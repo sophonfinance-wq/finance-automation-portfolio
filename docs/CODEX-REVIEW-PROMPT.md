@@ -79,12 +79,12 @@ RETURN:
 
 ---
 
-## Workflow-only variant (the "press play" GitHub Action)
+## Workflow-only variant (the "run it" GitHub Action)
 
 ```text
 ROLE: You are Codex doing a focused safety + UX review of ONE file:
 .github/workflows/run-finance-engine.yml in
-https://github.com/sophonfinance-wq/finance-automation-portfolio (a "press play" demo workflow).
+https://github.com/sophonfinance-wq/finance-automation-portfolio (a "run it" demo workflow).
 
 Confirm, and try to break, each of these:
 - Trigger: workflow_dispatch with a clear "Run workflow" button; an `engine` choice input that
@@ -102,5 +102,5 @@ Confirm, and try to break, each of these:
   instructions point to the right place and are clear for a first-time visitor.
 
 RETURN: VERDICT (PASS / PASS WITH NOTES / FAIL); findings as [Severity] line — issue — fix;
-and a one-paragraph plain-English "is this safe and ready for strangers to press play?" answer.
+and a one-paragraph plain-English "is this safe and ready for strangers to run it?" answer.
 ```

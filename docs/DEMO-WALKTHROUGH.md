@@ -9,13 +9,12 @@ All data is fictional and seeded. Nothing here references a real entity, person,
 
 ## 60-second framing
 
-> "This repo is seven runnable systems that automate the finance work teams still do by hand: close,
-> reconciliation, partnership tax prep, hard international tax modeling, and a citation-governed
-> knowledge brain over meeting transcripts. Above that, I designed an
-> AI review layer with separation of duties and an optional 24/7 agent command center. A request can
-> start from a phone, route to Mac mini workers, run the finance systems, validate the results, and
-> draft a CEO-ready summary. The demo uses fictional data, but the architecture is real. Let me show
-> you."
+> "This repository is seven runnable systems that automate the finance work teams still do by hand:
+> close, reconciliation, partnership tax prep, complex international tax modeling, and a
+> citation-governed knowledge brain over meeting transcripts. Above that sits an AI review layer with
+> separation of duties and an optional orchestration layer. A request runs the finance systems,
+> validates the results, and drafts an executive-ready summary. The demo uses fictional data, but the
+> architecture is production-grade. Let me show you."
 
 ---
 
@@ -43,7 +42,7 @@ python -m close_engine --period 2026-03 --out ./output
 
 **Point at:** `Close status: CLEAN` and `output/je_register.md`.
 
-**The wow moment:** show that the intercompany legs self-balance and that the engine refuses to
+**Key behavior:** show that the intercompany legs self-balance and that the engine refuses to
 post out-of-tie entries instead of forcing a plug.
 
 **What it proves:** close automation can be repeatable, controlled, and reviewable.
@@ -59,7 +58,7 @@ python -m recon_engine
 
 **Point at:** `evidence-log.md`, especially the flagged-for-review section.
 
-**The wow moment:** the sample plants multiple discrepancies. The engine separates immaterial
+**Key behavior:** the sample plants multiple discrepancies. The engine separates immaterial
 timing from items that need review.
 
 **What it proves:** materiality logic and evidence logs can be automated.
@@ -75,7 +74,7 @@ python -m surplus_engine --start 2021 --end 2024 --out out --xlsx
 
 **Point at:** `out/workpaper_CEDAR_MEZZ.md`, especially surplus movement and ACB behavior.
 
-**The wow moment:** the ACB ledger moves only on capital events, while operating income moves
+**Key behavior:** the ACB ledger moves only on capital events, while operating income moves
 through the surplus logic.
 
 **What it proves:** hard cross-border tax logic can be made traceable and reusable.
@@ -92,7 +91,7 @@ python -m partnership_tax
 **Point at:** `output/tax_workpapers.md`, `output/review_checks.md`, and
 `output/form_1065_preview.json`.
 
-**The wow moment:** the system turns a fictional source bundle into a 1065 workpaper bridge, maps
+**Key behavior:** the system turns a fictional source bundle into a 1065 workpaper bridge, maps
 the return lines, allocates K-1 preview amounts, and runs checks before calling the package READY.
 
 **What it proves:** tax prep can be treated like a controlled production system: source intake,
@@ -109,10 +108,11 @@ python run.py
 
 **Point at:** the per-workbook PASS / REVIEW / FAIL verdicts.
 
-**The wow moment:** the checker is read-only. Tests hash files before and after validation so the
+**Key behavior:** the checker is read-only. Tests hash files before and after validation so the
 validator cannot corrupt what it checks.
 
-**What it proves:** deterministic verification beats asking an AI whether a workbook "looks good."
+**What it proves:** deterministic verification is more reliable than asking an AI whether a workbook
+appears correct.
 
 ---
 
@@ -128,10 +128,11 @@ python -m triangulate --sample clean  # clean sample     -> VERDICT: PASS
 
 **Point at:** the fix packet and verdict.
 
-**The wow moment:** the reviewer can flag but cannot silently fix. The role is structurally
+**Key behavior:** the reviewer can flag but cannot silently fix. The role is structurally
 read-only, and the orchestrator checks that the workpaper digest did not change.
 
-**What it proves:** AI review can be designed with separation of duties instead of vibes.
+**What it proves:** AI review can be designed with structural separation of duties rather than
+unverified judgment.
 
 ---
 
@@ -149,7 +150,7 @@ python -m brain_engine remediate "Surplus Workpaper Review — Reviewer Correcti
 **Point at:** the citation block — `[Title — Date — HH:MM:SS — Speaker]` — and the refusal banner
 when you ask for something the brain has no source for.
 
-**The wow moment:** it cites verbatim with a timestamp, and it refuses to guess. Ask for a parking
+**Key behavior:** it cites verbatim with a timestamp, and it refuses to guess. Ask for a parking
 or lunch policy and the brain returns its refusal banner instead of inventing an answer. Then run
 `remediate` and watch a review meeting's spoken corrections become cited change-directives plus an
 auto-generated, apply-ready remediation prompt — and a change-log mapping each directive → source →
@@ -163,21 +164,21 @@ applies the changes.
 
 ---
 
-## 8. Agent command center
+## 8. Optional orchestration layer
 
 Open **[Agent Operations](./AGENT-OPERATIONS.md)**.
 
-**Point at:** the mobile command center diagram and the phone/status cues in the engine GIFs.
+**Point at:** the orchestration-layer diagram and the status cues in the engine GIFs.
 
-**The wow moment:** the system can run two ways:
+**Key behavior:** the platform can run two ways:
 
-- **Agent-accelerated:** mobile command intake through Telegram or approved mobile AI access,
-  dedicated Mac mini workers online 24/7, Hermes/OpenClaw orchestration, Codex/Claude support,
-  and the seven finance systems underneath, with status returning to the phone.
-- **Enterprise-safe:** if IT does not allow agents, the same engines, tests, validation, and
-  human-gated workflow still run without Hermes, OpenClaw, or Telegram.
+- **Agent-enabled:** in approved environments, an optional orchestration layer coordinates
+  longer-running work, manages background review passes, and routes status updates back to the
+  operator, with the seven finance systems running underneath — all through the same controls.
+- **Enterprise-safe:** where agents are not permitted, the same engines, tests, validation, and
+  human-gated workflow run fully without any orchestration dependency.
 
-**What it proves:** this is not just prompt usage. It is finance operations architecture: intake,
+**What it proves:** this is not prompt usage. It is finance operations architecture: intake,
 orchestration, controls, evidence, review, escalation, and executive communication.
 
 ---
@@ -190,7 +191,7 @@ Open the CEO-ready reporting section in **[Agent Operations](./AGENT-OPERATIONS.
 
 **Point at:** the executive package diagram.
 
-**The wow moment:** the workflow does not stop when the report exists. It can produce the summary,
+**Key behavior:** the workflow does not stop when the report exists. It can produce the summary,
 findings, exceptions, validation status, recommended next action, and CEO/CFO-ready email draft.
 
 **What it proves:** the system goes from command to workpaper to validation to leadership
@@ -224,6 +225,6 @@ defective sample.
 ## The close
 
 > "Every one of these systems is on GitHub, runs on synthetic data, and is covered by tests. The
-> real engagements behind them stay confidential. The public version is enterprise-safe. Where a
-> client approves agent tooling, the same system can be accelerated with mobile command intake, Mac
-> mini workers, Hermes/OpenClaw orchestration, and CEO-ready reporting."
+> real engagements behind them remain confidential. The public version is enterprise-safe. Where a
+> client approves agent tooling, the same system can be accelerated with an optional orchestration
+> layer that coordinates longer-running work and executive-ready reporting through the same controls."

@@ -3,25 +3,25 @@
 <p align="center"><img src="../assets/systems/surplus.gif" alt="Tax Surplus / ACB Model — live demo" width="100%"></p>
 <p align="center"><img src="../assets/flows/surplus-flow.svg" alt="Tax Surplus / ACB Model flow chart" width="100%"></p>
 
-> How I engineer a **traceable, reusable calculation engine** for complex international tax —
+> A **traceable, reusable calculation engine** for complex international tax —
 > AI-assisted, but deterministic at the core — specifically Canadian foreign-affiliate
 > **surplus pools & ACB** (adjusted cost base) for CRA Form T1134.
 
-> 🔒 This page describes my **approach and capabilities** and references only **public tax
+> 🔒 This page describes the platform's **approach and capabilities** and references only **public tax
 > law**. It does not reproduce any employer's or client's specific methodology, entities,
 > structures, or figures.
 
 ---
 
-## The problem I solve
+## The problem it solves
 When a Canadian-parented group holds US operating entities in multi-tier ownership chains,
 Canadian tax law requires tracking — year by year, entity by entity — how much of each tier's
 accumulated earnings is **exempt surplus**, **taxable surplus**, or a return of
-**pre-acquisition capital**, plus the **ACB** of each investment. Historically this is
-brutally manual and easy to get wrong.
+**pre-acquisition capital**, plus the **ACB** of each investment. Performed by hand, this work is
+exhaustively manual and error-prone.
 
-## My approach
-- **A formula-driven engine, not a hand-keyed spreadsheet.** I build the workbooks
+## Approach
+- **A formula-driven engine, not a hand-keyed spreadsheet.** The workbooks are built
   programmatically (Python / openpyxl with headless recalculation) so the math is consistent
   and re-runnable.
 - **Traceability as the spine.** A strict source-of-truth hierarchy — *external workpaper →
@@ -32,16 +32,16 @@ brutally manual and easy to get wrong.
   partnership-tax layer (Form 1065, Schedules K-1/K-2/K-3, §704(c), §263A).
 - **Reusable templates.** A canonical workbook is cloned across entities and rolled forward a
   year with a single new column — paired with a documented checklist of the cells that always
-  need re-verification after a clone.
-- **Knowledge-base packaged.** The methodology is written up so a new preparer can come up to
+  require re-verification after a clone.
+- **Knowledge-base packaged.** The methodology is documented so a new preparer can come up to
   speed (including as a queryable NotebookLM source set).
 
 ## What this demonstrates
-- I can take **sophisticated cross-border tax** and turn it into a disciplined, auditable,
+- Turns **sophisticated cross-border tax** into a disciplined, auditable,
   reusable system.
-- I think in terms of **data lineage and source-of-truth** — the things an auditor or tax
-  authority actually cares about.
-- I can operate across **both the US partnership and Canadian foreign-affiliate frameworks**.
+- Is designed around **data lineage and source-of-truth** — the attributes an auditor or tax
+  authority cares about.
+- Operates across **both the US partnership and Canadian foreign-affiliate frameworks**.
 
 ## Tools
 `Python (openpyxl)` · `LibreOffice headless recalc` · `Excel` · `construction GL (Excel-GL connector)` · `Bank of Canada FX` · `Claude Code` · `ChatGPT` · `Codex` · `NotebookLM`
@@ -54,7 +54,7 @@ brutally manual and easy to get wrong.
 
 ## ▶️ Run it
 
-This repo ships a **genuinely working** reference implementation of the regime above, over
+This repository ships a **fully working** reference implementation of the regime above, over
 **fully fictional data**. It models a four-tier chain and, per entity per fiscal year, runs the
 full pipeline: standalone income → Reg. 5907(2) adjustment → allocable surplus → distribution
 **waterfall** (exempt → taxable → pre-acq capital, with an **exempt-distribution cap**) →

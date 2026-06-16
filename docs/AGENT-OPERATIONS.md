@@ -1,86 +1,77 @@
-# 24/7 Agent Operations Layer
+# Optional Orchestration Layer
 
-This is the advanced operating model for clients that approve agentic tooling: AI-driven finance
-automation that runs around the clock, with deterministic controls and a human gate that never moves.
+This is the advanced operating model for clients that approve agentic tooling: an optional layer
+that coordinates longer-running finance work and routes results through the same deterministic
+controls, with a human gate that never moves. The platform runs fully without it.
 
-The idea is a finance automation command center: a mobile command channel, dedicated Mac mini
-worker nodes, Hermes/OpenClaw orchestration, AI coding and review assistants, seven finance systems
-underneath, and a final executive package at the end.
-
-<p align="center"><img src="../assets/agent-command-center.svg" alt="Mobile command channel to 24/7 Mac mini agents to finance automation systems" width="100%"></p>
+The layer coordinates work across the seven finance systems, manages background review passes, and
+assembles the final executive package — all in approved, agent-enabled environments.
 
 ---
 
-## The sales version
+## Overview
 
-Send the request from your phone. The agent desk receives it. Mac mini workers keep the workspace
-online. Hermes/OpenClaw coordinate the work. Codex/Claude-style assistants can support coding,
-review, or drafting where approved. The seven finance systems run underneath. Validation checks the
-output. Triangulate challenges the work. Status comes back to the phone, and the system packages the
-result for leadership.
+A request is dispatched, and the orchestration layer coordinates the work. The seven finance systems
+run underneath. Validation checks the output. Triangulate challenges the work. Status is routed back
+to the operator, and the system packages the result for leadership.
 
-The output is not just a workbook. It is a report, an exception list, a validation status, and a
-CEO-ready email draft for human approval.
+The output is not only a workbook. It is a report, an exception list, a validation status, and an
+executive-ready email draft for human approval.
 
 ---
 
-## Command channels
+## Command surfaces
 
-### Mobile / Telegram
-
-For approved environments, a private Telegram channel can act as the command line for finance
-operations:
+In approved, agent-enabled environments, the orchestration layer can be driven through an approved
+command surface to:
 
 - start a close run
 - request a reconciliation review
-- ask for a surplus / ACB package
+- request a surplus / ACB package
 - check the status of a background review queue
 - receive exception summaries
 - receive finished-package status
 - approve or reject a drafted executive email
 
-Telegram is the convenient mobile layer, not the control system. The control system is still the
+The command surface is a convenience layer, not the control system. The control system remains the
 evidence, logs, validation, and human approval policy.
 
-### Codex / Claude mobile or remote access
+Where direct AI assistance is approved, the same surface can be used to:
 
-Where a user wants direct AI assistance from a phone, mobile access to Codex/Claude-style tools can
-serve as another command surface:
-
-- ask the coding assistant to adjust a rule
-- ask for a narrative explanation of a finding
+- request an adjustment to a rule
+- request a narrative explanation of a finding
 - request a draft client memo
-- queue a fix packet for the Mac mini workers
+- queue a fix packet for background processing
 
-The mobile device becomes the steering wheel. The Mac mini workers do the long-running work.
+The operator directs the work; the orchestration layer carries out the longer-running tasks.
 
 ---
 
-## Worker layer: dedicated Mac Minis
+## Layer model
 
-The Mac mini layer is the always-on operations desk.
+The orchestration layer functions as an always-available operations desk.
 
 | Layer | Purpose |
 |---|---|
-| Mobile device | sends commands, receives status, approves final action |
-| Telegram / approved command channel | lightweight intake and updates |
-| Mac mini worker nodes | keep agents and local workspaces online 24/7 |
-| Hermes / OpenClaw | coordinate multi-step agent workflows |
-| Codex / Claude-style assistants | support coding, review, drafting, and reasoning |
+| Operator | dispatches commands, receives status, approves final action |
+| Approved command surface | lightweight intake and updates |
+| Orchestration layer | keeps coordinated work moving and available |
+| Multi-step coordination | sequences longer-running agent workflows |
+| AI assistants | support coding, review, drafting, and reasoning where approved |
 | Finance engines | run close, reconciliation, tax, validation, and AI review |
 | Human gatekeeper | final sign-off, approval, and judgment |
 
-This is useful because finance work often has long waits: exports, source gathering, evidence
-packaging, review loops, and exception analysis. The worker layer can keep moving while the user is
-not sitting in front of the machine.
+This is useful because finance work often involves long waits: exports, source gathering, evidence
+packaging, review loops, and exception analysis. The orchestration layer can keep this work moving
+while the operator is away from the machine.
 
 ---
 
 ## How the seven systems fit underneath
 
-The agent layer does not replace the systems. It orchestrates them.
+The orchestration layer does not replace the systems. It coordinates them.
 
-| System | What the agent layer can do |
+| System | What the orchestration layer can do |
 |---|---|
 | Close Engine | run the close package, collect outputs, flag out-of-tie entries |
 | Reconciliation Engine | run bank/lender matching, summarize flagged reconciling items |
@@ -88,9 +79,9 @@ The agent layer does not replace the systems. It orchestrates them.
 | Partnership 1065 Automation | build the 1065 support package, K-1 preview, review checks, and summary draft |
 | Validation Engine | run read-only checks and turn failures into exception language |
 | Triangulate | route work through preparer, reviewer, specialist, audit, and human gate |
-| Knowledge Brain | ask for prior decisions, assemble meeting prep, pull verbatim, timestamped citations for workpapers, and run review -> remediation — a review meeting's recorded corrections become cited directives plus an auto-generated, apply-ready remediation prompt (and a change-log mapping each directive -> source -> status) that a downstream AI or operator uses to apply the changes (the transcript is the instruction set; application and verification happen downstream) — or surface its refusal when no source qualifies |
+| Knowledge Brain | retrieve prior decisions, assemble meeting prep, pull verbatim, timestamped citations for workpapers, and run review -> remediation — a review meeting's recorded corrections become cited directives plus an auto-generated, apply-ready remediation prompt (and a change-log mapping each directive -> source -> status) that a downstream AI or operator uses to apply the changes (the transcript is the instruction set; application and verification happen downstream) — or surface its refusal when no source qualifies |
 
-The value is not just automation. The value is controlled automation.
+The differentiator is not automation alone. It is controlled automation.
 
 ---
 
@@ -98,7 +89,7 @@ The value is not just automation. The value is controlled automation.
 
 <p align="center"><img src="../assets/executive-package.svg" alt="Finance automation outputs to CEO-ready email package" width="100%"></p>
 
-When the systems finish, the agent layer can produce an executive package:
+When the systems complete, the orchestration layer can produce an executive package:
 
 - subject line
 - greeting and correct title
@@ -139,30 +130,31 @@ sending can be policy-controlled.
 
 ---
 
-## Controls that keep it professional
+## Controls
 
-The system should be exciting, but not reckless.
+The platform is built for throughput without compromising governance.
 
 - no final email send unless the approval policy allows it
 - no confidential data in public demos
 - source files and outputs remain traceable
 - deterministic checks run before executive summaries
 - AI-generated assumptions rank below source data and signed work
-- human gatekeeper stays responsible for final sign-off
-- IT can choose the enterprise-safe mode if agents are not allowed
+- the human gatekeeper remains responsible for final sign-off
+- IT can select the enterprise-safe mode where agents are not permitted
 
 ---
 
 ## Enterprise-safe fallback
 
-If a company says no to Hermes, OpenClaw, Telegram, or always-on Mac mini agents, the same portfolio
-still works:
+Where an organization does not permit an orchestration layer or autonomous agents, the same
+portfolio runs fully without them:
 
 1. Run the Python engines manually or through CI.
 2. Generate Markdown/JSON/.xlsx evidence.
 3. Run the validation engine.
 4. Use Triangulate in offline/mock mode.
 5. Draft the executive package manually or with approved tools.
-6. Human reviewer sends the final email.
+6. The human reviewer sends the final email.
 
-The advanced setup makes it faster. The core control framework makes it defensible.
+The optional orchestration layer adds speed. The core control framework is what makes the work
+defensible.

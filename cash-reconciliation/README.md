@@ -3,39 +3,39 @@
 <p align="center"><img src="../assets/systems/recon.gif" alt="Cash & Debt Reconciliation Engine — live demo" width="100%"></p>
 <p align="center"><img src="../assets/flows/recon-flow.svg" alt="Cash and Debt Reconciliation flow chart" width="100%"></p>
 
-> How I build an **AI-assisted, materiality-based reconciliation system** with a structured,
+> An **AI-assisted, materiality-based reconciliation system** with a structured,
 > audit-ready evidence log — so cash and debt tie to the ledger the same way every month, with
 > a clean trail.
 
-> 🔒 This page describes my **approach and capabilities** and ships a **runnable, fully
+> 🔒 This page describes the platform's **approach and capabilities** and ships a **runnable, fully
 > synthetic** demo. It does not reproduce any employer's specific reconciliation procedures,
 > banks, entities, or figures. All names and numbers below are invented.
 
 ---
 
-## The problem I solve
+## The problem it solves
 Reconciling cash and debt means tying every bank and lender movement to the general ledger,
-explaining the differences, and keeping audit-ready evidence — across many entities. Done by
-hand it's repetitive, slow, and the evidence trail comes out inconsistent.
+explaining the differences, and keeping audit-ready evidence — across many entities. Performed by
+hand, the work is repetitive, slow, and the evidence trail is inconsistent.
 
-## My approach
-- **Scope discipline.** Reconcile what matters (cash, debt); explicitly exclude what's out of
+## Approach
+- **Scope discipline.** Reconcile what matters (cash, debt); explicitly exclude what is out of
   scope; skip dormant rows with a documented rule rather than chasing zeros.
-- **Source-to-target mapping.** A cheat sheet that resolves the perennial mismatch between
+- **Source-to-target mapping.** A mapping reference that resolves the recurring mismatch between
   ledger tab names and bank-file names, and targets values **by account number, not row
-  number**, to defeat off-by-one errors.
-- **Materiality + flagging.** Differences within a set threshold are noise (commented);
+  number**, to eliminate off-by-one errors.
+- **Materiality and flagging.** Differences within a set threshold are treated as noise (commented);
   anything over becomes a **numbered flag** escalated for review.
 - **A structured evidence log.** A multi-sheet workbook (summary, cash, debt, flagged items,
   notes) where every value carries a standardized comment citing its source, the balance
   found, the variance, and a status.
-- **Clean close-out reporting.** Color-coded status and a wrap summary that separates
-  *timing* items (expected, will clear) from *structural* items (cleanups worth attention).
+- **Clean close-out reporting.** Color-coded status and a closing summary that separates
+  *timing* items (expected, will clear) from *structural* items (cleanups that warrant attention).
 
 ## What this demonstrates
-- I can automate reconciliation of **many trial-balance tabs** on a repeatable cadence.
-- I build **materiality and escalation** into the process so reviewers see signal, not noise.
-- I produce a **consistent, audit-ready evidence trail** every cycle.
+- Automates reconciliation of **many trial-balance tabs** on a repeatable cadence.
+- Builds **materiality and escalation** into the process so reviewers see signal, not noise.
+- Produces a **consistent, audit-ready evidence trail** every cycle.
 
 ---
 
