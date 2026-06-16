@@ -29,7 +29,8 @@ the transcript into a queryable brain. Then I **query** it two ways:
 - **Cite** — while writing workpaper logic or a disclosure note, get the single authoritative
   prior statement back as a **paste-ready footnote**, quoted verbatim with its date and timestamp.
 - **Remediate** — after a **review meeting**, turn the reviewer's spoken corrections into a
-  cited, executable change set and a **ready-to-paste prompt** that applies every fix hands-free.
+  cited change set and an **apply-ready, ready-to-paste prompt** (plus a change-log mapping each
+  directive → source → status) that a downstream AI or operator uses to apply every fix.
 
 This engine is the **public, runnable** version of that brain, over invented transcripts.
 
@@ -44,15 +45,17 @@ This engine is the **public, runnable** version of that brain, over invented tra
 - **Meeting prep** — settled positions and open items for a topic, assembled and cited in one
   briefing.
 
-## Review → remediation (hands-free)
+## Review → remediation
 
 The brain holds **two** kinds of source-cited knowledge: the standing **laws** (decisions,
 rules, definitions) *and* the per-review **change-requests** a reviewer dictates. In the real
 (confidential) workflow I record the review meeting where a reviewer asks for specific
-corrections, then feed that transcript to an AI that **applies** the requested changes — I touch
-nothing but a copy-pasted prompt. **The transcript IS the instruction set.**
+corrections, then feed that transcript through this engine to **generate** an apply-ready, cited
+remediation prompt; a downstream AI or operator then runs that prompt to **apply** the requested
+changes. **The transcript IS the instruction set** — and application and verification happen
+downstream.
 
-This engine demonstrates exactly that, hands-free:
+This engine generates exactly that:
 
 1. A fictional review meeting's corrections are captured **verbatim** as `ChangeDirective`s, each
    with full provenance (meeting, date, **HH:MM:SS**, speaker).
@@ -83,8 +86,8 @@ directive `DIR-SURPLUS-REVIEW-01` · status PENDING
 ...
 
 ## Ready-to-paste remediation prompt
-You are applying reviewer corrections to a finance/tax workpaper, hands-free. Apply EACH
-numbered change below exactly as the reviewer stated it. ...
+You are a downstream AI or operator applying reviewer corrections to a finance/tax workpaper.
+Apply EACH numbered change below exactly as the reviewer stated it. ...
 
 1. Change the distribution formula to reference column E, not column D, across every year column.
    Source quote: "Change the distribution formula to reference column E, not column D, across every year column."

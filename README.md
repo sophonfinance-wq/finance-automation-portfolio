@@ -87,9 +87,11 @@ that explains what is happening.
 
 Meeting transcripts become a citation-governed knowledge base: prep for meetings and pull verbatim,
 timestamped citations for workpapers and disclosure notes — and the brain refuses when it has no
-source. It also runs **review → remediation hands-free**: a reviewer's recorded corrections become
-cited change-directives and an auto-generated remediation prompt the AI applies untouched — the
-transcript is the instruction set. See **[Knowledge Brain Engine](./knowledge-brain-engine/)**.
+source. It also runs **review → remediation**: a reviewer's recorded corrections become cited
+change-directives and an **auto-generated, apply-ready remediation prompt** (plus a change-log
+mapping each directive → source → status) — the transcript is the instruction set, and a downstream
+AI or operator uses that prompt to apply the changes. See
+**[Knowledge Brain Engine](./knowledge-brain-engine/)**.
 
 <p><img src="./assets/systems/brain.gif" alt="Knowledge Brain Engine live demo" width="100%"></p>
 <p align="center"><img src="./assets/flows/brain-flow.svg" alt="How the Knowledge Brain Engine works, step by step" width="100%"></p>
@@ -188,7 +190,7 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Partnership 1065 Automation](./partnership-1065-automation/) | `python -m partnership_tax` | AI-assisted source intake, book-to-tax bridge, 1065/Schedule K/Schedule L/M-1/M-2/K-1 mapping, review checks, and IRC §704(c) built-in gain (`--section704c`) |
 | [Validation Engine](./audit-automation/) | `python run.py` | read-only workbook checks, formula integrity, lineage checks, PASS / REVIEW / FAIL verdicts |
 | [Triangulate Orchestrator](./ai-validation-framework/) | `python -m triangulate` | AI separation of duties: preparer, reviewer, specialist, deterministic audit, human gate |
-| [Knowledge Brain](./knowledge-brain-engine/) | `python -m brain_engine ask "..."` | meeting transcripts -> citation-governed knowledge base; meeting prep + verbatim, timestamped citations for workpapers; review -> remediation, where a reviewer's recorded corrections become cited directives and an auto-generated, apply-ready remediation prompt the AI runs hands-free; refuses when it has no source |
+| [Knowledge Brain](./knowledge-brain-engine/) | `python -m brain_engine ask "..."` | meeting transcripts -> citation-governed knowledge base; meeting prep + verbatim, timestamped citations for workpapers; review -> remediation, where a reviewer's recorded corrections become cited directives and an auto-generated, apply-ready remediation prompt (plus a change-log mapping each directive -> source -> status) that a downstream AI or operator uses to apply the changes; refuses when it has no source |
 
 ## Why Triangulate matters
 
@@ -236,7 +238,7 @@ Each system has its own README and run command.
 | Partnership tax preparation | AI-assisted 1065 workpaper build, book-to-tax bridge, K-1 allocation preview, and review package |
 | Automated verification | Read-only validation that catches formula, tie-out, lineage, and documentation issues |
 | AI orchestration and controls | AI review under separation of duties — distinct preparer/reviewer/audit roles, an authority hierarchy, and human sign-off |
-| AI knowledge management | Citation-governed retrieval over meeting transcripts — meeting prep and verbatim, timestamped workpaper citations, plus review -> remediation that turns a reviewer's recorded corrections into a cited, auto-generated remediation prompt the AI applies hands-free (the transcript is the instruction set), with a refuse-if-no-source control |
+| AI knowledge management | Citation-governed retrieval over meeting transcripts — meeting prep and verbatim, timestamped workpaper citations, plus review -> remediation that turns a reviewer's recorded corrections into a cited, auto-generated, apply-ready remediation prompt (plus a change-log mapping each directive -> source -> status) that a downstream AI or operator uses to apply the changes (the transcript is the instruction set), with a refuse-if-no-source control |
 | Mobile command surface | Phone, Telegram-style intake, approved mobile assistant access, status return, and human approval prompts |
 | 24/7 agent operations | Dedicated Mac mini worker nodes, mobile command intake, Telegram updates, and background review queues where approved |
 | Hermes / OpenClaw workflow design | Advanced-agent orchestration for approved environments, paired with deterministic controls |

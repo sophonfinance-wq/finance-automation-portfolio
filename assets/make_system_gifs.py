@@ -569,12 +569,12 @@ SYSTEMS = [
     {
         "key": "brain", "accent": (79, 70, 229), "icon": "brain",
         "file": "brain_engine.py", "name": "Knowledge Brain Engine",
-        "subtitle": "carries the laws + reviewer corrections; cite or auto-apply",
+        "subtitle": "carries the laws + reviewer corrections; cite or generate a fix prompt",
         "code_caption": "review transcript -> cited directives -> apply prompt",
         "tests": 75, "footer": "stdlib TF-IDF - no embeddings / LLM / network - fictional transcripts",
         "pill": "FIX PROMPT READY", "badge_color": GREEN, "badge": "FIX PROMPT READY",
-        "badge_sub": "every change traced to the transcript - hands-free",
-        "kpis": [("4", "Directives"), ("100%", "Cited"), ("0", "Manual edits")],
+        "badge_sub": "every change traced to the transcript - apply downstream",
+        "kpis": [("4", "Directives"), ("100%", "Cited"), ("0", "Uncited")],
         "code": [
             [kw("def"), (" remediate", C_FN), ("(self, review):", C_PLN)],
             [("    # a reviewer's spoken corrections -> an apply-ready prompt", C_COM)],
@@ -591,7 +591,7 @@ SYSTEMS = [
             [("  1. Change distribution formula to column E, not D", DIM)],
             [("     [Surplus Review - 2025-04-08 - 00:02:11 - Q. Harlow]", FAINT)],
             [("  + 3 more changes, each cited verbatim + timestamp", FAINT)],
-            [("  Hands-free: paste the prompt, the AI applies it.", GREEN, True)],
+            [("  Apply-ready: paste into your AI; each change cited.", GREEN, True)],
         ],
     },
 ]

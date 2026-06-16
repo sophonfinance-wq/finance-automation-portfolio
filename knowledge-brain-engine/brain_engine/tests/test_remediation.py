@@ -124,10 +124,10 @@ def test_remediation_prompt_is_numbered_one_per_directive() -> None:
         assert f"{entry.number}. {entry.directive.request_text}" in rem.prompt
 
 
-def test_remediation_prompt_instructs_hands_free_and_log_against_source() -> None:
+def test_remediation_prompt_instructs_apply_and_log_against_source() -> None:
     engine = _engine()
     prompt = engine.remediate(REVIEW_MEETING_TITLE).prompt
-    assert "hands-free" in prompt
+    assert "Apply EACH numbered change" in prompt
     assert "change log" in prompt.lower()
     assert "APPLIED" in prompt
     assert "never guess" in prompt.lower()

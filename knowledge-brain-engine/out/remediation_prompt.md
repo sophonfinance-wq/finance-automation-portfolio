@@ -1,6 +1,6 @@
 # Review → Remediation — “Surplus Workpaper Review — Reviewer Corrections” [FICTIONAL]
 
-> 🔒 Reviewer corrections from a prior **fictional** review meeting, captured verbatim. The transcript IS the instruction set — paste the prompt below into your AI and the changes get applied hands-free, each traceable to the exact words.
+> 🔒 Reviewer corrections from a prior **fictional** review meeting, captured verbatim. The transcript IS the instruction set — paste the prompt below into a downstream AI or operator to apply the changes, each traceable to the exact words. This engine generates the apply-ready prompt; application happens downstream.
 
 _4 change-directive(s); each carries a citation._
 
@@ -36,10 +36,10 @@ _directive `DIR-SURPLUS-REVIEW-04` · status PENDING_
 
 ## Ready-to-paste remediation prompt
 
-_Copy everything in the block below into your AI; it applies each change hands-free and logs every applied change against its source._
+_Copy everything in the block below into a downstream AI or operator to apply each change and log it against its source._
 
 ```text
-You are applying reviewer corrections to a finance/tax workpaper, hands-free. Apply EACH numbered change below exactly as the reviewer stated it. Do not improvise beyond the request. Every change is annotated with the VERBATIM source quote and its timestamp so the instruction is fully traceable.
+You are a downstream AI or operator applying reviewer corrections to a finance/tax workpaper. Apply EACH numbered change below exactly as the reviewer stated it. Do not improvise beyond the request. Every change is annotated with the VERBATIM source quote and its timestamp so the instruction is fully traceable.
 
 Review: "Surplus Workpaper Review — Reviewer Corrections"
 

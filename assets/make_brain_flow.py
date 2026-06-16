@@ -15,7 +15,7 @@ OUT.parent.mkdir(exist_ok=True)
 
 ACCENT = "#4f46e5"        # indigo — the brain's distinct accent
 TITLE = "Knowledge Brain"
-SUBTITLE = "Carries the laws and the corrections — cite them, or auto-apply them hands-free."
+SUBTITLE = "Carries the laws and the corrections — cite them, or generate an apply-ready fix prompt."
 
 # (step title, body line 1, body line 2, [chips])
 STEPS = [
@@ -43,9 +43,9 @@ STEPS = [
      "A review transcript becomes a cited, executable",
      "list of the exact changes requested.",
      ["Verbatim", "Cited"]),
-    ("Auto-apply, hands-free",
-     "The brain writes the prompt; you copy-paste it;",
-     "the AI applies every change, traced to source.",
+    ("Generate the apply-ready prompt",
+     "The brain writes a cited prompt + change-log; a",
+     "downstream AI / operator applies each change.",
      ["Copy-paste", "Change-log"]),
 ]
 

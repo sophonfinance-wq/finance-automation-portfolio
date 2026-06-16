@@ -108,8 +108,8 @@ class Remediation:
         The ordered change-requests (spoken order), each with full provenance.
     prompt:
         The single READY-TO-PASTE remediation prompt — the operator copy-pastes
-        this into an AI and it applies every change hands-free, logging each
-        applied change against its verbatim source quote + timestamp.
+        this into a downstream AI or operator, which applies each change and logs
+        it against its verbatim source quote + timestamp.
     fix_packet:
         The change-log: one :class:`FixPacketEntry` per directive, 1:1, each
         starting at :data:`STATUS_PENDING`.
@@ -310,11 +310,12 @@ class BrainEngine:
         """Build the review-to-remediation packet for ``topic``.
 
         Produces (a) the ordered directive list (each cited), (b) a single
-        ready-to-paste remediation prompt that instructs an AI to apply every
-        change hands-free with each step annotated by its verbatim source quote +
+        ready-to-paste remediation prompt that instructs a downstream AI to apply
+        every change, with each step annotated by its verbatim source quote +
         timestamp and a log-against-source instruction, and (c) a fix-packet /
         change-log mapping each directive to its source citation at status
-        :data:`STATUS_PENDING`.
+        :data:`STATUS_PENDING`. The engine generates the prompt; application and
+        verification happen downstream.
 
         If no directive matches the topic, returns an *empty* :class:`Remediation`
         (``is_empty``) — the engine refuses rather than inventing a change set.
@@ -337,7 +338,7 @@ class BrainEngine:
         """Render the single copy-paste remediation prompt (deterministic).
 
         Every numbered change carries its verbatim source quote + timestamp, and
-        the prompt instructs the AI to apply each change hands-free and log it
+        the prompt instructs a downstream AI to apply each change and log it
         against its source. Empty fix-packet -> an explicit refusal prompt so the
         operator never pastes an instruction set the brain could not source.
         """
@@ -351,10 +352,10 @@ class BrainEngine:
             return "\n".join(lines)
 
         lines.append(
-            "You are applying reviewer corrections to a finance/tax workpaper, hands-free. "
-            "Apply EACH numbered change below exactly as the reviewer stated it. Do not "
-            "improvise beyond the request. Every change is annotated with the VERBATIM "
-            "source quote and its timestamp so the instruction is fully traceable."
+            "You are a downstream AI or operator applying reviewer corrections to a "
+            "finance/tax workpaper. Apply EACH numbered change below exactly as the reviewer "
+            "stated it. Do not improvise beyond the request. Every change is annotated with "
+            "the VERBATIM source quote and its timestamp so the instruction is fully traceable."
         )
         lines.append("")
         lines.append(f'Review: "{topic}"')

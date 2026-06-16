@@ -137,8 +137,8 @@ class ChangeDirective:
 
     A directive is the *review-to-remediation* counterpart of a
     :class:`KnowledgeCard`: where a card freezes a standing "law", a directive
-    freezes a per-review instruction — "change X to Y" — that an AI is meant to
-    APPLY hands-free. The transcript IS the instruction set, so the verbatim
+    freezes a per-review instruction — "change X to Y" — that a downstream AI is
+    meant to APPLY. The transcript IS the instruction set, so the verbatim
     request and its full provenance are the load-bearing fields.
 
     Attributes
