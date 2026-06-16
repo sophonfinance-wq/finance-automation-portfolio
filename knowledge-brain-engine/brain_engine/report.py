@@ -158,8 +158,9 @@ def render_remediation(rem: Remediation) -> str:
 
     out.append(
         "> 🔒 Reviewer corrections from a prior **fictional** review meeting, captured "
-        "verbatim. The transcript IS the instruction set — paste the prompt below into "
-        "your AI and the changes get applied hands-free, each traceable to the exact words."
+        "verbatim. The transcript IS the instruction set — paste the prompt below into a "
+        "downstream AI or operator to apply the changes, each traceable to the exact words. "
+        "This engine generates the apply-ready prompt; application happens downstream."
     )
     out.append("")
     out.append(f"_{len(rem.directives)} change-directive(s); each carries a citation._")
@@ -181,8 +182,8 @@ def render_remediation(rem: Remediation) -> str:
 
     out.append("## Ready-to-paste remediation prompt")
     out.append("")
-    out.append("_Copy everything in the block below into your AI; it applies each change "
-               "hands-free and logs every applied change against its source._")
+    out.append("_Copy everything in the block below into a downstream AI or operator to apply "
+               "each change and log it against its source._")
     out.append("")
     out.append("```text")
     out.append(rem.prompt)

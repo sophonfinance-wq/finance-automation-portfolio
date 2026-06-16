@@ -75,7 +75,7 @@ jobs:
         run: |
           set +e
 
-          mkdir -p _actions_artifacts/logs
+          mkdir -p _actions_artifacts
           overall=0
 
           {
@@ -87,11 +87,23 @@ jobs:
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
 
+          collect() {
+            local key="$1"; shift
+            local dest="$GITHUB_WORKSPACE/_actions_artifacts/${key}"
+            mkdir -p "$dest"
+            for src in "$@"; do
+              if [ -e "$src" ]; then
+                cp -r "$src" "$dest"/ 2>/dev/null || true
+              fi
+            done
+          }
+
           run_one() {
             local key="$1"
             local folder="$2"
             shift 2
-            local logfile="$GITHUB_WORKSPACE/_actions_artifacts/logs/${key}.log"
+            mkdir -p "$GITHUB_WORKSPACE/_actions_artifacts/${key}"
+            local logfile="$GITHUB_WORKSPACE/_actions_artifacts/${key}/${key}.log"
 
             echo "::group::${key}"
             echo "Running ${key} in ${folder}"
@@ -126,41 +138,55 @@ jobs:
           run_monthly_close() {
             run_one "monthly-close" "monthly-close-automation" \
               python run.py --period "$PERIOD" --seed "$SEED" --out output
+            collect "monthly-close" "monthly-close-automation/output"
           }
 
           run_cash_reconciliation() {
             run_one "cash-reconciliation" "cash-reconciliation" \
               python run.py --seed "$SEED"
+            collect "cash-reconciliation" "cash-reconciliation/evidence-log.md" "cash-reconciliation/output"
           }
 
           run_tax_surplus() {
             run_one "tax-surplus" "tax-surplus-engine" \
               python run.py --start "$START_YEAR" --end "$END_YEAR" --seed "$SEED" --out out --xlsx
+            collect "tax-surplus" "tax-surplus-engine/out"
           }
 
           run_partnership_1065() {
             run_one "partnership-1065" "partnership-1065-automation" \
               python run.py --year "$END_YEAR" --seed "$SEED" --out output
+            collect "partnership-1065" \
+              "partnership-1065-automation/output/form_1065_preview.json" \
+              "partnership-1065-automation/output/review_checks.md" \
+              "partnership-1065-automation/output/tax_workpapers.md"
           }
 
           run_partnership_704c() {
             run_one "partnership-704c" "partnership-1065-automation" \
               python run.py --section704c --out output
+            collect "partnership-704c" partnership-1065-automation/output/section704c_*
           }
 
           run_audit_validation() {
             run_one "audit-validation" "audit-automation" \
               python run.py
+            collect "audit-validation" \
+              "audit-automation/validation_report.json" \
+              "audit-automation/validation_report.md" \
+              "audit-automation/samples"
           }
 
           run_triangulate() {
             run_one "triangulate" "ai-validation-framework" \
               python run.py --sample clean --output output --xlsx
+            collect "triangulate" "ai-validation-framework/output"
           }
 
           run_knowledge_brain() {
             run_one "knowledge-brain" "knowledge-brain-engine" \
               python run.py --out out --prep "warranty reserve book-tax treatment"
+            collect "knowledge-brain" "knowledge-brain-engine/out"
           }
 
           case "$ENGINE" in
@@ -203,16 +229,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: finance-engine-demo-artifacts
-          path: |
-            _actions_artifacts/**
-            monthly-close-automation/output/**
-            cash-reconciliation/evidence-log.md
-            cash-reconciliation/output/**
-            tax-surplus-engine/out/**
-            partnership-1065-automation/output/**
-            audit-automation/samples/**
-            audit-automation/validation_report.json
-            audit-automation/validation_report.md
-            ai-validation-framework/output/**
-            knowledge-brain-engine/out/**
+          path: _actions_artifacts/**
           if-no-files-found: ignore

@@ -152,13 +152,14 @@ when you ask for something the brain has no source for.
 **The wow moment:** it cites verbatim with a timestamp, and it refuses to guess. Ask for a parking
 or lunch policy and the brain returns its refusal banner instead of inventing an answer. Then run
 `remediate` and watch a review meeting's spoken corrections become cited change-directives plus an
-auto-generated, apply-ready remediation prompt — the operator pastes that one prompt and the AI
-applies every fix hands-free, with a cited change-log.
+auto-generated, apply-ready remediation prompt — and a change-log mapping each directive → source →
+status — that a downstream AI or operator uses to apply the changes.
 
 **What it proves:** institutional memory becomes citation-grade — meeting decisions become quotable,
 sourced, and traceable into workpapers and disclosure notes — and a reviewer's recorded corrections
-become an auto-generated, cited, apply-ready prompt, so the transcript itself drives the remediation
-hands-free.
+become an auto-generated, cited, apply-ready prompt (plus a change-log mapping each directive →
+source → status), so the transcript itself drives the remediation while a downstream AI or operator
+applies the changes.
 
 ---
 
