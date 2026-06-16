@@ -3,52 +3,52 @@
 <p align="center"><img src="../assets/systems/close.gif" alt="Month-End Close Engine — live demo" width="100%"></p>
 <p align="center"><img src="../assets/flows/close-flow.svg" alt="Month-End Close Engine flow chart" width="100%"></p>
 
-> How I turn a slow, manual month-end close into an **AI-assisted, repeatable,
+> The platform converts a slow, manual month-end close into an **AI-assisted, repeatable,
 > documented, single-operator workflow** — even across large multi-entity groups
 > on multiple accounting databases.
 
-> 🔒 This page describes my **approach and capabilities**, and ships a small,
+> 🔒 This page describes the platform's **approach and capabilities**, and ships a small,
 > **fully runnable engine on fictional data**. It does not reproduce any
 > employer's specific close procedures, entities, or figures.
 
 ---
 
-## The problem I solve
-Month-end close at a large entity group is a recurring scramble: many interdependent
+## The problem it solves
+Month-end close at a large entity group is a recurring operational burden: many interdependent
 recurring journal entries, each with its own logic, spread across multiple operating
-entities and separate databases. Run from memory or a static spreadsheet, things slip and
-the close drags for days.
+entities and separate databases. Run from memory or a static spreadsheet, errors accumulate and
+the close extends for days.
 
-## My approach
-- **Codify the close as portable knowledge.** I capture the whole close — the entity map,
-  the recurring-entry logic, the chart-of-accounts gotchas, and the exact output format — in
-  structured SOPs so it can be run consistently by anyone (or handed to a fresh AI session)
-  without re-learning it.
+## Approach
+- **Codify the close as portable knowledge.** The platform captures the entire close — the entity map,
+  the recurring-entry logic, the chart-of-accounts exceptions, and the exact output format — in
+  structured SOPs, so it runs consistently for any operator (or a fresh AI session)
+  without re-learning the process.
 - **One universal rhythm for every recurring entry:** *check the ledger for new activity →
   update a formula-driven schedule → record the entry → tie the schedule back to the ledger.*
   Nothing posts unless it ties.
 - **Audit-ready by construction.** Formula-driven schedules (never hardcoded), immutable
   historical tabs as the audit record, and a cited evidence trail on every value touched.
-- **Operator-grade and "dummy-proof."** Plain-English steps, one recommended action (not a
-  menu), and a hard rule that an out-of-tie schedule stops the process.
+- **Operator-grade and resilient.** Plain-English steps, a single recommended action (not a
+  menu), and a hard rule that an out-of-tie schedule halts the process.
 
-## Classes of recurring entries I've automated
+## Classes of recurring entries automated
 At a capability level (no employer specifics): prepaid amortization, fixed-asset
 depreciation, deferred-rent / CAM allocations, management-fee accruals, note-payable
 interest accruals (including multi-leg intercompany interest *capitalization*), G&A cost
 allocations, and prepaid-insurance allocations — each as deterministic, tie-checked logic.
 
 ## What this demonstrates
-- I can reduce a **multi-day manual close to a repeatable workflow** one person can run.
-- I'm comfortable with **genuinely hard entries** — e.g. multi-database, multi-leg
+- Reduces a **multi-day manual close to a repeatable workflow** a single operator can run.
+- Handles **genuinely complex entries** — for example, multi-database, multi-leg
   intercompany interest capitalization that must balance independently in each ledger.
-- I build for **handoff and audit**, not just to get this month done.
+- Built for **handoff and audit**, not merely to complete the current month.
 
 ---
 
 ## ▶️ Run it
 
-This repo ships a small but **genuinely working** month-end **close engine** on
+This repository ships a small but **fully working** month-end **close engine** on
 **fictional** data. It generates a synthetic entity group, computes the recurring
 journal entries, enforces tie-out controls, and writes a JE register, an updated
 trial balance, and a close report.
@@ -196,7 +196,7 @@ refusal; period roll-forward; and full determinism for a given seed.
 
 ## Tools
 `Sage 300 CRE` · `Excel` · `Office Connector (Excel→GL import)` · `Claude Code / Cowork` · `SOPs`
-· `Python` (the engine in this repo)
+· `Python` (the engine in this repository)
 
 ## Samples (fictional)
 - [Close checklist](./samples/sample-close-checklist.md) — a worked close with task sequencing and tie-out status

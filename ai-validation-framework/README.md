@@ -8,8 +8,8 @@ LLM review pipeline with guardrails, built so AI can accelerate financial workpa
 becoming an unaccountable single point of failure. It ships with 21 tests covering the roles,
 the authority model, and the human-gated verdict.
 
-The idea is simple: no high-stakes workpaper should rely on one AI system saying "looks good."
-Instead, the work is split into separate roles, each with a defined mandate:
+The principle is straightforward: no high-stakes workpaper should rely on one AI system reporting
+"looks good." Instead, the work is split into separate roles, each with a defined mandate:
 
 - **Preparer** - builds the draft
 - **Reviewer** - challenges the draft and flags issues
@@ -93,17 +93,16 @@ review steps so a reviewer cannot quietly mutate the thing it is supposed to ins
 
 ### Enterprise-safe mode
 
-This is the default mode in the public repo.
+This is the default mode in the public repository.
 
 - deterministic mock reviewer
 - no API key
 - no network call
-- no Hermes dependency
-- no OpenClaw dependency
+- no dependency on any orchestration layer
 - runnable in conservative corporate IT environments
 
 This mode exists because many finance teams cannot approve agentic tooling on day one. The control
-framework still works because the evidence layer is deterministic.
+framework still operates because the evidence layer is deterministic.
 
 ### Agent-accelerated mode
 
@@ -111,8 +110,8 @@ Where approved by the client, the same framework can be accelerated with live mo
 orchestration layers:
 
 - a live Claude/LLM reviewer adapter can replace the mock reviewer
-- Hermes can coordinate longer-running background workflows
-- OpenClaw-style workflows can help manage handoffs, role separation, and unattended task queues
+- an optional orchestration layer can coordinate longer-running background workflows
+- the same layer can help manage handoffs, role separation, and unattended task queues
 - fix packets and QA summaries can be generated with less manual steering
 
 The control rule stays the same: AI can accelerate preparation and review, but it does not replace
@@ -159,7 +158,7 @@ LLMs are useful, but they fail in ways that matter for accounting:
 - they can miss the same issue twice
 - they can explain a number without tying it to source
 
-Triangulate assumes those failures will happen and builds the workflow around them.
+Triangulate assumes those failures will occur and builds the workflow around them.
 
 The result is not "the AI said yes." The result is a fix packet, a severity ranking, a read-only
 audit trail, and a human-gated verdict — AI for speed, controls for defensibility.
@@ -172,4 +171,4 @@ audit trail, and a human-gated verdict — AI for speed, controls for defensibil
 - Applied separation of duties across AI roles: preparer, reviewer, specialist, audit, and human gate.
 - Built deterministic read-only validation so the checker cannot corrupt the file it checks.
 - Created fix packets, QA summaries, and machine-readable verdicts for review evidence.
-- Designed the framework for two client realities: enterprise-safe operation and agent-accelerated operation with Hermes/OpenClaw-style tooling where approved.
+- Designed the framework for two client realities: enterprise-safe operation and agent-accelerated operation with an optional orchestration layer for approved, agent-enabled environments.

@@ -5,10 +5,10 @@
 
 > A **deterministic, read-only validation engine** that runs a registry of rules
 > over finished financial workbooks (`.xlsx`) and their JSON exports — plus a
-> seeded synthetic generator so you can run it **end-to-end on fully fictional
-> data**, no real files required. This is the deterministic backbone underneath my
+> seeded synthetic generator so it runs **end-to-end on fully fictional
+> data**, no real files required. This is the deterministic backbone underneath the
 > [AI Validation Framework](../ai-validation-framework/) — the unfalsifiable
-> ground truth an LLM reviewer can't talk its way around.
+> ground truth an LLM reviewer cannot talk its way around.
 
 > 🔒 Everything here is generic and runs on **dummy workbooks** with obviously
 > fake entities ("Demo Holdings LLC", "Maple Fund LP", "Birchwood Op Co"). It
@@ -17,7 +17,7 @@
 
 ---
 
-## The problem I solve
+## The problem it solves
 Large, formula-heavy workbooks need checking before sign-off: are the totals
 *driven by formulas* (not quietly hardcoded)? Does the trial balance tie out
 (debit == credit)? Were any "to-do" notes or internal/process words left behind?
@@ -25,11 +25,12 @@ Does the lineage flow the right way — evidence cells as raw *inputs*, detail
 cells as *formulas*? Were draft-only `MIN/MAX` cap formulas ever replaced? Does
 the published JSON still agree with the workbook it came from?
 
-Doing this by eye across many near-identical workbooks is slow and error-prone —
-and an LLM asked "did you fix everything?" will happily hallucinate "yes."
+Performing these checks by eye across many near-identical workbooks is slow and
+error-prone — and an LLM asked "did you fix everything?" will readily respond
+"yes" whether or not it is true.
 
 ## The system
-This started as a single read-only audit script. It is now a real **rules-based
+This began as a single read-only audit script. It is now a complete **rules-based
 validation engine** — a registry of independent checks, a structured report
 (markdown **and** JSON), and an overall verdict — packaged as
 [`validation_engine/`](./validation_engine/).
@@ -51,12 +52,12 @@ for cached *values*), inspects the relevant cells, and yields findings tagged
 **Verdict roll-up:** any `FAIL` ⇒ workbook verdict `FAIL`; otherwise any `FLAG`
 ⇒ `REVIEW`; otherwise `PASS`. The run's overall verdict is the worst of these.
 
-Adding a rule is a one-liner: write a `(WorkbookContext) -> list[Finding]`
+Adding a rule is a single function: write a `(WorkbookContext) -> list[Finding]`
 function and decorate it with `@check("my_rule")`. It joins the registry — the
 runner, report, and CLI pick it up automatically.
 
-**Why a script and not an LLM:** it's deterministic and unfalsifiable. The
-read-only constraint means the check can't *introduce* a defect — only report.
+**Why a script and not an LLM:** it is deterministic and unfalsifiable. The
+read-only constraint means the check cannot *introduce* a defect — only report.
 The same checks run identically every time, catching the regression human eyes
 miss on the 14th workbook. Synthetic data is generated with the stdlib `random`
 module under a **fixed seed**, so the corpus and every finding are reproducible.
@@ -161,9 +162,9 @@ audit-automation/
 ```
 
 ## What this demonstrates
-- I build **practical Python** controls around spreadsheet work — a real
+- Delivers **practical Python** controls around spreadsheet work — a real
   registry-based engine, not a one-off script.
-- I understand *why* deterministic verification beats asking an AI to self-check.
-- I design for the errors that **survive human review** — hardcoded totals,
+- Demonstrates *why* deterministic verification outperforms asking an AI to self-check.
+- Targets the errors that **survive human review** — hardcoded totals,
   out-of-balance tie-outs, leftover draft logic, inverted lineage, stale notes.
-- I ship it **runnable and tested**, on confidentiality-safe fictional data.
+- Ships **runnable and tested**, on confidentiality-safe fictional data.

@@ -1,19 +1,18 @@
 # Platform Architecture
 
-This repo is a seven-system, AI-driven finance and tax automation platform — five deterministic
-calculation engines, the Knowledge Brain retrieval engine, plus the Triangulate AI control
-framework — with an optional 24/7 agent operations layer:
+This repository is a seven-system, AI-driven Finance & Tax automation platform — five deterministic
+calculation engines, the Knowledge Brain retrieval engine, and the Triangulate AI control
+framework — with an optional orchestration layer:
 
-1. mobile command intake
-2. Mac mini worker nodes
-3. seeded fictional data generators
-4. calculation engines
-5. evidence artifacts
-6. independent validation
-7. CEO-ready reporting and human-gated verdicts
+1. seeded fictional data generators
+2. calculation engines
+3. evidence artifacts
+4. independent validation
+5. executive-ready reporting and human-gated verdicts
+6. an optional orchestration layer that coordinates longer-running work through the same controls
 
-The design principle is simple: the system that produces a number should not be the only system
-allowed to bless that number.
+The design principle is straightforward: the system that produces a number should not be the only
+system permitted to approve that number.
 
 ---
 
@@ -25,10 +24,11 @@ allowed to bless that number.
 
 ## Stage by stage
 
-### 1. Mobile or CLI command
+### 1. Command entry
 
-The same workflow can start from a phone, approved AI assistant access, a Python command, or CI.
-The command surface is flexible; the control trail stays the same.
+The same workflow can start from a Python command, continuous integration, or — in approved,
+agent-enabled environments — the optional orchestration layer. The entry point is flexible; the
+control trail stays the same.
 
 ### 2. Seeded fictional data
 
@@ -80,7 +80,7 @@ The human reviewer remains the final authority.
 
 ---
 
-## Deployment architecture: mobile command center
+## Deployment architecture
 
 The platform has two deployment tracks.
 
@@ -90,20 +90,17 @@ This is the public demo mode.
 
 <p align="center"><img src="./assets/flows/enterprise-safe-flow.svg" alt="Enterprise-safe deployment flow" width="100%"></p>
 
-It uses Python, Excel-compatible files, `openpyxl`, `pytest`, Markdown, JSON, and CI. It does not
-require Hermes or OpenClaw.
+It uses Python, Excel-compatible files, `openpyxl`, `pytest`, Markdown, JSON, and CI. It requires no
+agent or orchestration dependency.
 
-### Agent-accelerated track
+### Agent-enabled track
 
-This is the advanced workflow for environments that permit AI workstation orchestration.
+This is the advanced workflow for environments that permit AI orchestration.
 
-<p align="center"><img src="./assets/agent-command-center.svg" alt="Mobile command channel to 24/7 Mac mini agents to finance automation systems" width="100%"></p>
-
-Hermes/OpenClaw can coordinate longer-running work, handoffs, and background review passes.
-Telegram or approved mobile access can act as the command surface: send a job, check status, receive
-exceptions, and approve the final communication. Dedicated Mac mini workers keep the workspace
-available. The final output is a report package plus an executive-ready email draft. The agent layer
-does not replace deterministic validation or human sign-off.
+An optional orchestration layer can coordinate longer-running work, handoffs, and background review
+passes: dispatch a job, track status, receive exceptions, and approve the final communication, all
+through the same controls. The final output is a report package plus an executive-ready email draft.
+The orchestration layer does not replace deterministic validation or human sign-off.
 
 ## Executive package
 
@@ -131,8 +128,8 @@ Sending can be gated by human approval or by a client-approved routing policy.
   Knowledge Brain refuses to answer when no source clears its relevance floor.
 - **Evidence by default.** Every run leaves a reviewable trail, and prior decisions stay citable:
   the Knowledge Brain turns meeting transcripts into verbatim, timestamped citations for workpapers.
-- **Client-aware deployment.** The same control pattern can run with or without Hermes/OpenClaw,
-  depending on the client's IT rules.
+- **Client-aware deployment.** The same control pattern runs with or without the optional
+  orchestration layer, depending on the client's IT rules.
 - **Executive-ready communication.** The output is not just technical artifacts; it is packaged so
   leadership can understand what happened and what needs a decision.
 

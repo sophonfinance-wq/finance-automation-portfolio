@@ -167,22 +167,6 @@ def draw_icon(g, name, box, color=WHITE):
             g.ellipse([px - 2, py - 2, px + 2, py + 2], fill=color)
 
 
-def draw_phone_badge(g, accent, active=False, pulse=False):
-    """Small mobile command/status badge used in every engine demo."""
-    x1, y1, x2, y2 = 656, 104, 964, 126
-    fill = lerp((255, 255, 255), accent, 0.06 if active else 0)
-    outline = accent if active else BORDER
-    dot = lerp(accent, WHITE, 0.35 if pulse else 0.0) if active else FAINT
-
-    g.rr([x1, y1, x2, y2], 11, fill=fill, outline=outline)
-    g.rr([x1 + 12, y1 + 4, x1 + 28, y1 + 18], 3,
-         fill=(255, 255, 255), outline=accent, width=2)
-    g.ellipse([x1 + 19, y1 + 16, x1 + 21, y1 + 18], fill=accent)
-    g.ellipse([x2 - 23, y1 + 7, x2 - 13, y1 + 17], fill=dot)
-    g.text((x1 + 38, y1 + 3), "mobile command", UI_XS, DIM)
-    g.text((x1 + 170, y1 + 3), "status -> phone", UI_XS, accent if active else FAINT)
-
-
 def build_base(sys):
     accent = sys["accent"]
     acc_dk = darken(accent, 0.45)
@@ -229,7 +213,6 @@ def build_base(sys):
     g.rr([cx, 78, cx + 96, 100], 11, fill=KPI_BG, outline=BORDER)
     g.ellipse([cx + 12, 85, cx + 20, 93], fill=accent)
     g.text((cx + 28, 80), "Python 3.14", UI_XS, DIM)
-    draw_phone_badge(g, accent)
 
     # progress track
     g.rect([32, 132, W - 32, 135], BORDER2)
@@ -287,7 +270,6 @@ def render_frame(base, sys, accent, acc_dk, code_n, con_n, kpi_t, badge_t,
     g.rr([px1, 78, px1 + 150, 100], 11, fill=KPI_BG, outline=BORDER)
     g.ellipse([px1 + 18 - r, 89 - r, px1 + 18 + r, 89 + r], fill=dot_c)
     g.text((px1 + 30, 80), txt, UI_SB, pc)
-    draw_phone_badge(g, accent, active=running or badge_t > 0, pulse=pulse)
 
     # code lines
     y = 196

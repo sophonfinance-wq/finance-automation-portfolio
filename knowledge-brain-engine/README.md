@@ -1,17 +1,17 @@
 # 🧠 Knowledge Brain Engine
 
-> How I turn recorded finance/tax meetings into a **queryable, citation-governed knowledge
+> The platform turns recorded finance/tax meetings into a **queryable, citation-governed knowledge
 > base** — the sanitized public version of an internal **NotebookLM-style finance brain**.
-> Used *before* engagements to prep for meetings, and *during* workpaper and disclosure-note
+> Used *before* engagements to prepare for meetings, and *during* workpaper and disclosure-note
 > writing to cite the authoritative source **word-for-word, with date and timestamp**.
 
-> 🔒 This page describes my **approach and capabilities** over **fully fictional transcripts**.
+> 🔒 This page describes the platform's **approach and capabilities** over **fully fictional transcripts**.
 > Every meeting, participant, date, and quote is invented. It reproduces **no real meeting,
 > person, company, decision, or data** — only public accounting/tax concepts, generically.
 
 ---
 
-## The problem I solve
+## The problem it solves
 
 Finance and tax knowledge lives in meetings: a partner settles how a warranty reserve flows
 book-to-tax, a reviewer fixes the tie-out standard, a specialist rules on return of capital
@@ -19,15 +19,15 @@ beyond basis. Months later that decision has to be applied — but it survives o
 memory or a buried note. When it lands in a workpaper or a disclosure footnote, it needs to be
 **quotable and sourced**, not paraphrased from recall.
 
-## My approach: record → transcribe → ingest → query
+## Approach: record → transcribe → ingest → query
 
-In the real (confidential) workflow I **record** the meeting, **transcribe** it, and **ingest**
-the transcript into a queryable brain. Then I **query** it two ways:
+In the real (confidential) workflow, the platform **records** the meeting, **transcribes** it, and
+**ingests** the transcript into a queryable brain. It is then **queried** three ways:
 
 - **Prep** — before the next meeting, pull every prior decision, rule, and open item on the
   topic, each already cited.
-- **Cite** — while writing workpaper logic or a disclosure note, get the single authoritative
-  prior statement back as a **paste-ready footnote**, quoted verbatim with its date and timestamp.
+- **Cite** — while writing workpaper logic or a disclosure note, retrieve the single authoritative
+  prior statement as a **paste-ready footnote**, quoted verbatim with its date and timestamp.
 - **Remediate** — after a **review meeting**, turn the reviewer's spoken corrections into a
   cited change set and an **apply-ready, ready-to-paste prompt** (plus a change-log mapping each
   directive → source → status) that a downstream AI or operator uses to apply every fix.
@@ -49,8 +49,8 @@ This engine is the **public, runnable** version of that brain, over invented tra
 
 The brain holds **two** kinds of source-cited knowledge: the standing **laws** (decisions,
 rules, definitions) *and* the per-review **change-requests** a reviewer dictates. In the real
-(confidential) workflow I record the review meeting where a reviewer asks for specific
-corrections, then feed that transcript through this engine to **generate** an apply-ready, cited
+(confidential) workflow, the platform records the review meeting where a reviewer asks for specific
+corrections, then feeds that transcript through this engine to **generate** an apply-ready, cited
 remediation prompt; a downstream AI or operator then runs that prompt to **apply** the requested
 changes. **The transcript IS the instruction set** — and application and verification happen
 downstream.

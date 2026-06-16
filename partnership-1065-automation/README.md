@@ -84,14 +84,14 @@ ties: assets $2,260,000 = liabilities $0 + tax capital $2,260,000.
 | `output/section704c_summary.md` | Book-vs-tax capital reconciliation + §704(c) layer roll-forward with the ceiling rule flagged |
 | `output/section704c_k1_<PARTNER>.md` | Per-partner Schedule K-1 capital analysis on both §704(b) book and tax bases |
 
-## Sales Story
+## How It Operates
 
-The operator gives the system a source bundle. The system builds the tax workpapers, maps the
+The operator provides the system a source bundle. The system builds the tax workpapers, maps the
 numbers to the return, checks the package, and drafts the supporting summary for reviewer or
-executive follow-up. In an agent-approved environment, Hermes/OpenClaw can coordinate the source
-bundle, workpaper build, review checks, and status reporting through the 24/7 Mac mini worker layer.
-In a conservative environment, the same package runs manually through Python and CI without the
-agent layer.
+executive follow-up. In approved, agent-enabled environments, an optional orchestration layer can
+coordinate the source bundle, workpaper build, review checks, and status reporting as an unattended
+workflow. The platform runs fully without it: in a conservative environment, the same package runs
+through Python and CI with no orchestration layer.
 
 ## Controls
 

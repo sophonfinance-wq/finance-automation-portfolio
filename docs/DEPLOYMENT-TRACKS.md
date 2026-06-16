@@ -12,8 +12,9 @@ The core control framework is the same in both tracks:
 5. Keep the human reviewer responsible for final sign-off.
 
 The difference is the orchestration layer around that control framework: either a conservative
-enterprise-safe workflow, or a 24/7 multi-agent command center with mobile intake and Mac mini workers.
-In both tracks, AI does the drafting and review work while deterministic controls and a human gate keep it defensible.
+enterprise-safe workflow, or an optional orchestration layer that coordinates longer-running work in
+approved, agent-enabled environments. In both tracks, AI performs the drafting and review work while
+deterministic controls and a human gate keep it defensible.
 
 ---
 
@@ -36,10 +37,10 @@ third-party automation layers.
 
 ### What it avoids
 
-- no dependency on Hermes
-- no dependency on OpenClaw
+- no dependency on an orchestration layer
+- no dependency on autonomous agents
 - no need for live model credentials to run the public demo
-- no confidential data in the repo
+- no confidential data in the repository
 - no uncontrolled autonomous writes to final deliverables
 
 ### Why it still works
@@ -51,40 +52,39 @@ This is the version to show a conservative IT, audit, or compliance audience fir
 
 ---
 
-## Track 2: Agent-Accelerated Mode
+## Track 2: Agent-Enabled Mode
 
-Use this track when the company permits a more advanced AI workstation setup and wants faster
+Use this track when the company permits a more advanced AI orchestration setup and wants higher
 throughput across multi-step finance workflows.
 
-<p align="center"><img src="../assets/agent-command-center.svg" alt="Mobile command channel to 24/7 Mac mini finance agents" width="100%"></p>
+### Where the orchestration layer fits
 
-### Where Hermes and OpenClaw fit
+An optional orchestration layer can sit above the core engines. It is useful for work that benefits
+from longer-running coordination, such as:
 
-Hermes and OpenClaw-style workflows can sit above the core engines as orchestration surfaces. They
-are useful for work that benefits from longer-running coordination, such as:
-
-- mobile command intake through Telegram or approved mobile AI access
-- 24/7 Mac mini worker nodes that keep the workspace online
+- dispatching work through an approved command surface
+- keeping coordinated work available without operator supervision
 - preparing draft workpapers from a known source bundle
 - running background review passes
 - packaging handoffs between AI roles
-- monitoring multi-step tasks that do not require the user to sit at the keyboard
+- monitoring multi-step tasks that do not require the operator at the keyboard
 - routing findings into a fix packet, review memo, or sign-off checklist
 - keeping separate preparer, reviewer, specialist, and audit roles organized
-- drafting CEO-ready report emails after validation completes
+- drafting executive-ready report emails after validation completes
 
 ### What does not change
 
-Even in agent-accelerated mode:
+Even in agent-enabled mode:
 
 - the AI does not become the source of truth
-- the reviewer does not mark its own work
+- the reviewer does not validate its own work
 - deterministic checks still run
-- evidence still needs to tie to source
+- evidence still ties to source
 - final sign-off stays human
-- client confidentiality and IT rules control what can be automated
+- client confidentiality and IT rules govern what can be automated
 
-The agent layer can speed up execution, but the control layer is what makes the work defensible.
+The orchestration layer can speed up execution, but the control layer is what makes the work
+defensible.
 
 ### Executive package layer
 
@@ -108,12 +108,12 @@ describes the capability without requiring any client to approve automatic email
 Use this language when explaining the platform:
 
 > The public demo is intentionally enterprise-safe: Python, Excel, tests, CI, and fictional data.
-> Where a client allows more advanced AI tooling, the same framework can be accelerated with
-> Hermes and OpenClaw-style orchestration. Either way, the controls remain the same: independent
-> review, deterministic validation, evidence trails, and human sign-off.
+> Where a client allows more advanced AI tooling, the same framework can be accelerated with an
+> optional orchestration layer. Either way, the controls remain the same: independent review,
+> deterministic validation, evidence trails, and human sign-off.
 
-This keeps the claim honest. It tells clients that Hermes/OpenClaw capability exists without making
-the runnable public demo depend on tools their corporate environment may not permit.
+This keeps the claim precise. It confirms that orchestration capability exists without making the
+runnable public demo depend on tools a corporate environment may not permit.
 
 ---
 
@@ -127,14 +127,14 @@ the runnable public demo depend on tools their corporate environment may not per
 4. Review PASS / REVIEW / FAIL findings.
 5. Human reviewer signs off.
 
-### Agent-accelerated workflow
+### Agent-enabled workflow
 
-1. The operator sends a mobile command through Telegram or an approved AI assistant.
-2. Dedicated Mac mini workers keep the agent workspace available 24/7.
-3. Hermes/OpenClaw coordinates the source bundle, draft preparation, tax package build, and review queues.
+1. The operator dispatches a command through an approved command surface.
+2. The optional orchestration layer keeps coordinated work available without operator supervision.
+3. The orchestration layer coordinates the source bundle, draft preparation, tax package build, and review queues.
 4. Triangulate enforces AI separation of duties: preparer, reviewer, specialist, and a deterministic audit pass, with read-only review hash-enforced.
 5. Deterministic validation checks the output.
-6. Findings are packaged into a fix packet and CEO-ready email draft.
-7. Human reviewer decides what ships or what gets sent.
+6. Findings are packaged into a fix packet and executive-ready email draft.
+7. The human reviewer decides what ships or what gets sent.
 
 Both paths are credible. The right path depends on the client's IT environment.
