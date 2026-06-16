@@ -6,6 +6,7 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
 [![Run demo](https://img.shields.io/badge/GitHub%20Actions-Run%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
+[![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
@@ -44,10 +45,14 @@ financial deliverable should rest on a single model's word.
 
 ## See it run
 
-Want the actual "press play" version? Open
-**[Actions -> Run Finance Engine Demo](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)**,
-click **Run workflow**, choose one engine or `all`, and download the generated artifact package
-from the completed run. The workflow runs only the fictional-data demos in this public repo.
+**Try it yourself — three ways, all on fictional data:**
+
+1. **Run it in your browser, no install** — [open this repo in a GitHub Codespace](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio) (free tier; needs a GitHub account). When setup finishes, run `bash scripts/demo.sh` for the full tour, or a single engine, e.g.
+   `cd knowledge-brain-engine && python -m brain_engine remediate "Surplus Workpaper Review — Reviewer Corrections"`.
+2. **Press play on GitHub Actions** — **[Run Finance Engine Demo](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)** → **Run workflow** → choose one engine or `all` → download the artifact from the completed run. *(GitHub only shows the **Run workflow** button to accounts with write access, so **fork** the repo first to press play on your own copy.)*
+3. **Clone and run locally** — `pip install -r requirements.txt`, then `python -m pytest -q` (257 tests) or `bash scripts/demo.sh`.
+
+Every path runs only the fictional-data demos in this public repo.
 
 The systems below are not mockup slides. Each GIF shows a runnable engine producing evidence from
 fictional data, with mobile dispatch/status cues in the header, followed by the animated flow chart
