@@ -5,6 +5,7 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
+[![Run demo](https://img.shields.io/badge/GitHub%20Actions-Run%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
@@ -42,6 +43,11 @@ financial deliverable should rest on a single model's word.
 ---
 
 ## See it run
+
+Want the actual "press play" version? Open
+**[Actions -> Run Finance Engine Demo](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)**,
+click **Run workflow**, choose one engine or `all`, and download the generated artifact package
+from the completed run. The workflow runs only the fictional-data demos in this public repo.
 
 The systems below are not mockup slides. Each GIF shows a runnable engine producing evidence from
 fictional data, with mobile dispatch/status cues in the header, followed by the animated flow chart
