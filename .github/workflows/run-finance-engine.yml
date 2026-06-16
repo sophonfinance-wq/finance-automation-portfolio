@@ -1,0 +1,203 @@
+name: Run Finance Engine Demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      engine:
+        description: Which engine should GitHub run?
+        type: choice
+        required: true
+        default: all
+        options:
+          - all
+          - monthly-close
+          - cash-reconciliation
+          - tax-surplus
+          - partnership-1065
+          - partnership-704c
+          - audit-validation
+          - triangulate
+          - knowledge-brain
+      period:
+        description: Close period for the month-end engine
+        required: false
+        default: "2026-03"
+      start_year:
+        description: Start year for multi-year tax surplus runs
+        required: false
+        default: "2021"
+      end_year:
+        description: End year / tax year for tax engines
+        required: false
+        default: "2024"
+      seed:
+        description: Synthetic-data seed
+        required: false
+        default: "2026"
+      fail_on_review:
+        description: Fail the workflow when an engine returns a review/fail verdict
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  run-demo:
+    name: Run selected finance engine
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install requirements
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run engine
+        shell: bash
+        env:
+          ENGINE: ${{ inputs.engine }}
+          PERIOD: ${{ inputs.period }}
+          START_YEAR: ${{ inputs.start_year }}
+          END_YEAR: ${{ inputs.end_year }}
+          SEED: ${{ inputs.seed }}
+          FAIL_ON_REVIEW: ${{ inputs.fail_on_review }}
+          PYTHONIOENCODING: utf-8
+        run: |
+          set +e
+
+          mkdir -p _actions_artifacts/logs
+          overall=0
+
+          run_one() {
+            local key="$1"
+            local folder="$2"
+            shift 2
+            local logfile="$GITHUB_WORKSPACE/_actions_artifacts/logs/${key}.log"
+
+            echo "::group::${key}"
+            echo "Running ${key} in ${folder}"
+            (
+              cd "$folder"
+              "$@"
+            ) 2>&1 | tee "$logfile"
+            local rc=${PIPESTATUS[0]}
+            echo "::endgroup::"
+
+            {
+              echo "## ${key}"
+              echo ""
+              echo "- Folder: \`${folder}\`"
+              echo "- Command: \`$*\`"
+              echo "- Exit code: \`${rc}\`"
+              echo ""
+            } >> "$GITHUB_STEP_SUMMARY"
+
+            if [ "$rc" -ne 0 ]; then
+              overall=1
+              echo "::warning title=${key} returned ${rc}::The engine completed with a review/fail style exit code. Artifacts and logs were still captured."
+            fi
+          }
+
+          run_monthly_close() {
+            run_one "monthly-close" "monthly-close-automation" \
+              python run.py --period "$PERIOD" --seed "$SEED" --out output
+          }
+
+          run_cash_reconciliation() {
+            run_one "cash-reconciliation" "cash-reconciliation" \
+              python run.py --seed "$SEED"
+          }
+
+          run_tax_surplus() {
+            run_one "tax-surplus" "tax-surplus-engine" \
+              python run.py --start "$START_YEAR" --end "$END_YEAR" --seed "$SEED" --out out --xlsx
+          }
+
+          run_partnership_1065() {
+            run_one "partnership-1065" "partnership-1065-automation" \
+              python run.py --year "$END_YEAR" --seed "$SEED" --out output
+          }
+
+          run_partnership_704c() {
+            run_one "partnership-704c" "partnership-1065-automation" \
+              python run.py --section704c --out output
+          }
+
+          run_audit_validation() {
+            run_one "audit-validation" "audit-automation" \
+              python run.py
+          }
+
+          run_triangulate() {
+            run_one "triangulate" "ai-validation-framework" \
+              python run.py --sample clean --output output --xlsx
+          }
+
+          run_knowledge_brain() {
+            run_one "knowledge-brain" "knowledge-brain-engine" \
+              python run.py --out out --prep "warranty reserve book-tax treatment"
+          }
+
+          case "$ENGINE" in
+            all)
+              run_monthly_close
+              run_cash_reconciliation
+              run_tax_surplus
+              run_partnership_1065
+              run_partnership_704c
+              run_audit_validation
+              run_triangulate
+              run_knowledge_brain
+              ;;
+            monthly-close) run_monthly_close ;;
+            cash-reconciliation) run_cash_reconciliation ;;
+            tax-surplus) run_tax_surplus ;;
+            partnership-1065) run_partnership_1065 ;;
+            partnership-704c) run_partnership_704c ;;
+            audit-validation) run_audit_validation ;;
+            triangulate) run_triangulate ;;
+            knowledge-brain) run_knowledge_brain ;;
+            *)
+              echo "::error title=Unknown engine::$ENGINE"
+              exit 2
+              ;;
+          esac
+
+          {
+            echo "## Artifact locations"
+            echo ""
+            echo "Download the \`finance-engine-demo-artifacts\` artifact from this workflow run."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$overall" -ne 0 ] && [ "$FAIL_ON_REVIEW" = "true" ]; then
+            exit "$overall"
+          fi
+
+      - name: Upload generated artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finance-engine-demo-artifacts
+          path: |
+            _actions_artifacts/**
+            monthly-close-automation/output/**
+            cash-reconciliation/evidence-log.md
+            cash-reconciliation/output/**
+            tax-surplus-engine/out/**
+            partnership-1065-automation/output/**
+            audit-automation/samples/**
+            audit-automation/validation_report.json
+            audit-automation/validation_report.md
+            ai-validation-framework/output/**
+            knowledge-brain-engine/out/**
+          if-no-files-found: ignore
