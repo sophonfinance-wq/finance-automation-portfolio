@@ -1,0 +1,388 @@
+{
+  "tool": "validation_engine",
+  "version": "1.0.0",
+  "generated_utc": "2026-06-15T02:29:31Z",
+  "overall_verdict": "FAIL",
+  "workbook_count": 7,
+  "registry": [
+    "expected_formula",
+    "debit_credit_balance",
+    "forbidden_text",
+    "lineage_direction",
+    "cap_logic_leftover",
+    "json_tieout"
+  ],
+  "reports": [
+    {
+      "workbook": "cap_leftover__Sandbox_Capital_LLC.xlsx",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Surplus-Detail!B6",
+          "message": "formula present: =B3+B4+B5"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: =MAX(0, 'Surplus-Detail'!B6)"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "PASS",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance ties out (debit==credit==800)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forbidden text found"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "PASS",
+          "location": "-",
+          "message": "lineage flows inputs -> formulas"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "FLAG",
+          "location": "Summary!B2",
+          "message": "leftover MIN/MAX cap logic: =MAX(0, 'Surplus-Detail'!B6)"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "PASS",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus matches workbook (1350)"
+        }
+      ]
+    },
+    {
+      "workbook": "clean__Demo_Holdings_LLC.xlsx",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 7,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Surplus-Detail!B6",
+          "message": "formula present: =B3+B4+B5"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: ='Surplus-Detail'!B6"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "PASS",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance ties out (debit==credit==500)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forbidden text found"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "PASS",
+          "location": "-",
+          "message": "lineage flows inputs -> formulas"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "PASS",
+          "location": "-",
+          "message": "no MIN/MAX cap logic found"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "PASS",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus matches workbook (1800)"
+        }
+      ]
+    },
+    {
+      "workbook": "hardcoded_total__Maple_Fund_LP.xlsx",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 5,
+        "FAIL": 1,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "FAIL",
+          "location": "Surplus-Detail!B6",
+          "message": "expected a formula but found hardcoded value: 900"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: ='Surplus-Detail'!B6"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "PASS",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance ties out (debit==credit==1025)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forbidden text found"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "FLAG",
+          "location": "Surplus-Detail!B6",
+          "message": "detail driver should be a formula but is a literal: 900"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "PASS",
+          "location": "-",
+          "message": "no MIN/MAX cap logic found"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "PASS",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus matches workbook (900)"
+        }
+      ]
+    },
+    {
+      "workbook": "json_mismatch__Demo_Holdings_LLC.xlsx",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Surplus-Detail!B6",
+          "message": "formula present: =B3+B4+B5"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: ='Surplus-Detail'!B6"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "PASS",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance ties out (debit==credit==825)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forbidden text found"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "PASS",
+          "location": "-",
+          "message": "lineage flows inputs -> formulas"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "PASS",
+          "location": "-",
+          "message": "no MIN/MAX cap logic found"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "FAIL",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus=1725 != workbook closing surplus=1700"
+        }
+      ]
+    },
+    {
+      "workbook": "reversed_lineage__Harborview_Partners_LP.xlsx",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Surplus-Detail!B6",
+          "message": "formula present: =B3+B4+B5"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: ='Surplus-Detail'!B6"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "PASS",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance ties out (debit==credit==775)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forbidden text found"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "FLAG",
+          "location": "Evidence!B2",
+          "message": "evidence input should be a literal but is a formula: =Opening+0"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "PASS",
+          "location": "-",
+          "message": "no MIN/MAX cap logic found"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "PASS",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus matches workbook (1075)"
+        }
+      ]
+    },
+    {
+      "workbook": "stale_note__Cedar_Ridge_Trust.xlsx",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Surplus-Detail!B6",
+          "message": "formula present: =B3+B4+B5"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: ='Surplus-Detail'!B6"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "PASS",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance ties out (debit==credit==900)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "FLAG",
+          "location": "Surplus-Detail!D2",
+          "message": "forbidden text 'todo' in cell: 'TODO: reviewer decision pending on FY2024 income'"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "PASS",
+          "location": "-",
+          "message": "lineage flows inputs -> formulas"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "PASS",
+          "location": "-",
+          "message": "no MIN/MAX cap logic found"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "PASS",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus matches workbook (1225)"
+        }
+      ]
+    },
+    {
+      "workbook": "unbalanced_tb__Birchwood_Op_Co.xlsx",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 6,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Surplus-Detail!B6",
+          "message": "formula present: =B3+B4+B5"
+        },
+        {
+          "rule": "expected_formula",
+          "status": "PASS",
+          "location": "Summary!B2",
+          "message": "formula present: ='Surplus-Detail'!B6"
+        },
+        {
+          "rule": "debit_credit_balance",
+          "status": "FAIL",
+          "location": "Trial-Balance!B:C",
+          "message": "trial balance does NOT tie out: debit=885 vs credit=875 (diff=10)"
+        },
+        {
+          "rule": "forbidden_text",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forbidden text found"
+        },
+        {
+          "rule": "lineage_direction",
+          "status": "PASS",
+          "location": "-",
+          "message": "lineage flows inputs -> formulas"
+        },
+        {
+          "rule": "cap_logic_leftover",
+          "status": "PASS",
+          "location": "-",
+          "message": "no MIN/MAX cap logic found"
+        },
+        {
+          "rule": "json_tieout",
+          "status": "PASS",
+          "location": "json:closing_surplus",
+          "message": "JSON closing_surplus matches workbook (1350)"
+        }
+      ]
+    }
+  ]
+}

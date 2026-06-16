@@ -1,0 +1,54 @@
+# ============================================================
+#  SAFETY-FIRST .gitignore for a finance automation portfolio
+#  Default stance: BLOCK anything that could carry real client
+#  data, then explicitly allow only sanitized sample files.
+# ============================================================
+
+# --- Real data file types (blocked by default) ---
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.pdf
+*.qbo
+*.qbb
+*.qbw
+
+# --- Secrets / credentials ---
+.env
+.env.*
+*.key
+*.pem
+*.pfx
+credentials*
+secrets*
+*_token*
+*apikey*
+*api_key*
+
+# --- Real client / engagement work-products (never publish) ---
+#  Generic guards: block anything that looks like real engagement data.
+#  (Add your own project-specific patterns locally; keep this file generic.)
+**/client-data/
+**/real-data/
+**/private/
+**/*_CONFIDENTIAL*
+**/*review_package*/
+**/*evidence_log*
+**/*_pull_*.xlsx
+
+# --- OS / tooling noise ---
+.DS_Store
+Thumbs.db
+node_modules/
+.claude/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# ============================================================
+#  ALLOWLIST: sanitized sample files you DELIBERATELY include.
+#  Put dummy-data examples in a /samples folder and un-ignore
+#  them explicitly here, e.g.:
+# !samples/sample_reconciliation_DUMMY.csv
+# ============================================================

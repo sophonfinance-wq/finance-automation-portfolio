@@ -1,0 +1,85 @@
+name: CI
+
+# Runs the full test suite across every package in the portfolio.
+# Each system is self-contained (stdlib + openpyxl + pytest), so we install the
+# shared requirements once, then optionally install any per-package deps, then
+# run pytest in each package directory. The job is robust: every package runs
+# even if an earlier one fails, and the final step reports the aggregate result.
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+
+      - name: Install platform requirements
+        run: pip install -r requirements.txt
+
+      - name: Install any per-package dependencies
+        shell: bash
+        run: |
+          # Each system is independent. If a package declares its own deps
+          # (pyproject.toml or requirements.txt), install them so the suite is
+          # robust even as packages diverge. Failures here are non-fatal.
+          for dir in monthly-close-automation cash-reconciliation tax-surplus-engine partnership-1065-automation audit-automation ai-validation-framework; do
+            if [ -f "$dir/requirements.txt" ]; then
+              echo "::group::pip install -r $dir/requirements.txt"
+              pip install -r "$dir/requirements.txt" || echo "WARN: deps install failed for $dir (continuing)"
+              echo "::endgroup::"
+            fi
+            if [ -f "$dir/pyproject.toml" ]; then
+              echo "::group::pip install ./$dir"
+              pip install "./$dir" || echo "WARN: editable/package install failed for $dir (continuing)"
+              echo "::endgroup::"
+            fi
+          done
+
+      - name: Run test suite across all packages
+        shell: bash
+        env:
+          PYTHONIOENCODING: utf-8
+        run: |
+          # Run pytest in each package so a collection error in one package
+          # cannot hide the others. Aggregate the exit codes and fail at the end
+          # if any package failed.
+          set +e
+          overall=0
+          failed_packages=""
+          for dir in monthly-close-automation cash-reconciliation tax-surplus-engine partnership-1065-automation audit-automation ai-validation-framework; do
+            echo "::group::pytest $dir"
+            ( cd "$dir" && python -m pytest -q )
+            rc=$?
+            echo "::endgroup::"
+            if [ "$rc" -ne 0 ]; then
+              echo "::error title=Tests failed::$dir exited with code $rc"
+              overall=1
+              failed_packages="$failed_packages $dir"
+            fi
+          done
+          echo ""
+          if [ "$overall" -eq 0 ]; then
+            echo "All packages passed."
+          else
+            echo "FAILED packages:$failed_packages"
+          fi
+          exit "$overall"

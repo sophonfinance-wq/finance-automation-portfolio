@@ -1,0 +1,77 @@
+{
+  "status": "FAIL",
+  "max_severity": "Critical",
+  "severity_counts": {
+    "Critical": 2,
+    "High": 1,
+    "Medium": 2,
+    "Low": 1
+  },
+  "rationale": "2 Critical finding(s) present; deliverable cannot be signed off and is returned for rebuild.",
+  "signed_off_by": "HumanGate(automated-policy)",
+  "findings": [
+    {
+      "code": "TIE_OUT_MISMATCH",
+      "cell_ref": "B5",
+      "severity": "Critical",
+      "message": "Stated value 543000.0 does not tie out to formula =B2+B3+B4 (expected 544000.0).",
+      "raised_by": "Reviewer:MockLLMReviewer",
+      "authority": "Workbook Formula",
+      "expected": 544000.0,
+      "actual": 543000.0
+    },
+    {
+      "code": "AUDIT_TIE_OUT_FAIL",
+      "cell_ref": "B5",
+      "severity": "Critical",
+      "message": "Audit tie-out failed: B5 stated 543000.0 but =B2+B3+B4 re-derives to 544000.0.",
+      "raised_by": "Audit:DeterministicAuditor",
+      "authority": "Workbook Formula",
+      "expected": 544000.0,
+      "actual": 543000.0
+    },
+    {
+      "code": "HARDCODED_NO_FORMULA",
+      "cell_ref": "B7",
+      "severity": "High",
+      "message": "Cell 'Estimated Tax' is a hard-coded figure with no formula and only AI-assumption authority.",
+      "raised_by": "Reviewer:MockLLMReviewer",
+      "authority": "Ai Assumption",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "code": "UNSUPPORTED_AI_ASSUMPTION",
+      "cell_ref": "B6",
+      "severity": "Medium",
+      "message": "Cell 'Tax Rate (AI guess)' rests on an AI-generated assumption (lowest authority); requires a supporting source.",
+      "raised_by": "Reviewer:MockLLMReviewer",
+      "authority": "Ai Assumption",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "code": "UNSUPPORTED_AI_ASSUMPTION",
+      "cell_ref": "B7",
+      "severity": "Medium",
+      "message": "Cell 'Estimated Tax' rests on an AI-generated assumption (lowest authority); requires a supporting source.",
+      "raised_by": "Reviewer:MockLLMReviewer",
+      "authority": "Ai Assumption",
+      "expected": null,
+      "actual": null
+    },
+    {
+      "code": "PROCESS_LANGUAGE_LEAK",
+      "cell_ref": "<note[0]>",
+      "severity": "Low",
+      "message": "Internal/process language leaked into a note: 'placeholder until Reviewer confirms'.",
+      "raised_by": "Reviewer:MockLLMReviewer",
+      "authority": "Workbook Formula",
+      "expected": null,
+      "actual": null
+    }
+  ],
+  "notes": [
+    "Per authority hierarchy, AI-generated assumptions are lowest authority and must be replaced with a cited source before re-run."
+  ]
+}
