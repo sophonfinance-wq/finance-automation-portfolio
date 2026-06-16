@@ -2,7 +2,7 @@
 
 > 🔒 Sanitized public version of an internal NotebookLM-style finance brain. All meetings, people, dates, and quotes are invented; nothing reproduces a real meeting, person, or decision.
 
-**Meetings ingested:** 4 &nbsp;·&nbsp; **Knowledge cards:** 15
+**Meetings ingested:** 5 &nbsp;·&nbsp; **Knowledge cards:** 15
 
 ## Cards by kind
 

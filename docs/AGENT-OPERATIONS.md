@@ -88,7 +88,7 @@ The agent layer does not replace the systems. It orchestrates them.
 | Partnership 1065 Automation | build the 1065 support package, K-1 preview, review checks, and summary draft |
 | Validation Engine | run read-only checks and turn failures into exception language |
 | Triangulate | route work through preparer, reviewer, specialist, audit, and human gate |
-| Knowledge Brain | ask for prior decisions, assemble meeting prep, and pull verbatim, timestamped citations for workpapers — or surface its refusal when no source qualifies |
+| Knowledge Brain | ask for prior decisions, assemble meeting prep, pull verbatim, timestamped citations for workpapers, and run review -> remediation hands-free — a review meeting's recorded corrections become cited directives plus an auto-generated remediation prompt the AI applies untouched (the transcript is the instruction set) — or surface its refusal when no source qualifies |
 
 The value is not just automation. The value is controlled automation.
 

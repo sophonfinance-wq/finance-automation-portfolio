@@ -132,6 +132,48 @@ class Provenance:
 
 
 @dataclass(frozen=True)
+class ChangeDirective:
+    """A reviewer's spoken correction, captured as an executable change request.
+
+    A directive is the *review-to-remediation* counterpart of a
+    :class:`KnowledgeCard`: where a card freezes a standing "law", a directive
+    freezes a per-review instruction — "change X to Y" — that an AI is meant to
+    APPLY hands-free. The transcript IS the instruction set, so the verbatim
+    request and its full provenance are the load-bearing fields.
+
+    Attributes
+    ----------
+    directive_id:
+        Stable identifier (e.g. ``"DIR-SURPLUS-REVIEW-01"``).
+    topic_tags:
+        Normalised topic tags used by retrieval (e.g. ``("surplus", "review")``).
+    request_text:
+        The VERBATIM change request — byte-identical to the source utterance.
+    provenance:
+        Full source attribution (see :class:`Provenance`).
+    target:
+        Optional short label naming what the change touches (e.g.
+        ``"distribution formula"``) — a hint, never a substitute for the quote.
+    """
+
+    directive_id: str
+    topic_tags: Tuple[str, ...]
+    request_text: str
+    provenance: Provenance
+    target: str = ""
+
+    def __post_init__(self) -> None:
+        if not self.request_text.strip():
+            raise ValueError("directive request_text must be non-empty")
+        if not self.topic_tags:
+            raise ValueError(f"directive {self.directive_id} must carry at least one topic tag")
+
+    def citation_tag(self) -> str:
+        """Paste-ready citation tag for the directive's source utterance."""
+        return self.provenance.citation_tag()
+
+
+@dataclass(frozen=True)
 class KnowledgeCard:
     """An authoritative rule / decision / definition / open-item from a transcript.
 
@@ -171,10 +213,15 @@ class KnowledgeCard:
 
 @dataclass
 class Corpus:
-    """The full fictional corpus: meetings plus the cards extracted from them."""
+    """The full fictional corpus: meetings, the cards and directives extracted.
+
+    ``cards`` are the standing "laws"; ``directives`` are the per-review
+    change-requests. Both cite a source utterance, so both are traceable.
+    """
 
     meetings: List[Meeting] = field(default_factory=list)
     cards: List[KnowledgeCard] = field(default_factory=list)
+    directives: List["ChangeDirective"] = field(default_factory=list)
 
     def utterance_text(self, meeting_id: str, timestamp: str) -> str:
         """Return the source utterance text for a (meeting, timestamp) pair.
@@ -196,4 +243,12 @@ class Corpus:
         for card in self.cards:
             for tag in card.topic_tags:
                 grouped.setdefault(tag, []).append(card)
+        return grouped
+
+    def directives_by_topic(self) -> Dict[str, List["ChangeDirective"]]:
+        """Group change-directives by topic tag (one per tag the directive carries)."""
+        grouped: Dict[str, List["ChangeDirective"]] = {}
+        for directive in self.directives:
+            for tag in directive.topic_tags:
+                grouped.setdefault(tag, []).append(directive)
         return grouped

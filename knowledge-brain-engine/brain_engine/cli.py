@@ -9,9 +9,11 @@ Modes
     python -m brain_engine ask "<question>"         # top cited card(s)
     python -m brain_engine --cite "<assertion>"     # one paste-ready footnote
     python -m brain_engine --prep "<topic>"         # meeting-prep briefing
+    python -m brain_engine remediate "<review>"     # cited directives + paste-ready fix prompt
 
 With ``--out DIR`` the engine also writes the Markdown deliverables
-(brain_index.md, citation_example.md, meeting_prep_example.md).
+(brain_index.md, citation_example.md, meeting_prep_example.md,
+remediation_prompt.md, change_log.md).
 """
 
 from __future__ import annotations
@@ -23,12 +25,15 @@ from typing import List, Optional
 
 from .engine import MIN_RELEVANCE, BrainEngine
 from .generate import DEFAULT_SEED, build_corpus
+from .generate import REVIEW_MEETING_TITLE
 from .report import (
     REFUSAL,
     render_ask,
+    render_change_log,
     render_citation,
     render_index,
     render_prep,
+    render_remediation,
 )
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -37,6 +42,7 @@ _OUTPUT_DIR = _REPO_ROOT / "out"
 # Topics used for the written example deliverables (deterministic).
 _CITE_EXAMPLE = "return of capital in excess of basis"
 _PREP_EXAMPLE = "warranty reserve book-tax treatment"
+_REMEDIATE_EXAMPLE = REVIEW_MEETING_TITLE
 
 
 def _safe_print(text: str) -> None:
@@ -62,14 +68,17 @@ def build_parser() -> argparse.ArgumentParser:
         "ask",
         nargs="?",
         default=None,
-        metavar='ask "<question>"',
-        help='ask a question; prints the top matching card(s) with citation blocks',
+        metavar='ask "<question>" | remediate "<review>"',
+        help=(
+            'ask a question (top matching card(s) with citation blocks), or '
+            'remediate a review (cited change-directives + paste-ready fix prompt)'
+        ),
     )
     parser.add_argument(
         "question",
         nargs="?",
         default=None,
-        help="the question text (when using the 'ask' subcommand)",
+        help="the question / review text (when using the 'ask' or 'remediate' subcommand)",
     )
     parser.add_argument(
         "--cite",
@@ -118,6 +127,18 @@ def _write_deliverables(engine: BrainEngine, out_dir: Path) -> List[Path]:
         render_prep(_PREP_EXAMPLE, engine.prep(_PREP_EXAMPLE)), encoding="utf-8"
     )
     written.append(prep_path)
+
+    # Review -> remediation deliverables: the copy-paste prompt and the cited
+    # change-log, both generated from the fictional review meeting's directives.
+    rem = engine.remediate(_REMEDIATE_EXAMPLE)
+
+    prompt_path = out_dir / "remediation_prompt.md"
+    prompt_path.write_text(render_remediation(rem), encoding="utf-8")
+    written.append(prompt_path)
+
+    change_log_path = out_dir / "change_log.md"
+    change_log_path.write_text(render_change_log(rem), encoding="utf-8")
+    written.append(change_log_path)
     return written
 
 
@@ -154,6 +175,22 @@ def main(argv: Optional[List[str]] = None) -> int:
         hits = engine.prep(args.prep)
         _safe_print(render_prep(args.prep, hits))
         return 0 if hits else 3
+
+    # remediate mode --------------------------------------------------------
+    # Shape: remediate "<review meeting title or topic>". Handled before the
+    # generic 'ask' fallback so the keyword is never mistaken for a question.
+    if args.ask == "remediate":
+        topic = args.question if args.question is not None else ""
+        if not topic.strip():
+            print(
+                'error: remediate requires a review title/topic, e.g. '
+                'remediate "Surplus Workpaper Review"',
+                file=sys.stderr,
+            )
+            return 2
+        rem = engine.remediate(topic)
+        _safe_print(render_remediation(rem))
+        return 0 if not rem.is_empty else 3
 
     # ask mode --------------------------------------------------------------
     if args.ask == "ask" or args.question is not None:

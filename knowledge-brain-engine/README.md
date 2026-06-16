@@ -28,6 +28,8 @@ the transcript into a queryable brain. Then I **query** it two ways:
   topic, each already cited.
 - **Cite** — while writing workpaper logic or a disclosure note, get the single authoritative
   prior statement back as a **paste-ready footnote**, quoted verbatim with its date and timestamp.
+- **Remediate** — after a **review meeting**, turn the reviewer's spoken corrections into a
+  cited, executable change set and a **ready-to-paste prompt** that applies every fix hands-free.
 
 This engine is the **public, runnable** version of that brain, over invented transcripts.
 
@@ -41,6 +43,60 @@ This engine is the **public, runnable** version of that brain, over invented tra
   disclosure note or workpaper line can be traced straight back to who said it and when.
 - **Meeting prep** — settled positions and open items for a topic, assembled and cited in one
   briefing.
+
+## Review → remediation (hands-free)
+
+The brain holds **two** kinds of source-cited knowledge: the standing **laws** (decisions,
+rules, definitions) *and* the per-review **change-requests** a reviewer dictates. In the real
+(confidential) workflow I record the review meeting where a reviewer asks for specific
+corrections, then feed that transcript to an AI that **applies** the requested changes — I touch
+nothing but a copy-pasted prompt. **The transcript IS the instruction set.**
+
+This engine demonstrates exactly that, hands-free:
+
+1. A fictional review meeting's corrections are captured **verbatim** as `ChangeDirective`s, each
+   with full provenance (meeting, date, **HH:MM:SS**, speaker).
+2. `remediate "<review>"` retrieves those directives in spoken order and **auto-writes the
+   prompt you paste into your AI** — every numbered change annotated with its exact source quote
+   and timestamp, plus an instruction to log each applied change against its source.
+3. A **cited change-log** maps each directive → source citation → status (starts **PENDING**), so
+   every applied change traces back to the exact words it came from. Nothing is paraphrased; the
+   quote in the prompt and the change-log is **byte-identical** to what was said.
+
+If a review topic has no directives on record, the engine **refuses** rather than inventing
+corrections — the same refuse-do-not-guess control that governs every other mode.
+
+```bash
+# turn a review meeting's spoken corrections into cited directives + a paste-ready fix prompt:
+python -m brain_engine remediate "Surplus Workpaper Review — Reviewer Corrections"
+```
+
+**Real generated excerpt** (the directive list, then the prompt the operator copy-pastes):
+
+```text
+## Change-directives (in spoken order)
+
+**1. — target: distribution formula column reference**
+> Change the distribution formula to reference column E, not column D, across every year column.
+[Surplus Workpaper Review — Reviewer Corrections — 2025-04-08 — 00:01:04 — Quinn Harlow]
+directive `DIR-SURPLUS-REVIEW-01` · status PENDING
+...
+
+## Ready-to-paste remediation prompt
+You are applying reviewer corrections to a finance/tax workpaper, hands-free. Apply EACH
+numbered change below exactly as the reviewer stated it. ...
+
+1. Change the distribution formula to reference column E, not column D, across every year column.
+   Source quote: "Change the distribution formula to reference column E, not column D, across every year column."
+   Source: [Surplus Workpaper Review — Reviewer Corrections — 2025-04-08 — 00:01:04 — Quinn Harlow]
+...
+After applying all changes, output a change log: for each numbered change, record the change you
+made, the file/cell you touched, and the source citation above ... and set its status to APPLIED.
+... If any change cannot be applied, leave it PENDING and explain why — never guess.
+```
+
+With `--out`, this also writes `out/remediation_prompt.md` (the copy-paste prompt) and
+`out/change_log.md` (the cited fix-packet). Every name, number, and date here is **fictional**.
 
 ## Tools
 
@@ -88,7 +144,10 @@ python -m brain_engine --cite "return of capital in excess of basis is a deemed 
 # prep — a meeting-prep briefing of prior decisions/rules/open-items for a topic:
 python -m brain_engine --prep "warranty reserve book-tax treatment"
 
-# write the Markdown deliverables (index / citation example / prep example):
+# remediate — a review's spoken corrections as cited directives + a paste-ready fix prompt:
+python -m brain_engine remediate "Surplus Workpaper Review — Reviewer Corrections"
+
+# write the Markdown deliverables (index / citation / prep / remediation prompt / change-log):
 python -m brain_engine --out out
 #   (equivalently: python run.py --out out)
 
@@ -103,6 +162,8 @@ python -m pytest -q
 - `out/brain_index.md` — every card grouped by topic and by kind, with full provenance.
 - `out/citation_example.md` — a sample workpaper citation block (verbatim quote + source).
 - `out/meeting_prep_example.md` — a sample prep briefing (settled positions + open items).
+- `out/remediation_prompt.md` — a review's cited change-directives + the paste-ready fix prompt.
+- `out/change_log.md` — the cited fix-packet (directive → source citation → status PENDING).
 
 ### Example output (real, generated by the commands above)
 
@@ -149,8 +210,8 @@ $ python -m brain_engine ask "what is the office parking and lunch policy"
 
 ```text
 $ python -m pytest -q
-..................................................                       [100%]
-50 passed
+...........................................................................  [100%]
+75 passed
 ```
 
 The suite asserts the load-bearing governance: **every returned answer carries a citation**,
@@ -158,20 +219,25 @@ the **refuse-do-not-guess** behaviour when nothing clears the relevance floor, *
 formatting** from second offsets, **cite-mode text byte-identical** to the source utterance,
 **retrieval determinism** (same query → same ranked order and scores), **keyword/tag scoring**
 ranking the obviously-best card first, **prep mode** including the right prior decisions and
-excluding irrelevant ones, **index counts**, and that **no card exists without a source**.
+excluding irrelevant ones, **index counts**, and that **no card exists without a source**. The
+**review → remediation** tests add: change-directives extracted with full provenance, the
+generated remediation prompt containing **every directive in order**, each directive in the
+prompt *and* the change-log carrying its **verbatim** source quote + timestamp, the change-log
+mapping **1:1** to the directives at status **PENDING**, prompt **determinism**, and
+**refusal/empty** when a review topic has no directives on record.
 
 ### Layout
 ```text
 knowledge-brain-engine/
 ├── brain_engine/
 │   ├── __init__.py      # package + confidentiality posture
-│   ├── model.py         # Meeting / Utterance / Provenance / KnowledgeCard / Corpus
-│   ├── generate.py      # seeded fictional transcript corpus + card extraction
-│   ├── engine.py        # deterministic TF-IDF retrieval, cite/prep, refusal governance
-│   ├── report.py        # citation blocks, brain index, prep briefing, refusal banner
-│   ├── cli.py           # argparse CLI (ask / --cite / --prep / default index)
+│   ├── model.py         # Meeting / Utterance / Provenance / KnowledgeCard / ChangeDirective / Corpus
+│   ├── generate.py      # seeded fictional transcript corpus + card & directive extraction
+│   ├── engine.py        # deterministic TF-IDF retrieval, cite/prep, remediation, refusal governance
+│   ├── report.py        # citation blocks, brain index, prep briefing, remediation prompt + change-log
+│   ├── cli.py           # argparse CLI (ask / --cite / --prep / remediate / default index)
 │   ├── __main__.py      # python -m brain_engine
-│   └── tests/           # pytest suite (50 tests, inside the package)
+│   └── tests/           # pytest suite (75 tests, inside the package)
 ├── run.py               # convenience entrypoint
 ├── pytest.ini
 ├── out/                 # generated Markdown deliverables

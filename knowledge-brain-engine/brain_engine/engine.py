@@ -28,7 +28,18 @@ import re
 from dataclasses import dataclass
 from typing import Dict, List, Tuple
 
-from .model import AUTHORITATIVE_KINDS, OPEN_ITEM, Corpus, KnowledgeCard
+from .model import (
+    AUTHORITATIVE_KINDS,
+    OPEN_ITEM,
+    ChangeDirective,
+    Corpus,
+    KnowledgeCard,
+)
+
+# Status a freshly-generated fix-packet entry carries: the change has been
+# instructed but not yet confirmed applied. The operator (or the AI's own
+# change log) flips this once the edit is made.
+STATUS_PENDING = "PENDING"
 
 # A card must clear this cosine-similarity score to be returned. Below it, the
 # engine refuses rather than guessing. Tuned so off-topic questions (e.g.
@@ -69,6 +80,50 @@ class RetrievalHit:
 
     card: KnowledgeCard
     score: float
+
+
+@dataclass(frozen=True)
+class FixPacketEntry:
+    """One row of the cited change-log: directive -> source citation -> status.
+
+    The mapping is 1:1 with the review's directives, in spoken order. ``number``
+    is the human-facing position (1-based) used both in the change-log and in the
+    generated remediation prompt, so the two views line up.
+    """
+
+    number: int
+    directive: ChangeDirective
+    status: str = STATUS_PENDING
+
+
+@dataclass(frozen=True)
+class Remediation:
+    """The full review-to-remediation packet for one review meeting/topic.
+
+    Attributes
+    ----------
+    topic:
+        The review title/topic the operator asked to remediate.
+    directives:
+        The ordered change-requests (spoken order), each with full provenance.
+    prompt:
+        The single READY-TO-PASTE remediation prompt — the operator copy-pastes
+        this into an AI and it applies every change hands-free, logging each
+        applied change against its verbatim source quote + timestamp.
+    fix_packet:
+        The change-log: one :class:`FixPacketEntry` per directive, 1:1, each
+        starting at :data:`STATUS_PENDING`.
+    """
+
+    topic: str
+    directives: Tuple[ChangeDirective, ...]
+    prompt: str
+    fix_packet: Tuple[FixPacketEntry, ...]
+
+    @property
+    def is_empty(self) -> bool:
+        """True when no directive matched — the engine refuses rather than guess."""
+        return not self.directives
 
 
 class BrainEngine:
@@ -198,6 +253,130 @@ class BrainEngine:
             )
         )
         return hits[:top_k]
+
+    # --------------------------------------------------- review -> remediation
+    def directives_for(self, topic: str) -> List[ChangeDirective]:
+        """Resolve the change-directives for a review meeting title or topic.
+
+        Resolution is deterministic and citation-safe — it never guesses content,
+        it only *selects* directives that already exist verbatim in the corpus:
+
+        1. **Meeting match** — if ``topic`` (case-folded) is a substring of a
+           directive's source meeting title, or vice-versa, that whole review's
+           directives are returned in spoken order. This is the common path:
+           the operator pastes the review's title.
+        2. **Topic-tag match** — otherwise, directives whose topic tags overlap
+           the query tokens are returned, still in spoken (timestamp) order.
+
+        Returns an empty list when nothing matches; the caller then refuses,
+        consistent with the engine's refuse-do-not-guess control.
+        """
+        needle = topic.strip().casefold()
+        if not needle:
+            return []
+
+        # 1) Meeting-title match (substring either direction).
+        title_matched: List[ChangeDirective] = []
+        for directive in self.corpus.directives:
+            title = directive.provenance.title.casefold()
+            if needle in title or title in needle:
+                title_matched.append(directive)
+        if title_matched:
+            return self._order_directives(title_matched)
+
+        # 2) Topic-tag overlap.
+        query_tokens = set(_tokenize(topic))
+        tag_matched: List[ChangeDirective] = []
+        for directive in self.corpus.directives:
+            tags = set(directive.topic_tags) | {t for tag in directive.topic_tags for t in _tokenize(tag)}
+            if query_tokens & tags:
+                tag_matched.append(directive)
+        return self._order_directives(tag_matched)
+
+    @staticmethod
+    def _order_directives(directives: List[ChangeDirective]) -> List[ChangeDirective]:
+        """Order directives by (meeting_id, timestamp) — i.e. spoken order — total
+        and stable, with ``directive_id`` as a final deterministic tiebreak."""
+        return sorted(
+            directives,
+            key=lambda d: (
+                d.provenance.meeting_id,
+                d.provenance.timestamp,
+                d.directive_id,
+            ),
+        )
+
+    def remediate(self, topic: str) -> Remediation:
+        """Build the review-to-remediation packet for ``topic``.
+
+        Produces (a) the ordered directive list (each cited), (b) a single
+        ready-to-paste remediation prompt that instructs an AI to apply every
+        change hands-free with each step annotated by its verbatim source quote +
+        timestamp and a log-against-source instruction, and (c) a fix-packet /
+        change-log mapping each directive to its source citation at status
+        :data:`STATUS_PENDING`.
+
+        If no directive matches the topic, returns an *empty* :class:`Remediation`
+        (``is_empty``) — the engine refuses rather than inventing a change set.
+        """
+        directives = self.directives_for(topic)
+        fix_packet = tuple(
+            FixPacketEntry(number=i, directive=d, status=STATUS_PENDING)
+            for i, d in enumerate(directives, start=1)
+        )
+        prompt = self._build_remediation_prompt(topic, fix_packet)
+        return Remediation(
+            topic=topic,
+            directives=tuple(directives),
+            prompt=prompt,
+            fix_packet=fix_packet,
+        )
+
+    @staticmethod
+    def _build_remediation_prompt(topic: str, fix_packet: "Tuple[FixPacketEntry, ...]") -> str:
+        """Render the single copy-paste remediation prompt (deterministic).
+
+        Every numbered change carries its verbatim source quote + timestamp, and
+        the prompt instructs the AI to apply each change hands-free and log it
+        against its source. Empty fix-packet -> an explicit refusal prompt so the
+        operator never pastes an instruction set the brain could not source.
+        """
+        lines: List[str] = []
+        if not fix_packet:
+            lines.append(
+                "No sourced change-directive was found for "
+                f"“{topic}”. Do not invent corrections; "
+                "re-state the review meeting title or topic."
+            )
+            return "\n".join(lines)
+
+        lines.append(
+            "You are applying reviewer corrections to a finance/tax workpaper, hands-free. "
+            "Apply EACH numbered change below exactly as the reviewer stated it. Do not "
+            "improvise beyond the request. Every change is annotated with the VERBATIM "
+            "source quote and its timestamp so the instruction is fully traceable."
+        )
+        lines.append("")
+        lines.append(f'Review: "{topic}"')
+        lines.append("")
+        lines.append("Changes to apply:")
+        for entry in fix_packet:
+            d = entry.directive
+            prov = d.provenance
+            lines.append("")
+            target = f" (target: {d.target})" if d.target else ""
+            lines.append(f"{entry.number}. {d.request_text}{target}")
+            lines.append(f'   Source quote: "{d.request_text}"')
+            lines.append(f"   Source: {prov.citation_tag()}")
+        lines.append("")
+        lines.append(
+            "After applying all changes, output a change log: for each numbered change, "
+            "record the change you made, the file/cell you touched, and the source citation "
+            "above it traces to (meeting, date, timestamp, speaker), and set its status to "
+            "APPLIED. Do not mark a change APPLIED unless you actually made it. If any change "
+            "cannot be applied, leave it PENDING and explain why — never guess."
+        )
+        return "\n".join(lines)
 
     # --------------------------------------------------------------- summary
     def index_summary(self) -> Dict[str, object]:

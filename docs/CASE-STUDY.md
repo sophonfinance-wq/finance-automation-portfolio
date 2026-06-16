@@ -18,7 +18,7 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **seven runnable systems, 232
+without becoming the weakest link. This portfolio is that proof: **seven runnable systems, 257
 tests, CI.**
 
 ---
@@ -51,8 +51,14 @@ transcripts, with three query modes and one non-negotiable control:
 - **`--cite`** — while writing workpaper logic or a disclosure note, get the single authoritative
   prior statement back as a **paste-ready footnote**, quoted verbatim with `[Title — Date —
   HH:MM:SS — Speaker]`.
-- **Governance:** every answer carries a source; if nothing clears the relevance floor, the engine
-  **refuses to guess** rather than fabricating an uncited answer.
+- **`remediate` — review → remediation, hands-free.** After a recorded **review meeting**, the
+  reviewer's spoken corrections are captured as cited **change-directives** (verbatim quote + date +
+  `HH:MM:SS` + speaker), and the engine **auto-generates a copy-paste remediation prompt** that an AI
+  runs to apply every change, plus a **cited change-log** mapping each directive → source → status.
+  The operator touches nothing but the pasted prompt — **the transcript is the instruction set.**
+- **Governance:** every answer carries a source; if nothing clears the relevance floor — and if a
+  review topic has no directives on record — the engine **refuses to guess** rather than fabricating
+  an uncited answer or inventing corrections.
 
 That is retrieval with the discipline a workpaper or an auditor actually requires: provenance
 travels with every quote, and the quote is byte-identical to the transcript.
@@ -80,14 +86,14 @@ Each is now encoded as a control in the portfolio:
 
 | Competency | Proof in this repo | Tests |
 |---|---|---|
-| AI knowledge management — citation-governed retrieval over meeting transcripts (prep + verbatim cite) | `knowledge-brain-engine` | 50 |
+| AI knowledge management — citation-governed retrieval over meeting transcripts (prep + verbatim cite) plus review -> remediation (reviewer's recorded corrections -> cited directives -> auto-generated apply-ready prompt, applied hands-free with a cited change-log) | `knowledge-brain-engine` | 75 |
 | Cross-border foreign-affiliate tax (T1134, surplus pools, ACB, repatriation waterfall) | `tax-surplus-engine` | 26 |
 | Partnership tax — Form 1065 / K-1 assembly + §704(c) built-in gain (ceiling rule) | `partnership-1065-automation` | 40 |
 | Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 41 |
 | Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 31 |
 | Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 23 |
 | AI orchestration with controls (separation of duties, human gate) | `ai-validation-framework` | 21 |
-| **Total** | **7 systems** | **232** |
+| **Total** | **7 systems** | **257** |
 
 ---
 

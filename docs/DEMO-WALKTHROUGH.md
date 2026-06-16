@@ -143,16 +143,22 @@ python -m brain_engine                                                          
 python -m brain_engine ask "how is return of capital beyond basis treated?"      # cited answer
 python -m brain_engine --cite "return of capital in excess of basis is a deemed gain"  # paste-ready footnote
 python -m brain_engine --prep "warranty reserve book-tax treatment"              # meeting-prep briefing
+python -m brain_engine remediate "Surplus Workpaper Review — Reviewer Corrections"  # cited directives + apply-ready fix prompt
 ```
 
 **Point at:** the citation block — `[Title — Date — HH:MM:SS — Speaker]` — and the refusal banner
 when you ask for something the brain has no source for.
 
 **The wow moment:** it cites verbatim with a timestamp, and it refuses to guess. Ask for a parking
-or lunch policy and the brain returns its refusal banner instead of inventing an answer.
+or lunch policy and the brain returns its refusal banner instead of inventing an answer. Then run
+`remediate` and watch a review meeting's spoken corrections become cited change-directives plus an
+auto-generated, apply-ready remediation prompt — the operator pastes that one prompt and the AI
+applies every fix hands-free, with a cited change-log.
 
 **What it proves:** institutional memory becomes citation-grade — meeting decisions become quotable,
-sourced, and traceable into workpapers and disclosure notes.
+sourced, and traceable into workpapers and disclosure notes — and a reviewer's recorded corrections
+become an auto-generated, cited, apply-ready prompt, so the transcript itself drives the remediation
+hands-free.
 
 ---
 
