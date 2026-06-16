@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import List
 
-from .engine import BrainEngine, RetrievalHit
+from .engine import BrainEngine, Remediation, RetrievalHit
 from .model import OPEN_ITEM
 
 REFUSAL = "No sourced answer — the brain does not guess."
@@ -137,6 +137,99 @@ def render_prep(topic: str, hits: List[RetrievalHit]) -> str:
     else:
         out.append("_None on record._")
         out.append("")
+    return "\n".join(out)
+
+
+def render_remediation(rem: Remediation) -> str:
+    """Render the review-to-remediation view for the CLI: the cited directive
+    list followed by the ready-to-paste remediation prompt (or a refusal)."""
+    out: List[str] = []
+    out.append(f"# Review → Remediation — “{rem.topic}” [FICTIONAL]")
+    out.append("")
+    if rem.is_empty:
+        out.append(f"> 🔒 {REFUSAL}")
+        out.append("")
+        out.append(
+            "_No change-directive on record for this review. The brain refuses to "
+            "manufacture corrections._"
+        )
+        out.append("")
+        return "\n".join(out)
+
+    out.append(
+        "> 🔒 Reviewer corrections from a prior **fictional** review meeting, captured "
+        "verbatim. The transcript IS the instruction set — paste the prompt below into "
+        "your AI and the changes get applied hands-free, each traceable to the exact words."
+    )
+    out.append("")
+    out.append(f"_{len(rem.directives)} change-directive(s); each carries a citation._")
+    out.append("")
+
+    out.append("## Change-directives (in spoken order)")
+    out.append("")
+    for entry in rem.fix_packet:
+        d = entry.directive
+        prov = d.provenance
+        target = f" — _target: {d.target}_" if d.target else ""
+        out.append(f"**{entry.number}.{target}**")
+        out.append("")
+        out.append(f"> {d.request_text}")
+        out.append("")
+        out.append(f"{prov.citation_tag()}")
+        out.append(f"_directive `{d.directive_id}` · status {entry.status}_")
+        out.append("")
+
+    out.append("## Ready-to-paste remediation prompt")
+    out.append("")
+    out.append("_Copy everything in the block below into your AI; it applies each change "
+               "hands-free and logs every applied change against its source._")
+    out.append("")
+    out.append("```text")
+    out.append(rem.prompt)
+    out.append("```")
+    out.append("")
+    return "\n".join(out)
+
+
+def render_change_log(rem: Remediation) -> str:
+    """Render the cited change-log / fix-packet: directive -> source -> status.
+
+    The change-log maps 1:1 to the review's directives and quotes each request
+    byte-identically so a reviewer can confirm nothing drifted from what was said.
+    """
+    out: List[str] = []
+    out.append(f"# Change Log — “{rem.topic}” [FICTIONAL]")
+    out.append("")
+    if rem.is_empty:
+        out.append(f"> 🔒 {REFUSAL}")
+        out.append("")
+        out.append("_No change-directive on record for this review; nothing to log._")
+        out.append("")
+        return "\n".join(out)
+
+    out.append(
+        "> 🔒 Fix-packet for a **fictional** review. Each row maps a reviewer change-request "
+        "to its verbatim source citation and a status. Every entry starts **PENDING**; the AI "
+        "(or operator) flips it to **APPLIED** once the edit is made and logged against its source."
+    )
+    out.append("")
+    out.append("| # | Change requested (verbatim) | Target | Source (Title — Date — HH:MM:SS — Speaker) | Directive | Status |")
+    out.append("|---:|---|---|---|---|---|")
+    for entry in rem.fix_packet:
+        d = entry.directive
+        prov = d.provenance
+        quote = d.request_text.replace("|", "\\|")
+        target = d.target.replace("|", "\\|") if d.target else "—"
+        src = f"{prov.title} — {prov.date} — {prov.timestamp} — {prov.speaker}"
+        out.append(
+            f"| {entry.number} | {quote} | {target} | {src} | `{d.directive_id}` | {entry.status} |"
+        )
+    out.append("")
+    out.append(
+        "_Every change traces to the exact words and timestamp it came from; the quote above is "
+        "byte-identical to the source transcript utterance. Status starts PENDING by design._"
+    )
+    out.append("")
     return "\n".join(out)
 
 

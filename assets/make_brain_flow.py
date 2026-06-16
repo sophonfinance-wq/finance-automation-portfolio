@@ -15,7 +15,7 @@ OUT.parent.mkdir(exist_ok=True)
 
 ACCENT = "#4f46e5"        # indigo — the brain's distinct accent
 TITLE = "Knowledge Brain"
-SUBTITLE = "Record, transcribe, ingest, and cite meetings word-for-word."
+SUBTITLE = "Carries the laws and the corrections — cite them, or auto-apply them hands-free."
 
 # (step title, body line 1, body line 2, [chips])
 STEPS = [
@@ -27,22 +27,26 @@ STEPS = [
      "Speaker-tagged utterances, each stamped to the",
      "second (HH:MM:SS).",
      ["Speaker", "HH:MM:SS"]),
-    ("Ingest into knowledge cards",
-     "Authoritative statements become cards carrying",
-     "full provenance.",
-     ["Decision", "Rule", "Open-item"]),
+    ("Ingest: laws + corrections",
+     "Authoritative rules AND reviewer change-requests",
+     "become cards with full provenance.",
+     ["Law", "Decision", "Directive"]),
     ("Index the brain",
      "A deterministic TF-IDF index over every card,",
      "organised by topic.",
      ["Topic", "TF-IDF"]),
-    ("Query before the work",
-     "Ask the brain, or prep for the next meeting from",
-     "prior decisions.",
-     ["Ask", "Prep"]),
-    ("Cite — word for word",
-     "Paste-ready footnote: verbatim quote + date, time,",
-     "speaker. No source: refuse.",
-     ["Verbatim", "Cite", "Refuse"]),
+    ("Query the brain",
+     "Ask it, prep for a meeting, or cite a prior",
+     "decision word-for-word.",
+     ["Ask", "Prep", "Cite"]),
+    ("Reviewer corrections → directives",
+     "A review transcript becomes a cited, executable",
+     "list of the exact changes requested.",
+     ["Verbatim", "Cited"]),
+    ("Auto-apply, hands-free",
+     "The brain writes the prompt; you copy-paste it;",
+     "the AI applies every change, traced to source.",
+     ["Copy-paste", "Change-log"]),
 ]
 
 CARD_H = 200

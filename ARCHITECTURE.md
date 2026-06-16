@@ -52,7 +52,7 @@ verbatim, sourced citations.
 
 | Engine | Folder | What it serves |
 |---|---|---|
-| Knowledge Brain | `knowledge-brain-engine` | meeting transcripts -> citation-governed knowledge base; meeting prep and verbatim, timestamped citations for workpapers; refuses when no source clears its relevance floor |
+| Knowledge Brain | `knowledge-brain-engine` | meeting transcripts -> citation-governed knowledge base; meeting prep and verbatim, timestamped citations for workpapers; review -> remediation (hands-free) where a review meeting's recorded corrections become cited directives and an auto-generated remediation prompt the AI applies untouched — the transcript is the instruction set; refuses when no source clears its relevance floor |
 
 ### 4. Evidence artifacts
 

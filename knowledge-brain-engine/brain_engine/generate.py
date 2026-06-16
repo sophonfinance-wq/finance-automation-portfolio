@@ -28,6 +28,7 @@ from .model import (
     DEFINITION,
     OPEN_ITEM,
     RULE,
+    ChangeDirective,
     Corpus,
     KnowledgeCard,
     Meeting,
@@ -36,6 +37,10 @@ from .model import (
 )
 
 DEFAULT_SEED = 1107
+
+# Title of the fictional review meeting that carries the change-directives. The
+# remediation CLI resolves a review topic/title back to this meeting's directives.
+REVIEW_MEETING_TITLE = "Surplus Workpaper Review — Reviewer Corrections"
 
 
 @dataclass(frozen=True)
@@ -49,11 +54,26 @@ class ExtractionSpec:
 
 
 @dataclass(frozen=True)
+class DirectiveSpec:
+    """Marks one utterance (by timestamp) as a reviewer change-request to extract.
+
+    Like :class:`ExtractionSpec`, but lifts the utterance into a
+    :class:`ChangeDirective` rather than a standing :class:`KnowledgeCard`.
+    """
+
+    directive_id: str
+    timestamp: str  # HH:MM:SS — must match an utterance in the meeting
+    topic_tags: Tuple[str, ...]
+    target: str = ""
+
+
+@dataclass(frozen=True)
 class _MeetingSpec:
-    """A meeting plus the extraction specs that pull cards from it."""
+    """A meeting plus the extraction / directive specs that pull from it."""
 
     meeting: Meeting
     extractions: Tuple[ExtractionSpec, ...]
+    directives: Tuple[DirectiveSpec, ...] = ()
 
 
 def _u(speaker: str, t_seconds: int, text: str) -> Utterance:
@@ -215,6 +235,77 @@ def _meeting_specs() -> List[_MeetingSpec]:
         )
     )
 
+    # --- Meeting 5: REVIEW — reviewer issues explicit corrections -----------
+    # This is the review-to-remediation meeting: the reviewer dictates specific,
+    # timestamped change-requests against the surplus workpaper. Each flagged
+    # utterance becomes a ChangeDirective (an instruction to APPLY), not a
+    # standing card. Numbers are invented; concepts are generic and public.
+    m5 = Meeting(
+        meeting_id="MTG-2025-SURPLUS-REVIEW",
+        date="2025-04-08",
+        title=REVIEW_MEETING_TITLE,
+        participants=("Quinn Harlow", "Marco Reyes", "Avery Stone"),
+        utterances=(
+            _u("Quinn Harlow", 0, "I reviewed the surplus workpaper; I have a handful of corrections to apply before sign-off."),
+            _u(
+                "Quinn Harlow",
+                64,
+                "Change the distribution formula to reference column E, not column D, across every year column.",
+            ),
+            _u("Marco Reyes", 150, "Understood — column E is the distributed figure, column D was the accrual."),
+            _u(
+                "Quinn Harlow",
+                212,
+                "Add back the warranty-reserve book-tax difference at the development level — about 46% of the adjustment.",
+            ),
+            _u("Avery Stone", 300, "So the add-back lands in the development tab, not the consolidated tab."),
+            _u(
+                "Quinn Harlow",
+                366,
+                "Re-run the evidence query and footnote each figure to its source anchor.",
+            ),
+            _u("Marco Reyes", 430, "I'll regenerate the tie-out and attach the anchors."),
+            _u(
+                "Quinn Harlow",
+                498,
+                "Keep the 26,000 item as a distribution to match the tax return, do not reclass it to income.",
+            ),
+            _u("Avery Stone", 560, "Got it — 26,000 stays on the distribution line to tie to the return."),
+        ),
+    )
+    specs.append(
+        _MeetingSpec(
+            m5,
+            extractions=(),  # a review meeting issues directives, not standing cards
+            directives=(
+                DirectiveSpec(
+                    "DIR-SURPLUS-REVIEW-01",
+                    "00:01:04",
+                    ("surplus", "distribution", "formula", "review"),
+                    target="distribution formula column reference",
+                ),
+                DirectiveSpec(
+                    "DIR-SURPLUS-REVIEW-02",
+                    "00:03:32",
+                    ("warranty", "book-tax", "add-back", "review"),
+                    target="warranty-reserve book-tax add-back",
+                ),
+                DirectiveSpec(
+                    "DIR-SURPLUS-REVIEW-03",
+                    "00:06:06",
+                    ("evidence", "tie-out", "footnote", "review"),
+                    target="evidence query re-run and footnotes",
+                ),
+                DirectiveSpec(
+                    "DIR-SURPLUS-REVIEW-04",
+                    "00:08:18",
+                    ("distribution", "tax-return", "classification", "review"),
+                    target="26,000 distribution classification",
+                ),
+            ),
+        )
+    )
+
     return specs
 
 
@@ -253,8 +344,44 @@ def _extract_cards(spec: _MeetingSpec) -> List[KnowledgeCard]:
     return cards
 
 
+def _extract_directives(spec: _MeetingSpec) -> List[ChangeDirective]:
+    """Lift the flagged review utterances of a meeting into change-directives.
+
+    The directive ``request_text`` is copied byte-for-byte from the matched
+    utterance, so a remediation prompt can never drift from what the reviewer
+    actually asked for.
+    """
+    meeting = spec.meeting
+    by_timestamp: Dict[str, Utterance] = {u.timestamp: u for u in meeting.utterances}
+    directives: List[ChangeDirective] = []
+    for spec_d in spec.directives:
+        if spec_d.timestamp not in by_timestamp:
+            raise KeyError(
+                f"directive {spec_d.directive_id} points at {spec_d.timestamp} "
+                f"but {meeting.meeting_id} has no utterance there"
+            )
+        utt = by_timestamp[spec_d.timestamp]
+        provenance = Provenance(
+            meeting_id=meeting.meeting_id,
+            title=meeting.title,
+            date=meeting.date,
+            speaker=utt.speaker,
+            timestamp=utt.timestamp,
+        )
+        directives.append(
+            ChangeDirective(
+                directive_id=spec_d.directive_id,
+                topic_tags=tuple(spec_d.topic_tags),
+                request_text=utt.text,  # verbatim, byte-identical
+                provenance=provenance,
+                target=spec_d.target,
+            )
+        )
+    return directives
+
+
 def build_corpus(seed: int = DEFAULT_SEED) -> Corpus:
-    """Build the deterministic fictional corpus of meetings and extracted cards.
+    """Build the deterministic fictional corpus of meetings, cards, and directives.
 
     ``seed`` is accepted for API parity with the sibling engines; the corpus is
     hand-authored and fully deterministic, so the result is identical every run.
@@ -262,6 +389,8 @@ def build_corpus(seed: int = DEFAULT_SEED) -> Corpus:
     specs = _meeting_specs()
     meetings = [s.meeting for s in specs]
     cards: List[KnowledgeCard] = []
+    directives: List[ChangeDirective] = []
     for spec in specs:
         cards.extend(_extract_cards(spec))
-    return Corpus(meetings=meetings, cards=cards)
+        directives.extend(_extract_directives(spec))
+    return Corpus(meetings=meetings, cards=cards, directives=directives)
