@@ -78,6 +78,15 @@ jobs:
           mkdir -p _actions_artifacts/logs
           overall=0
 
+          {
+            echo "# 🧮 Finance Engine Demo"
+            echo ""
+            echo "Ran on a clean GitHub Actions runner using **fully fictional, seeded data** — no real client or employer data is involved. Selected engine: \`${ENGINE}\`."
+            echo ""
+            echo "> A **review / fail verdict** from the Validation or Triangulate engine is an *intended* demo outcome — those systems are built to catch planted defects and refuse to bless bad work. The run still completes successfully unless you ticked **Fail on review**."
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
           run_one() {
             local key="$1"
             local folder="$2"
@@ -93,12 +102,18 @@ jobs:
             local rc=${PIPESTATUS[0]}
             echo "::endgroup::"
 
+            local result
+            if [ "$rc" -eq 0 ]; then
+              result="✅ completed cleanly (exit 0)"
+            else
+              result="⚠️ returned a review / fail verdict (exit ${rc}) — an intended demo outcome; the engine flagged issues instead of rubber-stamping them. Logs and artifacts were still captured."
+            fi
             {
               echo "## ${key}"
               echo ""
               echo "- Folder: \`${folder}\`"
               echo "- Command: \`$*\`"
-              echo "- Exit code: \`${rc}\`"
+              echo "- Result: ${result}"
               echo ""
             } >> "$GITHUB_STEP_SUMMARY"
 
