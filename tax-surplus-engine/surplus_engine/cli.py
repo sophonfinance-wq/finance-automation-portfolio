@@ -18,7 +18,9 @@ from pathlib import Path
 from typing import List, Optional
 
 from .engine import EXEMPT_CAP, SurplusEngine
+from .fx import render_fx_analysis
 from .generate import DEFAULT_SEED, generate_structure
+from .reconcile import reconcile, render_reconciliation
 from .report import attach_fx, consolidated_summary, entity_workpaper
 
 
@@ -57,6 +59,11 @@ def _parse_args(argv: Optional[List[str]]) -> argparse.Namespace:
         help="directory to write workpapers/summary (default: print summary to stdout only)",
     )
     p.add_argument("--xlsx", action="store_true", help="also write an Excel workbook")
+    p.add_argument(
+        "--check",
+        action="store_true",
+        help="run the reconciliation harness; exit non-zero on any identity break",
+    )
     return p.parse_args(argv)
 
 
@@ -77,6 +84,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     attach_fx(results, structure)
 
     summary = consolidated_summary(results, structure)
+    fx_analysis = render_fx_analysis(results, structure)
+    recon = reconcile(results, structure)
 
     if args.out:
         out_dir = Path(args.out)
@@ -87,6 +96,11 @@ def main(argv: Optional[List[str]] = None) -> int:
             (out_dir / f"workpaper_{code}.md").write_text(wp, encoding="utf-8")
         # Consolidated summary.
         (out_dir / "consolidated_summary.md").write_text(summary, encoding="utf-8")
+        # Per-layer FX analysis + reconciliation tie-out.
+        (out_dir / "fx_layer_analysis.md").write_text(fx_analysis, encoding="utf-8")
+        (out_dir / "reconciliation_report.md").write_text(
+            render_reconciliation(recon, structure), encoding="utf-8"
+        )
         # Optional workbook.
         if args.xlsx:
             from .workbook import build_workbook
@@ -95,12 +109,29 @@ def main(argv: Optional[List[str]] = None) -> int:
             wb.save(out_dir / "surplus_model.xlsx")
 
         _safe_print(f"Wrote {len(structure.entities)} workpapers + summary to {out_dir.resolve()}")
+        _safe_print("Wrote fx_layer_analysis.md and reconciliation_report.md")
         if args.xlsx:
             _safe_print(f"Wrote workbook: {(out_dir / 'surplus_model.xlsx').resolve()}")
 
     # Always echo the consolidated summary to stdout so the CLI is useful bare.
     _safe_print("")
     _safe_print(summary)
+
+    # Reconciliation gate: report status, and fail the run on any break.
+    if args.check:
+        passed = sum(1 for c in recon.checks if c.passed)
+        _safe_print("")
+        if recon.ok:
+            _safe_print(f"Reconciliation: OK ({passed}/{len(recon.checks)} identity checks pass)")
+        else:
+            _safe_print(
+                f"Reconciliation: FAILED ({len(recon.breaks)} break(s) of {len(recon.checks)} checks)"
+            )
+            for c in recon.breaks[:20]:
+                fy = "—" if c.year is None else c.year
+                _safe_print(f"  break: {c.name} [{c.entity} FY{fy}] expected {c.expected} got {c.actual}")
+            return 1
+
     return 0
 
 
