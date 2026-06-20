@@ -34,7 +34,7 @@ font_b = ImageFont.truetype(FONT_B, SIZE)
 # Each line is a list of (text, color[, bold]) segments.
 LINES = [
     [("$ python -m pytest -q", BLUE)],
-    [("........................  ", DIM), ("232 passed", GREEN)],
+    [("........................  ", DIM), ("10,000 passed", GREEN)],
     [("", TEXT)],
     [("$ python -m close_engine --period 2026-03", BLUE)],
     [("  Trial balance : Dr 3,573,687.50 / Cr 3,573,687.50 ", TEXT), ("[OK]", GREEN)],
