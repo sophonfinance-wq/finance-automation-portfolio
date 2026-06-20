@@ -6,8 +6,8 @@ prompt below into Codex (or any independent reviewer) to run an adversarial audi
 in this repo.
 
 > Before sending: update the HEAD and expected test count. Current at last edit:
-> **HEAD `fe8b76e` · `python -m pytest -q` → 1,098,140 passed · 7 systems**
-> (close 156,800 / recon 155,969 / surplus 159,886 / partnership 156,624 / audit 156,277 / triangulate 156,285 / knowledge-brain 156,299).
+> **`pytest` → 10,010 passed (curated suite) · `SWEEP=1 pytest` → 1,098,140 (property sweep) · 7 systems**
+> curated per system: (close 1,800 / recon 1,001 / surplus 1,486 / partnership 1,605 / audit 1,314 / triangulate 1,305 / knowledge-brain 1,499).
 
 ---
 
