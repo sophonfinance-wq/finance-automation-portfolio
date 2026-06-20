@@ -30,7 +30,7 @@ product.
 
 ## Accuracy and confidentiality (non-negotiable)
 
-- Every claim is true and demonstrable. Current facts: **seven runnable systems, 1,000,000+ tests, fully
+- Every claim is true and demonstrable. Current facts: **seven runnable systems, a ~10,000-test curated suite (plus an opt-in ~1.1M-case property/invariant sweep), fully
   fictional and seeded data, MIT-licensed, CI-backed.** Keep numbers current with the repository.
 - The Knowledge Brain **generates** an apply-ready, cited remediation prompt and a change-log; a
   downstream AI or operator applies the changes. Never state or imply that the engine itself applies
