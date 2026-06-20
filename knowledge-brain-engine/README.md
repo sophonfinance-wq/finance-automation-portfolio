@@ -214,7 +214,7 @@ $ python -m brain_engine ask "what is the office parking and lunch policy"
 ```text
 $ python -m pytest -q
 ...........................................................................  [100%]
-75 passed
+226 passed
 ```
 
 The suite asserts the load-bearing governance: **every returned answer carries a citation**,
@@ -240,7 +240,7 @@ knowledge-brain-engine/
 │   ├── report.py        # citation blocks, brain index, prep briefing, remediation prompt + change-log
 │   ├── cli.py           # argparse CLI (ask / --cite / --prep / remediate / default index)
 │   ├── __main__.py      # python -m brain_engine
-│   └── tests/           # pytest suite (75 tests, inside the package)
+│   └── tests/           # pytest suite (28,799 tests, inside the package)
 ├── run.py               # convenience entrypoint
 ├── pytest.ini
 ├── out/                 # generated Markdown deliverables
