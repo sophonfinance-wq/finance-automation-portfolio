@@ -167,7 +167,7 @@ Reconciliation: OK (212/212 identity checks pass)
 ```text
 $ python -m pytest -q
 ..........................                                               [100%]
-159,886 passed
+1,486 passed
 ```
 
 The suite asserts the load-bearing rules: **waterfall ordering**, **exempt-cap enforcement**
@@ -194,7 +194,7 @@ tax-surplus-engine/
 │   ├── workbook.py      # optional openpyxl Excel export
 │   ├── cli.py           # argparse CLI (+ --check reconciliation gate)
 │   └── __main__.py      # python -m surplus_engine
-├── tests/               # pytest suite (159,886 tests)
+├── tests/               # pytest suite (1,486 tests)
 ├── run.py               # convenience entrypoint
 ├── pytest.ini
 └── samples/             # original fictional worked example
