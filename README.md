@@ -40,6 +40,27 @@ and run `bash scripts/demo.sh` for the full tour.
 
 ---
 
+## For reviewers — a 60-second tour
+
+Three commands that show the load-bearing ideas, all on fictional data:
+
+**1. The AI control catches a hallucination.** Inject one made-up figure into a clean workpaper and watch two independent roles catch it and block sign-off:
+```bash
+cd ai-validation-framework && python -m triangulate --demo-adversarial
+```
+> An AI asserts a Total Revenue that's $49k over what the streams sum to; it cascades into the tax and net cells. The LLM-style **Reviewer** *and* an independent deterministic **Auditor** each re-derive every formula, raise **6 CRITICAL tie-out breaks**, and the human gate returns **FAIL** (exit 1). No model is asked "does this look right?" — the arithmetic decides.
+
+**2. Real cross-border tax depth.** Per-layer FX translation surfaces a sign-flip a blended rate hides:
+```bash
+cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out out
+# then open out/fx_layer_analysis.md  →  find the ⚑
+```
+> An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
+
+**3. Honest, tiered tests.** `pytest` runs the curated suite (~10k, gates CI); `SWEEP=1 pytest` runs an exhaustive property sweep (~1.09M generated cases). See [Testing](#testing).
+
+---
+
 ## Architecture
 
 <p align="center"><img src="./assets/architecture.svg" alt="seeded data to calculation engine to evidence to validation to human verdict" width="100%"></p>
@@ -90,7 +111,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **10,010** | Hand-written unit + behavior tests and parametrized coverage across all 7 systems. Runs in seconds; gates CI. |
+| **Curated** (default) | `pytest` | **10,016** | Hand-written unit + behavior tests and parametrized coverage across all 7 systems. Runs in seconds; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.09M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
@@ -98,7 +119,7 @@ default run (and CI) for speed and generated at import — the files stay small.
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
 Curated tests by system: close **1,800** · partnership **1,605** · knowledge-brain **1,499** ·
-tax-surplus **1,486** · validation **1,314** · triangulate **1,305** · recon **1,001**.
+tax-surplus **1,486** · validation **1,314** · triangulate **1,311** · recon **1,001**.
 
 ---
 
