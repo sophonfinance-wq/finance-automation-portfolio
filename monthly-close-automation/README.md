@@ -172,7 +172,7 @@ monthly-close-automation/
 │   ├── engine.py          # the six recurring entries + tie-out
 │   ├── report.py          # JE register, trial balance, close report writers
 │   ├── cli.py             # CLI entrypoint
-│   └── tests/             # pytest suite (41 tests)
+│   └── tests/             # pytest suite (256 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # committed .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -187,7 +187,7 @@ monthly-close-automation/
   reports it instead of silently posting.
 - Allocation ratios are validated to sum to exactly **100%** before posting.
 
-### Tested behavior (`python -m pytest -q` → **41 passed**)
+### Tested behavior (`python -m pytest -q` → **256 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; out-of-tie detection and
 refusal; period roll-forward; and full determinism for a given seed.

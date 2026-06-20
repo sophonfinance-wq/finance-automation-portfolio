@@ -5,7 +5,7 @@
 
 Triangulate is the AI control framework at the center of this portfolio: a multi-agent
 LLM review pipeline with guardrails, built so AI can accelerate financial workpapers without
-becoming an unaccountable single point of failure. It ships with 21 tests covering the roles,
+becoming an unaccountable single point of failure. It ships with 226 tests covering the roles,
 the authority model, and the human-gated verdict.
 
 The principle is straightforward: no high-stakes workpaper should rely on one AI system reporting

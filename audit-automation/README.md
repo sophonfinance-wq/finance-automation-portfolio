@@ -139,7 +139,7 @@ python -m pytest -q
 Real result:
 ```text
 .......................                                                  [100%]
-23 passed in 31.28s
+141 passed
 ```
 The suite proves the contract: **every planted defect is caught by its rule**
 (one per rule), the **clean workbook passes** with no FAIL/FLAG, the

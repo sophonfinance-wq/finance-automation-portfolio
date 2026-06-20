@@ -6,8 +6,8 @@ prompt below into Codex (or any independent reviewer) to run an adversarial audi
 in this repo.
 
 > Before sending: update the HEAD and expected test count. Current at last edit:
-> **HEAD `d2179a0` · `python -m pytest -q` → 257 passed · 7 systems**
-> (close 41 / recon 31 / surplus 26 / partnership 40 / validation 23 / triangulate 21 / knowledge-brain 75).
+> **HEAD `a335561` · `python -m pytest -q` → 1,363 passed · 7 systems**
+> (close 256 / recon 176 / surplus 160 / partnership 178 / validation 141 / triangulate 226 / knowledge-brain 226).
 
 ---
 
