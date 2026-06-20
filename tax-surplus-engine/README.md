@@ -124,7 +124,7 @@ elevation only in distribution years):
 ```text
 $ python -m pytest -q
 ..........................                                               [100%]
-26 passed
+160 passed
 ```
 
 The suite asserts the load-bearing rules: **waterfall ordering**, **exempt-cap enforcement**
@@ -146,7 +146,7 @@ tax-surplus-engine/
 │   ├── workbook.py      # optional openpyxl Excel export
 │   ├── cli.py           # argparse CLI
 │   └── __main__.py      # python -m surplus_engine
-├── tests/               # pytest suite (26 tests)
+├── tests/               # pytest suite (160 tests)
 ├── run.py               # convenience entrypoint
 ├── pytest.ini
 └── samples/             # original fictional worked example

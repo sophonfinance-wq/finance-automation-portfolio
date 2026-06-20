@@ -18,7 +18,7 @@ coordinate longer-running work and route results through the same controls in ap
 agent-enabled environments; the platform runs fully without it.
 
 This is a working portfolio: production-grade Python packages, seeded fictional data, deterministic
-outputs, continuous integration, and 257 tests that pin the behavior.
+outputs, continuous integration, and 1,363 tests that pin the behavior.
 
 The premise is direct. Finance teams should not depend on manual spreadsheet work, scattered review
 notes, or ad-hoc AI sessions. A request can run the finance engines, validate the results, package
@@ -51,7 +51,7 @@ no material financial deliverable should rest on a single model's output.
 1. **Run it in your browser, no install** — [open this repo in a GitHub Codespace](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio) (free tier; needs a GitHub account). When setup finishes, run `bash scripts/demo.sh` for the full tour, or a single engine, e.g.
    `cd knowledge-brain-engine && python -m brain_engine remediate "Surplus Workpaper Review — Reviewer Corrections"`.
 2. **Run it on GitHub Actions** — **[Run Finance Engine Demo](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)** → **Run workflow** → choose one engine or `all` → download the artifact from the completed run. *(GitHub only shows the **Run workflow** button to accounts with write access, so **fork** the repo first to run it on your own copy.)*
-3. **Clone and run locally** — `pip install -r requirements.txt`, then `python -m pytest -q` (257 tests) or `bash scripts/demo.sh`.
+3. **Clone and run locally** — `pip install -r requirements.txt`, then `python -m pytest -q` (1,363 tests) or `bash scripts/demo.sh`.
 
 Every path runs only the fictional-data demos in this public repository.
 
