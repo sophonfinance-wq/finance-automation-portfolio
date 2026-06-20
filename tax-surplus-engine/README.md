@@ -80,6 +80,9 @@ python -m surplus_engine --start 2021 --end 2024 --out out --xlsx
 # bare run — just print the consolidated summary to the console:
 python -m surplus_engine --start 2021 --end 2024
 
+# verify every structural identity ties out (non-zero exit on any break):
+python -m surplus_engine --start 2021 --end 2024 --check
+
 # run the rigorous test suite:
 python -m pytest -q
 ```
@@ -92,6 +95,10 @@ python -m pytest -q
   Summary** lineage (one per entity).
 - `out/consolidated_summary.md` — multi-entity roll-up, every pool converted to CAD via the
   fictional FX table.
+- `out/fx_layer_analysis.md` — single-rate vs **per-layer** ACB in CAD, with the divergence and
+  any sign flip (see *Per-layer FX*, below).
+- `out/reconciliation_report.md` — independent **tie-out** of every structural identity (see
+  *Reconciliation harness*, below).
 - `out/surplus_model.xlsx` — the same lineage as an Excel workbook (FX / Evidence /
   Surplus-Details / Summary sheets).
 
@@ -119,12 +126,48 @@ elevation only in distribution years):
 > on a capital contribution, then floors to 0 in 2024 on a return of capital — while operating
 > income across all four years never moves it.
 
+### Per-layer FX & a reconciliation harness
+
+**Per-layer FX (`fx.py`).** The Summary layer converts a *closing* ACB balance to CAD at one
+year's rate. But ACB is built from capital events in different years, and Canadian tax law
+translates each event at the rate in effect when it occurred (ITA 261 / Reg. 5907). The `fx.py`
+module re-derives ACB in CAD **layer by layer** — each contribution and each applied return of
+capital at its own year's rate — and compares it against the single-rate figure. Two properties
+make it both trustworthy and revealing:
+
+- **It cannot drift from the engine.** Because an applied return of capital never exceeds basis
+  (the excess is a deemed gain), the signed *functional-currency* layers always sum back to the
+  engine's closing ACB to the cent — a built-in tie-out (the `FC ties ✓` column).
+- **The CAD figure can change sign.** When a contribution and an offsetting return of capital
+  fall in years with different rates, the per-layer and single-rate CAD figures diverge. In the
+  seeded demo, Cedar Mezz contributes 35,502.71 in 2023 (rate 1.3383) and returns it in full in
+  2024 (rate 1.3569): the USD ACB is **0** and the single-rate CAD ACB is **0**, but the
+  per-layer CAD ACB is **(660.35)** — a genuine basis difference a blended rate hides.
+
+**Reconciliation harness (`reconcile.py`).** An independent re-derivation of the whole
+roll-forward that proves the engine's published numbers tie out. It recomputes each statutory
+quantity from the exposed intermediates and checks it against the stored balances; every check
+is a named identity with expected, actual, and a signed delta, so a break points straight at the
+entity, year, and figure:
+
+> `exempt / taxable / preacq / acb conservation` · `roll-forward continuity` (closing N == opening
+> N+1) · `waterfall ≤ distribution` · `exempt draw within cap` · `non-negative balances` ·
+> `elevation conservation` (parent lift == Σ children drawn × ownership %) · `ACB↔FX layer tie-out`.
+
+The `--check` flag runs the harness and **fails the process on any break** — a drop-in CI gate:
+
+```text
+$ python -m surplus_engine --start 2021 --end 2024 --out out --check
+...
+Reconciliation: OK (212/212 identity checks pass)
+```
+
 ### Test output (real)
 
 ```text
 $ python -m pytest -q
-..........................                                               [100%]
-26 passed
+....................................                                     [100%]
+36 passed
 ```
 
 The suite asserts the load-bearing rules: **waterfall ordering**, **exempt-cap enforcement**
@@ -132,7 +175,10 @@ The suite asserts the load-bearing rules: **waterfall ordering**, **exempt-cap e
 **ACB unaffected by operating income**, **FX applied at the Summary layer**, **roll-forward
 continuity** (closing year *N* == opening year *N+1*), **ownership-% allocation**, and a
 **deemed gain on negative ACB** (a return of capital beyond basis triggers an ITA 40(3)-style
-gain to the owner, with ACB deemed nil rather than negative).
+gain to the owner, with ACB deemed nil rather than negative). The newer suites cover
+**per-layer FX** (functional-currency layers tie back to closing ACB; single-rate vs per-layer
+divergence; the sign-flip case) and the **reconciliation harness** (every structural identity
+ties out on a clean run, and a deliberately tampered balance is detected).
 
 ### Layout
 ```text
@@ -143,10 +189,12 @@ tax-surplus-engine/
 │   ├── engine.py        # the engine: waterfall, elevation, ACB, roll-forward
 │   ├── generate.py      # seeded synthetic fictional data
 │   ├── report.py        # Markdown workpapers + consolidated summary
+│   ├── fx.py            # per-layer (lot-level) FX translation for ACB
+│   ├── reconcile.py     # independent reconciliation harness (identity tie-out)
 │   ├── workbook.py      # optional openpyxl Excel export
-│   ├── cli.py           # argparse CLI
+│   ├── cli.py           # argparse CLI (+ --check reconciliation gate)
 │   └── __main__.py      # python -m surplus_engine
-├── tests/               # pytest suite (26 tests)
+├── tests/               # pytest suite (36 tests)
 ├── run.py               # convenience entrypoint
 ├── pytest.ini
 └── samples/             # original fictional worked example
