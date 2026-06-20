@@ -144,15 +144,27 @@ make it both trustworthy and revealing:
   2024 (rate 1.3569): the USD ACB is **0** and the single-rate CAD ACB is **0**, but the
   per-layer CAD ACB is **(660.35)** — a genuine basis difference a blended rate hides.
 
+> **See it:** `python -m surplus_engine --start 2021 --end 2024 --out out`, then open
+> `out/fx_layer_analysis.md` — the `⚑` marks every entity whose per-layer and single-rate CAD
+> ACB disagree in sign.
+
 **Reconciliation harness (`reconcile.py`).** An independent re-derivation of the whole
 roll-forward that proves the engine's published numbers tie out. It recomputes each statutory
 quantity from the exposed intermediates and checks it against the stored balances; every check
 is a named identity with expected, actual, and a signed delta, so a break points straight at the
 entity, year, and figure:
 
-> `exempt / taxable / preacq / acb conservation` · `roll-forward continuity` (closing N == opening
-> N+1) · `waterfall ≤ distribution` · `exempt draw within cap` · `non-negative balances` ·
-> `elevation conservation` (parent lift == Σ children drawn × ownership %) · `ACB↔FX layer tie-out`.
+The **15 named identities**, every one independently re-derived from the published intermediates
+(each break carries `expected`, `actual`, and a signed `delta`):
+
+| Group | Identities | Guarantees |
+|---|---|---|
+| Pool conservation | `exempt_conservation`, `taxable_conservation`, `preacq_conservation`, `acb_conservation` | each closing pool = opening + additions/elevation − draws (ACB floored at 0) |
+| Capital event | `deemed_gain` | an ITA 40(3)-style gain surfaces exactly when a return of capital exceeds basis |
+| Distribution waterfall | `waterfall_le_distribution`, `exempt_within_cap`, `non_negative_balances` | pools never draw more than the distribution; exempt draw never exceeds the cap; no balance goes negative |
+| Roll-forward continuity | `continuity_exempt`, `continuity_taxable`, `continuity_preacq`, `continuity_acb` | closing year *N* == opening year *N+1*, per pool |
+| Elevation | `elevation_exempt`, `elevation_taxable` | a parent's lift == Σ children (amount drawn × ownership %) |
+| FX tie-out | `acb_fx_layers_tie` | the signed per-currency ACB layers sum back to the engine's closing ACB |
 
 The `--check` flag runs the harness and **fails the process on any break** — a drop-in CI gate:
 

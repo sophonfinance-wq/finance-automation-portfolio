@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import List
 
-from triangulate.generate import build_sample
+from triangulate.formula import evaluate
+from triangulate.generate import build_sample, make_adversarial_workpaper
 from triangulate.model import Workpaper
 from triangulate.roles.base import Preparer
 
@@ -51,3 +52,38 @@ class DemoPreparer(Preparer):
             "the automated audit before sign-off."
         )
         return memo
+
+
+class AdversarialPreparer(Preparer):
+    """Ships a clean workpaper with ONE injected hallucination.
+
+    Used by ``--demo-adversarial`` to prove the load-bearing claim: deterministic
+    verification beats asking an AI whether a workbook "looks right". The injected
+    figure is plausible enough to slip past a human skim, but cannot survive the
+    auditor re-deriving the formula.
+    """
+
+    name = "Preparer:AdversarialDemo"
+
+    def __init__(self, seed: int = 20240101) -> None:
+        self.seed = seed
+
+    def build(self) -> Workpaper:
+        return make_adversarial_workpaper(self.seed)
+
+    def builder_memo(self, wp: Workpaper) -> List[str]:
+        b5 = wp.get("B5")
+        values = {ref: c.value for ref, c in wp.cells.items() if c.value is not None}
+        derived = evaluate(b5.formula, values) if b5 and b5.formula else None
+        return [
+            f"Engagement {wp.engagement} -- {wp.entity} ({wp.period}).",
+            "ADVERSARIAL DEMO: a clean workpaper with ONE injected hallucination.",
+            f"An AI asserted B5 (Total Revenue) as {b5.value:,.2f} -- but =B2+B3+B4 "
+            f"sums to {derived:,.2f}, a {abs(b5.value - derived):,.2f} overstatement "
+            "backed only by an AI assumption (lowest authority).",
+            "B5 feeds B7 (tax) and B8 (net), so the single bad figure propagates downstream.",
+            "A human skim might accept a plausible-looking total. The deterministic audit "
+            "cannot: the Reviewer and the independent Auditor each re-derive every formula,",
+            "raise a CRITICAL tie-out break on each affected cell, and the human gate returns",
+            "FAIL -- the workpaper is blocked from sign-off. No model 'looks at it and says OK'.",
+        ]

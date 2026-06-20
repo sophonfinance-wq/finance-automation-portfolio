@@ -5,7 +5,7 @@
 
 Triangulate is the AI control framework at the center of this portfolio: a multi-agent
 LLM review pipeline with guardrails, built so AI can accelerate financial workpapers without
-becoming an unaccountable single point of failure. It ships with 1,305 tests covering the roles,
+becoming an unaccountable single point of failure. It ships with 1,311 tests covering the roles,
 the authority model, and the human-gated verdict.
 
 The principle is straightforward: no high-stakes workpaper should rely on one AI system reporting
@@ -69,6 +69,41 @@ Fix Packet (Critical/High -> back to Preparer)
 
 The clean sample runs the same flow and returns PASS, proving the gate discriminates instead of
 always failing.
+
+---
+
+## Adversarial demo: catch an injected hallucination
+
+The framework's whole thesis in one command — **deterministic verification beats asking an AI
+whether a workbook "looks right."** Inject one made-up figure into an otherwise-clean workpaper and
+watch it get caught:
+
+```bash
+python -m triangulate --demo-adversarial
+```
+
+An AI asserts a **Total Revenue $49,000 over** what the revenue streams actually sum to, backed
+only by an "AI assumption" (the lowest authority). Because that cell feeds the tax and net cells,
+the single bad figure **cascades** through the workpaper. A human skim might accept a
+plausible-looking total — the pipeline cannot:
+
+```text
+VERDICT: FAIL  [cannot sign off]
+  Severity      : Critical=6 High=0 Medium=1 Low=0
+
+Fix Packet (Critical/High -> back to Preparer)
+  [Critical] B5 TIE_OUT_MISMATCH:   Stated 593000.0 does not tie out to =B2+B3+B4 (expected 544000.0).
+  [Critical] B5 AUDIT_TIE_OUT_FAIL: Audit re-derived =B2+B3+B4 to 544000.0.
+  [Critical] B7 TIE_OUT_MISMATCH:   =B5*B6 no longer ties (the error propagated).
+  [Critical] B8 TIE_OUT_MISMATCH:   =B5-B7 no longer ties.
+  ...
+```
+
+The injected cell is flagged **independently by two roles** — the LLM-style Reviewer *and* the
+deterministic Auditor, which mechanically re-derives every formula. No model is asked "does this
+look OK?"; the arithmetic decides. The verdict is **FAIL**, the process **exits non-zero**, and the
+workpaper is blocked from sign-off. The behavior is pinned by
+[`tests/test_adversarial_demo.py`](./triangulate/tests/test_adversarial_demo.py).
 
 ---
 

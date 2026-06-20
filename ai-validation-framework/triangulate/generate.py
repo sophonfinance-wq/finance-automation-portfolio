@@ -130,13 +130,43 @@ def make_defective_workpaper(seed: int = 20240101) -> Workpaper:
     return wp
 
 
+# The single injected discrepancy used by the adversarial demo. An AI confidently
+# asserts a Total Revenue that is larger than the streams actually sum to.
+ADVERSARIAL_INJECTION = 49_000.0
+
+
+def make_adversarial_workpaper(seed: int = 20240101) -> Workpaper:
+    """A *clean* workpaper with exactly ONE injected hallucination.
+
+    The pipeline's whole thesis in one artifact: an AI "helpfully" asserts a
+    Total Revenue (``B5``) that does **not** tie to ``=B2+B3+B4``, and labels it
+    with the lowest authority (an AI assumption). Nothing else is wrong. A human
+    skimming the workbook would likely miss a plausible-looking total -- but the
+    deterministic auditor re-derives the formula and the discrepancy is
+    impossible to hide. Reviewer **and** auditor must both raise a CRITICAL
+    tie-out break, and the human gate must return FAIL.
+    """
+    wp = make_clean_workpaper(seed)
+    correct_total = wp.get("B5").value                 # ties to =B2+B3+B4
+    hallucinated = round(correct_total + ADVERSARIAL_INJECTION, 2)
+    wp.set_cell(WorkpaperCell(
+        "B5", "Total Revenue (AI-asserted)", hallucinated, formula="=B2+B3+B4",
+        source=AuthoritySource.AI_ASSUMPTION,
+    ))
+    return wp
+
+
 def build_sample(kind: str = "defective", seed: int = 20240101) -> Workpaper:
     """Factory used by the CLI/tests. ``kind`` is ``'clean'`` or ``'defective'``."""
     if kind == "clean":
         return make_clean_workpaper(seed)
     if kind == "defective":
         return make_defective_workpaper(seed)
-    raise ValueError(f"Unknown sample kind: {kind!r} (use 'clean' or 'defective')")
+    if kind == "adversarial":
+        return make_adversarial_workpaper(seed)
+    raise ValueError(
+        f"Unknown sample kind: {kind!r} (use 'clean', 'defective' or 'adversarial')"
+    )
 
 
 def write_xlsx(wp: Workpaper, path: str) -> str:

@@ -7,6 +7,7 @@ Examples::
 
     python -m triangulate                     # defective sample (default)
     python -m triangulate --sample clean      # clean sample passes
+    python -m triangulate --demo-adversarial  # inject one hallucination; watch it get caught
     python -m triangulate --no-specialist     # skip the specialist step
     python -m triangulate --output ./output   # where artifacts are written
     python -m triangulate --xlsx              # also emit a .xlsx workpaper
@@ -22,7 +23,7 @@ from typing import List, Optional
 from triangulate.generate import write_xlsx
 from triangulate.orchestrator import PipelineResult, TriangulateOrchestrator
 from triangulate.reconcile import VerdictStatus
-from triangulate.roles.preparer import DemoPreparer
+from triangulate.roles.preparer import AdversarialPreparer, DemoPreparer
 
 _RULE = "=" * 64
 
@@ -106,6 +107,12 @@ def build_parser() -> argparse.ArgumentParser:
         help="Which bundled synthetic workpaper to run (default: defective).",
     )
     parser.add_argument(
+        "--demo-adversarial",
+        action="store_true",
+        help="Inject one hallucinated figure into a clean workpaper and watch the "
+             "pipeline catch it (CRITICAL tie-out break -> FAIL). Overrides --sample.",
+    )
+    parser.add_argument(
         "--seed",
         type=int,
         default=20240101,
@@ -142,8 +149,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     """
     args = build_parser().parse_args(argv)
 
+    preparer = (
+        AdversarialPreparer(seed=args.seed)
+        if args.demo_adversarial
+        else DemoPreparer(kind=args.sample, seed=args.seed)
+    )
     orchestrator = TriangulateOrchestrator(
-        preparer=DemoPreparer(kind=args.sample, seed=args.seed),
+        preparer=preparer,
         use_specialist=not args.no_specialist,
     )
     result = orchestrator.run()
