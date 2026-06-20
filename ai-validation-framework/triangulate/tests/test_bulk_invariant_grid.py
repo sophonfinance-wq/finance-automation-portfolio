@@ -21,10 +21,10 @@ import pytest
 
 from triangulate.formula import evaluate
 
-# 200 x 140 = 28,000 operand pairs.
-# range(-50, 150) spans negatives, zero, and positives for column B2.
+# 1107 x 140 = 154,980 operand pairs.
+# range(-550, 557) spans negatives, zero, and positives for column B2.
 # range(1, 141) is strictly positive for column B3 (covers boundaries 1..140).
-_GRID = list(itertools.product(range(-50, 150), range(1, 141)))
+_GRID = list(itertools.product(range(-550, 557), range(1, 141)))
 
 
 @pytest.mark.parametrize("a,b", _GRID)

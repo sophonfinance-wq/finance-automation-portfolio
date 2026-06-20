@@ -21,9 +21,9 @@ from close_engine.money import CENTS_PER_UNIT, split_evenly, to_cents
 
 # --- split_evenly grid -----------------------------------------------------
 # totals span negative, zero, and positive cents; periods are always >= 1.
-_TOTALS = range(-105, 105)      # 210 values, includes 0 and negatives
+_TOTALS = range(-743, 744)      # 1487 values, includes 0 and negatives
 _PERIODS = range(1, 101)        # 100 values, all >= 1 (split_evenly requires)
-_SPLIT_GRID = list(itertools.product(_TOTALS, _PERIODS))  # 210 * 100 = 21,000
+_SPLIT_GRID = list(itertools.product(_TOTALS, _PERIODS))  # 1487 * 100 = 148,700
 
 
 @pytest.mark.parametrize("total_cents,periods", _SPLIT_GRID)
