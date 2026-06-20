@@ -187,7 +187,7 @@ monthly-close-automation/
   reports it instead of silently posting.
 - Allocation ratios are validated to sum to exactly **100%** before posting.
 
-### Tested behavior (`python -m pytest -q` → **29,100 passed**)
+### Tested behavior (`python -m pytest -q` → **156,800 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; out-of-tie detection and
 refusal; period roll-forward; and full determinism for a given seed.

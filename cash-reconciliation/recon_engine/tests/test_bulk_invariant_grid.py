@@ -33,9 +33,9 @@ from recon_engine.generate import LenderStatement
 # Grid 1: compute_variance(a, b) == a - b over an integer product grid.
 # Domain spans negatives, zero, and large positives to cover sign boundaries.
 # ---------------------------------------------------------------------------
-_VAR_A = range(-90, 90)   # 180 values, includes 0 and negatives
+_VAR_A = range(-1317, 1317)   # 2634 values, includes 0 and negatives
 _VAR_B = range(-25, 27)   # 52 values, includes 0 and negatives
-_VARIANCE_GRID = list(itertools.product(_VAR_A, _VAR_B))  # 180 * 52 = 9,360
+_VARIANCE_GRID = list(itertools.product(_VAR_A, _VAR_B))  # 2634 * 52 = 136,968
 
 
 @pytest.mark.parametrize("a,b", _VARIANCE_GRID)
