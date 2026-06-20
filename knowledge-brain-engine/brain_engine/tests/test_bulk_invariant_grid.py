@@ -23,10 +23,10 @@ from brain_engine.model import Provenance, format_timestamp
 
 # --- Grid construction (at import) -----------------------------------------
 # hours x minutes x seconds.  28 * 60 * 16 = 26,880 ... we need 27,300-28,000.
-# Use 35 hours * 60 minutes * 13 seconds = 27,300 exactly.
-_HOURS = range(0, 35)      # 35 values: 0..34
+# Use 43 hours * 60 minutes * 60 seconds = 154,800.
+_HOURS = range(0, 43)      # 43 values: 0..42
 _MINUTES = range(0, 60)    # 60 values: 0..59  (includes minute boundary)
-_SECONDS = range(0, 13)    # 13 values: 0..12
+_SECONDS = range(0, 60)    # 60 values: 0..59
 
 _GRID = list(itertools.product(_HOURS, _MINUTES, _SECONDS))  # 27,300 cases
 
@@ -40,7 +40,7 @@ def test_timestamp_and_provenance_invariants(h, m, s):
     assert format_timestamp(total) == first
 
     # (2) Exact rendering identity: the HH:MM:SS string reconstructs to the
-    #     (h, m, s) it was built from. h <= 34 so hours never exceed 2 digits.
+    #     (h, m, s) it was built from. h <= 42 so hours never exceed 2 digits.
     assert first == f"{h:02d}:{m:02d}:{s:02d}"
 
     # (3) Frozen-dataclass field round-trip: every field reads back equal.
