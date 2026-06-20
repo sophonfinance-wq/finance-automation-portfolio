@@ -31,11 +31,11 @@ _STATUSES = [Status.PASS, Status.FAIL, Status.FLAG]
 
 # --------------------------------------------------------------------------- #
 # Grid 1: Finding frozen-dataclass field round-trip + to_dict round-trip.
-#   a in 0..199  (200 values) -> drives rule/location/message text + status
+#   a in 0..2016 (2017 values) -> drives rule/location/message text + status
 #   b in 0..69   (70 values)  -> drives a second, independent text axis
-#   200 * 70 = 14,000 cases
+#   2017 * 70 = 141,190 cases
 # --------------------------------------------------------------------------- #
-_GRID_FINDING = list(itertools.product(range(0, 200), range(0, 70)))
+_GRID_FINDING = list(itertools.product(range(0, 2017), range(0, 70)))
 
 
 @pytest.mark.parametrize("a,b", _GRID_FINDING)
@@ -69,7 +69,7 @@ def test_finding_roundtrip(a, b):
 
 # --------------------------------------------------------------------------- #
 # Grid 2: _is_formula determinism + exact "starts with '='" semantics.
-#   a in 0..199  (200 values)
+#   a in 0..2016 (2017 values)
 #   b in 0..49   (50 values)
 #   200 * 50 = 10,000 cases
 # --------------------------------------------------------------------------- #

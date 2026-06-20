@@ -20,10 +20,10 @@ from partnership_tax.model import IncomeItem
 
 # ---------------------------------------------------------------------------
 # Grid 1: allocate_by_bps sum-preservation (signed totals x two-way bps split).
-# total in [-96, 96)  -> 192 values ; split index in [1, 100) -> 99 values.
-# 192 * 99 = 19,008 cases.
+# total in [-740, 741) -> 1481 values ; split index in [1, 100) -> 99 values.
+# 1481 * 99 = 146,619 cases.
 # ---------------------------------------------------------------------------
-_TOTALS = range(-96, 96)
+_TOTALS = range(-740, 741)
 _SPLITS = range(1, 100)
 _ALLOC_GRID = list(itertools.product(_TOTALS, _SPLITS))
 

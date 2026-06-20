@@ -37,9 +37,9 @@ from surplus_engine.engine import (
 # ---------------------------------------------------------------------------
 # Grid 1: PoolBalances field round-trip + get/add over an integer product grid.
 # ---------------------------------------------------------------------------
-_EX = range(0, 35)        # exempt_surplus
-_TX = range(0, 35)        # taxable_surplus
-_PRE_ACB = range(0, 21)   # used for both pre_acq capital and acb
+_EX = range(0, 70)        # exempt_surplus
+_TX = range(0, 70)        # taxable_surplus
+_PRE_ACB = range(0, 32)   # used for both pre_acq capital and acb
 
 _GRID_POOL = list(itertools.product(_EX, _TX, _PRE_ACB))
 
