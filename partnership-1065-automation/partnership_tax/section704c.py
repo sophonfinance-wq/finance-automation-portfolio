@@ -181,8 +181,13 @@ class Partnership:
     property_years: Dict[tuple[str, int], PropertyYear]
     partnership_years: Dict[int, PartnershipYear]
     years: List[int] = field(default_factory=list)
+    method: str = "traditional"
 
     def __post_init__(self) -> None:
+        if self.method not in ("traditional", "remedial"):
+            raise ValueError(
+                f"method must be 'traditional' or 'remedial', got {self.method!r}"
+            )
         total_bps = sum(p.interest_bps for p in self.partners.values())
         if total_bps != BPS_SCALE:
             raise ValueError(
@@ -241,6 +246,12 @@ class PropertyYearResult:
 
     ceiling_binding: bool = False
     ceiling_shortfall: int = 0
+
+    # Remedial method (Reg. §1.704-3(d)); empty/zero under the traditional method.
+    method_used: str = "traditional"
+    remedial_income_alloc: Dict[str, int] = field(default_factory=dict)
+    remedial_deduction_alloc: Dict[str, int] = field(default_factory=dict)
+    remedial_net: int = 0
 
 
 @dataclass
@@ -359,11 +370,13 @@ class Section704cEngine:
             if not prop.depreciable or self._sold[prop.code]:
                 continue
             pyr = self.p.property_year(prop.code, year)
-            res = (
-                self._handle_sale(prop, year, pyr.sale_price_cents)
-                if pyr.sold
-                else self._handle_depreciation(prop, year)
-            )
+            if pyr.sold:
+                res = self._handle_sale(prop, year, pyr.sale_price_cents)
+            elif self.p.method == "remedial":
+                res = self._remedial_depreciation(prop, year)
+            else:
+                res = self._handle_depreciation(prop, year)
+            res.method_used = self.p.method
             prop_results.append(res)
             for code, amt in res.book_dep_alloc.items():
                 income_book[code] -= amt
@@ -373,6 +386,12 @@ class Section704cEngine:
                 income_book[code] += amt
             for code, amt in res.tax_gain_alloc.items():
                 income_tax[code] += amt
+            # Remedial notional items (Reg. §1.704-3(d)): tax-only, equal and
+            # offsetting, net to zero, no effect on book capital.
+            for code, amt in res.remedial_income_alloc.items():
+                income_tax[code] += amt
+            for code, amt in res.remedial_deduction_alloc.items():
+                income_tax[code] -= amt
 
         # 3) Cash distribution: pro-rata by interest, reduces both bases.
         dist_parts = (
@@ -478,6 +497,98 @@ class Section704cEngine:
             layer_cured=cured,
             ceiling_binding=ceiling_binding,
             ceiling_shortfall=ceiling_shortfall,
+        )
+
+    def _remedial_depreciation(
+        self, prop: ContributedProperty, year: int
+    ) -> PropertyYearResult:
+        """Remedial method (Reg. §1.704-3(d)): cure the ceiling shortfall with
+        equal, offsetting notional items.
+
+        Actual tax depreciation is allocated exactly as under the traditional
+        method (non-contributors first, up to their book share; the ceiling caps
+        them at the available tax item). Where the ceiling would bind, the
+        partnership then creates a *remedial deduction* for the short-changed
+        non-contributors and an equal, offsetting *remedial income* item of the
+        same character for the contributor. The pair nets to zero, never touches
+        book capital, and eliminates the non-contributor's book/tax disparity.
+
+        Book depreciation note: §1.704-3(d)(2) recovers the tax-basis portion of
+        book value over its remaining tax life and the book-over-tax excess over
+        a new recovery period. When that new period equals the book life (as in
+        these fixtures), the two-layer schedule coincides exactly with
+        straight-line FMV / book life, which is what is used here.
+        """
+        weights = self.p.interest_weights()
+        partners = self.p.ordered_partners()
+
+        book_dep = min(self._book_basis[prop.code], self._book_dep_amount(prop))
+        tax_dep = min(self._tax_basis[prop.code], self._tax_dep_amount(prop))
+
+        book_alloc_list = _allocate(book_dep, weights)
+        book_dep_alloc = {p.code: a for p, a in zip(partners, book_alloc_list)}
+        noncontrib_book_share = sum(
+            a for code, a in book_dep_alloc.items() if code != prop.contributor
+        )
+
+        others = [p for p in partners if p.code != prop.contributor]
+        tax_dep_alloc = {p.code: 0 for p in partners}
+        remedial_deduction_alloc: Dict[str, int] = {}
+        remedial_income_alloc: Dict[str, int] = {}
+
+        if tax_dep >= noncontrib_book_share:
+            # No ceiling problem: identical to the traditional method; no
+            # remedial items are required.
+            other_shares = _allocate(
+                noncontrib_book_share, _other_weights(self.p, prop.contributor)
+            )
+            for partner, amt in zip(others, other_shares):
+                tax_dep_alloc[partner.code] = amt
+            tax_dep_alloc[prop.contributor] = tax_dep - noncontrib_book_share
+        else:
+            # Ceiling binds at the ACTUAL level; remedial items cure it.
+            other_shares = _allocate(tax_dep, _other_weights(self.p, prop.contributor))
+            for partner, amt in zip(others, other_shares):
+                tax_dep_alloc[partner.code] = amt
+            tax_dep_alloc[prop.contributor] = 0
+            for partner in others:
+                shortfall = book_dep_alloc[partner.code] - tax_dep_alloc[partner.code]
+                if shortfall:
+                    remedial_deduction_alloc[partner.code] = shortfall
+            total_remedial = sum(remedial_deduction_alloc.values())
+            if total_remedial:
+                remedial_income_alloc[prop.contributor] = total_remedial
+
+        remedial_net = (
+            sum(remedial_income_alloc.values())
+            - sum(remedial_deduction_alloc.values())
+        )
+
+        layer_open = self._layer[prop.code]
+        cured = self._cure_layer(prop.code, book_dep - tax_dep)
+        layer_close = self._layer[prop.code]
+
+        self._book_basis[prop.code] -= book_dep
+        self._tax_basis[prop.code] -= tax_dep
+
+        return PropertyYearResult(
+            property=prop.code,
+            year=year,
+            contributor=prop.contributor,
+            sold=False,
+            book_depreciation=book_dep,
+            tax_depreciation=tax_dep,
+            book_dep_alloc=book_dep_alloc,
+            tax_dep_alloc=tax_dep_alloc,
+            layer_open=layer_open,
+            layer_close=layer_close,
+            layer_cured=cured,
+            ceiling_binding=False,
+            ceiling_shortfall=0,
+            method_used="remedial",
+            remedial_income_alloc=remedial_income_alloc,
+            remedial_deduction_alloc=remedial_deduction_alloc,
+            remedial_net=remedial_net,
         )
 
     def _handle_sale(
@@ -634,12 +745,16 @@ def build_partnership_years(years: List[int]) -> Dict[int, PartnershipYear]:
 
 
 def generate_partnership(
-    n_years: int = DEFAULT_YEARS, seed: int = DEFAULT_SEED
+    n_years: int = DEFAULT_YEARS,
+    seed: int = DEFAULT_SEED,
+    method: str = "traditional",
 ) -> Partnership:
     """Generate the deterministic fictional Harborview Partners LP.
 
     The ``seed`` is accepted for interface parity; the figures are fixed so the
-    worked example and the tests stay reproducible.
+    worked example and the tests stay reproducible. ``method`` selects the
+    §704(c) allocation method ('traditional' or 'remedial'); it defaults to
+    'traditional' so the canonical demo is unchanged.
     """
     if n_years < 1:
         raise ValueError("n_years must be >= 1")
@@ -652,6 +767,7 @@ def generate_partnership(
         property_years=build_property_years(years),
         partnership_years=build_partnership_years(years),
         years=years,
+        method=method,
     )
 
 
