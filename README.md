@@ -6,6 +6,7 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-10%2C839%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
+[![Systems](https://img.shields.io/badge/systems-8%20runnable-6f42c1)](#the-eight-systems)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
@@ -13,8 +14,8 @@
 
 Eight self-contained Python systems for finance and tax work — month-end close, cash/debt
 reconciliation, cross-border surplus & ACB, partnership 1065 / §704(c), read-only workbook
-validation, a NotebookLM-style knowledge brain, and an interactive finance operations atlas —
-plus **Triangulate**, a multi-agent LLM review framework with a deterministic core and a human
+validation, a NotebookLM-style knowledge brain, and an interactive finance operations atlas. The
+eighth is **Triangulate**, a multi-agent LLM review framework with a deterministic core and a human
 sign-off gate. Everything runs on seeded
 fictional data, is covered by CI, and is built on one rule: **no material output rests on a single
 model's word.**
@@ -66,7 +67,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 
 ## Architecture
 
-<p align="center"><img src="./assets/architecture.svg" alt="seeded data to calculation engine to evidence to validation to human verdict" width="100%"></p>
+<p align="center"><img src="./assets/architecture.svg" alt="Five-stage control pipeline: seeded data, calculation engine, cited evidence, read-only validation, human verdict — with separation of duties across preparer, reviewer, specialist, deterministic auditor, and human gate" width="100%"></p>
 
 The same control pattern runs through every system:
 
