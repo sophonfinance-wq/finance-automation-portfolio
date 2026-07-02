@@ -198,6 +198,10 @@ Triangulate assumes those failures will occur and builds the workflow around the
 The result is not "the AI said yes." The result is a fix packet, a severity ranking, a read-only
 audit trail, and a human-gated verdict — AI for speed, controls for defensibility.
 
+How the review prompts themselves are engineered as controls — role injection, scope-bracketed
+templates, and negative constraints — is documented in
+[Prompt Engineering](./prompt-engineering.md).
+
 ---
 
 ## Portfolio bullets

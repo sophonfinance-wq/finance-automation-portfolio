@@ -10,11 +10,12 @@ All data is fictional and seeded. Nothing here references a real entity, person,
 ## 60-second framing
 
 > "This repository is seven runnable systems that automate the finance work teams still do by hand:
-> close, reconciliation, partnership tax prep, complex international tax modeling, and a
-> citation-governed knowledge brain over meeting transcripts. Above that sits an AI review layer with
-> separation of duties and an optional orchestration layer. A request runs the finance systems,
-> validates the results, and drafts an executive-ready summary. The demo uses fictional data, but the
-> architecture is production-grade. Let me show you."
+> close, reconciliation, partnership tax prep, complex international tax modeling, read-only workbook
+> validation, and a citation-governed knowledge brain over meeting transcripts. Above that sits an AI
+> review layer (Triangulate) with separation of duties and an optional orchestration layer. A request
+> runs the finance systems, validates the results, and drafts an executive-ready summary. The demo
+> uses fictional data, but the control architecture — deterministic engines, read-only validation,
+> human sign-off — is the same pattern a production deployment would use. Let me show you."
 
 ---
 

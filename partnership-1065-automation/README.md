@@ -29,6 +29,8 @@ python run.py --no-xlsx
 python -m pytest -q
 ```
 
+The module ships with 1,605 curated tests (`python -m pytest -q`).
+
 ## Outputs
 
 | Output | Purpose |

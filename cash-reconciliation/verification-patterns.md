@@ -26,14 +26,14 @@ the value replaced does not match what the schedule expected for that account, t
 rejected for review rather than trusted.
 
 ### 2. Entity / title cross-check
-Related entities in a real estate or fund structure often share a numbering pattern — an
-*Investor → Sponsor → Development* tier where the same trailing account code appears under several
+Related entities in a layered structure often share a numbering pattern — a generic
+*Holdco → Opco → Project* structure where the same trailing account code appears under several
 companies. A balance can tie perfectly and still belong to the wrong entity.
 
-> *Fictional example.* Target account `74-002-1150` is populated from a register whose G/L reads
-> `9-002-1150`. Both are "operating," so the dollars look plausible — but `9-002` is a
-> different company. The register whose G/L is *exactly* `74-002-1150` belongs to the sibling
-> "Sponsor" entity and carries a materially different balance. The mismatch is caught by
+> *Fictional example.* Schedule row `OPCO7-4410` is populated from a register whose G/L reads
+> `HOLD2-4410`. Both are "operating," so the dollars look plausible — but `HOLD2` is a
+> different company. The register whose G/L is *exactly* `OPCO7-4410` sits under the sibling
+> "Opco" entity and carries a materially different balance. The mismatch is caught by
 > confirming the source's **G/L code and bank id match the target**, not just the amount.
 
 ### 3. Independent re-derivation
@@ -42,7 +42,7 @@ adversarial review rounds whose default posture is skeptical (a finding must sur
 refute it). This catches plausible-but-wrong figures before they are booked.
 
 ### 4. Completeness sweep (source → target, whole population)
-The highest-value check. Every source register on the drive is scanned — **not only the ones on
+The highest-value check. Every source register in the population is scanned — **not only the ones on
 the worklist** — and each live balance must map to either a booked account or an explicitly
 scoped-out one. Anything unmatched is surfaced.
 
@@ -64,21 +64,29 @@ Every difference is classified and routed, so reviewers see structural signal in
 | **Closed / swept** | Account closed; residual within tolerance of $0 | Write down to $0 |
 | **Bank-migration successor** | Cash moved to a new bank/account | Book if on ledger; **flag if off-ledger** |
 | **Entity-mapping error** | Right amount, wrong source entity | Correct the source |
-| **Cross-region duplicate** | Same account appears in two regions | Flag to avoid double-listing |
+| **Duplicate listing** | Same account appears in two source populations | Flag to avoid double-listing |
+| **Unrecorded bank fees / interest** | Small recurring differences the ledger never picked up | Book a catch-up entry |
+| **FX / translation difference** | Balance held in another currency, translated at the wrong rate | Retranslate at the correct rate |
 
 ---
 
 ## Bank-migration &amp; off-ledger successors
 
-The most common structural theme in a long-lived entity set: an operating account is closed and its
+A recurring pattern in long-lived entity sets: an operating account is closed and its
 cash migrates to a **successor account at a new bank** that has not yet been added to the trial
 balance. The tell is a matched pair — a **dead predecessor sitting at $0 on the ledger** and a
-**live successor that is off-ledger entirely**.
+**live successor that is off-ledger entirely**. The pattern shows up in more than one form:
 
-> *Fictional example.* "Oakline Development" shows a Wells Fargo operating line closed in a prior
-> year, correctly at $0. The entity's real cash now sits in a US Bank successor account that is not
-> a ledger row. The predecessor is written down; the successor is quantified and **flagged for
-> chart-of-accounts scoping** rather than silently booked.
+> *Fictional example — off-ledger successor.* "Oakline Development" shows a First Meridian Bank
+> operating line closed in a prior year, correctly at $0. The entity's real cash now sits in a
+> Cascade Trust Bank successor account that is not a ledger row. The predecessor is written down;
+> the successor is quantified and **flagged for chart-of-accounts scoping** rather than silently
+> booked.
+
+> *Fictional example — successor mapped to the wrong entity.* In a second variant, the successor
+> account *is* on the ledger — but under a sibling entity that opened accounts at the same bank in
+> the same window. The balance ties somewhere, so a values-only check passes; only the entity /
+> bank-id cross-check reveals that the cash is booked one company over from where it actually sits.
 
 Left unchecked, this pattern understates live cash while the ledger tracks accounts that no longer
 transact. Surfacing the full successor population turns a routine reconciliation into a structural

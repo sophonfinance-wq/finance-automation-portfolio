@@ -13,13 +13,13 @@
 
 For years I did genuinely hard finance and tax work by hand under partner review — Canadian
 cross-border foreign-affiliate tax, US partnership tax, multi-entity month-end close, and
-construction/JV audit support — inside a large, owner-operated real-estate development group. I also
+construction/JV audit support — inside a privately held real-estate group. I also
 built an internal **knowledge brain**: I recorded every engagement meeting, transcribed it, and
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **seven runnable systems, 257
-tests, CI.**
+without becoming the weakest link. This portfolio is that proof: **seven runnable systems, a
+10,016-test curated suite (plus an opt-in ~1.09M-case property sweep), CI.**
 
 ---
 
@@ -28,17 +28,17 @@ tests, CI.**
 | The real work (public-concept level) | The system that demonstrates the skill |
 |---|---|
 | **An internal "finance brain."** Recording engagement meetings, transcribing them, and loading them into a queryable knowledge base used *before* the work to prep, and *during* the work to cite a prior decision **word-for-word, with date + timestamp**, in a workpaper or disclosure note. | [`knowledge-brain-engine`](../knowledge-brain-engine/) |
-| **Canadian foreign-affiliate surplus & ACB (CRA Form T1134).** Maintaining — year by year, entity by entity, across a large multi-tier US structure owned through Canada — the **exempt / taxable / pre-acquisition** surplus pools and the **adjusted cost base** of each investment, for eventual tax-efficient repatriation. | [`tax-surplus-engine`](../tax-surplus-engine/) |
+| **Canadian foreign-affiliate surplus & ACB (CRA Form T1134).** Maintaining — year by year, entity by entity, across a multi-tier cross-border ownership structure — the **exempt / taxable / pre-acquisition** surplus pools and the **adjusted cost base** of each investment, for eventual tax-efficient repatriation. | [`tax-surplus-engine`](../tax-surplus-engine/) |
 | **US partnership tax with IRC §704(c).** Form 1065 / Schedule K-1 assembly *and* **built-in gain** on contributed property — book vs. tax capital, the **traditional method / ceiling rule**, tax-basis financials. | [`partnership-1065-automation`](../partnership-1065-automation/) |
 | **Multi-entity month-end close.** Recurring journal entries (prepaid amortization, depreciation, deferred rent/CAM, accrued management fees, intercompany note interest) and cross-entity G&A/insurance allocations, with schedule-to-GL tie-outs. | [`monthly-close-automation`](../monthly-close-automation/) |
-| **Construction / JV project audits.** Pulling GL, job-cost, and check-register detail from a construction-accounting ERP for annual partner and Big-Four audits; classifying materiality; tracing a selection to source. | [`cash-reconciliation`](../cash-reconciliation/) + [`audit-automation`](../audit-automation/) |
+| **Construction / JV project audits.** Pulling GL, job-cost, and check-register detail from a construction-accounting ERP for annual partner and external audits; classifying materiality; tracing a selection to source. | [`cash-reconciliation`](../cash-reconciliation/) + [`audit-automation`](../audit-automation/) |
 | **Reviewer-driven QA, formalized.** Building a deliverable, then having it **independently reviewed against the reviewer's own words** before sign-off — a discipline I turned into a separation-of-duties control framework for AI-assisted work. | [`ai-validation-framework`](../ai-validation-framework/) (Triangulate) |
 
 ---
 
 ## The knowledge brain, in detail
 
-This is the system most people have never seen built properly. The real workflow:
+This is the least common system in the set, so it is worth describing in full. The real workflow:
 **record → transcribe → ingest → query.** Meetings stop evaporating; they become institutional
 memory that can be *cited*, not paraphrased from recall.
 
@@ -87,14 +87,14 @@ Each is now encoded as a control in the portfolio:
 
 | Competency | Proof in this repo | Tests |
 |---|---|---|
-| AI knowledge management — citation-governed retrieval over meeting transcripts (prep + verbatim cite) plus review -> remediation (reviewer's recorded corrections -> cited directives -> auto-generated apply-ready prompt + cited change-log mapping each directive -> source -> status, applied downstream by an AI or operator) | `knowledge-brain-engine` | 75 |
-| Cross-border foreign-affiliate tax (T1134, surplus pools, ACB, repatriation waterfall) | `tax-surplus-engine` | 26 |
-| Partnership tax — Form 1065 / K-1 assembly + §704(c) built-in gain (ceiling rule) | `partnership-1065-automation` | 40 |
-| Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 41 |
-| Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 31 |
-| Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 23 |
-| AI orchestration with controls (separation of duties, human gate) | `ai-validation-framework` | 21 |
-| **Total** | **7 systems** | **257** |
+| AI knowledge management — citation-governed retrieval over meeting transcripts (prep + verbatim cite) plus review -> remediation (reviewer's recorded corrections -> cited directives -> auto-generated apply-ready prompt + cited change-log mapping each directive -> source -> status, applied downstream by an AI or operator) | `knowledge-brain-engine` | 1,499 |
+| Cross-border foreign-affiliate tax (T1134, surplus pools, ACB, repatriation waterfall) | `tax-surplus-engine` | 1,486 |
+| Partnership tax — Form 1065 / K-1 assembly + §704(c) built-in gain (ceiling rule) | `partnership-1065-automation` | 1,605 |
+| Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 1,800 |
+| Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 1,001 |
+| Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 1,314 |
+| AI orchestration with controls (separation of duties, human gate) | `ai-validation-framework` | 1,311 |
+| **Total** | **7 systems** | **10,016** |
 
 ---
 

@@ -1,5 +1,8 @@
 # 🧠 Knowledge Brain Engine
 
+<p align="center"><img src="../assets/systems/brain.gif" alt="Knowledge Brain Engine — live demo" width="100%"></p>
+<p align="center"><img src="../assets/flows/brain-flow.svg" alt="Knowledge Brain Engine flow chart" width="100%"></p>
+
 > The platform turns recorded finance/tax meetings into a **queryable, citation-governed knowledge
 > base** — the sanitized public version of an internal **NotebookLM-style finance brain**.
 > Used *before* engagements to prepare for meetings, and *during* workpaper and disclosure-note
@@ -212,9 +215,9 @@ $ python -m brain_engine ask "what is the office parking and lunch policy"
 ### Test output (real)
 
 ```text
-$ python -m pytest -q
-...........................................................................  [100%]
-226 passed
+$ python -m pytest
+...........................................................              [100%]
+1499 passed in 1.17s
 ```
 
 The suite asserts the load-bearing governance: **every returned answer carries a citation**,

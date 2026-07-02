@@ -5,7 +5,9 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-10%2C016%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
+[![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
@@ -28,7 +30,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (~10k tests, a few seconds)
+# run the curated test suite (10,016 tests, a few seconds)
 pytest
 
 # run a system
@@ -134,7 +136,7 @@ finance-automation-portfolio/
 ├── audit-automation/             validation_engine — read-only workbook checks
 ├── ai-validation-framework/      triangulate       — multi-agent LLM review + guardrails
 ├── knowledge-brain-engine/       brain_engine      — cited retrieval, review → remediation
-├── docs/                         architecture · case study · walkthrough
+├── docs/                         case study · walkthrough · agent operations · deployment tracks
 ├── assets/                       diagrams + demo GIFs
 ├── scripts/                      demo.sh
 └── .github/workflows/            CI + runnable demo

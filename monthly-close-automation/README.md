@@ -172,7 +172,7 @@ monthly-close-automation/
 │   ├── engine.py          # the six recurring entries + tie-out
 │   ├── report.py          # JE register, trial balance, close report writers
 │   ├── cli.py             # CLI entrypoint
-│   └── tests/             # pytest suite (256 tests)
+│   └── tests/             # pytest suite (1,800 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # committed .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers

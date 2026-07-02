@@ -8,8 +8,9 @@ below lets anyone evaluate it end to end, and thoughtful suggestions are welcome
 
 - Python **3.12+**
 - `pip install -r requirements.txt`
-- Each system is self-contained under its own directory, with a `run.py` and a `samples/` set of
-  **fully synthetic** inputs.
+- Each system is self-contained under its own directory with a `run.py` entry point; systems ship
+  either a `samples/` set of **fully synthetic** inputs or a seeded fictional-data generator that
+  produces them at run time.
 
 ## Verify it
 

@@ -1,8 +1,8 @@
 # Platform Architecture
 
-This repository is a seven-system, AI-driven Finance & Tax automation platform — five deterministic
-calculation engines, the Knowledge Brain retrieval engine, and the Triangulate AI control
-framework — with an optional orchestration layer:
+This repository is a seven-system, AI-driven Finance & Tax automation platform — four deterministic
+calculation engines, a read-only validation engine, the Knowledge Brain retrieval engine, and the
+Triangulate AI control framework — with an optional orchestration layer:
 
 1. seeded fictional data generators
 2. calculation engines
