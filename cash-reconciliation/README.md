@@ -37,6 +37,8 @@ hand, the work is repetitive, slow, and the evidence trail is inconsistent.
 - Builds **materiality and escalation** into the process so reviewers see signal, not noise.
 - Produces a **consistent, audit-ready evidence trail** every cycle.
 
+📄 **Deep dive:** [Verification &amp; Completeness Patterns](verification-patterns.md) — the layered checks (account-number targeting, entity-mapping cross-checks, independent re-derivation, and a full-population completeness sweep) plus the finding taxonomy that separates timing noise from structural signal.
+
 ---
 
 ## ▶️ Run it
