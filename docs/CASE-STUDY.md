@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **seven runnable systems, a
-10,016-test curated suite (plus an opt-in ~1.09M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **eight runnable systems, a
+10,839-test curated suite (plus an opt-in ~1.09M-case property sweep), CI.**
 
 ---
 
@@ -94,7 +94,8 @@ Each is now encoded as a control in the portfolio:
 | Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 1,001 |
 | Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 1,314 |
 | AI orchestration with controls (separation of duties, human gate) | `ai-validation-framework` | 1,311 |
-| **Total** | **7 systems** | **10,016** |
+| Finance operations mapping — a deterministic data model rendering an interactive department atlas (drives, workstreams, directory, calendar), with deny-list confidentiality linting | `finance-atlas` | 823 |
+| **Total** | **8 systems** | **10,839** |
 
 ---
 

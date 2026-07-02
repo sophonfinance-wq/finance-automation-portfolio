@@ -1,8 +1,9 @@
 # Platform Architecture
 
-This repository is a seven-system, AI-driven Finance & Tax automation platform — four deterministic
-calculation engines, a read-only validation engine, the Knowledge Brain retrieval engine, and the
-Triangulate AI control framework — with an optional orchestration layer:
+This repository is an eight-system, AI-driven Finance & Tax automation platform — four deterministic
+calculation engines, a read-only validation engine, the Knowledge Brain retrieval engine, an
+interactive finance operations atlas, and the Triangulate AI control framework — with an optional
+orchestration layer:
 
 1. seeded fictional data generators
 2. calculation engines
@@ -52,7 +53,7 @@ verbatim, sourced citations.
 
 | Engine | Folder | What it serves |
 |---|---|---|
-| Knowledge Brain | `knowledge-brain-engine` | meeting transcripts -> citation-governed knowledge base; meeting prep and verbatim, timestamped citations for workpapers; review -> remediation where a review meeting's recorded corrections become cited directives and an auto-generated, apply-ready remediation prompt (plus a change-log mapping each directive -> source -> status) that a downstream AI or operator uses to apply the changes — the transcript is the instruction set, and application and verification happen downstream; refuses when no source clears its relevance floor |
+| Knowledge Brain | `knowledge-brain-engine` | meeting transcripts -> a citation-governed knowledge base: verbatim, timestamped citations for workpapers and meeting prep; a review -> remediation mode that turns a reviewer's recorded corrections into cited directives plus an apply-ready remediation prompt (applied downstream by an AI or operator, not the engine); refuses when no source clears its relevance floor |
 
 ### 4. Evidence artifacts
 

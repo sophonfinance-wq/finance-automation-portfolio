@@ -4,14 +4,14 @@ This is the advanced operating model for clients that approve agentic tooling: a
 that coordinates longer-running finance work and routes results through the same deterministic
 controls, with a human gate that never moves. The platform runs fully without it.
 
-The layer coordinates work across the seven finance systems, manages background review passes, and
+The layer coordinates work across the finance systems, manages background review passes, and
 assembles the final executive package — all in approved, agent-enabled environments.
 
 ---
 
 ## Overview
 
-A request is dispatched, and the orchestration layer coordinates the work. The seven finance systems
+A request is dispatched, and the orchestration layer coordinates the work. The finance systems
 run underneath. Validation checks the output. Triangulate challenges the work. Status is routed back
 to the operator, and the system packages the result for leadership.
 
@@ -67,7 +67,7 @@ while the operator is away from the machine.
 
 ---
 
-## How the seven systems fit underneath
+## How the systems fit underneath
 
 The orchestration layer does not replace the systems. It coordinates them.
 
@@ -79,7 +79,7 @@ The orchestration layer does not replace the systems. It coordinates them.
 | Partnership 1065 Automation | build the 1065 support package, K-1 preview, review checks, and summary draft |
 | Validation Engine | run read-only checks and turn failures into exception language |
 | Triangulate | route work through preparer, reviewer, specialist, audit, and human gate |
-| Knowledge Brain | retrieve prior decisions, assemble meeting prep, pull verbatim, timestamped citations for workpapers, and run review -> remediation — a review meeting's recorded corrections become cited directives plus an auto-generated, apply-ready remediation prompt (and a change-log mapping each directive -> source -> status) that a downstream AI or operator uses to apply the changes (the transcript is the instruction set; application and verification happen downstream) — or surface its refusal when no source qualifies |
+| Knowledge Brain | retrieve prior decisions, assemble meeting prep, and pull verbatim, timestamped citations for workpapers; run review -> remediation (a reviewer's recorded corrections become cited directives plus an apply-ready remediation prompt, applied downstream by an AI or operator); or surface a refusal when no source qualifies |
 
 The differentiator is not automation alone. It is controlled automation.
 

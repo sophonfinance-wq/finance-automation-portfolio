@@ -9,9 +9,10 @@ All data is fictional and seeded. Nothing here references a real entity, person,
 
 ## 60-second framing
 
-> "This repository is seven runnable systems that automate the finance work teams still do by hand:
+> "This repository is eight runnable systems that automate the finance work teams still do by hand:
 > close, reconciliation, partnership tax prep, complex international tax modeling, read-only workbook
-> validation, and a citation-governed knowledge brain over meeting transcripts. Above that sits an AI
+> validation, a citation-governed knowledge brain over meeting transcripts, and an interactive finance
+> operations atlas. Above that sits an AI
 > review layer (Triangulate) with separation of duties and an optional orchestration layer. A request
 > runs the finance systems, validates the results, and drafts an executive-ready summary. The demo
 > uses fictional data, but the control architecture — deterministic engines, read-only validation,
@@ -159,9 +160,7 @@ status — that a downstream AI or operator uses to apply the changes.
 
 **What it proves:** institutional memory becomes citation-grade — meeting decisions become quotable,
 sourced, and traceable into workpapers and disclosure notes — and a reviewer's recorded corrections
-become an auto-generated, cited, apply-ready prompt (plus a change-log mapping each directive →
-source → status), so the transcript itself drives the remediation while a downstream AI or operator
-applies the changes.
+drive their own remediation, with the transcript itself as the instruction set.
 
 ---
 
@@ -175,7 +174,7 @@ Open **[Agent Operations](./AGENT-OPERATIONS.md)**.
 
 - **Agent-enabled:** in approved environments, an optional orchestration layer coordinates
   longer-running work, manages background review passes, and routes status updates back to the
-  operator, with the seven finance systems running underneath — all through the same controls.
+  operator, with the finance systems running underneath — all through the same controls.
 - **Enterprise-safe:** where agents are not permitted, the same engines, tests, validation, and
   human-gated workflow run fully without any orchestration dependency.
 

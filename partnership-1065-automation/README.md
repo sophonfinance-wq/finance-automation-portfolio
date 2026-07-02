@@ -88,10 +88,15 @@ ties: assets $2,260,000 = liabilities $0 + tax capital $2,260,000.
 
 ## How It Operates
 
-The operator provides the system a source bundle. The system builds the tax workpapers, maps the
-numbers to the return, checks the package, and drafts the supporting summary for reviewer or
-executive follow-up. In approved, agent-enabled environments, an optional orchestration layer can
-coordinate the source bundle, workpaper build, review checks, and status reporting as an unattended
+The operator provides a source bundle. The system then:
+
+1. builds the tax workpapers,
+2. maps the numbers to the return,
+3. checks the package, and
+4. drafts the supporting summary for reviewer or executive follow-up.
+
+In approved, agent-enabled environments, an optional orchestration layer can coordinate the whole
+sequence — source bundle, workpaper build, review checks, and status reporting — as an unattended
 workflow. The platform runs fully without it: in a conservative environment, the same package runs
 through Python and CI with no orchestration layer.
 
