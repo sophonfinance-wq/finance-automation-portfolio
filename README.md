@@ -11,10 +11,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
-Seven self-contained Python systems for finance and tax work — month-end close, cash/debt
+Eight self-contained Python systems for finance and tax work — month-end close, cash/debt
 reconciliation, cross-border surplus & ACB, partnership 1065 / §704(c), read-only workbook
-validation, and a NotebookLM-style knowledge brain — plus **Triangulate**, a multi-agent LLM
-review framework with a deterministic core and a human sign-off gate. Everything runs on seeded
+validation, a NotebookLM-style knowledge brain, and an interactive finance operations atlas —
+plus **Triangulate**, a multi-agent LLM review framework with a deterministic core and a human
+sign-off gate. Everything runs on seeded
 fictional data, is covered by CI, and is built on one rule: **no material output rests on a single
 model's word.**
 
@@ -30,7 +31,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (10,016 tests, a few seconds)
+# run the curated test suite (10,839 tests, under two minutes)
 pytest
 
 # run a system
@@ -85,7 +86,7 @@ Full flow in **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
 ---
 
-## The seven systems
+## The eight systems
 
 Every system is self-contained, deterministic, and ships with a seeded fictional-data generator.
 
@@ -98,6 +99,7 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Validation Engine](./audit-automation/) | `validation_engine` | `python run.py` | read-only workbook checks, formula integrity, lineage, PASS / REVIEW / FAIL verdicts, byte-identical no-write guarantee |
 | [Triangulate](./ai-validation-framework/) | `triangulate` | `python -m triangulate` | AI separation of duties: preparer, reviewer, specialist, deterministic audit, human gate |
 | [Knowledge Brain](./knowledge-brain-engine/) | `brain_engine` | `python -m brain_engine ask "..."` | meeting transcripts → citation-governed knowledge base; verbatim, timestamped citations; review → remediation (cited change-directives + an apply-ready remediation prompt); refuses with no source |
+| [Finance Operations Atlas](./finance-atlas/) | `atlas_data` + `generate` | `python generate.py` | documentation-as-artifact: a data model that renders an interactive, single-file HTML map of a finance department (drives, workstreams, directory, calendar) — deterministic output, deny-list confidentiality linting in the test suite |
 
 **Triangulate** is the centerpiece: a framework for putting AI into financial work without letting a
 single model validate its own output. Its reviewer is a live Anthropic Claude integration
@@ -113,7 +115,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **10,016** | Hand-written unit + behavior tests and parametrized coverage across all 7 systems. Runs in seconds; gates CI. |
+| **Curated** (default) | `pytest` | **10,839** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems. Runs in under two minutes; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.09M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
@@ -121,7 +123,8 @@ default run (and CI) for speed and generated at import — the files stay small.
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
 Curated tests by system: close **1,800** · partnership **1,605** · knowledge-brain **1,499** ·
-tax-surplus **1,486** · validation **1,314** · triangulate **1,311** · recon **1,001**.
+tax-surplus **1,486** · validation **1,314** · triangulate **1,311** · recon **1,001** ·
+atlas **823** (including a parametrized deny-list confidentiality linter across every shipped file).
 
 ---
 
