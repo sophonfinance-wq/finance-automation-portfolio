@@ -19,6 +19,11 @@ recurring journal entries, each with its own logic, spread across multiple opera
 entities and separate databases. Run from memory or a static spreadsheet, errors accumulate and
 the close extends for days.
 
+The failures that hurt most are the **silent** ones: a recurring accrual that quietly stops
+posting, a fully depreciated asset that keeps depreciating, an allocation driven by a
+cumulative balance instead of the month's activity. Each looks exactly like a clean close —
+until someone finds it quarters later.
+
 ## Approach
 - **Codify the close as portable knowledge.** The platform captures the entire close — the entity map,
   the recurring-entry logic, the chart-of-accounts exceptions, and the exact output format — in
@@ -27,6 +32,9 @@ the close extends for days.
 - **One universal rhythm for every recurring entry:** *check the ledger for new activity →
   update a formula-driven schedule → record the entry → tie the schedule back to the ledger.*
   Nothing posts unless it ties.
+- **A close that cannot silently go wrong.** Every posted entry must survive ten deterministic
+  controls — Close Sentinel — before it counts, including an independent shadow recomputation
+  of every amount from the raw data.
 - **Audit-ready by construction.** Formula-driven schedules (never hardcoded), immutable
   historical tabs as the audit record, and a cited evidence trail on every value touched.
 - **Operator-grade and resilient.** Plain-English steps, a single recommended action (not a
@@ -42,6 +50,13 @@ allocations, and prepaid-insurance allocations — each as deterministic, tie-ch
 - Reduces a **multi-day manual close to a repeatable workflow** a single operator can run.
 - Handles **genuinely complex entries** — for example, multi-database, multi-leg
   intercompany interest capitalization that must balance independently in each ledger.
+- **Control design, not just computation** — ten deterministic close controls that encode
+  the month-end failure modes every controller recognizes: the missed accrual, the one-sided
+  intercompany entry, the asset depreciating past its useful life, the cumulative balance
+  used as an allocation driver.
+- **Detection proven, not asserted** — a fault-injection demo (`--demo-guardrails`) injects
+  twelve classic close errors covering all ten controls and shows each one caught by the
+  specific control designed for it.
 - Built for **handoff and audit**, not merely to complete the current month.
 
 ---
@@ -50,8 +65,8 @@ allocations, and prepaid-insurance allocations — each as deterministic, tie-ch
 
 This repository ships a small but **fully working** month-end **close engine** on
 **fictional** data. It generates a synthetic entity group, computes the recurring
-journal entries, enforces tie-out controls, and writes a JE register, an updated
-trial balance, and a close report.
+journal entries, enforces tie-out controls, runs the Close Sentinel control suite,
+and writes a JE register, an updated trial balance, and a close report.
 
 **Requirements:** Python 3.12+, `openpyxl` (already installed). Tests
 use `pytest`. No pandas/numpy/faker — stdlib only, seeded for determinism.
@@ -68,15 +83,20 @@ python -m close_engine --period 2026-03 --out ./output
 #   ...or, equivalently:
 python run.py --period 2026-03 --out ./output
 
-# 3) Run the tests
+# 3) Prove the controls: inject twelve classic close errors, watch each get caught
+python -m close_engine --demo-guardrails
+
+# 4) Run the tests
 python -m pytest -q
 ```
 
 The CLI **exits non-zero** if the close is not clean (any out-of-tie entry, a
 failed schedule tie-out, or an unbalanced trial balance), so it can gate a pipeline.
+Close Sentinel runs by default (`--no-sentinel` to skip); any **CRITICAL** control
+finding also fails the run.
 
 ### What the engine computes
-Six classes of recurring entries, each with a backing schedule and a hard
+Seven classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
 
 | Entry | Logic |
@@ -87,9 +107,101 @@ debits == credits control (and per-entity balance for intercompany entries):
 | **Management-fee accrual** | full monthly fee, **netting** any in-month cash payment |
 | **Note interest accrual** | simple monthly interest, with the lender/borrower **intercompany mirror** |
 | **G&A allocation** | fixed ratio that **must sum to 100%** (largest-remainder split, no penny lost) |
+| **Prepaid-insurance allocation** | shared policies amortized monthly across entities by fixed basis-point splits (largest-remainder, exact to the cent), with a **mid-year renewal step-up** — the applicable premium switches to the renewal rate starting in the renewal month |
 
 All money is held as **integer cents** so tie-outs are exact. Allocation ratios are
 validated to sum to exactly 100% (10000 bps) before anything posts.
+
+---
+
+## 🛡️ Close Sentinel — ten deterministic controls
+
+**Thesis: a close that cannot silently go wrong.** Computing the right numbers is
+half the job; the other half is proving nothing slipped past. Every entry must
+survive ten deterministic controls before it counts. Each control encodes a
+month-end failure mode a controller will recognize on sight, expressed generically
+and verified independently of the code that posted the entry. Findings are graded
+**CRITICAL / WARN / INFO**; a single CRITICAL blocks the close. Detection is proven,
+not asserted: the fault-injection demo below drives twelve injected faults across
+all ten controls.
+
+| ID | Control | The close failure it blocks |
+|----|---------|-----------------------------|
+| **C1** | Re-balance | An entry — or a trial balance — that does not foot. The opening trial balance must net to zero group-wide, every posted entry must re-add from its raw lines (in aggregate and per entity leg), and the post-close ledger trial balance must still balance — all re-summed independently of the posting code, so an imbalance cannot be vouched for by the same code that created it. |
+| **C2** | Intercompany mirror | The one-sided intercompany entry: the due-from booked in one entity, the due-to never booked in the other. Both legs must exist and must mirror to the cent — the kind of gap that otherwise surfaces only at consolidation. |
+| **C3** | Completeness calendar | The silently missing accrual — and its twin, the entry posted twice. The expected set of (entity, entry) pairs is derived from the sub-ledgers each period; anything missing or duplicated is named. Explicit waivers are recorded, not assumed. |
+| **C4** | Asset-life guard | The fully depreciated asset that keeps depreciating, and accumulated depreciation exceeding cost. Remaining life is recomputed for every asset, and the accumulated balance is re-derived from the sub-ledger and the posted register — never from the workpaper schedule, so a doctored schedule cannot vouch for it. The monthly overstatement and the exact over-accrual (the reversal candidate) are quantified in cents. |
+| **C5** | Driver provenance | The allocation driven by a cumulative balance instead of the period's activity. The driver is recomputed from the sub-ledger; a YTD balance quietly standing in for the month's activity is called out with both numbers. |
+| **C6** | Cross-foot | Stranded cents and stale splits. Per policy, the entity shares must sum exactly to the monthly total — which catches a renewal step-up whose entity rows were left at the old premium — and every allocation split map must pass dataset integrity: exactly 100.00%, naming only entities inside the group. The engine refuses to post on an invalid map instead of crashing; this control independently blocks the close. |
+| **C7** | Step-change corroboration | The unexplained jump — or drop — that flows through on autopilot. A movement over 20% and over $100 (absolute delta, either direction) versus the prior period must trace to a real sub-ledger event of the **same entity** (a renewal, a new asset in service, a new prepaid, an item expiring or reaching end of life); an explained step is noted, an unexplained one is flagged for the reviewer. |
+| **C8** | Rounding policy | The one-cent drift between detail and summary. The clearing leg must equal the **sum of the rounded per-line amounts** — never `round(total)` — so multi-line allocations reconcile exactly. |
+| **C9** | Shadow recompute | A defect — or a tamper — in the posting path. An independent minimal re-implementation recomputes every expected amount from the raw data; the posted register must agree to the cent. Two independent computations must agree before anything counts. |
+| **C10** | Period lock | The closed period quietly rewritten. Each closed register is sealed with a hash; any later mutation of a locked period is detected on recompute. |
+
+Sentinel results are written alongside the close outputs: the close report gains a
+**Control findings** section (or "All controls passed" on a clean run), plus a
+machine-readable findings JSON.
+
+### Fault-injection demo
+
+```bash
+python -m close_engine --demo-guardrails
+```
+
+The demo first runs a clean baseline — which must produce **zero** findings — then
+injects twelve classic close errors one at a time and asserts that the expected
+control catches each. A fault counts as caught only when its expected control fires
+at a qualifying severity: CRITICAL for the blocking controls, WARN or above for the
+reviewer-escalation control C7 (whose fault is independently blocked by the C9
+shadow recompute). The command exits 0 only if the baseline is clean **and** all
+twelve faults are caught:
+
+```
+Close Sentinel guardrail demo - period 2026-03 (seed 2026)
+  baseline (no fault)            -> PASS: zero findings on clean data
+  unbalanced_opening             -> PASS: caught by C1 re_balance (CRITICAL): opening trial balance out of balance
+  ended_asset_keeps_depreciating -> PASS: caught by C4 asset_life_guard (CRITICAL): fully depreciated asset still depreciating
+  accumulated_over_cost          -> PASS: caught by C4 asset_life_guard (CRITICAL): accumulated depreciation exceeds cost
+  balance_as_driver              -> PASS: caught by C5 driver_provenance (CRITICAL): cumulative balance used as allocation driver
+  stale_renewal_row              -> PASS: caught by C6 crossfoot (CRITICAL): entity shares do not crossfoot to the policy monthly total
+  missing_recurring_entry        -> PASS: caught by C3 completeness_calendar (CRITICAL): expected recurring entry absent
+  duplicate_entry                -> PASS: caught by C3 completeness_calendar (CRITICAL): duplicate recurring entry
+  interco_one_sided              -> PASS: caught by C2 interco_mirror (CRITICAL): one-sided intercompany entry
+  uncorroborated_step            -> PASS: caught by C7 step_change (WARN): unexplained step change
+  rounded_total_leg              -> PASS: caught by C8 rounding_policy (CRITICAL): rounding drift between detail and clearing leg
+  shadow_tamper                  -> PASS: caught by C9 shadow_recompute (CRITICAL): shadow recomputation disagrees
+  prior_period_mutation          -> PASS: caught by C10 period_lock (CRITICAL): closed period mutated
+  Demo verdict: ALL GUARDRAILS HELD (12 faults, baseline clean)
+```
+
+Every fault injector is seeded and deterministic, and each maps to exactly one
+control — so the demo doubles as living documentation of what each control is for.
+The twelve faults cover all ten controls; C3 and C4 are each proven against two
+distinct failure modes. Injectors with period preconditions guard themselves:
+before any policy has incepted, the renewal fault substitutes a same-class
+crossfoot corruption, so the demo holds at any valid period.
+
+### Scope and assumptions
+
+Known limits, stated so the controls are read for exactly what they prove:
+
+- **Single currency.** The engine and all ten controls operate in one functional
+  currency. There is no FX translation layer, and no control asserts anything
+  about rate selection or translation differences.
+- **C9 proves translation, not truth.** The shadow recompute guards the
+  dataset-to-register translation: an independent implementation must derive the
+  same register from the same raw data. If the raw sub-ledger itself is wrong,
+  both implementations agree on the same wrong number. Dataset truth is the job
+  of upstream reconciliation, not this control.
+- **Offsetting shifts inside one GL cell net out.** A shift of amounts between
+  two items that share the same (entity, category, account) triple leaves every
+  GL-level total unchanged, so it is invisible to GL-level controls and out of
+  scope here. Catching it requires item-level sub-ledger assertions.
+- **Digest-based deny lists confirm known terms.** The repository's
+  confidentiality checks compare hashed terms, so the guarded terms never appear
+  in the codebase in clear text — but a hash match is confirmable by someone who
+  already knows a candidate term. The mechanism prevents accidental disclosure;
+  it is not designed to resist a targeted guess by an insider.
 
 ---
 
@@ -101,11 +213,13 @@ gitignored). Console summary:
 
 ```
 Month-end close — period 2026-03 (seed 2026)
-  Posted entries : 6
+  Posted entries : 7
   Refused (tie)  : 0
-  Trial balance  : Dr 3,573,687.50 / Cr 3,573,687.50 [OK]
+  Trial balance  : Dr 3,587,237.50 / Cr 3,587,237.50 [OK]
   Tie-outs:
     - Prepaid amortization         acct 1400: sched 8,100.00 vs GL 8,100.00 [OK]
+    - Insurance allocation         acct 1450: sched 10,950.00 vs GL 10,950.00 [OK]
+  Sentinel: all controls passed (no findings).
   Outputs written to: .../monthly-close-automation/output
   Close status: CLEAN
 ```
@@ -123,15 +237,24 @@ Month-end close — period 2026-03 (seed 2026)
 | 4 | Management-fee accrual (net of in-month payments)        | JE-2026-03-MGMTFEE   | 14,000.00 | 14,000.00 | [x] |
 | 5 | Related-party note interest accrual                      | JE-2026-03-INTEREST  |  6,875.00 |  6,875.00 | [x] |
 | 6 | G&A cost allocation (fixed ratio, sums to 100%)          | JE-2026-03-GNA       | 24,000.00 | 24,000.00 | [x] |
+| 7 | Insurance premium allocation (shared policies)           | JE-2026-03-INSUR     |  2,600.00 |  2,600.00 | [x] |
 
 ## Controls
 - [x] Every posted entry balances (debits == credits).
-- [x] Trial balance is in balance (3,573,687.50 == 3,573,687.50).
+- [x] Trial balance is in balance (3,587,237.50 == 3,587,237.50).
 - [x] Every schedule ties to the GL.
 - [x] No entries refused for being out of tie (0 refused).
 
+## Control findings
+
+_Sentinel: all controls passed (no findings)._
+
 **Close status: CLEAN — ready for review.**
 ```
+
+With Close Sentinel enabled (the default), the report ends with a **Control
+findings** section — "All controls passed" on a clean run, or one line per
+finding with control id, severity, subject, and detail.
 
 ### Intercompany lease entry — balances *within each entity* ([`output/je_register.md`](./output/je_register.md))
 
@@ -168,11 +291,13 @@ monthly-close-automation/
 │   ├── __main__.py        # enables `python -m close_engine`
 │   ├── money.py           # integer-cent math (split / allocate, no penny lost)
 │   ├── model.py           # chart of accounts, JEs, ledger + the balance control
-│   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers)
-│   ├── engine.py          # the six recurring entries + tie-out
-│   ├── report.py          # JE register, trial balance, close report writers
-│   ├── cli.py             # CLI entrypoint
-│   └── tests/             # pytest suite (1,800 tests)
+│   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers, insurance policies)
+│   ├── engine.py          # the seven recurring entries + tie-out
+│   ├── sentinel/          # Close Sentinel — findings, controls C1–C10, shadow recompute
+│   ├── faults.py          # seeded fault injectors behind --demo-guardrails
+│   ├── report.py          # JE register, trial balance, close report + control findings
+│   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
+│   └── tests/             # pytest suite (5,542 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # committed .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -186,16 +311,28 @@ monthly-close-automation/
 - The engine **refuses to post an out-of-tie entry**, records it as *refused*, and
   reports it instead of silently posting.
 - Allocation ratios are validated to sum to exactly **100%** before posting.
+- **Close Sentinel** layers the ten deterministic controls above on top of the posting
+  gates — including an independent shadow recomputation that must agree with the
+  posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **1,800 passed**)
+### Tested behavior (`python -m pytest -q` → **5,542 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
-math; allocation ratios sum to 100% with no penny lost; out-of-tie detection and
-refusal; period roll-forward; and full determinism for a given seed.
+math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
+under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie
+detection and refusal; period roll-forward; and full determinism for a given seed.
+
+Close Sentinel adds **3,742** tests: every control stays silent on clean data
+and fires on its targeted corruption; a seed-by-period grid proves the shadow
+recomputation matches the engine on every entry category and detects a single-cent
+tamper anywhere in the register; every fault injector round-trips through the demo
+runner; and named regression tests read like the accounting rules they enforce
+(*a fully depreciated asset stops depreciating*, *intercompany legs must mirror to
+the cent*, *a closed period cannot be quietly rewritten*).
 
 ---
 
 ## Tools
-`ERP general ledger` · `Excel` · `Excel-GL connector (Excel→GL import)` · `Claude Code / Cowork` · `SOPs`
+`ERP general ledger` · `Excel` · `Excel→GL import connector` · `Claude Code / Cowork` · `SOPs`
 · `Python` (the engine in this repository)
 
 ## Samples (fictional)

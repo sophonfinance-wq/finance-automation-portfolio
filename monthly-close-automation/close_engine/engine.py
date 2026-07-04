@@ -19,6 +19,8 @@ Recurring-entry classes implemented:
 * management-fee accrual, netting any in-month cash payment
 * note interest accrual (simple monthly interest)
 * G&A cost allocation by a fixed ratio summing to 100%
+* insurance premium allocation (shared policies, largest-remainder entity
+  split, renewal step-up booked from the renewal month)
 """
 
 from __future__ import annotations
@@ -30,6 +32,7 @@ from .generate import (
     Dataset,
     FixedAsset,
     GnaAllocation,
+    InsurancePolicy,
     Lease,
     MgmtFee,
     Note,
@@ -137,17 +140,23 @@ class CloseEngine:
         """Run the full close and return the result.
 
         The opening trial balance is loaded first, then each recurring entry is
-        computed, controlled, and posted. Finally every schedule is tied back
-        to the GL.
+        computed, controlled, and posted. A split-driven entry whose allocation
+        map fails validation is refused up front (never crashing mid-close).
+        Finally every schedule is tied back to the GL.
         """
         self.ledger.load_opening(self.ds.opening_tb)
 
+        refused_splits = self._refuse_invalid_splits()
         self._post(self._prepaid_amortization())
         self._post(self._depreciation())
-        self._post(self._deferred_rent_and_cam())
+        if "deferred_rent_cam" not in refused_splits:
+            self._post(self._deferred_rent_and_cam())
         self._post(self._mgmt_fee_accrual())
         self._post(self._note_interest_accrual())
-        self._post(self._gna_allocation())
+        if "gna_allocation" not in refused_splits:
+            self._post(self._gna_allocation())
+        if "insurance_allocation" not in refused_splits:
+            self._post(self._insurance_allocation())
 
         ties = self._tie_out()
         return CloseResult(
@@ -161,6 +170,75 @@ class CloseEngine:
         )
 
     # -- posting with controls -------------------------------------------- #
+
+    def _refuse_invalid_splits(self) -> set[str]:
+        """Refuse split-driven entries whose allocation map fails validation.
+
+        A ``split_bps`` map must sum to exactly 10000 basis points and may
+        only name entities inside the group. A map that fails either rule is
+        a dataset-integrity defect: instead of crashing mid-close with a raw
+        ``ValueError``, the engine records a refusal through the same
+        mechanism as an out-of-tie entry and skips the affected category; the
+        sentinel's crossfoot control (C6) raises the CRITICAL finding.
+
+        Returns:
+            The recurring-entry categories refused this run.
+        """
+        codes = {e.code for e in self.ds.entities()}
+        checks: list[tuple[str, str, str, dict[str, int]]] = [
+            (
+                "deferred_rent_cam",
+                f"JE-{self.period}-LEASE",
+                lease.lease_id,
+                lease.split_bps,
+            )
+            for lease in self.ds.leases()
+        ]
+        if self.ds.subs.gna is not None:
+            checks.append(
+                (
+                    "gna_allocation",
+                    f"JE-{self.period}-GNA",
+                    "G&A shared-services pool",
+                    self.ds.gna().split_bps,
+                )
+            )
+        checks.extend(
+            (
+                "insurance_allocation",
+                f"JE-{self.period}-INSUR",
+                pol.policy_id,
+                pol.split_bps,
+            )
+            for pol in self.ds.insurance_policies()
+        )
+        refused_categories: set[str] = set()
+        for category, je_id, key, split in checks:
+            problems: list[str] = []
+            total_bps = sum(split.values())
+            if total_bps != 10000:
+                problems.append(
+                    f"split_bps sums to {total_bps} bps, not 10000"
+                )
+            unknown = sorted(set(split) - codes)
+            if unknown:
+                problems.append(
+                    f"split_bps names entities outside the group: "
+                    f"{', '.join(unknown)}"
+                )
+            if not problems:
+                continue
+            je = JournalEntry(
+                je_id=je_id,
+                period=self.period,
+                category=category,
+                description=f"REFUSED: invalid allocation split ({key})",
+            )
+            self.refused.append(
+                OutOfTieError(je, f"{key}: " + "; ".join(problems))
+            )
+            refused_categories.add(category)
+        return refused_categories
 
     def _post(self, je: JournalEntry | None) -> None:
         """Post an entry, capturing any out-of-tie refusal instead of raising.
@@ -696,6 +774,111 @@ class CloseEngine:
         )
         self.schedules.append(sched)
         return je
+
+    def _insurance_allocation(self) -> JournalEntry:
+        """Amortize one month of each shared insurance policy, split per entity.
+
+        Accounting rule: one month of the premium in force (original premium
+        until the renewal period; the renewal premium from the renewal month
+        on, so a step-up books at the new rate) is expensed and relieved from
+        prepaid insurance. Entity shares use the largest-remainder method so
+        the per-entity lines sum EXACTLY to the policy's monthly amortization
+        total. Each entity debits Insurance expense (6400) and credits Prepaid
+        insurance (1450) for its own share, so every entity leg self-balances.
+        """
+        je = JournalEntry(
+            je_id=f"JE-{self.period}-INSUR",
+            period=self.period,
+            category="insurance_allocation",
+            description="Insurance premium allocation (shared policies)",
+        )
+        sched = Schedule("Insurance allocation", "insurance_allocation")
+        entities = self.ds.entities()
+        for pol in self.ds.insurance_policies():
+            monthly_total = self._insurance_monthly_total(pol)
+            weights = [pol.split_bps.get(e.code, 0) for e in entities]
+            shares = money.allocate_by_ratio(monthly_total, weights)
+            annual = self._insurance_applicable_premium(pol)
+            for ent, weight, share in zip(entities, weights, shares):
+                if weight == 0:
+                    continue
+                sched.rows.append(
+                    ScheduleRow(
+                        f"{pol.policy_id}-{ent.code}",
+                        {
+                            "policy": pol.policy_id,
+                            "carrier": pol.carrier,
+                            "entity": ent.code,
+                            "ratio": f"{weight / 100:.2f}%",
+                            "annual_premium": money.fmt(annual),
+                            "policy_monthly": money.fmt(monthly_total),
+                            "entity_share": money.fmt(share),
+                        },
+                    )
+                )
+                if share:
+                    je.lines.append(
+                        JournalLine(
+                            ent.code,
+                            "6400",
+                            share,
+                            0,
+                            f"{pol.policy_id} {self.period} insurance amortization",
+                        )
+                    )
+                    je.lines.append(
+                        JournalLine(
+                            ent.code,
+                            "1450",
+                            0,
+                            share,
+                            f"Relieve prepaid insurance {pol.policy_id}",
+                        )
+                    )
+        # Schedule ties to the remaining prepaid insurance balance group-wide.
+        sched.tie_account = "1450"
+        sched.tie_expected_cents = sum(
+            self._insurance_remaining(pol) for pol in self.ds.insurance_policies()
+        )
+        self.schedules.append(sched)
+        return je
+
+    def _insurance_applicable_premium(self, pol: InsurancePolicy) -> int:
+        """Annual premium in force for the close month.
+
+        The original premium applies until the renewal period; the renewal
+        premium applies FROM the renewal period on (the step-up month books
+        the new rate). Policies renew on their inception anniversary, so the
+        12-month amortization cycle and the premium switch stay aligned.
+        """
+        if period_index(self.period) >= period_index(pol.renewal_period):
+            return pol.renewal_annual_premium_cents
+        return pol.annual_premium_cents
+
+    def _insurance_monthly_total(self, pol: InsurancePolicy) -> int:
+        """One month of the applicable annual premium (0 before inception).
+
+        The premium splits into 12 straight-line parts (the final month
+        absorbs the split remainder, matching :func:`money.split_evenly`).
+        """
+        offset = months_elapsed(pol.inception_period, self.period)
+        if offset < 0:
+            return 0
+        annual = self._insurance_applicable_premium(pol)
+        return money.split_evenly(annual, 12)[offset % 12]
+
+    def _insurance_remaining(self, pol: InsurancePolicy) -> int:
+        """Unamortized prepaid insurance after this period's entry.
+
+        Equals the applicable annual premium less every monthly part booked
+        through the close month within the current policy year.
+        """
+        offset = months_elapsed(pol.inception_period, self.period)
+        if offset < 0:
+            return 0
+        annual = self._insurance_applicable_premium(pol)
+        parts = money.split_evenly(annual, 12)
+        return annual - sum(parts[: offset % 12 + 1])
 
     # -- tie-out ----------------------------------------------------------- #
 

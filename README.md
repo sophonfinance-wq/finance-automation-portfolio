@@ -5,7 +5,7 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-10%2C839%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
+[![Tests](https://img.shields.io/badge/tests-14%2C686%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
 [![Systems](https://img.shields.io/badge/systems-8%20runnable-6f42c1)](#the-eight-systems)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
@@ -32,7 +32,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (10,839 tests, under two minutes)
+# run the curated test suite (14,686 tests, under two minutes)
 pytest
 
 # run a system
@@ -46,7 +46,7 @@ and run `bash scripts/demo.sh` for the full tour.
 
 ## For reviewers — a 60-second tour
 
-Three commands that show the load-bearing ideas, all on fictional data:
+Four commands that show the load-bearing ideas, all on fictional data:
 
 **1. The AI control catches a hallucination.** Inject one made-up figure into a clean workpaper and watch two independent roles catch it and block sign-off:
 ```bash
@@ -62,6 +62,12 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
 **3. Honest, tiered tests.** `pytest` runs the curated suite (~10k, gates CI); `SWEEP=1 pytest` runs an exhaustive property sweep (~1.09M generated cases). See [Testing](#testing).
+
+**4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
+```bash
+cd monthly-close-automation && python -m close_engine --demo-guardrails
+```
+> A trial balance loads with a one-sided line; a fully depreciated asset keeps depreciating; an intercompany entry loses its far leg; a clearing leg books `round(total)` instead of the sum of rounded lines; a closed period is quietly edited. The demo runs a clean baseline first (**zero findings**), then injects each fault and asserts the expected control (**C1–C10**) fires — a shadow recomputation independently re-derives every posted amount, and the run exits non-zero unless all twelve faults are caught.
 
 ---
 
@@ -93,7 +99,7 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 
 | System | Package | Run | What it demonstrates |
 |---|---|---|---|
-| [Month-End Close](./monthly-close-automation/) | `close_engine` | `python -m close_engine --period 2026-03` | recurring JEs, schedule-to-GL tie-outs, debit/credit controls, refusal to post out-of-tie entries |
+| [Month-End Close](./monthly-close-automation/) | `close_engine` | `python -m close_engine --period 2026-03` | recurring JEs, schedule-to-GL tie-outs, debit/credit controls, a ten-control sentinel layer (completeness calendar, interco mirroring, shadow recompute, period lock — fault-injection proven via `--demo-guardrails`), refusal to post out-of-tie entries |
 | [Cash & Debt Reconciliation](./cash-reconciliation/) | `recon_engine` | `python -m recon_engine` | GL-to-bank/lender matching, materiality classification, evidence log generation |
 | [Tax Surplus / ACB](./tax-surplus-engine/) | `surplus_engine` | `python -m surplus_engine --start 2021 --end 2024` | Canadian foreign-affiliate surplus pools, distribution waterfall, per-layer FX, ITA 40(3)-style deemed gain on negative ACB |
 | [Partnership 1065](./partnership-1065-automation/) | `partnership_tax` | `python -m partnership_tax` | book-to-tax bridge, 1065 / Sch. K / L / M-1 / M-2 / K-1 mapping, review checks, IRC §704(c) built-in gain (`--section704c`) |
