@@ -179,8 +179,10 @@ class Ledger:
         """Load opening balances from trial-balance lines (no tie control).
 
         The opening trial balance is treated as the starting state, not a
-        posted entry. It is validated for whole-group balance separately by the
-        controls layer.
+        posted entry, so the ledger itself accepts it unchecked. The Close
+        Sentinel's C1 gate independently verifies that the opening trial
+        balance nets to zero group-wide and that the post-close trial
+        balance still balances.
         """
         for line in lines:
             key = (line.entity, line.account)

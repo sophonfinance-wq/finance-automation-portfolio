@@ -6,7 +6,8 @@ Produces a fully fictional, seeded dataset for one entity group:
 * three operating entities,
 * an opening trial balance that balances per entity, and
 * source sub-ledgers: prepaids, fixed assets, leases (deferred rent + CAM),
-  related-party notes, management-fee arrangements, and the G&A allocation map.
+  related-party notes, management-fee arrangements, the G&A allocation map,
+  and shared insurance policies (one with a mid-year renewal step-up).
 
 Everything is generated with ``random.seed(seed)`` so two runs with the same
 seed produce byte-identical inputs. No real names, figures, or paths appear.
@@ -50,6 +51,7 @@ CHART: list[Account] = [
     Account("1000", "Cash", AccountType.ASSET),
     Account("1200", "Accounts receivable", AccountType.ASSET),
     Account("1400", "Prepaid expenses", AccountType.ASSET),
+    Account("1450", "Prepaid insurance", AccountType.ASSET),
     Account("1500", "Fixed assets - gross", AccountType.ASSET),
     Account("1510", "Accumulated depreciation", AccountType.ASSET),
     Account("1600", "Deferred rent asset", AccountType.ASSET),
@@ -162,6 +164,27 @@ class GnaAllocation:
     split_bps: dict[str, int]  # entity -> basis points (sum 10000)
 
 
+@dataclass(frozen=True)
+class InsurancePolicy:
+    """A shared insurance policy amortized monthly across the group.
+
+    The annual premium is prepaid and expensed one twelfth per month, split
+    across entities by ``split_bps`` (basis points summing to 10000). The
+    policy renews on its inception anniversary: from ``renewal_period`` on,
+    ``renewal_annual_premium_cents`` is the premium in force (a renewal at a
+    higher premium is a genuine step-up the close must book that month).
+    """
+
+    policy_id: str
+    carrier: str
+    description: str
+    annual_premium_cents: int
+    split_bps: dict[str, int]  # entity -> basis points (sum 10000)
+    inception_period: str  # YYYY-MM
+    renewal_period: str  # YYYY-MM (the inception anniversary)
+    renewal_annual_premium_cents: int
+
+
 @dataclass
 class SubLedgers:
     """Container for all generated sub-ledger data."""
@@ -172,6 +195,7 @@ class SubLedgers:
     notes: list[Note] = field(default_factory=list)
     mgmt_fees: list[MgmtFee] = field(default_factory=list)
     gna: GnaAllocation | None = None
+    insurance: list[InsurancePolicy] = field(default_factory=list)
 
 
 # --------------------------------------------------------------------------- #
@@ -412,6 +436,99 @@ def _gna() -> GnaAllocation:
     )
 
 
+def _insurance(seed: int, entities: list[Entity]) -> list[InsurancePolicy]:
+    """Generate two shared insurance policies (one step-up, one flat renewal).
+
+    The package policy is shared by every entity and renews mid-calendar-year
+    at a genuinely HIGHER premium; the umbrella policy covers two entities and
+    renews flat. Both renew on their inception anniversary. Amounts and splits
+    are drawn from a dedicated seeded stream so this generator never disturbs
+    the random sequences consumed by the other sub-ledger generators.
+    """
+    rng = random.Random(f"insurance-{seed}")
+    codes = [e.code for e in entities]
+    # Package policy: shared by all entities, renews 8.00%-15.00% higher.
+    annual_1 = money.to_cents(rng.choice([18600, 21000, 24600, 27000]))
+    step_up_bps = rng.randint(800, 1500)
+    renewal_1 = annual_1 * (10000 + step_up_bps) // 10000
+    first = rng.randrange(3500, 5001, 100)
+    second = rng.randrange(2000, 3501, 100)
+    split_1 = {codes[0]: first, codes[1]: second, codes[2]: 10000 - first - second}
+    # Umbrella policy: two entities, renews at the same premium (flat).
+    annual_2 = money.to_cents(rng.choice([9000, 10800, 12600]))
+    lead = rng.randrange(5500, 7001, 100)
+    split_2 = {codes[1]: lead, codes[2]: 10000 - lead}
+    return [
+        InsurancePolicy(
+            policy_id="POL-01",
+            carrier="Demo Mutual Insurance Co.",
+            description="Package policy (property & liability, shared)",
+            annual_premium_cents=annual_1,
+            split_bps=split_1,
+            inception_period="2025-07",
+            renewal_period="2026-07",
+            renewal_annual_premium_cents=renewal_1,
+        ),
+        InsurancePolicy(
+            policy_id="POL-02",
+            carrier="Birch Casualty Ltd.",
+            description="Umbrella policy (flat renewal)",
+            annual_premium_cents=annual_2,
+            split_bps=split_2,
+            inception_period="2025-10",
+            renewal_period="2026-10",
+            renewal_annual_premium_cents=annual_2,
+        ),
+    ]
+
+
+def _opening_insurance_balances(
+    policies: list[InsurancePolicy], period: str
+) -> list[JournalLine]:
+    """Seed opening prepaid-insurance balances so the schedule ties to the GL.
+
+    Each policy year is a 12-month prepaid of the premium in force (the
+    renewal premium from the renewal period onward). The opening balance is
+    the unamortized portion of the current policy year as of the START of the
+    close month, allocated per entity by the policy split (largest-remainder,
+    in group entity order). A per-entity equity plug offsets the debit so
+    each entity's opening trial balance still balances.
+
+    Args:
+        policies: The generated insurance sub-ledger.
+        period: Close period ``YYYY-MM``.
+
+    Returns:
+        Opening journal lines (debit 1450, credit 3000) per entity.
+    """
+    by_entity: dict[str, int] = {}
+    for pol in policies:
+        offset = months_elapsed(pol.inception_period, period)
+        if offset < 0:
+            continue
+        if period_index(period) >= period_index(pol.renewal_period):
+            annual = pol.renewal_annual_premium_cents
+        else:
+            annual = pol.annual_premium_cents
+        parts = money.split_evenly(annual, 12)
+        opening = annual - sum(parts[: offset % 12])
+        weights = [pol.split_bps.get(e.code, 0) for e in ENTITIES]
+        shares = money.allocate_by_ratio(opening, weights)
+        for ent, share in zip(ENTITIES, shares):
+            by_entity[ent.code] = by_entity.get(ent.code, 0) + share
+    lines: list[JournalLine] = []
+    for entity, bal in by_entity.items():
+        if bal == 0:
+            continue
+        lines.append(
+            JournalLine(entity, "1450", bal, 0, "Opening prepaid insurance")
+        )
+        lines.append(
+            JournalLine(entity, "3000", 0, bal, "Opening equity (insurance plug)")
+        )
+    return lines
+
+
 def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
     """Generate a complete, seeded, fictional dataset for ``period``.
 
@@ -431,6 +548,7 @@ def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
         notes=_notes(),
         mgmt_fees=_mgmt_fees(),
         gna=_gna(),
+        insurance=_insurance(seed, ENTITIES),
     )
     # Seed the opening prepaid asset balance (account 1400) so the prepaid
     # schedule ties to the GL after this period's amortization. The opening
@@ -438,6 +556,9 @@ def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
     # (i.e. before this period's entry). Offset with an equity plug per entity
     # so each entity's opening trial balance still balances.
     opening.extend(_opening_prepaid_balances(subs.prepaids, period))
+    # Same treatment for prepaid insurance (account 1450): seed the current
+    # policy year's unamortized premium so the insurance schedule ties.
+    opening.extend(_opening_insurance_balances(subs.insurance, period))
     return Dataset(
         period=period,
         seed=seed,
@@ -496,6 +617,10 @@ class Dataset:
         assert self.subs.gna is not None
         return self.subs.gna
 
+    def insurance_policies(self) -> list[InsurancePolicy]:
+        """Return the shared insurance policy sub-ledger."""
+        return self.subs.insurance
+
     def summary(self) -> str:
         """Return a short human-readable summary of the generated inputs."""
         lines = [
@@ -508,6 +633,7 @@ class Dataset:
             f"  Leases        : {len(self.subs.leases)}",
             f"  Notes         : {len(self.subs.notes)}",
             f"  Mgmt fees     : {len(self.subs.mgmt_fees)}",
+            f"  Insurance     : {len(self.subs.insurance)}",
             f"  G&A pool      : {money.fmt(self.subs.gna.monthly_pool_cents)}"
             if self.subs.gna
             else "  G&A pool      : (none)",

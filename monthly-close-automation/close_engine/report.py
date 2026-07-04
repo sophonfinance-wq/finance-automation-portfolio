@@ -18,6 +18,7 @@ from pathlib import Path
 from . import money
 from .engine import CloseResult
 from .generate import ENTITY_BY_CODE
+from .sentinel.findings import SentinelReport
 
 
 def _account_name(result: CloseResult, code: str) -> str:
@@ -170,8 +171,15 @@ def trial_balance_json(result: CloseResult) -> dict:
 # --------------------------------------------------------------------------- #
 
 
-def close_report_markdown(result: CloseResult) -> str:
-    """Render the close report (checklist + tie-out summary) as markdown."""
+def close_report_markdown(
+    result: CloseResult,
+    sentinel: SentinelReport | None = None,
+) -> str:
+    """Render the close report (checklist + tie-out summary) as markdown.
+
+    When a sentinel report is provided, a "Control findings" section lists
+    every finding (or states that all controls passed).
+    """
     lines: list[str] = []
     lines.append(f"# Month-End Close Report — {result.period}")
     lines.append("")
@@ -239,6 +247,25 @@ def close_report_markdown(result: CloseResult) -> str:
             lines.append(f"- `{err.je.je_id}`: {err.detail}")
         lines.append("")
 
+    # Control findings (Close Sentinel).
+    if sentinel is not None:
+        lines.append("## Control findings")
+        lines.append("")
+        lines.append(f"_{sentinel.summary_line()}_")
+        lines.append("")
+        if not sentinel.findings:
+            lines.append("All controls passed.")
+        else:
+            lines.append("| Control | Severity | Entity | Subject | Detail |")
+            lines.append("|---------|----------|--------|---------|--------|")
+            for finding in sentinel.findings:
+                lines.append(
+                    f"| {finding.control_id} | {finding.severity.value.upper()} "
+                    f"| {finding.entity or 'group'} | {finding.subject} "
+                    f"| {finding.detail} |"
+                )
+        lines.append("")
+
     verdict = "CLEAN — ready for review." if result.clean else \
         "NOT CLEAN — resolve flagged items before review."
     lines.append(f"**Close status: {verdict}**")
@@ -247,16 +274,52 @@ def close_report_markdown(result: CloseResult) -> str:
 
 
 # --------------------------------------------------------------------------- #
+# Sentinel report
+# --------------------------------------------------------------------------- #
+
+
+def sentinel_json(report: SentinelReport) -> dict:
+    """Render a sentinel report as a JSON-serializable dict.
+
+    Carries the clean verdict, per-severity counts, and every finding with
+    its control id so a pipeline can gate on ``clean`` without re-parsing.
+    """
+    return {
+        "clean": report.clean,
+        "summary": report.summary_line(),
+        "critical_count": len(report.criticals),
+        "warning_count": len(report.warnings),
+        "info_count": len(report.infos),
+        "findings": [
+            {
+                "control_id": finding.control_id,
+                "severity": finding.severity.value,
+                "entity": finding.entity,
+                "subject": finding.subject,
+                "detail": finding.detail,
+            }
+            for finding in report.findings
+        ],
+    }
+
+
+# --------------------------------------------------------------------------- #
 # Writers
 # --------------------------------------------------------------------------- #
 
 
-def write_outputs(result: CloseResult, out_dir: str | Path) -> list[Path]:
+def write_outputs(
+    result: CloseResult,
+    out_dir: str | Path,
+    sentinel: SentinelReport | None = None,
+) -> list[Path]:
     """Write all committed outputs (and optional xlsx) to ``out_dir``.
 
     Args:
         result: The close result to render.
         out_dir: Destination directory (created if missing).
+        sentinel: Optional sentinel report; when given, its findings render
+            into the close report and ``sentinel.json`` is also written.
 
     Returns:
         The list of files written.
@@ -279,7 +342,9 @@ def write_outputs(result: CloseResult, out_dir: str | Path) -> list[Path]:
     _write_json("je_register.json", je_register_json(result))
     _write("trial_balance.md", trial_balance_markdown(result))
     _write_json("trial_balance.json", trial_balance_json(result))
-    _write("close_report.md", close_report_markdown(result))
+    _write("close_report.md", close_report_markdown(result, sentinel=sentinel))
+    if sentinel is not None:
+        _write_json("sentinel.json", sentinel_json(sentinel))
 
     xlsx_path = _write_xlsx(result, out)
     if xlsx_path is not None:

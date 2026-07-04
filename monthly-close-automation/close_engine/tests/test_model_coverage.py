@@ -210,10 +210,10 @@ def test_chart_get_unknown_raises_keyerror() -> None:
 def test_chart_iteration_yields_accounts() -> None:
     coa = chart_of_accounts()
     accounts = list(coa)
-    assert len(accounts) == 28
+    assert len(accounts) == 29
     assert all(isinstance(a, Account) for a in accounts)
     codes = {a.code for a in accounts}
-    assert {"1000", "1400", "6600", "6650"} <= codes
+    assert {"1000", "1400", "1450", "6600", "6650"} <= codes
 
 
 def test_chart_built_from_custom_accounts() -> None:

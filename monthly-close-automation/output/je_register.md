@@ -1,6 +1,6 @@
 # Journal Entry Register — 2026-03
 
-_Seed 2026. 6 entries posted; 0 refused (out of tie)._
+_Seed 2026. 7 entries posted; 0 refused (out of tie)._
 
 ## JE-2026-03-PREPAID — Prepaid amortization (straight-line)
 
@@ -104,3 +104,22 @@ _Seed 2026. 6 entries posted; 0 refused (out of tie)._
 | BW | 6600 · G&A - allocated | Allocated G&A share | 3,750.00 |  |
 | BW | 2800 · Due to affiliates | Due to affiliate (G&A allocation) |  | 3,750.00 |
 | | | **Totals** | **24,000.00** | **24,000.00** |
+
+## JE-2026-03-INSUR — Insurance premium allocation (shared policies)
+
+- Category: `insurance_allocation`
+- Control: debits 2,600.00 == credits 2,600.00 (ties)
+
+| Entity | Account | Memo | Debit | Credit |
+|--------|---------|------|------:|-------:|
+| DH | 6400 · Insurance expense | POL-01 2026-03 insurance amortization | 573.50 |  |
+| DH | 1450 · Prepaid insurance | Relieve prepaid insurance POL-01 |  | 573.50 |
+| MF | 6400 · Insurance expense | POL-01 2026-03 insurance amortization | 542.50 |  |
+| MF | 1450 · Prepaid insurance | Relieve prepaid insurance POL-01 |  | 542.50 |
+| BW | 6400 · Insurance expense | POL-01 2026-03 insurance amortization | 434.00 |  |
+| BW | 1450 · Prepaid insurance | Relieve prepaid insurance POL-01 |  | 434.00 |
+| MF | 6400 · Insurance expense | POL-02 2026-03 insurance amortization | 630.00 |  |
+| MF | 1450 · Prepaid insurance | Relieve prepaid insurance POL-02 |  | 630.00 |
+| BW | 6400 · Insurance expense | POL-02 2026-03 insurance amortization | 420.00 |  |
+| BW | 1450 · Prepaid insurance | Relieve prepaid insurance POL-02 |  | 420.00 |
+| | | **Totals** | **2,600.00** | **2,600.00** |

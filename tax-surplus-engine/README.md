@@ -44,7 +44,7 @@ exhaustively manual and error-prone.
 - Operates across **both the US partnership and Canadian foreign-affiliate frameworks**.
 
 ## Tools
-`Python (openpyxl)` · `LibreOffice headless recalc` · `Excel` · `construction GL (Excel-GL connector)` · `Bank of Canada FX` · `Claude Code` · `ChatGPT` · `Codex` · `NotebookLM`
+`Python (openpyxl)` · `LibreOffice headless recalc` · `Excel` · `construction-accounting GL (refreshable Excel connector)` · `Bank of Canada FX` · `Claude Code` · `ChatGPT` · `Codex` · `NotebookLM`
 
 ## Sample (fictional)
 - [Surplus pool calculation](./samples/sample-surplus-calc.md) — a worked example showing the

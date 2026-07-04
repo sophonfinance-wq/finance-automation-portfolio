@@ -169,10 +169,8 @@ def test_gna_allocation_distributes_full_pool() -> None:
     assert allocated == gd(PERIOD).gna().monthly_pool_cents
 
 
-def test_gna_allocation_rejected_when_ratios_do_not_sum_to_100() -> None:
-    """A bad allocation map raises before any out-of-tie entry can post."""
-    import pytest
-
+def test_gna_allocation_refused_when_ratios_do_not_sum_to_100() -> None:
+    """A bad allocation map is refused up front, never crashing the close."""
     ds = generate_dataset(PERIOD)
     # Corrupt the split so it no longer sums to 10000 bps.
     ds.subs.gna = GnaAllocation(
@@ -180,8 +178,27 @@ def test_gna_allocation_rejected_when_ratios_do_not_sum_to_100() -> None:
         monthly_pool_cents=money.to_cents(15000),
         split_bps={"DH": 4000, "MF": 3500, "BW": 2000},  # sums to 9500
     )
-    with pytest.raises(ValueError):
-        CloseEngine(ds).run()
+    result = CloseEngine(ds).run()  # must not raise
+    assert not result.clean
+    assert [err.je.category for err in result.refused] == ["gna_allocation"]
+    assert "9500" in result.refused[0].detail
+    assert not any(je.category == "gna_allocation" for je in result.register)
+
+
+def test_gna_allocation_refused_when_the_split_names_an_outside_entity() -> None:
+    """A split naming an entity outside the group is refused, not crashed on."""
+    ds = generate_dataset(PERIOD)
+    ds.subs.gna = GnaAllocation(
+        pool_entity="DH",
+        monthly_pool_cents=money.to_cents(15000),
+        split_bps={"DH": 4000, "MF": 3500, "ZZ": 2500},  # ZZ is not in the group
+    )
+    result = CloseEngine(ds).run()  # must not raise
+    assert not result.clean
+    assert [err.je.category for err in result.refused] == ["gna_allocation"]
+    assert "ZZ" in result.refused[0].detail
+    assert "outside the group" in result.refused[0].detail
+    assert not any(je.category == "gna_allocation" for je in result.register)
 
 
 # --------------------------------------------------------------------------- #
