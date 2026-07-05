@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sophon Finance Systems — Your paperwork, on autopilot</title>
+<meta name="description" content="Nine AI finance engines. Documents in, finished work out — with proof attached and your people in charge. Free consultation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%232563eb'/%3E%3Cstop offset='1' stop-color='%2300a8ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='2' y='2' width='44' height='44' rx='13' fill='url(%23g)'/%3E%3Cpath d='M9 17 L18 11 L28 14 L39 8' fill='none' stroke='rgba(255,255,255,.55)' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='39' cy='8' r='2.6' fill='white'/%3E%3Ctext x='24' y='34' text-anchor='middle' font-family='Arial' font-weight='900' font-size='16' fill='white' letter-spacing='1'%3ESFS%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    --navy:#0f2a5c; --blue:#2563eb; --sky:#00a8ff; --ink:#16213a; --slate:#5b6b84;
+    --line:#e3eaf5; --wash:#f5f9fe; --white:#fff; --green:#15803d;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { font-family:-apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif; color:var(--ink); background:var(--white); line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; -webkit-tap-highlight-color:transparent; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  .wrap { max-width:1080px; margin:0 auto; padding:0 28px; }
+
+  /* ===== scroll reveal ===== */
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .85s cubic-bezier(.2,.6,.2,1), transform .85s cubic-bezier(.2,.6,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+  .d1{transition-delay:.12s} .d2{transition-delay:.24s} .d3{transition-delay:.36s} .d4{transition-delay:.48s}
+
+  /* ===== nav ===== */
+  nav { position:sticky; top:0; background:rgba(255,255,255,.85); backdrop-filter:blur(16px); border-bottom:1px solid var(--line); z-index:50; }
+  .nav-in { display:flex; align-items:center; justify-content:space-between; height:58px; }
+  .logo { font-weight:800; font-size:16px; letter-spacing:.4px; text-decoration:none; display:flex; align-items:center; gap:10px; color:var(--navy); }
+  .logo em { font-style:normal; color:var(--blue); }
+  .mark { display:block; }
+  .logo .mark { width:30px; height:30px; }
+  .logo .navmark { display:block; flex:none; }
+  .logo .wm-nav { display:block; flex:none; height:36px; width:auto; }
+  .logo .wordmark { font-family:-apple-system,'Segoe UI',Arial,sans-serif; font-weight:600; font-size:14.5px; letter-spacing:1.4px; color:#0b1f45; text-transform:uppercase; white-space:nowrap; }
+  .logo .wordmark b { font-weight:900; letter-spacing:1.6px; }
+  .nav-links a { color:var(--slate); text-decoration:none; font-size:14px; margin-left:22px; font-weight:600; }
+  .nav-links a:hover { color:var(--blue); }
+  .nav-links .cta { color:#fff; background:var(--blue); padding:8px 18px; border-radius:999px; }
+  .nav-links .cta:hover { background:var(--navy); color:#fff; }
+  /* nav stays light/solid over the light hero */
+
+  /* ===== HERO — the big bang ===== */
+  header { position:relative; min-height:92vh; display:flex; flex-direction:column; justify-content:center; text-align:left; overflow:hidden; color:#eaf1fd;
+    background:linear-gradient(92deg, rgba(6,15,36,.88) 0%, rgba(6,15,36,.68) 28%, rgba(6,15,36,.36) 52%, rgba(6,15,36,.08) 78%, rgba(6,15,36,0) 100%), url('assets/hero-photo.png?v=seattle') center / cover no-repeat, #0a1428; }
+  .orb, .heroGrid { display:none; }
+
+  @keyframes bangUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
+  .b0 { animation:bangUp .7s ease .02s both; }
+  .b1 { animation:bangUp .8s cubic-bezier(.2,.6,.2,1) .12s both; }
+  .b2 { animation:bangUp .8s cubic-bezier(.2,.6,.2,1) .26s both; }
+  .b3 { animation:bangUp .8s cubic-bezier(.2,.6,.2,1) .42s both; }
+  .b4 { animation:bangUp .8s cubic-bezier(.2,.6,.2,1) .58s both; }
+  .b5 { animation:bangUp .9s cubic-bezier(.2,.6,.2,1) .74s both; }
+
+  .hero-mark { display:none; }
+  .eyebrow { display:inline-flex; align-items:center; gap:12px; font-size:12px; font-weight:800; letter-spacing:2.6px; text-transform:uppercase; color:#9ec3ff; }
+  .eyebrow::before { content:''; width:28px; height:1.5px; background:linear-gradient(90deg,#2563eb,#00a8ff); }
+  h1 { font-size:clamp(40px, 6.1vw, 74px); line-height:1.03; font-weight:800; color:#fff; letter-spacing:-1.7px; margin:20px 0 0; max-width:15ch; text-shadow:0 2px 30px rgba(4,10,26,.55); }
+  h1 em { display:block; font-style:italic; font-weight:500; font-family:Georgia,'Times New Roman',serif; letter-spacing:-.6px; margin-top:4px;
+    background:linear-gradient(92deg,#2563eb,#00a8ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .cred { display:flex; flex-wrap:wrap; gap:10px; margin:26px 0 2px; }
+  .cred span { display:inline-flex; align-items:center; gap:10px; font-size:13px; font-weight:700; letter-spacing:.2px; color:#eaf1fd;
+    border:1px solid rgba(255,255,255,.20); border-radius:12px; padding:9px 16px 9px 11px;
+    background:rgba(255,255,255,.10); backdrop-filter:blur(7px); box-shadow:0 6px 18px rgba(4,10,26,.30), inset 0 1px 0 rgba(255,255,255,.16);
+    transition:transform .2s, box-shadow .2s; }
+  .cred span:hover { transform:translateY(-2px); box-shadow:0 12px 26px rgba(37,99,235,.18); }
+  .cred .cico { width:28px; height:28px; flex:none; border-radius:9px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#2563eb,#00a8ff); box-shadow:0 5px 12px rgba(37,99,235,.32); }
+  .cred .cico svg { width:16px; height:16px; }
+  .cred b { color:#fff; font-weight:800; }
+  .hero-sub { font-size:clamp(17px, 2vw, 21px); color:#c7d6ef; max-width:33em; margin:20px 0 30px; line-height:1.55; }
+  .btns a { display:inline-flex; align-items:center; justify-content:center; gap:9px; text-decoration:none; font-weight:700; font-size:16px; padding:14px 28px; border-radius:11px; margin:0 12px 12px 0; }
+  .btn-p { background:linear-gradient(135deg,#2563eb,#00a8ff); color:#fff; box-shadow:0 12px 28px rgba(37,99,235,.28); transition:transform .2s, box-shadow .2s; }
+  .btn-p:hover { transform:translateY(-2px); box-shadow:0 16px 38px rgba(0,140,255,.4); }
+  .btn-s { color:#fff; border:1.5px solid rgba(255,255,255,.45); background:rgba(255,255,255,.08); backdrop-filter:blur(4px); }
+  .btn-s:hover { border-color:#fff; background:rgba(255,255,255,.17); color:#fff; }
+  .hero-note { font-size:13.5px; color:#a9c0e4; margin-top:12px; }
+  header .pipe-label { color:#b9cdea; }
+  header .scroll-cue { border-color:#b9cbe8; }
+
+  /* live pipeline in hero */
+  .pipe { position:relative; height:150px; max-width:780px; margin:34px auto 0; }
+  .pipe-track { position:absolute; left:6%; right:6%; top:64px; height:3px; background:linear-gradient(90deg, transparent, #c9dcf6 18%, #c9dcf6 82%, transparent); }
+  .pipe-core { position:absolute; left:50%; top:64px; transform:translate(-50%,-50%); width:152px; height:152px; z-index:2; }
+  .pring { position:absolute; inset:0; border-radius:50%; border:2px solid #bfd9f9; animation:ringpulse 3.9s ease-out infinite; }
+  .pring.r2 { animation-delay:1.3s; } .pring.r3 { animation-delay:2.6s; }
+  @keyframes ringpulse { 0%{ transform:scale(.6); opacity:.9; } 100%{ transform:scale(1.2); opacity:0; } }
+  .mech .gearspin { transform-box:fill-box; transform-origin:center; animation:spin 14s linear infinite; }
+  .mech .orbit { transform-box:fill-box; transform-origin:center; animation:spin 9s linear infinite reverse; }
+  .corepulse { transform-box:fill-box; transform-origin:center; animation:corepulse 3.4s ease-in-out infinite; }
+  @keyframes corepulse { 0%,100%{ transform:scale(.78); opacity:.6; } 50%{ transform:scale(1.15); opacity:1; } }
+  .docart { width:26px; height:32px; flex:none; filter:drop-shadow(0 2px 5px rgba(15,42,92,.14)); }
+  .pipe-chipcore { position:absolute; inset:24px; border-radius:24px; background:linear-gradient(135deg, var(--blue), var(--sky));
+    display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 16px 38px rgba(37,99,235,.42), inset 0 0 0 1.5px rgba(255,255,255,.28); overflow:hidden; }
+  .core-label.sm b { font-size:15px; }
+  .core-label.sm i { font-size:8px; letter-spacing:2px; }
+  .pdoc { position:absolute; top:44px; left:4%; z-index:1; display:flex; align-items:center; gap:7px; background:#fff; border:1px solid var(--line); border-radius:10px;
+    padding:8px 12px; font-size:13px; font-weight:700; color:var(--ink); box-shadow:0 8px 20px rgba(15,42,92,.1); opacity:0; animation:docIn 11.4s linear infinite; }
+  .pdoc.p2 { animation-delay:3.8s; } .pdoc.p3 { animation-delay:7.6s; }
+  @keyframes docIn {
+    0% { opacity:0; transform:translateX(0); }
+    4% { opacity:1; }
+    30% { opacity:1; transform:translateX(240px); }
+    40% { opacity:0; transform:translateX(330px) scale(.8); }
+    100% { opacity:0; transform:translateX(330px) scale(.8); }
+  }
+  .pout { position:absolute; top:44px; right:4%; z-index:1; display:flex; align-items:center; gap:7px; background:#f0f9f1; border:1px solid #cde8d2; border-radius:10px;
+    padding:8px 12px; font-size:13px; font-weight:700; color:var(--green); box-shadow:0 8px 20px rgba(21,128,61,.12); opacity:0; animation:docOut 11.4s linear infinite; }
+  .pout.p2 { animation-delay:3.8s; } .pout.p3 { animation-delay:7.6s; }
+  @keyframes docOut {
+    0%, 42% { opacity:0; transform:translateX(-330px) scale(.8); }
+    50% { opacity:1; transform:translateX(-235px) scale(1); }
+    76% { opacity:1; transform:translateX(0) scale(1); }
+    82% { opacity:0; transform:translateX(22px); }
+    100% { opacity:0; }
+  }
+  .pipe-label { position:absolute; bottom:0; left:0; right:0; font-size:13px; color:var(--slate); }
+  .scroll-cue { margin:30px auto 0; width:26px; height:42px; border:2px solid #b9cbe8; border-radius:14px; position:relative; }
+  .scroll-cue::after { content:''; position:absolute; left:50%; top:8px; width:4px; height:9px; margin-left:-2px; border-radius:2px; background:var(--blue); animation:cue 1.8s ease-in-out infinite; }
+  @keyframes cue { 0%,100%{ transform:translateY(0); opacity:1; } 55%{ transform:translateY(12px); opacity:.2; } }
+
+  /* ===== trust bar ===== */
+  .trust { border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#fff; }
+  .trust-in { display:flex; flex-wrap:wrap; justify-content:space-between; gap:18px; padding:24px 0; }
+  .trust b { display:block; font-size:36px; color:var(--navy); font-weight:850; font-variant-numeric:tabular-nums; letter-spacing:-.5px; line-height:1.02; }
+  .trust b .count { font-size:inherit; }
+  .trust .sfx { font-size:23px; font-weight:800; letter-spacing:0; }
+  .trust span { font-size:13px; color:var(--slate); }
+  /* light credential break between dark bands */
+  .credband { background:#f5f8fd; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:34px 0; }
+  .cred-row { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px 42px; text-align:center; }
+  .cred-row span { font-size:15px; color:var(--slate); letter-spacing:.2px; }
+  .cred-row b { color:var(--navy); font-weight:800; }
+  @media (max-width:700px){ .cred-row { gap:12px 22px; } .cred-row span { font-size:13px; } }
+
+  /* ===== sections ===== */
+  section { padding:96px 0; }
+  section.alt { background:var(--wash); }
+  .sec-kicker { font-size:12.5px; font-weight:800; letter-spacing:2px; color:var(--blue); text-transform:uppercase; }
+  h2 { font-size:clamp(30px, 4.2vw, 46px); font-weight:850; color:var(--navy); letter-spacing:-.9px; line-height:1.1; margin:10px 0 12px; }
+  .lead { font-size:18.5px; color:var(--slate); max-width:38em; }
+  .center { text-align:center; } .center .lead { margin:0 auto; }
+
+  /* ===== flagship flows ===== */
+  .flow { display:grid; grid-template-columns:1fr 84px 1.22fr 84px 1fr; align-items:center; margin-top:52px; }
+  .stage { background:#fff; border:1px solid var(--line); border-radius:20px; padding:26px 24px; box-shadow:0 14px 34px rgba(15,42,92,.06); }
+  .stage h3 { font-size:14px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:var(--blue); margin-bottom:14px; }
+  .stage.out h3 { color:var(--green); }
+  .doc { display:flex; align-items:center; gap:10px; background:var(--wash); border:1px solid var(--line); border-radius:11px; padding:10px 13px; margin-bottom:9px; font-size:14.5px; font-weight:650; color:var(--ink); }
+  .doc svg { flex:none; }
+  .in.doc-float .doc { animation:floaty 4.6s ease-in-out infinite; }
+  .in.doc-float .doc:nth-child(3){ animation-delay:.8s; } .in.doc-float .doc:nth-child(4){ animation-delay:1.6s; } .in.doc-float .doc:nth-child(5){ animation-delay:2.4s; }
+  @keyframes floaty { 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-4px);} }
+  .stage .fine { font-size:12.5px; color:var(--slate); margin-top:10px; }
+  .conn { position:relative; height:6px; }
+  .conn svg { position:absolute; inset:-22px 0; width:100%; height:50px; overflow:visible; }
+  .conn .rail { stroke:#c9dcf6; stroke-width:3; }
+  .conn .pulse { stroke:var(--sky); stroke-width:3.5; stroke-linecap:round; stroke-dasharray:14 30; animation:flowdash 1.6s linear infinite; }
+  @keyframes flowdash { to { stroke-dashoffset:-44; } }
+  @keyframes connslide { to { background-position-y:30px; } }
+  .core { text-align:center; padding:26px 20px 24px; }
+  .core-vis { position:relative; width:178px; height:178px; margin:0 auto 16px; }
+  .ring { position:absolute; inset:0; border-radius:50%; border:2px solid #bfd9f9; animation:ringpulse 2.6s ease-out infinite; }
+  .ring.r2 { animation-delay:.85s; } .ring.r3 { animation-delay:1.7s; }
+  .core-chip { position:absolute; inset:24px; border-radius:28px; background:linear-gradient(135deg, var(--blue), var(--sky)); display:flex; align-items:center; justify-content:center; color:#fff; box-shadow:0 18px 44px rgba(37,99,235,.42), inset 0 0 0 1.5px rgba(255,255,255,.28); overflow:hidden; }
+  /* ===== skeleton movement (Richard Mille mode) ===== */
+  .mech { position:absolute; inset:0; width:100%; height:100%; }
+  .gspin { transform-box:fill-box; transform-origin:center; animation:spin 11s linear infinite; }
+  .gspin.rev { animation-direction:reverse; animation-duration:7.5s; }
+  .gspin.fast { animation-duration:5.5s; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .bal { transform-box:fill-box; transform-origin:center; animation:tick 1.7s cubic-bezier(.45,.05,.55,.95) infinite; }
+  @keyframes tick { 0%,100% { transform:rotate(-26deg); } 50% { transform:rotate(26deg); } }
+  .core-label { position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; background:rgba(10,33,78,.52); border:1px solid rgba(255,255,255,.42); border-radius:11px; padding:6px 14px; backdrop-filter:blur(1.5px); }
+  .core-label b { font-size:21px; font-weight:900; line-height:1; letter-spacing:1px; }
+  .core-label i { font-style:normal; font-size:9.5px; font-weight:800; letter-spacing:2.6px; margin-top:3px; opacity:.92; }
+  .bgear { width:16px; height:16px; flex:none; }
+  .bgear g { transform-box:fill-box; transform-origin:center; animation:spin 7s linear infinite; }
+  a:hover .bgear g { animation-duration:1.1s; }
+  .core h3 { font-size:14px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:var(--blue); margin-bottom:12px; }
+  .core ul { list-style:none; text-align:left; max-width:250px; margin:0 auto; }
+  .core li { font-size:14.5px; color:var(--slate); padding:5px 0 5px 26px; position:relative; opacity:0; transform:translateX(-8px); transition:opacity .5s, transform .5s; }
+  .core li::before { content:''; position:absolute; left:2px; top:11px; width:14px; height:14px; border-radius:50%; background:#e3f0ff; border:2px solid var(--blue); }
+  .core li::after { content:''; position:absolute; left:6.5px; top:14.5px; width:5px; height:7px; border-right:2.5px solid var(--blue); border-bottom:2.5px solid var(--blue); transform:rotate(40deg); }
+  .core.in li, .in .core li { opacity:1; transform:none; }
+  .core.in li:nth-child(1), .in .core li:nth-child(1){ transition-delay:.25s; }
+  .core.in li:nth-child(2), .in .core li:nth-child(2){ transition-delay:.55s; }
+  .core.in li:nth-child(3), .in .core li:nth-child(3){ transition-delay:.85s; }
+  .core.in li:nth-child(4), .in .core li:nth-child(4){ transition-delay:1.15s; }
+  .result { display:flex; align-items:center; gap:10px; background:#f0f9f1; border:1px solid #cde8d2; border-radius:11px; padding:11px 13px; margin-bottom:9px; font-size:14.5px; font-weight:700; color:var(--green); }
+  .flow-caption { text-align:center; font-size:14px; color:var(--slate); margin-top:26px; }
+  .flow-caption b { color:var(--navy); }
+
+  /* ===== flagship flow — Big-Firm blend (KPMG + GD + Deloitte + PwC) ===== */
+  #tax, #close, #recon {
+    position:relative; overflow:hidden; color:#cfe0ff;
+    background:
+      radial-gradient(1000px 560px at 50% -4%, rgba(0,120,220,.22), transparent 60%),
+      linear-gradient(180deg, #04162f 0%, #0a1f40 100%);
+  }
+  /* PwC-style geometric wedge accent */
+  #tax::after, #close::after, #recon::after { content:''; position:absolute; right:-8%; top:-25%; width:48%; height:150%; background:linear-gradient(135deg, rgba(235,140,0,.11), rgba(0,94,184,.07) 52%, transparent 78%); transform:skewX(-13deg); pointer-events:none; z-index:0; }
+  #tax > .wrap, #close > .wrap, #recon > .wrap { position:relative; z-index:1; }
+  .flow .stage { background:#fff; border:1px solid rgba(255,255,255,.14); border-radius:16px; box-shadow:0 30px 62px rgba(0,10,30,.5); position:relative; overflow:hidden; }
+  .flow .stage::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,#00338D,#005EB8,#0091DA); }
+  .flow .stage.out::before { background:linear-gradient(90deg,#00A3A1,#33c7c0); }
+  .flow .stage h3 { color:#00338D; letter-spacing:1.4px; }
+  .flow .stage.out h3 { color:#00A3A1; }
+  .flow .doc { background:#f3f7fd; border:1px solid rgba(0,51,141,.10); border-radius:11px; color:#1a2b4a; }
+  .flow .result { border-radius:11px; border:1px solid rgba(0,163,161,.30); background:#edfaf8; }
+  .flow .conn .rail { stroke:rgba(120,180,255,.30); stroke-width:2.5; }
+  .flow .conn .pulse { stroke:#4aa8ff; stroke-width:3.2; }
+  .flow .core-chip { border-radius:24px; background:linear-gradient(150deg,#00338D,#005EB8); box-shadow:0 28px 60px rgba(0,51,141,.44), inset 0 0 0 1.5px rgba(255,255,255,.28); }
+  .flow .ring { border-color:rgba(120,180,255,.28); }
+  .flow .core h3 { color:#00338D; }
+  .flow-caption { color:#a9c0e4; }
+  .flow-caption b { color:#fff; }
+
+  /* engine-card photo heroes (triangulate / knowledge brain) */
+  .eng-vis.photo-eng { position:relative; background-color:#0a1526; background-size:cover; background-position:center; border-radius:14px; min-height:236px; overflow:hidden; box-shadow:0 16px 42px rgba(15,42,92,.18), inset 0 0 0 1px rgba(37,99,235,.16); }
+  .eng-vis.photo-eng svg { display:none; }
+  .eng-vis.photo-tri { background-image:url('assets/tri.png'); }
+  .eng-vis.photo-brain { background-image:url('assets/brain.png'); }
+
+  /* per-engine themed panels */
+  #engines .eng { border-radius:22px; padding:32px 30px; margin:10px 0; }
+  .eng.t-pools  { background:linear-gradient(115deg, rgba(240,180,40,.10), rgba(37,99,235,.04)); box-shadow:inset 0 0 0 1px rgba(240,180,40,.16); }
+  .eng.t-audit  { background:linear-gradient(115deg, rgba(21,150,85,.11), rgba(37,99,235,.04)); box-shadow:inset 0 0 0 1px rgba(21,150,85,.16); }
+  .eng.t-tri    { background:linear-gradient(115deg, rgba(0,180,255,.12), rgba(11,20,42,.05)); box-shadow:inset 0 0 0 1px rgba(0,180,255,.18); }
+  .eng.t-verify { background:linear-gradient(115deg, rgba(21,150,85,.09), rgba(220,70,70,.07)); box-shadow:inset 0 0 0 1px rgba(21,150,85,.15); }
+  .eng.t-brain  { background:linear-gradient(115deg, rgba(139,92,246,.12), rgba(37,99,235,.05)); box-shadow:inset 0 0 0 1px rgba(139,92,246,.18); }
+  .eng.t-atlas  { background:linear-gradient(115deg, rgba(37,99,235,.12), rgba(0,180,255,.05)); box-shadow:inset 0 0 0 1px rgba(37,99,235,.18); }
+  .engnum { display:inline-block; font-size:12px; font-weight:900; letter-spacing:2px; color:#b9cbe8; margin-right:10px; }
+
+  /* ===== engine wall (04-09) ===== */
+  .eng { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; padding:58px 0; border-bottom:1px solid var(--line); position:relative; }
+  .eng:last-child { border-bottom:none; }
+  .eng .bignum { position:absolute; top:34px; right:0; font-size:110px; font-weight:900; color:#eef4fc; line-height:1; letter-spacing:-4px; z-index:0; user-select:none; }
+  .eng.rev .bignum { right:auto; left:0; }
+  .eng-txt { position:relative; z-index:1; }
+  .eng-txt .sec-kicker { font-size:11.5px; }
+  .eng-txt h3 { font-size:26px; font-weight:850; color:var(--navy); letter-spacing:-.5px; margin:8px 0 8px; }
+  .eng-txt p { font-size:15.5px; color:var(--slate); margin-bottom:12px; }
+  .eng-txt ul { list-style:none; }
+  .eng-txt li { font-size:14.5px; color:var(--slate); padding:4px 0 4px 24px; position:relative; }
+  .eng-txt li::before { content:''; position:absolute; left:0; top:10px; width:12px; height:12px; border-radius:50%; background:#e3f0ff; border:2px solid var(--blue); }
+  .eng-vis { background:#fff; border:1px solid var(--line); border-radius:20px; padding:18px; box-shadow:0 14px 34px rgba(15,42,92,.06); position:relative; z-index:1; }
+  .eng-vis svg { display:block; width:100%; height:auto; }
+  .eng.rev .eng-txt { order:2; } .eng.rev .eng-vis { order:1; }
+
+  /* per-engine animations (run when .in) */
+  .grow { transform:scaleY(0); transform-origin:bottom; }
+  .in .grow { animation:growUp .9s cubic-bezier(.2,.7,.3,1.1) forwards; }
+  .in .grow.g2{animation-delay:.18s} .in .grow.g3{animation-delay:.36s} .in .grow.g4{animation-delay:.54s} .in .grow.g5{animation-delay:.72s}
+  @keyframes growUp { to { transform:scaleY(1); } }
+  .fillpool { transform:scaleY(0); transform-origin:bottom; }
+  .in .fillpool { animation:growUp 1.4s ease .9s forwards; }
+  .scanline { animation:scan 2.8s ease-in-out infinite; }
+  @keyframes scan { 0%,100% { transform:translateY(0); } 50% { transform:translateY(118px); } }
+  .popchk { opacity:0; transform:scale(.4); transform-origin:center; }
+  .in .popchk { animation:pop .5s cubic-bezier(.2,.8,.3,1.4) forwards; }
+  .in .popchk.c2{animation-delay:.7s} .in .popchk.c3{animation-delay:1.4s} .in .popchk.c4{animation-delay:2.1s}
+  @keyframes pop { to { opacity:1; transform:scale(1); } }
+  .vote { stroke-dasharray:8 10; animation:flowdash 1.3s linear infinite; }
+  .verdict { opacity:0; transform:scale(.4) rotate(-9deg); transform-origin:center; }
+  .in .verdict { animation:stamp .6s cubic-bezier(.2,.8,.3,1.35) 1.1s forwards; }
+  @keyframes stamp { to { opacity:1; transform:scale(1) rotate(-6deg); } }
+  .drawline { stroke-dasharray:340; stroke-dashoffset:340; }
+  .in .drawline { animation:draw 1.6s ease forwards; }
+  .in .drawline.l2{animation-delay:.4s} .in .drawline.l3{animation-delay:.8s}
+  @keyframes draw { to { stroke-dashoffset:0; } }
+  .pin { opacity:0; transform:translateY(-16px); transform-origin:center; }
+  .in .pin { animation:pindrop .55s cubic-bezier(.2,.8,.3,1.35) forwards; }
+  .in .pin.p2{animation-delay:.25s} .in .pin.p3{animation-delay:.5s} .in .pin.p4{animation-delay:.75s} .in .pin.p5{animation-delay:1s}
+  @keyframes pindrop { to { opacity:1; transform:translateY(0); } }
+  .tickrow { opacity:0; }
+  .in .tickrow { animation:pop .45s ease forwards; }
+  .in .tickrow.t2{animation-delay:.35s} .in .tickrow.t3{animation-delay:.7s} .in .tickrow.t4{animation-delay:1.05s}
+  .beacon { animation:beacon 2.4s ease-in-out infinite; }
+  @keyframes beacon { 0%,100%{opacity:.35} 50%{opacity:1} }
+
+  /* ===== timeline / principles / proof / final ===== */
+  .timeline { display:grid; grid-template-columns:repeat(5,1fr); margin-top:56px; position:relative; }
+  .timeline::before { content:''; position:absolute; top:26px; left:10%; right:10%; height:3px; background:linear-gradient(90deg, var(--blue), var(--sky)); border-radius:2px; opacity:.35; }
+  .tl { text-align:center; padding:0 12px; position:relative; }
+  .tl .dot { width:52px; height:52px; margin:0 auto 14px; border-radius:50%; background:#fff; border:3px solid var(--blue); color:var(--blue); font-weight:900; font-size:19px; display:flex; align-items:center; justify-content:center; position:relative; z-index:1; }
+  .tl h3 { font-size:15.5px; color:var(--navy); margin-bottom:5px; }
+  .tl p { font-size:13.5px; color:var(--slate); }
+  .tl .tag { display:inline-block; font-size:11px; font-weight:800; letter-spacing:.8px; text-transform:uppercase; color:var(--blue); background:#e8f1fe; border-radius:999px; padding:3px 10px; margin-bottom:8px; }
+  .principles { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:44px; }
+  .pr { background:#fff; border:1px solid var(--line); border-radius:16px; padding:22px; }
+  .pr h3 { font-size:16px; color:var(--navy); margin:10px 0 6px; }
+  .pr p { font-size:13.5px; color:var(--slate); }
+  .proof { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:44px; }
+  .proof a { display:block; text-decoration:none; background:#fff; border:1px solid var(--line); border-radius:18px; padding:28px; transition:transform .25s, box-shadow .25s; }
+  .proof a:hover { transform:translateY(-3px); box-shadow:0 16px 36px rgba(15,42,92,.1); border-color:var(--blue); }
+  .proof h3 { color:var(--navy); font-size:18px; margin-bottom:6px; }
+  .proof p { color:var(--slate); font-size:14.5px; }
+  .proof .go { color:var(--blue); font-weight:700; font-size:14px; margin-top:12px; display:inline-block; }
+  .final { text-align:center; background:linear-gradient(rgba(8,14,28,.82), rgba(10,20,40,.88)), url('assets/office-collab.png') center 30% / cover no-repeat, var(--navy); color:#fff; padding:120px 0; }
+  .final h2 { font-size:clamp(42px, 7vw, 78px); line-height:1.0; letter-spacing:-1.8px; margin:12px 0 14px; text-shadow:0 6px 44px rgba(0,130,255,.45); }
+  .final .lead, .final p { font-size:clamp(17px,2.1vw,22px); color:#d3e0f4; }
+  .final h2 { color:#fff; }
+  .final p { color:#c9dbf5; font-size:18px; max-width:38em; margin:0 auto 30px; }
+  .final .btn-p { background:#fff; color:var(--navy); animation:none; }
+  .final .btn-p:hover { background:var(--sky); color:#fff; }
+  .final .fine { font-size:13.5px; color:#9db9e0; margin-top:16px; }
+  footer { padding:26px 0; }
+  .foot { display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:13.5px; color:var(--slate); align-items:center; }
+  .foot a { color:var(--blue); text-decoration:none; font-weight:600; }
+
+  /* ===== pain / promise ===== */
+  .pain-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:44px; }
+  .pain { background:rgba(10,20,42,.38); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.18); border-radius:16px; padding:22px; transition:transform .25s, box-shadow .25s, background .25s; }
+  .pain:hover { transform:translateY(-4px); background:rgba(10,20,42,.52); box-shadow:0 16px 34px rgba(0,0,0,.3); }
+  .pico { width:44px; height:44px; border-radius:12px; background:rgba(255,255,255,.13); border:1px solid rgba(255,255,255,.24); display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
+  .pain .pico svg { stroke:#c3d9ff; }
+  .pain h3 { font-size:16.5px; color:#fff; margin-bottom:6px; }
+  .pain p { font-size:14px; color:#c6d4ec; }
+  .pivot { margin-top:26px; background:rgba(11,24,50,.52); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.16); border-radius:22px; padding:32px 30px; color:#fff; display:grid; grid-template-columns:1.25fr .75fr; gap:26px; align-items:center; box-shadow:0 22px 48px rgba(0,0,0,.34); }
+  .pivot h3 { font-size:25px; font-weight:850; letter-spacing:-.4px; margin-bottom:8px; }
+  .pivot p { color:#c9dbf5; font-size:15px; }
+  .pivot-list { list-style:none; margin:8px 0 6px; padding:0; }
+  .pivot-list li { color:#dbe7fb; font-size:15px; padding:6px 0 6px 28px; position:relative; }
+  .pivot-list li::before { content:''; position:absolute; left:2px; top:11px; width:13px; height:13px; border-radius:50%; background:rgba(255,255,255,.14); border:2px solid #7fb0ff; }
+  .pivot-list li::after { content:''; position:absolute; left:6px; top:14px; width:4px; height:6px; border-right:2px solid #cfe0ff; border-bottom:2px solid #cfe0ff; transform:rotate(40deg); }
+  .pivot .chips { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .pivot .chip { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.32); border-radius:999px; padding:7px 14px; font-size:13px; font-weight:700; }
+  .pivot .btn-p { background:#fff; color:var(--navy); animation:none; }
+  .pivot .btn-p:hover { background:var(--sky); color:#fff; }
+
+  /* ===== ROI / value band ===== */
+  .roi { background:linear-gradient(rgba(9,15,30,.80), rgba(9,15,30,.85)), url('assets/office-golden.png') center / cover no-repeat, #0a1120; color:#eaf1fd; text-align:center; }
+  .roi h2 { color:#fff; }
+  .roi .lead { color:#b3c4e6; margin:0 auto; }
+  .roi .lead em { font-style:italic; color:#e8f3ff; }
+  .roi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin:46px 0 34px; }
+  .roi-card { border:1px solid rgba(150,180,235,.18); border-radius:18px; padding:32px 22px; background:rgba(255,255,255,.03); text-align:left; }
+  .roi-num { font-size:clamp(40px,5.6vw,56px); font-weight:850; letter-spacing:-1.6px; line-height:1;
+    background:linear-gradient(92deg,#6fb4ff,#00e0ff); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .roi-card h3 { font-size:17px; color:#fff; margin:14px 0 6px; }
+  .roi-card p { font-size:14px; color:#a9bce0; }
+  /* principles = dark security hero */
+  section.princ { background:linear-gradient(rgba(7,14,28,.74), rgba(7,14,28,.82)), url('assets/shield.png') center / cover no-repeat, #0a1428; }
+  .princ .sec-kicker { color:#9ec3ff; }
+  .princ h2 { color:#fff; }
+  .princ .pr { background:rgba(10,20,42,.42); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,.16); border-radius:16px; }
+  .princ .pr svg { stroke:#6fd0ff; }
+  .princ .pr h3 { color:#fff; }
+  .princ .pr p { color:#c6d4ec; }
+  .roi-line { font-size:16px; color:#c7d6f0; max-width:46em; margin:0 auto; line-height:1.6; }
+  .roi-line b { color:#fff; }
+  /* ===== works-with strip ===== */
+  .stack { padding:58px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:#fff; }
+  .stack h2 { font-size:clamp(24px,3vw,32px); }
+  .stack-row { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-top:28px; }
+  .stack-row span { font-size:16px; font-weight:800; letter-spacing:.3px; color:var(--navy); background:linear-gradient(180deg,#fff,#f1f6ff); border:1px solid var(--line); border-radius:12px; padding:12px 22px; box-shadow:0 4px 12px rgba(15,42,92,.06); transition:transform .2s, box-shadow .2s; }
+  .stack-row span:hover { transform:translateY(-2px); box-shadow:0 10px 22px rgba(37,99,235,.14); }
+  @media (max-width:600px){ .stack-row span { font-size:14px; padding:10px 16px; } }
+  /* ===== how we help ===== */
+  .help { padding:46px 0 90px; background:linear-gradient(rgba(7,14,28,.82), rgba(7,14,28,.88)), url('assets/help-bg.png') center / cover no-repeat, #0a1428; }
+  #pain { background:linear-gradient(rgba(7,14,28,.58), rgba(7,14,28,.70)), url('assets/boardroom.png') center 42% / cover no-repeat; }
+  #pain h2 { color:#fff; text-shadow:0 2px 20px rgba(4,10,26,.5); }
+  #pain .sec-kicker { color:#9ec3ff; }
+  .flowdiv { height:250px; background:linear-gradient(rgba(8,15,28,.22), rgba(8,15,28,.42)), url('assets/office-action.png') center 38% / cover no-repeat; }
+  @media (max-width:600px){ .flowdiv { height:150px; } }
+  /* ===== establishing photo band ===== */
+  .showband { position:relative; min-height:62vh; display:flex; align-items:center; color:#fff; text-align:left; overflow:hidden;
+    background:linear-gradient(90deg, rgba(6,13,30,.84) 0%, rgba(6,13,30,.56) 42%, rgba(6,13,30,.18) 72%, rgba(6,13,30,.04) 100%), url('assets/office-wide.png') center / cover no-repeat, #0a1428; }
+  .showband .sec-kicker { color:#9ec3ff; }
+  .showband h2 { color:#fff; margin:10px 0 12px; text-shadow:0 2px 24px rgba(4,10,26,.55); }
+  .showband .lead { color:#d6e2f5; max-width:34em; }
+  .sb-logo { position:absolute; bottom:22px; left:0; right:0; z-index:2; }
+  .sb-logo .wrap { display:flex; align-items:center; justify-content:flex-end; gap:10px; opacity:.92; }
+  .sb-logo .wordmark { font-weight:600; font-size:14.5px; letter-spacing:1.4px; color:#fff; text-transform:uppercase; white-space:nowrap; }
+  .sb-logo .wm-mark { height:16px; width:auto; display:block; opacity:.5; filter:drop-shadow(0 1px 2px rgba(0,0,0,.4)); }
+  .sb-logo .wordmark b { font-weight:900; letter-spacing:1.6px; }
+  @media (max-width:700px){ .showband { min-height:54vh; } }
+  .showband.t-data { min-height:50vh; background:linear-gradient(90deg, rgba(6,13,30,.86) 0%, rgba(6,13,30,.52) 52%, rgba(6,13,30,.20) 100%), url('assets/tech-data.png') center / cover no-repeat, #0a1428; }
+  .showband.t-cmd { min-height:50vh; background:linear-gradient(90deg, rgba(6,13,30,.84) 0%, rgba(6,13,30,.5) 52%, rgba(6,13,30,.16) 100%), url('assets/team-command.png') center / cover no-repeat, #0a1428; }
+  .showband.t-eng { min-height:50vh; background:linear-gradient(90deg, rgba(6,13,30,.87) 0%, rgba(6,13,30,.54) 52%, rgba(6,13,30,.22) 100%), url('assets/tech-eng.png') center / cover no-repeat, #0a1428; }
+  .showband.t-analyst { min-height:54vh; background:linear-gradient(90deg, rgba(6,13,30,.86) 0%, rgba(6,13,30,.52) 50%, rgba(6,13,30,.16) 100%), url('assets/analyst.png') center / cover no-repeat, #0a1428; }
+  .showband.t-tax { min-height:48vh; background:linear-gradient(90deg, rgba(6,13,30,.85) 0%, rgba(6,13,30,.5) 52%, rgba(6,13,30,.16) 100%), url('assets/sec-tax.png') center / cover no-repeat, #0a1428; }
+  .showband.t-close { min-height:48vh; background:linear-gradient(90deg, rgba(6,13,30,.86) 0%, rgba(6,13,30,.54) 52%, rgba(6,13,30,.2) 100%), url('assets/sec-close.png') center 30% / cover no-repeat, #0a1428; }
+  .showband.t-recon { min-height:48vh; background:linear-gradient(90deg, rgba(6,13,30,.85) 0%, rgba(6,13,30,.5) 52%, rgba(6,13,30,.16) 100%), url('assets/sec-recon.png') center / cover no-repeat, #0a1428; }
+  .showband.t-engines { min-height:52vh; background:linear-gradient(90deg, rgba(6,13,30,.82) 0%, rgba(6,13,30,.46) 52%, rgba(6,13,30,.14) 100%), url('assets/sec-engines.png') center / cover no-repeat, #0a1428; }
+  .showband.t-stack { min-height:46vh; background:linear-gradient(90deg, rgba(6,13,30,.84) 0%, rgba(6,13,30,.5) 52%, rgba(6,13,30,.18) 100%), url('assets/sec-stack.png') center / cover no-repeat, #0a1428; }
+  .helpgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:46px; }
+  .helpcard { background:rgba(10,20,42,.42); backdrop-filter:blur(9px); -webkit-backdrop-filter:blur(9px); border:1px solid rgba(255,255,255,.16); border-radius:16px; padding:26px 24px; transition:transform .25s, box-shadow .25s, border-color .25s, background .25s; }
+  .helpcard:hover { transform:translateY(-4px); background:rgba(10,20,42,.56); box-shadow:0 18px 38px rgba(0,0,0,.32); border-color:rgba(255,255,255,.3); }
+  .helpcard .hico { width:46px; height:46px; border-radius:12px; background:linear-gradient(135deg,var(--blue),var(--sky)); display:flex; align-items:center; justify-content:center; margin-bottom:16px; box-shadow:0 6px 16px rgba(37,99,235,.28); }
+  .helpcard h3 { font-size:18px; color:#fff; margin-bottom:8px; }
+  .helpcard p { font-size:14.5px; color:#c6d4ec; }
+  .helpcard.custom { background:linear-gradient(135deg,#2563eb,#00a8ff); border-color:transparent; backdrop-filter:none; -webkit-backdrop-filter:none; box-shadow:0 18px 40px rgba(37,99,235,.42); }
+  /* high-tech card treatment */
+  .helpcard { position:relative; overflow:hidden; border-radius:14px; }
+  .helpcard::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,#2563eb,#00e0ff,#2563eb); opacity:.8; }
+  .helpcard:hover { border-color:rgba(0,224,255,.45); box-shadow:0 22px 46px rgba(0,0,0,.42), 0 0 0 1px rgba(0,224,255,.32); }
+  .helpcard .hico { box-shadow:0 6px 18px rgba(37,99,235,.42), 0 0 22px rgba(0,180,255,.32); }
+  .helpcard.custom h3 { color:#fff; } .helpcard.custom p { color:#c9dbf5; }
+  .helpcard.custom .hico { background:rgba(255,255,255,.18); }
+  @media (max-width:900px){ .helpgrid { grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .helpgrid { grid-template-columns:1fr; } }
+  .foot-brand { text-align:center; padding:8px 0 22px; }
+  .foot-brand svg { width:min(340px,74vw); height:auto; opacity:.92; }
+  @media (max-width:900px){ .roi-grid{ grid-template-columns:1fr; } }
+
+  /* ===== mobile sticky CTA ===== */
+  .mcta { position:fixed; left:14px; right:14px; bottom:calc(14px + env(safe-area-inset-bottom)); z-index:60; display:none; }
+  .mcta a { display:flex; align-items:center; justify-content:center; gap:9px; background:var(--blue); color:#fff; font-weight:800; font-size:16px; padding:15px; border-radius:999px; box-shadow:0 14px 34px rgba(37,99,235,.45); text-decoration:none; }
+
+  /* mobile pipeline animations (shorter travel) */
+  @keyframes docInM { 0%{opacity:0;transform:translateX(0)} 6%{opacity:1} 30%{opacity:1;transform:translateX(84px)} 40%{opacity:0;transform:translateX(128px) scale(.8)} 100%{opacity:0;transform:translateX(128px) scale(.8)} }
+  @keyframes docOutM { 0%,42%{opacity:0;transform:translateX(-128px) scale(.8)} 50%{opacity:1;transform:translateX(-76px)} 76%{opacity:1;transform:translateX(0)} 82%{opacity:0;transform:translateX(14px)} 100%{opacity:0} }
+
+  @media (max-width:900px) {
+    header { min-height:auto; padding:56px 0 48px; }
+    section { padding:64px 0; }
+    .flow { grid-template-columns:1fr; }
+    .conn { height:64px; position:relative; }
+    .conn svg { display:none; }
+    .conn::before { content:''; position:absolute; left:50%; top:8px; bottom:8px; width:3px; margin-left:-1.5px; border-radius:2px;
+      background:linear-gradient(180deg, var(--sky) 0 12px, transparent 12px 30px); background-size:3px 30px; background-repeat:repeat-y; animation:connslide 1.4s linear infinite; }
+    .pipe { height:132px; max-width:100%; }
+    .pipe-core { width:104px; height:104px; top:56px; }
+    .pipe-chipcore { inset:16px; border-radius:18px; }
+    .core-label.sm b { font-size:13px; } .core-label.sm i { font-size:7px; letter-spacing:1.6px; }
+    .pdoc, .pout { font-size:11px; padding:6px 9px; top:44px; gap:5px; }
+    .pdoc { animation-name:docInM; } .pout { animation-name:docOutM; }
+    .pipe-track { top:56px; }
+    .pipe-label { font-size:11.5px; }
+    .trust-in { display:grid; grid-template-columns:1fr 1fr; gap:16px 12px; }
+    .trust b { font-size:22px; }
+    .pain-grid { grid-template-columns:none; grid-auto-flow:column; grid-auto-columns:76%; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; padding-bottom:12px; scrollbar-width:none; }
+    .pain-grid::-webkit-scrollbar { display:none; }
+    .pain { scroll-snap-align:center; }
+    .pivot { grid-template-columns:1fr; padding:26px 22px; text-align:left; }
+    .eng { grid-template-columns:1fr; gap:22px; }
+    .eng.rev .eng-txt { order:1; } .eng.rev .eng-vis { order:2; }
+    .eng .bignum { font-size:64px; top:14px; }
+    .eng-txt h3 { font-size:22px; }
+    .timeline { grid-template-columns:1fr; gap:26px; } .timeline::before { display:none; }
+    .principles { grid-template-columns:1fr 1fr; }
+    .proof { grid-template-columns:1fr; }
+    .nav-links a:not(.cta) { display:none; }
+    body.scrolled .mcta { display:block; }
+  }
+  @media (max-width:480px) {
+    .wrap { padding:0 18px; }
+    .nav-in { height:52px; }
+    .logo { font-size:12px; gap:8px; letter-spacing:.2px; white-space:nowrap; }
+    .logo .mark { width:26px; height:26px; flex:none; }
+    .logo .wordmark { font-size:12.5px; letter-spacing:.8px; } .logo .navmark { width:26px; height:26px; } .logo .wm-rest { display:none; } .logo .wm-nav { height:23px; }
+    .nav-links .cta { font-size:12.5px; padding:7px 12px; white-space:nowrap; }
+    h1 { letter-spacing:-1px; }
+    .hero-sub { font-size:16.5px; }
+    .btns a { width:100%; margin:0 0 10px; }
+    .kicker-pill { font-size:10.5px; padding:7px 13px; letter-spacing:1.1px; }
+    .stage { padding:20px 16px; }
+    .core-vis { width:150px; height:150px; }
+    .principles { grid-template-columns:1fr; }
+    .trust b { font-size:20px; }
+    .pain-grid { grid-auto-columns:84%; }
+    .final .btn-p { width:100%; margin:0 0 10px; }
+    footer { padding-bottom:86px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+    .reveal, .core li, .grow, .fillpool, .popchk, .verdict, .pin, .tickrow { opacity:1 !important; transform:none !important; }
+    .drawline { stroke-dashoffset:0 !important; }
+  }
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="logo" href="#top" aria-label="Sophon Finance Systems">
+    <svg class="wm-nav" viewBox="0 12 664 58" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sophon Finance Systems — Artificial Intelligence Automations, USA">
+      <defs>
+        <linearGradient id="mg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2563eb"/><stop offset="1" stop-color="#00a8ff"/></linearGradient>
+        <mask id="stNav"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask>
+      </defs>
+      <text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#0b0f1a" mask="url(#stNav)">SOPHON FINANCE SYSTEMS</text>
+      <text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#0b0f1a">&#174;</text>
+      <text x="0" y="61" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12.5" fill="#1a2540" textLength="633" lengthAdjust="spacing">ARTIFICIAL INTELLIGENCE AUTOMATIONS &#183; USA</text>
+    </svg></a>
+  <div class="nav-links">
+    <a href="#tax">1065</a>
+    <a href="#close">Close</a>
+    <a href="#recon">Recon</a>
+    <a href="#engines">All 9 engines</a>
+    <a href="#how">How we start</a>
+    <a class="cta" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Free consultation</a>
+  </div>
+</div></nav>
+
+<!-- ================= HERO ================= -->
+<header id="top">
+  <div class="orb orb1"></div><div class="orb orb2"></div><div class="heroGrid"></div>
+  <div class="wrap" style="position:relative">
+    <svg class="mark hero-mark b0" viewBox="0 0 48 48" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="45" rx="13" fill="url(#mg1)"/><path d="M9 17 L18 11 L28 14 L39 8" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="39" cy="8" r="2.6" fill="#fff"/><text x="24" y="34" text-anchor="middle" font-family="-apple-system,'Segoe UI',Arial" font-weight="900" font-size="16" fill="#fff" letter-spacing="1">SFS</text></svg>
+    <div class="eyebrow b1">AI That Makes Corporations Run Leaner</div>
+    <h1 class="b2">Automate Your Finance Work.<br><em>Cut Cost. Keep Control.</em></h1>
+    <p class="hero-sub b3">We are an AI firm for finance and accounting. We automate your team's repetitive work &mdash; cutting overhead and raising efficiency, with your people approving every result.</p>
+    <div class="btns b4">
+      <a class="btn-p" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener"><svg class="bgear" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-dasharray="2.9 2.2"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7.4 12 H16.6 M12 7.4 V16.6" stroke="currentColor" stroke-width="1.1"/><circle cx="12" cy="12" r="1.5" fill="#ff3b5c"/></g></svg>Book A Free Consultation</a>
+      <a class="btn-s" href="#tax"><svg class="bgear" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-dasharray="2.9 2.2"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7.4 12 H16.6 M12 7.4 V16.6" stroke="currentColor" stroke-width="1.1"/><circle cx="12" cy="12" r="1.5" fill="#ff3b5c"/></g></svg>See How It Works</a>
+    </div>
+    <div class="pipe b5" aria-hidden="true">
+      <div class="pipe-track"></div>
+      <div class="pdoc"><svg class="docart" viewBox="0 0 34 42"><path d="M5 2h15l9 9v29H5z" fill="#fff" stroke="#bcd3f2" stroke-width="1.6"/><path d="M20 2v9h9" fill="#e6f0fc" stroke="#bcd3f2" stroke-width="1.6"/><rect x="9" y="17" width="16" height="3" rx="1.5" fill="#2563eb"/><rect x="9" y="24" width="16" height="2" rx="1" fill="#c9dcf6"/><rect x="9" y="29" width="16" height="2" rx="1" fill="#c9dcf6"/><rect x="9" y="34" width="10" height="2" rx="1" fill="#c9dcf6"/></svg><span>Bank statements</span></div>
+      <div class="pdoc p2"><svg class="docart" viewBox="0 0 34 42"><path d="M5 2h15l9 9v29H5z" fill="#fff" stroke="#bcd3f2" stroke-width="1.6"/><path d="M20 2v9h9" fill="#e6f0fc" stroke="#bcd3f2" stroke-width="1.6"/><rect x="9" y="16" width="15" height="2.4" rx="1.2" fill="#2563eb"/><rect x="9" y="31" width="3" height="6" rx="1" fill="#2563eb"/><rect x="14" y="27" width="3" height="10" rx="1" fill="#00a8ff"/><rect x="19" y="23" width="3" height="14" rx="1" fill="#2563eb"/></svg><span>Trial balance</span></div>
+      <div class="pdoc p3"><svg class="docart" viewBox="0 0 34 42"><path d="M5 2h15l9 9v29H5z" fill="#fff" stroke="#bcd3f2" stroke-width="1.6"/><path d="M20 2v9h9" fill="#e6f0fc" stroke="#bcd3f2" stroke-width="1.6"/><circle cx="17" cy="23" r="4" fill="#2563eb"/><path d="M10 36c0-4 3.4-6 7-6s7 2 7 6" fill="#cfe0f6"/><rect x="10" y="16" width="9" height="2" rx="1" fill="#2563eb" opacity=".55"/></svg><span>K-1 info</span></div>
+      <div class="pipe-core"><div class="pring"></div><div class="pring r2"></div><div class="pring r3"></div><div class="pipe-chipcore">
+        <svg class="mech" viewBox="0 0 100 100" aria-hidden="true">
+          <g transform="translate(50 50)">
+            <g class="orbit"><circle cx="0" cy="-33" r="2.4" fill="#fff"/><circle cx="33" cy="0" r="2" fill="rgba(255,255,255,.72)"/><circle cx="0" cy="33" r="2.4" fill="#fff"/><circle cx="-33" cy="0" r="2" fill="rgba(255,255,255,.72)"/></g>
+            <g class="gearspin"><g transform="translate(-22 -22) scale(1.83)"><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="rgba(255,255,255,.95)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+            <circle class="corepulse" cx="0" cy="0" r="8" fill="#fff"/>
+          </g>
+        </svg>
+      </div></div>
+      <div class="pout"><svg class="docart" viewBox="0 0 34 42"><path d="M5 2h15l9 9v29H5z" fill="#fff" stroke="#bfe3c6" stroke-width="1.6"/><path d="M20 2v9h9" fill="#e7f6ea" stroke="#bfe3c6" stroke-width="1.6"/><rect x="9" y="16" width="16" height="2.6" rx="1.3" fill="#15803d"/><rect x="9" y="22" width="16" height="1.8" rx=".9" fill="#cde8d2"/><rect x="9" y="27" width="11" height="1.8" rx=".9" fill="#cde8d2"/><circle cx="27" cy="33" r="7" fill="#15803d"/><path d="M23.6 33l2.2 2.2 4-4.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Reconciled &amp; proven</span></div>
+      <div class="pout p2"><svg class="docart" viewBox="0 0 34 42"><path d="M5 2h15l9 9v29H5z" fill="#fff" stroke="#bfe3c6" stroke-width="1.6"/><path d="M20 2v9h9" fill="#e7f6ea" stroke="#bfe3c6" stroke-width="1.6"/><rect x="9" y="16" width="16" height="2.6" rx="1.3" fill="#15803d"/><rect x="9" y="22" width="16" height="1.8" rx=".9" fill="#cde8d2"/><rect x="9" y="27" width="11" height="1.8" rx=".9" fill="#cde8d2"/><circle cx="27" cy="33" r="7" fill="#15803d"/><path d="M23.6 33l2.2 2.2 4-4.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Entries drafted</span></div>
+      <div class="pout p3"><svg class="docart" viewBox="0 0 34 42"><path d="M5 2h15l9 9v29H5z" fill="#fff" stroke="#bfe3c6" stroke-width="1.6"/><path d="M20 2v9h9" fill="#e7f6ea" stroke="#bfe3c6" stroke-width="1.6"/><rect x="9" y="16" width="16" height="2.6" rx="1.3" fill="#15803d"/><rect x="9" y="22" width="16" height="1.8" rx=".9" fill="#cde8d2"/><rect x="9" y="27" width="11" height="1.8" rx=".9" fill="#cde8d2"/><circle cx="27" cy="33" r="7" fill="#15803d"/><path d="M23.6 33l2.2 2.2 4-4.4" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Return ready for review</span></div>
+      <div class="pipe-label">Live: documents in &rarr; finished work out</div>
+    </div>
+    <div class="scroll-cue b5" aria-hidden="true"></div>
+  </div>
+</header>
+
+<div class="trust"><div class="wrap trust-in">
+  <div class="reveal"><b class="count" data-n="9">0</b><span>Finance Engines, All Public</span></div>
+  <div class="reveal d1"><b><span class="count" data-n="14000">0</span><span class="sfx">+</span></b><span>Automated Tests Behind Them</span></div>
+  <div class="reveal d2"><b><span class="count" data-n="100">0</span><span class="sfx">%</span></b><span>Figures Shipped With Evidence</span></div>
+  <div class="reveal d3"><b class="count" data-n="0">0</b><span>Numbers Finalized Without Approval</span></div>
+</div></div>
+
+<!-- ================= PAIN / PROMISE ================= -->
+<!-- ================= ESTABLISHING PHOTO BAND ================= -->
+<section class="showband">
+  <div class="sb-logo"><div class="wrap">
+    <svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg>
+  </div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">How We Work</div>
+    <h2>Smart People. Smarter Systems.</h2>
+    <p class="lead">Accountants and AI on the same floor &mdash; your team keeps the judgment, the machines take the grind.</p>
+  </div>
+</section>
+
+<!-- ================= PAIN ================= -->
+<!-- ================= CREDENTIAL BREAK (light) ================= -->
+<section class="credband"><div class="wrap">
+  <div class="cred-row reveal">
+    <span><b>Ex&ndash;Big Four</b> &middot; KPMG-Trained</span>
+    <span><b>Fortune 100 &amp; 500</b> Experience</span>
+    <span><b>International</b> Finance &amp; Accounting</span>
+    <span><b>Evidence-First</b> &middot; Human-Gated</span>
+  </div>
+</div></section>
+
+<section class="alt" id="pain"><div class="wrap">
+  <div class="center reveal">
+    <div class="sec-kicker">The Challenges We Solve</div>
+    <h2>The Work That Slows Finance Teams Down.</h2>
+  </div>
+  <div class="pain-grid">
+    <div class="pain reveal"><div class="pico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <h3>Month-End Close</h3><p>Five days of manual copying and tie-outs, every month.</p></div>
+    <div class="pain reveal d1"><div class="pico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 2l4 4-4 4M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 0 1-4 4H3"/></svg></div>
+      <h3>Reconciliation</h3><p>Dozens of accounts, and one figure that won't tie.</p></div>
+    <div class="pain reveal d2"><div class="pico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 4V2M16 4V2M12 12l2 5h-4l2-5z" /></svg></div>
+      <h3>Tax Season</h3><p>K-1s, returns, and extensions &mdash; all at once, all manual.</p></div>
+    <div class="pain reveal d3"><div class="pico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8 11h6M11 8v6"/></svg></div>
+      <h3>Audit Requests</h3><p>Support that should take minutes takes days to assemble.</p></div>
+  </div>
+</div></section>
+
+<!-- ================= HOW WE HELP — HEADER BAND ================= -->
+<section class="showband t-analyst">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">How We Help</div>
+    <h2>Services Built On Proven Engines.</h2>
+    <p class="lead">Each engine automates one part of the finance and accounting workload. We deploy the ones your team needs today &mdash; and build new ones when your workflow calls for it.</p>
+  </div>
+</section>
+
+<!-- ================= HOW WE HELP — CARDS ================= -->
+<section class="help"><div class="wrap">
+  <div class="helpgrid">
+    <div class="helpcard reveal">
+      <div class="hico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 4V2M16 4V2M8 14l2.5 2.5L16 12"/></svg></div>
+      <h3>Month-End Close</h3>
+      <p>Entries, tie-outs, and the checklist &mdash; drafted.</p>
+    </div>
+    <div class="helpcard reveal">
+      <div class="hico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-6 7 6v11"/><path d="M9 21v-6h6v6"/></svg></div>
+      <h3>Cash &amp; Bank Reconciliation</h3>
+      <p>Every account tied. Every exception explained.</p>
+    </div>
+    <div class="helpcard reveal">
+      <div class="hico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M9 13h6M9 17h4"/></svg></div>
+      <h3>Partnership Tax (1065)</h3>
+      <p>Returns and K-1s, sourced for your CPA.</p>
+    </div>
+    <div class="helpcard reveal">
+      <div class="hico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M8.5 11l1.8 1.8 3.5-3.6"/></svg></div>
+      <h3>Audit &amp; Evidence</h3>
+      <p>Every figure sourced &mdash; PBC in minutes.</p>
+    </div>
+    <div class="helpcard reveal">
+      <div class="hico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg></div>
+      <h3>AI Validation</h3>
+      <p>Independent AI cross-check, before you see it.</p>
+    </div>
+    <div class="helpcard custom reveal">
+      <div class="hico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3.4M12 18.6V22M4.2 4.2l2.4 2.4M17.4 17.4l2.4 2.4M2 12h3.4M18.6 12H22M4.2 19.8l2.4-2.4M17.4 6.6l2.4-2.4"/></svg></div>
+      <h3>Custom Engines</h3>
+      <p>Your worst weekly grind, engineered out.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- ================= ROI / BUSINESS CASE ================= -->
+<section class="roi"><div class="wrap">
+  <div class="reveal">
+    <div class="sec-kicker" style="color:#7fb0ff">The business case</div>
+    <h2>The Math A CFO Actually Cares About.</h2>
+  </div>
+  <div class="roi-grid">
+    <div class="roi-card reveal"><div class="roi-num">Up to 90%</div><h3>Lower cost on automated work</h3><p>Redundant work stops needing a salary.</p></div>
+    <div class="roi-card reveal d1"><div class="roi-num">Days&ndash;Weeks</div><h3>Live, not quarters</h3><p>No multi-quarter rollout.</p></div>
+    <div class="roi-card reveal d2"><div class="roi-num">Fixed price</div><h3>Scoped by phase</h3><p>Stop after any phase. No open meter.</p></div>
+  </div>
+</div></section>
+
+<!-- ================= ENGINE 01: 1065 ================= -->
+<section class="showband t-tax">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker"><span class="engnum">ENGINE 01</span>Partnership tax &middot; Form 1065</div>
+    <h2>Tax Season, Without The Pile.</h2>
+    <p class="lead">Gather what you already have. The engine handles the reading, the math, and the drafting.</p>
+  </div>
+</section>
+
+<section id="tax"><div class="wrap">
+  <div class="flow">
+    <div class="stage reveal doc-float">
+      <h3>You hand over</h3>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Income statements</div>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Prior-year return</div>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Partner &amp; K-1 info</div>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M3 3v18h18M8 16v-5m4 5V8m4 8v-3"/></svg>Trial balance</div>
+      <div class="fine">PDFs, spreadsheets, scans — however they exist today.</div>
+    </div>
+    <div class="conn reveal d1"><svg preserveAspectRatio="none"><line class="rail" x1="0" y1="25" x2="100%" y2="25"/><line class="pulse" x1="0" y1="25" x2="100%" y2="25"/></svg></div>
+    <div class="stage core reveal d2">
+      <h3>The engine works</h3>
+      <div class="core-vis"><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div><div class="core-chip">
+        <svg class="mech" viewBox="0 0 100 100" aria-hidden="true">
+          <g transform="translate(28,26)"><g class="gspin"><circle r="15" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="5.5" stroke-dasharray="3.9 2.7"/><circle r="9" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/><path d="M-9 0 H9 M0 -9 V9 M-6.4 -6.4 L6.4 6.4 M-6.4 6.4 L6.4 -6.4" stroke="rgba(255,255,255,.8)" stroke-width="1.3"/><circle r="2.4" fill="#ff3b5c"/></g></g>
+          <g transform="translate(76,72)"><g class="gspin rev"><circle r="11" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="4.5" stroke-dasharray="3.2 2.5"/><circle r="6.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><path d="M-6.5 0 H6.5 M0 -6.5 V6.5" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/><circle r="2" fill="#ff3b5c"/></g></g>
+          <g transform="translate(79,25)"><g class="gspin fast"><circle r="7.5" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3.4" stroke-dasharray="2.6 2"/><circle r="1.7" fill="#ff3b5c"/></g></g>
+          <g transform="translate(24,77)"><g class="bal"><circle r="9.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><path d="M-9.5 0 H9.5 M0 -9.5 V0" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/><path d="M0 0 a3 3 0 0 1 3 3 a4.5 4.5 0 0 1 -6 3.5" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle r="1.6" fill="#ff3b5c"/></g></g>
+        </svg>
+        <div class="core-label"><b>AI</b><i>ENGINE</i></div>
+      </div></div>
+      <ul>
+        <li>Reads every document</li>
+        <li>Computes partner allocations</li>
+        <li>Drafts the return &amp; K-1s</li>
+        <li>Checks its own work</li>
+      </ul>
+    </div>
+    <div class="conn reveal d3"><svg preserveAspectRatio="none"><line class="rail" x1="0" y1="25" x2="100%" y2="25"/><line class="pulse" x1="0" y1="25" x2="100%" y2="25"/></svg></div>
+    <div class="stage out reveal d4">
+      <h3>You get back</h3>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Draft Form 1065</div>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>K-1 for every partner</div>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Evidence binder — every number sourced</div>
+      <div class="fine">Your CPA reviews and files. Nothing files itself.</div>
+    </div>
+  </div>
+  <p class="flow-caption reveal">From shoebox to <b>review-ready draft</b> — days of preparation become an afternoon of review.</p>
+</div></section>
+
+<!-- ================= ENGINE 02: CLOSE ================= -->
+<section class="showband t-close">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker"><span class="engnum">ENGINE 02</span>Month-end close</div>
+    <h2>Close Week, Minus The Grind.</h2>
+    <p class="lead">The recurring work of every month-end — drafted before your team's coffee is cold.</p>
+  </div>
+</section>
+
+<section class="alt" id="close"><div class="wrap">
+  <div class="flow">
+    <div class="stage reveal doc-float">
+      <h3>You hand over</h3>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M3 21h18M5 21V10l7-6 7 6v11"/></svg>Bank statements</div>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 4V2M16 4V2"/></svg>Last month's close</div>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M3 3v18h18M8 16v-5m4 5V8m4 8v-3"/></svg>General ledger export</div>
+      <div class="fine">Straight from your accounting system — no re-keying.</div>
+    </div>
+    <div class="conn reveal d1"><svg preserveAspectRatio="none"><line class="rail" x1="0" y1="25" x2="100%" y2="25"/><line class="pulse" x1="0" y1="25" x2="100%" y2="25"/></svg></div>
+    <div class="stage core reveal d2">
+      <h3>The engine works</h3>
+      <div class="core-vis"><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div><div class="core-chip">
+        <svg class="mech" viewBox="0 0 100 100" aria-hidden="true">
+          <g transform="translate(28,26)"><g class="gspin"><circle r="15" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="5.5" stroke-dasharray="3.9 2.7"/><circle r="9" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/><path d="M-9 0 H9 M0 -9 V9 M-6.4 -6.4 L6.4 6.4 M-6.4 6.4 L6.4 -6.4" stroke="rgba(255,255,255,.8)" stroke-width="1.3"/><circle r="2.4" fill="#ff3b5c"/></g></g>
+          <g transform="translate(76,72)"><g class="gspin rev"><circle r="11" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="4.5" stroke-dasharray="3.2 2.5"/><circle r="6.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><path d="M-6.5 0 H6.5 M0 -6.5 V6.5" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/><circle r="2" fill="#ff3b5c"/></g></g>
+          <g transform="translate(79,25)"><g class="gspin fast"><circle r="7.5" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3.4" stroke-dasharray="2.6 2"/><circle r="1.7" fill="#ff3b5c"/></g></g>
+          <g transform="translate(24,77)"><g class="bal"><circle r="9.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><path d="M-9.5 0 H9.5 M0 -9.5 V0" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/><path d="M0 0 a3 3 0 0 1 3 3 a4.5 4.5 0 0 1 -6 3.5" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle r="1.6" fill="#ff3b5c"/></g></g>
+        </svg>
+        <div class="core-label"><b>AI</b><i>ENGINE</i></div>
+      </div></div>
+      <ul>
+        <li>Drafts recurring entries</li>
+        <li>Rolls schedules forward</li>
+        <li>Ties balances to support</li>
+        <li>Runs the close checklist</li>
+      </ul>
+    </div>
+    <div class="conn reveal d3"><svg preserveAspectRatio="none"><line class="rail" x1="0" y1="25" x2="100%" y2="25"/><line class="pulse" x1="0" y1="25" x2="100%" y2="25"/></svg></div>
+    <div class="stage out reveal d4">
+      <h3>You get back</h3>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Journal entries, drafted &amp; balanced</div>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Completed close checklist</div>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Close package for the controller</div>
+      <div class="fine">Your controller approves each entry before it posts.</div>
+    </div>
+  </div>
+  <p class="flow-caption reveal">Close in <b>days, not weeks</b> — and every entry arrives with its support attached.</p>
+</div></section>
+
+<!-- ================= ENGINE 03: RECON ================= -->
+<section class="showband t-recon">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker"><span class="engnum">ENGINE 03</span>Bank &amp; cash reconciliation</div>
+    <h2>Every Account. Every Dollar. Proven.</h2>
+    <p class="lead">Not a sample — the full population of your bank accounts, matched to your books, with every exception explained.</p>
+  </div>
+</section>
+
+<section id="recon"><div class="wrap">
+  <div class="flow">
+    <div class="stage reveal doc-float">
+      <h3>You hand over</h3>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M3 21h18M5 21V10l7-6 7 6v11"/></svg>Bank statements &amp; registers</div>
+      <div class="doc"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M3 3v18h18M8 16v-5m4 5V8m4 8v-3"/></svg>Trial balance</div>
+      <div class="fine">Every entity, every account — the engine wants all of it.</div>
+    </div>
+    <div class="conn reveal d1"><svg preserveAspectRatio="none"><line class="rail" x1="0" y1="25" x2="100%" y2="25"/><line class="pulse" x1="0" y1="25" x2="100%" y2="25"/></svg></div>
+    <div class="stage core reveal d2">
+      <h3>The engine works</h3>
+      <div class="core-vis"><div class="ring"></div><div class="ring r2"></div><div class="ring r3"></div><div class="core-chip">
+        <svg class="mech" viewBox="0 0 100 100" aria-hidden="true">
+          <g transform="translate(28,26)"><g class="gspin"><circle r="15" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="5.5" stroke-dasharray="3.9 2.7"/><circle r="9" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.6"/><path d="M-9 0 H9 M0 -9 V9 M-6.4 -6.4 L6.4 6.4 M-6.4 6.4 L6.4 -6.4" stroke="rgba(255,255,255,.8)" stroke-width="1.3"/><circle r="2.4" fill="#ff3b5c"/></g></g>
+          <g transform="translate(76,72)"><g class="gspin rev"><circle r="11" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="4.5" stroke-dasharray="3.2 2.5"/><circle r="6.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><path d="M-6.5 0 H6.5 M0 -6.5 V6.5" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/><circle r="2" fill="#ff3b5c"/></g></g>
+          <g transform="translate(79,25)"><g class="gspin fast"><circle r="7.5" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="3.4" stroke-dasharray="2.6 2"/><circle r="1.7" fill="#ff3b5c"/></g></g>
+          <g transform="translate(24,77)"><g class="bal"><circle r="9.5" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4"/><path d="M-9.5 0 H9.5 M0 -9.5 V0" stroke="rgba(255,255,255,.75)" stroke-width="1.2"/><path d="M0 0 a3 3 0 0 1 3 3 a4.5 4.5 0 0 1 -6 3.5" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1"/><circle r="1.6" fill="#ff3b5c"/></g></g>
+        </svg>
+        <div class="core-label"><b>AI</b><i>ENGINE</i></div>
+      </div></div>
+      <ul>
+        <li>Matches every account to the books</li>
+        <li>Surfaces what doesn't tie</li>
+        <li>Traces every closed account's cash</li>
+        <li>Explains every exception</li>
+      </ul>
+    </div>
+    <div class="conn reveal d3"><svg preserveAspectRatio="none"><line class="rail" x1="0" y1="25" x2="100%" y2="25"/><line class="pulse" x1="0" y1="25" x2="100%" y2="25"/></svg></div>
+    <div class="stage out reveal d4">
+      <h3>You get back</h3>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Reconciliation, every account</div>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Exceptions classified &amp; explained</div>
+      <div class="result"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg>Evidence card for every figure</div>
+      <div class="fine">The one question that matters — "is any dollar unaccounted for?" — answered with receipts.</div>
+    </div>
+  </div>
+  <p class="flow-caption reveal">Nothing missing goes unnoticed. Nothing noticed goes <b>unexplained</b>.</p>
+</div></section>
+
+<!-- flowdiv replaced by engines hero band -->
+
+<!-- ================= ENGINES HERO BAND ================= -->
+<section class="showband t-engines">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">The rest of the fleet</div>
+    <h2>Nine Engines. One Standard: Proof.</h2>
+    <p class="lead">Keep scrolling — every engine, running, right here. No clicks, no demos to request.</p>
+  </div>
+</section>
+
+<!-- ================= ENGINES 04-09 ================= -->
+<section class="alt" id="engines"><div class="wrap">
+  <div class="center reveal" style="height:0;overflow:hidden;margin:0"></div>
+
+  <!-- 04 SURPLUS -->
+  <div class="eng reveal t-pools">
+    <div class="bignum">04</div>
+    <div class="eng-txt">
+      <div class="sec-kicker">Tax pools &amp; cost basis</div>
+      <h3>Multi-year tax computations, carried forward perfectly.</h3>
+      <p>Years of returns and workpapers become computed pools and cost-basis schedules — every year building on the last, every figure traceable to its source, foreign-exchange handled by rule.</p>
+      <ul><li>Reads a decade of filings in minutes</li><li>Carries balances forward year over year</li><li>Flags anything that breaks the pattern</li></ul>
+    </div>
+    <div class="eng-vis"><svg viewBox="0 0 460 220">
+      <g font-family="-apple-system,'Segoe UI',Arial" font-size="11" fill="#5b6b84">
+        <rect class="grow"    x="30"  y="120" width="30" height="60"  rx="4" fill="#bfdbfe"/>
+        <rect class="grow g2" x="70"  y="100" width="30" height="80"  rx="4" fill="#93c5fd"/>
+        <rect class="grow g3" x="110" y="82"  width="30" height="98"  rx="4" fill="#60a5fa"/>
+        <rect class="grow g4" x="150" y="60"  width="30" height="120" rx="4" fill="#3b82f6"/>
+        <rect class="grow g5" x="190" y="40"  width="30" height="140" rx="4" fill="#2563eb"/>
+        <text x="30" y="196">2021</text><text x="70" y="196">2022</text><text x="110" y="196">2023</text><text x="150" y="196">2024</text><text x="190" y="196">2025</text>
+        <path d="M232 110 h44" stroke="#00a8ff" stroke-width="3" stroke-dasharray="8 8" class="vote"/>
+        <path d="M270 104 l10 6 -10 6z" fill="#00a8ff"/>
+        <rect x="290" y="40" width="140" height="140" rx="14" fill="none" stroke="#9cc0ee" stroke-width="2.5"/>
+        <rect class="fillpool" x="296" y="46" width="128" height="128" rx="10" fill="url(#mg1)" opacity=".85"/>
+        <text x="360" y="115" text-anchor="middle" font-size="15" font-weight="800" fill="#ffffff">TAX POOLS</text>
+        <text x="360" y="133" text-anchor="middle" font-size="10.5" fill="#e3efff">computed &amp; carried</text>
+        <text x="360" y="196" text-anchor="middle">every year, every figure, sourced</text>
+      </g>
+    </svg></div>
+  </div>
+
+  <!-- 05 AUDIT / EVIDENCE -->
+  <div class="eng rev reveal t-audit">
+    <div class="bignum">05</div>
+    <div class="eng-txt">
+      <div class="sec-kicker">Audit &amp; evidence automation</div>
+      <h3>When the auditors call, you're already done.</h3>
+      <p>Every schedule is scanned against its support and stamped with where each number came from. Audit requests become a lookup, not a scramble.</p>
+      <ul><li>Every figure linked to its source rows</li><li>Evidence cards assembled automatically</li><li>Review-ready packages, on demand</li></ul>
+    </div>
+    <div class="eng-vis"><svg viewBox="0 0 460 220">
+      <rect x="60" y="24" width="180" height="172" rx="10" fill="#f5f9fe" stroke="#9cc0ee" stroke-width="2"/>
+      <g stroke="#c9dcf6" stroke-width="2"><path d="M80 56 h140 M80 84 h140 M80 112 h140 M80 140 h108 M80 168 h124"/></g>
+      <rect class="scanline" x="66" y="34" width="168" height="12" rx="6" fill="#00a8ff" opacity=".28"/>
+      <g class="popchk"><circle cx="258" cy="56" r="11" fill="#f0f9f1" stroke="#15803d" stroke-width="2"/><path d="M253 56 l4 4 7 -8" fill="none" stroke="#15803d" stroke-width="2.4"/></g>
+      <g class="popchk c2"><circle cx="258" cy="98" r="11" fill="#f0f9f1" stroke="#15803d" stroke-width="2"/><path d="M253 98 l4 4 7 -8" fill="none" stroke="#15803d" stroke-width="2.4"/></g>
+      <g class="popchk c3"><circle cx="258" cy="140" r="11" fill="#f0f9f1" stroke="#15803d" stroke-width="2"/><path d="M253 140 l4 4 7 -8" fill="none" stroke="#15803d" stroke-width="2.4"/></g>
+      <g class="popchk c4">
+        <rect x="292" y="76" width="136" height="66" rx="10" fill="#fff" stroke="#cde8d2" stroke-width="2"/>
+        <text x="360" y="104" text-anchor="middle" font-family="-apple-system,'Segoe UI',Arial" font-size="13" font-weight="800" fill="#15803d">EVIDENCE</text>
+        <text x="360" y="122" text-anchor="middle" font-family="-apple-system,'Segoe UI',Arial" font-size="10.5" fill="#5b6b84">source · file · date · row</text>
+      </g>
+    </svg></div>
+  </div>
+
+  <!-- 06 TRIANGULATE -->
+  <div class="eng reveal t-tri">
+    <div class="bignum">06</div>
+    <div class="eng-txt">
+      <div class="sec-kicker">AI validation &middot; Triangulate</div>
+      <h3>Three AIs argue so you don't have to.</h3>
+      <p>Independent models cross-examine the same work from different angles. They must agree before anything reaches your desk — disagreement stops the line, automatically.</p>
+      <ul><li>Independent reviewers, independent logic</li><li>Disagreements surface, never hide</li><li>Consensus required to proceed</li></ul>
+    </div>
+    <div class="eng-vis photo-eng photo-tri"><svg viewBox="0 0 460 220">
+      <g font-family="-apple-system,'Segoe UI',Arial" font-weight="800">
+        <circle cx="80" cy="50" r="24" fill="#e8f1fe" stroke="#2563eb" stroke-width="2"/><text x="80" y="55" text-anchor="middle" font-size="13" fill="#2563eb">AI 1</text>
+        <circle cx="80" cy="170" r="24" fill="#e8f1fe" stroke="#2563eb" stroke-width="2"/><text x="80" y="175" text-anchor="middle" font-size="13" fill="#2563eb">AI 2</text>
+        <circle cx="230" cy="26" r="24" fill="#e8f1fe" stroke="#2563eb" stroke-width="2"/><text x="230" y="31" text-anchor="middle" font-size="13" fill="#2563eb">AI 3</text>
+        <path class="vote" d="M104 58 L206 102" stroke="#00a8ff" stroke-width="2.5" fill="none"/>
+        <path class="vote" d="M104 162 L206 118" stroke="#00a8ff" stroke-width="2.5" fill="none"/>
+        <path class="vote" d="M230 50 L230 88" stroke="#00a8ff" stroke-width="2.5" fill="none"/>
+        <polygon points="230,88 254,110 230,132 206,110" fill="#fff" stroke="#2563eb" stroke-width="2.5"/>
+        <circle cx="230" cy="110" r="5" fill="#2563eb" class="beacon"/>
+        <g class="verdict">
+          <rect x="300" y="84" width="128" height="52" rx="10" fill="#f0f9f1" stroke="#15803d" stroke-width="2.5"/>
+          <text x="364" y="106" text-anchor="middle" font-size="15" fill="#15803d">AGREED ✓</text>
+          <text x="364" y="124" text-anchor="middle" font-size="10" font-weight="600" fill="#5b6b84">3 of 3 reviewers</text>
+        </g>
+        <text x="230" y="200" text-anchor="middle" font-size="11" font-weight="600" fill="#5b6b84">no consensus, no sign-off</text>
+      </g>
+    </svg></div>
+  </div>
+
+  <!-- 07 VERIFIER -->
+  <div class="eng rev reveal t-verify">
+    <div class="bignum">07</div>
+    <div class="eng-txt">
+      <div class="sec-kicker">The completeness verifier</div>
+      <h3>The engine that's allowed to say NO.</h3>
+      <p>Before any report ships, an independent verifier re-derives the whole thing from raw data. If one account is missing or one total doesn't foot, it rejects the report — our own included. That's not a bug. That's the product.</p>
+      <ul><li>Every account in exactly one bucket</li><li>Every total must re-add from source</li><li>NO-GO verdicts stop bad reports cold</li></ul>
+    </div>
+    <div class="eng-vis"><svg viewBox="0 0 460 220">
+      <g font-family="-apple-system,'Segoe UI',Arial">
+        <g class="tickrow"><rect x="30" y="30" width="250" height="32" rx="8" fill="#f5f9fe" stroke="#9cc0ee" stroke-width="1.6"/><text x="44" y="51" font-size="12" font-weight="700" fill="#16213a">Accounts matched &amp; tied</text><text x="252" y="51" font-size="12" font-weight="900" fill="#15803d">✓</text></g>
+        <g class="tickrow t2"><rect x="30" y="72" width="250" height="32" rx="8" fill="#f5f9fe" stroke="#9cc0ee" stroke-width="1.6"/><text x="44" y="93" font-size="12" font-weight="700" fill="#16213a">Exceptions explained</text><text x="252" y="93" font-size="12" font-weight="900" fill="#15803d">✓</text></g>
+        <g class="tickrow t3"><rect x="30" y="114" width="250" height="32" rx="8" fill="#f5f9fe" stroke="#9cc0ee" stroke-width="1.6"/><text x="44" y="135" font-size="12" font-weight="700" fill="#16213a">Totals re-added from source</text><text x="252" y="135" font-size="12" font-weight="900" fill="#15803d">✓</text></g>
+        <g class="tickrow t4"><rect x="30" y="156" width="250" height="32" rx="8" fill="#f5f9fe" stroke="#9cc0ee" stroke-width="1.6"/><text x="44" y="177" font-size="12" font-weight="700" fill="#16213a">Population foots — nothing missing</text><text x="252" y="177" font-size="12" font-weight="900" fill="#15803d">✓</text></g>
+        <g class="verdict">
+          <rect x="308" y="74" width="120" height="70" rx="12" fill="none" stroke="#15803d" stroke-width="4"/>
+          <text x="368" y="118" text-anchor="middle" font-size="30" font-weight="900" fill="#15803d">GO</text>
+        </g>
+        <text x="368" y="170" text-anchor="middle" font-size="10.5" font-weight="600" fill="#5b6b84">or NO-GO — and it means it</text>
+      </g>
+    </svg></div>
+  </div>
+
+  <!-- 08 KNOWLEDGE BRAIN -->
+  <div class="eng reveal t-brain">
+    <div class="bignum">08</div>
+    <div class="eng-txt">
+      <div class="sec-kicker">Knowledge brain</div>
+      <h3>Your team's know-how, permanently on staff.</h3>
+      <p>Procedures, decisions, and institutional memory become a searchable brain. Ask a question, get the answer with the source cited — even when the person who knew it is on vacation, or gone.</p>
+      <ul><li>SOPs and history, fully searchable</li><li>Every answer cites its source</li><li>New hires productive in days, not months</li></ul>
+    </div>
+    <div class="eng-vis photo-eng photo-brain"><svg viewBox="0 0 460 220">
+      <g>
+        <path class="drawline"    d="M90 60 L170 40 L250 70" fill="none" stroke="#9cc0ee" stroke-width="2"/>
+        <path class="drawline l2" d="M90 60 L150 120 L250 70 L230 150" fill="none" stroke="#9cc0ee" stroke-width="2"/>
+        <path class="drawline l3" d="M150 120 L230 150 L320 120 L250 70" fill="none" stroke="#9cc0ee" stroke-width="2"/>
+        <circle cx="90" cy="60" r="7" fill="#2563eb"/><circle cx="170" cy="40" r="6" fill="#60a5fa"/><circle cx="250" cy="70" r="8" fill="#2563eb"/>
+        <circle cx="150" cy="120" r="6" fill="#60a5fa"/><circle cx="230" cy="150" r="7" fill="#2563eb"/><circle cx="320" cy="120" r="6" fill="#00a8ff" class="beacon"/>
+        <g class="popchk c2">
+          <rect x="60" y="176" width="150" height="30" rx="8" fill="#fff" stroke="#9cc0ee" stroke-width="1.6"/>
+          <text x="74" y="196" font-family="-apple-system,'Segoe UI',Arial" font-size="11.5" font-weight="700" fill="#16213a">"How do we book X?"</text>
+        </g>
+        <g class="popchk c3">
+          <rect x="240" y="176" width="170" height="30" rx="8" fill="#f0f9f1" stroke="#cde8d2" stroke-width="1.6"/>
+          <text x="254" y="196" font-family="-apple-system,'Segoe UI',Arial" font-size="11.5" font-weight="700" fill="#15803d">Answer + source, cited ✓</text>
+        </g>
+      </g>
+    </svg></div>
+  </div>
+
+  <!-- 09 FINANCE ATLAS -->
+  <div class="eng rev reveal t-atlas">
+    <div class="bignum">09</div>
+    <div class="eng-txt">
+      <div class="sec-kicker">Finance atlas</div>
+      <h3>Every account, entity, and file — mapped.</h3>
+      <p>A living map of your finance operation: which entity banks where, which workbook is the source of truth, where every process lives. The "where is that?" question, retired forever.</p>
+      <ul><li>Entities, accounts &amp; systems on one map</li><li>Canonical sources flagged — no stale copies</li><li>Anyone finds anything in seconds</li></ul>
+    </div>
+    <div class="eng-vis"><svg viewBox="0 0 460 220">
+      <g stroke="#e3eaf5" stroke-width="1.5"><path d="M30 60 H430 M30 110 H430 M30 160 H430 M110 20 V200 M190 20 V200 M270 20 V200 M350 20 V200"/></g>
+      <rect x="30" y="20" width="400" height="180" rx="12" fill="none" stroke="#9cc0ee" stroke-width="2"/>
+      <g class="pin"><path d="M110 60 c0 -14 20 -14 20 0 c0 9 -10 12 -10 20 c0 -8 -10 -11 -10 -20z" fill="#2563eb"/><circle cx="120" cy="59" r="4" fill="#fff"/></g>
+      <g class="pin p2"><path d="M210 100 c0 -14 20 -14 20 0 c0 9 -10 12 -10 20 c0 -8 -10 -11 -10 -20z" fill="#00a8ff"/><circle cx="220" cy="99" r="4" fill="#fff"/></g>
+      <g class="pin p3"><path d="M300 50 c0 -14 20 -14 20 0 c0 9 -10 12 -10 20 c0 -8 -10 -11 -10 -20z" fill="#2563eb"/><circle cx="310" cy="49" r="4" fill="#fff"/></g>
+      <g class="pin p4"><path d="M150 140 c0 -14 20 -14 20 0 c0 9 -10 12 -10 20 c0 -8 -10 -11 -10 -20z" fill="#00a8ff"/><circle cx="160" cy="139" r="4" fill="#fff"/></g>
+      <g class="pin p5"><path d="M360 130 c0 -14 20 -14 20 0 c0 9 -10 12 -10 20 c0 -8 -10 -11 -10 -20z" fill="#2563eb"/><circle cx="370" cy="129" r="4" fill="#fff"/></g>
+      <text x="230" y="192" text-anchor="middle" font-family="-apple-system,'Segoe UI',Arial" font-size="11" font-weight="600" fill="#5b6b84">entities · bank accounts · systems · sources of truth</text>
+    </svg></div>
+  </div>
+
+</div></section>
+
+<!-- ================= WORKS WITH YOUR STACK ================= -->
+<!-- ================= STACK HERO BAND ================= -->
+<section class="showband t-stack">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">Works With Your Stack</div>
+    <h2>It Plugs Into The Systems You Already Run.</h2>
+    <p class="lead">No rip-and-replace. Our engines connect to the ERP, accounting, and spreadsheet tools your team uses today.</p>
+  </div>
+</section>
+
+<section class="stack"><div class="wrap center reveal">
+  <div class="stack-row">
+    <span>SAP</span><span>Oracle NetSuite</span><span>Sage</span><span>QuickBooks</span><span>Microsoft 365</span><span>Excel</span>
+  </div>
+</div></section>
+
+<!-- ================= TECH BAND — ENGINES ================= -->
+<section class="showband t-data">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">Built On Real Engineering</div>
+    <h2>Nine Engines. Thousands Of Tests.</h2>
+    <p class="lead">Production systems, not slideware &mdash; running on infrastructure your team can inspect.</p>
+  </div>
+</section>
+
+<!-- ================= HOW WE START ================= -->
+<section id="how"><div class="wrap">
+  <div class="center reveal">
+    <div class="sec-kicker">How we start</div>
+    <h2>Five Steps. The First One Is Free.</h2>
+    <p class="lead">No software to buy, no license, no leap of faith. A short engagement that starts with a conversation.</p>
+  </div>
+  <div class="timeline">
+    <div class="tl reveal"><div class="dot">1</div><div class="tag">Free &middot; No time limit</div><h3>Consultation</h3><p>You tell us where the hours go. We tell you honestly what's automatable — and what isn't.</p></div>
+    <div class="tl reveal d1"><div class="dot">2</div><div class="tag">2&ndash;5 days</div><h3>Observation</h3><p>Our people work alongside your accountants — we're accountants too — and map the real workflow.</p></div>
+    <div class="tl reveal d2"><div class="dot">3</div><div class="tag">Yours to keep</div><h3>Executive plan</h3><p>What to automate, what to leave human, timeline, and a fixed price for each phase.</p></div>
+    <div class="tl reveal d3"><div class="dot">4</div><div class="tag">Phased</div><h3>Build &amp; launch</h3><p>Live task by task. Your team approves every output. Stop after any phase.</p></div>
+    <div class="tl reveal d4"><div class="dot">5</div><div class="tag">No lock-in</div><h3>Handover</h3><p>Documentation and training. Your team owns everything. No black box.</p></div>
+  </div>
+</div></section>
+
+<!-- ================= TECH BAND — CONTROL ================= -->
+<section class="showband t-cmd">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">You Stay In Command</div>
+    <h2>Your Team Holds The Controls.</h2>
+    <p class="lead">Every output waits for a human. Nothing posts, sends, or files itself.</p>
+  </div>
+</section>
+
+<!-- ================= PRINCIPLES ================= -->
+<section class="alt princ"><div class="wrap">
+  <div class="center reveal">
+    <div class="sec-kicker">Why it's safe</div>
+    <h2>Principles We Don't Bend.</h2>
+  </div>
+  <div class="principles">
+    <div class="pr reveal"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg><h3>Evidence first</h3><p>Every number carries its receipts.</p></div>
+    <div class="pr reveal d1"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></svg><h3>Verification built in</h3><p>An independent check can reject any work &mdash; even ours.</p></div>
+    <div class="pr reveal d2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><h3>Humans stay the gate</h3><p>Software drafts. Your people decide.</p></div>
+    <div class="pr reveal d3"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><h3>Your data stays yours</h3><p>Runs in your environment. Nothing leaves.</p></div>
+  </div>
+</div></section>
+
+<!-- ================= TECH BAND — ENGINEERING ================= -->
+<section class="showband t-eng">
+  <div class="sb-logo"><div class="wrap"><svg class="wm-mark" viewBox="0 13 664 33" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs><mask id="stM"><rect width="640" height="60" fill="#000"/><g fill="#fff"><rect x="0" y="12" width="640" height="4"/><rect x="0" y="19" width="640" height="4"/><rect x="0" y="26" width="640" height="4"/><rect x="0" y="33" width="640" height="4"/><rect x="0" y="40" width="640" height="4"/></g></mask></defs><text x="0" y="45" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.2" fill="#fff" mask="url(#stM)">SOPHON FINANCE SYSTEMS</text><text x="640" y="24" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12" fill="#fff">&#174;</text></svg></div></div>
+  <div class="wrap reveal">
+    <div class="sec-kicker">The Engineering</div>
+    <h2>Read Every Line Yourself.</h2>
+    <p class="lead">Open code, open tests, all on fictional data &mdash; judge the work before you ever hire us.</p>
+  </div>
+</section>
+
+<!-- ================= PROOF ================= -->
+<section><div class="wrap">
+  <div class="center reveal">
+    <div class="sec-kicker">Don't take our word for it</div>
+    <h2>The Engineering Is Public.</h2>
+    <p class="lead">Every engine runs live on fictional demo data. Your technical people can read the code, run the tests, and judge for themselves.</p>
+  </div>
+  <div class="proof">
+    <a class="reveal" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">
+      <h3>GitHub — for your engineers</h3>
+      <p>Nine runnable finance engines with 14,000+ automated tests: close, reconciliation, cash completeness with built-in independent verification, partnership tax prep, AI validation, and more.</p>
+      <span class="go">github.com/sophonfinance-wq &rarr;</span></a>
+    <a class="reveal d1" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">
+      <h3>LinkedIn — for everyone else</h3>
+      <p>What we're building, in plain English — including the honest lessons, like the time our own verification layer rejected our own report before it shipped.</p>
+      <span class="go">linkedin.com/in/sophonnarith &rarr;</span></a>
+  </div>
+</div></section>
+
+<!-- ================= FINAL ================= -->
+<section class="final"><div class="wrap">
+  <div class="sec-kicker reveal" style="color:#7fb0ff">Your Free Consultation</div>
+  <h2 class="reveal">Let's Make Your Finance<br>Run Leaner.</h2>
+  <p class="reveal d1">Free, no time limit &mdash; you'll know exactly what's automatable.</p>
+  <div class="btns reveal d2">
+    <a class="btn-p" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" style="flex:none" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#0A66C2"/><path fill="#fff" d="M8.34 18.5H5.5V9.5h2.84v9ZM6.92 8.28A1.65 1.65 0 1 1 6.92 4.98a1.65 1.65 0 0 1 0 3.3ZM18.5 18.5h-2.84v-4.4c0-1.05-.02-2.4-1.46-2.4-1.47 0-1.69 1.14-1.69 2.32v4.48h-2.84v-9h2.73v1.23h.04c.38-.72 1.31-1.48 2.7-1.48 2.88 0 3.42 1.9 3.42 4.36v4.89Z"/></svg>Message Us On LinkedIn</a>
+    <a class="btn-p" href="mailto:sophonfinance@gmail.com"><svg width="22" height="22" viewBox="0 0 48 48" style="flex:none" aria-hidden="true"><path fill="#4caf50" d="M45 16.2l-5 2.75-5 4.75L35 40h7a3 3 0 0 0 3-3V16.2z"/><path fill="#1e88e5" d="M3 16.2l3.61 1.71L13 23.7V40H6a3 3 0 0 1-3-3V16.2z"/><path fill="#e53935" d="M35 11.2L24 19.45 13 11.2 12 17l1 6.7L24 32l11-8.3 1-6.7z"/><path fill="#c62828" d="M3 12.3v3.9l10 7.5V11.2L9.88 8.86A4.3 4.3 0 0 0 3 12.3z"/><path fill="#fbc02d" d="M45 12.3v3.9l-10 7.5V11.2l3.12-2.34A4.3 4.3 0 0 1 45 12.3z"/></svg>Email sophonfinance@gmail.com</a>
+  </div>
+  <div class="fine reveal d3">Accounting &amp; finance teams &middot; on-site or remote &middot; fixed-scope pricing after observation</div>
+</div></section>
+
+<div class="wrap foot-brand">
+  <svg viewBox="0 0 700 96" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sophon Finance Systems">
+    <defs><mask id="stFoot"><rect width="700" height="96" fill="#000"/><g fill="#fff"><rect x="0" y="28" width="700" height="3.4"/><rect x="0" y="33.6" width="700" height="3.4"/><rect x="0" y="39.2" width="700" height="3.4"/><rect x="0" y="44.8" width="700" height="3.4"/><rect x="0" y="50.4" width="700" height="3.4"/><rect x="0" y="56" width="700" height="3.4"/><rect x="0" y="61.6" width="700" height="3.4"/></g></mask></defs>
+    <text x="4" y="66" font-family="Arial,Helvetica,sans-serif" font-weight="900" font-size="40" letter-spacing="0.5" fill="#0b0f1a" mask="url(#stFoot)">SOPHON FINANCE SYSTEMS</text>
+    <text x="648" y="46" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="14" fill="#0b0f1a">&#174;</text>
+    <text x="4" y="86" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="12.5" fill="#1a2540" textLength="642" lengthAdjust="spacing">ARTIFICIAL INTELLIGENCE AUTOMATIONS &#183; USA</text>
+  </svg>
+</div>
+<footer><div class="wrap foot">
+  <div style="display:flex;align-items:center;gap:9px"><svg class="mark" width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><rect x="1.5" y="1.5" width="45" height="45" rx="13" fill="url(#mg1)"/><text x="24" y="34" text-anchor="middle" font-family="-apple-system,'Segoe UI',Arial" font-weight="900" font-size="17" fill="#fff" letter-spacing="1">SFS</text></svg>&copy; 2026 Sophon Finance Systems</div>
+  <div><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">LinkedIn</a> &middot; All public code uses fictional data. Client work stays confidential.</div>
+</div></footer>
+
+<div class="mcta" aria-hidden="true"><a href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener"><svg class="bgear" viewBox="0 0 24 24" aria-hidden="true"><g><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="3.4" stroke-dasharray="2.9 2.2"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M7.4 12 H16.6 M12 7.4 V16.6" stroke="currentColor" stroke-width="1.1"/><circle cx="12" cy="12" r="1.5" fill="#ff3b5c"/></g></svg>Free consultation &mdash; message us</a></div>
+
+<noscript><style>.reveal{opacity:1;transform:none}.core li,.grow,.fillpool,.popchk,.verdict,.pin,.tickrow{opacity:1;transform:none}.drawline{stroke-dashoffset:0}</style></noscript>
+<script>
+  // scroll reveal
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }, { threshold: 0.16 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    // sticky mobile CTA appears once the hero is scrolled past
+    const hero = document.querySelector('header');
+    new IntersectionObserver((entries) => {
+      for (const e of entries) document.body.classList.toggle('scrolled', !e.isIntersecting);
+    }, { threshold: 0.05 }).observe(hero);
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+  // count-up stats
+  function countUp(el) {
+    const target = parseInt(el.dataset.n, 10);
+    const dur = 1300, t0 = performance.now();
+    function tick(t) {
+      const p = Math.min(1, (t - t0) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased).toLocaleString('en-US');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  if ('IntersectionObserver' in window) {
+    const cio = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { countUp(e.target); cio.unobserve(e.target); }
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.count').forEach(el => cio.observe(el));
+  } else {
+    document.querySelectorAll('.count').forEach(el => el.textContent = parseInt(el.dataset.n,10).toLocaleString('en-US'));
+  }
+</script>
+
+</body>
+</html>
