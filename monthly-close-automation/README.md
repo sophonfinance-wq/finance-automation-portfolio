@@ -183,6 +183,8 @@ crossfoot corruption, so the demo holds at any valid period.
 
 ### 🔁 Autonomous Close Loop (`loop.py`)
 
+<p align="center"><img src="../assets/flows/self-healing-close-loop.svg" alt="The Close That Checks Itself — source data flows through the engine and independent controls to a tie-out decision: what ties posts automatically with evidence, routine breaks are fixed from source and re-checked, and judgment calls go to a human reviewer; exceptions fall 6 → 4 → 2 → 0 across passes" width="100%"></p>
+
 The Sentinel *detects*; today a human works the exception list and re-runs. The
 **Autonomous Close Loop** closes that loop and takes the operator out of it —
 without pretending the controls no longer matter. The seeded sub-ledger is the
