@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Surplus Assurance Loop — FLAG</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f6f8f5; --panel:#ffffff; --ink:#18201a; --muted:#586a5b; --line:#e2e8df;
+  --accent:#2ea44f; --good:#2ea44f; --bad:#c9382f;
+  --code:#0b3d2e; --codebg:#eef4ee; --shadow:0 1px 3px rgba(20,40,20,.07);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0e130f; --panel:#161d17; --ink:#e8efe6; --muted:#94a494; --line:#273028;
+        --good:#3fb862; --bad:#e06b62; --code:#8fe3b8; --codebg:#12241a; --shadow:0 1px 3px rgba(0,0,0,.4);}
+}
+:root[data-theme="light"]{--bg:#f6f8f5;--panel:#fff;--ink:#18201a;--muted:#586a5b;--line:#e2e8df;--good:#2ea44f;--bad:#c9382f;--code:#0b3d2e;--codebg:#eef4ee;--shadow:0 1px 3px rgba(20,40,20,.07)}
+:root[data-theme="dark"]{--bg:#0e130f;--panel:#161d17;--ink:#e8efe6;--muted:#94a494;--line:#273028;--good:#3fb862;--bad:#e06b62;--code:#8fe3b8;--codebg:#12241a;--shadow:0 1px 3px rgba(0,0,0,.4)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:32px 20px 60px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85em;
+  color:var(--code);background:var(--codebg);padding:1px 5px;border-radius:5px}
+h1{font-size:2.05rem;margin:.1em 0 .3em;letter-spacing:-.022em;text-wrap:balance}
+h2{font-size:1.15rem;margin:2.2em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line);text-wrap:balance}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.lede{font-size:1.05rem;color:var(--muted);max-width:62ch}
+.fic{font-size:.8rem;color:var(--muted);margin-top:1.2em}
+.muted{color:var(--muted)}
+.verdict{display:flex;gap:16px;align-items:center;margin:1.4em 0 .4em;padding:16px 18px;
+  background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);
+  border-radius:12px;box-shadow:var(--shadow)}
+.v-badge{flex:0 0 auto;width:46px;height:46px;border-radius:50%;background:var(--accent);
+  color:#fff;font-size:1.5rem;font-weight:800;display:grid;place-items:center}
+.v-word{font-weight:800;font-size:1.15rem;color:var(--accent);letter-spacing:.02em}
+.v-blurb{font-size:.9rem;color:var(--muted)}
+.cycle-wrap{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;
+  margin:2em 0;padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.cycle{width:min(100%,420px);height:auto}
+.cyc-arc{stroke:var(--accent);stroke-width:2;opacity:.55}
+.cyc-ah{fill:var(--accent)}
+.cyc-node{fill:var(--panel);stroke:var(--accent);stroke-width:2}
+.cyc-node--gate{fill:var(--accent)}
+.cyc-lbl{fill:var(--ink);font-size:11px;font-weight:600;text-anchor:middle}
+.cyc-node--gate + .cyc-lbl{fill:#fff}
+.cyc-center{fill:var(--ink);font-size:15px;font-weight:800;text-anchor:middle}
+.cyc-center-sub{fill:var(--muted);font-size:10px;text-anchor:middle}
+.legend{margin:0;padding-left:1.1em;font-size:.9rem;color:var(--muted);max-width:320px}
+.legend li{margin:.25em 0}
+.legend b{color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:1.6em 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat-v{font-size:1.3rem;font-weight:800;letter-spacing:-.01em}
+.stat-l{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.88rem;margin:.3em 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.delta{font-weight:700}
+.turn{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;margin:12px 0;box-shadow:var(--shadow)}
+.turn-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.turn-n{font-weight:800}
+.turn-lock{font-size:.75rem;font-weight:700;color:var(--accent);background:var(--codebg);
+  padding:2px 9px;border-radius:20px}
+.turn-delta{font-size:.85rem;color:var(--muted);margin-left:auto}
+.turn-delta em{color:var(--accent);font-style:normal;font-weight:700}
+.bars{display:flex;gap:18px;margin:.4em 0 .8em;flex-wrap:wrap}
+.bar{display:flex;align-items:center;gap:8px;flex:1;min-width:180px}
+.bar-l{font-size:.72rem;color:var(--muted);width:22px}
+.bar-n{font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums;width:26px;text-align:right}
+.track{flex:1;height:8px;background:var(--codebg);border-radius:6px;overflow:hidden}
+.fill{display:block;height:100%;transition:width .2s ease}
+.fill-in{background:var(--bad)}
+.fill-out{background:var(--good)}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+.how p{color:var(--muted);max-width:70ch}
+.foot{margin-top:2.4em;padding-top:1em;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+@media(max-width:560px){h1{font-size:1.6rem}.turn-delta{margin-left:0}}
+</style>
+<main class="wrap" style="--accent:#d29922">
+  <header class="hero">
+    <div class="eyebrow">Sophon Finance Systems · Tax Surplus / ACB Engine</div>
+    <h1>Surplus Assurance Loop</h1>
+    <p class="lede">A bounded, human-gated control loop that drives a <strong>drifted</strong>
+      workpaper set back to a clean structural tie-out — re-deriving each fiscal period from
+      cited source facts, one locked period at a time — then hands a verdict to a person.</p>
+    <div class="verdict" role="status">
+      <span class="v-badge">⚑</span>
+      <div><div class="v-word">FLAG</div>
+      <div class="v-blurb">Converged, but material adjustments were booked. A human must review what changed before sign-off, even though every identity now ties.</div></div>
+    </div>
+    <p class="fic">🔒 Fully fictional, seeded data. No real entity, figure, or methodology.</p>
+  </header>
+
+  <section class="cycle-wrap">
+    <svg viewBox="0 0 600 260" role="img" aria-label="Five-stage loop: observe, detect, remediate, re-verify, gate, repeating." class="cycle"><defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="cyc-ah"/></marker></defs><line x1="300.0" y1="34.0" x2="391.3" y2="100.3" class="cyc-arc" marker-end="url(#ah)"/><line x1="391.3" y1="100.3" x2="356.4" y2="207.7" class="cyc-arc" marker-end="url(#ah)"/><line x1="356.4" y1="207.7" x2="243.6" y2="207.7" class="cyc-arc" marker-end="url(#ah)"/><line x1="243.6" y1="207.7" x2="208.7" y2="100.3" class="cyc-arc" marker-end="url(#ah)"/><line x1="208.7" y1="100.3" x2="300.0" y2="34.0" class="cyc-arc" marker-end="url(#ah)"/><circle cx="300.0" cy="34.0" r="30" class="cyc-node"/><text x="300.0" y="38.0" class="cyc-lbl">observe</text><circle cx="391.3" cy="100.3" r="30" class="cyc-node"/><text x="391.3" y="104.3" class="cyc-lbl">detect</text><circle cx="356.4" cy="207.7" r="30" class="cyc-node"/><text x="356.4" y="211.7" class="cyc-lbl">remediate</text><circle cx="243.6" cy="207.7" r="30" class="cyc-node"/><text x="243.6" y="211.7" class="cyc-lbl">re-verify</text><circle cx="208.7" cy="100.3" r="30" class="cyc-node cyc-node--gate"/><text x="208.7" y="104.3" class="cyc-lbl">gate</text><text x="300" y="126" class="cyc-center">repeat</text><text x="300" y="146" class="cyc-center-sub">until it ties</text></svg>
+    <ol class="legend">
+      <li><b>observe</b> — run the 212-check reconciliation harness</li>
+      <li><b>detect</b> — find the earliest fiscal period still failing an identity</li>
+      <li><b>remediate</b> — re-derive that period from source; book the corrections</li>
+      <li><b>re-verify</b> — reconcile again; lock the period</li>
+      <li><b>gate</b> — PASS / FLAG / FAIL to a human</li>
+    </ol>
+  </section>
+
+  <section class="stats"><div class="stat"><div class="stat-v">2021–2024</div><div class="stat-l">fiscal range</div></div><div class="stat"><div class="stat-v">212</div><div class="stat-l">identity checks / pass</div></div><div class="stat"><div class="stat-v">6</div><div class="stat-l">breaks at start</div></div><div class="stat"><div class="stat-v">3</div><div class="stat-l">remediation turns</div></div><div class="stat"><div class="stat-v">2021, 2022, 2023</div><div class="stat-l">periods locked</div></div><div class="stat"><div class="stat-v">CAD 107,088.50</div><div class="stat-l">adjustments booked</div></div></section>
+
+  <section><h2>Injected drift</h2><p class="muted">The stored workpapers arrive contaminated — the kind of drift a reviewer meets in real month-end work. Each fault names the control that must catch it.</p><div class="tw"><table><thead><tr><th>Fault</th><th>Entity</th><th>FY</th><th>Root cause</th><th>Control</th></tr></thead><tbody><tr><td><code>F1-MISKEY-CLOSE</code></td><td>Cedar Mezz Holdings LLC</td><td>2021</td><td>Fat-fingered closing cell: exempt surplus overstated on the 2021 workpaper</td><td><code>exempt_conservation + continuity_exempt</code></td></tr><tr><td><code>F2-UNSUPPORTED-ELEVATION</code></td><td>Maple Fund LP</td><td>2022</td><td>Intercompany elevation booked at the fund with no subsidiary distribution to support it</td><td><code>elevation_exempt</code></td></tr><tr><td><code>F3-ACB-MISKEY</code></td><td>Cedar Mezz Holdings LLC</td><td>2023</td><td>Mis-keyed ACB balance on the 2023 mezzanine workpaper</td><td><code>acb_conservation + continuity_acb</code></td></tr></tbody></table></div></section>
+  <section><h2>The loop, turn by turn</h2><div class="turn"><div class="turn-h"><span class="turn-n">Turn 1</span><span class="turn-lock">lock FY2021</span><span class="turn-delta">6 → 4 breaks <em>(2 cleared)</em></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:100%" class="fill fill-in"></i></div><span class="bar-n">6</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:67%" class="fill fill-out"></i></div><span class="bar-n">4</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>FY</th><th>Field</th><th class="num">From</th><th class="num">To</th><th class="num">Δ FC</th><th class="num">Δ CAD</th></tr></thead><tbody><tr><td>Cedar Mezz Holdings LLC</td><td>2021</td><td><code>closing.exempt_surplus</code></td><td class="num">749,503.61</td><td class="num">699,503.61</td><td class="num delta">(50,000.00)</td><td class="num">65,750.00</td></tr></tbody></table></div></div><div class="turn"><div class="turn-h"><span class="turn-n">Turn 2</span><span class="turn-lock">lock FY2022</span><span class="turn-delta">4 → 2 breaks <em>(2 cleared)</em></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:67%" class="fill fill-in"></i></div><span class="bar-n">4</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:33%" class="fill fill-out"></i></div><span class="bar-n">2</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>FY</th><th>Field</th><th class="num">From</th><th class="num">To</th><th class="num">Δ FC</th><th class="num">Δ CAD</th></tr></thead><tbody><tr><td>Maple Fund LP</td><td>2022</td><td><code>closing.exempt_surplus</code></td><td class="num">113,173.49</td><td class="num">105,173.49</td><td class="num delta">(8,000.00)</td><td class="num">10,632.00</td></tr><tr><td>Maple Fund LP</td><td>2022</td><td><code>elevated_exempt</code></td><td class="num">8,000.00</td><td class="num">0.00</td><td class="num delta">(8,000.00)</td><td class="num">10,632.00</td></tr></tbody></table></div></div><div class="turn"><div class="turn-h"><span class="turn-n">Turn 3</span><span class="turn-lock">lock FY2023</span><span class="turn-delta">2 → 0 breaks <em>(2 cleared)</em></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:33%" class="fill fill-in"></i></div><span class="bar-n">2</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:0%" class="fill fill-out"></i></div><span class="bar-n">0</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>FY</th><th>Field</th><th class="num">From</th><th class="num">To</th><th class="num">Δ FC</th><th class="num">Δ CAD</th></tr></thead><tbody><tr><td>Cedar Mezz Holdings LLC</td><td>2023</td><td><code>closing.acb</code></td><td class="num">50,502.71</td><td class="num">35,502.71</td><td class="num delta">(15,000.00)</td><td class="num">20,074.50</td></tr></tbody></table></div></div></section>
+
+  <section class="how">
+    <h2>Why it's defensible</h2>
+    <p>The loop never invents a number. Every correction is the engine's own re-derivation from
+    the cited source facts, and the final workpaper set is <strong>byte-identical to a clean engine
+    run</strong>. The reconciliation harness — 212 named structural identities
+    (conservation, roll-forward continuity, elevation, ACB, per-layer FX) — is both the loop's
+    sensor and its acceptance test. Convergence is bounded by a turn budget; if it can't tie out,
+    it escalates rather than papering over the break. The verdict doubles as a CI exit code.</p>
+  </section>
+
+  <footer class="foot">Generated deterministically from <code>surplus_engine.loop</code> ·
+  fictional data · re-runnable and diffable.</footer>
+</main>
+</body>
+</html>
