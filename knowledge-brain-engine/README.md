@@ -104,6 +104,40 @@ made, the file/cell you touched, and the source citation above ... and set its s
 With `--out`, this also writes `out/remediation_prompt.md` (the copy-paste prompt) and
 `out/change_log.md` (the cited fix-packet). Every name, number, and date here is **fictional**.
 
+## 🔁 Knowledge-Base Integrity Loop (`loop.py`)
+
+The engine's trust model is *verbatim, timestamped citation* — but that guarantee was only
+asserted at extraction time. Once stored, a KB can drift: a card's text quietly edited, a
+provenance stamped with the wrong speaker, a citation pointing at a moment no one spoke. The
+integrity loop re-verifies and repairs it:
+
+**observe → detect → remediate → re-verify → gate → repeat**
+
+Each turn re-checks every card and directive against the **transcript of record**
+(`Corpus.utterance_text`), takes the earliest affected meeting, and re-derives every tampered
+entry **byte-for-byte from the source utterance** — text and speaker both. One thing it will
+never do is repair an **orphaned** entry (a citation with no utterance behind it): inventing a
+source would betray the engine's one rule, so orphans are quarantined for a human and the run
+exits with the engine's refusal code.
+
+| Verdict | Meaning | Exit |
+|---|---|:--:|
+| `CLEAN` | nothing drifted | 0 |
+| `REMEDIATED` | all drift re-derived verbatim from the transcript | 0 |
+| `ESCALATED` | uncited entries quarantined — no source, no guess | 3 |
+
+```bash
+# inject the drift profile (edited rule text, reworded directive, wrong
+# speaker, orphaned citation) and watch the loop restore what it can prove:
+python -m brain_engine.loop --demo
+```
+```text
+Verdict: ⚑ ESCALATED — uncited entries quarantined for a human
+Turn 1  re-derive MTG-2025-EVIDENCE        4 -> 2 findings  (text + speaker restored)
+Turn 2  re-derive MTG-2025-SURPLUS-REVIEW  2 -> 1 findings  (directive restored verbatim)
+Held: ORPHANED CARD-EVIDENCE-03 — no utterance at 03:59:59; waits for a human
+```
+
 ## Tools
 
 `Python (stdlib only)` · `deterministic TF-IDF (no embeddings, no LLM, no network)` ·
