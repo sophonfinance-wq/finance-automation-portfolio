@@ -177,11 +177,17 @@ Each system has its own README with the regime it models, the run commands, and 
 **Month-End Close Engine**
 <p><img src="./assets/systems/close.gif" alt="Month-End Close Engine live demo" width="100%"></p>
 
+**Autonomous Close Loop** *(new)*
+<p><img src="./assets/systems/close-loop.gif" alt="Autonomous Close Loop live demo" width="100%"></p>
+
 **Cash & Debt Reconciliation**
 <p><img src="./assets/systems/recon.gif" alt="Cash and Debt Reconciliation live demo" width="100%"></p>
 
 **Tax Surplus / ACB Model**
 <p><img src="./assets/systems/surplus.gif" alt="Tax Surplus and ACB Model live demo" width="100%"></p>
+
+**Surplus Assurance Loop** *(new)*
+<p><img src="./assets/systems/surplus-loop.gif" alt="Surplus Assurance Loop live demo" width="100%"></p>
 
 **Partnership 1065 Automation**
 <p><img src="./assets/systems/partnership-tax.gif" alt="Partnership 1065 Automation live demo" width="100%"></p>
