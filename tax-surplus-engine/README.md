@@ -174,6 +174,52 @@ $ python -m surplus_engine --start 2021 --end 2024 --out out --check
 Reconciliation: OK (212/212 identity checks pass)
 ```
 
+### Continuous Assurance Loop (`loop.py`)
+
+The `--check` gate answers *"does it tie out?"* — one pass, pass/fail. The **assurance loop**
+answers the operational question that comes next: *"it doesn't tie out — drive it back to clean,
+show me every correction, and don't sign off until a human sees what changed."* It closes the
+control loop the rest of the platform is built around:
+
+**observe → detect → remediate → re-verify → gate → repeat**
+
+Real workpapers *drift* from what the source facts support: a fat-fingered closing cell, a stale
+roll-forward, an intercompany elevation booked with no distribution to support it, a mis-keyed
+ACB. The loop treats the 212-check reconciliation harness as its **sensor** and the engine as its
+**authority**. Each turn it takes the **earliest fiscal period** that still fails any identity,
+re-derives that period from the cited source facts, **books every field change as a journal
+adjustment**, **locks the period** (roll-forward continuity re-seats the next period's opening),
+and re-verifies. It repeats until every identity across every period and tier reconciles — or a
+**turn budget** is exhausted, in which case it escalates. It never invents a number: the settled
+workpaper set is byte-identical to a clean engine run.
+
+A **human gate** returns a verdict that doubles as a CI exit code:
+
+| Verdict | Meaning | Exit |
+|---|---|:--:|
+| `PASS` | converged; booked adjustments immaterial — clean to sign off | 0 |
+| `FLAG` | converged, but **material** adjustments were booked — a human reviews *what changed* before sign-off | 0 |
+| `FAIL` | did not converge within the turn budget — escalate | 1 |
+
+```bash
+# inject the built-in workpaper-drift profile and watch the loop clear it, period by period:
+python -m surplus_engine.loop --demo --out out
+```
+```text
+Verdict: ⚑ FLAG — Converged, but material adjustments were booked...
+- Remediation turns: 3 / budget 6 · periods locked: 2021, 2022, 2023
+- Adjustments booked: 4 · total magnitude CAD 107,088.50 · materiality CAD 1,000.00
+
+Turn 1 — lock FY2021 · 6 break(s) in → 4 out   (Cedar Mezz closing exempt −50,000.00)
+Turn 2 — lock FY2022 · 4 break(s) in → 2 out   (Maple Fund unsupported elevation −8,000.00 ×2)
+Turn 3 — lock FY2023 · 2 break(s) in → 0 out   (Cedar Mezz closing ACB −15,000.00)
+```
+
+The run also writes **`out/assurance_loop.html`** — a single-file, self-contained visual of the
+loop (the five-stage cycle, the turn-by-turn break-clearing, the adjustments ledger, and the
+verdict), regenerated deterministically from the journal. Run on a clean set (drop `--demo`) and
+the loop finds nothing to do and returns `PASS` in zero turns.
+
 ### Test output (real)
 
 ```text
