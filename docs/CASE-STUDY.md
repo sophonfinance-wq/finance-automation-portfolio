@@ -91,6 +91,7 @@ Each is now encoded as a control in the portfolio:
 | Cross-border foreign-affiliate tax (T1134, surplus pools, ACB, repatriation waterfall) | `tax-surplus-engine` | 1,486 |
 | Partnership tax — Form 1065 / K-1 assembly + §704(c) built-in gain (ceiling rule) | `partnership-1065-automation` | 1,605 |
 | Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 1,800 |
+| Self-healing control loops — engines detect drift, re-derive it from source, re-verify, and escalate only what they cannot certify (human-gated on tax-surplus; autonomous with quarantine on close) | `surplus_engine.loop` + `close_engine.loop` | 23 |
 | Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 1,001 |
 | Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 1,314 |
 | AI orchestration with controls (separation of duties, human gate) | `ai-validation-framework` | 1,311 |

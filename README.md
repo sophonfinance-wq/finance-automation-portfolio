@@ -46,7 +46,7 @@ and run `bash scripts/demo.sh` for the full tour.
 
 ## For reviewers — a 60-second tour
 
-Four commands that show the load-bearing ideas, all on fictional data:
+Five commands that show the load-bearing ideas, all on fictional data:
 
 **1. The AI control catches a hallucination.** Inject one made-up figure into a clean workpaper and watch two independent roles catch it and block sign-off:
 ```bash
@@ -67,6 +67,11 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```bash
 cd monthly-close-automation && python -m close_engine --demo-guardrails
 ```
+
+**5. The loop closes itself.** Contaminate a posted close with drift (a dropped intercompany leg, a missing accrual, a one-cent tamper) *plus* a tampered locked prior period, and watch the autonomous loop resync each category from source, re-verify, auto-post — and quarantine the locked-period tamper rather than overwrite it:
+```bash
+cd monthly-close-automation && python -m close_engine.loop --demo
+```
 > A trial balance loads with a one-sided line; a fully depreciated asset keeps depreciating; an intercompany entry loses its far leg; a clearing leg books `round(total)` instead of the sum of rounded lines; a closed period is quietly edited. The demo runs a clean baseline first (**zero findings**), then injects each fault and asserts the expected control (**C1–C10**) fires — a shadow recomputation independently re-derives every posted amount, and the run exits non-zero unless all twelve faults are caught.
 
 ---
@@ -78,6 +83,12 @@ cd monthly-close-automation && python -m close_engine --demo-guardrails
 The same control pattern runs through every system:
 
 **seeded data → calculation engine → cited evidence → read-only validation → human verdict**
+
+And since v1.2 the pattern *closes into a loop*: **observe → detect → remediate → re-verify →
+gate → repeat.** Engines detect their own drift, re-derive it from the seeded source of record,
+and re-verify — escalating only what they cannot certify. Two gate policies ship today:
+human-gated on the tax-surplus engine (`python -m surplus_engine.loop --demo`) and autonomous
+with quarantine on the close engine (`python -m close_engine.loop --demo`).
 
 - **Deterministic core.** Integer-cent arithmetic, seeded generators, byte-stable outputs — the
   numbers don't move between runs, so every figure is re-derivable and diffable.

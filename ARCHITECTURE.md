@@ -9,8 +9,10 @@ orchestration layer:
 2. calculation engines
 3. evidence artifacts
 4. independent validation
-5. executive-ready reporting and human-gated verdicts
-6. an optional orchestration layer that coordinates longer-running work through the same controls
+5. self-healing loops — engines detect drift, re-derive it from source, and re-verify, escalating
+   only what they cannot certify
+6. executive-ready reporting and gated verdicts
+7. an optional orchestration layer that coordinates longer-running work through the same controls
 
 The design principle is straightforward: the system that produces a number should not be the only
 system permitted to approve that number.
@@ -67,6 +69,26 @@ The validation layer does not trust the output just because the output exists.
 - **Validation Engine:** read-only rules over workbook and JSON artifacts.
 - **Triangulate Orchestrator:** AI separation of duties (preparer / reviewer / specialist) plus a deterministic audit gate and human sign-off.
 
+### 5a. Self-healing loops
+
+Detection alone still leaves a person working the exception list. The loop layer closes that gap:
+
+**observe → detect → remediate → re-verify → gate → repeat**
+
+Each loop treats the engine's own control harness as its *sensor* and a deterministic
+re-derivation from the seeded source of record as its *authority*. It finds the earliest scope
+that fails a check, resyncs it to source (booking every change as an adjustment), and re-verifies —
+until everything ties or a turn budget is exhausted. It never invents a number: the settled state
+is byte-identical to a clean engine run.
+
+| Loop | Package | Gate policy |
+|---|---|---|
+| Assurance Loop | `surplus_engine.loop` | human-gated: `PASS` / `FLAG` / `FAIL` — material adjustments stop for a person |
+| Autonomous Close Loop | `close_engine.loop` | policy-gated: `AUTO-POSTED` / `PARTIAL` / `HALTED` — posts on its own authority, quarantines a tampered locked period, refuses a broken opening |
+
+The two policies bracket the spectrum: the same loop architecture runs human-gated where sign-off
+is required and autonomously where policy allows — the controls and the audit trail are identical.
+
 ### 6. Verdicts
 
 The platform produces review-ready artifacts:
@@ -77,7 +99,8 @@ The platform produces review-ready artifacts:
 - change logs
 - machine-readable JSON
 
-The human reviewer remains the final authority.
+The human reviewer remains the final authority wherever the gate policy requires one — and every
+autonomous action still traces to a deterministic control.
 
 ---
 
