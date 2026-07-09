@@ -120,6 +120,40 @@ The full committed log lives in [`evidence-log.md`](./evidence-log.md).
 
 ---
 
+## 🔁 Reconciliation Assurance Loop (`loop.py`)
+
+The engine answers *"what doesn't tie?"* — one pass. The **assurance loop** answers the next
+question: *"the stored package has drifted from source — restore it, show every correction, and
+apply a materiality gate before it ships."*
+
+**observe → detect → remediate → re-verify → gate → repeat**
+
+The seeded generator is the system of record. Each turn the loop reconciles the current package,
+compares every account's outcome against the **baseline** (the reconciliation of the pristine
+seeded dataset), takes the lowest-numbered deviating account, and resyncs every record it owns —
+GL row, bank statement, lender statement, dormant marker — booking each field change as a
+correction. It repeats until nothing deviates from source.
+
+Two properties keep it honest:
+
+- **Fidelity, not zeroing.** The scenario's *genuine* reconciling items (the deposit in transit,
+  the keying error) are part of the baseline and survive the loop untouched — the loop restores
+  agreement with source, it does not paper over real flags.
+- **Materiality gate.** `PASS` (corrections immaterial, exit 0) · `FLAG` (converged but material —
+  reviewer sees what moved, exit 0) · `FAIL` (did not converge, exit 1).
+
+```bash
+# inject the drift profile (fat-fingered GL, missing lender statement,
+# active account mis-marked dormant) and watch the loop restore the package:
+python -m recon_engine.loop --demo
+```
+```text
+Verdict: ⚑ FLAG — converged, material corrections booked
+Turn 1  resync CASH-1002   gl_balance 212,292.45 -> 207,462.20
+Turn 2  resync DEBT-2000   lender statement restored
+Turn 3  resync DEBT-2001   dormant True -> False   (back in scope)
+```
+
 ## Tools
 `Excel / openpyxl` · `Python 3` · `Bank registers / lender statements` · `Claude Code / Cowork`
 
