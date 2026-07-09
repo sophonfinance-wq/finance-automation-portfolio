@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Autonomous Close Loop — AUTO-POSTED (PARTIAL)</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f5f7fa; --panel:#ffffff; --ink:#161c26; --muted:#556074; --line:#e2e7ef;
+  --accent:#2f6f9f; --good:#2ea44f; --bad:#c9382f;
+  --code:#123a5c; --codebg:#eaf1f7; --shadow:0 1px 3px rgba(20,30,45,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0d1117; --panel:#151b24; --ink:#e6ecf3; --muted:#93a0b3; --line:#26303d;
+        --good:#3fb862; --bad:#e06b62; --code:#8fc7ee; --codebg:#122231; --shadow:0 1px 3px rgba(0,0,0,.4);}
+}
+:root[data-theme="light"]{--bg:#f5f7fa;--panel:#fff;--ink:#161c26;--muted:#556074;--line:#e2e7ef;--good:#2ea44f;--bad:#c9382f;--code:#123a5c;--codebg:#eaf1f7;--shadow:0 1px 3px rgba(20,30,45,.08)}
+:root[data-theme="dark"]{--bg:#0d1117;--panel:#151b24;--ink:#e6ecf3;--muted:#93a0b3;--line:#26303d;--good:#3fb862;--bad:#e06b62;--code:#8fc7ee;--codebg:#122231;--shadow:0 1px 3px rgba(0,0,0,.4)}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:32px 20px 60px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.85em;
+  color:var(--code);background:var(--codebg);padding:1px 5px;border-radius:5px}
+h1{font-size:2.05rem;margin:.1em 0 .3em;letter-spacing:-.022em;text-wrap:balance}
+h2{font-size:1.15rem;margin:2.2em 0 .7em;padding-bottom:.35em;border-bottom:1px solid var(--line);text-wrap:balance}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+.lede{font-size:1.05rem;color:var(--muted);max-width:64ch}
+.fic{font-size:.8rem;color:var(--muted);margin-top:1.2em}
+.muted{color:var(--muted)}
+.verdict{display:flex;gap:16px;align-items:center;margin:1.4em 0 .4em;padding:16px 18px;
+  background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--accent);
+  border-radius:12px;box-shadow:var(--shadow)}
+.v-badge{flex:0 0 auto;width:46px;height:46px;border-radius:50%;background:var(--accent);
+  color:#fff;font-size:1.5rem;font-weight:800;display:grid;place-items:center}
+.v-word{font-weight:800;font-size:1.1rem;color:var(--accent);letter-spacing:.02em}
+.v-blurb{font-size:.9rem;color:var(--muted)}
+.cycle-wrap{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;
+  margin:2em 0;padding:18px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+.cycle{width:min(100%,420px);height:auto}
+.cyc-arc{stroke:var(--accent);stroke-width:2;opacity:.55}
+.cyc-ah{fill:var(--accent)}
+.cyc-node{fill:var(--panel);stroke:var(--accent);stroke-width:2}
+.cyc-node--gate{fill:var(--accent)}
+.cyc-lbl{fill:var(--ink);font-size:11px;font-weight:600;text-anchor:middle}
+.cyc-node--gate + .cyc-lbl{fill:#fff}
+.cyc-center{fill:var(--ink);font-size:15px;font-weight:800;text-anchor:middle}
+.cyc-center-sub{fill:var(--muted);font-size:10px;text-anchor:middle}
+.legend{margin:0;padding-left:1.1em;font-size:.9rem;color:var(--muted);max-width:340px}
+.legend li{margin:.25em 0}.legend b{color:var(--ink)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:1.6em 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat-v{font-size:1.25rem;font-weight:800;letter-spacing:-.01em}
+.stat-l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:.86rem;margin:.3em 0}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.delta{font-weight:700}
+.turn{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0;box-shadow:var(--shadow)}
+.turn-h{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;margin-bottom:8px}
+.turn-n{font-weight:800}
+.turn-cat{font-size:.75rem;font-weight:700;color:var(--accent);background:var(--codebg);padding:2px 9px;border-radius:20px}
+.turn-cleared{font-size:.82rem;color:var(--muted);margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.pill{font-size:.72rem;font-weight:700;color:var(--good);border:1px solid var(--good);border-radius:20px;padding:1px 7px}
+.bars{display:flex;gap:18px;margin:.4em 0 .8em;flex-wrap:wrap}
+.bar{display:flex;align-items:center;gap:8px;flex:1;min-width:180px}
+.bar-l{font-size:.72rem;color:var(--muted);width:22px}
+.bar-n{font-size:.8rem;font-weight:700;font-variant-numeric:tabular-nums;width:26px;text-align:right}
+.track{flex:1;height:8px;background:var(--codebg);border-radius:6px;overflow:hidden}
+.fill{display:block;height:100%;transition:width .2s ease}
+.fill-in{background:var(--bad)}.fill-out{background:var(--good)}
+@media(prefers-reduced-motion:reduce){.fill{transition:none}}
+.held{list-style:none;padding:0;margin:.5em 0;display:flex;flex-direction:column;gap:8px}
+.held li{padding:10px 12px;background:var(--panel);border:1px solid var(--line);border-radius:10px;font-size:.9rem}
+.tag{font-size:.68rem;font-weight:800;letter-spacing:.05em;padding:1px 7px;border-radius:5px;color:#fff}
+.tag-halt{background:var(--bad)}.tag-q{background:#d29922}
+.how p{color:var(--muted);max-width:72ch}
+.foot{margin-top:2.4em;padding-top:1em;border-top:1px solid var(--line);font-size:.78rem;color:var(--muted)}
+@media(max-width:560px){h1{font-size:1.6rem}.turn-cleared{margin-left:0}}
+</style>
+<main class="wrap" style="--accent:#d29922">
+  <header class="hero">
+    <div class="eyebrow">Sophon Finance Systems · Month-End Close Engine</div>
+    <h1>Autonomous Close Loop</h1>
+    <p class="lede">A human-out-of-the-loop remediation controller: it drives a <strong>drifted</strong>
+      posted close back to a certifiable state, resyncing each recurring-entry category to the seeded
+      sub-ledger of record, then posts on its own authority — and <strong>quarantines what it cannot
+      certify</strong>.</p>
+    <div class="verdict" role="status">
+      <span class="v-badge">⚑</span>
+      <div><div class="v-word">AUTO-POSTED (PARTIAL)</div>
+      <div class="v-blurb">The current period was posted autonomously. Some scope could not be certified without authority the loop does not have, so it was quarantined and logged rather than acted on.</div></div>
+    </div>
+    <p class="fic">🔒 Fully fictional, seeded data. No real entity, figure, or methodology.</p>
+  </header>
+
+  <section class="cycle-wrap">
+    <svg viewBox="0 0 600 260" role="img" aria-label="Five-stage autonomous loop: observe, detect, remediate, re-verify, gate, repeating." class="cycle"><defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" class="cyc-ah"/></marker></defs><line x1="300.0" y1="34.0" x2="391.3" y2="100.3" class="cyc-arc" marker-end="url(#ah)"/><line x1="391.3" y1="100.3" x2="356.4" y2="207.7" class="cyc-arc" marker-end="url(#ah)"/><line x1="356.4" y1="207.7" x2="243.6" y2="207.7" class="cyc-arc" marker-end="url(#ah)"/><line x1="243.6" y1="207.7" x2="208.7" y2="100.3" class="cyc-arc" marker-end="url(#ah)"/><line x1="208.7" y1="100.3" x2="300.0" y2="34.0" class="cyc-arc" marker-end="url(#ah)"/><circle cx="300.0" cy="34.0" r="30" class="cyc-node"/><text x="300.0" y="38.0" class="cyc-lbl">observe</text><circle cx="391.3" cy="100.3" r="30" class="cyc-node"/><text x="391.3" y="104.3" class="cyc-lbl">detect</text><circle cx="356.4" cy="207.7" r="30" class="cyc-node"/><text x="356.4" y="211.7" class="cyc-lbl">remediate</text><circle cx="243.6" cy="207.7" r="30" class="cyc-node"/><text x="243.6" y="211.7" class="cyc-lbl">re-verify</text><circle cx="208.7" cy="100.3" r="30" class="cyc-node cyc-node--gate"/><text x="208.7" y="104.3" class="cyc-lbl">gate</text><text x="300" y="126" class="cyc-center">repeat</text><text x="300" y="146" class="cyc-center-sub">until certifiable</text></svg>
+    <ol class="legend">
+      <li><b>observe</b> — run the ten-control Close Sentinel</li>
+      <li><b>detect</b> — find the earliest category that disagrees with source</li>
+      <li><b>remediate</b> — resync it to the authoritative re-derivation; book the movement</li>
+      <li><b>re-verify</b> — re-run the controls</li>
+      <li><b>gate</b> — post autonomously, or quarantine / halt what it can't certify</li>
+    </ol>
+  </section>
+
+  <section class="stats"><div class="stat"><div class="stat-v">2026-03</div><div class="stat-l">close period</div></div><div class="stat"><div class="stat-v">19</div><div class="stat-l">findings at start</div></div><div class="stat"><div class="stat-v">4</div><div class="stat-l">remediation turns</div></div><div class="stat"><div class="stat-v">prepaid amortization, mgmt fee accrual, note interest, gna allocation</div><div class="stat-l">categories resynced</div></div><div class="stat"><div class="stat-v">33,000.04</div><div class="stat-l">gross movement booked</div></div><div class="stat"><div class="stat-v">1</div><div class="stat-l">held, not acted on</div></div></section>
+
+  <section><h2>Injected drift</h2><p class="muted">The posted close arrives contaminated. Each fault names the control that catches it — the same catalogue the Close Sentinel is proven against.</p><div class="tw"><table><thead><tr><th>Fault</th><th>Control</th><th>Root cause</th></tr></thead><tbody><tr><td><code>interco_one_sided</code></td><td><code>C2</code></td><td>Intercompany note lost its far leg — the lender mirror was dropped</td></tr><tr><td><code>missing_recurring_entry</code></td><td><code>C3</code></td><td>An expected recurring accrual is silently absent from the register</td></tr><tr><td><code>rounded_total_leg</code></td><td><code>C8</code></td><td>A clearing leg booked as round(total) instead of the sum of rounded lines</td></tr><tr><td><code>shadow_tamper</code></td><td><code>C9</code></td><td>One posted amount is off by a single cent from the sub-ledger</td></tr><tr><td><code>prior_period_mutation</code></td><td><code>C10</code></td><td>A signed-off, locked prior period was quietly rewritten</td></tr></tbody></table></div></section>
+  <section><h2>The loop, turn by turn</h2><div class="turn"><div class="turn-h"><span class="turn-n">Turn 1</span><span class="turn-cat">resync prepaid amortization</span><span class="turn-cleared">cleared <span class="pill">C9</span></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:95%" class="fill fill-in"></i></div><span class="bar-n">18</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:84%" class="fill fill-out"></i></div><span class="bar-n">16</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>Account</th><th class="num">From Dr/Cr</th><th class="num">To Dr/Cr</th><th class="num">Δ Dr</th><th class="num">Δ Cr</th></tr></thead><tbody><tr><td>DH</td><td>1400</td><td class="num">0.00/1,700.01</td><td class="num">0.00/1,700.00</td><td class="num delta">0.00</td><td class="num delta">-0.01</td></tr><tr><td>DH</td><td>6400</td><td class="num">1,200.01/0.00</td><td class="num">1,200.00/0.00</td><td class="num delta">-0.01</td><td class="num delta">0.00</td></tr></tbody></table></div></div><div class="turn"><div class="turn-h"><span class="turn-n">Turn 2</span><span class="turn-cat">resync mgmt fee accrual</span><span class="turn-cleared">cleared <span class="pill">C3</span> <span class="pill">C9</span></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:84%" class="fill fill-in"></i></div><span class="bar-n">16</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:47%" class="fill fill-out"></i></div><span class="bar-n">9</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>Account</th><th class="num">From Dr/Cr</th><th class="num">To Dr/Cr</th><th class="num">Δ Dr</th><th class="num">Δ Cr</th></tr></thead><tbody><tr><td>BW</td><td>1000</td><td class="num">0.00/0.00</td><td class="num">0.00/3,000.00</td><td class="num delta">0.00</td><td class="num delta">3,000.00</td></tr><tr><td>BW</td><td>2300</td><td class="num">0.00/0.00</td><td class="num">0.00/5,000.00</td><td class="num delta">0.00</td><td class="num delta">5,000.00</td></tr><tr><td>BW</td><td>6200</td><td class="num">0.00/0.00</td><td class="num">8,000.00/0.00</td><td class="num delta">8,000.00</td><td class="num delta">0.00</td></tr><tr><td>MF</td><td>2300</td><td class="num">0.00/0.00</td><td class="num">0.00/6,000.00</td><td class="num delta">0.00</td><td class="num delta">6,000.00</td></tr><tr><td>MF</td><td>6200</td><td class="num">0.00/0.00</td><td class="num">6,000.00/0.00</td><td class="num delta">6,000.00</td><td class="num delta">0.00</td></tr></tbody></table></div></div><div class="turn"><div class="turn-h"><span class="turn-n">Turn 3</span><span class="turn-cat">resync note interest</span><span class="turn-cleared">cleared <span class="pill">C2</span> <span class="pill">C7</span> <span class="pill">C9</span></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:47%" class="fill fill-in"></i></div><span class="bar-n">9</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:32%" class="fill fill-out"></i></div><span class="bar-n">6</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>Account</th><th class="num">From Dr/Cr</th><th class="num">To Dr/Cr</th><th class="num">Δ Dr</th><th class="num">Δ Cr</th></tr></thead><tbody><tr><td>MF</td><td>1800</td><td class="num">0.00/0.00</td><td class="num">2,500.00/0.00</td><td class="num delta">2,500.00</td><td class="num delta">0.00</td></tr><tr><td>MF</td><td>4900</td><td class="num">0.00/0.00</td><td class="num">0.00/2,500.00</td><td class="num delta">0.00</td><td class="num delta">2,500.00</td></tr></tbody></table></div></div><div class="turn"><div class="turn-h"><span class="turn-n">Turn 4</span><span class="turn-cat">resync gna allocation</span><span class="turn-cleared">cleared <span class="pill">C2</span> <span class="pill">C5</span> <span class="pill">C8</span> <span class="pill">C9</span></span></div><div class="bars"><div class="bar"><span class="bar-l">in</span><div class="track"><i style="width:32%" class="fill fill-in"></i></div><span class="bar-n">6</span></div><div class="bar"><span class="bar-l">out</span><div class="track"><i style="width:5%" class="fill fill-out"></i></div><span class="bar-n">1</span></div></div><div class="tw"><table class="adj"><thead><tr><th>Entity</th><th>Account</th><th class="num">From Dr/Cr</th><th class="num">To Dr/Cr</th><th class="num">Δ Dr</th><th class="num">Δ Cr</th></tr></thead><tbody><tr><td>DH</td><td>1800</td><td class="num">9,000.01/0.00</td><td class="num">9,000.00/0.00</td><td class="num delta">-0.01</td><td class="num delta">0.00</td></tr><tr><td>DH</td><td>6650</td><td class="num">0.00/15,000.01</td><td class="num">0.00/15,000.00</td><td class="num delta">0.00</td><td class="num delta">-0.01</td></tr></tbody></table></div></div></section>
+  <section><h2>Held, not acted on</h2><p class="muted">The boundary of autonomy: what the loop has no authority to fabricate or overwrite, it holds and logs instead of touching.</p><ul class="held"><li><span class="tag tag-q">QUARANTINE</span> <code>C10</code> — closed period mutated <span class="muted">· held + logged, never auto-overwritten</span></li></ul></section>
+
+  <section class="how">
+    <h2>Why it's defensible</h2>
+    <p>Autonomous does not mean ungated — the gate is a deterministic, logged policy instead of a
+    person. The loop never invents a number: every correction is the engine's own re-derivation from
+    the seeded sub-ledger of record, booked as an adjustment. The ten controls remain the acceptance
+    test; the loop only posts once they fall silent over the non-quarantined scope. A broken opening
+    carryforward it will not fabricate; a signed-off locked period it will not overwrite — both are
+    held and logged. The verdict doubles as a CI exit code.</p>
+  </section>
+
+  <footer class="foot">Generated deterministically from <code>close_engine.loop</code> ·
+  fictional data · re-runnable and diffable.</footer>
+</main>
+</body>
+</html>
