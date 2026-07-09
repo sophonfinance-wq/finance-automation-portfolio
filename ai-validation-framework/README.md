@@ -107,6 +107,36 @@ workpaper is blocked from sign-off. The behavior is pinned by
 
 ---
 
+## 🔁 Review loop: arithmetic self-heals, judgment escalates
+
+The adversarial demo proves *detection*. The review loop proves **bounded remediation** — it
+automates exactly the part of a rebuild a machine is entitled to do, and nothing more:
+
+**observe → detect → remediate → re-review → gate → repeat**
+
+Each turn takes the lowest broken formula cell (a `TIE_OUT` finding carries the auditor's
+re-derived expected value), re-derives it **from the cell's own formula on a clone** — a new
+workpaper version with a new digest, so the hash-enforced read-only guard is never touched — and
+sends the new version back through the **full pipeline**: reviewer, specialist, deterministic
+auditor, gate. The loop's fix gets no shortcut; it faces the same three challengers as any preparer.
+
+What it refuses to touch is the point of the framework: an AI-assumption input, a hardcoded cell
+with no formula — there is nothing to re-derive those *from*. They stay in the fix packet for a
+human. **The loop clears arithmetic; it cannot manufacture authority.**
+
+```bash
+# the injected $49k hallucination self-clears — one re-derivation, then a clean re-review:
+python -m triangulate.loop --sample adversarial     # FAIL -> PASS, exit 0
+
+# the defective sample: arithmetic fixed, judgment escalated:
+python -m triangulate.loop --sample defective       # FAIL -> FLAG, exit 1 (fix packet to human)
+```
+```text
+adversarial:  Turn 1  re-derive B5 = =B2+B3+B4 -> 544,000.00  · criticals 6 -> 0 · PASS
+defective:    Turns 1-2 clear the tie-outs; UNSUPPORTED_AI_ASSUMPTION + HARDCODED_NO_FORMULA
+              remain in the fix packet — ESCALATED to a human.
+```
+
 ## Code map
 
 | Concept | Code |
