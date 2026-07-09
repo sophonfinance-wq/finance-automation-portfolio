@@ -181,6 +181,58 @@ distinct failure modes. Injectors with period preconditions guard themselves:
 before any policy has incepted, the renewal fault substitutes a same-class
 crossfoot corruption, so the demo holds at any valid period.
 
+### 🔁 Autonomous Close Loop (`loop.py`)
+
+The Sentinel *detects*; today a human works the exception list and re-runs. The
+**Autonomous Close Loop** closes that loop and takes the operator out of it —
+without pretending the controls no longer matter. The seeded sub-ledger is the
+system of record (the controls already re-derive against it), so
+`CloseEngine(dataset).run()` is the authoritative close. Given a *drifted* posted
+register, the loop runs:
+
+**observe → detect → remediate → re-verify → gate → repeat**
+
+Each turn it finds the earliest recurring-entry **category** whose posted lines
+disagree with the authoritative re-derivation, resyncs that category (booking the
+line-level movement as adjustments), rebuilds the trial balance, and re-runs the
+Sentinel — until every auto-remediable control is silent or a turn budget is spent.
+
+**Autonomous does not mean ungated** — the gate is a deterministic, logged policy
+instead of a person. Two classes of finding are things the loop has no authority
+to act on unilaterally, so it does not:
+
+- **Quarantine** (`C10`, a tampered *locked* prior period): held and logged, never
+  auto-overwritten. The current period still posts.
+- **Halt** (`C1`, an unbalanced *opening* carryforward): the loop refuses to post
+  on a broken opening rather than fabricate one.
+
+It never invents a number: the settled register is byte-identical to a clean
+engine run. The verdict doubles as a CI exit code:
+
+| Verdict | Meaning | Exit |
+|---|---|:--:|
+| `AUTO-POSTED` | clean; posted autonomously, nothing held | 0 |
+| `AUTO-POSTED (PARTIAL)` | posted autonomously; some scope quarantined + logged | 0 |
+| `HALTED` | could not certify a postable close; escalated | 1 |
+
+```bash
+# inject a drift profile + a tampered locked prior, and watch the loop clear it:
+python -m close_engine.loop --demo --out output
+```
+```text
+Verdict: ⚑ AUTO-POSTED (PARTIAL)
+Turn 1 — resync prepaid_amortization · cleared C9  · 18 → 16 critical
+Turn 2 — resync mgmt_fee_accrual    · cleared C3, C9 · 16 → 9 critical
+Turn 3 — resync note_interest       · cleared C2, C7, C9 · 9 → 6 critical
+Turn 4 — resync gna_allocation      · cleared C2, C5, C8, C9 · 6 → 1 critical
+Held: QUARANTINE C10 — closed period mutated (held + logged; not auto-overwritten)
+```
+
+The run also writes **`output/autonomous_close_loop.html`** — a single-file,
+self-contained visual of the loop (the five-stage cycle, the turn-by-turn
+break-clearing, the adjustments ledger, and what was held). Run on a clean close
+(drop `--demo`) and it auto-posts in zero turns.
+
 ### Scope and assumptions
 
 Known limits, stated so the controls are read for exactly what they prove:
