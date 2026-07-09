@@ -176,6 +176,8 @@ Reconciliation: OK (212/212 identity checks pass)
 
 ### Continuous Assurance Loop (`loop.py`)
 
+<p align="center"><img src="../assets/systems/surplus-loop.gif" alt="Surplus Assurance Loop — live demo: drifted workpapers re-derived from source period by period, 6 breaks to 0, verdict FLAG for human review" width="100%"></p>
+
 The `--check` gate answers *"does it tie out?"* — one pass, pass/fail. The **assurance loop**
 answers the operational question that comes next: *"it doesn't tie out — drive it back to clean,
 show me every correction, and don't sign off until a human sees what changed."* It closes the

@@ -61,7 +61,20 @@ def darken(c, t=0.55):
 
 
 def f(name, size):
-    return ImageFont.truetype(f"C:/Windows/Fonts/{name}.ttf", size * S)
+    """Load a font by Windows name, falling back to Liberation faces on Linux."""
+    candidates = [f"C:/Windows/Fonts/{name}.ttf"]
+    linux = {
+        "segoeui": "LiberationSans-Regular", "seguisb": "LiberationSans-Bold",
+        "consola": "LiberationMono-Regular", "consolab": "LiberationMono-Bold",
+    }.get(name)
+    if linux:
+        candidates.append(f"/usr/share/fonts/truetype/liberation/{linux}.ttf")
+    for path in candidates:
+        try:
+            return ImageFont.truetype(path, size * S)
+        except OSError:
+            continue
+    raise OSError(f"no font found for {name!r}")
 
 
 UI       = f("segoeui", 19)
@@ -165,6 +178,11 @@ def draw_icon(g, name, box, color=WHITE):
         g.line([cx, y + 6, cx, y + h - 6], fill=color, width=2)
         for px, py in ((cx - 5, y + 11), (cx + 5, y + 14), (cx - 4, y + h - 12), (cx + 5, y + h - 13)):
             g.ellipse([px - 2, py - 2, px + 2, py + 2], fill=color)
+    elif name == "loop":
+        # circular arrow: open ring + arrowhead (the self-healing cycle)
+        g.d.arc([c * S for c in (x + 5, y + 5, x + w - 5, y + h - 5)],
+                start=-50, end=230, fill=color, width=2 * S)
+        g.polygon([(x + w - 6, y + 4), (x + w - 1, y + 10), (x + w - 12, y + 12)], fill=color)
 
 
 def build_base(sys):
@@ -579,8 +597,79 @@ SYSTEMS = [
 ]
 
 
+SYSTEMS += [
+    {
+        "key": "close-loop", "accent": (37, 99, 235), "icon": "loop",
+        "file": "close_engine/loop.py", "name": "Autonomous Close Loop",
+        "subtitle": "observe → detect → remediate → re-verify → gate · no operator",
+        "code_caption": "resync the earliest drifted category to source",
+        "tests": 11, "footer": "authority: the sub-ledger of record · quarantines what it can't certify",
+        "pill": "AUTO-POSTED", "badge_color": AMBER, "badge": "AUTO-POSTED (PARTIAL)",
+        "badge_sub": "4 categories resynced · locked-period tamper quarantined, not overwritten",
+        "kpis": [("19", "Findings in"), ("4", "Turns"), ("1", "Quarantined")],
+        "code": [
+            [kw("while"), (" blocking(report) ", C_PLN), kw("and"), (" len(turns) < budget:", C_PLN)],
+            [("    # earliest category that disagrees with source", C_COM)],
+            [("    category = differing(posted, authoritative)[", C_PLN), ("0", C_NUM), ("]", C_PLN)],
+            [("    adjustments = resync(posted, authoritative,", C_PLN)],
+            [("                         category)", C_PLN), ("   # book every delta", C_COM)],
+            [("    report = run_sentinel(dataset, posted)", C_PLN), ("  # re-verify", C_COM)],
+            [("", C_PLN)],
+            [("# the boundary of autonomy — held, never rubber-stamped", C_COM)],
+            [("QUARANTINE = {", C_PLN), ('"C10"', C_STR), ("}", C_PLN), ("   # locked period tampered", C_COM)],
+            [("HALT       = {", C_PLN), ('"C1"', C_STR), ("}", C_PLN), ("    # opening TB broken", C_COM)],
+            [kw("return"), (" verdict(report)", C_PLN), ("     # doubles as exit code", C_COM)],
+        ],
+        "console": [
+            [("$ ", (37, 99, 235)), ("python -m close_engine.loop --demo", TEXT)],
+            [("Verdict: ", DIM), ("AUTO-POSTED (PARTIAL)", AMBER, True)],
+            [("  Turn 1  resync prepaid_amortization   18 -> 16 critical", DIM)],
+            [("  Turn 2  resync mgmt_fee_accrual       16 ->  9 critical", DIM)],
+            [("  Turn 3  resync note_interest           9 ->  6 critical", DIM)],
+            [("  Turn 4  resync gna_allocation          6 ->  1 critical", DIM)],
+            [("  QUARANTINE ", AMBER), ("C10 closed period mutated — held + logged", TEXT)],
+        ],
+    },
+    {
+        "key": "surplus-loop", "accent": (180, 83, 9), "icon": "loop",
+        "file": "surplus_engine/loop.py", "name": "Surplus Assurance Loop",
+        "subtitle": "drifted workpapers → re-derive from source → lock periods → human gate",
+        "code_caption": "settle the earliest failing fiscal period",
+        "tests": 12, "footer": "sensor: 212 identity checks · never invents a number",
+        "pill": "FLAG", "badge_color": AMBER, "badge": "VERDICT: FLAG",
+        "badge_sub": "converged in 3 turns · CAD 107,088.50 of adjustments for human review",
+        "kpis": [("212", "Identity checks"), ("3", "Periods locked"), ("6→0", "Breaks")],
+        "code": [
+            [kw("while"), (" ", C_PLN), kw("not"), (" report.ok ", C_PLN), kw("and"), (" len(turns) < budget:", C_PLN)],
+            [("    # earliest fiscal period still failing an identity", C_COM)],
+            [("    earliest = min(c.year ", C_PLN), kw("for"), (" c ", C_PLN), kw("in"), (" report.breaks)", C_PLN)],
+            [("    adjustments = settle_year(workpapers,", C_PLN)],
+            [("        authoritative, earliest)", C_PLN), ("  # re-derive + lock", C_COM)],
+            [("    report = reconcile(workpapers, structure)", C_PLN)],
+            [("", C_PLN)],
+            [("total_cad = sum(a.delta_cad ", C_PLN), kw("for"), (" a ", C_PLN), kw("in"), (" booked)", C_PLN)],
+            [kw("if"), (" total_cad > materiality: ", C_PLN), kw("return"), (" ", C_PLN), ('"FLAG"', C_STR)],
+            [("    # ties out — but a human reviews what changed", C_COM)],
+        ],
+        "console": [
+            [("$ ", (180, 83, 9)), ("python -m surplus_engine.loop --demo", TEXT)],
+            [("Verdict: ", DIM), ("FLAG", AMBER, True), ("  — converged, material adjustments booked", DIM)],
+            [("  Turn 1  lock FY2021   6 breaks -> 4   exempt -50,000.00", DIM)],
+            [("  Turn 2  lock FY2022   4 breaks -> 2   elevation -8,000.00", DIM)],
+            [("  Turn 3  lock FY2023   2 breaks -> 0   ACB -15,000.00", DIM)],
+            [("  212/212 identity checks pass — byte-identical to a clean run", GREEN, True)],
+        ],
+    },
+]
+
+
 if __name__ == "__main__":
+    import sys as _sys
+
+    keys = set(_sys.argv[1:])
     print("Rendering premium system GIFs (2x supersampled):")
     for sys in SYSTEMS:
+        if keys and sys["key"] not in keys:
+            continue
         render(sys)
     print("Done ->", OUT)
