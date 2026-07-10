@@ -5,7 +5,7 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-14%2C686%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
+[![Tests](https://img.shields.io/badge/tests-14%2C740%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
 [![Systems](https://img.shields.io/badge/systems-8%20runnable-6f42c1)](#the-eight-systems)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
@@ -133,16 +133,16 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **10,839** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems. Runs in under two minutes; gates CI. |
+| **Curated** (default) | `pytest` | **14,740** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems. Runs in under two minutes; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.09M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
 default run (and CI) for speed and generated at import — the files stay small. It's there for
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
-Curated tests by system: close **1,800** · partnership **1,605** · knowledge-brain **1,499** ·
-tax-surplus **1,486** · validation **1,314** · triangulate **1,311** · recon **1,001** ·
-atlas **823** (including a parametrized deny-list confidentiality linter across every shipped file).
+Curated tests by system: close **5,553** · partnership **1,605** · knowledge-brain **1,511** ·
+tax-surplus **1,498** · validation **1,314** · triangulate **1,320** · recon **1,011** ·
+atlas **928** (including a parametrized deny-list confidentiality linter across every shipped file).
 
 ---
 
