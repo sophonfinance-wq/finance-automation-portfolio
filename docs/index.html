@@ -241,6 +241,8 @@
   .controls-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border);
     border:1px solid var(--border); margin-top:32px; }
   .ctl { background:#fff; padding:22px 24px; }
+  .ctl-vis { margin:-22px -24px 16px; border-bottom:1px solid var(--border); }
+  .ctl-vis img, .ctl-vis video { display:block; width:100%; height:auto; }
   .ctl .cid { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--blue); letter-spacing:.6px; }
   .ctl h3 { font-size:15.5px; font-weight:600; margin:8px 0 5px; }
   .ctl p { font-size:13.5px; color:var(--text-2); line-height:1.55; }
@@ -268,6 +270,8 @@
   .steps { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--border);
     border:1px solid var(--border); margin-top:32px; counter-reset:step; }
   .step { background:#fff; padding:22px 22px 20px; }
+  .step-vis { margin:-22px -22px 14px; border-bottom:1px solid var(--border); }
+  .step-vis img, .step-vis video { display:block; width:100%; height:auto; }
   .step .n { font-family:var(--mono); font-size:12px; color:var(--blue); font-weight:500; }
   .step .tag { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.6px; text-transform:uppercase;
     color:var(--blue); background:var(--blue-tint); padding:3px 8px; margin:10px 0 8px; }
@@ -277,9 +281,11 @@
   .process-fine b { color:var(--text); font-weight:600; }
 
   /* founder line */
-  .founder { display:flex; gap:20px; align-items:flex-start; border:1px solid var(--border); background:#fff;
-    padding:26px 28px; margin-top:48px; }
-  .founder-mark { flex:none; width:52px; height:52px; background:var(--blue-tint); display:flex; align-items:center; justify-content:center; }
+  .founder { display:flex; gap:0; align-items:stretch; border:1px solid var(--border); background:#fff;
+    padding:0; margin-top:48px; }
+  .founder > div:last-child { padding:30px 34px; border-top:2px solid var(--blue); }
+  .founder-photo { flex:none; width:216px; position:relative; }
+  .founder-photo img { display:block; width:100%; height:100%; min-height:216px; object-fit:cover; object-position:center 22%; }
   .founder h3 { font-size:16px; font-weight:600; }
   .founder .role { font-family:var(--mono); font-size:11px; letter-spacing:.5px; color:var(--blue); margin:2px 0 8px; }
   .founder p { font-size:14px; color:var(--text-2); max-width:70em; }
@@ -397,7 +403,7 @@
   <div class="wrap hero-grid">
     <div>
       <p class="kicker">FINANCE &amp; ACCOUNTING AUTOMATION</p>
-      <h1>automate the work.<br><strong>keep the judgment.</strong></h1>
+      <h1>Automate the work.<br><strong>Keep the judgment.</strong></h1>
       <p class="hero-sub">We build AI engines that take over the repetitive work of finance teams &mdash; close, reconciliation, partnership tax &mdash; and return it <b>drafted, tied out, and cited to source</b>. Independent verification checks every run. <b>Your people approve every output.</b></p>
       <div class="hero-ctas">
         <a class="btn btn-p" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Book a free consultation
@@ -646,12 +652,12 @@
       <p class="lead">Wherever code can enforce a control, it does &mdash; inspectable in the public repository. Where it can't, the commitment goes into the engagement terms, in writing.</p>
     </div>
     <div class="controls-grid reveal">
-      <div class="ctl"><span class="cid">C-01</span><h3>Evidence first</h3><p>Every computed figure carries a citation to its source &mdash; file, sheet, row. No orphan numbers.</p></div>
-      <div class="ctl"><span class="cid">C-02</span><h3>Independent verification</h3><p>A separate pass with separate logic recomputes the work. The preparer never grades itself.</p></div>
-      <div class="ctl"><span class="cid">C-03</span><h3>Completeness &amp; separation of duties</h3><p>Populations reconciled in full; preparer, reviewer, auditor, and human gate are distinct roles in the software.</p></div>
-      <div class="ctl"><span class="cid">C-04</span><h3>Human approval</h3><p>Nothing posts, sends, or files itself. Your people hold final sign-off on every output.</p></div>
-      <div class="ctl"><span class="cid">C-05</span><h3>Your environment, your data</h3><p>Engines run inside your environment or one you approve. Outputs, workpapers, and documentation are yours.</p></div>
-      <div class="ctl"><span class="cid">C-06</span><h3>Refusal &amp; audit trail</h3><p>Out-of-tie entries cannot post and unverified reports do not ship &mdash; and every run writes a log of what it read, computed, and corrected.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-01.webp" data-video="assets/ctl-01-motion.mp4" alt="A financial document in a silver display frame, one figure traced by a thin cobalt thread to its highlighted cell in the source ledger" width="1376" height="768" loading="lazy"></div><span class="cid">C-01</span><h3>Evidence first</h3><p>Every computed figure carries a citation to its source &mdash; file, sheet, row. No orphan numbers.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-02.webp" data-video="assets/ctl-02-motion.mp4" alt="Two identical silver verification machines processing the same documents, joined by a thin cobalt line with a checkmark seal where they agree" width="1376" height="768" loading="lazy"></div><span class="cid">C-02</span><h3>Independent verification</h3><p>A separate pass with separate logic recomputes the work. The preparer never grades itself.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-03.webp" data-video="assets/ctl-03-motion.mp4" alt="Four distinct silver instruments in a row passing one complete tray of documents through every station in sequence" width="1376" height="768" loading="lazy"></div><span class="cid">C-03</span><h3>Completeness &amp; separation of duties</h3><p>Populations reconciled in full; preparer, reviewer, auditor, and human gate are distinct roles in the software.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-04.webp" data-video="assets/ctl-04-motion.mp4" alt="A finished document in an approval tray with a silver stamp and pen beside an empty signature line awaiting a person" width="1376" height="768" loading="lazy"></div><span class="cid">C-04</span><h3>Human approval</h3><p>Nothing posts, sends, or files itself. Your people hold final sign-off on every output.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-05.webp" data-video="assets/ctl-05-motion.mp4" alt="A sealed glass vault holding document stacks with a single silver key resting in front — the client's environment and data" width="1376" height="768" loading="lazy"></div><span class="cid">C-05</span><h3>Your environment, your data</h3><p>Engines run inside your environment or one you approve. Outputs, workpapers, and documentation are yours.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-06.webp" data-video="assets/ctl-06-motion.mp4" alt="A silver control gate calmly declining one out-of-tie entry card while a glass audit panel logs the refusal" width="1376" height="768" loading="lazy"></div><span class="cid">C-06</span><h3>Refusal &amp; audit trail</h3><p>Out-of-tie entries cannot post and unverified reports do not ship &mdash; and every run writes a log of what it read, computed, and corrected.</p></div>
     </div>
     <p class="controls-note reveal">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg>
@@ -707,17 +713,17 @@
       <h2>Five steps. <strong>The first one is free.</strong></h2>
     </div>
     <div class="steps reveal">
-      <div class="step"><span class="n">01</span><br><span class="tag">Free</span><h3>Consultation</h3><p>You walk us through the month. We tell you honestly what is automatable &mdash; and what isn't.</p></div>
-      <div class="step"><span class="n">02</span><br><span class="tag">2–5 days</span><h3>Observation</h3><p>We sit with your accountants &mdash; as accountants &mdash; and map the real workflow.</p></div>
-      <div class="step"><span class="n">03</span><br><span class="tag">Yours to keep</span><h3>Executive plan</h3><p>What to automate, what to leave human, and a fixed price for each phase.</p></div>
-      <div class="step"><span class="n">04</span><br><span class="tag">Phased</span><h3>Build &amp; launch</h3><p>Live task by task. Your team approves every output. Stop after any phase.</p></div>
-      <div class="step"><span class="n">05</span><br><span class="tag">No lock-in</span><h3>Handover</h3><p>Documentation and training. Your team owns everything. No black box.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-01.webp" data-video="assets/step-01-motion.mp4" alt="An open monthly-close binder with a cobalt bookmark on a round glass consultation table between two chairs" width="1376" height="768" loading="lazy"></div><span class="n">01</span><br><span class="tag">Free</span><h3>Consultation</h3><p>You walk us through the month. We tell you honestly what is automatable &mdash; and what isn't.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-02.webp" data-video="assets/step-02-motion.mp4" alt="A silver observation scope over a flowing line of documents and a ledger, tracing the real workflow" width="1376" height="768" loading="lazy"></div><span class="n">02</span><br><span class="tag">2–5 days</span><h3>Observation</h3><p>We sit with your accountants &mdash; as accountants &mdash; and map the real workflow.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-03.webp" data-video="assets/step-03-motion.mp4" alt="A bound white executive plan with cobalt index tabs beside a silver seal and a fixed-price card" width="1376" height="768" loading="lazy"></div><span class="n">03</span><br><span class="tag">Yours to keep</span><h3>Executive plan</h3><p>What to automate, what to leave human, and a fixed price for each phase.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-04.webp" data-video="assets/step-04-motion.mp4" alt="Modular silver blocks assembling in phases along a cobalt guide line, a checkmark on each completed block" width="1376" height="768" loading="lazy"></div><span class="n">04</span><br><span class="tag">Phased</span><h3>Build &amp; launch</h3><p>Live task by task. Your team approves every output. Stop after any phase.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-05.webp" data-video="assets/step-05-motion.mp4" alt="An open silver case of documentation binders with a single key on a card handed over in front" width="1376" height="768" loading="lazy"></div><span class="n">05</span><br><span class="tag">No lock-in</span><h3>Handover</h3><p>Documentation and training. Your team owns everything. No black box.</p></div>
     </div>
     <p class="process-fine reveal">Pricing is <b>fixed per phase, scoped after observation</b> &mdash; stop after any phase and keep everything built to that point.</p>
 
     <div class="founder reveal" id="about">
-      <div class="founder-mark" aria-hidden="true">
-        <svg width="26" height="26" viewBox="0 0 48 48"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+      <div class="founder-photo">
+        <img src="assets/founder.webp" alt="Sophonnarith Hang, founder of Sophon Finance Systems, in his office" width="720" height="720" loading="lazy">
       </div>
       <div>
         <h3>Built by an accountant who engineers.</h3>
