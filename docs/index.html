@@ -223,30 +223,51 @@
   .tile.hot a:hover { text-decoration:underline; }
 
   /* ============ SELF-HEALING ============ */
-  .chainrow { display:flex; flex-wrap:wrap; gap:10px; align-items:stretch; margin:34px 0 22px; }
-  .chip { display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--border); padding:14px 18px; }
-  .chip i { font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.8px; color:var(--text-3); display:block; }
-  .chip b { display:block; font-size:14px; font-weight:600; color:var(--text); line-height:1.25; }
-  .chip.hot { border-color:var(--blue); }
-  .chip.hot i { color:var(--blue); }
-  .chip.ok { border-color:var(--green); }
-  .chip.ok i { color:var(--green); }
-  .chain-arrow { display:flex; align-items:center; color:var(--text-3); }
-  .loop-line { font-size:14.5px; color:var(--text-2); max-width:56em; }
-  .loop-line b { color:var(--text); font-weight:600; }
-  .loop-outcomes { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin:26px 0 22px; }
-  .loop-outcomes div { background:#fff; padding:16px 20px; font-size:13.5px; color:var(--text-2); }
-  .loop-outcomes b { display:block; font-size:14px; color:var(--text); font-weight:600; margin-bottom:3px; }
-  .loop-outcomes .ok b { color:var(--green); }
-  .loop-outcomes .fix b { color:var(--blue); }
-  .loop-outcomes .esc b { color:#8a6a00; }
+  /* ============ SELF-HEALING FLOW ============ */
+  .flow { margin:34px 0 24px; }
+  .flow-pipe { position:relative; display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .flow-track { position:absolute; left:0; right:0; top:50%; height:2px; transform:translateY(-50%); width:100%; z-index:0; overflow:visible; }
+  .flow-track .ft-base { stroke:var(--border); stroke-width:2; vector-effect:non-scaling-stroke; }
+  .flow-track .ft-pulse { stroke:var(--blue); stroke-width:2.5; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-dasharray:26 974; animation:pipeFlow 3.2s linear infinite; }
+  .fnode { position:relative; z-index:1; background:#fff; border:1px solid var(--border); padding:14px 16px; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+  .fnode i { font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.8px; color:var(--text-3); display:block; margin-bottom:3px; }
+  .fnode b { display:block; font-size:14px; font-weight:600; color:var(--text); line-height:1.25; }
+  .fnode:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(15,42,92,.08); }
+  .fnode.hot { border-color:var(--blue); } .fnode.hot i { color:var(--blue); }
+  .fnode.dec { border-color:var(--navy); box-shadow:inset 0 0 0 1px var(--navy); } .fnode.dec i { color:var(--navy); }
+  .flow-branch { display:block; width:100%; height:54px; margin-top:-1px; overflow:visible; }
+  .flow-branch .fb-base { fill:none; stroke:var(--border); stroke-width:2; vector-effect:non-scaling-stroke; }
+  .flow-branch .fb-trunk { fill:none; stroke:var(--blue); stroke-width:2.5; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-dasharray:18 300; animation:branchTrunk 2.2s linear infinite; }
+  .flow-branch .fb { fill:none; stroke-width:2.5; vector-effect:non-scaling-stroke; stroke-dasharray:7 8; animation:branchFlow 1s linear infinite; }
+  .flow-branch .fb.ok { stroke:var(--green); } .flow-branch .fb.fix { stroke:var(--blue); animation-delay:.15s; } .flow-branch .fb.esc { stroke:#b0850f; animation-delay:.3s; }
+  .flow-outs { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .fout { position:relative; background:#fff; border:1px solid var(--border); border-top-width:3px; padding:17px 18px 18px; transition:transform .18s ease, box-shadow .18s ease; }
+  .fout .fdot { position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:12px; height:12px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px var(--border); }
+  .fout b { display:block; font-size:14px; font-weight:600; margin:1px 0 5px; }
+  .fout span { display:block; font-size:13px; color:var(--text-2); line-height:1.5; }
+  .fout:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(15,42,92,.09); }
+  .fout.ok { border-top-color:var(--green); } .fout.ok b { color:var(--green); } .fout.ok .fdot { background:var(--green); box-shadow:0 0 0 1px var(--green); }
+  .fout.fix { border-top-color:var(--blue); } .fout.fix b { color:var(--blue); } .fout.fix .fdot { background:var(--blue); box-shadow:0 0 0 1px var(--blue); }
+  .fout.esc { border-top-color:#b0850f; } .fout.esc b { color:#8a6a00; } .fout.esc .fdot { background:#b0850f; box-shadow:0 0 0 1px #b0850f; }
+  @keyframes pipeFlow { to { stroke-dashoffset:-1000; } }
+  @keyframes branchTrunk { to { stroke-dashoffset:-318; } }
+  @keyframes branchFlow { to { stroke-dashoffset:-15; } }
+  @media (prefers-reduced-motion: reduce) { .flow-track .ft-pulse { display:none; } .flow-branch .fb-trunk { display:none; } .flow-branch .fb { animation:none; stroke-dasharray:none; } }
 
   /* ============ CONTROLS ============ */
   .controls-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border);
     border:1px solid var(--border); margin-top:32px; }
   .ctl { background:#fff; padding:22px 24px; }
-  .ctl-vis { margin:-22px -24px 16px; border-bottom:1px solid var(--border); }
+  .ctl-vis { margin:-22px -24px 16px; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
   .ctl-vis img, .ctl-vis video { display:block; width:100%; height:auto; }
+  /* pulsing LED glow overlay for still tiles */
+  .vis-glow { position:absolute; left:var(--gx); top:var(--gy); width:8%; aspect-ratio:1; transform:translate(-50%,-50%);
+    border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle, rgba(37,99,235,.9) 0%, rgba(37,99,235,.35) 42%, rgba(37,99,235,0) 70%);
+    filter:blur(2px); opacity:.4; animation:glowPulse 2.8s ease-in-out infinite; animation-delay:var(--gd, 0s); }
+  .vis-glow.amber { background:radial-gradient(circle, rgba(217,119,6,.85) 0%, rgba(217,119,6,.3) 42%, rgba(217,119,6,0) 70%); }
+  @keyframes glowPulse { 0%,100% { opacity:.28; transform:translate(-50%,-50%) scale(.8); } 50% { opacity:1; transform:translate(-50%,-50%) scale(1.18); } }
+  @media (prefers-reduced-motion: reduce) { .vis-glow { animation:none; opacity:.45; } }
   .ctl .cid { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--blue); letter-spacing:.6px; }
   .ctl h3 { font-size:15.5px; font-weight:600; margin:8px 0 5px; }
   .ctl p { font-size:13.5px; color:var(--text-2); line-height:1.55; }
@@ -274,7 +295,7 @@
   .steps { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--border);
     border:1px solid var(--border); margin-top:32px; counter-reset:step; }
   .step { background:#fff; padding:22px 22px 20px; }
-  .step-vis { margin:-22px -22px 14px; border-bottom:1px solid var(--border); }
+  .step-vis { margin:-22px -22px 14px; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
   .step-vis img, .step-vis video { display:block; width:100%; height:auto; }
   .step .n { font-family:var(--mono); font-size:12px; color:var(--blue); font-weight:500; }
   .step .tag { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.6px; text-transform:uppercase;
@@ -330,7 +351,12 @@
     .controls-grid { grid-template-columns:1fr 1fr; }
     .eng-grid { grid-template-columns:1fr; }
     .steps { grid-template-columns:repeat(2,1fr); }
-    .loop-outcomes { grid-template-columns:1fr; }
+    .flow-outs { grid-template-columns:1fr; }
+    .flow-pipe { grid-template-columns:1fr; gap:9px; }
+    .flow-track, .flow-branch { display:none; }
+    .fout { border-top-width:1px; border-left-width:3px; }
+    .fout.ok { border-left-color:var(--green); } .fout.fix { border-left-color:var(--blue); } .fout.esc { border-left-color:#b0850f; }
+    .fout .fdot { display:none; }
     .stats-in { grid-template-columns:1fr 1fr; }
     .stat:nth-child(3) { border-left:none; padding-left:0; }
     .stat { padding:22px 22px 20px; }
@@ -359,8 +385,6 @@
     .hero-ctas .btn, .final-ctas .btn { width:100%; }
     .flag-head, .flag-col, .flag-foot { padding-left:20px; padding-right:20px; }
     .flag-foot .gate { margin-left:0; }
-    .chainrow { flex-direction:column; }
-    .chain-arrow { transform:rotate(90deg); width:24px; margin:0 auto; }
     .founder { flex-direction:column; }
   }
 
@@ -629,19 +653,26 @@
       <h2>The engines run the <strong>control loop themselves.</strong></h2>
       <p class="lead">Each engine watches its own output, corrects routine drift from source data, re-verifies every correction against an independent recomputation, and escalates the judgment calls to a person. Nothing self-certifies.</p>
     </div>
-    <div class="chainrow reveal" role="img" aria-label="The control loop: source data flows to the finance engine, then to an independent recomputation, then to a tie-out decision.">
-      <div class="chip"><div><i>SOURCE</i><b>GL · bank · schedules</b></div></div>
-      <span class="chain-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      <div class="chip hot"><div><i>COMPUTE</i><b>Finance engine</b></div></div>
-      <span class="chain-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      <div class="chip"><div><i>SEPARATE LOGIC</i><b>Independent recompute</b></div></div>
-      <span class="chain-arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      <div class="chip ok"><div><i>DECISION</i><b>Tie-out</b></div></div>
-    </div>
-    <div class="loop-outcomes reveal">
-      <div class="ok"><b>Ties &rarr; posts with evidence</b>When the independent check confirms the work, it posts with a written audit trail.</div>
-      <div class="fix"><b>Routine break &rarr; fixed from source</b>A mis-keyed cell or dropped intercompany leg is corrected, then re-verified before it counts.</div>
-      <div class="esc"><b>Judgment call &rarr; a person</b>What the loop cannot prove is quarantined and flagged &mdash; never rubber-stamped.</div>
+    <div class="flow reveal" role="img" aria-label="Control loop: source data flows to the finance engine, then an independent recompute, then a tie-out decision that branches to three outcomes — ties post with evidence, routine breaks are fixed from source, and judgment calls escalate to a person.">
+      <div class="flow-pipe">
+        <svg class="flow-track" viewBox="0 0 1000 2" preserveAspectRatio="none" aria-hidden="true"><line class="ft-base" x1="0" y1="1" x2="1000" y2="1"/><line class="ft-pulse" x1="0" y1="1" x2="1000" y2="1"/></svg>
+        <div class="fnode"><i>SOURCE</i><b>GL · bank · schedules</b></div>
+        <div class="fnode hot"><i>COMPUTE</i><b>Finance engine</b></div>
+        <div class="fnode"><i>SEPARATE LOGIC</i><b>Independent recompute</b></div>
+        <div class="fnode dec"><i>DECISION</i><b>Tie-out</b></div>
+      </div>
+      <svg class="flow-branch" viewBox="0 0 1000 54" preserveAspectRatio="none" aria-hidden="true">
+        <path class="fb-base" d="M875 0 V22 H166 M166 22 V54 M500 22 V54 M834 22 V54"/>
+        <path class="fb-trunk" d="M875 0 V22 H166"/>
+        <path class="fb ok"  d="M166 22 V54"/>
+        <path class="fb fix" d="M500 22 V54"/>
+        <path class="fb esc" d="M834 22 V54"/>
+      </svg>
+      <div class="flow-outs">
+        <div class="fout ok"><span class="fdot" aria-hidden="true"></span><b>Ties &rarr; posts with evidence</b><span>When the independent check confirms the work, it posts with a written audit trail.</span></div>
+        <div class="fout fix"><span class="fdot" aria-hidden="true"></span><b>Routine break &rarr; fixed from source</b><span>A mis-keyed cell or dropped intercompany leg is corrected, then re-verified before it counts.</span></div>
+        <div class="fout esc"><span class="fdot" aria-hidden="true"></span><b>Judgment call &rarr; a person</b><span>What the loop cannot prove is quarantined and flagged &mdash; never rubber-stamped.</span></div>
+      </div>
     </div>
     <p class="loop-line reveal">You set the policy: <b>full autonomy</b> in approved environments, or a <b>human sign-off on every post</b> &mdash; the controls and audit trail are identical either way. Live today on five engines; every loop writes its own run report, with sample reports committed <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">on GitHub</a>.</p>
   </div>
@@ -656,12 +687,12 @@
       <p class="lead">Wherever code can enforce a control, it does &mdash; inspectable in the public repository. Where it can't, the commitment goes into the engagement terms, in writing.</p>
     </div>
     <div class="controls-grid reveal">
-      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-01.webp" data-video="assets/ctl-01-motion.mp4" alt="A financial document in a silver display frame, one figure traced by a thin cobalt thread to its highlighted cell in the source ledger" width="1376" height="768" loading="lazy"></div><span class="cid">C-01</span><h3>Evidence first</h3><p>Every computed figure carries a citation to its source &mdash; file, sheet, row. No orphan numbers.</p></div>
-      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-02.webp" data-video="assets/ctl-02-motion.mp4" alt="Two identical silver verification machines processing the same documents, joined by a thin cobalt line with a checkmark seal where they agree" width="1376" height="768" loading="lazy"></div><span class="cid">C-02</span><h3>Independent verification</h3><p>A separate pass with separate logic recomputes the work. The preparer never grades itself.</p></div>
-      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-03.webp" data-video="assets/ctl-03-motion.mp4" alt="Four distinct silver instruments in a row passing one complete tray of documents through every station in sequence" width="1376" height="768" loading="lazy"></div><span class="cid">C-03</span><h3>Completeness &amp; separation of duties</h3><p>Populations reconciled in full; preparer, reviewer, auditor, and human gate are distinct roles in the software.</p></div>
-      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-04.webp" data-video="assets/ctl-04-motion.mp4" alt="A finished document in an approval tray with a silver stamp and pen beside an empty signature line awaiting a person" width="1376" height="768" loading="lazy"></div><span class="cid">C-04</span><h3>Human approval</h3><p>Nothing posts, sends, or files itself. Your people hold final sign-off on every output.</p></div>
-      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-05.webp" data-video="assets/ctl-05-motion.mp4" alt="A sealed glass vault holding document stacks with a single silver key resting in front — the client's environment and data" width="1376" height="768" loading="lazy"></div><span class="cid">C-05</span><h3>Your environment, your data</h3><p>Engines run inside your environment or one you approve. Outputs, workpapers, and documentation are yours.</p></div>
-      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-06.webp" data-video="assets/ctl-06-motion.mp4" alt="A silver control gate calmly declining one out-of-tie entry card while a glass audit panel logs the refusal" width="1376" height="768" loading="lazy"></div><span class="cid">C-06</span><h3>Refusal &amp; audit trail</h3><p>Out-of-tie entries cannot post and unverified reports do not ship &mdash; and every run writes a log of what it read, computed, and corrected.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-01.webp" alt="A financial document in a silver display frame, one figure traced by a thin cobalt thread to its highlighted cell in the source ledger" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:66.5%;--gy:79%" aria-hidden="true"></span></div><span class="cid">C-01</span><h3>Evidence first</h3><p>Every computed figure carries a citation to its source &mdash; file, sheet, row. No orphan numbers.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-02.webp" alt="Two identical silver verification machines processing the same documents, joined by a thin cobalt line with a checkmark seal where they agree" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:28%;--gy:38%" aria-hidden="true"></span><span class="vis-glow" style="--gx:80%;--gy:38%;--gd:1.4s" aria-hidden="true"></span></div><span class="cid">C-02</span><h3>Independent verification</h3><p>A separate pass with separate logic recomputes the work. The preparer never grades itself.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-03.webp" alt="Four distinct silver instruments in a row passing one complete tray of documents through every station in sequence" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:40%;--gy:50%" aria-hidden="true"></span><span class="vis-glow" style="--gx:78%;--gy:24%;--gd:1.2s" aria-hidden="true"></span></div><span class="cid">C-03</span><h3>Completeness &amp; separation of duties</h3><p>Populations reconciled in full; preparer, reviewer, auditor, and human gate are distinct roles in the software.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-04.webp" alt="A finished document in an approval tray with a silver stamp and pen beside an empty signature line awaiting a person" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:69.5%;--gy:57%" aria-hidden="true"></span><span class="vis-glow" style="--gx:34%;--gy:18%;--gd:0.7s" aria-hidden="true"></span></div><span class="cid">C-04</span><h3>Human approval</h3><p>Nothing posts, sends, or files itself. Your people hold final sign-off on every output.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-05.webp" alt="A sealed glass vault holding document stacks with a single silver key resting in front — the client's environment and data" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:59.5%;--gy:58.5%" aria-hidden="true"></span></div><span class="cid">C-05</span><h3>Your environment, your data</h3><p>Engines run inside your environment or one you approve. Outputs, workpapers, and documentation are yours.</p></div>
+      <div class="ctl"><div class="ctl-vis"><img src="assets/ctl-06.webp" alt="A silver control gate calmly declining one out-of-tie entry card while a glass audit panel logs the refusal" width="1376" height="768" loading="lazy"><span class="vis-glow amber" style="--gx:55.5%;--gy:78%" aria-hidden="true"></span><span class="vis-glow" style="--gx:75%;--gy:66%;--gd:0.9s" aria-hidden="true"></span></div><span class="cid">C-06</span><h3>Refusal &amp; audit trail</h3><p>Out-of-tie entries cannot post and unverified reports do not ship &mdash; and every run writes a log of what it read, computed, and corrected.</p></div>
     </div>
     <p class="controls-note reveal">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2" aria-hidden="true"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M8.5 12l2.5 2.5L16 9.5"/></svg>
@@ -717,11 +748,11 @@
       <h2>Five steps. <strong>The first one is free.</strong></h2>
     </div>
     <div class="steps reveal">
-      <div class="step"><div class="step-vis"><img src="assets/step-01.webp" data-video="assets/step-01-motion.mp4" alt="An open monthly-close binder with a cobalt bookmark on a round glass consultation table between two chairs" width="1376" height="768" loading="lazy"></div><span class="n">01</span><br><span class="tag">Free</span><h3>Consultation</h3><p>You walk us through the month. We tell you honestly what is automatable &mdash; and what isn't.</p></div>
-      <div class="step"><div class="step-vis"><img src="assets/step-02.webp" data-video="assets/step-02-motion.mp4" alt="A silver observation scope over a flowing line of documents and a ledger, tracing the real workflow" width="1376" height="768" loading="lazy"></div><span class="n">02</span><br><span class="tag">2–5 days</span><h3>Observation</h3><p>We sit with your accountants &mdash; as accountants &mdash; and map the real workflow.</p></div>
-      <div class="step"><div class="step-vis"><img src="assets/step-03.webp" data-video="assets/step-03-motion.mp4" alt="A bound white executive plan with cobalt index tabs beside a silver seal and a fixed-price card" width="1376" height="768" loading="lazy"></div><span class="n">03</span><br><span class="tag">Yours to keep</span><h3>Executive plan</h3><p>What to automate, what to leave human, and a fixed price for each phase.</p></div>
-      <div class="step"><div class="step-vis"><img src="assets/step-04.webp" data-video="assets/step-04-motion.mp4" alt="Modular silver blocks assembling in phases along a cobalt guide line, a checkmark on each completed block" width="1376" height="768" loading="lazy"></div><span class="n">04</span><br><span class="tag">Phased</span><h3>Build &amp; launch</h3><p>Live task by task. Your team approves every output. Stop after any phase.</p></div>
-      <div class="step"><div class="step-vis"><img src="assets/step-05.webp" data-video="assets/step-05-motion.mp4" alt="An open silver case of documentation binders with a single key on a card handed over in front" width="1376" height="768" loading="lazy"></div><span class="n">05</span><br><span class="tag">No lock-in</span><h3>Handover</h3><p>Documentation and training. Your team owns everything. No black box.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-01.webp" alt="An open monthly-close binder with a cobalt bookmark on a round glass consultation table between two chairs" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:57.5%;--gy:48%" aria-hidden="true"></span></div><span class="n">01</span><br><span class="tag">Free</span><h3>Consultation</h3><p>You walk us through the month. We tell you honestly what is automatable &mdash; and what isn't.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-02.webp" alt="A silver observation scope over a flowing line of documents and a ledger, tracing the real workflow" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:36%;--gy:45%" aria-hidden="true"></span></div><span class="n">02</span><br><span class="tag">2–5 days</span><h3>Observation</h3><p>We sit with your accountants &mdash; as accountants &mdash; and map the real workflow.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-03.webp" alt="A bound white executive plan with cobalt index tabs beside a silver seal and a fixed-price card" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:49.5%;--gy:56.5%" aria-hidden="true"></span></div><span class="n">03</span><br><span class="tag">Yours to keep</span><h3>Executive plan</h3><p>What to automate, what to leave human, and a fixed price for each phase.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-04.webp" alt="Modular silver blocks assembling in phases along a cobalt guide line, a checkmark on each completed block" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:50.5%;--gy:34%" aria-hidden="true"></span></div><span class="n">04</span><br><span class="tag">Phased</span><h3>Build &amp; launch</h3><p>Live task by task. Your team approves every output. Stop after any phase.</p></div>
+      <div class="step"><div class="step-vis"><img src="assets/step-05.webp" alt="An open silver case of documentation binders with a single key on a card handed over in front" width="1376" height="768" loading="lazy"><span class="vis-glow" style="--gx:77.5%;--gy:35.5%" aria-hidden="true"></span></div><span class="n">05</span><br><span class="tag">No lock-in</span><h3>Handover</h3><p>Documentation and training. Your team owns everything. No black box.</p></div>
     </div>
     <p class="process-fine reveal">Pricing is <b>fixed per phase, scoped after observation</b> &mdash; stop after any phase and keep everything built to that point.</p>
 
@@ -823,7 +854,8 @@
         vio.unobserve(img);
         var v = document.createElement('video');
         v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
-        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('autoplay', '');
+        if ('disableRemotePlayback' in v) v.disableRemotePlayback = true;
         v.poster = img.currentSrc || img.src;
         v.src = img.getAttribute('data-video');
         v.width = img.width; v.height = img.height;
@@ -836,6 +868,16 @@
     }, { rootMargin: '200px' });
     vio.observe(img);
   });
+
+  // mobile resilience: some phones (e.g. iOS Low Power Mode) block the first autoplay.
+  // Retry all paused loops on the first touch and whenever the tab becomes visible again.
+  function kickVideos() {
+    document.querySelectorAll('video').forEach(function (v) {
+      if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    });
+  }
+  window.addEventListener('touchend', kickVideos, { once: true, passive: true });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) kickVideos(); });
 
   // counters: markup already contains the true final value; animation is enhancement only
   function animate(el) {
