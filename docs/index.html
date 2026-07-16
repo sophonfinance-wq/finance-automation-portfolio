@@ -157,6 +157,12 @@
   .cinema { position:relative; overflow:hidden; height:min(62vh,560px); min-height:340px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
   .cinema video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
   .cinema .cinema-wash { position:absolute; inset:0; background:rgba(255,255,255,.22); }
+  .final { position:relative; overflow:hidden; }
+  .final > .wrap { position:relative; z-index:2; }
+  .contact-video { position:absolute; inset:0; z-index:0; }
+  .contact-video video { width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
+  .contact-video .contact-wash { position:absolute; inset:0; background:rgba(29,78,216,.75); }
+  @media (prefers-reduced-motion:reduce){ .contact-video video { display:none; } }
   @media (prefers-reduced-motion:reduce){ .cinema video { display:none; } .cinema { background:url("assets/hero2-poster.jpg") center/cover; } }
   .hero-grid { display:grid; grid-template-columns:minmax(0,1.05fr); gap:0; align-items:center; max-width:660px; }
   h1 { font-size:clamp(38px, 4.6vw, 60px); font-weight:300; letter-spacing:-.4px; line-height:1.12; color:var(--text); }
@@ -745,6 +751,12 @@
 
 <!-- ================= FINAL CTA ================= -->
 <section class="final" id="contact">
+  <div class="contact-video" aria-hidden="true">
+    <video id="heroVid3" muted loop playsinline preload="none" poster="assets/contact-poster.jpg">
+      <source src="assets/contact-web.mp4" type="video/mp4">
+    </video>
+    <div class="contact-wash"></div>
+  </div>
   <div class="wrap">
     <p class="kicker reveal">Start the conversation</p>
     <h2 class="reveal">Show us where <strong>the hours go.</strong></h2>
@@ -875,6 +887,6 @@
   document.querySelectorAll('.count').forEach(function (el) { cio.observe(el); });
 })();
 </script>
-<script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero2-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}})();</script>
+<script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero2-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/contact-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
 </body>
 </html>
