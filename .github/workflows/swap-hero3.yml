@@ -1,0 +1,20 @@
+name: swap-hero3
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  swap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch verified extended hero film
+        run: |
+          curl -fsSL -o docs/assets/hero-web.mp4 "https://d2ol7oe51mr4n9.cloudfront.net/user_3FT2vQpL2ETEU7cpreHRkz8vsHo/6492632e-c848-43c4-94c2-bcd69b29397f.mp4"
+          echo "9e45fb278e0fc92651170c3db016529d386f446ded977efcd1730bb68ca6699a  docs/assets/hero-web.mp4" | sha256sum -c
+      - name: commit to main
+        run: |
+          git config user.name "sophonfinance-wq"
+          git config user.email "contact@sophonfinance.com"
+          git add docs/assets/hero-web.mp4
+          git commit -m "site: hero film gains four new scenes - Seattle skyrises and futuristic tech, 83s"
+          git push
