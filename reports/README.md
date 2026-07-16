@@ -1,5 +1,7 @@
 # Engine Technical Records
 
+**Capstone:** [SFS-2026-001 — Engine Performance & Economics Report](./SFS-2026-001%20-%20Engine%20Performance%20%26%20Economics%20Report.pdf) — human-equivalent workload analysis across all eight engines: measured engine throughput vs. estimated professional hours, per-unit economics, and a generalized field case (a live 150-entity tax schedule: ~75 budgeted hours delivered in 6.6). Human baselines are labeled estimates; engine figures are observed.
+
 Government-style technical records for each system in this portfolio. All records describe the systems as they run on **fictional, seeded data** — no employer or client data is reproduced.
 
 | Report | System | PDF |
