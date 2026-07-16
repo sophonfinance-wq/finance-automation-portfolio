@@ -232,11 +232,16 @@ How the review prompts themselves are engineered as controls — role injection,
 templates, and negative constraints — is documented in
 [Prompt Engineering](./prompt-engineering.md).
 
+What the model caught the first time it ran end-to-end on a live, high-stakes schedule — including
+an answer two independent LLM reviewers both missed, and a confident reviewer finding overturned by
+a signed source document — is written up in [Field Notes](./FIELD-NOTES.md).
+
 ---
 
 ## Portfolio bullets
 
 - Designed a multi-role AI validation framework for high-stakes financial workpapers.
+- Proved the control in the field: the source-first mandate caught an answer that unanimous multi-model review missed, and rejected a plausible reviewer finding on documentary evidence.
 - Applied separation of duties across AI roles: preparer, reviewer, specialist, audit, and human gate.
 - Built deterministic read-only validation so the checker cannot corrupt the file it checks.
 - Created fix packets, QA summaries, and machine-readable verdicts for review evidence.
