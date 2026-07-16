@@ -1,0 +1,20 @@
+name: swap-hero2
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  swap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: fetch verified mobile-safe hero film
+        run: |
+          curl -fsSL -o docs/assets/hero-web.mp4 "https://d2ol7oe51mr4n9.cloudfront.net/user_3FT2vQpL2ETEU7cpreHRkz8vsHo/46786dc6-7f26-419d-b789-26292b0c8fcb.mp4"
+          echo "83bf95c8649dea63e0cd4d5fd114c6385abd16196ff7c81bcc02676851b829b9  docs/assets/hero-web.mp4" | sha256sum -c
+      - name: commit to main
+        run: |
+          git config user.name "sophonfinance-wq"
+          git config user.email "contact@sophonfinance.com"
+          git add docs/assets/hero-web.mp4
+          git commit -m "site: hero ends on a mobile-safe logo card - 2s hold, fade to black, then loop"
+          git push
