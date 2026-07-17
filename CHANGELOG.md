@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-17
+
+- Added a fictional, validation-only construction budget-variance preflight with
+  exact integer-cent equations, cost-code and total crossfoots, explicit overrun
+  controls, permanent posting denial, and manual source/approval gates.
+
 All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).

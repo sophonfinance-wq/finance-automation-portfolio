@@ -134,6 +134,25 @@ The public schema is intentionally generic and the sample is entirely
 fictional. No workbook layout, company process, account mapping, or import
 connector is encoded in this validator.
 
+### Construction budget-variance preflight (validation only)
+
+`close_engine.budget_variance` independently re-derives a fictional project's
+cost-code mechanics using integer cents: current budget equals original budget
+plus approved changes; current cost to complete equals current budget less costs
+to date; revised budget equals current budget plus the period update; and revised
+cost to complete equals revised budget less costs to date. It also detects
+duplicate cost codes, unsafe amount types, negative cost-to-complete overruns,
+missing or stale overrun flags, and project totals that do not crossfoot to the
+detail.
+
+This component is intentionally read-only. Even a mechanically clean result is
+only `READY FOR HUMAN REVIEW`: source-system refresh and tie, commitment
+completeness, project-manager/change-order approval, and the approved forecast or
+pro forma update remain manual gates. It never creates a journal entry, import
+payload, posting action, or source-system mutation. The example names and amounts
+are entirely fictional, and the public module does not encode a private workbook
+layout.
+
 ### What the engine computes
 Nine classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
