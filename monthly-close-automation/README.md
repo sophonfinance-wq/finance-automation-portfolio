@@ -158,6 +158,12 @@ The validator is intentionally read-only. A mechanically clean result is only `R
 
 The validator is intentionally read-only and makes no tax conclusion. A mechanically clean result is only `READY FOR HUMAN REVIEW`: fixed-asset-register, ledger, invoice, disposal, prior-filing, situs, classification, valuation, taxability, exemption, and filing approvals remain manual gates. It never creates a journal entry, import payload, tax filing, source-system update, or posting action, and it contains no private workbook coordinates, paths, formulas, entity names, asset descriptions, or amounts.
 
+### Payroll-recovery preflight (validation only)
+
+`close_engine.payroll_recovery` validates fictional structured fiscal-year recovery evidence using integer cents. It requires unique entity/project lines, 12 July-through-June values, complete source references, line/month/grand-total crossfoots, a canonical snapshot month, and zero activity after that month. An optional immediately preceding snapshot checks source-fingerprint freshness, entity/project population changes, previously reported fiscal-month continuity, and whether target-month activity explains the entire grand-total change.
+
+The validator is intentionally read-only and is not a payroll-to-GL or payroll-processing engine. A mechanically clean result is only `READY FOR HUMAN REVIEW`: payroll-register, ledger, intercompany, confidentiality, recoverability, classification, allocation-basis, ownership, cutoff, and current-use approvals remain manual gates. It never creates a journal entry, payroll action, import payload, source-system update, or posting action, and it contains no private workbook paths, formulas, entities, projects, amounts, or fingerprints.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
@@ -526,6 +532,7 @@ monthly-close-automation/
 │   ├── group_operations.py # validation-only management-package controls
 │   ├── project_job_cost.py # validation-only monthly job-cost export controls
 │   ├── personal_property_tax.py # validation-only asset-schedule controls
+│   ├── payroll_recovery.py # validation-only fiscal recovery controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
 │   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
