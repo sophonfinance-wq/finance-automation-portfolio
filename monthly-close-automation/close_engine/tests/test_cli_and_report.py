@@ -3,24 +3,31 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from close_engine import cli, report
 from close_engine.engine import CloseEngine
 from close_engine.generate import generate_dataset
 
 
-def test_cli_clean_close_returns_zero(tmp_path) -> None:
+def test_cli_clean_close_returns_zero_and_tracked_outputs_are_fresh(tmp_path) -> None:
     code = cli.main(["--period", "2026-03", "--out", str(tmp_path), "--seed", "2026"])
     assert code == 0
-    # Committed outputs exist.
+    tracked_output = Path(__file__).resolve().parents[2] / "output"
+    # Every deterministic committed output must match a clean regeneration.
     for name in (
         "je_register.md",
         "je_register.json",
+        "schedules.json",
         "trial_balance.md",
         "trial_balance.json",
         "close_report.md",
+        "sentinel.json",
     ):
         assert (tmp_path / name).exists(), f"missing {name}"
+        assert (tmp_path / name).read_text("utf-8") == (
+            tracked_output / name
+        ).read_text("utf-8"), f"stale tracked output: {name}"
 
 
 def test_cli_rejects_bad_period(tmp_path) -> None:

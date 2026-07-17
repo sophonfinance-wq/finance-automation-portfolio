@@ -4,6 +4,27 @@ All notable changes to this project are documented here. The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+- Fictional postage-allocation engine for signed meter detail: exact one-route-per-project
+  gating, structured project/job/cost schedules, per-entity intercompany mirrors, refund
+  reversals, and per-entity clearing of unallocated postage.
+- Independent postage coverage in the C3 completeness calendar, C6 population and
+  crossfoot checks, C8 clearing control, C9 shadow recompute, C10 period lock, and the
+  autonomous close category order.
+- Tests for missing and duplicate routes, source-to-job crossfoots, zero/refund behavior,
+  blank and noncanonical identifiers, exact structured provenance, prefix-related batch
+  ids, metadata-only loop repair, one-cent tamper detection, deterministic output,
+  prior-period immutability, CLI/JSON exposure, and repository confidentiality.
+- Release hardening now rejects malformed batch periods before period filtering and
+  unknown entities from the full opening/post-close ledger universe, validates the
+  canonical JE header, memo, and structured provenance, and makes both console and
+  report CLEAN verdicts depend on the engine and Close Sentinel.
+- Regenerated deterministic close artifacts now include all nine entries and the new
+  structured `schedules.json`; freshness assertions compare every committed close and
+  autonomous-loop artifact to a clean regeneration.
+
 ## [1.1.0] - 2026-07-04
 
 Monthly-close automation: deterministic controls layer, insurance allocation, and a

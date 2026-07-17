@@ -61,6 +61,11 @@ class JournalLine:
         debit: Debit amount in cents (>= 0).
         credit: Credit amount in cents (>= 0).
         memo: Free-text description.
+        source_batch: Structured source-batch identifier, when applicable.
+        source_line: Structured source-row identifier, when applicable.
+        project_code: Exact approved project code, when applicable.
+        job_code: Exact approved job code, when applicable.
+        cost_code: Exact approved cost code, when applicable.
     """
 
     entity: str
@@ -68,6 +73,11 @@ class JournalLine:
     debit: int
     credit: int
     memo: str = ""
+    source_batch: str = ""
+    source_line: str = ""
+    project_code: str = ""
+    job_code: str = ""
+    cost_code: str = ""
 
 
 @dataclass

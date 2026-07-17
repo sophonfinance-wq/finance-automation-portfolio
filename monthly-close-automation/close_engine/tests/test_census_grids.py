@@ -865,9 +865,9 @@ def test_gna_invalid_split_is_refused_not_posted(bad_name, period, seed) -> None
         r for r in res.refused if r.je.category == "gna_allocation"
     )
     assert "split_bps" in refusal.detail
-    # The other seven recurring entries still post: a bad split never
+    # The other eight recurring entries still post: a bad split never
     # cascades into a crash or blocks unrelated categories.
-    assert len(res.register) == 7
+    assert len(res.register) == 8
 
 
 # ---------------------------------------------------------------------------

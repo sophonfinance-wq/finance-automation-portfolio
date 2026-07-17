@@ -8,7 +8,8 @@ Produces a fully fictional, seeded dataset for one entity group:
 * source sub-ledgers: prepaids, fixed assets, leases (deferred rent + CAM),
   fixed-fee accruals, related-party notes, management-fee arrangements, the
   G&A allocation map, and shared insurance policies (one with a mid-year
-  renewal step-up).
+  renewal step-up), plus signed postage meter detail and approved
+  project/job/cost routes.
 
 Everything is generated with ``random.seed(seed)`` so two runs with the same
 seed produce byte-identical inputs. No real names, figures, or paths appear.
@@ -53,6 +54,7 @@ CHART: list[Account] = [
     Account("1200", "Accounts receivable", AccountType.ASSET),
     Account("1400", "Prepaid expenses", AccountType.ASSET),
     Account("1450", "Prepaid insurance", AccountType.ASSET),
+    Account("1460", "Unallocated postage", AccountType.ASSET),
     Account("1500", "Fixed assets - gross", AccountType.ASSET),
     Account("1510", "Accumulated depreciation", AccountType.ASSET),
     Account("1600", "Deferred rent asset", AccountType.ASSET),
@@ -80,6 +82,7 @@ CHART: list[Account] = [
     Account("6500", "Software expense", AccountType.EXPENSE),
     Account("6600", "G&A - allocated", AccountType.EXPENSE),
     Account("6650", "G&A - shared services", AccountType.EXPENSE),
+    Account("6700", "Postage and delivery", AccountType.EXPENSE),
 ]
 
 
@@ -206,6 +209,47 @@ class InsurancePolicy:
     renewal_annual_premium_cents: int
 
 
+@dataclass(frozen=True)
+class PostageMeterLine:
+    """One signed meter-detail row awaiting an approved project route.
+
+    Positive amounts are charges and negative amounts are refunds. A zero
+    line remains visible in the source schedule but deliberately creates no
+    journal line.
+    """
+
+    line_id: str
+    project_code: str
+    description: str
+    amount_cents: int
+
+
+@dataclass(frozen=True)
+class PostageRoute:
+    """Approved exact-match route from project to entity, job, and cost."""
+
+    project_code: str
+    recipient_entity: str
+    job_code: str
+    cost_code: str
+
+
+@dataclass(frozen=True)
+class PostageBatch:
+    """A period meter batch and its independently maintained route table.
+
+    Every meter row must match exactly one route. The engine refuses the
+    entire batch if a project is unmapped, maps more than once, names an
+    entity outside the group, or repeats a meter line id.
+    """
+
+    batch_id: str
+    period: str
+    holder_entity: str
+    meter_lines: tuple[PostageMeterLine, ...]
+    routes: tuple[PostageRoute, ...]
+
+
 @dataclass
 class SubLedgers:
     """Container for all generated sub-ledger data."""
@@ -218,6 +262,7 @@ class SubLedgers:
     gna: GnaAllocation | None = None
     insurance: list[InsurancePolicy] = field(default_factory=list)
     fixed_fee_accruals: list[FixedFeeAccrual] = field(default_factory=list)
+    postage_batches: list[PostageBatch] = field(default_factory=list)
 
 
 # --------------------------------------------------------------------------- #
@@ -590,6 +635,94 @@ def _insurance(seed: int, entities: list[Entity]) -> list[InsurancePolicy]:
     ]
 
 
+def _postage(seed: int, period: str) -> list[PostageBatch]:
+    """Generate one fictional meter batch with charges, a refund, and a zero.
+
+    A dedicated seeded stream keeps the postage population deterministic
+    without changing any pre-existing generator sequence. The route table is
+    deliberately separate from meter detail so the engine must prove exact
+    one-to-one routing before it can draft a journal entry.
+    """
+    rng = random.Random(f"postage-{seed}")
+    orchard = money.to_cents(rng.randint(850, 1250))
+    cedar = money.to_cents(rng.randint(600, 950))
+    harbor = money.to_cents(rng.randint(400, 750))
+    refund = -money.to_cents(rng.randint(25, 75))
+    return [
+        PostageBatch(
+            batch_id=f"PST-{period}",
+            period=period,
+            holder_entity="DH",
+            meter_lines=(
+                PostageMeterLine(
+                    "MTR-001", "PRJ-ORCHARD", "Document delivery", orchard
+                ),
+                PostageMeterLine(
+                    "MTR-002", "PRJ-CEDAR", "Recorded-mail batch", cedar
+                ),
+                PostageMeterLine(
+                    "MTR-003", "PRJ-HARBOR", "Courier dispatch", harbor
+                ),
+                PostageMeterLine(
+                    "MTR-004", "PRJ-CEDAR", "Carrier credit", refund
+                ),
+                PostageMeterLine(
+                    "MTR-005", "PRJ-ORCHARD", "Voided label", 0
+                ),
+            ),
+            routes=(
+                PostageRoute(
+                    "PRJ-ORCHARD", "DH", "JOB-ORCHARD-01", "COST-MAIL-01"
+                ),
+                PostageRoute(
+                    "PRJ-CEDAR", "MF", "JOB-CEDAR-02", "COST-MAIL-02"
+                ),
+                PostageRoute(
+                    "PRJ-HARBOR", "BW", "JOB-HARBOR-03", "COST-MAIL-03"
+                ),
+            ),
+        )
+    ]
+
+
+def _opening_postage_balances(
+    batches: list[PostageBatch], period: str
+) -> list[JournalLine]:
+    """Seed meter activity into unallocated postage before routing.
+
+    The fictional upstream meter import has already placed the signed batch
+    total in account 1460. The recurring engine therefore clears that exact
+    balance to project/job expense and intercompany, with an equity plug here
+    solely to keep the generated opening trial balance balanced.
+    """
+    by_holder: dict[str, int] = {}
+    for batch in batches:
+        if batch.period != period:
+            continue
+        total = sum(line.amount_cents for line in batch.meter_lines)
+        by_holder[batch.holder_entity] = (
+            by_holder.get(batch.holder_entity, 0) + total
+        )
+    lines: list[JournalLine] = []
+    for holder, total in sorted(by_holder.items()):
+        if total > 0:
+            lines.append(
+                JournalLine(holder, "1460", total, 0, "Opening meter activity")
+            )
+            lines.append(
+                JournalLine(holder, "3000", 0, total, "Opening postage plug")
+            )
+        elif total < 0:
+            refund = -total
+            lines.append(
+                JournalLine(holder, "1460", 0, refund, "Opening meter refund")
+            )
+            lines.append(
+                JournalLine(holder, "3000", refund, 0, "Opening postage plug")
+            )
+    return lines
+
+
 def _opening_insurance_balances(
     policies: list[InsurancePolicy], period: str
 ) -> list[JournalLine]:
@@ -658,6 +791,7 @@ def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
         fixed_fee_accruals=_fixed_fee_accruals(),
         gna=_gna(),
         insurance=_insurance(seed, ENTITIES),
+        postage_batches=_postage(seed, period),
     )
     # Seed the opening prepaid asset balance (account 1400) so the prepaid
     # schedule ties to the GL after this period's amortization. The opening
@@ -671,6 +805,9 @@ def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
     # Fixed-fee settlements are upstream cash activity, so the recurring
     # engine starts with the post-settlement, pre-accrual payable balance.
     opening.extend(_opening_fixed_fee_balances(subs.fixed_fee_accruals))
+    # Meter detail is upstream activity in unallocated postage (1460). The
+    # recurring engine must clear it exactly to approved project/job routes.
+    opening.extend(_opening_postage_balances(subs.postage_batches, period))
     return Dataset(
         period=period,
         seed=seed,
@@ -737,6 +874,10 @@ class Dataset:
         """Return the shared insurance policy sub-ledger."""
         return self.subs.insurance
 
+    def postage_batches(self) -> list[PostageBatch]:
+        """Return meter batches and their approved route tables."""
+        return self.subs.postage_batches
+
     def summary(self) -> str:
         """Return a short human-readable summary of the generated inputs."""
         lines = [
@@ -751,6 +892,7 @@ class Dataset:
             f"  Mgmt fees     : {len(self.subs.mgmt_fees)}",
             f"  Fixed fees    : {len(self.subs.fixed_fee_accruals)}",
             f"  Insurance     : {len(self.subs.insurance)}",
+            f"  Postage batches: {len(self.subs.postage_batches)}",
             f"  G&A pool      : {money.fmt(self.subs.gna.monthly_pool_cents)}"
             if self.subs.gna
             else "  G&A pool      : (none)",

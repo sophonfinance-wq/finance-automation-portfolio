@@ -1,8 +1,9 @@
 """Output writers for the close engine.
 
-Produces the three committed artifacts in an output directory:
+Produces the committed release artifacts in an output directory:
 
 * ``je_register.md`` / ``je_register.json`` — the journal-entry register,
+* ``schedules.json`` — every backing schedule and structured route field,
 * ``trial_balance.md`` / ``trial_balance.json`` — the updated trial balance, and
 * ``close_report.md`` — a close report with a checklist and tie-out summary.
 
@@ -58,16 +59,26 @@ def je_register_markdown(result: CloseResult) -> str:
         lines.append(f"- Control: debits {money.fmt(je.total_debits)} == "
                      f"credits {money.fmt(je.total_credits)} ({status})")
         lines.append("")
-        lines.append("| Entity | Account | Memo | Debit | Credit |")
-        lines.append("|--------|---------|------|------:|-------:|")
+        lines.append(
+            "| Entity | Account | Source | Project | Job | Cost | Memo | Debit | Credit |"
+        )
+        lines.append(
+            "|--------|---------|--------|---------|-----|------|------|------:|-------:|"
+        )
         for ln in je.lines:
+            source = (
+                f"{ln.source_batch}/{ln.source_line}"
+                if ln.source_batch or ln.source_line
+                else ""
+            )
             lines.append(
-                f"| {ln.entity} | {_account_name(result, ln.account)} | {ln.memo} "
+                f"| {ln.entity} | {_account_name(result, ln.account)} | {source} "
+                f"| {ln.project_code} | {ln.job_code} | {ln.cost_code} | {ln.memo} "
                 f"| {money.fmt(ln.debit) if ln.debit else ''} "
                 f"| {money.fmt(ln.credit) if ln.credit else ''} |"
             )
         lines.append(
-            f"| | | **Totals** | **{money.fmt(je.total_debits)}** "
+            f"| | | | | | | **Totals** | **{money.fmt(je.total_debits)}** "
             f"| **{money.fmt(je.total_credits)}** |"
         )
         lines.append("")
@@ -100,6 +111,11 @@ def je_register_json(result: CloseResult) -> dict:
                         "debit_cents": ln.debit,
                         "credit_cents": ln.credit,
                         "memo": ln.memo,
+                        "source_batch": ln.source_batch,
+                        "source_line": ln.source_line,
+                        "project_code": ln.project_code,
+                        "job_code": ln.job_code,
+                        "cost_code": ln.cost_code,
                     }
                     for ln in je.lines
                 ],
@@ -108,6 +124,30 @@ def je_register_json(result: CloseResult) -> dict:
         ],
         "refused": [
             {"je_id": err.je.je_id, "detail": err.detail} for err in result.refused
+        ],
+    }
+
+
+def schedules_json(result: CloseResult) -> dict:
+    """Render every backing schedule with structured route provenance."""
+    return {
+        "period": result.period,
+        "seed": result.seed,
+        "schedules": [
+            {
+                "name": schedule.name,
+                "category": schedule.category,
+                "tie_account": schedule.tie_account,
+                "tie_expected_cents": schedule.tie_expected_cents,
+                "tie_expected_by_entity_cents": (
+                    schedule.tie_expected_by_entity_cents
+                ),
+                "rows": [
+                    {"key": row.key, **row.fields}
+                    for row in schedule.rows
+                ],
+            }
+            for schedule in result.schedules
         ],
     }
 
@@ -266,7 +306,8 @@ def close_report_markdown(
                 )
         lines.append("")
 
-    verdict = "CLEAN — ready for review." if result.clean else \
+    close_clean = result.clean and (sentinel is None or sentinel.clean)
+    verdict = "CLEAN — ready for review." if close_clean else \
         "NOT CLEAN — resolve flagged items before review."
     lines.append(f"**Close status: {verdict}**")
     lines.append("")
@@ -340,6 +381,7 @@ def write_outputs(
 
     _write("je_register.md", je_register_markdown(result))
     _write_json("je_register.json", je_register_json(result))
+    _write_json("schedules.json", schedules_json(result))
     _write("trial_balance.md", trial_balance_markdown(result))
     _write_json("trial_balance.json", trial_balance_json(result))
     _write("close_report.md", close_report_markdown(result, sentinel=sentinel))
@@ -373,7 +415,21 @@ def _write_xlsx(result: CloseResult, out: Path) -> Path | None:
         )
 
     je_ws = wb.create_sheet("JE Register")
-    je_ws.append(["JE ID", "Entity", "Account", "Memo", "Debit", "Credit"])
+    je_ws.append(
+        [
+            "JE ID",
+            "Entity",
+            "Account",
+            "Source Batch",
+            "Source Line",
+            "Project",
+            "Job",
+            "Cost",
+            "Memo",
+            "Debit",
+            "Credit",
+        ]
+    )
     for je in result.register:
         for ln in je.lines:
             je_ws.append(
@@ -381,6 +437,11 @@ def _write_xlsx(result: CloseResult, out: Path) -> Path | None:
                     je.je_id,
                     ln.entity,
                     _account_name(result, ln.account),
+                    ln.source_batch,
+                    ln.source_line,
+                    ln.project_code,
+                    ln.job_code,
+                    ln.cost_code,
                     ln.memo,
                     ln.debit / 100.0,
                     ln.credit / 100.0,
