@@ -152,6 +152,12 @@ The validator is intentionally read-only. A mechanically clean result is only `R
 
 The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source refresh and tie, cutoff, mapping, invoice support, capitalization, commitments, cost-to-complete judgment, and downstream approval remain manual gates. It never creates a journal entry, import payload, or posting action.
 
+### Personal-property FF&E preflight (validation only)
+
+`close_engine.personal_property_tax` validates fictional structured asset-schedule evidence using integer cents. It checks canonical period and entity authority; unique asset identities; placed-in-service and depreciation-end dates; positive useful lives; months-used bounds; asset-level net book value; independently rederived cost, accumulated-depreciation, period-depreciation, and net-book-value totals; and a displayed zero-balance control. An optional same-month prior-year snapshot surfaces additions, removals, and cost or useful-life changes.
+
+The validator is intentionally read-only and makes no tax conclusion. A mechanically clean result is only `READY FOR HUMAN REVIEW`: fixed-asset-register, ledger, invoice, disposal, prior-filing, situs, classification, valuation, taxability, exemption, and filing approvals remain manual gates. It never creates a journal entry, import payload, tax filing, source-system update, or posting action, and it contains no private workbook coordinates, paths, formulas, entity names, asset descriptions, or amounts.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
@@ -519,6 +525,7 @@ monthly-close-automation/
 │   ├── consolidation.py   # validation-only combined-statement package controls
 │   ├── group_operations.py # validation-only management-package controls
 │   ├── project_job_cost.py # validation-only monthly job-cost export controls
+│   ├── personal_property_tax.py # validation-only asset-schedule controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
 │   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
