@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (14,686 tests, under two minutes)
+# run the curated test suite (24,740 tests, runs in minutes)
 pytest
 
 # run a system
@@ -134,7 +134,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **24,740** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems, including bounded per-engine invariant grids. Runs in under two minutes; gates CI. |
+| **Curated** (default) | `pytest` | **24,740** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems, including bounded invariant grids on the 7 arithmetic engines. Runs in minutes; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.11M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
