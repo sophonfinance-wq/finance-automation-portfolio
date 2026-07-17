@@ -60,3 +60,44 @@ def test_finding_roundtrip_and_is_formula(a: int, b: int) -> None:
     # Non-strings are never formulas.
     assert _is_formula(a) is False
     assert _is_formula(None) is False
+
+
+# --- report counts conservation grid (+2,000 cases) ------------------------
+# WorkbookReport.counts() must tally exactly and conserve the total, and
+# Finding.to_dict must serialise the status to its .value string.
+from validation_engine.engine import Verdict, WorkbookReport  # noqa: E402
+
+_GRID_REPORT = list(itertools.product(range(0, 40), range(0, 50)))  # 40*50
+
+
+@pytest.mark.parametrize("p,q", _GRID_REPORT)
+def test_counts_conservation_and_verdict(p: int, q: int) -> None:
+    n_pass = p % 5
+    n_fail = q % 4
+    n_flag = (p + q) % 3
+    findings = (
+        [Finding(f"r{p}", Status.PASS, "-", f"pass {i}") for i in range(n_pass)]
+        + [Finding(f"r{p}", Status.FAIL, "-", f"fail {i}") for i in range(n_fail)]
+        + [Finding(f"r{p}", Status.FLAG, "-", f"flag {i}") for i in range(n_flag)]
+    )
+    report = WorkbookReport(workbook=f"wb_{p}_{q}.xlsx", findings=findings)
+
+    counts = report.counts()
+    assert counts["PASS"] == n_pass
+    assert counts["FAIL"] == n_fail
+    assert counts["FLAG"] == n_flag
+    # Conservation: the tally sums to the number of findings.
+    assert counts["PASS"] + counts["FAIL"] + counts["FLAG"] == len(findings)
+
+    # Verdict precedence: FAIL dominates, then FLAG, else PASS.
+    if n_fail > 0:
+        assert report.verdict is Verdict.FAIL
+    elif n_flag > 0:
+        assert report.verdict is Verdict.REVIEW
+    else:
+        assert report.verdict is Verdict.PASS
+
+    # to_dict serialises status to its .value string.
+    if findings:
+        d = findings[0].to_dict()
+        assert d["status"] == findings[0].status.value

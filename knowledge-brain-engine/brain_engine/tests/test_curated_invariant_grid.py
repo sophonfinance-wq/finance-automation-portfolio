@@ -49,3 +49,46 @@ def test_timestamp_and_provenance(h: int, m: int) -> None:
     tag = prov.citation_tag()
     assert tag == prov.citation_tag()
     assert tag == f"[{prov.title} — {prov.date} — {prov.timestamp} — {prov.speaker}]"
+
+
+# --- extended timestamp grid (+2,700 cases) --------------------------------
+# Full minute coverage across 45 hour values (two-digit hours throughout).
+_HOURS_X = range(0, 45)    # 45 values
+_MINUTES_X = range(0, 60)  # 60 values
+
+
+@pytest.mark.parametrize("h,m", list(itertools.product(_HOURS_X, _MINUTES_X)))
+def test_timestamp_full_minute_coverage(h: int, m: int) -> None:
+    s = (h * 11 + m * 7) % 60
+    total = h * 3600 + m * 60 + s
+    rendered = format_timestamp(total)
+    # Exact HH:MM:SS identity and determinism.
+    assert rendered == f"{h:02d}:{m:02d}:{s:02d}"
+    assert format_timestamp(total) == rendered
+
+
+# --- extended provenance grid (+1,800 cases) -------------------------------
+_SPEAKERS = range(0, 30)   # 30 speaker indices
+_SECONDS_X = range(0, 60)  # 60 second values
+
+
+@pytest.mark.parametrize("i,s", list(itertools.product(_SPEAKERS, _SECONDS_X)))
+def test_provenance_roundtrip_extended(i: int, s: int) -> None:
+    ts = f"{i:02d}:{s:02d}:{s:02d}"
+    prov = Provenance(
+        meeting_id=f"MTG-X-{i}-{s}",
+        title=f"Review {i}",
+        date="2025-06-30",
+        speaker=f"Speaker {s}",
+        timestamp=ts,
+    )
+    # Frozen-dataclass field round-trip.
+    assert prov.meeting_id == f"MTG-X-{i}-{s}"
+    assert prov.title == f"Review {i}"
+    assert prov.date == "2025-06-30"
+    assert prov.speaker == f"Speaker {s}"
+    assert prov.timestamp == ts
+    # citation_tag is a deterministic pure function of the fields.
+    tag = prov.citation_tag()
+    assert tag == prov.citation_tag()
+    assert tag == f"[{prov.title} — {prov.date} — {prov.timestamp} — {prov.speaker}]"

@@ -44,3 +44,36 @@ def test_allocate_to_cents_and_item_roundtrip(total_cents: int, split: int) -> N
     assert item.label == f"item-{split}"
     assert item.amount_cents == total_cents
     assert item.source_id == f"SRC-{split}"
+
+
+# --- three-way allocation grid (+5,500 cases) ------------------------------
+# Three-way basis-point splits summing to 10,000 bps must preserve the exact
+# signed total, return one part per weight, and keep every part within one
+# cent of its exact proportional share.
+_TOTALS3 = [
+    -12345678, -5000000, -999999, -742743, -123456, -99999, -50000, -12345,
+    -5001, -1000, -743, -100, -27, -13, -7, -3, -1, 0, 1, 3, 7, 13, 27, 100,
+    743, 1000, 5001, 9999, 12345, 33333, 50000, 99999, 123456, 250001, 333333,
+    499999, 654321, 742743, 888888, 999999, 1000000, 1234567, 2500001, 3333333,
+    4999999, 5000000, 6543210, 7427430, 8888888, 9999999, 10000000, 10000001,
+    12345678, 20000001, 25000000,
+]  # 55 signed totals spanning cents to eight figures
+_SPLITS3 = range(1, 101)  # 100 split points
+
+
+@pytest.mark.parametrize(
+    "total_cents,split", list(itertools.product(_TOTALS3, _SPLITS3))
+)
+def test_allocate_three_way_preserves_total(total_cents: int, split: int) -> None:
+    a = split * 30                      # 30..3000 bps
+    b = split * 60                      # 60..6000 bps
+    bps = [a, b, 10_000 - a - b]        # remainder keeps the sum at 10,000
+    parts = allocate_by_bps(total_cents, bps)
+    assert sum(parts) == total_cents
+    assert len(parts) == 3
+    # Proportionality: each part within one cent of its exact bps share
+    # (a weight-ignoring allocator fails immediately).
+    for i in range(3):
+        assert abs(parts[i] * 10_000 - total_cents * bps[i]) <= 10_000
+    # Determinism.
+    assert allocate_by_bps(total_cents, bps) == parts
