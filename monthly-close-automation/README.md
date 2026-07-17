@@ -146,6 +146,12 @@ The validator is intentionally read-only. A mechanically clean result is only `R
 
 The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source refresh and tie, reporting-perimeter and classification approval, manual-item support, structural-change review, and controller sign-off remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook coordinates, paths, formulas, entities, or amounts.
 
+### Project/job-cost export preflight (validation only)
+
+`close_engine.project_job_cost` validates fictional structured monthly transaction exports. It requires one export per job, canonical monthly period authority, complete source references, job ownership, finite integer-cent amounts, in-period accounting dates, unique transaction identities, and cached job totals that independently re-add. Negative/reversal rows and post-period transaction dates remain visible review items, and an optional prior month surfaces job, cost-code, and transaction-type population changes.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source refresh and tie, cutoff, mapping, invoice support, capitalization, commitments, cost-to-complete judgment, and downstream approval remain manual gates. It never creates a journal entry, import payload, or posting action.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
@@ -512,6 +518,7 @@ monthly-close-automation/
 │   ├── cash_draw.py       # validation-only construction-draw and funding controls
 │   ├── consolidation.py   # validation-only combined-statement package controls
 │   ├── group_operations.py # validation-only management-package controls
+│   ├── project_job_cost.py # validation-only monthly job-cost export controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
 │   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
