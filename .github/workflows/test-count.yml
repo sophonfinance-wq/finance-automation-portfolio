@@ -1,0 +1,80 @@
+name: test-count
+
+# Reproducible proof of the headline test count shown on sophonfinance.com/tests/.
+# Runs `pytest --collect-only` at the repo root and writes the numbers into the
+# GitHub Actions run summary, so anyone can click through from the site and see
+# the count regenerated from source — not just typed on a web page.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      sweep:
+        description: "Also collect the opt-in SWEEP tier (~1.1M cases, ~2 min)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Collect the curated suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          curated=$(python -m pytest --collect-only -q | tail -1)
+          echo "Curated: $curated"
+          {
+            echo "# Automated test count"
+            echo ""
+            echo "Regenerated from source on this runner — fictional/seeded data, MIT licensed."
+            echo ""
+            echo "## Curated suite (default \`pytest\`, gates CI)"
+            echo ""
+            echo '```'
+            echo "\$ pytest --collect-only -q | tail -1"
+            echo "$curated"
+            echo '```'
+            echo ""
+            echo "### By engine"
+            echo ""
+            echo "| Engine | Curated tests |"
+            echo "|---|---:|"
+            python -m pytest --collect-only -q \
+              | grep '::' \
+              | sed -E 's#/.*##' \
+              | sort | uniq -c | sort -rn \
+              | awk '{printf "| %s | %s |\n", $2, $1}'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Collect the opt-in SWEEP tier
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.sweep }}
+        shell: bash
+        env:
+          SWEEP: "1"
+        run: |
+          set -euo pipefail
+          sweep=$(python -m pytest --collect-only -q | tail -1)
+          echo "Sweep: $sweep"
+          {
+            echo ""
+            echo "## Opt-in property sweep (\`SWEEP=1 pytest\`)"
+            echo ""
+            echo '```'
+            echo "\$ SWEEP=1 pytest --collect-only -q | tail -1"
+            echo "$sweep"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
