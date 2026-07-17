@@ -3,9 +3,10 @@
 A deterministic, tie-checked month-end close engine for a small multi-entity
 group. Computes recurring journal entries (prepaid amortization, fixed-asset
 depreciation, deferred rent + CAM straight-lining, management-fee accruals,
-note interest accruals, and G&A cost allocation), enforces debits == credits on
-every entry, ties each schedule back to the general ledger, and produces a JE
-register, an updated trial balance, and a markdown close report.
+fixed-fee accruals, note interest accruals, and G&A cost allocation), enforces
+debits == credits on every entry, ties each schedule back to the general
+ledger, and produces a JE register, an updated trial balance, and a markdown
+close report.
 
 All data in this package is FICTIONAL and generated with a seeded ``random``
 stream for full reproducibility. Nothing here reproduces any real entity,

@@ -1,6 +1,6 @@
 # Journal Entry Register — 2026-03
 
-_Seed 2026. 7 entries posted; 0 refused (out of tie)._
+_Seed 2026. 8 entries posted; 0 refused (out of tie)._
 
 ## JE-2026-03-PREPAID — Prepaid amortization (straight-line)
 
@@ -57,6 +57,19 @@ _Seed 2026. 7 entries posted; 0 refused (out of tie)._
 | BW | 6050 · CAM expense | LSE-01 CAM share | 300.00 |  |
 | BW | 2800 · Due to affiliates | Due to affiliate (lease cost share) |  | 2,375.00 |
 | | | **Totals** | **17,812.50** | **17,812.50** |
+
+## JE-2026-03-FIXEDFEE — Fixed-fee accrual (settlements already in opening GL)
+
+- Category: `fixed_fee_accrual`
+- Control: debits 12,250.00 == credits 12,250.00 (ties)
+
+| Entity | Account | Memo | Debit | Credit |
+|--------|---------|------|------:|-------:|
+| DH | 6250 · Fixed fee expense | FFA-01 recurring fixed fee | 7,750.00 |  |
+| DH | 2350 · Fixed fee payable | FFA-01 recurring fixed fee |  | 7,750.00 |
+| MF | 6250 · Fixed fee expense | FFA-02 recurring fixed fee | 4,500.00 |  |
+| MF | 2350 · Fixed fee payable | FFA-02 recurring fixed fee |  | 4,500.00 |
+| | | **Totals** | **12,250.00** | **12,250.00** |
 
 ## JE-2026-03-MGMTFEE — Management-fee accrual (net of in-month payments)
 

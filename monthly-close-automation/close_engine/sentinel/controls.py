@@ -301,9 +301,10 @@ def c3_completeness_calendar(
     Accounting rule: the close calendar is derived from the sub-ledgers, not
     from memory. Active prepaids imply amortization; in-life assets imply
     depreciation; shared leases imply deferred rent; notes imply interest on
-    both sides; fee arrangements imply an accrual; the G&A pool and in-force
-    policies imply allocations. A missing expected entry or a double posting
-    is CRITICAL; an explicit waiver records the miss as INFO instead.
+    both sides; fixed-fee and management-fee arrangements imply accruals; the
+    G&A pool and in-force policies imply allocations. A missing expected entry
+    or a double posting is CRITICAL; an explicit waiver records the miss as
+    INFO instead.
     """
     period = dataset.period
     expected: dict[tuple[str, str], str] = {}
@@ -331,6 +332,13 @@ def c3_completeness_calendar(
         expect(note.lender_entity, "note_interest", f"{note.note_id} (lender)")
     for mf in dataset.mgmt_fees():
         expect(mf.payer_entity, "mgmt_fee_accrual", f"arrangement {mf.arrangement_id}")
+    for fee in dataset.fixed_fees():
+        if fee.monthly_fee_cents + fee.approved_adjustment_cents:
+            expect(
+                fee.entity,
+                "fixed_fee_accrual",
+                f"arrangement {fee.arrangement_id}",
+            )
     if dataset.subs.gna is not None:
         for entity, bps in dataset.gna().split_bps.items():
             if bps > 0:

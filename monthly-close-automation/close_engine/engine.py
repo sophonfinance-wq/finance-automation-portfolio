@@ -16,6 +16,7 @@ Recurring-entry classes implemented:
 * fixed-asset depreciation (straight-line, monthly, no salvage)
 * deferred rent + CAM straight-lining with a fixed cross-entity split routed
   through intercompany due-to / due-from
+* fixed-fee accrual with a liability rollforward and signed approved adjustment
 * management-fee accrual, netting any in-month cash payment
 * note interest accrual (simple monthly interest)
 * G&A cost allocation by a fixed ratio summing to 100%
@@ -31,6 +32,7 @@ from . import money
 from .generate import (
     Dataset,
     FixedAsset,
+    FixedFeeAccrual,
     GnaAllocation,
     InsurancePolicy,
     Lease,
@@ -151,6 +153,7 @@ class CloseEngine:
         self._post(self._depreciation())
         if "deferred_rent_cam" not in refused_splits:
             self._post(self._deferred_rent_and_cam())
+        self._post(self._fixed_fee_accrual())
         self._post(self._mgmt_fee_accrual())
         self._post(self._note_interest_accrual())
         if "gna_allocation" not in refused_splits:
@@ -549,6 +552,76 @@ class CloseEngine:
         year = int(self.period.split("-")[0])
         anchor = f"{year:04d}-01"
         return months_elapsed(anchor, self.period)
+
+    def _fixed_fee_current_accrual(self, fee: FixedFeeAccrual) -> int:
+        """Return the fee plus its signed, approved current-period adjustment."""
+        return fee.monthly_fee_cents + fee.approved_adjustment_cents
+
+    def _fixed_fee_accrual(self) -> JournalEntry:
+        """Book recurring fixed fees without double-booking settlements.
+
+        Settlement activity has already reduced account 2350 in the opening
+        ledger supplied to the recurring-entry engine. This entry therefore
+        posts only ``monthly fee + approved adjustment``. Positive accruals
+        debit expense and credit the payable; a sufficiently negative signed
+        adjustment reverses that direction. The schedule independently shows
+        ``beginning - settlement + accrual = ending`` and ties the ending
+        payable to the resulting GL.
+        """
+        je = JournalEntry(
+            je_id=f"JE-{self.period}-FIXEDFEE",
+            period=self.period,
+            category="fixed_fee_accrual",
+            description="Fixed-fee accrual (settlements already in opening GL)",
+        )
+        sched = Schedule("Fixed-fee accrual", "fixed_fee_accrual")
+        ending_total = 0
+        for fee in self.ds.fixed_fees():
+            accrual = self._fixed_fee_current_accrual(fee)
+            pre_accrual = (
+                fee.beginning_liability_cents - fee.settlement_cents
+            )
+            ending = pre_accrual + accrual
+            ending_total += ending
+            sched.rows.append(
+                ScheduleRow(
+                    fee.arrangement_id,
+                    {
+                        "entity": fee.entity,
+                        "beginning_liability": money.fmt(
+                            fee.beginning_liability_cents
+                        ),
+                        "current_settlement": money.fmt(fee.settlement_cents),
+                        "recurring_fee": money.fmt(fee.monthly_fee_cents),
+                        "approved_adjustment": money.fmt(
+                            fee.approved_adjustment_cents
+                        ),
+                        "current_accrual": money.fmt(accrual),
+                        "ending_liability": money.fmt(ending),
+                    },
+                )
+            )
+            memo = f"{fee.arrangement_id} recurring fixed fee"
+            if accrual > 0:
+                je.lines.append(
+                    JournalLine(fee.entity, "6250", accrual, 0, memo)
+                )
+                je.lines.append(
+                    JournalLine(fee.entity, "2350", 0, accrual, memo)
+                )
+            elif accrual < 0:
+                reversal = -accrual
+                je.lines.append(
+                    JournalLine(fee.entity, "2350", reversal, 0, memo)
+                )
+                je.lines.append(
+                    JournalLine(fee.entity, "6250", 0, reversal, memo)
+                )
+
+        sched.tie_account = "2350"
+        sched.tie_expected_cents = abs(ending_total)
+        self.schedules.append(sched)
+        return je
 
     def _mgmt_fee_accrual(self) -> JournalEntry:
         """Accrue the monthly management fee, netting any in-month cash payment.

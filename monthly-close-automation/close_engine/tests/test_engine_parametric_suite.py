@@ -789,7 +789,7 @@ def test_balances_per_entity(lines, expected):
 
 EXPECTED_CATEGORIES = {
     "prepaid_amortization", "depreciation", "deferred_rent_cam",
-    "mgmt_fee_accrual", "note_interest", "gna_allocation",
+    "fixed_fee_accrual", "mgmt_fee_accrual", "note_interest", "gna_allocation",
 }
 
 

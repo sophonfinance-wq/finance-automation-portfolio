@@ -6,8 +6,9 @@ Produces a fully fictional, seeded dataset for one entity group:
 * three operating entities,
 * an opening trial balance that balances per entity, and
 * source sub-ledgers: prepaids, fixed assets, leases (deferred rent + CAM),
-  related-party notes, management-fee arrangements, the G&A allocation map,
-  and shared insurance policies (one with a mid-year renewal step-up).
+  fixed-fee accruals, related-party notes, management-fee arrangements, the
+  G&A allocation map, and shared insurance policies (one with a mid-year
+  renewal step-up).
 
 Everything is generated with ``random.seed(seed)`` so two runs with the same
 seed produce byte-identical inputs. No real names, figures, or paths appear.
@@ -61,6 +62,7 @@ CHART: list[Account] = [
     Account("2100", "Accrued liabilities", AccountType.LIABILITY),
     Account("2200", "Deferred rent liability", AccountType.LIABILITY),
     Account("2300", "Management fee payable", AccountType.LIABILITY),
+    Account("2350", "Fixed fee payable", AccountType.LIABILITY),
     Account("2400", "Accrued interest payable", AccountType.LIABILITY),
     Account("2500", "Note payable - related party", AccountType.LIABILITY),
     Account("2800", "Due to affiliates", AccountType.LIABILITY),
@@ -72,6 +74,7 @@ CHART: list[Account] = [
     Account("6050", "CAM expense", AccountType.EXPENSE),
     Account("6100", "Depreciation expense", AccountType.EXPENSE),
     Account("6200", "Management fee expense", AccountType.EXPENSE),
+    Account("6250", "Fixed fee expense", AccountType.EXPENSE),
     Account("6300", "Interest expense", AccountType.EXPENSE),
     Account("6400", "Insurance expense", AccountType.EXPENSE),
     Account("6500", "Software expense", AccountType.EXPENSE),
@@ -156,6 +159,24 @@ class MgmtFee:
 
 
 @dataclass(frozen=True)
+class FixedFeeAccrual:
+    """A recurring fixed-fee accrual with an explicit liability rollforward.
+
+    ``settlement_cents`` is current-period cash activity already reflected in
+    the opening GL presented to the recurring-entry engine. The engine must
+    therefore book only the recurring fee plus the signed, approved
+    adjustment -- never the settlement a second time.
+    """
+
+    arrangement_id: str
+    entity: str
+    beginning_liability_cents: int
+    settlement_cents: int
+    monthly_fee_cents: int
+    approved_adjustment_cents: int = 0
+
+
+@dataclass(frozen=True)
 class GnaAllocation:
     """The G&A shared-services cost pool and its fixed allocation ratios."""
 
@@ -196,6 +217,7 @@ class SubLedgers:
     mgmt_fees: list[MgmtFee] = field(default_factory=list)
     gna: GnaAllocation | None = None
     insurance: list[InsurancePolicy] = field(default_factory=list)
+    fixed_fee_accruals: list[FixedFeeAccrual] = field(default_factory=list)
 
 
 # --------------------------------------------------------------------------- #
@@ -427,6 +449,92 @@ def _mgmt_fees() -> list[MgmtFee]:
     ]
 
 
+def _fixed_fee_accruals() -> list[FixedFeeAccrual]:
+    """Generate fixed-fee arrangements with fictional rollforward inputs.
+
+    The settlements are already present in the pre-accrual GL balance. One
+    arrangement also carries a positive approved adjustment and the other a
+    negative one so both signed-adjustment paths are exercised every run.
+    """
+    return [
+        FixedFeeAccrual(
+            arrangement_id="FFA-01",
+            entity="DH",
+            beginning_liability_cents=money.to_cents(48000),
+            settlement_cents=money.to_cents(10000),
+            monthly_fee_cents=money.to_cents(7500),
+            approved_adjustment_cents=money.to_cents(250),
+        ),
+        FixedFeeAccrual(
+            arrangement_id="FFA-02",
+            entity="MF",
+            beginning_liability_cents=money.to_cents(18000),
+            settlement_cents=money.to_cents(6000),
+            monthly_fee_cents=money.to_cents(5000),
+            approved_adjustment_cents=-money.to_cents(500),
+        ),
+    ]
+
+
+def _opening_fixed_fee_balances(
+    arrangements: list[FixedFeeAccrual],
+) -> list[JournalLine]:
+    """Seed the post-settlement, pre-accrual liability for each entity.
+
+    Current settlements belong to the upstream cash ledger. The recurring
+    close therefore receives an opening balance of ``beginning - settlement``
+    and posts only the current fee and approved adjustment. A matching equity
+    plug preserves a balanced fictional opening trial balance.
+    """
+    by_entity: dict[str, int] = {}
+    for arrangement in arrangements:
+        pre_accrual = (
+            arrangement.beginning_liability_cents
+            - arrangement.settlement_cents
+        )
+        by_entity[arrangement.entity] = (
+            by_entity.get(arrangement.entity, 0) + pre_accrual
+        )
+
+    lines: list[JournalLine] = []
+    for entity, balance in by_entity.items():
+        if balance > 0:
+            lines.append(
+                JournalLine(
+                    entity, "2350", 0, balance, "Opening fixed-fee payable"
+                )
+            )
+            lines.append(
+                JournalLine(
+                    entity,
+                    "3000",
+                    balance,
+                    0,
+                    "Opening equity (fixed-fee plug)",
+                )
+            )
+        elif balance < 0:
+            lines.append(
+                JournalLine(
+                    entity,
+                    "2350",
+                    -balance,
+                    0,
+                    "Opening fixed-fee debit balance",
+                )
+            )
+            lines.append(
+                JournalLine(
+                    entity,
+                    "3000",
+                    0,
+                    -balance,
+                    "Opening equity (fixed-fee plug)",
+                )
+            )
+    return lines
+
+
 def _gna() -> GnaAllocation:
     """Generate the G&A shared-services pool and its 100% allocation ratio."""
     return GnaAllocation(
@@ -547,6 +655,7 @@ def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
         leases=_leases(),
         notes=_notes(),
         mgmt_fees=_mgmt_fees(),
+        fixed_fee_accruals=_fixed_fee_accruals(),
         gna=_gna(),
         insurance=_insurance(seed, ENTITIES),
     )
@@ -559,6 +668,9 @@ def generate_dataset(period: str, seed: int = 2026) -> "Dataset":
     # Same treatment for prepaid insurance (account 1450): seed the current
     # policy year's unamortized premium so the insurance schedule ties.
     opening.extend(_opening_insurance_balances(subs.insurance, period))
+    # Fixed-fee settlements are upstream cash activity, so the recurring
+    # engine starts with the post-settlement, pre-accrual payable balance.
+    opening.extend(_opening_fixed_fee_balances(subs.fixed_fee_accruals))
     return Dataset(
         period=period,
         seed=seed,
@@ -612,6 +724,10 @@ class Dataset:
         """Return the management-fee arrangements."""
         return self.subs.mgmt_fees
 
+    def fixed_fees(self) -> list[FixedFeeAccrual]:
+        """Return the recurring fixed-fee accrual arrangements."""
+        return self.subs.fixed_fee_accruals
+
     def gna(self) -> GnaAllocation:
         """Return the G&A allocation map (must be present)."""
         assert self.subs.gna is not None
@@ -633,6 +749,7 @@ class Dataset:
             f"  Leases        : {len(self.subs.leases)}",
             f"  Notes         : {len(self.subs.notes)}",
             f"  Mgmt fees     : {len(self.subs.mgmt_fees)}",
+            f"  Fixed fees    : {len(self.subs.fixed_fee_accruals)}",
             f"  Insurance     : {len(self.subs.insurance)}",
             f"  G&A pool      : {money.fmt(self.subs.gna.monthly_pool_cents)}"
             if self.subs.gna
