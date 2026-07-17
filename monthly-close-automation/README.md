@@ -42,7 +42,8 @@ until someone finds it quarters later.
 
 ## Classes of recurring entries automated
 At a capability level (no employer specifics): prepaid amortization, fixed-asset
-depreciation, deferred-rent / CAM allocations, management-fee accruals, note-payable
+depreciation, deferred-rent / CAM allocations, fixed-fee accrual rollforwards,
+management-fee accruals, note-payable
 interest accruals (including multi-leg intercompany interest *capitalization*), G&A cost
 allocations, and prepaid-insurance allocations — each as deterministic, tie-checked logic.
 
@@ -96,7 +97,7 @@ Close Sentinel runs by default (`--no-sentinel` to skip); any **CRITICAL** contr
 finding also fails the run.
 
 ### What the engine computes
-Seven classes of recurring entries, each with a backing schedule and a hard
+Eight classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
 
 | Entry | Logic |
@@ -104,6 +105,7 @@ debits == credits control (and per-entity balance for intercompany entries):
 | **Prepaid amortization** | straight-line over each item's service period |
 | **Fixed-asset depreciation** | straight-line, monthly, no salvage |
 | **Deferred rent + CAM** | rent straight-lined vs. escalating cash rent; cost shared across entities by a fixed split routed through intercompany **due-to / due-from** |
+| **Fixed-fee accrual** | beginning payable less settlements already in the GL, plus the monthly fee and a signed approved adjustment; the engine posts only the accrual so settlements are never double-booked |
 | **Management-fee accrual** | full monthly fee, **netting** any in-month cash payment |
 | **Note interest accrual** | simple monthly interest, with the lender/borrower **intercompany mirror** |
 | **G&A allocation** | fixed ratio that **must sum to 100%** (largest-remainder split, no penny lost) |
@@ -269,11 +271,12 @@ gitignored). Console summary:
 
 ```
 Month-end close — period 2026-03 (seed 2026)
-  Posted entries : 7
+  Posted entries : 8
   Refused (tie)  : 0
-  Trial balance  : Dr 3,587,237.50 / Cr 3,587,237.50 [OK]
+  Trial balance  : Dr 3,599,487.50 / Cr 3,599,487.50 [OK]
   Tie-outs:
     - Prepaid amortization         acct 1400: sched 8,100.00 vs GL 8,100.00 [OK]
+    - Fixed-fee accrual            acct 2350: sched 62,250.00 vs GL 62,250.00 [OK]
     - Insurance allocation         acct 1450: sched 10,950.00 vs GL 10,950.00 [OK]
   Sentinel: all controls passed (no findings).
   Outputs written to: .../monthly-close-automation/output
@@ -290,14 +293,15 @@ Month-end close — period 2026-03 (seed 2026)
 | 1 | Prepaid amortization (straight-line)                     | JE-2026-03-PREPAID   |  3,400.00 |  3,400.00 | [x] |
 | 2 | Fixed-asset depreciation (straight-line, monthly)        | JE-2026-03-DEPREC    |  9,000.00 |  9,000.00 | [x] |
 | 3 | Deferred rent + CAM straight-lining (intercompany split) | JE-2026-03-LEASE     | 17,812.50 | 17,812.50 | [x] |
-| 4 | Management-fee accrual (net of in-month payments)        | JE-2026-03-MGMTFEE   | 14,000.00 | 14,000.00 | [x] |
-| 5 | Related-party note interest accrual                      | JE-2026-03-INTEREST  |  6,875.00 |  6,875.00 | [x] |
-| 6 | G&A cost allocation (fixed ratio, sums to 100%)          | JE-2026-03-GNA       | 24,000.00 | 24,000.00 | [x] |
-| 7 | Insurance premium allocation (shared policies)           | JE-2026-03-INSUR     |  2,600.00 |  2,600.00 | [x] |
+| 4 | Fixed-fee accrual (signed approved adjustment)           | JE-2026-03-FIXEDFEE  | 12,250.00 | 12,250.00 | [x] |
+| 5 | Management-fee accrual (net of in-month payments)        | JE-2026-03-MGMTFEE   | 14,000.00 | 14,000.00 | [x] |
+| 6 | Related-party note interest accrual                      | JE-2026-03-INTEREST  |  6,875.00 |  6,875.00 | [x] |
+| 7 | G&A cost allocation (fixed ratio, sums to 100%)          | JE-2026-03-GNA       | 24,000.00 | 24,000.00 | [x] |
+| 8 | Insurance premium allocation (shared policies)           | JE-2026-03-INSUR     |  2,600.00 |  2,600.00 | [x] |
 
 ## Controls
 - [x] Every posted entry balances (debits == credits).
-- [x] Trial balance is in balance (3,587,237.50 == 3,587,237.50).
+- [x] Trial balance is in balance (3,599,487.50 == 3,599,487.50).
 - [x] Every schedule ties to the GL.
 - [x] No entries refused for being out of tie (0 refused).
 
@@ -348,12 +352,12 @@ monthly-close-automation/
 │   ├── money.py           # integer-cent math (split / allocate, no penny lost)
 │   ├── model.py           # chart of accounts, JEs, ledger + the balance control
 │   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers, insurance policies)
-│   ├── engine.py          # the seven recurring entries + tie-out
+│   ├── engine.py          # the eight recurring entries + tie-out
 │   ├── sentinel/          # Close Sentinel — findings, controls C1–C10, shadow recompute
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,542 tests)
+│   └── tests/             # pytest suite (5,613 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # committed .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -371,7 +375,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,542 passed**)
+### Tested behavior (`python -m pytest -q` → **5,613 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie

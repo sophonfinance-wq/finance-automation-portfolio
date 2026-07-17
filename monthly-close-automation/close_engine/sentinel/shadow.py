@@ -20,6 +20,7 @@ CATEGORIES: tuple[str, ...] = (
     "prepaid_amortization",
     "depreciation",
     "deferred_rent_cam",
+    "fixed_fee_accrual",
     "mgmt_fee_accrual",
     "note_interest",
     "gna_allocation",
@@ -181,6 +182,27 @@ def _shadow_mgmt_fee_accrual(dataset, amounts: AmountMap) -> None:
                  credit=net)
 
 
+def _shadow_fixed_fee_accrual(dataset, amounts: AmountMap) -> None:
+    """Fixed fees: independently derive fee plus signed approved adjustment.
+
+    Settlements are deliberately absent: they are upstream activity already
+    reflected in the opening payable balance and must not be posted twice.
+    """
+    for fee in dataset.fixed_fees():
+        accrual = fee.monthly_fee_cents + fee.approved_adjustment_cents
+        if accrual > 0:
+            _add(amounts, fee.entity, "fixed_fee_accrual", "6250",
+                 debit=accrual)
+            _add(amounts, fee.entity, "fixed_fee_accrual", "2350",
+                 credit=accrual)
+        elif accrual < 0:
+            reversal = -accrual
+            _add(amounts, fee.entity, "fixed_fee_accrual", "2350",
+                 debit=reversal)
+            _add(amounts, fee.entity, "fixed_fee_accrual", "6250",
+                 credit=reversal)
+
+
 def _shadow_note_interest(dataset, amounts: AmountMap) -> None:
     """Notes: borrower accrues expense/payable; lender mirrors via due-from."""
     for note in dataset.notes():
@@ -262,6 +284,7 @@ def expected_amounts(dataset) -> AmountMap:
     _shadow_prepaid_amortization(dataset, amounts)
     _shadow_depreciation(dataset, amounts)
     _shadow_deferred_rent_cam(dataset, amounts)
+    _shadow_fixed_fee_accrual(dataset, amounts)
     _shadow_mgmt_fee_accrual(dataset, amounts)
     _shadow_note_interest(dataset, amounts)
     _shadow_gna_allocation(dataset, amounts)

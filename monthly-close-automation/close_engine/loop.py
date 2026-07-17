@@ -65,6 +65,7 @@ CATEGORY_ORDER: tuple[str, ...] = (
     "prepaid_amortization",
     "depreciation",
     "deferred_rent_cam",
+    "fixed_fee_accrual",
     "mgmt_fee_accrual",
     "note_interest",
     "gna_allocation",
