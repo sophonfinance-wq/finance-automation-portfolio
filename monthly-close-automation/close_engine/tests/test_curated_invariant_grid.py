@@ -45,3 +45,39 @@ def test_split_and_to_cents_invariants(total_cents: int, periods: int) -> None:
 
     # Integer dollar -> cents is an exact scaling by CENTS_PER_UNIT.
     assert to_cents(total_cents) == total_cents * CENTS_PER_UNIT
+
+
+# --- allocate_by_ratio grid (+6,000 cases) --------------------------------
+# Two-way basis-point splits always summing to 10,000 bps. Hamilton
+# (largest-remainder) allocation must preserve the signed total exactly and
+# return one part per weight.
+_ALLOC_TOTALS = [
+    -250000, -99999, -5001, -742, -100, -13, -1, 0, 1, 7, 50, 99, 100, 101,
+    743, 999, 1000, 1001, 4999, 5000, 5399, 9999, 10000, 10001, 12345, 25000,
+    33333, 49999, 50000, 66667, 74300, 99998, 99999, 100000, 100001, 123456,
+    200000, 250001, 333333, 499999, 500000, 654321, 742743, 888888, 999999,
+    1000000, 1000001, 1234567, 2000000, 2500001, 3333333, 4999999, 5000000,
+    6543210, 7427430, 8888888, 9999999, 10000000, 10000001, 12345678,
+]  # 60 signed totals
+_ALLOC_SPLITS = range(1, 101)  # 100 split points -> bps pairs summing to 10,000
+
+
+@pytest.mark.parametrize(
+    "total_cents,split", list(itertools.product(_ALLOC_TOTALS, _ALLOC_SPLITS))
+)
+def test_allocate_by_ratio_preserves_total(total_cents: int, split: int) -> None:
+    from close_engine.money import allocate_by_ratio
+
+    bps = [split * 50, 10_000 - split * 50]  # split in 1..100 -> 50..5000 bps
+    parts = allocate_by_ratio(total_cents, bps)
+
+    # Sum-preservation: no penny lost or created.
+    assert sum(parts) == total_cents
+    # One part per weight.
+    assert len(parts) == 2
+    # Proportionality: each part lies within one cent of its exact bps share
+    # (an allocator that ignores the weights fails immediately).
+    for i in range(2):
+        assert abs(parts[i] * 10_000 - total_cents * bps[i]) <= 10_000
+    # Determinism.
+    assert allocate_by_ratio(total_cents, bps) == parts
