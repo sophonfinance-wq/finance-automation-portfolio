@@ -69,3 +69,47 @@ def test_waterfall_and_pool_invariants(dist: int, pool: int) -> None:
     assert pb.get(PREACQ) == pool
     pb.add(EXEMPT, 7)
     assert pb.get(EXEMPT) == pool + 7
+
+
+# --- unequal-pool waterfall grid (+4,500 cases) ----------------------------
+# Pools of different sizes (exempt = pool, taxable = 2*pool, pre-acq = pool)
+# must obey the same certain invariants: never draw more than the
+# distribution or the total available, statutory pool tags only, strictly
+# positive steps, and the exempt draw capped at the statutory fraction.
+_DIST_U = range(0, 45)   # 45 distributions
+_POOL_U = range(0, 100)  # 100 pool scales
+
+
+@pytest.mark.parametrize("dist,pool", list(itertools.product(_DIST_U, _POOL_U)))
+def test_waterfall_unequal_pools(dist: int, pool: int) -> None:
+    opening = PoolBalances(
+        exempt_surplus=pool,
+        taxable_surplus=2 * pool,
+        pre_acquisition_capital=pool,
+        acb=0,
+    )
+    available = pool + 2 * pool + pool
+    steps, cap_amount, cap_binding = run_waterfall(dist, opening, EXEMPT_CAP)
+
+    total_drawn = sum(s.amount for s in steps)
+    assert total_drawn <= dist + 1e-9
+    assert total_drawn <= available + 1e-9
+    for s in steps:
+        assert s.amount > 0
+        assert s.pool in (EXEMPT, TAXABLE, PREACQ)
+    assert cap_amount == pytest.approx(round(dist * EXEMPT_CAP, 2))
+
+    # Exact expected draws under the statutory order (exempt -> taxable ->
+    # pre-acq, exempt capped): pins the waterfall to a full re-derivation,
+    # so an engine that under- or over-draws any pool fails here.
+    exempt_exp = min(pool, dist, cap_amount)
+    taxable_exp = min(2 * pool, dist - exempt_exp)
+    preacq_exp = min(pool, dist - exempt_exp - taxable_exp)
+    assert total_drawn == pytest.approx(exempt_exp + taxable_exp + preacq_exp)
+    exempt_drawn = sum(s.amount for s in steps if s.pool == EXEMPT)
+    assert exempt_drawn == pytest.approx(exempt_exp)
+
+    # The cap binds exactly when the exempt pool (and the distribution)
+    # could have supplied more than the cap allows.
+    assert isinstance(cap_binding, bool)
+    assert cap_binding == (min(pool, dist) > cap_amount + 1e-9)

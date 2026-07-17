@@ -6,8 +6,8 @@ prompt below into Codex (or any independent reviewer) to run an adversarial audi
 in this repo.
 
 > Before sending: update the HEAD and expected test count. Current at last edit:
-> **`pytest` → 10,839 passed (curated suite) · `SWEEP=1 pytest` → 1,098,140 (property sweep) · 8 systems**
-> curated per system: (close 1,800 / recon 1,001 / surplus 1,486 / partnership 1,605 / audit 1,314 / triangulate 1,311 / knowledge-brain 1,499 / finance-atlas 823).
+> **`pytest` → 59,740 collected (curated suite) · `SWEEP=1 pytest` → 1,147,870 (property sweep) · 8 systems**
+> curated per system: (close 13,053 / partnership 8,605 / triangulate 8,320 / recon 7,511 / surplus 7,498 / knowledge-brain 7,011 / audit 4,814 / finance-atlas 2,928).
 
 ---
 
