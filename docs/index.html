@@ -442,24 +442,24 @@
   @media (max-width:520px){ #jazz-toggle .jz-label{ display:none; } #jazz-toggle{ padding:11px 13px; } }
 </style>
 <audio id="jazz-audio" loop preload="none">
-  <source src="assets/smooth-jazz.mp3" type="audio/mpeg">
+  <source src="assets/site-music.mp3" type="audio/mpeg">
 </audio>
-<button id="jazz-toggle" type="button" aria-pressed="false" aria-label="Play smooth jazz" title="Smooth jazz — ambient background music">
+<button id="jazz-toggle" type="button" aria-pressed="false" aria-label="Play background music" title="Background music">
   <span class="jz-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-  <span class="jz-label">Smooth Jazz</span>
+  <span class="jz-label">Soundtrack</span>
 </button>
 <script>
 (function(){
   var audio = document.getElementById('jazz-audio');
   var btn   = document.getElementById('jazz-toggle');
   if (!audio || !btn) return;
-  var KEY = 'sfs-jazz';
+  var KEY = 'sfs-music';
   audio.volume = 0.35;
 
   function setState(on){
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btn.setAttribute('aria-label', on ? 'Pause smooth jazz' : 'Play smooth jazz');
-    btn.querySelector('.jz-label').textContent = on ? 'Playing' : 'Smooth Jazz';
+    btn.setAttribute('aria-label', on ? 'Pause background music' : 'Play background music');
+    btn.querySelector('.jz-label').textContent = on ? 'Playing' : 'Soundtrack';
   }
 
   // Button reflects the ACTUAL playback state, so it never claims "Playing" while muted-blocked.
