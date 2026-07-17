@@ -89,7 +89,10 @@ python run.py --period 2026-03 --out ./output
 # 3) Prove the controls: inject twelve classic close errors, watch each get caught
 python -m close_engine --demo-guardrails
 
-# 4) Run the tests
+# 4) Preflight a recurring-entry register without posting or importing it
+python -m close_engine.recurring_register --input samples/sample-recurring-register.json
+
+# 5) Run the tests
 python -m pytest -q
 ```
 
@@ -97,6 +100,39 @@ The CLI **exits non-zero** if the close is not clean (any out-of-tie entry, a
 failed schedule tie-out, or an unbalanced trial balance), so it can gate a pipeline.
 Close Sentinel runs by default (`--no-sentinel` to skip); any **CRITICAL** control
 finding also fails the run.
+
+### Read-only recurring-register preflight
+
+`close_engine.recurring_register` is a separate validation-only boundary for a
+controller-maintained recurring JE register. It reads a generic JSON register,
+validates it, and returns `PASS` or `NEEDS REVIEW`. It never creates journal
+entries, touches the ledger, constructs an ERP import payload, or changes the
+source file.
+
+The preflight applies five deterministic gates:
+
+| Gate | What it proves |
+|------|----------------|
+| **Exact period** | The target and every row use canonical `YYYY-MM`; a prior-period row is explicitly stale. |
+| **Row identity** | `(entry_id, line_id)` is unique and required identifiers are nonblank and already trimmed. |
+| **Stale memo** | Any canonical period token in a memo must equal the target period. |
+| **Safe amounts** | Amounts are nonnegative integer cents. Floats, booleans, text, formulas, nonfinite values, and spreadsheet error tokens are rejected instead of coerced. |
+| **Balance** | Every entry group balances independently, then the full register crossfoots globally; offsetting group errors cannot hide in a clean global net. |
+
+```text
+Recurring-register preflight - 2026-03
+  Rows             : 4
+  Entry groups     : 2
+  Debits / credits : 205000 / 205000 cents
+  Findings         : 0
+  Posting actions  : 0 (validation only)
+  Import payloads  : 0 (validation only)
+  Verdict          : PASS
+```
+
+The public schema is intentionally generic and the sample is entirely
+fictional. No workbook layout, company process, account mapping, or import
+connector is encoded in this validator.
 
 ### What the engine computes
 Nine classes of recurring entries, each with a backing schedule and a hard
@@ -365,7 +401,7 @@ monthly-close-automation/
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,697 tests)
+│   └── tests/             # pytest suite (5,740 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -383,7 +419,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,697 passed**)
+### Tested behavior (`python -m pytest -q` → **5,740 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie
