@@ -4,8 +4,9 @@ A deterministic, tie-checked month-end close engine for a small multi-entity
 group. Computes recurring journal entries (prepaid amortization, fixed-asset
 depreciation, deferred rent + CAM straight-lining, management-fee accruals,
 fixed-fee accruals, note interest accruals, G&A cost allocation, insurance,
-and exact-route postage allocation), plus a separate validation-only
-recurring-register preflight. The posting engine enforces
+and exact-route postage allocation), plus separate validation-only
+recurring-register, construction-budget, and trial-balance continuity
+preflights. The posting engine enforces
 debits == credits on every entry, ties each schedule back to the general
 ledger, and produces a JE register, an updated trial balance, and a markdown
 close report.
