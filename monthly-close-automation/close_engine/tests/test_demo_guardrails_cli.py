@@ -393,7 +393,9 @@ def test_sentinel_json_round_trips_through_json() -> None:
     assert json.loads(json.dumps(data)) == data
 
 
-def test_the_close_report_lists_each_finding_with_control_and_severity() -> None:
+def test_the_close_report_lists_each_finding_and_never_calls_it_clean(
+    capsys,
+) -> None:
     period = "2026-03"
     result = CloseEngine(generate_dataset(period)).run()
     md = report.close_report_markdown(result, sentinel=_mixed_report())
@@ -401,6 +403,10 @@ def test_the_close_report_lists_each_finding_with_control_and_severity() -> None
     assert "| C4 | CRITICAL | ENT-02 | over-accrual | excess 1.00 |" in md
     assert "| C7 | WARN | group | unexplained step | no event |" in md
     assert "| C7 | INFO | ENT-01 | step-up explained | renewal |" in md
+    assert "Close status: NOT CLEAN" in md
+
+    cli._print_summary(result, ".", _mixed_report())
+    assert "Close status: NOT CLEAN" in capsys.readouterr().out
 
 
 def test_the_close_report_omits_the_section_without_a_sentinel_report() -> None:

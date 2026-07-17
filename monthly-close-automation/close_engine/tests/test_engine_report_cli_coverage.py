@@ -86,6 +86,7 @@ def test_close_result_has_one_schedule_per_category() -> None:
         "note_interest",
         "gna_allocation",
         "insurance_allocation",
+        "postage_allocation",
     ]
 
 
@@ -101,6 +102,7 @@ def test_close_result_register_categories() -> None:
         "note_interest",
         "gna_allocation",
         "insurance_allocation",
+        "postage_allocation",
     ]
 
 

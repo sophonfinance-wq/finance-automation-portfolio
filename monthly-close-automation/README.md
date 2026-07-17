@@ -45,7 +45,8 @@ At a capability level (no employer specifics): prepaid amortization, fixed-asset
 depreciation, deferred-rent / CAM allocations, fixed-fee accrual rollforwards,
 management-fee accruals, note-payable
 interest accruals (including multi-leg intercompany interest *capitalization*), G&A cost
-allocations, and prepaid-insurance allocations — each as deterministic, tie-checked logic.
+allocations, prepaid-insurance allocations, and exact-route postage meter allocations —
+each as deterministic, tie-checked logic.
 
 ## What this demonstrates
 - Reduces a **multi-day manual close to a repeatable workflow** a single operator can run.
@@ -67,7 +68,8 @@ allocations, and prepaid-insurance allocations — each as deterministic, tie-ch
 This repository ships a small but **fully working** month-end **close engine** on
 **fictional** data. It generates a synthetic entity group, computes the recurring
 journal entries, enforces tie-out controls, runs the Close Sentinel control suite,
-and writes a JE register, an updated trial balance, and a close report.
+and writes a JE register, structured backing schedules, an updated trial balance,
+and a close report.
 
 **Requirements:** Python 3.12+, `openpyxl` (already installed). Tests
 use `pytest`. No pandas/numpy/faker — stdlib only, seeded for determinism.
@@ -97,7 +99,7 @@ Close Sentinel runs by default (`--no-sentinel` to skip); any **CRITICAL** contr
 finding also fails the run.
 
 ### What the engine computes
-Eight classes of recurring entries, each with a backing schedule and a hard
+Nine classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
 
 | Entry | Logic |
@@ -110,6 +112,7 @@ debits == credits control (and per-entity balance for intercompany entries):
 | **Note interest accrual** | simple monthly interest, with the lender/borrower **intercompany mirror** |
 | **G&A allocation** | fixed ratio that **must sum to 100%** (largest-remainder split, no penny lost) |
 | **Prepaid-insurance allocation** | shared policies amortized monthly across entities by fixed basis-point splits (largest-remainder, exact to the cent), with a **mid-year renewal step-up** — the applicable premium switches to the renewal rate starting in the renewal month |
+| **Postage allocation** | signed meter detail must match **exactly one** approved project/job/cost route; blank, noncanonical, unknown, or duplicate identifiers refuse the whole batch, refunds reverse expense and intercompany legs, and account 1460 must clear separately in every entity |
 
 All money is held as **integer cents** so tie-outs are exact. Allocation ratios are
 validated to sum to exactly 100% (10000 bps) before anything posts.
@@ -271,13 +274,17 @@ gitignored). Console summary:
 
 ```
 Month-end close — period 2026-03 (seed 2026)
-  Posted entries : 8
+  Posted entries : 9
   Refused (tie)  : 0
-  Trial balance  : Dr 3,599,487.50 / Cr 3,599,487.50 [OK]
+  Postage routes : 4/5 meter rows
+  Trial balance  : Dr 3,603,311.50 / Cr 3,603,311.50 [OK]
   Tie-outs:
     - Prepaid amortization         acct 1400: sched 8,100.00 vs GL 8,100.00 [OK]
     - Fixed-fee accrual            acct 2350: sched 62,250.00 vs GL 62,250.00 [OK]
     - Insurance allocation         acct 1450: sched 10,950.00 vs GL 10,950.00 [OK]
+    - Postage allocation (BW)      acct 1460: sched 0.00 vs GL 0.00 [OK]
+    - Postage allocation (DH)      acct 1460: sched 0.00 vs GL 0.00 [OK]
+    - Postage allocation (MF)      acct 1460: sched 0.00 vs GL 0.00 [OK]
   Sentinel: all controls passed (no findings).
   Outputs written to: .../monthly-close-automation/output
   Close status: CLEAN
@@ -298,10 +305,11 @@ Month-end close — period 2026-03 (seed 2026)
 | 6 | Related-party note interest accrual                      | JE-2026-03-INTEREST  |  6,875.00 |  6,875.00 | [x] |
 | 7 | G&A cost allocation (fixed ratio, sums to 100%)          | JE-2026-03-GNA       | 24,000.00 | 24,000.00 | [x] |
 | 8 | Insurance premium allocation (shared policies)           | JE-2026-03-INSUR     |  2,600.00 |  2,600.00 | [x] |
+| 9 | Postage meter allocation (exact project/job/cost routes) | JE-2026-03-POSTAGE   |  4,016.00 |  4,016.00 | [x] |
 
 ## Controls
 - [x] Every posted entry balances (debits == credits).
-- [x] Trial balance is in balance (3,599,487.50 == 3,599,487.50).
+- [x] Trial balance is in balance (3,603,311.50 == 3,603,311.50).
 - [x] Every schedule ties to the GL.
 - [x] No entries refused for being out of tie (0 refused).
 
@@ -351,15 +359,15 @@ monthly-close-automation/
 │   ├── __main__.py        # enables `python -m close_engine`
 │   ├── money.py           # integer-cent math (split / allocate, no penny lost)
 │   ├── model.py           # chart of accounts, JEs, ledger + the balance control
-│   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers, insurance policies)
-│   ├── engine.py          # the eight recurring entries + tie-out
+│   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers, insurance, postage)
+│   ├── engine.py          # the nine recurring entries + tie-out
 │   ├── sentinel/          # Close Sentinel — findings, controls C1–C10, shadow recompute
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,613 tests)
+│   └── tests/             # pytest suite (5,697 tests)
 ├── run.py                 # `python run.py --period 2026-03`
-├── output/                # committed .md/.json (xlsx gitignored)
+├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
 ```
 
@@ -375,7 +383,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,613 passed**)
+### Tested behavior (`python -m pytest -q` → **5,697 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie

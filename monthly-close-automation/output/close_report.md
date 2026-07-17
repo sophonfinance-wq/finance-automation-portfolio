@@ -20,6 +20,7 @@
 | 6 | Related-party note interest accrual | `JE-2026-03-INTEREST` | 6,875.00 | 6,875.00 | [x] |
 | 7 | G&A cost allocation (fixed ratio, sums to 100%) | `JE-2026-03-GNA` | 24,000.00 | 24,000.00 | [x] |
 | 8 | Insurance premium allocation (shared policies) | `JE-2026-03-INSUR` | 2,600.00 | 2,600.00 | [x] |
+| 9 | Postage meter allocation (exact project/job/cost routes) | `JE-2026-03-POSTAGE` | 4,016.00 | 4,016.00 | [x] |
 
 ## Tie-out summary
 
@@ -28,11 +29,14 @@
 | Prepaid amortization | 1400 · Prepaid expenses | 8,100.00 | 8,100.00 | [x] |
 | Fixed-fee accrual | 2350 · Fixed fee payable | 62,250.00 | 62,250.00 | [x] |
 | Insurance allocation | 1450 · Prepaid insurance | 10,950.00 | 10,950.00 | [x] |
+| Postage allocation (BW) | 1460 · Unallocated postage | 0.00 | 0.00 | [x] |
+| Postage allocation (DH) | 1460 · Unallocated postage | 0.00 | 0.00 | [x] |
+| Postage allocation (MF) | 1460 · Unallocated postage | 0.00 | 0.00 | [x] |
 
 ## Controls
 
 - [x] Every posted entry balances (debits == credits).
-- [x] Trial balance is in balance (3,599,487.50 == 3,599,487.50).
+- [x] Trial balance is in balance (3,603,311.50 == 3,603,311.50).
 - [x] Every schedule ties to the GL.
 - [x] No entries refused for being out of tie (0 refused).
 
