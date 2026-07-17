@@ -213,6 +213,24 @@ fictional examples and generic roles; it encodes no private workbook layout,
 entity, account map, amount, formula, or connector. It cannot emit a journal
 entry, import payload, posting action, audit opinion, or source mutation.
 
+### Combined-financial-statement preflight (validation only)
+
+`close_engine.consolidation` validates a fictional monthly consolidation
+package expressed as generic structured records and integer cents. It requires
+exactly one of 13 semantic roles, requires every statement and dependency to
+use the authoritative month, validates numeric formula caches and approved
+dependency roles, and independently compares each supplied control's actual
+and expected cents. Manual adjustments require support and approval and still
+remain review-gated.
+
+An optional prior package must be the immediately preceding month. Formula,
+dependency, entity, project, and account population changes are counted and
+sent to review instead of being silently accepted. A mechanically clean result
+is only `READY FOR HUMAN REVIEW`; the validator cannot create journal entries,
+import payloads, submissions, posting actions, or source mutations. The public
+schema and fixtures are entirely fictional and encode no private workbook
+layout, entity, account map, path, amount, formula, or connector.
+
 ### What the engine computes
 Nine classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
@@ -480,8 +498,9 @@ monthly-close-automation/
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
 │   ├── cash_draw.py       # validation-only construction-draw and funding controls
+│   ├── consolidation.py   # validation-only combined-statement package controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,898 tests)
+│   └── tests/             # pytest suite (5,938 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -499,7 +518,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,898 passed**)
+### Tested behavior (`python -m pytest -q` → **5,938 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie
