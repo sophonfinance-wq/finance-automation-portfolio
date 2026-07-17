@@ -153,6 +153,28 @@ payload, posting action, or source-system mutation. The example names and amount
 are entirely fictional, and the public module does not encode a private workbook
 layout.
 
+### Job-cost-to-construction-draw preflight (validation only)
+
+`close_engine.cash_draw` validates a fictional current construction draw against
+generic structured transaction, detail-total, category-total, reconciliation,
+and prior-period records. It uses integer cents and independently re-adds the
+draw equation (`amount - retainage + adjustment`), detail and bank-category
+crossfoots, the combined detail-to-draw tie, equity-plus-lender funding, net job
+cost, variance, and project-report totals. Current-versus-prior checks prove the
+draw number, cumulative interest, lender funding, and debt/equity continuity.
+An optional same-period original/revision pair must also explain its exact draw
+delta and is always sent to human approval when the amount changes.
+
+Unsafe amount types, invalid dates or cost codes, incomplete AP support,
+duplicate transaction identities, missing mappings or displayed totals, and
+external, broken, or cached-error dependencies are explicit findings. A clean
+result is still only `READY FOR HUMAN REVIEW`: source refresh and tie, invoice
+and commitment completeness, mapping and retainage approval, lender-statement
+confirmation, controller review, and lender submission remain manual gates.
+The public component encodes no private workbook layout, company, account map,
+amount, formula, path, or connector. It cannot create journal entries, lender
+submissions, import payloads, posting actions, or source mutations.
+
 ### Trial-balance continuity preflight (validation only)
 
 `close_engine.trial_balance` compares a fictional current/prior structured
@@ -457,8 +479,9 @@ monthly-close-automation/
 │   ├── sentinel/          # Close Sentinel — findings, controls C1–C10, shadow recompute
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
+│   ├── cash_draw.py       # validation-only construction-draw and funding controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,793 tests)
+│   └── tests/             # pytest suite (5,898 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -476,7 +499,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,793 passed**)
+### Tested behavior (`python -m pytest -q` → **5,898 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie
