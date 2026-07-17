@@ -6,8 +6,8 @@ depreciation, deferred rent + CAM straight-lining, management-fee accruals,
 fixed-fee accruals, note interest accruals, G&A cost allocation, insurance,
 and exact-route postage allocation), plus separate validation-only
 recurring-register, construction-budget, cash/draw reconciliation,
-trial-balance continuity, multi-entity TB package, audit/PBC package, and combined-financial-statement
-preflights. The posting engine enforces
+trial-balance continuity, multi-entity TB package, group-operations package,
+audit/PBC package, and combined-financial-statement preflights. The posting engine enforces
 debits == credits on every entry, ties each schedule back to the general
 ledger, and produces a JE register, an updated trial balance, and a markdown
 close report.
