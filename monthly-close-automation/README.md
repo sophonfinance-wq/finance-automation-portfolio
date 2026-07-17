@@ -140,6 +140,12 @@ connector is encoded in this validator.
 
 The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source-system refresh and tie, entity perimeter and mapping approval, project-result support, operations-package approval, and controller sign-off remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook coordinates, paths, formulas, entities, or amounts.
 
+### Group Operations package preflight (validation only)
+
+`close_engine.group_operations` validates a fictional structured monthly management package with 16 generic semantic roles. It checks canonical period authority; formula caches and external dependencies; allocation, regional crossfoot, and disclosed rounding-boundary controls; embedded amounts and manual adjustments; and current/prior formula, dependency, and label continuity using integer cents.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source refresh and tie, reporting-perimeter and classification approval, manual-item support, structural-change review, and controller sign-off remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook coordinates, paths, formulas, entities, or amounts.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
@@ -505,8 +511,9 @@ monthly-close-automation/
 │   ├── report.py          # JE register, trial balance, close report + control findings
 │   ├── cash_draw.py       # validation-only construction-draw and funding controls
 │   ├── consolidation.py   # validation-only combined-statement package controls
+│   ├── group_operations.py # validation-only management-package controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,938 tests)
+│   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
