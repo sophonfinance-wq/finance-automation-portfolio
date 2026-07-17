@@ -56,3 +56,29 @@ def test_variance_classify_and_leg_sum(variance: int, threshold: int) -> None:
         late_paydown=0,
     )
     assert lender_three_part_total(stmt) == variance + threshold
+
+
+# --- wide-axis banding grid (+5,000 cases) ---------------------------------
+# Same exact invariants as above over a wider variance/threshold lattice,
+# including the negative-variance mirror (classification is symmetric in
+# the sign of the variance).
+_VARIANCE_W = range(0, 50)     # 50 non-negative integer variances
+_THRESHOLD_W = range(1, 101)   # 100 positive integer thresholds
+
+
+@pytest.mark.parametrize(
+    "variance,threshold", list(itertools.product(_VARIANCE_W, _THRESHOLD_W))
+)
+def test_classify_banding_and_sign_symmetry(variance: int, threshold: int) -> None:
+    if variance == 0:
+        expected = "clean"
+    elif variance <= threshold:
+        expected = "timing"
+    else:
+        expected = "flag"
+    # Positive side.
+    assert classify(variance, threshold) == expected
+    # Sign symmetry: classification depends only on the magnitude.
+    assert classify(-variance, threshold) == expected
+    # compute_variance stays an exact subtraction on integers.
+    assert compute_variance(variance, threshold) == variance - threshold
