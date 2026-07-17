@@ -5,7 +5,7 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-14%2C884%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
+[![Tests](https://img.shields.io/badge/tests-14%2C927%20curated%20%C2%B7%20~1.09M%20sweep-2ea44f)](#testing)
 [![Systems](https://img.shields.io/badge/systems-8%20runnable-6f42c1)](#the-eight-systems)
 [![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (14,884 tests, under four minutes)
+# run the curated test suite (14,927 tests, under four minutes)
 pytest
 
 # run a system
@@ -62,7 +62,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
-**3. Honest, tiered tests.** `pytest` runs the curated suite (14,884, gates CI); `SWEEP=1 pytest` runs an exhaustive property sweep (~1.09M generated cases). See [Testing](#testing).
+**3. Honest, tiered tests.** `pytest` runs the curated suite (14,927, gates CI); `SWEEP=1 pytest` runs an exhaustive property sweep (~1.09M generated cases). See [Testing](#testing).
 
 **4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
 ```bash
@@ -134,14 +134,14 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **14,884** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems. Runs in under four minutes; gates CI. |
+| **Curated** (default) | `pytest` | **14,927** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems. Runs in under four minutes; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.09M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
 default run (and CI) for speed and generated at import — the files stay small. It's there for
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
-Curated tests by system: close **5,697** · partnership **1,605** · knowledge-brain **1,511** ·
+Curated tests by system: close **5,740** · partnership **1,605** · knowledge-brain **1,511** ·
 tax-surplus **1,498** · validation **1,314** · triangulate **1,320** · recon **1,011** ·
 atlas **928** (including a parametrized deny-list confidentiality linter across every shipped file).
 
