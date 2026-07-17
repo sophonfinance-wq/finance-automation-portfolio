@@ -134,6 +134,12 @@ The public schema is intentionally generic and the sample is entirely
 fictional. No workbook layout, company process, account mapping, or import
 connector is encoded in this validator.
 
+### Multi-entity trial-balance package preflight (validation only)
+
+`close_engine.tb_package` validates a fictional structured monthly package with eight semantic roles. It checks canonical period authority, formula-cache and external-dependency safety, support-to-summary crossfoots, operations-package category ties, controlled adjustments, and current/prior entity, account, row, and formula continuity using integer cents.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source-system refresh and tie, entity perimeter and mapping approval, project-result support, operations-package approval, and controller sign-off remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook coordinates, paths, formulas, entities, or amounts.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
