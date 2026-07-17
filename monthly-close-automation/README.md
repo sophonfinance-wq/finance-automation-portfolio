@@ -153,6 +153,24 @@ payload, posting action, or source-system mutation. The example names and amount
 are entirely fictional, and the public module does not encode a private workbook
 layout.
 
+### Trial-balance continuity preflight (validation only)
+
+`close_engine.trial_balance` compares a fictional current/prior structured
+trial-balance pair using integer cents. It independently re-adds every line's
+opening plus activity to closing, requires each entity to net to zero, ties
+optional displayed controls to the rederived entity net, compares current
+openings with prior closings, and names added or removed entity/account keys. It
+also review-gates nonzero adjustments and surfaces external, broken, or cached
+formula-error dependency evidence.
+
+This public component is validation-only: even a clean result is only `READY
+FOR HUMAN REVIEW`. Source-system refresh and tie, mapping and population-change
+approval, adjustment approval, consolidation treatment, posting, and the
+post-entry general-ledger tie remain manual. The module accepts generic
+structured rows and deliberately encodes no private workbook layout, company
+name, account map, amount, or connector. It never emits a journal entry, import
+payload, posting action, or source mutation.
+
 ### What the engine computes
 Nine classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
