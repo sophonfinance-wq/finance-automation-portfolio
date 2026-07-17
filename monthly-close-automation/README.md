@@ -171,6 +171,26 @@ structured rows and deliberately encodes no private workbook layout, company
 name, account map, amount, or connector. It never emits a journal entry, import
 payload, posting action, or source mutation.
 
+### Audit/PBC package preflight (validation only)
+
+`close_engine.audit_pbc` validates a fictional annual audit package expressed
+as generic structured records. It requires one semantic role for each core
+package component, independently re-adds trial-balance plus adjustment to
+final, re-adds final less prior to displayed change, ties current prior values
+to the supplied prior-package finals, and validates opening-plus-movements
+continuity schedules. It also requires displayed `CHECK` controls to equal
+zero and distinguishes authoritative dependency failures from review-only
+stale-template evidence.
+
+All amounts use integer cents and all input identifiers are validated before
+control arithmetic. A mechanically clean result is still only `READY FOR HUMAN
+REVIEW`: controlled audit-TB and source ties, evidence completeness,
+adjustment/classification approval, disclosure conclusions, auditor delivery,
+posting, and the post-entry GL tie remain manual. The module contains only
+fictional examples and generic roles; it encodes no private workbook layout,
+entity, account map, amount, formula, or connector. It cannot emit a journal
+entry, import payload, posting action, audit opinion, or source mutation.
+
 ### What the engine computes
 Nine classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
@@ -438,7 +458,7 @@ monthly-close-automation/
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,740 tests)
+│   └── tests/             # pytest suite (5,793 tests)
 ├── run.py                 # `python run.py --period 2026-03`
 ├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
@@ -456,7 +476,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,740 passed**)
+### Tested behavior (`python -m pytest -q` → **5,793 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie
