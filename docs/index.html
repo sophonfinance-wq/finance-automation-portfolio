@@ -425,8 +425,33 @@
   #close-depth .cov-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:22px; }
   #close-depth .cov-group { background:var(--bg-alt); border:1px solid var(--border); padding:20px 20px 14px; }
   #close-depth .cov-group h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
-  #close-depth .cov-chip { display:inline-flex; align-items:center; gap:6px; font-size:13px; line-height:1.3; padding:5px 10px; margin:0 6px 6px 0; border:1px solid var(--border-strong); border-radius:2px; color:var(--text-2); background:var(--bg-tile); }
+  #close-depth .cov-chip { display:inline-flex; align-items:center; gap:6px; font-size:13px; line-height:1.3; padding:5px 10px; margin:0 6px 6px 0; border:1px solid var(--border-strong); border-radius:2px; color:var(--text-2); background:var(--bg-tile); font-family:var(--sans); cursor:pointer; transition:border-color .15s var(--ease), box-shadow .15s var(--ease); }
+  #close-depth .cov-chip:hover { border-color:var(--blue); color:var(--blue-hover); }
+  #close-depth .cov-chip[aria-expanded="true"] { border-color:var(--blue); background:var(--blue); color:#fff; }
+  #close-depth .cov-chip[aria-expanded="true"].new::after { background:#fff; color:var(--green); }
   #close-depth .cov-chip.draft { border-color:#a6c8ff; color:var(--blue-hover); background:var(--blue-tint); }
+  #close-depth .cov-chip.draft:hover { border-color:var(--blue); }
+  #close-depth .cov-chip.draft[aria-expanded="true"] { background:var(--blue); color:#fff; }
+  #close-depth .cov-detail { margin-top:18px; border:1px solid var(--border-strong); border-left:3px solid var(--blue); background:var(--bg-tile); padding:24px 26px 20px; }
+  #close-depth .cov-detail .cd-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 14px; margin-bottom:6px; }
+  #close-depth .cov-detail h3 { font-size:19px; font-weight:600; letter-spacing:-.1px; }
+  #close-depth .cov-detail .cd-mode { font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.5px; padding:3px 8px; border-radius:2px; }
+  #close-depth .cov-detail .cd-mode.draft { background:var(--blue-tint); color:var(--blue-hover); border:1px solid #a6c8ff; }
+  #close-depth .cov-detail .cd-mode.val { background:var(--bg-alt); color:var(--text-2); border:1px solid var(--border-strong); }
+  #close-depth .cov-detail .cd-what { font-size:14.5px; color:var(--text-2); max-width:62em; }
+  #close-depth .cov-detail .cd-label { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin:16px 0 8px; }
+  #close-depth .cov-detail ul { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:6px 22px; }
+  #close-depth .cov-detail li { font-size:13.5px; color:var(--text-2); padding-left:16px; position:relative; }
+  #close-depth .cov-detail li::before { content:""; position:absolute; left:0; top:.55em; width:7px; height:7px; border:1.6px solid var(--blue); border-radius:1px; }
+  #close-depth .cov-detail .cd-gate { margin-top:14px; font-size:13.5px; color:var(--text-2); }
+  #close-depth .cov-detail .cd-gate b { color:var(--text); }
+  #close-depth .cov-detail .cd-links { display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
+  #close-depth .cov-detail .cd-links a { font-family:var(--mono); font-size:12.5px; text-decoration:none; }
+  #close-depth .cov-detail .cd-links a:hover { text-decoration:underline; }
+  #close-depth .cov-detail .cd-links .cd-note { font-family:var(--mono); font-size:12px; color:var(--text-3); }
+  #close-depth .cov-detail .cd-close { margin-left:auto; background:none; border:none; cursor:pointer; color:var(--text-3); font-size:20px; line-height:1; padding:2px 6px; }
+  #close-depth .cov-detail .cd-close:hover { color:var(--text); }
+  @media (max-width:640px){ #close-depth .cov-detail { padding:18px 16px 16px; } }
   #close-depth .cov-chip.new::after { content:"NEW"; font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:.4px; color:#fff; background:var(--green); padding:1px 4px; border-radius:2px; }
   #close-depth .cov-key { margin-top:22px; font-size:13.5px; color:var(--text-3); display:flex; flex-wrap:wrap; gap:20px 26px; align-items:center; }
   #close-depth .cov-key span { display:inline-flex; align-items:center; gap:7px; }
@@ -810,32 +835,40 @@
     <div class="cov-grid reveal">
       <div class="cov-group">
         <h4>Amortization &amp; depreciation</h4>
-        <span class="cov-chip draft">Prepaid expense</span><span class="cov-chip draft">Prepaid insurance</span><span class="cov-chip draft">Fixed assets</span><span class="cov-chip draft">Deferred rent</span>
+        <button type="button" class="cov-chip draft" data-key="prepaid" aria-expanded="false" aria-controls="cov-detail">Prepaid expense</button><button type="button" class="cov-chip draft" data-key="insurance" aria-expanded="false" aria-controls="cov-detail">Prepaid insurance</button><button type="button" class="cov-chip draft" data-key="fixed-assets" aria-expanded="false" aria-controls="cov-detail">Fixed assets</button><button type="button" class="cov-chip draft" data-key="deferred-rent" aria-expanded="false" aria-controls="cov-detail">Deferred rent</button>
       </div>
       <div class="cov-group">
         <h4>Accruals &amp; interest</h4>
-        <span class="cov-chip draft">Bonus accrual</span><span class="cov-chip draft">Fixed-fee accrual</span><span class="cov-chip draft">Note interest</span><span class="cov-chip">AP / accrued liabilities</span>
+        <button type="button" class="cov-chip draft" data-key="bonus" aria-expanded="false" aria-controls="cov-detail">Bonus accrual</button><button type="button" class="cov-chip draft" data-key="fixed-fee" aria-expanded="false" aria-controls="cov-detail">Fixed-fee accrual</button><button type="button" class="cov-chip draft" data-key="note-interest" aria-expanded="false" aria-controls="cov-detail">Note interest</button><button type="button" class="cov-chip" data-key="ap-accrued" aria-expanded="false" aria-controls="cov-detail">AP / accrued liabilities</button>
       </div>
       <div class="cov-group">
         <h4>Reporting packages</h4>
-        <span class="cov-chip">Combined statements</span><span class="cov-chip">Multi-entity TB package</span><span class="cov-chip">Group operations</span><span class="cov-chip">Project / job-cost export</span><span class="cov-chip">Recurring-JE register</span>
+        <button type="button" class="cov-chip" data-key="combined" aria-expanded="false" aria-controls="cov-detail">Combined statements</button><button type="button" class="cov-chip" data-key="tb-package" aria-expanded="false" aria-controls="cov-detail">Multi-entity TB package</button><button type="button" class="cov-chip" data-key="group-ops" aria-expanded="false" aria-controls="cov-detail">Group operations</button><button type="button" class="cov-chip" data-key="job-cost" aria-expanded="false" aria-controls="cov-detail">Project / job-cost export</button><button type="button" class="cov-chip" data-key="je-register" aria-expanded="false" aria-controls="cov-detail">Recurring-JE register</button>
       </div>
       <div class="cov-group">
         <h4>Balances &amp; continuity</h4>
-        <span class="cov-chip">AR balances</span><span class="cov-chip">Deposit balances</span><span class="cov-chip">Investment continuity</span><span class="cov-chip">Trial-balance continuity</span>
+        <button type="button" class="cov-chip" data-key="ar" aria-expanded="false" aria-controls="cov-detail">AR balances</button><button type="button" class="cov-chip" data-key="deposits" aria-expanded="false" aria-controls="cov-detail">Deposit balances</button><button type="button" class="cov-chip" data-key="investment" aria-expanded="false" aria-controls="cov-detail">Investment continuity</button><button type="button" class="cov-chip" data-key="tb-continuity" aria-expanded="false" aria-controls="cov-detail">Trial-balance continuity</button>
       </div>
       <div class="cov-group">
         <h4>Allocations &amp; fees</h4>
-        <span class="cov-chip draft">Postage allocation</span><span class="cov-chip">G&amp;A allocation</span><span class="cov-chip">Management fees</span><span class="cov-chip">Marketing fees</span><span class="cov-chip">Recoveries</span>
+        <button type="button" class="cov-chip draft" data-key="postage" aria-expanded="false" aria-controls="cov-detail">Postage allocation</button><button type="button" class="cov-chip" data-key="ga" aria-expanded="false" aria-controls="cov-detail">G&amp;A allocation</button><button type="button" class="cov-chip" data-key="mgmt-fees" aria-expanded="false" aria-controls="cov-detail">Management fees</button><button type="button" class="cov-chip" data-key="marketing-fees" aria-expanded="false" aria-controls="cov-detail">Marketing fees</button><button type="button" class="cov-chip" data-key="recoveries" aria-expanded="false" aria-controls="cov-detail">Recoveries</button>
       </div>
       <div class="cov-group">
         <h4>Construction</h4>
-        <span class="cov-chip">Budget variance</span><span class="cov-chip">Job-cost-to-draw reconciliation</span>
+        <button type="button" class="cov-chip" data-key="budget-variance" aria-expanded="false" aria-controls="cov-detail">Budget variance</button><button type="button" class="cov-chip" data-key="cash-draw" aria-expanded="false" aria-controls="cov-detail">Job-cost-to-draw reconciliation</button>
       </div>
       <div class="cov-group">
         <h4>Audit &amp; support</h4>
-        <span class="cov-chip">Audit / PBC package</span><span class="cov-chip">Personal-property FF&amp;E</span><span class="cov-chip">Payroll recovery</span><span class="cov-chip new">Headcount support</span><span class="cov-chip new">JE support packages</span>
+        <button type="button" class="cov-chip" data-key="audit-pbc" aria-expanded="false" aria-controls="cov-detail">Audit / PBC package</button><button type="button" class="cov-chip" data-key="ffe" aria-expanded="false" aria-controls="cov-detail">Personal-property FF&amp;E</button><button type="button" class="cov-chip" data-key="payroll-recovery" aria-expanded="false" aria-controls="cov-detail">Payroll recovery</button><button type="button" class="cov-chip new" data-key="headcount" aria-expanded="false" aria-controls="cov-detail">Headcount support</button><button type="button" class="cov-chip new" data-key="je-package" aria-expanded="false" aria-controls="cov-detail">JE support packages</button>
       </div>
+    </div>
+    <div class="cov-detail" id="cov-detail" hidden>
+      <div class="cd-head"><h3 id="cd-name"></h3><span class="cd-mode" id="cd-mode"></span><button type="button" class="cd-close" id="cd-close" aria-label="Close control detail">&times;</button></div>
+      <p class="cd-what" id="cd-what"></p>
+      <p class="cd-label">Controls enforced</p>
+      <ul id="cd-controls"></ul>
+      <p class="cd-gate" id="cd-gate"></p>
+      <div class="cd-links" id="cd-links"></div>
     </div>
     <p class="cov-key reveal"><span><span class="cov-dot draft"></span> Draft-capable &mdash; balanced entries, drafted and held for approval</span><span><span class="cov-dot val"></span> Validation-only &mdash; recomputed and flagged, never posts</span></p>
   </div>
@@ -1092,6 +1125,80 @@
   }
   flash();
   setInterval(flash, 5500);
+})();
+</script>
+
+<!-- ================= CONTROL DRILL-DOWN ================= -->
+<script>
+(function(){
+  var B='https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/';
+  var M=B+'monthly-close-automation/close_engine/', T=M+'tests/';
+  var ENG=[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_census_grids.py']];
+  var ARCH=[['Control architecture ↗',B+'ARCHITECTURE.md']];
+  var NOTE='Engagement deployment — the public repo demonstrates the identical control pattern.';
+  var D={
+  'prepaid':{n:'Prepaid expense',m:'draft',w:'Amortizes every prepaid straight-line over its contractual term and drafts the balanced monthly entry.',c:['Exact-period authority — no inferred months','Schedule-to-GL tie before any line drafts','Debits equal credits on every entry','Any high exception suppresses the whole draft'],l:ENG},
+  'insurance':{n:'Prepaid insurance',m:'draft',w:'Allocates each policy’s premium across entities and drafts the monthly amortization.',c:['Policy allocations must sum to exactly 100.00%','Premium, exclusion, policy, and entity crossfoots','Split maps validated for dataset integrity','Renewal step-ups caught by the cross-foot control'],l:ENG},
+  'fixed-assets':{n:'Fixed assets',m:'draft',w:'Computes per-asset monthly depreciation from the register and drafts the entry.',c:['Net-book-value rollforward re-derived independently','Fully depreciated assets must stop depreciating','Schedule-to-GL difference control','Draft suppressed on any register exception'],l:ENG},
+  'deferred-rent':{n:'Deferred rent',m:'draft',w:'Straight-lines lease and CAM over the full term and drafts the deferred-rent movement.',c:['Escalation steps handled across the term','Deferred liability/asset rollforward re-added','Global and entity-level balance required'],l:ENG},
+  'bonus':{n:'Bonus accrual',m:'draft',w:'Rolls each award class beginning + accrual − payments to ending and drafts only the current accrual.',c:['Per-class rollforward re-performed','Total ending crossfoot across classes','One approved liability/expense pair required','Positive current accrual only — else review'],g:'compensation approval and the post-entry tie stay with your team.',l:ARCH,note:NOTE},
+  'fixed-fee':{n:'Fixed-fee accrual',m:'draft',w:'Accrues the contractual monthly fee net of settlements already booked — never double-books.',c:['Beginning payable less settled amounts re-derived','Stale visible-JE blocks flagged for review','Exact-period column authority'],l:[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_fixed_fee_accrual.py']]},
+  'note-interest':{n:'Note interest',m:'draft',w:'Computes interest from explicit rate, principal, and day-count terms, then drafts the accrual.',c:['Exact-date debt rollforward and carryforward','Interest only from explicit term authority','Manual overrides require written approval evidence','Every drafted amount traces to target interest'],l:ENG},
+  'ap-accrued':{n:'AP / accrued liabilities',m:'val',w:'Re-performs beginning + activity = ending across every accrual section and ties the grand balance.',c:['Section-level rollforwards re-added','Current beginnings must carry from the prior month','Section endings crossfoot to the grand balance'],l:ARCH,note:NOTE},
+  'postage':{n:'Postage allocation',m:'draft',w:'Routes each signed meter charge to exactly one approved project/job/cost code and drafts balanced allocations.',c:['Exactly one active route per meter — else the whole batch refuses','Refunds reverse expense and intercompany legs','Clearing account must zero in every entity','Meter, project, and JE totals crossfoot'],l:[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_postage_engine.py']]},
+  'ga':{n:'G&A allocation',m:'prep',w:'Summarizes the month’s G&A activity by account and type for the approved allocation workbook.',c:['Exact-period selection only','Account and type summaries independently re-added','No allocation percentages assumed'],g:'your team pastes into the approved workbook, reviews percentages, and posts.',l:[['Source ↗',M+'engine.py']]},
+  'mgmt-fees':{n:'Management fees',m:'val',w:'Validates exact-period fee base detail with subtotal, project, and grand-total crossfoots before any accrual is booked.',c:['Exact target month required','Visible subtotals and grand totals re-added','Detail-to-summary agreement'],g:'the approved fee and intercompany mapping stays with your controller.',l:ENG},
+  'marketing-fees':{n:'Marketing fees',m:'val',w:'Validates exact-period base detail and every visible total before fees post.',c:['Exact target month required','Visible-total crossfoots re-added','Exceptions anchored to file, sheet, and cell'],l:ARCH,note:NOTE},
+  'recoveries':{n:'Recoveries',m:'val',w:'Validates recovery detail, project subtotals, and grand totals for the exact month.',c:['Exact-period detail selection','Project and subtotal crossfoots','Grand-total re-add with cell evidence'],l:ARCH,note:NOTE},
+  'ar':{n:'AR balances',m:'val',w:'Crossfoots fiscal-year category → detail → cached totals and flags stale activity instead of bridging it.',c:['Category-to-detail crossfoot re-added','Cached totals independently re-derived','Stale periods reported, never fabricated'],l:ARCH,note:NOTE},
+  'deposits':{n:'Deposit balances',m:'val',w:'Re-performs carry-forward + additions − allocations/releases = ending balance.',c:['Rollforward re-added from dated activity','No missing activity fabricated','Ending balance flagged for period-end GL tie'],l:ARCH,note:NOTE},
+  'investment':{n:'Investment continuity',m:'val',w:'Proves beginning equity + contributions, distributions, earnings, and transfers = ending — by subsidiary and in total.',c:['Subsidiary continuity re-performed','Detail-to-summary monthly ties','Cross-entity transfers must mirror equal-and-opposite','Visible differences anchored to cells'],l:ARCH,note:NOTE},
+  'tb-continuity':{n:'Trial-balance continuity',m:'val',w:'Ties every current opening to the prior close and re-performs each line rollforward.',c:['Opening-plus-activity rollforward per line','Entity zero-balance controls','Account-population changes surfaced','External dependencies inventoried'],l:[['Source ↗',M+'trial_balance.py'],['Tests ↗',T+'test_trial_balance.py']]},
+  'combined':{n:'Combined statements',m:'val',w:'Validates the consolidation package end to end: semantic roles, local formulas, caches, and displayed controls.',c:['Thirteen semantic package roles resolved','Local formulas independently re-performed','Missing caches and external links inventoried','Current/prior structural continuity'],l:[['Source ↗',M+'consolidation.py'],['Tests ↗',T+'test_consolidation.py']]},
+  'tb-package':{n:'Multi-entity TB package',m:'val',w:'Validates the multi-entity trial-balance package: support ties, adjustments, and structure.',c:['Support-tab-to-summary crossfoots re-added','Adjustment columns inventoried','Formula caches and embedded amounts flagged','Current/prior entity and account continuity'],l:[['Source ↗',M+'tb_package.py'],['Tests ↗',T+'test_tb_package.py']]},
+  'group-ops':{n:'Group operations',m:'val',w:'Validates the monthly management package: allocations, regional crossfoots, and the disclosed rounding boundary.',c:['Sixteen semantic roles resolved','Allocation-zero controls re-performed','Regional monthly crossfoots re-added','Structural and dependency changes surfaced'],l:[['Source ↗',M+'group_operations.py'],['Tests ↗',T+'test_group_operations.py']]},
+  'job-cost':{n:'Project / job-cost export',m:'val',w:'Re-adds every cached job total in the monthly transaction export and checks each row’s identity.',c:['Per-job cached totals re-added','Ownership, core fields, dates, and duplicates checked','Negative and post-period rows flagged','Current/prior population changes surfaced'],l:[['Source ↗',M+'project_job_cost.py'],['Tests ↗',T+'test_project_job_cost.py']]},
+  'je-register':{n:'Recurring-JE register',m:'val',w:'Validates the recurring-JE register — posting date, line structure, memo periods, and balance — and never executes an import.',c:['Per-group and global debit/credit balance','Memo-period agreement per line','Import formulas detected as evidence only'],l:[['Source ↗',M+'recurring_register.py'],['Tests ↗',T+'test_recurring_register.py']]},
+  'budget-variance':{n:'Budget variance',m:'val',w:'Re-derives every cost-code equation and flags overruns before the forecast moves.',c:['Current budget = original + approved changes','Cost-to-complete re-derived per code','Negative cost-to-complete must carry an overrun flag','Project totals crossfoot to the detail'],l:[['Source ↗',M+'budget_variance.py'],['Tests ↗',T+'test_budget_variance.py']]},
+  'cash-draw':{n:'Job-cost-to-draw reconciliation',m:'val',w:'Ties job-cost detail to the construction draw and proves funding continuity.',c:['Draw equation re-added: amount − retainage + adjustment','Detail and bank-category crossfoots','Equity-plus-lender funding continuity','Project-report totals re-derived'],l:[['Source ↗',M+'cash_draw.py'],['Tests ↗',T+'test_cash_draw.py']]},
+  'audit-pbc':{n:'Audit / PBC package',m:'val',w:'Validates the annual audit package: leadsheet equations, carryforwards, and displayed checks.',c:['Leadsheet equations re-performed','Current/prior carryforwards proved','Continuity schedules re-added','Stale dependencies fail closed'],l:[['Source ↗',M+'audit_pbc.py'],['Tests ↗',T+'test_audit_pbc.py']]},
+  'ffe':{n:'Personal-property FF&E',m:'val',w:'Re-performs the personal-property FF&E schedule’s mechanics — and never files or concludes tax.',c:['Asset cost, life, months, and NBV re-derived','Local subtotals independently re-added','Duplicate assets and missing fields flagged','Year-over-year population compared'],l:[['Source ↗',M+'personal_property_tax.py'],['Tests ↗',T+'test_personal_property_tax.py']]},
+  'payroll-recovery':{n:'Payroll recovery',m:'val',w:'Re-performs fiscal-month recovery schedules and ties the total change to target-month activity.',c:['Every local formula re-performed','Future-period activity blocked','Historical months must carry unchanged','Grand-total change ties to the target month'],l:[['Source ↗',M+'payroll_recovery.py'],['Tests ↗',T+'test_payroll_recovery.py']]},
+  'headcount':{n:'Headcount support',m:'val',w:'Re-adds annual entity headcount totals and reconciles the annual change — no employee-level data, ever.',c:['Descending consecutive year columns required','Annual totals independently re-added','Overlapping history must carry unchanged','Total change ties to the sum of entity changes'],l:[['Source ↗',M+'headcount.py'],['Tests ↗',T+'test_headcount.py'],['Invariant grid ↗',T+'test_headcount_grid.py']]},
+  'je-package':{n:'JE support packages',m:'val',w:'Re-adds every journal entry in the monthly support package and proves debits equal credits.',c:['Per-entry debit/credit re-add and balance','One-sided intercompany flagged for counterparty review','Cached formula errors and stale tabs surfaced','Carryforward entries must not drift'],l:[['Source ↗',M+'je_package.py'],['Tests ↗',T+'test_je_package.py'],['Invariant grid ↗',T+'test_je_package_grid.py']]}
+  };
+  var panel=document.getElementById('cov-detail'); if(!panel) return;
+  var chips=[].slice.call(document.querySelectorAll('#close-depth .cov-chip[data-key]'));
+  var current=null;
+  function close(){ panel.hidden=true; if(current){current.setAttribute('aria-expanded','false');} current=null;
+    if(history.replaceState){history.replaceState(null,'',location.pathname+location.search);} }
+  function open(chip){
+    var d=D[chip.getAttribute('data-key')]; if(!d) return;
+    chips.forEach(function(c){c.setAttribute('aria-expanded','false');});
+    chip.setAttribute('aria-expanded','true'); current=chip;
+    document.getElementById('cd-name').textContent=d.n;
+    var mode=document.getElementById('cd-mode');
+    mode.textContent=d.m==='draft'?'DRAFTS ENTRIES — HELD FOR APPROVAL':(d.m==='prep'?'DATA PREPARATION — NO POSTING':'VALIDATION-ONLY — NEVER POSTS');
+    mode.className='cd-mode '+(d.m==='draft'?'draft':'val');
+    document.getElementById('cd-what').textContent=d.w;
+    var ul=document.getElementById('cd-controls'); ul.innerHTML='';
+    d.c.forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li);});
+    var gate=d.g||(d.m==='draft'?'your controller approves each entry before it posts.':'recomputed and flagged only — posting, mappings, and support stay with your team.');
+    var gp=document.getElementById('cd-gate'); gp.innerHTML='<b>Human gate:</b> '; gp.appendChild(document.createTextNode(gate));
+    var links=document.getElementById('cd-links'); links.innerHTML='';
+    (d.l||[]).forEach(function(pair){var a=document.createElement('a');a.href=pair[1];a.target='_blank';a.rel='noopener';a.textContent=pair[0];links.appendChild(a);});
+    if(d.note){var s=document.createElement('span');s.className='cd-note';s.textContent=d.note;links.appendChild(s);}
+    panel.hidden=false;
+    if(history.replaceState){history.replaceState(null,'','#control-'+chip.getAttribute('data-key'));}
+    var r=panel.getBoundingClientRect();
+    if(r.bottom>window.innerHeight||r.top<0){panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  }
+  chips.forEach(function(chip){ chip.addEventListener('click',function(){ chip===current?close():open(chip); }); });
+  document.getElementById('cd-close').addEventListener('click',close);
+  var h=location.hash.match(/^#control-([a-z-]+)$/);
+  if(h){ var target=null;
+    chips.forEach(function(c){ if(c.getAttribute('data-key')===h[1]) target=c; });
+    if(target){ open(target); setTimeout(function(){ target.scrollIntoView({block:'center'}); },80); } }
 })();
 </script>
 </body>
