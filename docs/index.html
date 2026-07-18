@@ -202,8 +202,19 @@
   .stat .src { display:block; font-family:var(--mono); font-size:10.5px; color:var(--text-3); margin-top:8px; letter-spacing:.3px; }
 
   /* credential strip */
-  .cred { padding:18px 0; border-bottom:1px solid var(--border); }
-  .cred-in { display:flex; flex-wrap:wrap; gap:8px 0; align-items:center; }
+  .cred { position:relative; overflow:hidden; padding:clamp(36px,7vh,60px) 0; border-bottom:1px solid var(--border); }
+  .cred-video { position:absolute; inset:0; z-index:0; }
+  .cred-video video { width:100%; height:100%; object-fit:cover; object-position:50% 42%; }
+  .cred-wash { position:absolute; inset:0; background:linear-gradient(180deg, rgba(255,255,255,.86) 0%, rgba(255,255,255,.76) 100%); }
+  @media (max-width:820px){ .cred-wash { background:rgba(255,255,255,.84); } }
+  @media (prefers-reduced-motion:reduce){ .cred-video video { display:none; } .cred-video { background:url("assets/cred-poster.jpg") center/cover; } }
+  .cred-mark { position:absolute; z-index:2; right:clamp(14px,4vw,38px); bottom:11px; display:flex; align-items:center; gap:7px; opacity:.58; pointer-events:none; }
+  .cred-mark svg { width:17px; height:17px; flex:none; }
+  .cred-mark .cm-tx { display:flex; flex-direction:column; line-height:1; }
+  .cred-mark .cm-tx b { font-family:var(--sans); font-weight:600; font-size:10.5px; letter-spacing:.2px; color:var(--text); }
+  .cred-mark .cm-tx small { font-family:var(--mono); font-weight:400; font-size:8px; letter-spacing:.4px; color:var(--text-3); margin-top:2px; }
+  .cred-in { position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:8px 0; align-items:center; justify-content:center; }
+  @media (max-width:640px){ .cred-mark { position:static; justify-content:center; margin:16px auto 0; opacity:.5; } }
   .cred span { font-size:13.5px; color:var(--text-2); padding:0 22px; position:relative; }
   .cred span:first-child { padding-left:0; }
   .cred span + span::before { content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
@@ -664,11 +675,21 @@
 
 <!-- ================= CREDENTIALS ================= -->
 <div class="cred">
+  <div class="cred-video" aria-hidden="true">
+    <video id="credVid" muted loop playsinline preload="none" poster="assets/cred-poster.jpg">
+      <source src="assets/cred-web.mp4" type="video/mp4">
+    </video>
+    <div class="cred-wash"></div>
+  </div>
   <div class="wrap cred-in">
     <span><b>KPMG-trained</b> &middot; ex&ndash;Big Four</span>
     <span><b>Fortune 100 &amp; 500</b> experience</span>
     <span><b>International</b> finance &amp; accounting</span>
     <span><b>Public engineering</b> on <a href="https://github.com/sophonfinance-wq" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">LinkedIn</a></span>
+  </div>
+  <div class="cred-mark" aria-hidden="true">
+    <svg viewBox="0 0 48 48"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <div class="cm-tx"><b>Sophon Finance Systems</b><small>sophonfinance.com</small></div>
   </div>
 </div>
 
@@ -1148,6 +1169,7 @@
 })();
 </script>
 <script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/tech-film-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
+<script>(function(){var v=document.getElementById("credVid");if(!v)return;var small=Math.min(screen.width,screen.height)<=820;if(small){v.querySelector("source").src="assets/cred-mobile.mp4";}function go(){var p=v.play();if(p&&p.catch)p.catch(function(){});}if("IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v.dataset.l){v.load();v.dataset.l=1;}go();}else{v.pause();}});},{rootMargin:"200px"}).observe(v);}else{v.load();go();}})();</script>
 <script>
 // Middle "cinema" band: start the shared hero clip from its MIDDLE (so it differs from
 // the top hero) and flash one corporate power word in/out every ~5.5s, like a brand film.
