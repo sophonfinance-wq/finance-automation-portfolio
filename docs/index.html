@@ -180,7 +180,7 @@
   .contact-video video { width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
   .contact-video .contact-wash { position:absolute; inset:0; background:rgba(29,78,216,.75); }
   @media (prefers-reduced-motion:reduce){ .contact-video video { display:none; } }
-  @media (prefers-reduced-motion:reduce){ .cinema video { display:none; } .cinema { background:url("assets/band-poster.jpg") center/cover; } }
+  @media (prefers-reduced-motion:reduce){ .cinema video { display:none; } .cinema { background:url("assets/band-logo-poster.jpg") center/cover; } }
   .hero-grid { display:grid; grid-template-columns:minmax(0,1.05fr); gap:0; align-items:center; max-width:660px; }
   h1 { font-size:clamp(38px, 4.6vw, 60px); font-weight:300; letter-spacing:-.4px; line-height:1.12; color:var(--text); }
   h1 strong { font-weight:600; color:var(--blue); }
@@ -1106,23 +1106,30 @@
 </script>
 <script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/film-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/band-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/contact-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
 <script>
-// City film band (below the hero): rotate one corporate power word in/out every
-// ~5.5s over the skyline recut — lower-left film-super styling with the blue rule.
-// The main brand film (with its typeset logo outro) now runs in the TOP hero.
+// City film band (below the hero): rotate one corporate power word in/out over
+// the city loop — lower-left film-super styling with the blue rule. The loop ends
+// on the typeset SOPHON FINANCE SYSTEMS closeout, so words are suppressed during
+// the final ~5s: nothing may sit on the logo.
 (function(){
+  var v = document.getElementById('heroVid2');
   var wordEl = document.getElementById('cinemaWord');
   if (!wordEl) return;
   var words = ['Efficiency','Accuracy','Precision','Compliance','Clarity','Control','Confidence'];
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce){ wordEl.textContent = words[0]; wordEl.classList.add('show'); return; }
+  if (reduce) return; // reduced-motion shows the logo-card poster instead
   var i = 0;
+  function inOutro(margin){
+    return v && v.duration && isFinite(v.duration) && v.currentTime > v.duration - margin;
+  }
   function flash(){
+    if (inOutro(7.9)) return;                  // a word started later would linger into the closeout
     wordEl.classList.remove('show');           // ensure a clean fade-in
     wordEl.textContent = words[i];
     i = (i + 1) % words.length;
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ wordEl.classList.add('show'); }); });
     setTimeout(function(){ wordEl.classList.remove('show'); }, 2800); // hold ~2.2s, then fade out
   }
+  if (v){ v.addEventListener('timeupdate', function(){ if (inOutro(5.3)) wordEl.classList.remove('show'); }); }
   flash();
   setInterval(flash, 5500);
 })();
