@@ -149,7 +149,10 @@
   .sec-head { max-width:820px; margin-bottom:14px; }
 
   /* ============ HERO ============ */
-  .hero { padding:96px 0 104px; min-height:520px; display:flex; align-items:center; border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+  .hero { padding:96px 0 104px; min-height:520px; display:flex; align-items:center; position:relative; overflow:hidden; }
+  .hero::before, .hero::after { content:""; position:absolute; left:0; right:0; z-index:1; height:clamp(48px,9vh,96px); pointer-events:none; }
+  .hero::before { top:0; background:linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0) 100%); }
+  .hero::after { bottom:0; background:linear-gradient(0deg, var(--bg) 0%, rgba(255,255,255,0) 100%); }
   .hero-grid > div:first-child { position:relative; z-index:2; }
   .hero-video { position:absolute; inset:0; z-index:0; }
   .hero-video video { width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
@@ -157,23 +160,27 @@
     background:linear-gradient(90deg, rgba(255,255,255,.83) 0%, rgba(255,255,255,.75) 34%, rgba(255,255,255,.53) 58%, rgba(255,255,255,.29) 100%); }
   @media (max-width:820px){ .hero-wash { background:rgba(255,255,255,.75); } }
   @media (prefers-reduced-motion:reduce){ .hero-video video { display:none; } }
-  .cinema { position:relative; overflow:hidden; height:min(62vh,560px); min-height:340px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+  .cinema { position:relative; overflow:hidden; height:min(34vh,300px); min-height:210px; }
+  .cinema::before, .cinema::after { content:""; position:absolute; left:0; right:0; z-index:1; height:clamp(56px,12vh,110px); pointer-events:none; }
+  .cinema::before { top:0; background:linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0) 100%); }
+  .cinema::after { bottom:0; background:linear-gradient(0deg, var(--bg) 0%, rgba(255,255,255,0) 100%); }
   .cinema video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
   .cinema .cinema-wash { position:absolute; inset:0; background:linear-gradient(90deg, rgba(255,255,255,.52) 0%, rgba(255,255,255,.42) 34%, rgba(255,255,255,.28) 58%, rgba(255,255,255,.12) 100%); } @media (max-width:820px){ .cinema .cinema-wash { background:rgba(255,255,255,.44); } }
-  .cinema .cinema-words { position:absolute; inset:0; z-index:2; display:flex; align-items:center; justify-content:center; pointer-events:none; }
-  .cinema .cinema-words span { font-family:var(--sans); font-weight:600; text-transform:uppercase; font-size:clamp(30px,6.4vw,76px); letter-spacing:.16em; color:var(--text); padding-left:.16em;
-    text-shadow:0 2px 34px rgba(255,255,255,.6), 0 1px 2px rgba(255,255,255,.75); opacity:0; transform:translateY(10px) scale(.99);
-    transition:opacity .6s ease, transform .6s ease; will-change:opacity, transform; }
-  .cinema .cinema-words span.show { opacity:1; transform:translateY(0) scale(1); }
-  .cinema .cinema-words span::after { content:""; display:block; height:2px; width:44%; margin:.42em auto 0; background:var(--blue); opacity:.85; }
+  .cinema .cinema-words { position:absolute; inset:0; z-index:2; display:flex; align-items:flex-end; justify-content:flex-start; padding:0 0 26px clamp(20px,5vw,64px); pointer-events:none; }
+  .cinema .cinema-words span { font-family:var(--sans); font-weight:600; text-transform:uppercase; font-size:clamp(14px,1.7vw,20px); letter-spacing:.24em; color:var(--text);
+    text-shadow:0 1px 22px rgba(255,255,255,.9), 0 1px 2px rgba(255,255,255,.9); opacity:0; transform:translateY(8px);
+    transition:opacity .5s ease, transform .5s ease; will-change:opacity, transform; }
+  .cinema .cinema-words span.show { opacity:1; transform:translateY(0) }
+  .cinema .cinema-words span::after { content:""; display:block; height:2px; width:56px; margin:.5em 0 0; background:var(--blue); opacity:.9; }
   @media (prefers-reduced-motion:reduce){ .cinema .cinema-words span { transition:opacity .3s linear; transform:none; } }
   .final { position:relative; overflow:hidden; }
+  .final::before { content:""; position:absolute; left:0; right:0; top:0; z-index:1; height:clamp(48px,9vh,96px); background:linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,0) 100%); pointer-events:none; }
   .final > .wrap { position:relative; z-index:2; }
   .contact-video { position:absolute; inset:0; z-index:0; }
   .contact-video video { width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
   .contact-video .contact-wash { position:absolute; inset:0; background:rgba(29,78,216,.75); }
   @media (prefers-reduced-motion:reduce){ .contact-video video { display:none; } }
-  @media (prefers-reduced-motion:reduce){ .cinema video { display:none; } .cinema { background:url("assets/hero2-poster.jpg") center/cover; } }
+  @media (prefers-reduced-motion:reduce){ .cinema video { display:none; } .cinema { background:url("assets/band-poster.jpg") center/cover; } }
   .hero-grid { display:grid; grid-template-columns:minmax(0,1.05fr); gap:0; align-items:center; max-width:660px; }
   h1 { font-size:clamp(38px, 4.6vw, 60px); font-weight:300; letter-spacing:-.4px; line-height:1.12; color:var(--text); }
   h1 strong { font-weight:600; color:var(--blue); }
@@ -593,8 +600,8 @@
 <!-- ================= HERO ================= -->
 <header class="hero" id="top">
   <div class="hero-video" aria-hidden="true">
-    <video id="heroVid" autoplay muted loop playsinline preload="metadata" poster="assets/hero-poster.jpg">
-      <source src="assets/hero-web.mp4" type="video/mp4">
+    <video id="heroVid" autoplay muted loop playsinline preload="metadata" poster="assets/film-open-poster.jpg">
+      <source src="assets/film-web.mp4" type="video/mp4">
     </video>
     <div class="hero-wash"></div>
   </div>
@@ -616,6 +623,15 @@
     </figure>
   </div>
 </header>
+
+<!-- ================= CINEMA — city film band ================= -->
+<section class="cinema" aria-label="Sophon Finance Systems film, part two">
+  <video id="heroVid2" autoplay muted loop playsinline preload="metadata" poster="assets/band-poster.jpg">
+    <source src="assets/hero-web.mp4" type="video/mp4">
+  </video>
+  <div class="cinema-wash"></div>
+  <div class="cinema-words" aria-hidden="true"><span id="cinemaWord"></span></div>
+</section>
 
 <!-- ================= STATS ================= -->
 <div class="stats" role="complementary" aria-label="Verified facts">
@@ -760,14 +776,6 @@
 
   </div>
 </section>
-<section class="cinema" aria-label="Sophon Finance Systems film, part two">
-  <video id="heroVid2" autoplay muted loop playsinline preload="metadata" poster="assets/hero2-poster.jpg">
-    <source src="assets/hero2-web.mp4" type="video/mp4">
-  </video>
-  <div class="cinema-wash"></div>
-  <div class="cinema-words" aria-hidden="true"><span id="cinemaWord"></span></div>
-</section>
-
 <!-- ================= PORTFOLIO ================= -->
 <section class="alt" id="engines">
   <div class="wrap">
@@ -1096,44 +1104,25 @@
   document.querySelectorAll('.count').forEach(function (el) { cio.observe(el); });
 })();
 </script>
-<script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero2-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/contact-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
+<script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/film-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/contact-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
 <script>
-// Middle "cinema" band: start the shared hero clip from its MIDDLE (so it differs from
-// the top hero) and flash one corporate power word in/out every ~5.5s, like a brand film.
+// City film band (below the hero): rotate one corporate power word in/out every
+// ~5.5s over the skyline recut — lower-left film-super styling with the blue rule.
+// The main brand film (with its typeset logo outro) now runs in the TOP hero.
 (function(){
-  var v = document.getElementById('heroVid2');
   var wordEl = document.getElementById('cinemaWord');
-  if (v){
-    // Seek to the middle whenever the clip (re)loads from the start — including after the
-    // IntersectionObserver's one-time v.load(). Guard on currentTime<1 so we never yank it
-    // mid-playback; natural loops then run full from 0, which is the intended behaviour.
-    var toMiddle = function(){
-      if (v.duration && isFinite(v.duration) && v.duration > 2 && v.currentTime < 1){
-        try { v.currentTime = v.duration / 2; } catch(e){}
-      }
-    };
-    if (v.readyState >= 1) toMiddle();
-    v.addEventListener('loadedmetadata', toMiddle);
-    v.addEventListener('loadeddata', toMiddle);
-    v.addEventListener('play', toMiddle);
-  }
   if (!wordEl) return;
   var words = ['Efficiency','Accuracy','Precision','Compliance','Clarity','Control','Confidence'];
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce){ wordEl.textContent = words[0]; wordEl.classList.add('show'); return; }
   var i = 0;
-  function inOutro(margin){
-    return v && v.duration && isFinite(v.duration) && v.currentTime > v.duration - margin;
-  }
   function flash(){
-    if (inOutro(6.6)) return;                  // no word may linger into the logo outro
     wordEl.classList.remove('show');           // ensure a clean fade-in
     wordEl.textContent = words[i];
     i = (i + 1) % words.length;
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ wordEl.classList.add('show'); }); });
     setTimeout(function(){ wordEl.classList.remove('show'); }, 2800); // hold ~2.2s, then fade out
   }
-  if (v){ v.addEventListener('timeupdate', function(){ if (inOutro(3.75)) wordEl.classList.remove('show'); }); }
   flash();
   setInterval(flash, 5500);
 })();
