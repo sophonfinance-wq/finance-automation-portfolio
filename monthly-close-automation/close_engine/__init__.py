@@ -8,8 +8,8 @@ and exact-route postage allocation), plus separate validation-only
 recurring-register, construction-budget, cash/draw reconciliation,
 trial-balance continuity, multi-entity TB package, group-operations package,
 project/job-cost export, personal-property FF&E schedule, payroll-recovery schedule,
-annual headcount-support schedule, audit/PBC package, and combined-financial-statement
-preflights. The posting engine enforces
+annual headcount-support schedule, monthly journal-entry support package, audit/PBC
+package, and combined-financial-statement preflights. The posting engine enforces
 debits == credits on every entry, ties each schedule back to the general
 ledger, and produces a JE register, an updated trial balance, and a markdown
 close report.
