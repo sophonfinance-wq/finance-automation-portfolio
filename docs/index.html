@@ -451,6 +451,11 @@
   #close-depth .cov-detail .cd-links .cd-note { font-family:var(--mono); font-size:12px; color:var(--text-3); }
   #close-depth .cov-detail .cd-close { margin-left:auto; background:none; border:none; cursor:pointer; color:var(--text-3); font-size:20px; line-height:1; padding:2px 6px; }
   #close-depth .cov-detail .cd-close:hover { color:var(--text); }
+  #close-depth .cov-detail .cd-vis { position:relative; margin:16px 0 2px; border:1px solid var(--border); background:#fff; aspect-ratio:16/9; max-height:340px; overflow:hidden; }
+  #close-depth .cov-detail .cd-vis img, #close-depth .cov-detail .cd-vis video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  #close-depth .cov-detail .cd-vis video { z-index:2; }
+  #close-depth .cd-links .cd-run { font-weight:600; }
+  @media (max-width:640px){ #close-depth .cov-detail .cd-vis { max-height:240px; } }
   @media (max-width:640px){ #close-depth .cov-detail { padding:18px 16px 16px; } }
   #close-depth .cov-chip.new::after { content:"NEW"; font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:.4px; color:#fff; background:var(--green); padding:1px 4px; border-radius:2px; }
   #close-depth .cov-key { margin-top:22px; font-size:13.5px; color:var(--text-3); display:flex; flex-wrap:wrap; gap:20px 26px; align-items:center; }
@@ -864,6 +869,7 @@
     </div>
     <div class="cov-detail" id="cov-detail" hidden>
       <div class="cd-head"><h3 id="cd-name"></h3><span class="cd-mode" id="cd-mode"></span><button type="button" class="cd-close" id="cd-close" aria-label="Close control detail">&times;</button></div>
+      <figure class="cd-vis" id="cd-vis" hidden><img id="cd-poster" alt="" width="1200" height="675" loading="lazy"><video id="cd-video" muted loop playsinline preload="none" hidden></video></figure>
       <p class="cd-what" id="cd-what"></p>
       <p class="cd-label">Controls enforced</p>
       <ul id="cd-controls"></ul>
@@ -1136,6 +1142,13 @@
   var ENG=[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_census_grids.py']];
   var ARCH=[['Control architecture ↗',B+'ARCHITECTURE.md']];
   var NOTE='Engagement deployment — the public repo demonstrates the identical control pattern.';
+  var FAM={'prepaid':'amortization','insurance':'amortization','fixed-assets':'amortization','deferred-rent':'amortization',
+  'bonus':'accruals','fixed-fee':'accruals','note-interest':'accruals','ap-accrued':'accruals',
+  'combined':'reporting','tb-package':'reporting','group-ops':'reporting','job-cost':'reporting','je-register':'reporting',
+  'ar':'balances','deposits':'balances','investment':'balances','tb-continuity':'balances',
+  'postage':'allocations','ga':'allocations','mgmt-fees':'allocations','marketing-fees':'allocations','recoveries':'allocations',
+  'budget-variance':'construction','cash-draw':'construction',
+  'audit-pbc':'audit','ffe':'audit','payroll-recovery':'audit','headcount':'audit','je-package':'audit'};
   var D={
   'prepaid':{n:'Prepaid expense',m:'draft',w:'Amortizes every prepaid straight-line over its contractual term and drafts the balanced monthly entry.',c:['Exact-period authority — no inferred months','Schedule-to-GL tie before any line drafts','Debits equal credits on every entry','Any high exception suppresses the whole draft'],l:ENG},
   'insurance':{n:'Prepaid insurance',m:'draft',w:'Allocates each policy’s premium across entities and drafts the monthly amortization.',c:['Policy allocations must sum to exactly 100.00%','Premium, exclusion, policy, and entity crossfoots','Split maps validated for dataset integrity','Renewal step-ups caught by the cross-foot control'],l:ENG},
@@ -1171,6 +1184,7 @@
   var chips=[].slice.call(document.querySelectorAll('#close-depth .cov-chip[data-key]'));
   var current=null;
   function close(){ panel.hidden=true; if(current){current.setAttribute('aria-expanded','false');} current=null;
+    var vid=document.getElementById('cd-video'); if(vid&&vid.pause){vid.pause();}
     if(history.replaceState){history.replaceState(null,'',location.pathname+location.search);} }
   function open(chip){
     var d=D[chip.getAttribute('data-key')]; if(!d) return;
@@ -1187,7 +1201,16 @@
     var gp=document.getElementById('cd-gate'); gp.innerHTML='<b>Human gate:</b> '; gp.appendChild(document.createTextNode(gate));
     var links=document.getElementById('cd-links'); links.innerHTML='';
     (d.l||[]).forEach(function(pair){var a=document.createElement('a');a.href=pair[1];a.target='_blank';a.rel='noopener';a.textContent=pair[0];links.appendChild(a);});
+    var run=document.createElement('a');run.href='https://codespaces.new/sophonfinance-wq/finance-automation-portfolio';run.target='_blank';run.rel='noopener';run.className='cd-run';run.textContent='\u25B6 Run it \u2014 Codespaces';links.appendChild(run);
     if(d.note){var s=document.createElement('span');s.className='cd-note';s.textContent=d.note;links.appendChild(s);}
+    var fam=FAM[chip.getAttribute('data-key')]||'audit';
+    var fig=document.getElementById('cd-vis'),vid=document.getElementById('cd-video'),post=document.getElementById('cd-poster');
+    if(fig){ post.src='assets/controls/'+fam+'.webp'; post.alt=d.n+' \u2014 engine visual';
+      var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!rm&&vid){ if(vid.getAttribute('data-fam')!==fam){ vid.src='assets/controls/'+fam+'-motion.mp4'; vid.setAttribute('data-fam',fam); }
+        vid.hidden=false; if(vid.play){ vid.play().catch(function(){ vid.hidden=true; }); } }
+      else if(vid){ vid.hidden=true; if(vid.pause){vid.pause();} }
+      fig.hidden=false; }
     panel.hidden=false;
     if(history.replaceState){history.replaceState(null,'','#control-'+chip.getAttribute('data-key'));}
     var r=panel.getBoundingClientRect();
