@@ -5,7 +5,7 @@ from dataclasses import replace
 
 import pytest
 
-from recon_engine.outstanding_checks import (
+from cash_engine.outstanding_checks import (
     CheckRecord,
     OutstandingCheckValidator,
     _parse_iso_date,

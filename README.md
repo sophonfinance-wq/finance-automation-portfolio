@@ -5,19 +5,19 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-67%2C662%20curated%20%C2%B7%20~1.15M%20sweep-2ea44f)](#testing)
-[![Systems](https://img.shields.io/badge/systems-8%20runnable-6f42c1)](#the-eight-systems)
+[![Tests](https://img.shields.io/badge/tests-67%2C664%20curated%20%C2%B7%20~1.15M%20sweep-2ea44f)](#testing)
+[![Systems](https://img.shields.io/badge/systems-9%20runnable-6f42c1)](#the-nine-systems)
 [![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
-Eight self-contained Python systems for finance and tax work — month-end close, cash/debt
-reconciliation, cross-border surplus & ACB, partnership 1065 / §704(c), read-only workbook
-validation, a NotebookLM-style knowledge brain, and an interactive finance operations atlas. The
-eighth is **Triangulate**, a multi-agent LLM review framework with a deterministic core and a human
-sign-off gate. Everything runs on seeded
+Nine self-contained Python systems for finance and tax work — month-end close, cash/debt
+reconciliation, a cash-manager control suite, cross-border surplus & ACB, partnership 1065 /
+§704(c), read-only workbook validation, a NotebookLM-style knowledge brain, and an interactive
+finance operations atlas. One of them, **Triangulate**, is a multi-agent LLM review framework with a
+deterministic core and a human sign-off gate. Everything runs on seeded
 fictional data, is covered by CI, and is built on one rule: **no material output rests on a single
 model's word.**
 
@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (67,662 tests, runs in minutes)
+# run the curated test suite (67,664 tests, runs in minutes)
 pytest
 
 # run a system
@@ -105,14 +105,15 @@ Full flow in **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
 ---
 
-## The eight systems
+## The nine systems
 
 Every system is self-contained, deterministic, and ships with a seeded fictional-data generator.
 
 | System | Package | Run | What it demonstrates |
 |---|---|---|---|
 | [Month-End Close](./monthly-close-automation/) | `close_engine` | `python -m close_engine --period 2026-03` | recurring JEs, schedule-to-GL tie-outs, debit/credit controls, a ten-control sentinel layer (completeness calendar, interco mirroring, shadow recompute, period lock — fault-injection proven via `--demo-guardrails`), refusal to post out-of-tie entries |
-| [Cash & Debt Reconciliation](./cash-reconciliation/) | `recon_engine` | `python -m recon_engine` | GL-to-bank/lender matching, materiality classification, evidence log generation, plus five cash-manager controls: bank-rec bridge, outstanding/void checks, wire dual-approval, register continuity, concentration sweep |
+| [Cash & Debt Reconciliation](./cash-reconciliation/) | `recon_engine` | `python -m recon_engine` | GL-to-bank/lender matching, materiality classification, evidence log generation |
+| [Cash Management](./cash-management/) | `cash_engine` | `python -m cash_engine --demo` | five cash-manager controls — bank-rec bridge (bank ± DIT/outstanding = GL), outstanding/void/stale checks, wire dual-approval (segregation of duties), register running-balance continuity, concentration sweep tie-out — all read-only, human-gated |
 | [Partnership 1065](./partnership-1065-automation/) | `partnership_tax` | `python -m partnership_tax` | book-to-tax bridge, 1065 / Sch. K / L / M-1 / M-2 / K-1 mapping, review checks, IRC §704(c) built-in gain (`--section704c`) |
 | [Validation Engine](./audit-automation/) | `validation_engine` | `python run.py` | read-only workbook checks, formula integrity, lineage, PASS / REVIEW / FAIL verdicts, byte-identical no-write guarantee |
 | [Tax Surplus / ACB](./tax-surplus-engine/) | `surplus_engine` | `python -m surplus_engine --start 2021 --end 2024` | Canadian foreign-affiliate surplus pools, distribution waterfall, per-layer FX, ITA 40(3)-style deemed gain on negative ACB |
@@ -134,7 +135,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **67,662** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems, including a bounded invariant grid on every engine. Runs in minutes; gates CI. |
+| **Curated** (default) | `pytest` | **67,664** | Hand-written unit + behavior tests and parametrized coverage across all 9 systems, including a bounded invariant grid on every engine. Runs in minutes; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.15M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
@@ -142,7 +143,7 @@ default run (and CI) for speed and generated at import — the files stay small.
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
 Curated tests by system: close **15,687** · partnership **8,605** · triangulate **8,320** ·
-recon **12,799** · tax-surplus **7,498** · knowledge-brain **7,011** · validation **4,814** ·
+recon **7,511** · tax-surplus **7,498** · knowledge-brain **7,011** · cash-management **5,290** · validation **4,814** ·
 atlas **2,928** (including a parametrized deny-list confidentiality linter across every shipped file).
 
 ---

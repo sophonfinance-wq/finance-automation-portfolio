@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from recon_engine.bank_register import (
+from cash_engine.bank_register import (
     BankRegister,
     BankRegisterValidator,
     RegisterTransaction,
