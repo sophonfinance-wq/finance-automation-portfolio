@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sophon Finance Systems — AI Finance &amp; Accounting Automation, Human-Approved</title>
-<meta name="description" content="Evidence-first automation for month-end close, reconciliation, and partnership tax. Eight public finance engines, 59,740 automated tests, every figure cited, every output approved by your people. Free consultation.">
+<meta name="description" content="Evidence-first automation for month-end close, reconciliation, and partnership tax. Eight public finance engines, 62,374 automated tests, every figure cited, every output approved by your people. Free consultation.">
 <link rel="canonical" href="https://sophonfinance.com/">
 
 <!--
@@ -12,7 +12,7 @@
   SITE FACTS — single source of truth (verified 2026-07-17)
   ============================================================
   ENGINES_PUBLIC   = 8        (system dirs on origin/main; README badge "systems: 8 runnable")
-  TESTS_CURATED    = 59,740   (pytest --collect-only on origin/main, 2026-07-17)
+  TESTS_CURATED    = 62,374   (pytest --collect-only on origin/main, 2026-07-18)
   TESTS_SWEEP      = ~1.15M   (opt-in property sweep, SWEEP=1 pytest; 1,147,870 on 2026-07-17)
   LOOP_ENGINES     = 5        (close, surplus, reconciliation, knowledge brain, Triangulate)
   GITHUB           = https://github.com/sophonfinance-wq/finance-automation-portfolio
@@ -27,7 +27,7 @@
 <meta property="og:url" content="https://sophonfinance.com/">
 <meta property="og:site_name" content="Sophon Finance Systems">
 <meta property="og:title" content="Automate the work. Keep the judgment.">
-<meta property="og:description" content="Evidence-first AI automation for month-end close, reconciliation, and partnership tax. Eight public engines, 59,740 automated tests, humans approve every output.">
+<meta property="og:description" content="Evidence-first AI automation for month-end close, reconciliation, and partnership tax. Eight public engines, 62,374 automated tests, humans approve every output.">
 <meta property="og:image" content="https://sophonfinance.com/assets/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -90,7 +90,10 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; }
   body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6;
-    -webkit-font-smoothing:antialiased; overflow-x:hidden; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
+    font-kerning:normal; font-feature-settings:"kern" 1; overflow-x:hidden; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  h1, h2, h3 { text-rendering:optimizeLegibility; }
+  .stat b, .count, .cov-stat b, .tnum, .flag-num, .num { font-variant-numeric:tabular-nums lining-nums; }
   img, svg { max-width:100%; }
   .wrap { max-width:var(--wrap); margin:0 auto; padding:0 32px; }
   ::selection { background:var(--blue); color:#fff; }
@@ -137,7 +140,7 @@
   .btn-sm { min-height:40px; padding:9px 14px; font-size:14px; gap:20px; }
 
   /* ============ SECTION PRIMITIVES ============ */
-  section { padding:80px 0; }
+  section { padding:72px 0; }
   section.alt { background:var(--bg-alt); }
   .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
   h2 { font-size:clamp(28px, 3.4vw, 42px); font-weight:300; letter-spacing:-.2px; line-height:1.18; margin:10px 0 12px; color:var(--text); }
@@ -398,7 +401,9 @@
     footer { padding-bottom:84px; }
   }
   @media (max-width:600px) {
-    .wrap { padding:0 20px; }
+    .wrap { padding:0 18px; }
+    section { padding:44px 0; }
+    .lead { font-size:15.5px; }
     .fleet { grid-template-columns:1fr; }
     .controls-grid { grid-template-columns:1fr; }
     .steps { grid-template-columns:1fr; }
@@ -410,6 +415,62 @@
     .flag-head, .flag-col, .flag-foot { padding-left:20px; padding-right:20px; }
     .flag-foot .gate { margin-left:0; }
     .founder { flex-direction:column; } .founder-photo { width:100%; } .founder-photo img { height:auto; min-height:0; aspect-ratio:3/2; object-position:center 18%; }
+  }
+
+  /* inside the close engine — control coverage */
+  #close-depth .cov-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:26px 0 8px; }
+  #close-depth .cov-stat { background:var(--bg-alt); border:1px solid var(--border); padding:22px 24px; }
+  #close-depth .cov-stat b { display:block; font-size:clamp(30px,3.2vw,40px); font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--text); }
+  #close-depth .cov-stat span { display:block; margin-top:8px; font-size:13px; color:var(--text-3); }
+  #close-depth .cov-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:22px; }
+  #close-depth .cov-group { background:var(--bg-alt); border:1px solid var(--border); padding:20px 20px 14px; }
+  #close-depth .cov-group h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+  #close-depth .cov-chip { display:inline-flex; align-items:center; gap:6px; font-size:13px; line-height:1.3; padding:5px 10px; margin:0 6px 6px 0; border:1px solid var(--border-strong); border-radius:2px; color:var(--text-2); background:var(--bg-tile); font-family:var(--sans); cursor:pointer; transition:border-color .15s var(--ease), box-shadow .15s var(--ease); }
+  #close-depth .cov-chip:hover { border-color:var(--blue); color:var(--blue-hover); }
+  #close-depth .cov-chip[aria-expanded="true"] { border-color:var(--blue); background:var(--blue); color:#fff; }
+  #close-depth .cov-chip[aria-expanded="true"].new::after { background:#fff; color:var(--green); }
+  #close-depth .cov-chip.draft { border-color:#a6c8ff; color:var(--blue-hover); background:var(--blue-tint); }
+  #close-depth .cov-chip.draft:hover { border-color:var(--blue); }
+  #close-depth .cov-chip.draft[aria-expanded="true"] { background:var(--blue); color:#fff; }
+  #close-depth .cov-detail { margin-top:18px; border:1px solid var(--border-strong); border-left:3px solid var(--blue); background:var(--bg-tile); padding:24px 26px 20px; }
+  #close-depth .cov-detail .cd-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px 14px; margin-bottom:6px; }
+  #close-depth .cov-detail h3 { font-size:19px; font-weight:600; letter-spacing:-.1px; }
+  #close-depth .cov-detail .cd-mode { font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.5px; padding:3px 8px; border-radius:2px; }
+  #close-depth .cov-detail .cd-mode.draft { background:var(--blue-tint); color:var(--blue-hover); border:1px solid #a6c8ff; }
+  #close-depth .cov-detail .cd-mode.val { background:var(--bg-alt); color:var(--text-2); border:1px solid var(--border-strong); }
+  #close-depth .cov-detail .cd-what { font-size:14.5px; color:var(--text-2); max-width:62em; }
+  #close-depth .cov-detail .cd-label { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin:16px 0 8px; }
+  #close-depth .cov-detail ul { list-style:none; display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:6px 22px; }
+  #close-depth .cov-detail li { font-size:13.5px; color:var(--text-2); padding-left:16px; position:relative; }
+  #close-depth .cov-detail li::before { content:""; position:absolute; left:0; top:.55em; width:7px; height:7px; border:1.6px solid var(--blue); border-radius:1px; }
+  #close-depth .cov-detail .cd-gate { margin-top:14px; font-size:13.5px; color:var(--text-2); }
+  #close-depth .cov-detail .cd-gate b { color:var(--text); }
+  #close-depth .cov-detail .cd-links { display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:16px; padding-top:14px; border-top:1px solid var(--border); }
+  #close-depth .cov-detail .cd-links a { font-family:var(--mono); font-size:12.5px; text-decoration:none; }
+  #close-depth .cov-detail .cd-links a:hover { text-decoration:underline; }
+  #close-depth .cov-detail .cd-links .cd-note { font-family:var(--mono); font-size:12px; color:var(--text-3); }
+  #close-depth .cov-detail .cd-close { margin-left:auto; background:none; border:none; cursor:pointer; color:var(--text-3); font-size:20px; line-height:1; padding:2px 6px; }
+  #close-depth .cov-detail .cd-close:hover { color:var(--text); }
+  #close-depth .cov-detail .cd-vis { position:relative; margin:16px 0 2px; border:1px solid var(--border); background:#fff; aspect-ratio:16/9; max-height:340px; overflow:hidden; }
+  #close-depth .cov-detail .cd-vis img, #close-depth .cov-detail .cd-vis video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  #close-depth .cov-detail .cd-vis video { z-index:2; }
+  #close-depth .cd-links .cd-run { font-weight:600; }
+  @media (max-width:640px){ #close-depth .cov-detail .cd-vis { max-height:240px; } }
+  @media (max-width:640px){ #close-depth .cov-detail { padding:18px 16px 16px; } }
+  #close-depth .cov-chip.new::after { content:"NEW"; font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:.4px; color:#fff; background:var(--green); padding:1px 4px; border-radius:2px; }
+  #close-depth .cov-key { margin-top:22px; font-size:13.5px; color:var(--text-3); display:flex; flex-wrap:wrap; gap:20px 26px; align-items:center; }
+  #close-depth .cov-key span { display:inline-flex; align-items:center; gap:7px; }
+  #close-depth .cov-dot { width:12px; height:12px; border-radius:2px; flex:0 0 auto; }
+  #close-depth .cov-dot.draft { background:var(--blue-tint); border:1px solid #a6c8ff; }
+  #close-depth .cov-dot.val { background:var(--bg-tile); border:1px solid var(--border-strong); }
+  @media (max-width:820px){ #close-depth .cov-stats, #close-depth .cov-grid { gap:12px; } }
+  @media (max-width:640px){
+    #close-depth .cov-stats { grid-template-columns:1fr 1fr; gap:10px; margin:20px 0 4px; }
+    #close-depth .cov-stat { padding:15px 16px 13px; }
+    #close-depth .cov-stat b { font-size:26px; }
+    #close-depth .cov-group { padding:16px 16px 10px; }
+    #close-depth .cov-chip { font-size:12.5px; padding:4px 9px; }
+    #close-depth .cov-key { font-size:12.5px; gap:10px 18px; margin-top:16px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -451,7 +512,7 @@
 <audio id="jazz-audio" loop preload="none">
   <source src="assets/site-music.mp3" type="audio/mpeg">
 </audio>
-<button id="jazz-toggle" type="button" aria-pressed="false" aria-label="Play background music" title="Background music">
+<button id="jazz-toggle" type="button" aria-pressed="false" aria-label="Play background music — J.S. Bach, Air on the G String, performed by the U.S. Air Force Strings (public domain)" title="J.S. Bach — Air (BWV 1068) · U.S. Air Force Strings">
   <span class="jz-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
   <span class="jz-label">Soundtrack</span>
 </button>
@@ -562,9 +623,9 @@
     <div class="stat"><b><span class="count" data-count="8">8</span></b>
       <span class="cap">public finance engines &mdash; runnable, MIT-licensed</span>
       <span class="src"><a href="https://github.com/sophonfinance-wq" target="_blank" rel="noopener">github.com/sophonfinance-wq</a></span></div>
-    <div class="stat"><b><a href="tests/" style="color:var(--blue);text-decoration:none" aria-label="See all 59,740 tests by engine"><span class="count" data-count="59740">59,740</span></a></b>
+    <div class="stat"><b><a href="tests/" style="color:var(--blue);text-decoration:none" aria-label="See all 62,374 tests by engine"><span class="count" data-count="62374">62,374</span></a></b>
       <span class="cap">automated tests in the curated suite, gating CI</span>
-      <span class="src"><a href="tests/">See all 59,740 tests, by engine &rarr;</a></span></div>
+      <span class="src"><a href="tests/">See all 62,374 tests, by engine &rarr;</a></span></div>
     <div class="stat"><b><span class="count" data-count="100">100</span><span class="unit">%</span></b>
       <span class="cap">of computed figures ship with cited evidence</span>
       <span class="src">evidence log per run</span></div>
@@ -593,44 +654,9 @@
       <p class="lead">Working systems, not proposals &mdash; the same architecture runs publicly on GitHub against fictional data. What each takes in, what it does, and what your team keeps control of.</p>
     </div>
 
-    <article class="flag reveal">
-      <div class="flag-head">
-        <div class="flag-id"><span class="flag-num">ENGINE 01</span><h3>Partnership Tax &middot; Form 1065</h3></div>
-        <span class="flag-tag">Returns and K-1s, prepared for your CPA's review</span>
-      </div>
-      <figure class="flag-vis">
-        <img src="assets/engine-1065.webp" data-video="assets/engine-1065-motion.mp4" alt="Diagram: trial balance, prior-year return, and partner data flow into the 1065 engine and come out as a checked Form 1065 draft, K-1s per partner, and an evidence binder — passing a gate labeled CPA reviews and files" width="1840" height="1027" loading="lazy">
-      </figure>
-      <div class="flag-body">
-        <div class="flag-col">
-          <h4>You provide</h4>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Trial balance &amp; income statements</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Prior-year return</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Partner &amp; ownership information</div>
-        </div>
-        <div class="flag-col does">
-          <h4>The engine does</h4>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Normalizes the trial balance, P&amp;L, and partner data</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Computes allocations, rolls capital accounts</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Drafts the return and every K-1, tied to the ledger</div>
-        </div>
-        <div class="flag-col gets">
-          <h4>You receive</h4>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Draft Form 1065</b>, review-ready</span></div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>K-1 drafts</b> for every partner</span></div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Evidence binder</b> &mdash; every number sourced</span></div>
-        </div>
-      </div>
-      <div class="flag-foot">
-        <span class="lbl">Controls</span>
-        <span>Allocations recomputed independently &middot; capital accounts must roll</span>
-        <span class="gate"><b>Human gate:</b> your CPA reviews and files. Nothing files itself.</span>
-      </div>
-    </article>
-
     <article class="flag reveal" id="close">
       <div class="flag-head">
-        <div class="flag-id"><span class="flag-num">ENGINE 02</span><h3>Month-End Close</h3></div>
+        <div class="flag-id"><span class="flag-num">ENGINE 01</span><h3>Month-End Close</h3></div>
         <span class="flag-tag">The recurring close, drafted under ten deterministic controls</span>
       </div>
       <figure class="flag-vis">
@@ -665,7 +691,7 @@
 
     <article class="flag reveal" id="recon">
       <div class="flag-head">
-        <div class="flag-id"><span class="flag-num">ENGINE 03</span><h3>Cash &amp; Debt Reconciliation</h3></div>
+        <div class="flag-id"><span class="flag-num">ENGINE 02</span><h3>Cash &amp; Debt Reconciliation</h3></div>
         <span class="flag-tag">The full population of accounts &mdash; not a sample &mdash; matched and explained</span>
       </div>
       <figure class="flag-vis">
@@ -696,6 +722,42 @@
         <span class="gate"><b>Human gate:</b> your team signs off on every exception.</span>
       </div>
     </article>
+
+    <article class="flag reveal">
+      <div class="flag-head">
+        <div class="flag-id"><span class="flag-num">ENGINE 03</span><h3>Partnership Tax &middot; Form 1065</h3></div>
+        <span class="flag-tag">Returns and K-1s, prepared for your CPA's review</span>
+      </div>
+      <figure class="flag-vis">
+        <img src="assets/engine-1065.webp" data-video="assets/engine-1065-motion.mp4" alt="Diagram: trial balance, prior-year return, and partner data flow into the 1065 engine and come out as a checked Form 1065 draft, K-1s per partner, and an evidence binder — passing a gate labeled CPA reviews and files" width="1840" height="1027" loading="lazy">
+      </figure>
+      <div class="flag-body">
+        <div class="flag-col">
+          <h4>You provide</h4>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Trial balance &amp; income statements</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Prior-year return</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Partner &amp; ownership information</div>
+        </div>
+        <div class="flag-col does">
+          <h4>The engine does</h4>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Normalizes the trial balance, P&amp;L, and partner data</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Computes allocations, rolls capital accounts</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Drafts the return and every K-1, tied to the ledger</div>
+        </div>
+        <div class="flag-col gets">
+          <h4>You receive</h4>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Draft Form 1065</b>, review-ready</span></div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>K-1 drafts</b> for every partner</span></div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Evidence binder</b> &mdash; every number sourced</span></div>
+        </div>
+      </div>
+      <div class="flag-foot">
+        <span class="lbl">Controls</span>
+        <span>Allocations recomputed independently &middot; capital accounts must roll</span>
+        <span class="gate"><b>Human gate:</b> your CPA reviews and files. Nothing files itself.</span>
+      </div>
+    </article>
+
   </div>
 </section>
 <section class="cinema" aria-label="Sophon Finance Systems film, part two">
@@ -716,18 +778,18 @@
     </div>
     <div class="fleet reveal">
       <div class="tile">
-        <div class="tile-vis"><img src="assets/tile-surplus.webp" data-video="assets/tile-surplus-motion.mp4" alt="Diagram: yearly filings 2021 through 2024 thread through the surplus engine into layered tax pools carried forward, with foreign exchange per layer and a check traced to source" width="1280" height="714" loading="lazy"></div>
-        <span class="tnum">04</span>
-        <h3>Tax Surplus / ACB</h3>
-        <p>Multi-year tax pools and adjusted cost basis carried forward by rule &mdash; foreign exchange per layer, every figure traceable to source.</p>
-        <span class="run">python -m surplus_engine --start 2021 --end 2024</span>
-      </div>
-      <div class="tile">
         <div class="tile-vis"><img src="assets/tile-validation.webp" data-video="assets/tile-validation-motion.mp4" alt="Diagram: a finished workbook passes under a read-only validation scanner that never writes, exiting unchanged with PASS, REVIEW, or FAIL verdict chips" width="1280" height="714" loading="lazy"></div>
-        <span class="tnum">05</span>
+        <span class="tnum">04</span>
         <h3>Validation Engine</h3>
         <p>Read-only workbook review: formula integrity, lineage, PASS / REVIEW / FAIL verdicts &mdash; with a byte-identical guarantee that it never modifies what it inspects.</p>
         <span class="run">python run.py</span>
+      </div>
+      <div class="tile">
+        <div class="tile-vis"><img src="assets/tile-surplus.webp" data-video="assets/tile-surplus-motion.mp4" alt="Diagram: yearly filings 2021 through 2024 thread through the surplus engine into layered tax pools carried forward, with foreign exchange per layer and a check traced to source" width="1280" height="714" loading="lazy"></div>
+        <span class="tnum">05</span>
+        <h3>Tax Surplus / ACB</h3>
+        <p>Multi-year tax pools and adjusted cost basis carried forward by rule &mdash; foreign exchange per layer, every figure traceable to source.</p>
+        <span class="run">python -m surplus_engine --start 2021 --end 2024</span>
       </div>
       <div class="tile">
         <div class="tile-vis"><img src="assets/tile-triangulate.webp" data-video="assets/tile-triangulate-motion.mp4" alt="Diagram: two reviewers, a specialist, and a deterministic auditor all examine the same work; consensus is required, and the check appears only where their beams agree — no consensus, no sign-off" width="1280" height="714" loading="lazy"></div>
@@ -758,6 +820,63 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= CLOSE ENGINE DEPTH ================= -->
+<section id="close-depth">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="kicker">Inside the close engine</p>
+      <h2>One engine. <strong>29 deterministic controls.</strong></h2>
+      <p class="lead">The month-end close isn't a single script &mdash; it's a library of recurring workpapers, each with its own arithmetic. The close engine drafts or validates every one under the same rule: recompute it independently, tie it to the ledger, and refuse to post anything a person hasn't approved.</p>
+    </div>
+    <div class="cov-stats reveal">
+      <div class="cov-stat"><b>29</b><span>deterministic controls</span></div>
+      <div class="cov-stat"><b>8</b><span>draft-capable</span></div>
+      <div class="cov-stat"><b>21</b><span>validation-only</span></div>
+      <div class="cov-stat"><b>0</b><span>post without a human</span></div>
+    </div>
+    <div class="cov-grid reveal">
+      <div class="cov-group">
+        <h4>Amortization &amp; depreciation</h4>
+        <button type="button" class="cov-chip draft" data-key="prepaid" aria-expanded="false" aria-controls="cov-detail">Prepaid expense</button><button type="button" class="cov-chip draft" data-key="insurance" aria-expanded="false" aria-controls="cov-detail">Prepaid insurance</button><button type="button" class="cov-chip draft" data-key="fixed-assets" aria-expanded="false" aria-controls="cov-detail">Fixed assets</button><button type="button" class="cov-chip draft" data-key="deferred-rent" aria-expanded="false" aria-controls="cov-detail">Deferred rent</button>
+      </div>
+      <div class="cov-group">
+        <h4>Accruals &amp; interest</h4>
+        <button type="button" class="cov-chip draft" data-key="bonus" aria-expanded="false" aria-controls="cov-detail">Bonus accrual</button><button type="button" class="cov-chip draft" data-key="fixed-fee" aria-expanded="false" aria-controls="cov-detail">Fixed-fee accrual</button><button type="button" class="cov-chip draft" data-key="note-interest" aria-expanded="false" aria-controls="cov-detail">Note interest</button><button type="button" class="cov-chip" data-key="ap-accrued" aria-expanded="false" aria-controls="cov-detail">AP / accrued liabilities</button>
+      </div>
+      <div class="cov-group">
+        <h4>Reporting packages</h4>
+        <button type="button" class="cov-chip" data-key="combined" aria-expanded="false" aria-controls="cov-detail">Combined statements</button><button type="button" class="cov-chip" data-key="tb-package" aria-expanded="false" aria-controls="cov-detail">Multi-entity TB package</button><button type="button" class="cov-chip" data-key="group-ops" aria-expanded="false" aria-controls="cov-detail">Group operations</button><button type="button" class="cov-chip" data-key="job-cost" aria-expanded="false" aria-controls="cov-detail">Project / job-cost export</button><button type="button" class="cov-chip" data-key="je-register" aria-expanded="false" aria-controls="cov-detail">Recurring-JE register</button>
+      </div>
+      <div class="cov-group">
+        <h4>Balances &amp; continuity</h4>
+        <button type="button" class="cov-chip" data-key="ar" aria-expanded="false" aria-controls="cov-detail">AR balances</button><button type="button" class="cov-chip" data-key="deposits" aria-expanded="false" aria-controls="cov-detail">Deposit balances</button><button type="button" class="cov-chip" data-key="investment" aria-expanded="false" aria-controls="cov-detail">Investment continuity</button><button type="button" class="cov-chip" data-key="tb-continuity" aria-expanded="false" aria-controls="cov-detail">Trial-balance continuity</button>
+      </div>
+      <div class="cov-group">
+        <h4>Allocations &amp; fees</h4>
+        <button type="button" class="cov-chip draft" data-key="postage" aria-expanded="false" aria-controls="cov-detail">Postage allocation</button><button type="button" class="cov-chip" data-key="ga" aria-expanded="false" aria-controls="cov-detail">G&amp;A allocation</button><button type="button" class="cov-chip" data-key="mgmt-fees" aria-expanded="false" aria-controls="cov-detail">Management fees</button><button type="button" class="cov-chip" data-key="marketing-fees" aria-expanded="false" aria-controls="cov-detail">Marketing fees</button><button type="button" class="cov-chip" data-key="recoveries" aria-expanded="false" aria-controls="cov-detail">Recoveries</button>
+      </div>
+      <div class="cov-group">
+        <h4>Construction</h4>
+        <button type="button" class="cov-chip" data-key="budget-variance" aria-expanded="false" aria-controls="cov-detail">Budget variance</button><button type="button" class="cov-chip" data-key="cash-draw" aria-expanded="false" aria-controls="cov-detail">Job-cost-to-draw reconciliation</button>
+      </div>
+      <div class="cov-group">
+        <h4>Audit &amp; support</h4>
+        <button type="button" class="cov-chip" data-key="audit-pbc" aria-expanded="false" aria-controls="cov-detail">Audit / PBC package</button><button type="button" class="cov-chip" data-key="ffe" aria-expanded="false" aria-controls="cov-detail">Personal-property FF&amp;E</button><button type="button" class="cov-chip" data-key="payroll-recovery" aria-expanded="false" aria-controls="cov-detail">Payroll recovery</button><button type="button" class="cov-chip new" data-key="headcount" aria-expanded="false" aria-controls="cov-detail">Headcount support</button><button type="button" class="cov-chip new" data-key="je-package" aria-expanded="false" aria-controls="cov-detail">JE support packages</button>
+      </div>
+    </div>
+    <div class="cov-detail" id="cov-detail" hidden>
+      <div class="cd-head"><h3 id="cd-name"></h3><span class="cd-mode" id="cd-mode"></span><button type="button" class="cd-close" id="cd-close" aria-label="Close control detail">&times;</button></div>
+      <figure class="cd-vis" id="cd-vis" hidden><img id="cd-poster" alt="" width="1200" height="675" loading="lazy"><video id="cd-video" muted loop playsinline preload="none" hidden></video></figure>
+      <p class="cd-what" id="cd-what"></p>
+      <p class="cd-label">Controls enforced</p>
+      <ul id="cd-controls"></ul>
+      <p class="cd-gate" id="cd-gate"></p>
+      <div class="cd-links" id="cd-links"></div>
+    </div>
+    <p class="cov-key reveal"><span><span class="cov-dot draft"></span> Draft-capable &mdash; balanced entries, drafted and held for approval</span><span><span class="cov-dot val"></span> Validation-only &mdash; recomputed and flagged, never posts</span></p>
   </div>
 </section>
 
@@ -806,13 +925,13 @@
       <p class="lead">The entire engine portfolio is on GitHub &mdash; code, tests, controls, and documentation. Your technical reviewers can judge the work before you spend anything.</p>
     </div>
     <div class="eng-grid">
-      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 59,740 automated tests with pytest.">
+      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 62,374 automated tests with pytest.">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>verify-it-yourself — bash</span></div>
         <div class="term-body" aria-hidden="true">
           <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
           <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
           <div class="cmd">pytest --collect-only -q | tail -1</div>
-          <div class="ok-line">59740 tests collected</div>
+          <div class="ok-line">62374 tests collected</div>
           <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
           <div class="ok-line">passed ✓</div>
           <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
@@ -820,7 +939,7 @@
         </div>
       </div>
       <div class="eng-points reveal d1">
-        <div class="pt"><h3>59,740 tests, honestly tiered</h3>
+        <div class="pt"><h3>62,374 tests, honestly tiered</h3>
           <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.15M generated cases. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
         <div class="pt"><h3>Fictional data, by rule</h3>
           <p>Every public example runs on seeded, invented data. Client information never appears in public code &mdash; backed by a deny-list confidentiality linter in the test suite.</p></div>
@@ -829,7 +948,7 @@
         <div class="eng-cta">
           <a class="btn btn-p btn-sm" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">View on GitHub
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-          <a class="btn btn-t btn-sm" href="tests/">See all 59,740 tests</a>
+          <a class="btn btn-t btn-sm" href="tests/">See all 62,374 tests</a>
           <a class="btn btn-t btn-sm" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Follow on LinkedIn</a>
         </div>
       </div>
@@ -1003,15 +1122,111 @@
   var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce){ wordEl.textContent = words[0]; wordEl.classList.add('show'); return; }
   var i = 0;
+  function inOutro(margin){
+    return v && v.duration && isFinite(v.duration) && v.currentTime > v.duration - margin;
+  }
   function flash(){
+    if (inOutro(6.6)) return;                  // no word may linger into the logo outro
     wordEl.classList.remove('show');           // ensure a clean fade-in
     wordEl.textContent = words[i];
     i = (i + 1) % words.length;
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ wordEl.classList.add('show'); }); });
     setTimeout(function(){ wordEl.classList.remove('show'); }, 2800); // hold ~2.2s, then fade out
   }
+  if (v){ v.addEventListener('timeupdate', function(){ if (inOutro(3.75)) wordEl.classList.remove('show'); }); }
   flash();
   setInterval(flash, 5500);
+})();
+</script>
+
+<!-- ================= CONTROL DRILL-DOWN ================= -->
+<script>
+(function(){
+  var B='https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/';
+  var M=B+'monthly-close-automation/close_engine/', T=M+'tests/';
+  var ENG=[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_census_grids.py']];
+  var ARCH=[['Control architecture ↗',B+'ARCHITECTURE.md']];
+  var NOTE='Engagement deployment — the public repo demonstrates the identical control pattern.';
+  var FAM={'prepaid':'amortization','insurance':'amortization','fixed-assets':'amortization','deferred-rent':'amortization',
+  'bonus':'accruals','fixed-fee':'accruals','note-interest':'accruals','ap-accrued':'accruals',
+  'combined':'reporting','tb-package':'reporting','group-ops':'reporting','job-cost':'reporting','je-register':'reporting',
+  'ar':'balances','deposits':'balances','investment':'balances','tb-continuity':'balances',
+  'postage':'allocations','ga':'allocations','mgmt-fees':'allocations','marketing-fees':'allocations','recoveries':'allocations',
+  'budget-variance':'construction','cash-draw':'construction',
+  'audit-pbc':'audit','ffe':'audit','payroll-recovery':'audit','headcount':'audit','je-package':'audit'};
+  var D={
+  'prepaid':{n:'Prepaid expense',m:'draft',w:'Amortizes every prepaid straight-line over its contractual term and drafts the balanced monthly entry.',c:['Exact-period authority — no inferred months','Schedule-to-GL tie before any line drafts','Debits equal credits on every entry','Any high exception suppresses the whole draft'],l:ENG},
+  'insurance':{n:'Prepaid insurance',m:'draft',w:'Allocates each policy’s premium across entities and drafts the monthly amortization.',c:['Policy allocations must sum to exactly 100.00%','Premium, exclusion, policy, and entity crossfoots','Split maps validated for dataset integrity','Renewal step-ups caught by the cross-foot control'],l:ENG},
+  'fixed-assets':{n:'Fixed assets',m:'draft',w:'Computes per-asset monthly depreciation from the register and drafts the entry.',c:['Net-book-value rollforward re-derived independently','Fully depreciated assets must stop depreciating','Schedule-to-GL difference control','Draft suppressed on any register exception'],l:ENG},
+  'deferred-rent':{n:'Deferred rent',m:'draft',w:'Straight-lines lease and CAM over the full term and drafts the deferred-rent movement.',c:['Escalation steps handled across the term','Deferred liability/asset rollforward re-added','Global and entity-level balance required'],l:ENG},
+  'bonus':{n:'Bonus accrual',m:'draft',w:'Rolls each award class beginning + accrual − payments to ending and drafts only the current accrual.',c:['Per-class rollforward re-performed','Total ending crossfoot across classes','One approved liability/expense pair required','Positive current accrual only — else review'],g:'compensation approval and the post-entry tie stay with your team.',l:ARCH,note:NOTE},
+  'fixed-fee':{n:'Fixed-fee accrual',m:'draft',w:'Accrues the contractual monthly fee net of settlements already booked — never double-books.',c:['Beginning payable less settled amounts re-derived','Stale visible-JE blocks flagged for review','Exact-period column authority'],l:[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_fixed_fee_accrual.py']]},
+  'note-interest':{n:'Note interest',m:'draft',w:'Computes interest from explicit rate, principal, and day-count terms, then drafts the accrual.',c:['Exact-date debt rollforward and carryforward','Interest only from explicit term authority','Manual overrides require written approval evidence','Every drafted amount traces to target interest'],l:ENG},
+  'ap-accrued':{n:'AP / accrued liabilities',m:'val',w:'Re-performs beginning + activity = ending across every accrual section and ties the grand balance.',c:['Section-level rollforwards re-added','Current beginnings must carry from the prior month','Section endings crossfoot to the grand balance'],l:ARCH,note:NOTE},
+  'postage':{n:'Postage allocation',m:'draft',w:'Routes each signed meter charge to exactly one approved project/job/cost code and drafts balanced allocations.',c:['Exactly one active route per meter — else the whole batch refuses','Refunds reverse expense and intercompany legs','Clearing account must zero in every entity','Meter, project, and JE totals crossfoot'],l:[['Source ↗',M+'engine.py'],['Tests ↗',T+'test_postage_engine.py']]},
+  'ga':{n:'G&A allocation',m:'prep',w:'Summarizes the month’s G&A activity by account and type for the approved allocation workbook.',c:['Exact-period selection only','Account and type summaries independently re-added','No allocation percentages assumed'],g:'your team pastes into the approved workbook, reviews percentages, and posts.',l:[['Source ↗',M+'engine.py']]},
+  'mgmt-fees':{n:'Management fees',m:'val',w:'Validates exact-period fee base detail with subtotal, project, and grand-total crossfoots before any accrual is booked.',c:['Exact target month required','Visible subtotals and grand totals re-added','Detail-to-summary agreement'],g:'the approved fee and intercompany mapping stays with your controller.',l:ENG},
+  'marketing-fees':{n:'Marketing fees',m:'val',w:'Validates exact-period base detail and every visible total before fees post.',c:['Exact target month required','Visible-total crossfoots re-added','Exceptions anchored to file, sheet, and cell'],l:ARCH,note:NOTE},
+  'recoveries':{n:'Recoveries',m:'val',w:'Validates recovery detail, project subtotals, and grand totals for the exact month.',c:['Exact-period detail selection','Project and subtotal crossfoots','Grand-total re-add with cell evidence'],l:ARCH,note:NOTE},
+  'ar':{n:'AR balances',m:'val',w:'Crossfoots fiscal-year category → detail → cached totals and flags stale activity instead of bridging it.',c:['Category-to-detail crossfoot re-added','Cached totals independently re-derived','Stale periods reported, never fabricated'],l:ARCH,note:NOTE},
+  'deposits':{n:'Deposit balances',m:'val',w:'Re-performs carry-forward + additions − allocations/releases = ending balance.',c:['Rollforward re-added from dated activity','No missing activity fabricated','Ending balance flagged for period-end GL tie'],l:ARCH,note:NOTE},
+  'investment':{n:'Investment continuity',m:'val',w:'Proves beginning equity + contributions, distributions, earnings, and transfers = ending — by subsidiary and in total.',c:['Subsidiary continuity re-performed','Detail-to-summary monthly ties','Cross-entity transfers must mirror equal-and-opposite','Visible differences anchored to cells'],l:ARCH,note:NOTE},
+  'tb-continuity':{n:'Trial-balance continuity',m:'val',w:'Ties every current opening to the prior close and re-performs each line rollforward.',c:['Opening-plus-activity rollforward per line','Entity zero-balance controls','Account-population changes surfaced','External dependencies inventoried'],l:[['Source ↗',M+'trial_balance.py'],['Tests ↗',T+'test_trial_balance.py']]},
+  'combined':{n:'Combined statements',m:'val',w:'Validates the consolidation package end to end: semantic roles, local formulas, caches, and displayed controls.',c:['Thirteen semantic package roles resolved','Local formulas independently re-performed','Missing caches and external links inventoried','Current/prior structural continuity'],l:[['Source ↗',M+'consolidation.py'],['Tests ↗',T+'test_consolidation.py']]},
+  'tb-package':{n:'Multi-entity TB package',m:'val',w:'Validates the multi-entity trial-balance package: support ties, adjustments, and structure.',c:['Support-tab-to-summary crossfoots re-added','Adjustment columns inventoried','Formula caches and embedded amounts flagged','Current/prior entity and account continuity'],l:[['Source ↗',M+'tb_package.py'],['Tests ↗',T+'test_tb_package.py']]},
+  'group-ops':{n:'Group operations',m:'val',w:'Validates the monthly management package: allocations, regional crossfoots, and the disclosed rounding boundary.',c:['Sixteen semantic roles resolved','Allocation-zero controls re-performed','Regional monthly crossfoots re-added','Structural and dependency changes surfaced'],l:[['Source ↗',M+'group_operations.py'],['Tests ↗',T+'test_group_operations.py']]},
+  'job-cost':{n:'Project / job-cost export',m:'val',w:'Re-adds every cached job total in the monthly transaction export and checks each row’s identity.',c:['Per-job cached totals re-added','Ownership, core fields, dates, and duplicates checked','Negative and post-period rows flagged','Current/prior population changes surfaced'],l:[['Source ↗',M+'project_job_cost.py'],['Tests ↗',T+'test_project_job_cost.py']]},
+  'je-register':{n:'Recurring-JE register',m:'val',w:'Validates the recurring-JE register — posting date, line structure, memo periods, and balance — and never executes an import.',c:['Per-group and global debit/credit balance','Memo-period agreement per line','Import formulas detected as evidence only'],l:[['Source ↗',M+'recurring_register.py'],['Tests ↗',T+'test_recurring_register.py']]},
+  'budget-variance':{n:'Budget variance',m:'val',w:'Re-derives every cost-code equation and flags overruns before the forecast moves.',c:['Current budget = original + approved changes','Cost-to-complete re-derived per code','Negative cost-to-complete must carry an overrun flag','Project totals crossfoot to the detail'],l:[['Source ↗',M+'budget_variance.py'],['Tests ↗',T+'test_budget_variance.py']]},
+  'cash-draw':{n:'Job-cost-to-draw reconciliation',m:'val',w:'Ties job-cost detail to the construction draw and proves funding continuity.',c:['Draw equation re-added: amount − retainage + adjustment','Detail and bank-category crossfoots','Equity-plus-lender funding continuity','Project-report totals re-derived'],l:[['Source ↗',M+'cash_draw.py'],['Tests ↗',T+'test_cash_draw.py']]},
+  'audit-pbc':{n:'Audit / PBC package',m:'val',w:'Validates the annual audit package: leadsheet equations, carryforwards, and displayed checks.',c:['Leadsheet equations re-performed','Current/prior carryforwards proved','Continuity schedules re-added','Stale dependencies fail closed'],l:[['Source ↗',M+'audit_pbc.py'],['Tests ↗',T+'test_audit_pbc.py']]},
+  'ffe':{n:'Personal-property FF&E',m:'val',w:'Re-performs the personal-property FF&E schedule’s mechanics — and never files or concludes tax.',c:['Asset cost, life, months, and NBV re-derived','Local subtotals independently re-added','Duplicate assets and missing fields flagged','Year-over-year population compared'],l:[['Source ↗',M+'personal_property_tax.py'],['Tests ↗',T+'test_personal_property_tax.py']]},
+  'payroll-recovery':{n:'Payroll recovery',m:'val',w:'Re-performs fiscal-month recovery schedules and ties the total change to target-month activity.',c:['Every local formula re-performed','Future-period activity blocked','Historical months must carry unchanged','Grand-total change ties to the target month'],l:[['Source ↗',M+'payroll_recovery.py'],['Tests ↗',T+'test_payroll_recovery.py']]},
+  'headcount':{n:'Headcount support',m:'val',w:'Re-adds annual entity headcount totals and reconciles the annual change — no employee-level data, ever.',c:['Descending consecutive year columns required','Annual totals independently re-added','Overlapping history must carry unchanged','Total change ties to the sum of entity changes'],l:[['Source ↗',M+'headcount.py'],['Tests ↗',T+'test_headcount.py'],['Invariant grid ↗',T+'test_headcount_grid.py']]},
+  'je-package':{n:'JE support packages',m:'val',w:'Re-adds every journal entry in the monthly support package and proves debits equal credits.',c:['Per-entry debit/credit re-add and balance','One-sided intercompany flagged for counterparty review','Cached formula errors and stale tabs surfaced','Carryforward entries must not drift'],l:[['Source ↗',M+'je_package.py'],['Tests ↗',T+'test_je_package.py'],['Invariant grid ↗',T+'test_je_package_grid.py']]}
+  };
+  var panel=document.getElementById('cov-detail'); if(!panel) return;
+  var chips=[].slice.call(document.querySelectorAll('#close-depth .cov-chip[data-key]'));
+  var current=null;
+  function close(){ panel.hidden=true; if(current){current.setAttribute('aria-expanded','false');} current=null;
+    var vid=document.getElementById('cd-video'); if(vid&&vid.pause){vid.pause();}
+    if(history.replaceState){history.replaceState(null,'',location.pathname+location.search);} }
+  function open(chip){
+    var d=D[chip.getAttribute('data-key')]; if(!d) return;
+    chips.forEach(function(c){c.setAttribute('aria-expanded','false');});
+    chip.setAttribute('aria-expanded','true'); current=chip;
+    document.getElementById('cd-name').textContent=d.n;
+    var mode=document.getElementById('cd-mode');
+    mode.textContent=d.m==='draft'?'DRAFTS ENTRIES — HELD FOR APPROVAL':(d.m==='prep'?'DATA PREPARATION — NO POSTING':'VALIDATION-ONLY — NEVER POSTS');
+    mode.className='cd-mode '+(d.m==='draft'?'draft':'val');
+    document.getElementById('cd-what').textContent=d.w;
+    var ul=document.getElementById('cd-controls'); ul.innerHTML='';
+    d.c.forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li);});
+    var gate=d.g||(d.m==='draft'?'your controller approves each entry before it posts.':'recomputed and flagged only — posting, mappings, and support stay with your team.');
+    var gp=document.getElementById('cd-gate'); gp.innerHTML='<b>Human gate:</b> '; gp.appendChild(document.createTextNode(gate));
+    var links=document.getElementById('cd-links'); links.innerHTML='';
+    (d.l||[]).forEach(function(pair){var a=document.createElement('a');a.href=pair[1];a.target='_blank';a.rel='noopener';a.textContent=pair[0];links.appendChild(a);});
+    var run=document.createElement('a');run.href='https://codespaces.new/sophonfinance-wq/finance-automation-portfolio';run.target='_blank';run.rel='noopener';run.className='cd-run';run.textContent='\u25B6 Run it \u2014 Codespaces';links.appendChild(run);
+    if(d.note){var s=document.createElement('span');s.className='cd-note';s.textContent=d.note;links.appendChild(s);}
+    var fam=FAM[chip.getAttribute('data-key')]||'audit';
+    var fig=document.getElementById('cd-vis'),vid=document.getElementById('cd-video'),post=document.getElementById('cd-poster');
+    if(fig){ post.src='assets/controls/'+fam+'.webp'; post.alt=d.n+' \u2014 engine visual';
+      var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if(!rm&&vid){ if(vid.getAttribute('data-fam')!==fam){ vid.src='assets/controls/'+fam+'-motion.mp4'; vid.setAttribute('data-fam',fam); }
+        vid.hidden=false; if(vid.play){ vid.play().catch(function(){ vid.hidden=true; }); } }
+      else if(vid){ vid.hidden=true; if(vid.pause){vid.pause();} }
+      fig.hidden=false; }
+    panel.hidden=false;
+    if(history.replaceState){history.replaceState(null,'','#control-'+chip.getAttribute('data-key'));}
+    var r=panel.getBoundingClientRect();
+    if(r.bottom>window.innerHeight||r.top<0){panel.scrollIntoView({behavior:'smooth',block:'nearest'});}
+  }
+  chips.forEach(function(chip){ chip.addEventListener('click',function(){ chip===current?close():open(chip); }); });
+  document.getElementById('cd-close').addEventListener('click',close);
+  var h=location.hash.match(/^#control-([a-z-]+)$/);
+  if(h){ var target=null;
+    chips.forEach(function(c){ if(c.getAttribute('data-key')===h[1]) target=c; });
+    if(target){ open(target); setTimeout(function(){ target.scrollIntoView({block:'center'}); },80); } }
 })();
 </script>
 </body>
