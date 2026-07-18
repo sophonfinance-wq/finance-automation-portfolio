@@ -281,6 +281,24 @@
   .fout.ok { border-top-color:var(--green); } .fout.ok b { color:var(--green); } .fout.ok .fdot { background:var(--green); box-shadow:0 0 0 1px var(--green); }
   .fout.fix { border-top-color:var(--blue); } .fout.fix b { color:var(--blue); } .fout.fix .fdot { background:var(--blue); box-shadow:0 0 0 1px var(--blue); }
   .fout.esc { border-top-color:#b0850f; } .fout.esc b { color:#8a6a00; } .fout.esc .fdot { background:#b0850f; box-shadow:0 0 0 1px #b0850f; }
+  /* self-healing — Higgsfield visual panels */
+  .loop-hero { margin:34px auto 6px; max-width:1040px; }
+  .loop-hero img { display:block; width:100%; height:auto; }
+  .loop-steps { list-style:none; display:flex; flex-wrap:wrap; justify-content:center; margin:2px 0 36px; padding:0; }
+  .loop-steps li { position:relative; flex:1 1 0; min-width:150px; text-align:center; padding:0 16px; }
+  .loop-steps li + li::before { content:""; position:absolute; left:-5px; top:12px; width:9px; height:9px; border-top:2px solid var(--border-strong); border-right:2px solid var(--border-strong); transform:rotate(45deg); }
+  .loop-steps li span { display:block; font-family:var(--mono); font-size:11px; letter-spacing:.7px; text-transform:uppercase; color:var(--blue); }
+  .loop-steps li small { display:block; font-size:12.5px; color:var(--text-2); margin-top:5px; line-height:1.35; }
+  .loop-outs { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .lout { background:#fff; border:1px solid var(--border); border-top-width:3px; padding:0 0 20px; transition:transform .18s ease, box-shadow .18s ease; }
+  .lout:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(15,42,92,.09); }
+  .lout figure { margin:0; background:var(--bg-alt); border-bottom:1px solid var(--border); }
+  .lout figure img { display:block; width:100%; height:auto; }
+  .lout h4 { font-size:15px; font-weight:600; margin:16px 20px 6px; }
+  .lout p { font-size:13px; color:var(--text-2); line-height:1.5; margin:0 20px; }
+  .lout.ok { border-top-color:var(--green); } .lout.ok h4 { color:var(--green); }
+  .lout.fix { border-top-color:var(--blue); } .lout.fix h4 { color:var(--blue); }
+  .lout.esc { border-top-color:#b0850f; } .lout.esc h4 { color:#8a6a00; }
   @keyframes pipeFlow { to { stroke-dashoffset:-1000; } }
   @keyframes branchTrunk { to { stroke-dashoffset:-318; } }
   @keyframes branchFlow { to { stroke-dashoffset:-15; } }
@@ -384,6 +402,10 @@
     .eng-grid { grid-template-columns:1fr; }
     .steps { grid-template-columns:repeat(2,1fr); }
     .flow-outs { grid-template-columns:1fr; }
+    .loop-outs { grid-template-columns:1fr; gap:14px; }
+    .loop-steps { flex-direction:column; align-items:center; gap:12px; }
+    .loop-steps li { padding:0; }
+    .loop-steps li + li::before { display:none; }
     .flow-pipe { grid-template-columns:1fr; gap:9px; }
     .flow-track, .flow-branch { display:none; }
     .fout { border-top-width:1px; border-left-width:3px; }
@@ -900,26 +922,31 @@
       <h2>The engines run the <strong>control loop themselves.</strong></h2>
       <p class="lead">Each engine watches its own output, corrects routine drift from source data, re-verifies every correction against an independent recomputation, and escalates the judgment calls to a person. Nothing self-certifies.</p>
     </div>
-    <div class="flow reveal" role="img" aria-label="Control loop: source data flows to the finance engine, then an independent recompute, then a tie-out decision that branches to three outcomes — ties post with evidence, routine breaks are fixed from source, and judgment calls escalate to a person.">
-      <div class="flow-pipe">
-        <svg class="flow-track" viewBox="0 0 1000 2" preserveAspectRatio="none" aria-hidden="true"><line class="ft-base" x1="0" y1="1" x2="1000" y2="1"/><line class="ft-pulse" x1="0" y1="1" x2="1000" y2="1"/></svg>
-        <div class="fnode"><i>SOURCE</i><b>GL · bank · schedules</b></div>
-        <div class="fnode hot"><i>COMPUTE</i><b>Finance engine</b></div>
-        <div class="fnode"><i>SEPARATE LOGIC</i><b>Independent recompute</b></div>
-        <div class="fnode dec"><i>DECISION</i><b>Tie-out</b></div>
-      </div>
-      <svg class="flow-branch" viewBox="0 0 1000 54" preserveAspectRatio="none" aria-hidden="true">
-        <path class="fb-base" d="M875 0 V22 H166 M166 22 V54 M500 22 V54 M834 22 V54"/>
-        <path class="fb-trunk" d="M875 0 V22 H166"/>
-        <path class="fb ok"  d="M166 22 V54"/>
-        <path class="fb fix" d="M500 22 V54"/>
-        <path class="fb esc" d="M834 22 V54"/>
-      </svg>
-      <div class="flow-outs">
-        <div class="fout ok"><span class="fdot" aria-hidden="true"></span><b>Ties &rarr; posts with evidence</b><span>When the independent check confirms the work, it posts with a written audit trail.</span></div>
-        <div class="fout fix"><span class="fdot" aria-hidden="true"></span><b>Routine break &rarr; fixed from source</b><span>A mis-keyed cell or dropped intercompany leg is corrected, then re-verified before it counts.</span></div>
-        <div class="fout esc"><span class="fdot" aria-hidden="true"></span><b>Judgment call &rarr; a person</b><span>What the loop cannot prove is quarantined and flagged &mdash; never rubber-stamped.</span></div>
-      </div>
+    <figure class="loop-hero reveal">
+      <img src="assets/heal/engine-loop.webp" alt="Control loop diagram: source documents — general ledger, bank statements, schedules — flow into the finance engine, which runs a continuous feedback loop against an independent recompute and re-verifies each result with a green check before it counts." width="1760" height="983" loading="lazy">
+    </figure>
+    <ol class="loop-steps reveal">
+      <li><span>Source</span><small>GL &middot; bank &middot; schedules</small></li>
+      <li><span>Compute</span><small>Finance engine</small></li>
+      <li><span>Recompute</span><small>Independent, separate logic</small></li>
+      <li><span>Tie-out</span><small>Decision gate</small></li>
+    </ol>
+    <div class="loop-outs reveal" role="group" aria-label="Three outcomes of the control loop">
+      <article class="lout ok">
+        <figure><img src="assets/heal/out-posts.webp" alt="A stack of finished financial documents sealed with a green checkmark badge and an audit-trail line." width="900" height="900" loading="lazy"></figure>
+        <h4>Ties &rarr; posts with evidence</h4>
+        <p>When the independent check confirms the work, it posts with a written audit trail.</p>
+      </article>
+      <article class="lout fix">
+        <figure><img src="assets/heal/out-fixed.webp" alt="A spreadsheet cell being corrected by a repair arrow, then re-checked by a loop arrow." width="900" height="900" loading="lazy"></figure>
+        <h4>Routine break &rarr; fixed from source</h4>
+        <p>A mis-keyed cell or dropped intercompany leg is corrected, then re-verified before it counts.</p>
+      </article>
+      <article class="lout esc">
+        <figure><img src="assets/heal/out-person.webp" alt="A flagged card routed along a track to a person seated at a desk for review." width="900" height="900" loading="lazy"></figure>
+        <h4>Judgment call &rarr; a person</h4>
+        <p>What the loop cannot prove is quarantined and flagged &mdash; never rubber-stamped.</p>
+      </article>
     </div>
     <p class="loop-line reveal">You set the policy: <b>full autonomy</b> in approved environments, or a <b>human sign-off on every post</b> &mdash; the controls and audit trail are identical either way. Live today on five engines; every loop writes its own run report, with sample reports committed <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">on GitHub</a>.</p>
   </div>
