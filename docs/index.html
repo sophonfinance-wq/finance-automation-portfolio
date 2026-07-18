@@ -1049,14 +1049,18 @@
 
   // motion enhancement: labeled diagrams upgrade to silent looping video.
   // Reduced-motion and no-JS users keep the static images (early return above).
+  function playLoop(v) { if (v && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
+  function playAll() { document.querySelectorAll('video').forEach(playLoop); }
+
   document.querySelectorAll('img[data-video]').forEach(function (img) {
     var vio = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
         vio.unobserve(img);
         var v = document.createElement('video');
-        v.muted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
-        v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('autoplay', '');
+        v.muted = true; v.defaultMuted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
+        v.setAttribute('autoplay', ''); v.setAttribute('loop', ''); v.setAttribute('preload', 'auto');
         if ('disableRemotePlayback' in v) v.disableRemotePlayback = true;
         v.poster = img.currentSrc || img.src;
         v.src = img.getAttribute('data-video');
@@ -1064,22 +1068,30 @@
         v.setAttribute('role', 'img');
         v.setAttribute('aria-label', img.alt);
         img.replaceWith(v);
-        var p = v.play();
-        if (p && p.catch) p.catch(function () {});
+        playLoop(v);
+        v.addEventListener('loadeddata', function () { playLoop(v); });
+        v.addEventListener('canplay', function () { playLoop(v); });
+        // Keep it playing whenever it is on screen. Re-attempting play() on every
+        // re-entry is what actually starts muted loops on mobile — each scroll into
+        // view is a fresh chance after the browser's autoplay gate, and it pauses
+        // off-screen loops to save battery/data.
+        new IntersectionObserver(function (es) {
+          es.forEach(function (x) { if (x.isIntersecting) playLoop(v); else if (!v.paused) v.pause(); });
+        }, { threshold: 0.01 }).observe(v);
       });
     }, { rootMargin: '200px' });
     vio.observe(img);
   });
 
-  // mobile resilience: some phones (e.g. iOS Low Power Mode) block the first autoplay.
-  // Retry all paused loops on the first touch and whenever the tab becomes visible again.
-  function kickVideos() {
-    document.querySelectorAll('video').forEach(function (v) {
-      if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
-    });
-  }
-  window.addEventListener('touchend', kickVideos, { once: true, passive: true }); window.addEventListener('pointerdown', kickVideos, { once: true, passive: true }); window.addEventListener('scroll', kickVideos, { once: true, passive: true });
-  document.addEventListener('visibilitychange', function () { if (!document.hidden) kickVideos(); });
+  // mobile resilience: some phones (iOS Low Power Mode, data saver) gate the first
+  // muted autoplay until any interaction. Retry ALL videos on every early gesture —
+  // NOT once, because tile videos are created lazily and may not exist at the first
+  // gesture — and whenever the tab becomes visible again. playLoop is a no-op on
+  // already-playing videos, so this stays cheap.
+  ['touchstart', 'pointerdown', 'click', 'keydown'].forEach(function (evt) {
+    window.addEventListener(evt, playAll, { passive: true });
+  });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) playAll(); });
 
   // counters: markup already contains the true final value; animation is enhancement only
   function animate(el) {
