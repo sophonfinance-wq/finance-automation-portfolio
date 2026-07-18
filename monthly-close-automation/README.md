@@ -164,6 +164,12 @@ The validator is intentionally read-only and makes no tax conclusion. A mechanic
 
 The validator is intentionally read-only and is not a payroll-to-GL or payroll-processing engine. A mechanically clean result is only `READY FOR HUMAN REVIEW`: payroll-register, ledger, intercompany, confidentiality, recoverability, classification, allocation-basis, ownership, cutoff, and current-use approvals remain manual gates. It never creates a journal entry, payroll action, import payload, source-system update, or posting action, and it contains no private workbook paths, formulas, entities, projects, amounts, or fingerprints.
 
+### Annual headcount preflight (validation only)
+
+`close_engine.headcount` validates a fictional one-table annual entity-headcount support schedule: one row per legal entity and one descending, consecutive year column starting with the as-of year. It checks the as-of year and month, unique entity rows, complete source references, whole non-negative counts, count vectors aligned to the year headers, and cached annual column totals that independently re-add. An optional immediately preceding-year snapshot (with a matching as-of month) checks source-fingerprint freshness, entity-population changes, unchanged overlapping entity/year history, and whether the sum of per-entity changes reconciles to the current-year total change.
+
+The validator is intentionally read-only, never handles employee-level data, and makes no headcount, FTE, or employment conclusion. A mechanically clean result is only `READY FOR HUMAN REVIEW`: employee-roster, payroll/HR-report, legal-entity-perimeter, headcount/FTE-definition, confidentiality, and auditor-delivery approvals remain manual gates. It never creates a journal entry, payroll action, import payload, audit submission, source-system update, or posting action, and it contains no private workbook paths, formulas, entity names, counts, or fingerprints.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
@@ -533,6 +539,7 @@ monthly-close-automation/
 │   ├── project_job_cost.py # validation-only monthly job-cost export controls
 │   ├── personal_property_tax.py # validation-only asset-schedule controls
 │   ├── payroll_recovery.py # validation-only fiscal recovery controls
+│   ├── headcount.py       # validation-only annual headcount-support controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
 │   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
