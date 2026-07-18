@@ -19,7 +19,7 @@ loaded it into a queryable knowledge base so prior decisions could be cited word
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
 without becoming the weakest link. This portfolio is that proof: **eight runnable systems, a
-60,374-test curated suite (plus an opt-in ~1.15M-case property sweep), CI.**
+62,374-test curated suite (plus an opt-in ~1.15M-case property sweep), CI.**
 
 ---
 
@@ -90,13 +90,13 @@ Each is now encoded as a control in the portfolio:
 | AI knowledge management — citation-governed retrieval over meeting transcripts (prep + verbatim cite) plus review -> remediation (reviewer's recorded corrections -> cited directives -> auto-generated apply-ready prompt + cited change-log mapping each directive -> source -> status, applied downstream by an AI or operator) | `knowledge-brain-engine` | 7,011 |
 | Cross-border foreign-affiliate tax (T1134, surplus pools, ACB, repatriation waterfall) | `tax-surplus-engine` | 7,498 |
 | Partnership tax — Form 1065 / K-1 assembly + §704(c) built-in gain (ceiling rule) | `partnership-1065-automation` | 8,605 |
-| Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 13,687 |
+| Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 15,687 |
 | Self-healing control loops — engines detect drift, re-derive it from source, re-verify, and escalate only what they cannot certify (human-gated on tax-surplus; autonomous with quarantine on close) | `surplus_engine.loop` + `close_engine.loop` | 23 |
 | Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 7,511 |
 | Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 4,814 |
 | AI orchestration with controls (separation of duties, human gate) | `ai-validation-framework` | 8,320 |
 | Finance operations mapping — a deterministic data model rendering an interactive department atlas (drives, workstreams, directory, calendar), with deny-list confidentiality linting | `finance-atlas` | 2,928 |
-| **Total** | **8 systems** | **60,374** |
+| **Total** | **8 systems** | **62,374** |
 
 ---
 
