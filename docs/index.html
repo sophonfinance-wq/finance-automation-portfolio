@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sophon Finance Systems — AI Finance &amp; Accounting Automation, Human-Approved</title>
-<meta name="description" content="Evidence-first automation for month-end close, reconciliation, and partnership tax. Eight public finance engines, 60,374 automated tests, every figure cited, every output approved by your people. Free consultation.">
+<meta name="description" content="Evidence-first automation for month-end close, reconciliation, and partnership tax. Eight public finance engines, 62,374 automated tests, every figure cited, every output approved by your people. Free consultation.">
 <link rel="canonical" href="https://sophonfinance.com/">
 
 <!--
@@ -12,7 +12,7 @@
   SITE FACTS — single source of truth (verified 2026-07-17)
   ============================================================
   ENGINES_PUBLIC   = 8        (system dirs on origin/main; README badge "systems: 8 runnable")
-  TESTS_CURATED    = 60,374   (pytest --collect-only on origin/main, 2026-07-18)
+  TESTS_CURATED    = 62,374   (pytest --collect-only on origin/main, 2026-07-18)
   TESTS_SWEEP      = ~1.15M   (opt-in property sweep, SWEEP=1 pytest; 1,147,870 on 2026-07-17)
   LOOP_ENGINES     = 5        (close, surplus, reconciliation, knowledge brain, Triangulate)
   GITHUB           = https://github.com/sophonfinance-wq/finance-automation-portfolio
@@ -27,7 +27,7 @@
 <meta property="og:url" content="https://sophonfinance.com/">
 <meta property="og:site_name" content="Sophon Finance Systems">
 <meta property="og:title" content="Automate the work. Keep the judgment.">
-<meta property="og:description" content="Evidence-first AI automation for month-end close, reconciliation, and partnership tax. Eight public engines, 60,374 automated tests, humans approve every output.">
+<meta property="og:description" content="Evidence-first AI automation for month-end close, reconciliation, and partnership tax. Eight public engines, 62,374 automated tests, humans approve every output.">
 <meta property="og:image" content="https://sophonfinance.com/assets/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -90,7 +90,10 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   html { scroll-behavior:smooth; }
   body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6;
-    -webkit-font-smoothing:antialiased; overflow-x:hidden; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; text-rendering:optimizeLegibility;
+    font-kerning:normal; font-feature-settings:"kern" 1; overflow-x:hidden; -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  h1, h2, h3 { text-rendering:optimizeLegibility; }
+  .stat b, .count, .cov-stat b, .tnum, .flag-num, .num { font-variant-numeric:tabular-nums lining-nums; }
   img, svg { max-width:100%; }
   .wrap { max-width:var(--wrap); margin:0 auto; padding:0 32px; }
   ::selection { background:var(--blue); color:#fff; }
@@ -137,7 +140,7 @@
   .btn-sm { min-height:40px; padding:9px 14px; font-size:14px; gap:20px; }
 
   /* ============ SECTION PRIMITIVES ============ */
-  section { padding:80px 0; }
+  section { padding:72px 0; }
   section.alt { background:var(--bg-alt); }
   .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
   h2 { font-size:clamp(28px, 3.4vw, 42px); font-weight:300; letter-spacing:-.2px; line-height:1.18; margin:10px 0 12px; color:var(--text); }
@@ -398,7 +401,9 @@
     footer { padding-bottom:84px; }
   }
   @media (max-width:600px) {
-    .wrap { padding:0 20px; }
+    .wrap { padding:0 18px; }
+    section { padding:44px 0; }
+    .lead { font-size:15.5px; }
     .fleet { grid-template-columns:1fr; }
     .controls-grid { grid-template-columns:1fr; }
     .steps { grid-template-columns:1fr; }
@@ -410,6 +415,32 @@
     .flag-head, .flag-col, .flag-foot { padding-left:20px; padding-right:20px; }
     .flag-foot .gate { margin-left:0; }
     .founder { flex-direction:column; } .founder-photo { width:100%; } .founder-photo img { height:auto; min-height:0; aspect-ratio:3/2; object-position:center 18%; }
+  }
+
+  /* inside the close engine — control coverage */
+  #close-depth .cov-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin:26px 0 8px; }
+  #close-depth .cov-stat { background:var(--bg-alt); border:1px solid var(--border); padding:22px 24px; }
+  #close-depth .cov-stat b { display:block; font-size:clamp(30px,3.2vw,40px); font-weight:600; letter-spacing:-.02em; line-height:1; color:var(--text); }
+  #close-depth .cov-stat span { display:block; margin-top:8px; font-size:13px; color:var(--text-3); }
+  #close-depth .cov-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:22px; }
+  #close-depth .cov-group { background:var(--bg-alt); border:1px solid var(--border); padding:20px 20px 14px; }
+  #close-depth .cov-group h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+  #close-depth .cov-chip { display:inline-flex; align-items:center; gap:6px; font-size:13px; line-height:1.3; padding:5px 10px; margin:0 6px 6px 0; border:1px solid var(--border-strong); border-radius:2px; color:var(--text-2); background:var(--bg-tile); }
+  #close-depth .cov-chip.draft { border-color:#a6c8ff; color:var(--blue-hover); background:var(--blue-tint); }
+  #close-depth .cov-chip.new::after { content:"NEW"; font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:.4px; color:#fff; background:var(--green); padding:1px 4px; border-radius:2px; }
+  #close-depth .cov-key { margin-top:22px; font-size:13.5px; color:var(--text-3); display:flex; flex-wrap:wrap; gap:20px 26px; align-items:center; }
+  #close-depth .cov-key span { display:inline-flex; align-items:center; gap:7px; }
+  #close-depth .cov-dot { width:12px; height:12px; border-radius:2px; flex:0 0 auto; }
+  #close-depth .cov-dot.draft { background:var(--blue-tint); border:1px solid #a6c8ff; }
+  #close-depth .cov-dot.val { background:var(--bg-tile); border:1px solid var(--border-strong); }
+  @media (max-width:820px){ #close-depth .cov-stats, #close-depth .cov-grid { gap:12px; } }
+  @media (max-width:640px){
+    #close-depth .cov-stats { grid-template-columns:1fr 1fr; gap:10px; margin:20px 0 4px; }
+    #close-depth .cov-stat { padding:15px 16px 13px; }
+    #close-depth .cov-stat b { font-size:26px; }
+    #close-depth .cov-group { padding:16px 16px 10px; }
+    #close-depth .cov-chip { font-size:12.5px; padding:4px 9px; }
+    #close-depth .cov-key { font-size:12.5px; gap:10px 18px; margin-top:16px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -562,9 +593,9 @@
     <div class="stat"><b><span class="count" data-count="8">8</span></b>
       <span class="cap">public finance engines &mdash; runnable, MIT-licensed</span>
       <span class="src"><a href="https://github.com/sophonfinance-wq" target="_blank" rel="noopener">github.com/sophonfinance-wq</a></span></div>
-    <div class="stat"><b><a href="tests/" style="color:var(--blue);text-decoration:none" aria-label="See all 60,374 tests by engine"><span class="count" data-count="60374">60,374</span></a></b>
+    <div class="stat"><b><a href="tests/" style="color:var(--blue);text-decoration:none" aria-label="See all 62,374 tests by engine"><span class="count" data-count="62374">62,374</span></a></b>
       <span class="cap">automated tests in the curated suite, gating CI</span>
-      <span class="src"><a href="tests/">See all 60,374 tests, by engine &rarr;</a></span></div>
+      <span class="src"><a href="tests/">See all 62,374 tests, by engine &rarr;</a></span></div>
     <div class="stat"><b><span class="count" data-count="100">100</span><span class="unit">%</span></b>
       <span class="cap">of computed figures ship with cited evidence</span>
       <span class="src">evidence log per run</span></div>
@@ -593,44 +624,9 @@
       <p class="lead">Working systems, not proposals &mdash; the same architecture runs publicly on GitHub against fictional data. What each takes in, what it does, and what your team keeps control of.</p>
     </div>
 
-    <article class="flag reveal">
-      <div class="flag-head">
-        <div class="flag-id"><span class="flag-num">ENGINE 01</span><h3>Partnership Tax &middot; Form 1065</h3></div>
-        <span class="flag-tag">Returns and K-1s, prepared for your CPA's review</span>
-      </div>
-      <figure class="flag-vis">
-        <img src="assets/engine-1065.webp" data-video="assets/engine-1065-motion.mp4" alt="Diagram: trial balance, prior-year return, and partner data flow into the 1065 engine and come out as a checked Form 1065 draft, K-1s per partner, and an evidence binder — passing a gate labeled CPA reviews and files" width="1840" height="1027" loading="lazy">
-      </figure>
-      <div class="flag-body">
-        <div class="flag-col">
-          <h4>You provide</h4>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Trial balance &amp; income statements</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Prior-year return</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Partner &amp; ownership information</div>
-        </div>
-        <div class="flag-col does">
-          <h4>The engine does</h4>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Normalizes the trial balance, P&amp;L, and partner data</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Computes allocations, rolls capital accounts</div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Drafts the return and every K-1, tied to the ledger</div>
-        </div>
-        <div class="flag-col gets">
-          <h4>You receive</h4>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Draft Form 1065</b>, review-ready</span></div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>K-1 drafts</b> for every partner</span></div>
-          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Evidence binder</b> &mdash; every number sourced</span></div>
-        </div>
-      </div>
-      <div class="flag-foot">
-        <span class="lbl">Controls</span>
-        <span>Allocations recomputed independently &middot; capital accounts must roll</span>
-        <span class="gate"><b>Human gate:</b> your CPA reviews and files. Nothing files itself.</span>
-      </div>
-    </article>
-
     <article class="flag reveal" id="close">
       <div class="flag-head">
-        <div class="flag-id"><span class="flag-num">ENGINE 02</span><h3>Month-End Close</h3></div>
+        <div class="flag-id"><span class="flag-num">ENGINE 01</span><h3>Month-End Close</h3></div>
         <span class="flag-tag">The recurring close, drafted under ten deterministic controls</span>
       </div>
       <figure class="flag-vis">
@@ -665,7 +661,7 @@
 
     <article class="flag reveal" id="recon">
       <div class="flag-head">
-        <div class="flag-id"><span class="flag-num">ENGINE 03</span><h3>Cash &amp; Debt Reconciliation</h3></div>
+        <div class="flag-id"><span class="flag-num">ENGINE 02</span><h3>Cash &amp; Debt Reconciliation</h3></div>
         <span class="flag-tag">The full population of accounts &mdash; not a sample &mdash; matched and explained</span>
       </div>
       <figure class="flag-vis">
@@ -696,6 +692,42 @@
         <span class="gate"><b>Human gate:</b> your team signs off on every exception.</span>
       </div>
     </article>
+
+    <article class="flag reveal">
+      <div class="flag-head">
+        <div class="flag-id"><span class="flag-num">ENGINE 03</span><h3>Partnership Tax &middot; Form 1065</h3></div>
+        <span class="flag-tag">Returns and K-1s, prepared for your CPA's review</span>
+      </div>
+      <figure class="flag-vis">
+        <img src="assets/engine-1065.webp" data-video="assets/engine-1065-motion.mp4" alt="Diagram: trial balance, prior-year return, and partner data flow into the 1065 engine and come out as a checked Form 1065 draft, K-1s per partner, and an evidence binder — passing a gate labeled CPA reviews and files" width="1840" height="1027" loading="lazy">
+      </figure>
+      <div class="flag-body">
+        <div class="flag-col">
+          <h4>You provide</h4>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/></svg>Trial balance &amp; income statements</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>Prior-year return</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6f6f6f" stroke-width="2" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>Partner &amp; ownership information</div>
+        </div>
+        <div class="flag-col does">
+          <h4>The engine does</h4>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Normalizes the trial balance, P&amp;L, and partner data</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Computes allocations, rolls capital accounts</div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0f62fe" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>Drafts the return and every K-1, tied to the ledger</div>
+        </div>
+        <div class="flag-col gets">
+          <h4>You receive</h4>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Draft Form 1065</b>, review-ready</span></div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>K-1 drafts</b> for every partner</span></div>
+          <div class="flag-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#198038" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg><span><b>Evidence binder</b> &mdash; every number sourced</span></div>
+        </div>
+      </div>
+      <div class="flag-foot">
+        <span class="lbl">Controls</span>
+        <span>Allocations recomputed independently &middot; capital accounts must roll</span>
+        <span class="gate"><b>Human gate:</b> your CPA reviews and files. Nothing files itself.</span>
+      </div>
+    </article>
+
   </div>
 </section>
 <section class="cinema" aria-label="Sophon Finance Systems film, part two">
@@ -716,18 +748,18 @@
     </div>
     <div class="fleet reveal">
       <div class="tile">
-        <div class="tile-vis"><img src="assets/tile-surplus.webp" data-video="assets/tile-surplus-motion.mp4" alt="Diagram: yearly filings 2021 through 2024 thread through the surplus engine into layered tax pools carried forward, with foreign exchange per layer and a check traced to source" width="1280" height="714" loading="lazy"></div>
-        <span class="tnum">04</span>
-        <h3>Tax Surplus / ACB</h3>
-        <p>Multi-year tax pools and adjusted cost basis carried forward by rule &mdash; foreign exchange per layer, every figure traceable to source.</p>
-        <span class="run">python -m surplus_engine --start 2021 --end 2024</span>
-      </div>
-      <div class="tile">
         <div class="tile-vis"><img src="assets/tile-validation.webp" data-video="assets/tile-validation-motion.mp4" alt="Diagram: a finished workbook passes under a read-only validation scanner that never writes, exiting unchanged with PASS, REVIEW, or FAIL verdict chips" width="1280" height="714" loading="lazy"></div>
-        <span class="tnum">05</span>
+        <span class="tnum">04</span>
         <h3>Validation Engine</h3>
         <p>Read-only workbook review: formula integrity, lineage, PASS / REVIEW / FAIL verdicts &mdash; with a byte-identical guarantee that it never modifies what it inspects.</p>
         <span class="run">python run.py</span>
+      </div>
+      <div class="tile">
+        <div class="tile-vis"><img src="assets/tile-surplus.webp" data-video="assets/tile-surplus-motion.mp4" alt="Diagram: yearly filings 2021 through 2024 thread through the surplus engine into layered tax pools carried forward, with foreign exchange per layer and a check traced to source" width="1280" height="714" loading="lazy"></div>
+        <span class="tnum">05</span>
+        <h3>Tax Surplus / ACB</h3>
+        <p>Multi-year tax pools and adjusted cost basis carried forward by rule &mdash; foreign exchange per layer, every figure traceable to source.</p>
+        <span class="run">python -m surplus_engine --start 2021 --end 2024</span>
       </div>
       <div class="tile">
         <div class="tile-vis"><img src="assets/tile-triangulate.webp" data-video="assets/tile-triangulate-motion.mp4" alt="Diagram: two reviewers, a specialist, and a deterministic auditor all examine the same work; consensus is required, and the check appears only where their beams agree — no consensus, no sign-off" width="1280" height="714" loading="lazy"></div>
@@ -758,6 +790,54 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================= CLOSE ENGINE DEPTH ================= -->
+<section id="close-depth">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="kicker">Inside the close engine</p>
+      <h2>One engine. <strong>29 deterministic controls.</strong></h2>
+      <p class="lead">The month-end close isn't a single script &mdash; it's a library of recurring workpapers, each with its own arithmetic. The close engine drafts or validates every one under the same rule: recompute it independently, tie it to the ledger, and refuse to post anything a person hasn't approved.</p>
+    </div>
+    <div class="cov-stats reveal">
+      <div class="cov-stat"><b>29</b><span>deterministic controls</span></div>
+      <div class="cov-stat"><b>8</b><span>draft-capable</span></div>
+      <div class="cov-stat"><b>21</b><span>validation-only</span></div>
+      <div class="cov-stat"><b>0</b><span>post without a human</span></div>
+    </div>
+    <div class="cov-grid reveal">
+      <div class="cov-group">
+        <h4>Amortization &amp; depreciation</h4>
+        <span class="cov-chip draft">Prepaid expense</span><span class="cov-chip draft">Prepaid insurance</span><span class="cov-chip draft">Fixed assets</span><span class="cov-chip draft">Deferred rent</span>
+      </div>
+      <div class="cov-group">
+        <h4>Accruals &amp; interest</h4>
+        <span class="cov-chip draft">Bonus accrual</span><span class="cov-chip draft">Fixed-fee accrual</span><span class="cov-chip draft">Note interest</span><span class="cov-chip">AP / accrued liabilities</span>
+      </div>
+      <div class="cov-group">
+        <h4>Reporting packages</h4>
+        <span class="cov-chip">Combined statements</span><span class="cov-chip">Multi-entity TB package</span><span class="cov-chip">Group operations</span><span class="cov-chip">Project / job-cost export</span><span class="cov-chip">Recurring-JE register</span>
+      </div>
+      <div class="cov-group">
+        <h4>Balances &amp; continuity</h4>
+        <span class="cov-chip">AR balances</span><span class="cov-chip">Deposit balances</span><span class="cov-chip">Investment continuity</span><span class="cov-chip">Trial-balance continuity</span>
+      </div>
+      <div class="cov-group">
+        <h4>Allocations &amp; fees</h4>
+        <span class="cov-chip draft">Postage allocation</span><span class="cov-chip">G&amp;A allocation</span><span class="cov-chip">Management fees</span><span class="cov-chip">Marketing fees</span><span class="cov-chip">Recoveries</span>
+      </div>
+      <div class="cov-group">
+        <h4>Construction</h4>
+        <span class="cov-chip">Budget variance</span><span class="cov-chip">Job-cost-to-draw reconciliation</span>
+      </div>
+      <div class="cov-group">
+        <h4>Audit &amp; support</h4>
+        <span class="cov-chip">Audit / PBC package</span><span class="cov-chip">Personal-property FF&amp;E</span><span class="cov-chip">Payroll recovery</span><span class="cov-chip new">Headcount support</span><span class="cov-chip new">JE support packages</span>
+      </div>
+    </div>
+    <p class="cov-key reveal"><span><span class="cov-dot draft"></span> Draft-capable &mdash; balanced entries, drafted and held for approval</span><span><span class="cov-dot val"></span> Validation-only &mdash; recomputed and flagged, never posts</span></p>
   </div>
 </section>
 
@@ -806,13 +886,13 @@
       <p class="lead">The entire engine portfolio is on GitHub &mdash; code, tests, controls, and documentation. Your technical reviewers can judge the work before you spend anything.</p>
     </div>
     <div class="eng-grid">
-      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 60,374 automated tests with pytest.">
+      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 62,374 automated tests with pytest.">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>verify-it-yourself — bash</span></div>
         <div class="term-body" aria-hidden="true">
           <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
           <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
           <div class="cmd">pytest --collect-only -q | tail -1</div>
-          <div class="ok-line">60374 tests collected</div>
+          <div class="ok-line">62374 tests collected</div>
           <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
           <div class="ok-line">passed ✓</div>
           <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
@@ -820,7 +900,7 @@
         </div>
       </div>
       <div class="eng-points reveal d1">
-        <div class="pt"><h3>60,374 tests, honestly tiered</h3>
+        <div class="pt"><h3>62,374 tests, honestly tiered</h3>
           <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.15M generated cases. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
         <div class="pt"><h3>Fictional data, by rule</h3>
           <p>Every public example runs on seeded, invented data. Client information never appears in public code &mdash; backed by a deny-list confidentiality linter in the test suite.</p></div>
@@ -829,7 +909,7 @@
         <div class="eng-cta">
           <a class="btn btn-p btn-sm" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">View on GitHub
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
-          <a class="btn btn-t btn-sm" href="tests/">See all 60,374 tests</a>
+          <a class="btn btn-t btn-sm" href="tests/">See all 62,374 tests</a>
           <a class="btn btn-t btn-sm" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Follow on LinkedIn</a>
         </div>
       </div>
