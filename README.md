@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated test suite (59,740 tests, runs in minutes)
+# run the curated test suite (60,374 tests, runs in minutes)
 pytest
 
 # run a system
@@ -134,14 +134,14 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Curated** (default) | `pytest` | **59,740** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems, including a bounded invariant grid on every engine. Runs in minutes; gates CI. |
+| **Curated** (default) | `pytest` | **60,374** | Hand-written unit + behavior tests and parametrized coverage across all 8 systems, including a bounded invariant grid on every engine. Runs in minutes; gates CI. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.15M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
 default run (and CI) for speed and generated at import — the files stay small. It's there for
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
-Curated tests by system: close **13,053** · partnership **8,605** · triangulate **8,320** ·
+Curated tests by system: close **13,687** · partnership **8,605** · triangulate **8,320** ·
 recon **7,511** · tax-surplus **7,498** · knowledge-brain **7,011** · validation **4,814** ·
 atlas **2,928** (including a parametrized deny-list confidentiality linter across every shipped file).
 
