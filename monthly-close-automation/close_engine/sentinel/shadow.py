@@ -20,10 +20,12 @@ CATEGORIES: tuple[str, ...] = (
     "prepaid_amortization",
     "depreciation",
     "deferred_rent_cam",
+    "fixed_fee_accrual",
     "mgmt_fee_accrual",
     "note_interest",
     "gna_allocation",
     "insurance_allocation",
+    "postage_allocation",
 )
 
 # (entity, category, account) -> (debit_cents, credit_cents)
@@ -181,6 +183,27 @@ def _shadow_mgmt_fee_accrual(dataset, amounts: AmountMap) -> None:
                  credit=net)
 
 
+def _shadow_fixed_fee_accrual(dataset, amounts: AmountMap) -> None:
+    """Fixed fees: independently derive fee plus signed approved adjustment.
+
+    Settlements are deliberately absent: they are upstream activity already
+    reflected in the opening payable balance and must not be posted twice.
+    """
+    for fee in dataset.fixed_fees():
+        accrual = fee.monthly_fee_cents + fee.approved_adjustment_cents
+        if accrual > 0:
+            _add(amounts, fee.entity, "fixed_fee_accrual", "6250",
+                 debit=accrual)
+            _add(amounts, fee.entity, "fixed_fee_accrual", "2350",
+                 credit=accrual)
+        elif accrual < 0:
+            reversal = -accrual
+            _add(amounts, fee.entity, "fixed_fee_accrual", "2350",
+                 debit=reversal)
+            _add(amounts, fee.entity, "fixed_fee_accrual", "6250",
+                 credit=reversal)
+
+
 def _shadow_note_interest(dataset, amounts: AmountMap) -> None:
     """Notes: borrower accrues expense/payable; lender mirrors via due-from."""
     for note in dataset.notes():
@@ -242,6 +265,87 @@ def _shadow_insurance_allocation(dataset, amounts: AmountMap) -> None:
             _add(amounts, code, "insurance_allocation", "1450", credit=share)
 
 
+def _shadow_postage_allocation(dataset, amounts: AmountMap) -> None:
+    """Meter rows: independently exact-match routes and clear account 1460.
+
+    The shadow intentionally rebuilds route counts and posting legs without
+    calling any engine helper. An invalid batch is omitted because the engine
+    must refuse it in full; C6 independently reports the mapping defect.
+    """
+    category = "postage_allocation"
+    codes = {entity.code for entity in dataset.entities()}
+    current_batches = [
+        batch
+        for batch in dataset.postage_batches()
+        if batch.period == dataset.period
+    ]
+    batch_ids = [batch.batch_id for batch in current_batches]
+
+    def canonical(value: str) -> bool:
+        return bool(value.strip()) and value == value.strip()
+
+    for batch in current_batches:
+        route_counts: dict[str, int] = {}
+        route_by_project = {}
+        invalid = (
+            batch.holder_entity not in codes
+            or not canonical(batch.batch_id)
+            or batch_ids.count(batch.batch_id) != 1
+        )
+        line_ids = [line.line_id for line in batch.meter_lines]
+        if len(line_ids) != len(set(line_ids)):
+            invalid = True
+        if any(
+            not canonical(line.line_id) or not canonical(line.project_code)
+            for line in batch.meter_lines
+        ):
+            invalid = True
+        for route in batch.routes:
+            route_counts[route.project_code] = (
+                route_counts.get(route.project_code, 0) + 1
+            )
+            route_by_project[route.project_code] = route
+            if (
+                route.recipient_entity not in codes
+                or not canonical(route.project_code)
+                or not canonical(route.job_code)
+                or not canonical(route.cost_code)
+            ):
+                invalid = True
+        if any(count != 1 for count in route_counts.values()):
+            invalid = True
+        if any(
+            route_counts.get(line.project_code, 0) != 1
+            for line in batch.meter_lines
+        ):
+            invalid = True
+        if invalid:
+            continue
+        for line in batch.meter_lines:
+            amount = line.amount_cents
+            if amount == 0:
+                continue
+            recipient = route_by_project[line.project_code].recipient_entity
+            holder = batch.holder_entity
+            if amount > 0:
+                _add(amounts, recipient, category, "6700", debit=amount)
+                if recipient == holder:
+                    _add(amounts, holder, category, "1460", credit=amount)
+                else:
+                    _add(amounts, recipient, category, "2800", credit=amount)
+                    _add(amounts, holder, category, "1800", debit=amount)
+                    _add(amounts, holder, category, "1460", credit=amount)
+            else:
+                refund = -amount
+                _add(amounts, recipient, category, "6700", credit=refund)
+                if recipient == holder:
+                    _add(amounts, holder, category, "1460", debit=refund)
+                else:
+                    _add(amounts, recipient, category, "2800", debit=refund)
+                    _add(amounts, holder, category, "1800", credit=refund)
+                    _add(amounts, holder, category, "1460", debit=refund)
+
+
 # --------------------------------------------------------------------------- #
 # Public API
 # --------------------------------------------------------------------------- #
@@ -262,10 +366,12 @@ def expected_amounts(dataset) -> AmountMap:
     _shadow_prepaid_amortization(dataset, amounts)
     _shadow_depreciation(dataset, amounts)
     _shadow_deferred_rent_cam(dataset, amounts)
+    _shadow_fixed_fee_accrual(dataset, amounts)
     _shadow_mgmt_fee_accrual(dataset, amounts)
     _shadow_note_interest(dataset, amounts)
     _shadow_gna_allocation(dataset, amounts)
     _shadow_insurance_allocation(dataset, amounts)
+    _shadow_postage_allocation(dataset, amounts)
     return amounts
 
 

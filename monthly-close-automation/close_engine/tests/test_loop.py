@@ -11,6 +11,7 @@ whole thing is deterministic.
 from __future__ import annotations
 
 from dataclasses import replace
+from pathlib import Path
 
 from close_engine.engine import CloseEngine
 from close_engine.faults import inject_unbalanced_opening
@@ -150,8 +151,11 @@ def test_cli_smoke(tmp_path):
 
     rc = main(["--demo", "--out", str(tmp_path)])
     assert rc == 0
-    assert (tmp_path / "autonomous_close_loop.md").exists()
-    assert (tmp_path / "autonomous_close_loop.html").exists()
+    tracked_output = Path(__file__).resolve().parents[2] / "output"
+    for name in ("autonomous_close_loop.md", "autonomous_close_loop.html"):
+        assert (tmp_path / name).read_text("utf-8") == (
+            tracked_output / name
+        ).read_text("utf-8"), f"stale tracked output: {name}"
 
     rc_halt = main(["--demo", "--budget", "1"])
     assert rc_halt == 1

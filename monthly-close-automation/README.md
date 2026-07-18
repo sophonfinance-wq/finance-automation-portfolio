@@ -42,9 +42,11 @@ until someone finds it quarters later.
 
 ## Classes of recurring entries automated
 At a capability level (no employer specifics): prepaid amortization, fixed-asset
-depreciation, deferred-rent / CAM allocations, management-fee accruals, note-payable
+depreciation, deferred-rent / CAM allocations, fixed-fee accrual rollforwards,
+management-fee accruals, note-payable
 interest accruals (including multi-leg intercompany interest *capitalization*), G&A cost
-allocations, and prepaid-insurance allocations — each as deterministic, tie-checked logic.
+allocations, prepaid-insurance allocations, and exact-route postage meter allocations —
+each as deterministic, tie-checked logic.
 
 ## What this demonstrates
 - Reduces a **multi-day manual close to a repeatable workflow** a single operator can run.
@@ -66,7 +68,8 @@ allocations, and prepaid-insurance allocations — each as deterministic, tie-ch
 This repository ships a small but **fully working** month-end **close engine** on
 **fictional** data. It generates a synthetic entity group, computes the recurring
 journal entries, enforces tie-out controls, runs the Close Sentinel control suite,
-and writes a JE register, an updated trial balance, and a close report.
+and writes a JE register, structured backing schedules, an updated trial balance,
+and a close report.
 
 **Requirements:** Python 3.12+, `openpyxl` (already installed). Tests
 use `pytest`. No pandas/numpy/faker — stdlib only, seeded for determinism.
@@ -86,7 +89,10 @@ python run.py --period 2026-03 --out ./output
 # 3) Prove the controls: inject twelve classic close errors, watch each get caught
 python -m close_engine --demo-guardrails
 
-# 4) Run the tests
+# 4) Preflight a recurring-entry register without posting or importing it
+python -m close_engine.recurring_register --input samples/sample-recurring-register.json
+
+# 5) Run the tests
 python -m pytest -q
 ```
 
@@ -95,8 +101,180 @@ failed schedule tie-out, or an unbalanced trial balance), so it can gate a pipel
 Close Sentinel runs by default (`--no-sentinel` to skip); any **CRITICAL** control
 finding also fails the run.
 
+### Read-only recurring-register preflight
+
+`close_engine.recurring_register` is a separate validation-only boundary for a
+controller-maintained recurring JE register. It reads a generic JSON register,
+validates it, and returns `PASS` or `NEEDS REVIEW`. It never creates journal
+entries, touches the ledger, constructs an ERP import payload, or changes the
+source file.
+
+The preflight applies five deterministic gates:
+
+| Gate | What it proves |
+|------|----------------|
+| **Exact period** | The target and every row use canonical `YYYY-MM`; a prior-period row is explicitly stale. |
+| **Row identity** | `(entry_id, line_id)` is unique and required identifiers are nonblank and already trimmed. |
+| **Stale memo** | Any canonical period token in a memo must equal the target period. |
+| **Safe amounts** | Amounts are nonnegative integer cents. Floats, booleans, text, formulas, nonfinite values, and spreadsheet error tokens are rejected instead of coerced. |
+| **Balance** | Every entry group balances independently, then the full register crossfoots globally; offsetting group errors cannot hide in a clean global net. |
+
+```text
+Recurring-register preflight - 2026-03
+  Rows             : 4
+  Entry groups     : 2
+  Debits / credits : 205000 / 205000 cents
+  Findings         : 0
+  Posting actions  : 0 (validation only)
+  Import payloads  : 0 (validation only)
+  Verdict          : PASS
+```
+
+The public schema is intentionally generic and the sample is entirely
+fictional. No workbook layout, company process, account mapping, or import
+connector is encoded in this validator.
+
+### Multi-entity trial-balance package preflight (validation only)
+
+`close_engine.tb_package` validates a fictional structured monthly package with eight semantic roles. It checks canonical period authority, formula-cache and external-dependency safety, support-to-summary crossfoots, operations-package category ties, controlled adjustments, and current/prior entity, account, row, and formula continuity using integer cents.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source-system refresh and tie, entity perimeter and mapping approval, project-result support, operations-package approval, and controller sign-off remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook coordinates, paths, formulas, entities, or amounts.
+
+### Group Operations package preflight (validation only)
+
+`close_engine.group_operations` validates a fictional structured monthly management package with 16 generic semantic roles. It checks canonical period authority; formula caches and external dependencies; allocation, regional crossfoot, and disclosed rounding-boundary controls; embedded amounts and manual adjustments; and current/prior formula, dependency, and label continuity using integer cents.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source refresh and tie, reporting-perimeter and classification approval, manual-item support, structural-change review, and controller sign-off remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook coordinates, paths, formulas, entities, or amounts.
+
+### Project/job-cost export preflight (validation only)
+
+`close_engine.project_job_cost` validates fictional structured monthly transaction exports. It requires one export per job, canonical monthly period authority, complete source references, job ownership, finite integer-cent amounts, in-period accounting dates, unique transaction identities, and cached job totals that independently re-add. Negative/reversal rows and post-period transaction dates remain visible review items, and an optional prior month surfaces job, cost-code, and transaction-type population changes.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: source refresh and tie, cutoff, mapping, invoice support, capitalization, commitments, cost-to-complete judgment, and downstream approval remain manual gates. It never creates a journal entry, import payload, or posting action.
+
+### Personal-property FF&E preflight (validation only)
+
+`close_engine.personal_property_tax` validates fictional structured asset-schedule evidence using integer cents. It checks canonical period and entity authority; unique asset identities; placed-in-service and depreciation-end dates; positive useful lives; months-used bounds; asset-level net book value; independently rederived cost, accumulated-depreciation, period-depreciation, and net-book-value totals; and a displayed zero-balance control. An optional same-month prior-year snapshot surfaces additions, removals, and cost or useful-life changes.
+
+The validator is intentionally read-only and makes no tax conclusion. A mechanically clean result is only `READY FOR HUMAN REVIEW`: fixed-asset-register, ledger, invoice, disposal, prior-filing, situs, classification, valuation, taxability, exemption, and filing approvals remain manual gates. It never creates a journal entry, import payload, tax filing, source-system update, or posting action, and it contains no private workbook coordinates, paths, formulas, entity names, asset descriptions, or amounts.
+
+### Payroll-recovery preflight (validation only)
+
+`close_engine.payroll_recovery` validates fictional structured fiscal-year recovery evidence using integer cents. It requires unique entity/project lines, 12 July-through-June values, complete source references, line/month/grand-total crossfoots, a canonical snapshot month, and zero activity after that month. An optional immediately preceding snapshot checks source-fingerprint freshness, entity/project population changes, previously reported fiscal-month continuity, and whether target-month activity explains the entire grand-total change.
+
+The validator is intentionally read-only and is not a payroll-to-GL or payroll-processing engine. A mechanically clean result is only `READY FOR HUMAN REVIEW`: payroll-register, ledger, intercompany, confidentiality, recoverability, classification, allocation-basis, ownership, cutoff, and current-use approvals remain manual gates. It never creates a journal entry, payroll action, import payload, source-system update, or posting action, and it contains no private workbook paths, formulas, entities, projects, amounts, or fingerprints.
+
+### Annual headcount preflight (validation only)
+
+`close_engine.headcount` validates a fictional one-table annual entity-headcount support schedule: one row per legal entity and one descending, consecutive year column starting with the as-of year. It checks the as-of year and month, unique entity rows, complete source references, whole non-negative counts, count vectors aligned to the year headers, and cached annual column totals that independently re-add. An optional immediately preceding-year snapshot (with a matching as-of month) checks source-fingerprint freshness, entity-population changes, unchanged overlapping entity/year history, and whether the sum of per-entity changes reconciles to the current-year total change.
+
+The validator is intentionally read-only, never handles employee-level data, and makes no headcount, FTE, or employment conclusion. A mechanically clean result is only `READY FOR HUMAN REVIEW`: employee-roster, payroll/HR-report, legal-entity-perimeter, headcount/FTE-definition, confidentiality, and auditor-delivery approvals remain manual gates. It never creates a journal entry, payroll action, import payload, audit submission, source-system update, or posting action, and it contains no private workbook paths, formulas, entity names, counts, or fingerprints.
+
+### Monthly journal-entry support-package preflight (validation only)
+
+`close_engine.je_package` validates a fictional monthly per-project journal-entry support package — several journal entries, each a set of account lines with integer-cent debits and credits. It independently re-adds each entry, proves **debits equal credits**, crossfoots the cached per-entry totals, and requires unique entry ids, clean account/description text, non-negative amounts, and lines that are a debit xor a credit. A **one-sided intercompany** entry is a visible review item (its offset is booked on the counterparty), not a hard error. Each entry's period must match the package period unless it is a flagged **carryforward** entry. An optional immediately preceding month checks entry-population changes, unchanged carryforward entries, and source-fingerprint freshness.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: account/entity/intercompany mapping, invoice/contract support, classification, cutoff, the counterparty leg, human posting, and post-entry GL tie-out remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook paths, formulas, accounts, entities, memos, amounts, or fingerprints.
+
+### Construction budget-variance preflight (validation only)
+
+`close_engine.budget_variance` independently re-derives a fictional project's
+cost-code mechanics using integer cents: current budget equals original budget
+plus approved changes; current cost to complete equals current budget less costs
+to date; revised budget equals current budget plus the period update; and revised
+cost to complete equals revised budget less costs to date. It also detects
+duplicate cost codes, unsafe amount types, negative cost-to-complete overruns,
+missing or stale overrun flags, and project totals that do not crossfoot to the
+detail.
+
+This component is intentionally read-only. Even a mechanically clean result is
+only `READY FOR HUMAN REVIEW`: source-system refresh and tie, commitment
+completeness, project-manager/change-order approval, and the approved forecast or
+pro forma update remain manual gates. It never creates a journal entry, import
+payload, posting action, or source-system mutation. The example names and amounts
+are entirely fictional, and the public module does not encode a private workbook
+layout.
+
+### Job-cost-to-construction-draw preflight (validation only)
+
+`close_engine.cash_draw` validates a fictional current construction draw against
+generic structured transaction, detail-total, category-total, reconciliation,
+and prior-period records. It uses integer cents and independently re-adds the
+draw equation (`amount - retainage + adjustment`), detail and bank-category
+crossfoots, the combined detail-to-draw tie, equity-plus-lender funding, net job
+cost, variance, and project-report totals. Current-versus-prior checks prove the
+draw number, cumulative interest, lender funding, and debt/equity continuity.
+An optional same-period original/revision pair must also explain its exact draw
+delta and is always sent to human approval when the amount changes.
+
+Unsafe amount types, invalid dates or cost codes, incomplete AP support,
+duplicate transaction identities, missing mappings or displayed totals, and
+external, broken, or cached-error dependencies are explicit findings. A clean
+result is still only `READY FOR HUMAN REVIEW`: source refresh and tie, invoice
+and commitment completeness, mapping and retainage approval, lender-statement
+confirmation, controller review, and lender submission remain manual gates.
+The public component encodes no private workbook layout, company, account map,
+amount, formula, path, or connector. It cannot create journal entries, lender
+submissions, import payloads, posting actions, or source mutations.
+
+### Trial-balance continuity preflight (validation only)
+
+`close_engine.trial_balance` compares a fictional current/prior structured
+trial-balance pair using integer cents. It independently re-adds every line's
+opening plus activity to closing, requires each entity to net to zero, ties
+optional displayed controls to the rederived entity net, compares current
+openings with prior closings, and names added or removed entity/account keys. It
+also review-gates nonzero adjustments and surfaces external, broken, or cached
+formula-error dependency evidence.
+
+This public component is validation-only: even a clean result is only `READY
+FOR HUMAN REVIEW`. Source-system refresh and tie, mapping and population-change
+approval, adjustment approval, consolidation treatment, posting, and the
+post-entry general-ledger tie remain manual. The module accepts generic
+structured rows and deliberately encodes no private workbook layout, company
+name, account map, amount, or connector. It never emits a journal entry, import
+payload, posting action, or source mutation.
+
+### Audit/PBC package preflight (validation only)
+
+`close_engine.audit_pbc` validates a fictional annual audit package expressed
+as generic structured records. It requires one semantic role for each core
+package component, independently re-adds trial-balance plus adjustment to
+final, re-adds final less prior to displayed change, ties current prior values
+to the supplied prior-package finals, and validates opening-plus-movements
+continuity schedules. It also requires displayed `CHECK` controls to equal
+zero and distinguishes authoritative dependency failures from review-only
+stale-template evidence.
+
+All amounts use integer cents and all input identifiers are validated before
+control arithmetic. A mechanically clean result is still only `READY FOR HUMAN
+REVIEW`: controlled audit-TB and source ties, evidence completeness,
+adjustment/classification approval, disclosure conclusions, auditor delivery,
+posting, and the post-entry GL tie remain manual. The module contains only
+fictional examples and generic roles; it encodes no private workbook layout,
+entity, account map, amount, formula, or connector. It cannot emit a journal
+entry, import payload, posting action, audit opinion, or source mutation.
+
+### Combined-financial-statement preflight (validation only)
+
+`close_engine.consolidation` validates a fictional monthly consolidation
+package expressed as generic structured records and integer cents. It requires
+exactly one of 13 semantic roles, requires every statement and dependency to
+use the authoritative month, validates numeric formula caches and approved
+dependency roles, and independently compares each supplied control's actual
+and expected cents. Manual adjustments require support and approval and still
+remain review-gated.
+
+An optional prior package must be the immediately preceding month. Formula,
+dependency, entity, project, and account population changes are counted and
+sent to review instead of being silently accepted. A mechanically clean result
+is only `READY FOR HUMAN REVIEW`; the validator cannot create journal entries,
+import payloads, submissions, posting actions, or source mutations. The public
+schema and fixtures are entirely fictional and encode no private workbook
+layout, entity, account map, path, amount, formula, or connector.
+
 ### What the engine computes
-Seven classes of recurring entries, each with a backing schedule and a hard
+Nine classes of recurring entries, each with a backing schedule and a hard
 debits == credits control (and per-entity balance for intercompany entries):
 
 | Entry | Logic |
@@ -104,10 +282,12 @@ debits == credits control (and per-entity balance for intercompany entries):
 | **Prepaid amortization** | straight-line over each item's service period |
 | **Fixed-asset depreciation** | straight-line, monthly, no salvage |
 | **Deferred rent + CAM** | rent straight-lined vs. escalating cash rent; cost shared across entities by a fixed split routed through intercompany **due-to / due-from** |
+| **Fixed-fee accrual** | beginning payable less settlements already in the GL, plus the monthly fee and a signed approved adjustment; the engine posts only the accrual so settlements are never double-booked |
 | **Management-fee accrual** | full monthly fee, **netting** any in-month cash payment |
 | **Note interest accrual** | simple monthly interest, with the lender/borrower **intercompany mirror** |
 | **G&A allocation** | fixed ratio that **must sum to 100%** (largest-remainder split, no penny lost) |
 | **Prepaid-insurance allocation** | shared policies amortized monthly across entities by fixed basis-point splits (largest-remainder, exact to the cent), with a **mid-year renewal step-up** — the applicable premium switches to the renewal rate starting in the renewal month |
+| **Postage allocation** | signed meter detail must match **exactly one** approved project/job/cost route; blank, noncanonical, unknown, or duplicate identifiers refuse the whole batch, refunds reverse expense and intercompany legs, and account 1460 must clear separately in every entity |
 
 All money is held as **integer cents** so tie-outs are exact. Allocation ratios are
 validated to sum to exactly 100% (10000 bps) before anything posts.
@@ -269,12 +449,17 @@ gitignored). Console summary:
 
 ```
 Month-end close — period 2026-03 (seed 2026)
-  Posted entries : 7
+  Posted entries : 9
   Refused (tie)  : 0
-  Trial balance  : Dr 3,587,237.50 / Cr 3,587,237.50 [OK]
+  Postage routes : 4/5 meter rows
+  Trial balance  : Dr 3,603,311.50 / Cr 3,603,311.50 [OK]
   Tie-outs:
     - Prepaid amortization         acct 1400: sched 8,100.00 vs GL 8,100.00 [OK]
+    - Fixed-fee accrual            acct 2350: sched 62,250.00 vs GL 62,250.00 [OK]
     - Insurance allocation         acct 1450: sched 10,950.00 vs GL 10,950.00 [OK]
+    - Postage allocation (BW)      acct 1460: sched 0.00 vs GL 0.00 [OK]
+    - Postage allocation (DH)      acct 1460: sched 0.00 vs GL 0.00 [OK]
+    - Postage allocation (MF)      acct 1460: sched 0.00 vs GL 0.00 [OK]
   Sentinel: all controls passed (no findings).
   Outputs written to: .../monthly-close-automation/output
   Close status: CLEAN
@@ -290,14 +475,16 @@ Month-end close — period 2026-03 (seed 2026)
 | 1 | Prepaid amortization (straight-line)                     | JE-2026-03-PREPAID   |  3,400.00 |  3,400.00 | [x] |
 | 2 | Fixed-asset depreciation (straight-line, monthly)        | JE-2026-03-DEPREC    |  9,000.00 |  9,000.00 | [x] |
 | 3 | Deferred rent + CAM straight-lining (intercompany split) | JE-2026-03-LEASE     | 17,812.50 | 17,812.50 | [x] |
-| 4 | Management-fee accrual (net of in-month payments)        | JE-2026-03-MGMTFEE   | 14,000.00 | 14,000.00 | [x] |
-| 5 | Related-party note interest accrual                      | JE-2026-03-INTEREST  |  6,875.00 |  6,875.00 | [x] |
-| 6 | G&A cost allocation (fixed ratio, sums to 100%)          | JE-2026-03-GNA       | 24,000.00 | 24,000.00 | [x] |
-| 7 | Insurance premium allocation (shared policies)           | JE-2026-03-INSUR     |  2,600.00 |  2,600.00 | [x] |
+| 4 | Fixed-fee accrual (signed approved adjustment)           | JE-2026-03-FIXEDFEE  | 12,250.00 | 12,250.00 | [x] |
+| 5 | Management-fee accrual (net of in-month payments)        | JE-2026-03-MGMTFEE   | 14,000.00 | 14,000.00 | [x] |
+| 6 | Related-party note interest accrual                      | JE-2026-03-INTEREST  |  6,875.00 |  6,875.00 | [x] |
+| 7 | G&A cost allocation (fixed ratio, sums to 100%)          | JE-2026-03-GNA       | 24,000.00 | 24,000.00 | [x] |
+| 8 | Insurance premium allocation (shared policies)           | JE-2026-03-INSUR     |  2,600.00 |  2,600.00 | [x] |
+| 9 | Postage meter allocation (exact project/job/cost routes) | JE-2026-03-POSTAGE   |  4,016.00 |  4,016.00 | [x] |
 
 ## Controls
 - [x] Every posted entry balances (debits == credits).
-- [x] Trial balance is in balance (3,587,237.50 == 3,587,237.50).
+- [x] Trial balance is in balance (3,603,311.50 == 3,603,311.50).
 - [x] Every schedule ties to the GL.
 - [x] No entries refused for being out of tie (0 refused).
 
@@ -347,15 +534,23 @@ monthly-close-automation/
 │   ├── __main__.py        # enables `python -m close_engine`
 │   ├── money.py           # integer-cent math (split / allocate, no penny lost)
 │   ├── model.py           # chart of accounts, JEs, ledger + the balance control
-│   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers, insurance policies)
-│   ├── engine.py          # the seven recurring entries + tie-out
+│   ├── generate.py        # seeded synthetic data (entities, TB, sub-ledgers, insurance, postage)
+│   ├── engine.py          # the nine recurring entries + tie-out
 │   ├── sentinel/          # Close Sentinel — findings, controls C1–C10, shadow recompute
 │   ├── faults.py          # seeded fault injectors behind --demo-guardrails
 │   ├── report.py          # JE register, trial balance, close report + control findings
+│   ├── cash_draw.py       # validation-only construction-draw and funding controls
+│   ├── consolidation.py   # validation-only combined-statement package controls
+│   ├── group_operations.py # validation-only management-package controls
+│   ├── project_job_cost.py # validation-only monthly job-cost export controls
+│   ├── personal_property_tax.py # validation-only asset-schedule controls
+│   ├── payroll_recovery.py # validation-only fiscal recovery controls
+│   ├── headcount.py       # validation-only annual headcount-support controls
+│   ├── je_package.py      # validation-only monthly JE support-package controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
-│   └── tests/             # pytest suite (5,542 tests)
+│   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
-├── output/                # committed .md/.json (xlsx gitignored)
+├── output/                # register, schedules, TB, report .md/.json (xlsx gitignored)
 └── samples/               # the original fictional workpapers
 ```
 
@@ -371,7 +566,7 @@ monthly-close-automation/
   gates — including an independent shadow recomputation that must agree with the
   posted register to the cent before the close is called clean.
 
-### Tested behavior (`python -m pytest -q` → **5,542 passed**)
+### Tested behavior (`python -m pytest -q` → **5,938 passed**)
 JEs balance (aggregate and per entity); straight-line amortization and depreciation
 math; allocation ratios sum to 100% with no penny lost; insurance allocation is exact
 under largest-remainder splits and re-rates correctly at the renewal step-up; out-of-tie

@@ -81,10 +81,12 @@ def test_close_result_has_one_schedule_per_category() -> None:
         "prepaid_amortization",
         "depreciation",
         "deferred_rent_cam",
+        "fixed_fee_accrual",
         "mgmt_fee_accrual",
         "note_interest",
         "gna_allocation",
         "insurance_allocation",
+        "postage_allocation",
     ]
 
 
@@ -95,10 +97,12 @@ def test_close_result_register_categories() -> None:
         "prepaid_amortization",
         "depreciation",
         "deferred_rent_cam",
+        "fixed_fee_accrual",
         "mgmt_fee_accrual",
         "note_interest",
         "gna_allocation",
         "insurance_allocation",
+        "postage_allocation",
     ]
 
 

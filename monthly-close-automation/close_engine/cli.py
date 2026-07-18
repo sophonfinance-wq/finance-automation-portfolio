@@ -108,6 +108,19 @@ def _print_summary(
     print(f"Month-end close — period {result.period} (seed {result.seed})")
     print(f"  Posted entries : {len(result.register)}")
     print(f"  Refused (tie)  : {len(result.refused)}")
+    postage = next(
+        (
+            schedule
+            for schedule in result.schedules
+            if schedule.category == "postage_allocation"
+        ),
+        None,
+    )
+    if postage is not None:
+        routed = sum(
+            row.fields.get("status") == "routed" for row in postage.rows
+        )
+        print(f"  Postage routes : {routed}/{len(postage.rows)} meter rows")
     debits, credits = result.ledger.total_debits_credits()
     tb_ok = "OK" if debits == credits else "FAIL"
     print(f"  Trial balance  : Dr {money.fmt(debits)} / Cr {money.fmt(credits)} "
@@ -133,7 +146,8 @@ def _print_summary(
                   f"{finding.control_id} {scope}: {finding.subject}")
     out_path = Path(out_dir).resolve()
     print(f"  Outputs written to: {out_path}")
-    print(f"  Close status: {'CLEAN' if result.clean else 'NOT CLEAN'}")
+    close_clean = result.clean and (sentinel is None or sentinel.clean)
+    print(f"  Close status: {'CLEAN' if close_clean else 'NOT CLEAN'}")
 
 
 def _control_labels() -> dict[str, str]:

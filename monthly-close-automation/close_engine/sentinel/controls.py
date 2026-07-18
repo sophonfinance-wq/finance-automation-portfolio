@@ -236,13 +236,18 @@ def c2_interco_mirror(dataset: Dataset, result: CloseResult) -> list[Finding]:
     for category, label in (
         ("gna_allocation", "G&A allocation"),
         ("deferred_rent_cam", "lease cost share"),
+        ("postage_allocation", "postage project allocation"),
     ):
         for je in _entries(result, category):
             due_from = sum(
-                line.debit for line in je.lines if line.account == "1800"
+                line.debit - line.credit
+                for line in je.lines
+                if line.account == "1800"
             )
             due_to = sum(
-                line.credit for line in je.lines if line.account == "2800"
+                line.credit - line.debit
+                for line in je.lines
+                if line.account == "2800"
             )
             if due_from == 0 and due_to == 0:
                 continue
@@ -301,9 +306,10 @@ def c3_completeness_calendar(
     Accounting rule: the close calendar is derived from the sub-ledgers, not
     from memory. Active prepaids imply amortization; in-life assets imply
     depreciation; shared leases imply deferred rent; notes imply interest on
-    both sides; fee arrangements imply an accrual; the G&A pool and in-force
-    policies imply allocations. A missing expected entry or a double posting
-    is CRITICAL; an explicit waiver records the miss as INFO instead.
+    both sides; fixed-fee and management-fee arrangements imply accruals; the
+    G&A pool and in-force policies imply allocations. A missing expected entry
+    or a double posting is CRITICAL; an explicit waiver records the miss as
+    INFO instead.
     """
     period = dataset.period
     expected: dict[tuple[str, str], str] = {}
@@ -331,6 +337,13 @@ def c3_completeness_calendar(
         expect(note.lender_entity, "note_interest", f"{note.note_id} (lender)")
     for mf in dataset.mgmt_fees():
         expect(mf.payer_entity, "mgmt_fee_accrual", f"arrangement {mf.arrangement_id}")
+    for fee in dataset.fixed_fees():
+        if fee.monthly_fee_cents + fee.approved_adjustment_cents:
+            expect(
+                fee.entity,
+                "fixed_fee_accrual",
+                f"arrangement {fee.arrangement_id}",
+            )
     if dataset.subs.gna is not None:
         for entity, bps in dataset.gna().split_bps.items():
             if bps > 0:
@@ -340,6 +353,32 @@ def c3_completeness_calendar(
             for entity, bps in pol.split_bps.items():
                 if bps > 0:
                     expect(entity, "insurance_allocation", f"in-force policy {pol.policy_id}")
+    codes = {entity.code for entity in dataset.entities()}
+    for batch in dataset.postage_batches():
+        if batch.period != period:
+            continue
+        if any(line.amount_cents for line in batch.meter_lines):
+            if batch.holder_entity in codes:
+                expect(
+                    batch.holder_entity,
+                    "postage_allocation",
+                    f"current meter batch {batch.batch_id}",
+                )
+        routes: dict[str, list] = {}
+        for route in batch.routes:
+            routes.setdefault(route.project_code, []).append(route)
+        for line in batch.meter_lines:
+            matches = routes.get(line.project_code, [])
+            if (
+                line.amount_cents
+                and len(matches) == 1
+                and matches[0].recipient_entity in codes
+            ):
+                expect(
+                    matches[0].recipient_entity,
+                    "postage_allocation",
+                    f"meter line {line.line_id} routed to {matches[0].job_code}",
+                )
 
     findings: list[Finding] = []
     waived: set[tuple[str, str]] = set()
@@ -608,6 +647,320 @@ def c6_crossfoot(dataset: Dataset, result: CloseResult) -> list[Finding]:
                     f"{key}: " + "; ".join(problems),
                 )
             )
+
+    # Postage population integrity and line-level crossfoot. The control
+    # rebuilds exact route counts from raw meter detail, then compares every
+    # signed source row to the project/job/cost expense line and clearing leg.
+    postage_jes = list(_entries(result, "postage_allocation"))
+    canonical_je_id = f"JE-{dataset.period}-POSTAGE"
+    canonical_description = (
+        "Postage meter allocation (exact project/job/cost routes)"
+    )
+    for je in postage_jes:
+        if (
+            je.je_id != canonical_je_id
+            or je.period != dataset.period
+            or je.description != canonical_description
+        ):
+            findings.append(
+                Finding(
+                    "C6",
+                    Severity.CRITICAL,
+                    None,
+                    "postage journal header does not match canonical contract",
+                    f"expected id/period/description "
+                    f"{canonical_je_id!r}/{dataset.period!r}/"
+                    f"{canonical_description!r}, got "
+                    f"{je.je_id!r}/{je.period!r}/{je.description!r}",
+                )
+            )
+
+    all_batches = list(dataset.postage_batches())
+
+    def canonical_period(value: str) -> bool:
+        parts = value.split("-")
+        return (
+            len(value) == 7
+            and len(parts) == 2
+            and len(parts[0]) == 4
+            and len(parts[1]) == 2
+            and parts[0].isdigit()
+            and parts[1].isdigit()
+            and 1 <= int(parts[1]) <= 12
+        )
+
+    current_batches = [
+        batch
+        for batch in all_batches
+        if canonical_period(batch.period) and batch.period == dataset.period
+    ]
+    batch_ids = [batch.batch_id for batch in current_batches]
+
+    def check_identifier(problems: list[str], label: str, value: str) -> None:
+        normalized = value.strip()
+        if not normalized:
+            problems.append(f"{label} is blank")
+        elif value != normalized:
+            problems.append(f"{label} has surrounding whitespace")
+
+    for batch in all_batches:
+        problems: list[str] = []
+        if not canonical_period(batch.period):
+            problems.append(
+                f"batch period {batch.period!r} must be canonical YYYY-MM"
+            )
+        elif batch.period != dataset.period:
+            continue
+        check_identifier(problems, "batch id", batch.batch_id)
+        if batch_ids.count(batch.batch_id) > 1:
+            problems.append(f"duplicate batch id {batch.batch_id!r}")
+        if batch.holder_entity not in codes:
+            problems.append(
+                f"holder entity {batch.holder_entity!r} is outside the group"
+            )
+        line_ids = [line.line_id for line in batch.meter_lines]
+        for meter_line in batch.meter_lines:
+            check_identifier(
+                problems,
+                f"meter line id {meter_line.line_id!r}",
+                meter_line.line_id,
+            )
+            check_identifier(
+                problems,
+                f"meter project on {meter_line.line_id!r}",
+                meter_line.project_code,
+            )
+        duplicate_lines = sorted(
+            line_id for line_id in set(line_ids) if line_ids.count(line_id) > 1
+        )
+        if duplicate_lines:
+            problems.append(
+                "duplicate meter line ids: " + ", ".join(duplicate_lines)
+            )
+        route_counts: dict[str, int] = {}
+        route_by_project = {}
+        for route in batch.routes:
+            check_identifier(
+                problems,
+                f"route project {route.project_code!r}",
+                route.project_code,
+            )
+            check_identifier(
+                problems,
+                f"job code for route {route.project_code!r}",
+                route.job_code,
+            )
+            check_identifier(
+                problems,
+                f"cost code for route {route.project_code!r}",
+                route.cost_code,
+            )
+            route_counts[route.project_code] = (
+                route_counts.get(route.project_code, 0) + 1
+            )
+            route_by_project[route.project_code] = route
+            if route.recipient_entity not in codes:
+                problems.append(
+                    f"route {route.project_code} names entity "
+                    f"{route.recipient_entity!r} outside the group"
+                )
+        duplicates = sorted(
+            project for project, count in route_counts.items() if count > 1
+        )
+        if duplicates:
+            problems.append("duplicate project routes: " + ", ".join(duplicates))
+        unmapped = sorted(
+            {
+                line.project_code
+                for line in batch.meter_lines
+                if route_counts.get(line.project_code, 0) == 0
+            }
+        )
+        if unmapped:
+            problems.append("unmapped meter projects: " + ", ".join(unmapped))
+        if problems:
+            findings.append(
+                Finding(
+                    "C6",
+                    Severity.CRITICAL,
+                    None,
+                    "postage route table fails exact-match integrity",
+                    f"{batch.batch_id}: " + "; ".join(problems),
+                )
+            )
+            continue
+
+        meter_total = sum(line.amount_cents for line in batch.meter_lines)
+        batch_lines = [
+            line
+            for je in postage_jes
+            for line in je.lines
+            if line.source_batch == batch.batch_id
+        ]
+        expense_total = sum(
+            line.debit - line.credit
+            for line in batch_lines
+            if line.account == "6700"
+        )
+        clearing_total = sum(
+            line.credit - line.debit
+            for line in batch_lines
+            if line.account == "1460"
+        )
+        if expense_total != meter_total or clearing_total != meter_total:
+            findings.append(
+                Finding(
+                    "C6",
+                    Severity.CRITICAL,
+                    batch.holder_entity,
+                    "postage batch does not crossfoot meter to expense and clearing",
+                    f"{batch.batch_id}: meter {money.fmt(meter_total)}, "
+                    f"project/job expense {money.fmt(expense_total)}, "
+                    f"unallocated-postage clearing {money.fmt(clearing_total)}",
+                )
+            )
+        known_line_ids = {line.line_id for line in batch.meter_lines}
+        unexpected_sources = sorted(
+            {
+                line.source_line
+                for line in batch_lines
+                if line.source_line not in known_line_ids
+            },
+            key=lambda value: "" if value is None else value,
+        )
+        if unexpected_sources:
+            findings.append(
+                Finding(
+                    "C6",
+                    Severity.CRITICAL,
+                    batch.holder_entity,
+                    "postage structured provenance names an unknown source line",
+                    f"{batch.batch_id}: unknown source line ids "
+                    f"{', '.join(repr(value) for value in unexpected_sources)}",
+                )
+            )
+        for meter_line in batch.meter_lines:
+            route = route_by_project[meter_line.project_code]
+            source_lines = [
+                line
+                for line in batch_lines
+                if line.source_line == meter_line.line_id
+            ]
+            expense_lines = [
+                line
+                for line in source_lines
+                if line.account == "6700"
+            ]
+            actual = sum(line.debit - line.credit for line in expense_lines)
+            expected_memo = (
+                f"{batch.batch_id} {meter_line.line_id} "
+                f"{meter_line.project_code} {route.job_code} {route.cost_code}"
+            )
+            provenance_ok = all(
+                line.project_code == meter_line.project_code
+                and line.job_code == route.job_code
+                and line.cost_code == route.cost_code
+                and line.memo == expected_memo
+                for line in source_lines
+            )
+            if meter_line.amount_cents and (
+                not source_lines or not provenance_ok
+            ):
+                findings.append(
+                    Finding(
+                        "C6",
+                        Severity.CRITICAL,
+                        route.recipient_entity,
+                        "postage structured provenance does not exactly match route",
+                        f"{batch.batch_id} {meter_line.line_id}: every JE leg "
+                        f"must carry exact source batch/line, memo, and "
+                        f"project/job/cost "
+                        f"{meter_line.project_code}/{route.job_code}/{route.cost_code}",
+                    )
+                )
+            amount = meter_line.amount_cents
+            holder = batch.holder_entity
+            recipient = route.recipient_entity
+            expected_legs: list[tuple[str, str, int, int]] = []
+            if amount > 0:
+                expected_legs.append((recipient, "6700", amount, 0))
+                if recipient == holder:
+                    expected_legs.append((holder, "1460", 0, amount))
+                else:
+                    expected_legs.extend(
+                        [
+                            (recipient, "2800", 0, amount),
+                            (holder, "1800", amount, 0),
+                            (holder, "1460", 0, amount),
+                        ]
+                    )
+            elif amount < 0:
+                refund = -amount
+                expected_legs.append((recipient, "6700", 0, refund))
+                if recipient == holder:
+                    expected_legs.append((holder, "1460", refund, 0))
+                else:
+                    expected_legs.extend(
+                        [
+                            (recipient, "2800", refund, 0),
+                            (holder, "1800", 0, refund),
+                            (holder, "1460", refund, 0),
+                        ]
+                    )
+            actual_legs = sorted(
+                (line.entity, line.account, line.debit, line.credit)
+                for line in source_lines
+            )
+            legs_ok = actual_legs == sorted(expected_legs)
+            if actual != meter_line.amount_cents or not legs_ok:
+                findings.append(
+                    Finding(
+                        "C6",
+                        Severity.CRITICAL,
+                        route.recipient_entity,
+                        "postage meter line does not crossfoot to its approved job",
+                        f"{batch.batch_id} {meter_line.line_id}: meter "
+                        f"{money.fmt(meter_line.amount_cents)} routes to "
+                        f"{route.project_code}/{route.job_code}, but the JE "
+                        f"contains signed expense {money.fmt(actual)} on "
+                        f"{len(expense_lines)} matching line(s)",
+                    )
+                )
+
+    # A zero group balance is insufficient: equal and opposite entity-level
+    # leftovers would otherwise conceal an uncleared project allocation. The
+    # universe includes every opening and post-close ledger entity so an
+    # unexpected code cannot disappear outside the configured entity list.
+    known_entities = {entity.code for entity in dataset.entities()}
+    entity_universe = (
+        known_entities
+        | {line.entity for line in dataset.opening_tb}
+        | {entity for entity, _account in result.ledger.keys()}
+    )
+    for entity in sorted(entity_universe - known_entities):
+        findings.append(
+            Finding(
+                "C6",
+                Severity.CRITICAL,
+                entity,
+                "unknown entity present in postage accounting universe",
+                f"entity {entity!r} appears in the opening or post-close "
+                "ledger but is not configured in the entity group",
+            )
+        )
+    for entity in sorted(entity_universe):
+        balance = result.ledger.balance(entity, "1460")
+        if balance != 0:
+            findings.append(
+                Finding(
+                    "C6",
+                    Severity.CRITICAL,
+                    entity,
+                    "per-entity unallocated postage balance not cleared",
+                    f"entity {entity} retains signed account 1460 balance "
+                    f"{money.fmt(balance)}; every entity must clear to zero",
+                )
+            )
     return findings
 
 
@@ -796,6 +1149,32 @@ def c8_rounding_policy(dataset: Dataset, result: CloseResult) -> list[Finding]:
                     f"({money.fmt(drift)} drift)",
                 )
             )
+
+    # Postage: the signed clearing movement must equal the sum of signed,
+    # already-rounded meter detail. Refunds reverse both sides.
+    for je in _entries(result, "postage_allocation"):
+        expense = sum(
+            line.debit - line.credit
+            for line in je.lines
+            if line.account == "6700"
+        )
+        clearing = sum(
+            line.credit - line.debit
+            for line in je.lines
+            if line.account == "1460"
+        )
+        if clearing != expense:
+            findings.append(
+                Finding(
+                    "C8",
+                    Severity.CRITICAL,
+                    None,
+                    "rounding drift between detail and clearing leg",
+                    f"{je.je_id}: postage clearing {money.fmt(clearing)} vs "
+                    f"signed meter detail {money.fmt(expense)} "
+                    f"({money.fmt(clearing - expense)} drift)",
+                )
+            )
     return findings
 
 
@@ -870,6 +1249,11 @@ def lock_register(result: CloseResult) -> str:
                         "debit": line.debit,
                         "credit": line.credit,
                         "memo": line.memo,
+                        "source_batch": line.source_batch,
+                        "source_line": line.source_line,
+                        "project_code": line.project_code,
+                        "job_code": line.job_code,
+                        "cost_code": line.cost_code,
                     }
                     for line in je.lines
                 ],

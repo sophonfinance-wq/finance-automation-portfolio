@@ -6,7 +6,7 @@
 
 - Period **2026-03** (seed 2026)
 - Injected drift: **5** fault(s) · initial findings: **19**
-- Remediation turns: **4** / budget **9** · categories resynced: **prepaid amortization, mgmt fee accrual, note interest, gna allocation**
+- Remediation turns: **4** / budget **11** · categories resynced: **prepaid amortization, mgmt fee accrual, note interest, gna allocation**
 - Adjustments booked: **11** · gross movement **33,000.04**
 - Quarantined: **1** · halted-on: **0**
 
