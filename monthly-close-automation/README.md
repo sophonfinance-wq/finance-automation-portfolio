@@ -170,6 +170,12 @@ The validator is intentionally read-only and is not a payroll-to-GL or payroll-p
 
 The validator is intentionally read-only, never handles employee-level data, and makes no headcount, FTE, or employment conclusion. A mechanically clean result is only `READY FOR HUMAN REVIEW`: employee-roster, payroll/HR-report, legal-entity-perimeter, headcount/FTE-definition, confidentiality, and auditor-delivery approvals remain manual gates. It never creates a journal entry, payroll action, import payload, audit submission, source-system update, or posting action, and it contains no private workbook paths, formulas, entity names, counts, or fingerprints.
 
+### Monthly journal-entry support-package preflight (validation only)
+
+`close_engine.je_package` validates a fictional monthly per-project journal-entry support package — several journal entries, each a set of account lines with integer-cent debits and credits. It independently re-adds each entry, proves **debits equal credits**, crossfoots the cached per-entry totals, and requires unique entry ids, clean account/description text, non-negative amounts, and lines that are a debit xor a credit. A **one-sided intercompany** entry is a visible review item (its offset is booked on the counterparty), not a hard error. Each entry's period must match the package period unless it is a flagged **carryforward** entry. An optional immediately preceding month checks entry-population changes, unchanged carryforward entries, and source-fingerprint freshness.
+
+The validator is intentionally read-only. A mechanically clean result is only `READY FOR HUMAN REVIEW`: account/entity/intercompany mapping, invoice/contract support, classification, cutoff, the counterparty leg, human posting, and post-entry GL tie-out remain manual gates. It never creates a journal entry, import payload, or posting action, and it contains no private workbook paths, formulas, accounts, entities, memos, amounts, or fingerprints.
+
 ### Construction budget-variance preflight (validation only)
 
 `close_engine.budget_variance` independently re-derives a fictional project's
@@ -540,6 +546,7 @@ monthly-close-automation/
 │   ├── personal_property_tax.py # validation-only asset-schedule controls
 │   ├── payroll_recovery.py # validation-only fiscal recovery controls
 │   ├── headcount.py       # validation-only annual headcount-support controls
+│   ├── je_package.py      # validation-only monthly JE support-package controls
 │   ├── cli.py             # CLI entrypoint (--sentinel on by default, --demo-guardrails)
 │   └── tests/             # pytest suite (6,000+ tests)
 ├── run.py                 # `python run.py --period 2026-03`
