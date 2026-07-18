@@ -4,16 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Sophon Finance Systems — AI Finance &amp; Accounting Automation, Human-Approved</title>
-<meta name="description" content="Evidence-first automation for month-end close, reconciliation, and partnership tax. Eight public finance engines, 14,740 automated tests, every figure cited, every output approved by your people. Free consultation.">
+<meta name="description" content="Evidence-first automation for month-end close, reconciliation, and partnership tax. Eight public finance engines, 59,740 automated tests, every figure cited, every output approved by your people. Free consultation.">
 <link rel="canonical" href="https://sophonfinance.com/">
 
 <!--
   ============================================================
-  SITE FACTS — single source of truth (verified 2026-07-10)
+  SITE FACTS — single source of truth (verified 2026-07-17)
   ============================================================
   ENGINES_PUBLIC   = 8        (system dirs on origin/main; README badge "systems: 8 runnable")
-  TESTS_CURATED    = 14,740   (pytest --collect-only on origin/main, 2026-07-10)
-  TESTS_SWEEP      = ~1.09M   (opt-in property sweep, SWEEP=1 pytest; per README)
+  TESTS_CURATED    = 59,740   (pytest --collect-only on origin/main, 2026-07-17)
+  TESTS_SWEEP      = ~1.15M   (opt-in property sweep, SWEEP=1 pytest; 1,147,870 on 2026-07-17)
   LOOP_ENGINES     = 5        (close, surplus, reconciliation, knowledge brain, Triangulate)
   GITHUB           = https://github.com/sophonfinance-wq/finance-automation-portfolio
   LINKEDIN         = https://www.linkedin.com/in/sophonnarith/
@@ -27,7 +27,7 @@
 <meta property="og:url" content="https://sophonfinance.com/">
 <meta property="og:site_name" content="Sophon Finance Systems">
 <meta property="og:title" content="Automate the work. Keep the judgment.">
-<meta property="og:description" content="Evidence-first AI automation for month-end close, reconciliation, and partnership tax. Eight public engines, 14,740 automated tests, humans approve every output.">
+<meta property="og:description" content="Evidence-first AI automation for month-end close, reconciliation, and partnership tax. Eight public engines, 59,740 automated tests, humans approve every output.">
 <meta property="og:image" content="https://sophonfinance.com/assets/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -115,7 +115,7 @@
   .brand-word { font-weight:600; font-size:14.5px; letter-spacing:.2px; white-space:nowrap; }
   .brand-word span { font-weight:300; }
   .nav-links { display:flex; align-items:center; gap:2px; }
-  .nav-links a:not(.btn) { color:var(--text); text-decoration:none; font-size:14px; font-weight:400; padding:8px 14px; }
+  .nav-links a:not(.btn) { color:var(--blue); text-decoration:none; font-size:14px; font-weight:400; padding:8px 14px; }
   .nav-links a:not(.btn):hover { background:var(--bg-alt); }
   .nav-links .btn { margin-left:14px; }
   .nav-toggle { display:none; background:none; border:none; width:44px; height:44px; cursor:pointer;
@@ -157,6 +157,13 @@
   .cinema { position:relative; overflow:hidden; height:min(62vh,560px); min-height:340px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
   .cinema video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
   .cinema .cinema-wash { position:absolute; inset:0; background:linear-gradient(90deg, rgba(255,255,255,.52) 0%, rgba(255,255,255,.42) 34%, rgba(255,255,255,.28) 58%, rgba(255,255,255,.12) 100%); } @media (max-width:820px){ .cinema .cinema-wash { background:rgba(255,255,255,.44); } }
+  .cinema .cinema-words { position:absolute; inset:0; z-index:2; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .cinema .cinema-words span { font-family:var(--sans); font-weight:600; text-transform:uppercase; font-size:clamp(30px,6.4vw,76px); letter-spacing:.16em; color:var(--text); padding-left:.16em;
+    text-shadow:0 2px 34px rgba(255,255,255,.6), 0 1px 2px rgba(255,255,255,.75); opacity:0; transform:translateY(10px) scale(.99);
+    transition:opacity .6s ease, transform .6s ease; will-change:opacity, transform; }
+  .cinema .cinema-words span.show { opacity:1; transform:translateY(0) scale(1); }
+  .cinema .cinema-words span::after { content:""; display:block; height:2px; width:44%; margin:.42em auto 0; background:var(--blue); opacity:.85; }
+  @media (prefers-reduced-motion:reduce){ .cinema .cinema-words span { transition:opacity .3s linear; transform:none; } }
   .final { position:relative; overflow:hidden; }
   .final > .wrap { position:relative; z-index:2; }
   .contact-video { position:absolute; inset:0; z-index:0; }
@@ -196,8 +203,8 @@
   .cred b { color:var(--text); font-weight:600; }
   .cred a { color:var(--blue); text-decoration:none; font-weight:500; }
   .cred a:hover { text-decoration:underline; }
-  .stat .src a { color:inherit; text-decoration:none; border-bottom:1px solid var(--border); transition:color .15s, border-color .15s; }
-  .stat .src a:hover { color:var(--blue); border-color:var(--blue); }
+  .stat .src a { color:var(--blue); text-decoration:none; border-bottom:1px solid var(--blue); transition:color .15s, border-color .15s; }
+  .stat .src a:hover { color:#0043ce; border-color:#0043ce; }
 
   /* ============ FLAGSHIP ENGINES ============ */
   .flag { border:1px solid var(--border); background:#fff; margin-top:28px; }
@@ -348,8 +355,8 @@
   .foot { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;
     font-size:13px; color:var(--text-3); }
   .foot-left { display:flex; align-items:center; gap:9px; color:var(--text-2); }
-  .foot a { color:var(--text-2); text-decoration:none; font-weight:500; }
-  .foot a:hover { color:var(--blue); }
+  .foot a { color:var(--blue); text-decoration:none; font-weight:500; }
+  .foot a:hover { color:#0043ce; text-decoration:underline; }
   .foot-note { width:100%; font-size:12px; color:var(--text-3); border-top:1px solid var(--border);
     padding-top:14px; margin-top:4px; line-height:1.6; }
 
@@ -415,6 +422,87 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
+<!-- ================= AMBIENT AUDIO (smooth jazz, off by default) ================= -->
+<style>
+  #jazz-toggle{
+    position:fixed; right:20px; bottom:20px; z-index:60;
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:var(--sans); font-size:13px; font-weight:500; letter-spacing:.2px;
+    color:var(--text); background:rgba(255,255,255,.9);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border:1px solid var(--border-strong); border-radius:999px;
+    padding:9px 15px 9px 13px; cursor:pointer; line-height:1;
+    box-shadow:0 2px 10px rgba(22,22,22,.08); transition:border-color .15s, box-shadow .15s, color .15s;
+  }
+  #jazz-toggle:hover{ border-color:var(--blue); box-shadow:0 4px 16px rgba(15,98,254,.16); }
+  #jazz-toggle:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
+  #jazz-toggle .jz-eq{ display:inline-flex; align-items:flex-end; gap:2px; height:14px; width:16px; }
+  #jazz-toggle .jz-eq span{ width:3px; height:4px; background:var(--blue); border-radius:1px; transform-origin:bottom; }
+  #jazz-toggle[aria-pressed="true"] .jz-eq span{ animation:jz-bounce .9s ease-in-out infinite; }
+  #jazz-toggle[aria-pressed="true"] .jz-eq span:nth-child(2){ animation-delay:.18s; }
+  #jazz-toggle[aria-pressed="true"] .jz-eq span:nth-child(3){ animation-delay:.36s; }
+  #jazz-toggle[aria-pressed="true"] .jz-eq span:nth-child(4){ animation-delay:.54s; }
+  #jazz-toggle[aria-pressed="false"] .jz-eq span{ height:4px; opacity:.5; }
+  #jazz-toggle .jz-label{ white-space:nowrap; }
+  @keyframes jz-bounce{ 0%,100%{ height:4px; } 50%{ height:14px; } }
+  @media (prefers-reduced-motion:reduce){ #jazz-toggle .jz-eq span{ animation:none !important; } }
+  @media (max-width:520px){ #jazz-toggle .jz-label{ display:none; } #jazz-toggle{ padding:11px 13px; } }
+</style>
+<audio id="jazz-audio" loop preload="none">
+  <source src="assets/site-music.mp3" type="audio/mpeg">
+</audio>
+<button id="jazz-toggle" type="button" aria-pressed="false" aria-label="Play background music" title="Background music">
+  <span class="jz-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+  <span class="jz-label">Soundtrack</span>
+</button>
+<script>
+(function(){
+  var audio = document.getElementById('jazz-audio');
+  var btn   = document.getElementById('jazz-toggle');
+  if (!audio || !btn) return;
+  var KEY = 'sfs-music';
+  audio.volume = 0.35;
+
+  function setState(on){
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', on ? 'Pause background music' : 'Play background music');
+    btn.querySelector('.jz-label').textContent = on ? 'Playing' : 'Soundtrack';
+  }
+
+  // Button reflects the ACTUAL playback state, so it never claims "Playing" while muted-blocked.
+  audio.addEventListener('play',  function(){ setState(true); });
+  audio.addEventListener('pause', function(){ setState(false); });
+
+  function tryPlay(){ var p = audio.play(); if (p && p.catch) p.catch(function(){}); }
+
+  var optedOut = false;
+  try { optedOut = localStorage.getItem(KEY) === 'off'; } catch(e){}
+
+  // Manual toggle — a pause is remembered so we stop nagging that visitor.
+  btn.addEventListener('click', function(){
+    if (audio.paused){ optedOut = false; try{ localStorage.setItem(KEY,'on'); }catch(e){} tryPlay(); }
+    else { optedOut = true; audio.pause(); try{ localStorage.setItem(KEY,'off'); }catch(e){} }
+  });
+
+  // Default ON. Browsers (especially iOS/Android) block audio-with-sound until the
+  // visitor interacts, so we buffer eagerly and start on the very first tap, scroll,
+  // or keypress anywhere on the page — unless this visitor has paused before.
+  if (!optedOut){
+    try { audio.preload = 'auto'; audio.load(); } catch(e){}
+    tryPlay(); // desktop with media engagement may start right away
+    var evs = ['pointerdown','touchstart','keydown','scroll','click'];
+    function unkick(){ evs.forEach(function(ev){ window.removeEventListener(ev, kick, true); }); }
+    function kick(e){
+      if (optedOut) { unkick(); return; }
+      if (e && e.target && btn.contains(e.target)) return; // let the toggle handle its own taps
+      if (audio.paused) tryPlay();
+      if (!audio.paused) unkick(); // once it's really playing, stop listening
+    }
+    evs.forEach(function(ev){ window.addEventListener(ev, kick, { capture:true, passive:true }); });
+  }
+})();
+</script>
+
 <!-- ================= NAV ================= -->
 <div class="nav">
   <div class="wrap nav-in">
@@ -474,9 +562,9 @@
     <div class="stat"><b><span class="count" data-count="8">8</span></b>
       <span class="cap">public finance engines &mdash; runnable, MIT-licensed</span>
       <span class="src"><a href="https://github.com/sophonfinance-wq" target="_blank" rel="noopener">github.com/sophonfinance-wq</a></span></div>
-    <div class="stat"><b><span class="count" data-count="14740">14,740</span></b>
+    <div class="stat"><b><a href="tests/" style="color:var(--blue);text-decoration:none" aria-label="See all 59,740 tests by engine"><span class="count" data-count="59740">59,740</span></a></b>
       <span class="cap">automated tests in the curated suite, gating CI</span>
-      <span class="src">pytest --collect-only · 2026-07-10</span></div>
+      <span class="src"><a href="tests/">See all 59,740 tests, by engine &rarr;</a></span></div>
     <div class="stat"><b><span class="count" data-count="100">100</span><span class="unit">%</span></b>
       <span class="cap">of computed figures ship with cited evidence</span>
       <span class="src">evidence log per run</span></div>
@@ -612,9 +700,10 @@
 </section>
 <section class="cinema" aria-label="Sophon Finance Systems film, part two">
   <video id="heroVid2" autoplay muted loop playsinline preload="metadata" poster="assets/hero2-poster.jpg">
-    <source src="assets/hero2-web.mp4" type="video/mp4">
+    <source src="assets/hero-web.mp4" type="video/mp4">
   </video>
   <div class="cinema-wash"></div>
+  <div class="cinema-words" aria-hidden="true"><span id="cinemaWord"></span></div>
 </section>
 
 <!-- ================= PORTFOLIO ================= -->
@@ -717,22 +806,22 @@
       <p class="lead">The entire engine portfolio is on GitHub &mdash; code, tests, controls, and documentation. Your technical reviewers can judge the work before you spend anything.</p>
     </div>
     <div class="eng-grid">
-      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 14,740 automated tests with pytest.">
+      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 59,740 automated tests with pytest.">
         <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>verify-it-yourself — bash</span></div>
         <div class="term-body" aria-hidden="true">
           <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
           <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
           <div class="cmd">pytest --collect-only -q | tail -1</div>
-          <div class="ok-line">14740 tests collected</div>
-          <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, under two minutes</span></div>
+          <div class="ok-line">59740 tests collected</div>
+          <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
           <div class="ok-line">passed ✓</div>
-          <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.09M generated cases</span></div>
-          <div class="dim">verified 2026-07-10 · fictional seeded data · MIT license</div>
+          <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
+          <div class="dim">verified 2026-07-17 · fictional seeded data · MIT license</div>
         </div>
       </div>
       <div class="eng-points reveal d1">
-        <div class="pt"><h3>14,740 tests, honestly tiered</h3>
-          <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.09M generated cases. The tiers are documented, not blended into one inflated number.</p></div>
+        <div class="pt"><h3>59,740 tests, honestly tiered</h3>
+          <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.15M generated cases. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
         <div class="pt"><h3>Fictional data, by rule</h3>
           <p>Every public example runs on seeded, invented data. Client information never appears in public code &mdash; backed by a deny-list confidentiality linter in the test suite.</p></div>
         <div class="pt"><h3>Read it, run it, or both</h3>
@@ -740,6 +829,7 @@
         <div class="eng-cta">
           <a class="btn btn-p btn-sm" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">View on GitHub
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+          <a class="btn btn-t btn-sm" href="tests/">See all 59,740 tests</a>
           <a class="btn btn-t btn-sm" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Follow on LinkedIn</a>
         </div>
       </div>
@@ -887,6 +977,42 @@
   document.querySelectorAll('.count').forEach(function (el) { cio.observe(el); });
 })();
 </script>
-<script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero2-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/contact-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
+<script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/contact-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
+<script>
+// Middle "cinema" band: start the shared hero clip from its MIDDLE (so it differs from
+// the top hero) and flash one corporate power word in/out every ~5.5s, like a brand film.
+(function(){
+  var v = document.getElementById('heroVid2');
+  var wordEl = document.getElementById('cinemaWord');
+  if (v){
+    // Seek to the middle whenever the clip (re)loads from the start — including after the
+    // IntersectionObserver's one-time v.load(). Guard on currentTime<1 so we never yank it
+    // mid-playback; natural loops then run full from 0, which is the intended behaviour.
+    var toMiddle = function(){
+      if (v.duration && isFinite(v.duration) && v.duration > 2 && v.currentTime < 1){
+        try { v.currentTime = v.duration / 2; } catch(e){}
+      }
+    };
+    if (v.readyState >= 1) toMiddle();
+    v.addEventListener('loadedmetadata', toMiddle);
+    v.addEventListener('loadeddata', toMiddle);
+    v.addEventListener('play', toMiddle);
+  }
+  if (!wordEl) return;
+  var words = ['Efficiency','Accuracy','Precision','Compliance','Clarity','Control','Confidence'];
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce){ wordEl.textContent = words[0]; wordEl.classList.add('show'); return; }
+  var i = 0;
+  function flash(){
+    wordEl.classList.remove('show');           // ensure a clean fade-in
+    wordEl.textContent = words[i];
+    i = (i + 1) % words.length;
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ wordEl.classList.add('show'); }); });
+    setTimeout(function(){ wordEl.classList.remove('show'); }, 2800); // hold ~2.2s, then fade out
+  }
+  flash();
+  setInterval(flash, 5500);
+})();
+</script>
 </body>
 </html>

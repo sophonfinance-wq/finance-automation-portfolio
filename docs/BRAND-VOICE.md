@@ -30,8 +30,8 @@ product.
 
 ## Accuracy and confidentiality (non-negotiable)
 
-- Every claim is true and demonstrable. Current facts: **eight runnable systems, a 14,740-test curated suite (plus an opt-in ~1.09M-case property/invariant sweep), fully
-  fictional and seeded data, MIT-licensed, CI-backed.** (Verified via `pytest --collect-only` 2026-07-10.) Keep numbers current with the repository.
+- Every claim is true and demonstrable. Current facts: **eight runnable systems, a 59,740-test curated suite (plus an opt-in ~1.15M-case property/invariant sweep), fully
+  fictional and seeded data, MIT-licensed, CI-backed.** (Verified via `pytest --collect-only` 2026-07-17.) Keep numbers current with the repository.
 - The Knowledge Brain **generates** an apply-ready, cited remediation prompt and a change-log; a
   downstream AI or operator applies the changes. Never state or imply that the engine itself applies
   or verifies changes ("hands-free").
