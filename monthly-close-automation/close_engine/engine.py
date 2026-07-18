@@ -16,11 +16,13 @@ Recurring-entry classes implemented:
 * fixed-asset depreciation (straight-line, monthly, no salvage)
 * deferred rent + CAM straight-lining with a fixed cross-entity split routed
   through intercompany due-to / due-from
+* fixed-fee accrual with a liability rollforward and signed approved adjustment
 * management-fee accrual, netting any in-month cash payment
 * note interest accrual (simple monthly interest)
 * G&A cost allocation by a fixed ratio summing to 100%
 * insurance premium allocation (shared policies, largest-remainder entity
   split, renewal step-up booked from the renewal month)
+* postage meter allocation by an exact, approved project/job/cost route table
 """
 
 from __future__ import annotations
@@ -31,11 +33,13 @@ from . import money
 from .generate import (
     Dataset,
     FixedAsset,
+    FixedFeeAccrual,
     GnaAllocation,
     InsurancePolicy,
     Lease,
     MgmtFee,
     Note,
+    PostageBatch,
     Prepaid,
     months_elapsed,
     period_index,
@@ -61,6 +65,8 @@ class Schedule:
         rows: The schedule rows.
         tie_account: Account code the schedule ties to (group-wide), if any.
         tie_expected_cents: The schedule's computed balance for that account.
+        tie_expected_by_entity_cents: Optional per-entity expectations for the
+            tie account. When present, every listed entity must tie separately.
     """
 
     name: str
@@ -68,6 +74,7 @@ class Schedule:
     rows: list[ScheduleRow] = field(default_factory=list)
     tie_account: str | None = None
     tie_expected_cents: int | None = None
+    tie_expected_by_entity_cents: dict[str, int] | None = None
 
 
 @dataclass
@@ -78,11 +85,13 @@ class TieResult:
     account: str
     expected_cents: int
     actual_cents: int
+    entity: str | None = None
+    scope_valid: bool = True
 
     @property
     def ties(self) -> bool:
-        """True iff the schedule expectation equals the GL balance."""
-        return self.expected_cents == self.actual_cents
+        """True iff the entity is approved and the GL equals expectation."""
+        return self.scope_valid and self.expected_cents == self.actual_cents
 
     @property
     def variance_cents(self) -> int:
@@ -151,12 +160,15 @@ class CloseEngine:
         self._post(self._depreciation())
         if "deferred_rent_cam" not in refused_splits:
             self._post(self._deferred_rent_and_cam())
+        self._post(self._fixed_fee_accrual())
         self._post(self._mgmt_fee_accrual())
         self._post(self._note_interest_accrual())
         if "gna_allocation" not in refused_splits:
             self._post(self._gna_allocation())
         if "insurance_allocation" not in refused_splits:
             self._post(self._insurance_allocation())
+        refused_postage = self._refuse_invalid_postage_batches()
+        self._post(self._postage_allocation(refused_postage))
 
         ties = self._tie_out()
         return CloseResult(
@@ -239,6 +251,140 @@ class CloseEngine:
             )
             refused_categories.add(category)
         return refused_categories
+
+    def _refuse_invalid_postage_batches(self) -> set[PostageBatch]:
+        """Refuse a meter batch unless every row has one exact valid route.
+
+        Mapping is a posting gate, not a best-effort lookup. Duplicate route
+        keys, unmapped projects, unknown entities, blank job codes, duplicate
+        line ids, and an unknown holder all block the affected batch in full.
+        Every source period is validated before filtering. Malformed periods
+        are refused; canonical prior periods are ignored. Other valid
+        current-period batches may still proceed.
+        """
+        codes = {entity.code for entity in self.ds.entities()}
+        refused: set[PostageBatch] = set()
+        all_batches = list(self.ds.postage_batches())
+
+        def canonical_period(value: str) -> bool:
+            """Return whether *value* is exactly YYYY-MM with month 01..12."""
+            parts = value.split("-")
+            return (
+                len(value) == 7
+                and len(parts) == 2
+                and len(parts[0]) == 4
+                and len(parts[1]) == 2
+                and parts[0].isdigit()
+                and parts[1].isdigit()
+                and 1 <= int(parts[1]) <= 12
+            )
+
+        current_batches = [
+            batch
+            for batch in all_batches
+            if canonical_period(batch.period) and batch.period == self.period
+        ]
+        batch_ids = [batch.batch_id for batch in current_batches]
+
+        def validate_identifier(
+            problems: list[str], label: str, value: str
+        ) -> None:
+            """Require a nonblank identifier already in canonical trim form."""
+            normalized = value.strip()
+            if not normalized:
+                problems.append(f"{label} is blank")
+            elif value != normalized:
+                problems.append(f"{label} has surrounding whitespace")
+
+        for batch in all_batches:
+            problems: list[str] = []
+            if not canonical_period(batch.period):
+                problems.append(
+                    f"batch period {batch.period!r} must be canonical YYYY-MM"
+                )
+            elif batch.period != self.period:
+                # A valid historical population is outside this close.
+                continue
+            validate_identifier(problems, "batch id", batch.batch_id)
+            if batch_ids.count(batch.batch_id) > 1:
+                problems.append(f"duplicate batch id {batch.batch_id!r}")
+            if batch.holder_entity not in codes:
+                problems.append(
+                    f"holder entity {batch.holder_entity!r} is outside the group"
+                )
+            line_ids = [line.line_id for line in batch.meter_lines]
+            for meter_line in batch.meter_lines:
+                validate_identifier(
+                    problems,
+                    f"meter line id {meter_line.line_id!r}",
+                    meter_line.line_id,
+                )
+                validate_identifier(
+                    problems,
+                    f"meter project on {meter_line.line_id!r}",
+                    meter_line.project_code,
+                )
+            duplicate_lines = sorted(
+                line_id for line_id in set(line_ids) if line_ids.count(line_id) > 1
+            )
+            if duplicate_lines:
+                problems.append(
+                    "duplicate meter line ids: " + ", ".join(duplicate_lines)
+                )
+            route_counts: dict[str, int] = {}
+            for route in batch.routes:
+                validate_identifier(
+                    problems,
+                    f"route project {route.project_code!r}",
+                    route.project_code,
+                )
+                validate_identifier(
+                    problems,
+                    f"job code for route {route.project_code!r}",
+                    route.job_code,
+                )
+                validate_identifier(
+                    problems,
+                    f"cost code for route {route.project_code!r}",
+                    route.cost_code,
+                )
+                route_counts[route.project_code] = (
+                    route_counts.get(route.project_code, 0) + 1
+                )
+                if route.recipient_entity not in codes:
+                    problems.append(
+                        f"route {route.project_code} names entity "
+                        f"{route.recipient_entity!r} outside the group"
+                    )
+            duplicate_routes = sorted(
+                project for project, count in route_counts.items() if count > 1
+            )
+            if duplicate_routes:
+                problems.append(
+                    "duplicate project routes: " + ", ".join(duplicate_routes)
+                )
+            unmapped = sorted(
+                {
+                    line.project_code
+                    for line in batch.meter_lines
+                    if route_counts.get(line.project_code, 0) == 0
+                }
+            )
+            if unmapped:
+                problems.append("unmapped meter projects: " + ", ".join(unmapped))
+            if not problems:
+                continue
+            je = JournalEntry(
+                je_id=f"JE-{self.period}-POSTAGE-{batch.batch_id}",
+                period=self.period,
+                category="postage_allocation",
+                description=f"REFUSED: postage route integrity ({batch.batch_id})",
+            )
+            self.refused.append(
+                OutOfTieError(je, f"{batch.batch_id}: " + "; ".join(problems))
+            )
+            refused.add(batch)
+        return refused
 
     def _post(self, je: JournalEntry | None) -> None:
         """Post an entry, capturing any out-of-tie refusal instead of raising.
@@ -549,6 +695,76 @@ class CloseEngine:
         year = int(self.period.split("-")[0])
         anchor = f"{year:04d}-01"
         return months_elapsed(anchor, self.period)
+
+    def _fixed_fee_current_accrual(self, fee: FixedFeeAccrual) -> int:
+        """Return the fee plus its signed, approved current-period adjustment."""
+        return fee.monthly_fee_cents + fee.approved_adjustment_cents
+
+    def _fixed_fee_accrual(self) -> JournalEntry:
+        """Book recurring fixed fees without double-booking settlements.
+
+        Settlement activity has already reduced account 2350 in the opening
+        ledger supplied to the recurring-entry engine. This entry therefore
+        posts only ``monthly fee + approved adjustment``. Positive accruals
+        debit expense and credit the payable; a sufficiently negative signed
+        adjustment reverses that direction. The schedule independently shows
+        ``beginning - settlement + accrual = ending`` and ties the ending
+        payable to the resulting GL.
+        """
+        je = JournalEntry(
+            je_id=f"JE-{self.period}-FIXEDFEE",
+            period=self.period,
+            category="fixed_fee_accrual",
+            description="Fixed-fee accrual (settlements already in opening GL)",
+        )
+        sched = Schedule("Fixed-fee accrual", "fixed_fee_accrual")
+        ending_total = 0
+        for fee in self.ds.fixed_fees():
+            accrual = self._fixed_fee_current_accrual(fee)
+            pre_accrual = (
+                fee.beginning_liability_cents - fee.settlement_cents
+            )
+            ending = pre_accrual + accrual
+            ending_total += ending
+            sched.rows.append(
+                ScheduleRow(
+                    fee.arrangement_id,
+                    {
+                        "entity": fee.entity,
+                        "beginning_liability": money.fmt(
+                            fee.beginning_liability_cents
+                        ),
+                        "current_settlement": money.fmt(fee.settlement_cents),
+                        "recurring_fee": money.fmt(fee.monthly_fee_cents),
+                        "approved_adjustment": money.fmt(
+                            fee.approved_adjustment_cents
+                        ),
+                        "current_accrual": money.fmt(accrual),
+                        "ending_liability": money.fmt(ending),
+                    },
+                )
+            )
+            memo = f"{fee.arrangement_id} recurring fixed fee"
+            if accrual > 0:
+                je.lines.append(
+                    JournalLine(fee.entity, "6250", accrual, 0, memo)
+                )
+                je.lines.append(
+                    JournalLine(fee.entity, "2350", 0, accrual, memo)
+                )
+            elif accrual < 0:
+                reversal = -accrual
+                je.lines.append(
+                    JournalLine(fee.entity, "2350", reversal, 0, memo)
+                )
+                je.lines.append(
+                    JournalLine(fee.entity, "6250", 0, reversal, memo)
+                )
+
+        sched.tie_account = "2350"
+        sched.tie_expected_cents = abs(ending_total)
+        self.schedules.append(sched)
+        return je
 
     def _mgmt_fee_accrual(self) -> JournalEntry:
         """Accrue the monthly management fee, netting any in-month cash payment.
@@ -880,17 +1096,141 @@ class CloseEngine:
         parts = money.split_evenly(annual, 12)
         return annual - sum(parts[: offset % 12 + 1])
 
+    def _postage_allocation(
+        self, refused_batches: set[PostageBatch]
+    ) -> JournalEntry:
+        """Clear signed meter detail to exact project, job, and entity routes.
+
+        The meter import sits in unallocated postage (1460). A holder-routed
+        row reclasses directly to expense. A row routed to another entity
+        adds mirrored due-from/due-to legs so each entity remains balanced.
+        Refunds reverse every affected leg; zero lines stay in the schedule
+        for population completeness but generate no journal lines.
+        """
+        je = JournalEntry(
+            je_id=f"JE-{self.period}-POSTAGE",
+            period=self.period,
+            category="postage_allocation",
+            description="Postage meter allocation (exact project/job/cost routes)",
+        )
+        sched = Schedule("Postage allocation", "postage_allocation")
+        for batch in self.ds.postage_batches():
+            if batch.period != self.period or batch in refused_batches:
+                continue
+            route_by_project = {
+                route.project_code: route for route in batch.routes
+            }
+            for meter_line in batch.meter_lines:
+                route = route_by_project[meter_line.project_code]
+                amount = meter_line.amount_cents
+                memo = (
+                    f"{batch.batch_id} {meter_line.line_id} "
+                    f"{meter_line.project_code} {route.job_code} {route.cost_code}"
+                )
+
+                def routed_line(
+                    entity: str,
+                    account: str,
+                    debit: int,
+                    credit: int,
+                ) -> JournalLine:
+                    """Build a line with exact machine-checkable provenance."""
+                    return JournalLine(
+                        entity,
+                        account,
+                        debit,
+                        credit,
+                        memo,
+                        source_batch=batch.batch_id,
+                        source_line=meter_line.line_id,
+                        project_code=meter_line.project_code,
+                        job_code=route.job_code,
+                        cost_code=route.cost_code,
+                    )
+
+                sched.rows.append(
+                    ScheduleRow(
+                        f"{batch.batch_id}-{meter_line.line_id}",
+                        {
+                            "batch": batch.batch_id,
+                            "meter_line": meter_line.line_id,
+                            "project": meter_line.project_code,
+                            "job": route.job_code,
+                            "cost_code": route.cost_code,
+                            "recipient": route.recipient_entity,
+                            "meter_amount": money.fmt(amount),
+                            "status": "zero - no posting" if amount == 0 else "routed",
+                        },
+                    )
+                )
+                if amount == 0:
+                    continue
+                holder = batch.holder_entity
+                recipient = route.recipient_entity
+                if amount > 0:
+                    je.lines.append(routed_line(recipient, "6700", amount, 0))
+                    if recipient == holder:
+                        je.lines.append(routed_line(holder, "1460", 0, amount))
+                    else:
+                        je.lines.append(routed_line(recipient, "2800", 0, amount))
+                        je.lines.append(routed_line(holder, "1800", amount, 0))
+                        je.lines.append(routed_line(holder, "1460", 0, amount))
+                else:
+                    refund = -amount
+                    je.lines.append(routed_line(recipient, "6700", 0, refund))
+                    if recipient == holder:
+                        je.lines.append(routed_line(holder, "1460", refund, 0))
+                    else:
+                        je.lines.append(routed_line(recipient, "2800", refund, 0))
+                        je.lines.append(routed_line(holder, "1800", 0, refund))
+                        je.lines.append(routed_line(holder, "1460", refund, 0))
+        sched.tie_account = "1460"
+        sched.tie_expected_by_entity_cents = {
+            entity.code: 0 for entity in self.ds.entities()
+        }
+        self.schedules.append(sched)
+        return je
+
     # -- tie-out ----------------------------------------------------------- #
 
     def _tie_out(self) -> list[TieResult]:
         """Tie each schedule that declares a ``tie_account`` to the GL.
 
-        Returns a :class:`TieResult` per tied schedule comparing the schedule's
-        expected balance to the actual group-wide GL balance.
+        Returns group-wide ties for ordinary schedules and one tie per entity
+        when a schedule declares ``tie_expected_by_entity_cents``. A net-zero
+        group balance can therefore never conceal offsetting entity balances.
         """
         results: list[TieResult] = []
         for sched in self.schedules:
-            if sched.tie_account is None or sched.tie_expected_cents is None:
+            if sched.tie_account is None:
+                continue
+            if sched.tie_expected_by_entity_cents is not None:
+                known_entities = {
+                    entity.code for entity in self.ds.entities()
+                }
+                # Inspect every entity that entered the accounting state, not
+                # merely the configured entity list.  An unexpected entity
+                # must make the tie fail even when its 1460 balance is zero.
+                entity_universe = (
+                    set(sched.tie_expected_by_entity_cents)
+                    | {line.entity for line in self.ds.opening_tb}
+                    | {entity for entity, _account in self.ledger.keys()}
+                )
+                for entity in sorted(entity_universe):
+                    expected = sched.tie_expected_by_entity_cents.get(entity, 0)
+                    actual = abs(self.ledger.balance(entity, sched.tie_account))
+                    results.append(
+                        TieResult(
+                            schedule=f"{sched.name} ({entity})",
+                            account=sched.tie_account,
+                            expected_cents=expected,
+                            actual_cents=actual,
+                            entity=entity,
+                            scope_valid=entity in known_entities,
+                        )
+                    )
+                continue
+            if sched.tie_expected_cents is None:
                 continue
             actual = abs(self.ledger.account_balance(sched.tie_account))
             results.append(

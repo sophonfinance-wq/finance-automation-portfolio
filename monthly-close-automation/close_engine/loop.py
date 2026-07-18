@@ -65,10 +65,12 @@ CATEGORY_ORDER: tuple[str, ...] = (
     "prepaid_amortization",
     "depreciation",
     "deferred_rent_cam",
+    "fixed_fee_accrual",
     "mgmt_fee_accrual",
     "note_interest",
     "gna_allocation",
     "insurance_allocation",
+    "postage_allocation",
 )
 
 # Controls the loop can remediate by resyncing a category to the authoritative
@@ -188,7 +190,53 @@ def _rebuild_ledger(dataset: Dataset, register: list[JournalEntry]) -> Ledger:
 
 
 def _category_lines(register: list[JournalEntry], category: str):
-    """Aggregate a category's posted lines to ``{(entity, account): (dr, cr)}``."""
+    """Aggregate lines using every field material to category correctness.
+
+    Most categories are amount-driven. Postage has a canonical JE contract,
+    including header, memo, and structured source/project/job/cost provenance,
+    so any metadata-only tamper must trigger an authoritative resync.
+    """
+    if category == "postage_allocation":
+        return tuple(
+            (
+                je.je_id,
+                je.period,
+                je.description,
+                tuple(
+                    (
+                        line.entity,
+                        line.account,
+                        line.debit,
+                        line.credit,
+                        line.memo,
+                        line.source_batch,
+                        line.source_line,
+                        line.project_code,
+                        line.job_code,
+                        line.cost_code,
+                    )
+                    for line in je.lines
+                ),
+            )
+            for je in register
+            if je.category == category
+        )
+
+    agg: dict[tuple[str, ...], tuple[int, int]] = {}
+    for je in register:
+        if je.category != category:
+            continue
+        for line in je.lines:
+            key = (line.entity, line.account)
+            dr, cr = agg.get(key, (0, 0))
+            agg[key] = (dr + line.debit, cr + line.credit)
+    return agg
+
+
+def _category_amounts(
+    register: list[JournalEntry], category: str
+) -> dict[tuple[str, str], tuple[int, int]]:
+    """Aggregate numeric movements for the adjustment journal."""
     agg: dict[tuple[str, str], tuple[int, int]] = {}
     for je in register:
         if je.category != category:
@@ -224,8 +272,8 @@ def _resync_category(
     Books the (entity, account) movement as adjustments, swaps the entries, and
     rebuilds the trial balance so the next observe sees a consistent close.
     """
-    before = _category_lines(posted.register, category)
-    after = _category_lines(authoritative.register, category)
+    before = _category_amounts(posted.register, category)
+    after = _category_amounts(authoritative.register, category)
     adjustments: list[Adjustment] = []
     for key in sorted(set(before) | set(after)):
         f_dr, f_cr = before.get(key, (0, 0))
