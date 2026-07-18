@@ -414,6 +414,23 @@
     padding-top:14px; margin-top:4px; line-height:1.6; }
 
   /* mobile sticky CTA */
+  /* booking modal */
+  .bookov { position:fixed; inset:0; z-index:120; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(22,22,22,.55); }
+  .bookov.open { display:flex; }
+  .bookp { background:#fff; width:100%; max-width:520px; max-height:92vh; overflow:auto; padding:34px 34px 30px; position:relative; }
+  .bookp .kicker { margin-bottom:4px; }
+  .bookp h3 { font-size:clamp(22px,2.6vw,28px); font-weight:300; letter-spacing:-.2px; line-height:1.2; margin:0 0 8px; }
+  .bookp h3 strong { font-weight:600; }
+  .bookp .bk-sub { font-size:14px; color:var(--text-2); line-height:1.55; margin:0 0 22px; }
+  .bookp label { display:block; font-family:var(--mono); font-size:11px; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin:14px 0 6px; }
+  .bookp input, .bookp textarea { width:100%; font-family:var(--sans); font-size:15px; color:var(--text); background:var(--bg-alt); border:none; border-bottom:1px solid var(--border-strong); padding:12px 14px; outline:none; transition:border-color .15s, box-shadow .15s; border-radius:0; -webkit-appearance:none; }
+  .bookp input:focus, .bookp textarea:focus { border-bottom-color:var(--blue); box-shadow:inset 0 -1px 0 var(--blue); }
+  .bookp textarea { min-height:96px; resize:vertical; }
+  .bookp .btn-p { width:100%; margin-top:22px; }
+  .bookp .bk-note { font-size:12px; color:var(--text-3); margin-top:14px; line-height:1.5; }
+  .bookx { position:absolute; top:12px; right:12px; width:40px; height:40px; background:none; border:none; cursor:pointer; color:var(--text-2); font-size:22px; line-height:1; }
+  .bookx:hover { color:var(--text); }
+  @media (max-width:560px){ .bookov { padding:0; align-items:flex-end; } .bookp { max-width:none; max-height:94vh; padding:28px 22px 24px; } }
   .mcta { position:fixed; left:0; right:0; bottom:0; z-index:70; display:none; }
   .mcta a { display:flex; align-items:center; justify-content:center; gap:10px; background:var(--blue); color:#fff;
     font-weight:500; font-size:15px; padding:15px; text-decoration:none; }
@@ -636,7 +653,7 @@
       <a href="#tax">Engines</a>
       <a href="#loops">Auto Verification</a>
       <a href="#engineering">Engineering</a>
-      <a class="btn btn-p btn-sm" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Book a consultation
+      <a class="btn btn-p btn-sm" href="#book" data-book>Book a consultation
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
     </nav>
   </div>
@@ -658,7 +675,7 @@
       <h1>Automate the work.<br><strong>Keep the judgment.</strong></h1>
       <p class="hero-sub">We build AI engines that take over the repetitive work of finance teams &mdash; close, reconciliation, partnership tax &mdash; and return it <b>drafted, tied out, and cited to source</b>. Independent verification checks every run. <b>Your people approve every output.</b></p>
       <div class="hero-ctas">
-        <a class="btn btn-p" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Book a free consultation
+        <a class="btn btn-p" href="#book" data-book>Book a free consultation
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
         <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Inspect the engineering
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
@@ -1047,7 +1064,7 @@
     <h2 class="reveal">Show us where <strong>the hours go.</strong></h2>
     <p class="lead reveal d1">One conversation. You describe the work that consumes your team's month; we tell you plainly what an engine can take over, what it can't, and what a scoped first phase would cost.</p>
     <div class="final-ctas reveal d2">
-      <a class="btn btn-w" href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Message us on LinkedIn
+      <a class="btn btn-w" href="#book" data-book>Book a free consultation
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a class="btn btn-wo" href="mailto:contact@sophonfinance.com">contact@sophonfinance.com</a>
     </div>
@@ -1077,7 +1094,46 @@
   </div>
 </footer>
 
-<div class="mcta"><a href="https://www.linkedin.com/in/sophonnarith/" target="_blank" rel="noopener">Book a free consultation</a></div>
+<div class="mcta"><a href="#book" data-book>Book a free consultation</a></div>
+
+<!-- ================= BOOKING MODAL ================= -->
+<div class="bookov" id="bookov" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+  <div class="bookp">
+    <button class="bookx" type="button" aria-label="Close" id="bookClose">&#215;</button>
+    <p class="kicker">Free consultation</p>
+    <h3 id="bookTitle">Show us where <strong>the hours go.</strong></h3>
+    <p class="bk-sub">Tell us a little about the work that consumes your team's month. We'll reply personally within one business day &mdash; what an engine can take over, what it can't, and what a scoped first phase would cost.</p>
+    <form action="https://formsubmit.co/contact@sophonfinance.com" method="POST">
+      <input type="hidden" name="_subject" value="New consultation request — sophonfinance.com">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_next" value="https://sophonfinance.com/thanks.html">
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+      <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Sophon Finance Systems — your consultation request has been received.&#10;&#10;What happens next: we review the work you described and reply personally within one business day with a plain answer — what an engine can take over, what it can't, and what a scoped first phase would cost. No software purchase, fixed-scope pricing after observation, and your people keep approval authority at every step.&#10;&#10;Why finance teams work with us:&#10;- 9 public finance engines — month-end close, cash and debt reconciliation, partnership tax (1065/K-1s), cash management and more — runnable and MIT-licensed on GitHub&#10;- 67,000+ automated tests gate every change, and every computed figure ships with cited evidence&#10;- Human-gated by design: nothing files or posts itself — your team approves every output&#10;- Built by a KPMG-trained, ex-Big Four accountant with Fortune 100 and 500 experience&#10;&#10;See the engineering yourself:&#10;GitHub: https://github.com/sophonfinance-wq/finance-automation-portfolio&#10;Website: https://sophonfinance.com&#10;LinkedIn: https://www.linkedin.com/in/sophonnarith/&#10;Email: contact@sophonfinance.com&#10;&#10;We'll be in touch shortly.&#10;&#10;Sophonnarith Hang&#10;Founder, Sophon Finance Systems&#10;Automate the work. Keep the judgment.">
+      <label for="bkName">Your name</label>
+      <input id="bkName" type="text" name="name" required autocomplete="name" placeholder="Jane Rivera">
+      <label for="bkEmail">Work email</label>
+      <input id="bkEmail" type="email" name="email" required autocomplete="email" placeholder="jane@company.com">
+      <label for="bkCo">Company</label>
+      <input id="bkCo" type="text" name="company" autocomplete="organization" placeholder="Company, Inc.">
+      <label for="bkMsg">What's eating your team's hours?</label>
+      <textarea id="bkMsg" name="message" placeholder="e.g. our month-end close takes nine days, reconciliation is manual&hellip;"></textarea>
+      <button class="btn btn-p" type="submit">Request my free consultation
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <p class="bk-note">You'll get an instant confirmation email with our background, and a personal reply within one business day. No spam, ever.</p>
+    </form>
+  </div>
+</div>
+<script>(function(){
+  var ov=document.getElementById('bookov');
+  if(!ov) return;
+  function open(e){ if(e)e.preventDefault(); ov.classList.add('open'); document.body.style.overflow='hidden'; var f=document.getElementById('bkName'); if(f) setTimeout(function(){f.focus();},60); }
+  function close(){ ov.classList.remove('open'); document.body.style.overflow=''; }
+  document.querySelectorAll('[data-book]').forEach(function(a){ a.addEventListener('click', open); });
+  document.getElementById('bookClose').addEventListener('click', close);
+  ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+})();</script>
 
 <script>
 (function () {
