@@ -4,7 +4,7 @@ from dataclasses import replace
 
 import pytest
 
-from recon_engine.wire_approval import (
+from cash_engine.wire_approval import (
     WireRequest,
     WireApprovalValidator,
     demo_wires,
