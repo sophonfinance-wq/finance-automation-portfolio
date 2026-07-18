@@ -154,6 +154,23 @@ Turn 2  resync DEBT-2000   lender statement restored
 Turn 3  resync DEBT-2001   dormant True -> False   (back in scope)
 ```
 
+## 🏦 Cash-manager controls (validation only)
+
+Five read-only validators model the monthly cash-manager control set on seeded,
+fictional data — integer cents, deterministic, never posting:
+
+| Module | Control |
+|---|---|
+| `recon_engine.bank_rec` | Bank→GL bridge: bank ending + deposits in transit − outstanding checks ± approved error plugs must equal the adjusted book balance. |
+| `recon_engine.outstanding_checks` | Outstanding/void/zero check register: aging vs a stale-date policy, void-amount rules, and an independently re-added outstanding total. |
+| `recon_engine.wire_approval` | Wire dual-approval: no approved or scheduled wire without two distinct approvers, both different from the initiator (segregation of duties). |
+| `recon_engine.bank_register` | Register continuity: every running balance re-derived row by row; closing foots; opening ties to prior close; optional bank tie-out. |
+| `recon_engine.cash_concentration` | Concentration sweep: sub-account sweeps re-added to the concentration inflow; roll-forward re-derived. |
+
+Each validator ends at READY FOR HUMAN REVIEW — mechanical cleanliness is a
+precondition for review, never a sign-off. A curated invariant grid exercises
+all five end-to-end (clean ties + one-cent tampers) across 5,000 parameter points.
+
 ## Tools
 `Excel / openpyxl` · `Python 3` · `Bank registers / lender statements` · `Claude Code / Cowork`
 
