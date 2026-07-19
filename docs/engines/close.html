@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Month-End Close — Sophon Finance Systems</title>
+<meta name="description" content="The recurring close, drafted under deterministic controls — how the Month-End Close engine works, what you provide, what you receive, and how to verify the engineering yourself on GitHub.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#ffffff; --bg-alt:#f4f4f4; --border:#e0e0e0; --border-strong:#c6c6c6; --text:#161616; --text-2:#525252; --text-3:#6f6f6f; --blue:#0f62fe; --blue-hover:#0043ce; --blue-tint:#edf5ff; --green:#198038;
+    --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6; }
+  .wrap { width:100%; max-width:980px; margin:0 auto; padding:0 22px; }
+  header.nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 0; }
+  .nav-in { display:flex; align-items:center; gap:16px; }
+  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
+  .brand-mark { width:24px; height:24px; }
+  .brand-word { font-weight:600; font-size:14px; letter-spacing:.2px; white-space:nowrap; }
+  .brand-word span { font-weight:300; }
+  .nav-in .backlink { margin-left:auto; color:var(--blue); text-decoration:none; font-size:14px; }
+  .nav-in .backlink:hover { text-decoration:underline; }
+  .btn { display:inline-flex; align-items:center; gap:18px; text-decoration:none; font-size:15px; padding:13px 18px; min-height:46px; border:1px solid transparent; }
+  .btn-p { background:var(--blue); color:#fff; } .btn-p:hover { background:var(--blue-hover); }
+  .btn-t { background:transparent; color:var(--blue); border-color:var(--blue); } .btn-t:hover { background:var(--blue); color:#fff; }
+  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
+  .hero { padding:54px 0 8px; }
+  h1 { font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-.3px; line-height:1.15; margin:8px 0 10px; }
+  h1 strong { font-weight:600; }
+  .tag { font-size:16px; color:var(--text-2); max-width:44em; }
+  .intro { font-size:16.5px; color:var(--text-2); max-width:46em; margin:18px 0 8px; }
+  figure.vis { margin:34px 0 8px; }
+  figure.vis img, figure.vis video { display:block; width:100%; height:auto; }
+  section { padding:34px 0 6px; }
+  h2 { font-size:clamp(20px,2.6vw,26px); font-weight:600; letter-spacing:-.2px; margin-bottom:14px; }
+  .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); }
+  .col { padding:22px 24px; }
+  .col + .col { border-left:1px solid var(--border); }
+  .col h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
+  .col.does h4 { color:var(--blue); } .col.gets h4 { color:var(--green); }
+  .item { display:flex; gap:9px; font-size:14px; color:var(--text-2); margin:9px 0; line-height:1.45; }
+  .item b { color:var(--text); }
+  .dot { flex:none; width:7px; height:7px; border-radius:50%; margin-top:7px; background:var(--border-strong); }
+  .does .dot { background:var(--blue); } .gets .dot { background:var(--green); }
+  .ctrl { border:1px solid var(--border); border-left:3px solid var(--blue); padding:18px 22px; margin-top:16px; }
+  .ctrl .lbl { font-family:var(--mono); font-size:11px; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:6px; }
+  .ctrl p { font-size:14.5px; color:var(--text-2); }
+  .ctrl .gate b { color:var(--text); }
+  .faq details { border:1px solid var(--border); padding:0; margin-top:10px; }
+  .faq summary { cursor:pointer; font-weight:600; font-size:15px; padding:15px 18px; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+  .faq summary::after { content:"+"; color:var(--blue); font-size:20px; font-weight:300; }
+  .faq details[open] summary::after { content:"\2212"; }
+  .faq details p { padding:0 18px 16px; font-size:14.5px; color:var(--text-2); }
+  .verify { background:var(--bg-alt); border:1px solid var(--border); padding:26px 26px 22px; margin-top:6px; }
+  .verify .runline { font-family:var(--mono); font-size:13px; background:#161616; color:#9ef0a0; padding:12px 16px; margin:14px 0 16px; overflow-x:auto; white-space:nowrap; }
+  .verify .links { display:flex; flex-wrap:wrap; gap:10px; }
+  .verify p { font-size:14.5px; color:var(--text-2); }
+  .cta { margin:44px 0 60px; background:var(--blue); color:#fff; padding:34px 30px; }
+  .cta h2 { color:#fff; margin-bottom:6px; }
+  .cta p { color:#d0e2ff; font-size:15px; max-width:44em; margin-bottom:18px; }
+  .btn-w { background:#fff; color:var(--blue); } .btn-w:hover { background:var(--blue-tint); }
+  .btn-wo { background:transparent; color:#fff; border-color:#fff; } .btn-wo:hover { background:rgba(255,255,255,.14); }
+  footer { border-top:1px solid var(--border); padding:18px 0 26px; font-size:13px; color:var(--text-3); }
+  footer a { color:var(--blue); text-decoration:none; }
+  @media (max-width:760px){ .cols { grid-template-columns:1fr; } .col + .col { border-left:none; border-top:1px solid var(--border); } }
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-word">Sophon <span>Finance Systems</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="kicker">ENGINE 01 &middot; FLAGSHIP</p>
+    <h1><strong>Month-End Close</strong></h1>
+    <p class="tag">The recurring close, drafted under deterministic controls</p>
+    <p class="intro">The month-end close isn't a single script &mdash; it's a library of recurring workpapers, each with its own arithmetic. The close engine drafts or validates every one under the same rule: recompute it independently, tie it to the ledger, and refuse to post anything a person hasn't approved. It runs 29 deterministic controls &mdash; 8 draft-capable, 21 validation-only, 0 that post without a human.</p>
+  </div>
+
+  <figure class="vis">
+    <img src="../assets/engine-close.webp" data-video="../assets/engine-close-motion.mp4" alt="Diagram: GL export, bank statements, and the prior close feed the close engine inside a ring of controls; out-of-tie entries are rejected while checked journal entries, close checklist, and close package come out" loading="eager">
+  </figure>
+
+  <section>
+    <h2>How the work moves</h2>
+    <div class="cols">
+      <div class="col"><h4>You provide</h4><div class="item"><span class="dot"></span><span>General ledger export</span></div><div class="item"><span class="dot"></span><span>Bank statements</span></div><div class="item"><span class="dot"></span><span>Last month's close package</span></div></div>
+      <div class="col does"><h4>The engine does</h4><div class="item"><span class="dot"></span><span>Drafts recurring entries, rolls schedules, ties to GL</span></div><div class="item"><span class="dot"></span><span>Runs the control sentinel: completeness, intercompany mirroring, shadow recompute, period lock</span></div><div class="item"><span class="dot"></span><span>Refuses to post any entry that doesn't tie</span></div></div>
+      <div class="col gets"><h4>You receive</h4><div class="item"><span class="dot"></span><span><b>Journal entries</b>, drafted and balanced</span></div><div class="item"><span class="dot"></span><span><b>Close checklist</b> with tie-outs</span></div><div class="item"><span class="dot"></span><span><b>Close package</b> for the controller</span></div></div>
+    </div>
+    <div class="ctrl"><span class="lbl">Controls</span><p>Deterministic sentinel controls, fault-injection proven &middot; out-of-tie entries cannot post</p></div>
+    <div class="ctrl" style="border-left-color:var(--green)"><span class="lbl" style="color:var(--green)">Human gate</span><p class="gate"><b>Your controller approves each entry before it posts. Nothing posts itself.</b></p></div>
+  </section>
+
+  <section class="faq">
+    <h2>What customers ask</h2>
+    <details><summary>What does it cover?</summary><p>Amortization &amp; depreciation, accruals &amp; interest, reporting packages, balances &amp; continuity, allocations &amp; fees, construction, and audit support &mdash; 29 recurring workpapers in all, each recomputed independently.</p></details><details><summary>What if something doesn't tie?</summary><p>Ties post with evidence. Routine breaks are corrected from source data and re-verified before they count. Judgment calls are quarantined and flagged for a person &mdash; never rubber-stamped.</p></details><details><summary>How fast is a close cycle?</summary><p>The drafting and tie-out work that consumes days of a team's month runs in minutes; your controller's review remains the pace-setter &mdash; by design.</p></details>
+  </section>
+
+  <section>
+    <h2>Verify it yourself</h2>
+    <div class="verify">
+      <p>Don't take this page's word for it. The engine is public, MIT-licensed, and runs on fictional seeded data &mdash; read the code, run it, and judge the work before you spend anything.</p>
+      <div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git<br>cd monthly-close-automation &nbsp;&amp;&amp;&nbsp; python run.py</div>
+      <div class="links">
+        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/monthly-close-automation" target="_blank" rel="noopener">Source on GitHub</a>
+        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+        <a class="btn btn-t" href="/tests/" >All tests, by engine</a>
+        <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta">
+    <h2>Show us where the hours go.</h2>
+    <p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. No software purchase &mdash; and your people keep approval authority.</p>
+    <a class="btn btn-w" href="/#book">Book a free consultation</a>
+    <a class="btn btn-wo" href="mailto:contact@sophonfinance.com">contact@sophonfinance.com</a>
+  </div>
+</main>
+
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+
+<script>
+// motion upgrade: diagram image swaps to its silent looping video when visible
+document.querySelectorAll('img[data-video]').forEach(function(img){
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){
+    if(!e.isIntersecting) return; io.unobserve(img);
+    var v=document.createElement('video');
+    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
+    v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay',''); v.setAttribute('loop',''); v.setAttribute('preload','auto');
+    v.poster=img.currentSrc||img.src; v.src=img.getAttribute('data-video');
+    v.width=img.width; v.height=img.height; v.setAttribute('role','img'); v.setAttribute('aria-label',img.alt);
+    img.replaceWith(v); var p=v.play(); if(p&&p.catch)p.catch(function(){});
+  }); },{rootMargin:'120px'});
+  io.observe(img);
+});
+</script>
+</body>
+</html>
