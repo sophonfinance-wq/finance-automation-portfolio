@@ -339,6 +339,9 @@
   .lout:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(15,42,92,.09); }
   .lout figure { margin:0; background:var(--bg-alt); border-bottom:1px solid var(--border); height:clamp(130px,16vw,190px); overflow:hidden; }
   .lout figure img, .lout figure video { display:block; width:100%; height:100%; object-fit:cover; }
+  /* outcome mini-diagrams: hand-typeset inline SVG, natural height — never crops */
+  .lout figure.ldg { height:auto; padding:16px 14px 8px; overflow:visible; }
+  .lout figure.ldg svg { display:block; width:100%; height:auto; }
   .lout h4 { font-size:15px; font-weight:600; margin:16px 20px 6px; }
   .lout p { font-size:13px; color:var(--text-2); line-height:1.5; margin:0 20px; }
   .lout.ok { border-top-color:var(--green); } .lout.ok h4 { color:var(--green); }
@@ -446,9 +449,25 @@
   .bookp textarea { min-height:96px; resize:vertical; }
   .bookp .btn-p { width:100%; margin-top:22px; }
   .bookp .bk-note { font-size:12px; color:var(--text-3); margin-top:14px; line-height:1.5; }
-  .bookx { position:absolute; top:12px; right:12px; width:40px; height:40px; background:none; border:none; cursor:pointer; color:var(--text-2); font-size:22px; line-height:1; }
+  .bookx { position:absolute; top:12px; right:12px; width:40px; height:40px; background:none; border:none; cursor:pointer; color:var(--text-2); font-size:22px; line-height:1; z-index:2; }
   .bookx:hover { color:var(--text); }
-  @media (max-width:560px){ .bookov { padding:0; align-items:flex-end; } .bookp { max-width:none; max-height:94vh; padding:28px 22px 24px; } }
+  /* booking: duration chooser + live scheduler */
+  .bookp.sched { max-width:660px; }
+  .bk-opts { display:flex; flex-direction:column; gap:12px; margin:20px 0 6px; }
+  .bk-opt { text-align:left; display:block; width:100%; background:var(--bg-alt); border:1px solid var(--border-strong); padding:16px 18px; cursor:pointer; transition:border-color .15s, box-shadow .15s; }
+  .bk-opt:hover { border-color:var(--blue); box-shadow:inset 0 0 0 1px var(--blue); }
+  .bk-opt-t { display:block; font-size:16px; font-weight:600; color:var(--text); }
+  .bk-opt-d { display:block; font-size:13px; color:var(--text-2); line-height:1.5; margin:4px 0 9px; }
+  .bk-opt-go { display:block; font-family:var(--mono); font-size:12px; color:var(--blue); letter-spacing:.4px; }
+  .bk-alt { display:inline-block; background:none; border:none; cursor:pointer; font-family:var(--sans); font-size:13px; color:var(--blue); padding:9px 0 2px; margin-top:6px; text-decoration:none; }
+  .bk-alt:hover { text-decoration:underline; }
+  .bk-back { background:none; border:none; cursor:pointer; font-family:var(--mono); font-size:12px; letter-spacing:.4px; color:var(--text-2); padding:2px 0 10px; }
+  .bk-back:hover { color:var(--text); }
+  .bk-frame { width:100%; height:min(64vh,564px); border:1px solid var(--border); overflow:hidden; background:var(--bg-alt); }
+  .bk-frame iframe { width:100%; height:100%; border:0; display:block; }
+  .bk-meet { display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--text-2); margin:2px 0 0; }
+  .bk-meet svg { width:15px; height:15px; }
+  @media (max-width:560px){ .bookov { padding:0; align-items:flex-end; } .bookp, .bookp.sched { max-width:none; max-height:94vh; padding:28px 22px 24px; } .bk-frame { height:74vh; } }
   /* ===== assistant pet (Sophie) ===== */
   #ask-launch { position:fixed; left:20px; bottom:20px; z-index:90; width:60px; height:60px; border-radius:50%; border:1px solid var(--border); background:#fff; box-shadow:0 6px 24px rgba(15,42,92,.16); cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center; transition:transform .18s ease, box-shadow .18s ease; }
   #ask-launch:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(15,98,254,.24); }
@@ -1060,17 +1079,60 @@
     </ol>
     <div class="loop-outs reveal" role="group" aria-label="Three outcomes of the control loop">
       <article class="lout ok">
-        <figure><img src="assets/heal/out-posts.webp" data-video="assets/heal/out-posts-motion.mp4" alt="A stack of finished financial documents sealed with a green checkmark badge and an audit-trail line." width="900" height="900" loading="lazy"></figure>
+        <figure class="ldg"><svg viewBox="0 0 440 190" role="img" aria-label="Flow diagram: the engine and an independent recompute meet at a tie gate; when they agree, the work posts with evidence attached." font-family="IBM Plex Mono, ui-monospace, monospace">
+          <defs><marker id="loArrG" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#198038"/></marker></defs>
+          <rect x="20" y="28" width="118" height="40" fill="#fff" stroke="#8d8d8d" stroke-width="1.5"/>
+          <rect x="20" y="116" width="118" height="40" fill="#fff" stroke="#8d8d8d" stroke-width="1.5"/>
+          <text x="79" y="53" font-size="14.5" fill="#161616" text-anchor="middle" letter-spacing="1">ENGINE</text>
+          <text x="79" y="141" font-size="14.5" fill="#161616" text-anchor="middle" letter-spacing="1">RECOMPUTE</text>
+          <path d="M138 48 H154 V88 H161" fill="none" stroke="#525252" stroke-width="1.6"/>
+          <path d="M138 136 H154 V88 H161" fill="none" stroke="#525252" stroke-width="1.6"/>
+          <path d="M198 56 L234 88 198 120 162 88 Z" fill="#fff" stroke="#161616" stroke-width="1.7"/>
+          <text x="198" y="93" font-size="14.5" fill="#161616" text-anchor="middle" letter-spacing="1">TIE</text>
+          <path d="M234 88 H266" fill="none" stroke="#198038" stroke-width="2" marker-end="url(#loArrG)"/>
+          <rect x="272" y="61" width="128" height="54" fill="#fff" stroke="#198038" stroke-width="2"/>
+          <text x="336" y="94" font-size="16" font-weight="600" fill="#198038" text-anchor="middle" letter-spacing="1.2">POSTS</text>
+          <circle cx="400" cy="61" r="13" fill="#198038"/>
+          <path d="M394 61l4.5 4.5L407 56.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="336" y="160" font-size="13.5" fill="#525252" text-anchor="middle" letter-spacing="1">EVIDENCE ATTACHED</text>
+        </svg></figure>
         <h4>Ties &rarr; posts with evidence</h4>
         <p>When the independent check confirms the work, it posts with a written audit trail.</p>
       </article>
       <article class="lout fix">
-        <figure><img src="assets/heal/out-fixed.webp" data-video="assets/heal/out-fixed-motion.mp4" alt="A spreadsheet cell being corrected by a repair arrow, then re-checked by a loop arrow." width="900" height="900" loading="lazy"></figure>
+        <figure class="ldg"><svg viewBox="0 0 440 190" role="img" aria-label="Flow diagram: a broken spreadsheet cell is fixed from source data, then re-verified with a green check before it counts." font-family="IBM Plex Mono, ui-monospace, monospace">
+          <defs><marker id="loArrN" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#525252"/></marker><marker id="loArrB" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#0f62fe"/></marker></defs>
+          <rect x="24" y="49" width="78" height="78" fill="#fff" stroke="#8d8d8d" stroke-width="1.3"/>
+          <path d="M50 49V127 M76 49V127 M24 75H102 M24 101H102" fill="none" stroke="#8d8d8d" stroke-width="1.3"/>
+          <rect x="50" y="75" width="26" height="26" fill="#d0e2ff" stroke="#0f62fe" stroke-width="2"/>
+          <text x="63" y="94" font-size="14" font-weight="600" fill="#0f62fe" text-anchor="middle">!</text>
+          <text x="63" y="160" font-size="13.5" fill="#525252" text-anchor="middle" letter-spacing="1">BREAK</text>
+          <path d="M108 88 H136" fill="none" stroke="#525252" stroke-width="1.8" marker-end="url(#loArrN)"/>
+          <rect x="144" y="59" width="130" height="58" fill="#fff" stroke="#0f62fe" stroke-width="2"/>
+          <text x="209" y="84" font-size="14.5" fill="#0f62fe" text-anchor="middle" letter-spacing="1">FIX FROM</text>
+          <text x="209" y="103" font-size="14.5" fill="#0f62fe" text-anchor="middle" letter-spacing="1">SOURCE</text>
+          <path d="M274 88 H302" fill="none" stroke="#525252" stroke-width="1.8" marker-end="url(#loArrN)"/>
+          <path d="M372 68 A28 28 0 1 1 380 83" fill="none" stroke="#0f62fe" stroke-width="2" marker-end="url(#loArrB)"/>
+          <path d="M340 89 l8 8 L366 77" fill="none" stroke="#198038" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="352" y="160" font-size="13.5" fill="#525252" text-anchor="middle" letter-spacing="1">RE-VERIFIED</text>
+        </svg></figure>
         <h4>Routine break &rarr; fixed from source</h4>
         <p>A mis-keyed cell or dropped intercompany leg is corrected, then re-verified before it counts.</p>
       </article>
       <article class="lout esc">
-        <figure><img src="assets/heal/out-person.webp" data-video="assets/heal/out-person-motion.mp4" alt="A flagged card routed along a track to a person seated at a desk for review." width="900" height="900" loading="lazy"></figure>
+        <figure class="ldg"><svg viewBox="0 0 440 190" role="img" aria-label="Flow diagram: work the loop cannot prove is quarantined and flagged, then routed to a person who makes the decision." font-family="IBM Plex Mono, ui-monospace, monospace">
+          <defs><marker id="loArrN2" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#525252"/></marker></defs>
+          <rect x="34" y="56" width="140" height="64" fill="#fff" stroke="#b0850f" stroke-width="1.8" stroke-dasharray="7 5"/>
+          <path d="M160 56 V32" fill="none" stroke="#8a6a00" stroke-width="2"/>
+          <path d="M160 32 L178 38 160 44 Z" fill="#b0850f"/>
+          <text x="104" y="93" font-size="14.5" fill="#8a6a00" text-anchor="middle" letter-spacing="1">UNPROVEN</text>
+          <text x="104" y="160" font-size="13.5" fill="#525252" text-anchor="middle" letter-spacing="1">QUARANTINED</text>
+          <path d="M174 88 H232" fill="none" stroke="#525252" stroke-width="1.8" marker-end="url(#loArrN2)"/>
+          <circle cx="310" cy="66" r="14" fill="#fff" stroke="#161616" stroke-width="2"/>
+          <path d="M282 112 C282 90 338 90 338 112" fill="#fff" stroke="#161616" stroke-width="2"/>
+          <line x1="272" y1="118" x2="348" y2="118" stroke="#8d8d8d" stroke-width="1.5"/>
+          <text x="310" y="160" font-size="13.5" fill="#161616" text-anchor="middle" letter-spacing="1">A PERSON DECIDES</text>
+        </svg></figure>
         <h4>Judgment call &rarr; a person</h4>
         <p>What the loop cannot prove is quarantined and flagged &mdash; never rubber-stamped.</p>
       </article>
@@ -1173,6 +1235,38 @@
 <div class="bookov" id="bookov" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
   <div class="bookp">
     <button class="bookx" type="button" aria-label="Close" id="bookClose">&#215;</button>
+
+    <!-- View 1: pick a call length and self-book against the live calendar (shown only when scheduling is configured) -->
+    <div id="bookChoose" hidden>
+      <p class="kicker">Free consultation</p>
+      <h3>Book a <strong>call with Sophon.</strong></h3>
+      <p class="bk-sub">Pick a time straight from my live calendar &mdash; a <b>Google&nbsp;Meet</b> video link lands in your inbox the moment you book. Prefer a phone call? Just note it when you book.</p>
+      <div class="bk-opts">
+        <button type="button" class="bk-opt" data-dur="30">
+          <span class="bk-opt-t">30-minute intro call</span>
+          <span class="bk-opt-d">A quick read on where your team's hours go and whether an engine fits.</span>
+          <span class="bk-opt-go">Pick a time &rarr;</span>
+        </button>
+        <button type="button" class="bk-opt" data-dur="60">
+          <span class="bk-opt-t">60-minute working session</span>
+          <span class="bk-opt-d">A deeper walk through one process &mdash; close, reconciliation, tax &mdash; and a scoped first phase.</span>
+          <span class="bk-opt-go">Pick a time &rarr;</span>
+        </button>
+      </div>
+      <p class="bk-meet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l4.55-2.28A1 1 0 0121 8.62v6.76a1 1 0 01-1.45.9L15 14M4 7h9a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2z"/></svg> Video by Google Meet &middot; times shown in your timezone</p>
+      <button type="button" class="bk-alt" id="bkToForm">Prefer we email you instead? Send a note &rarr;</button>
+    </div>
+
+    <!-- View 2: the chosen Google Appointment Schedule, embedded -->
+    <div id="bookSched" hidden>
+      <button type="button" class="bk-back" id="bkBack">&larr; Back</button>
+      <p class="kicker" id="bkSchedKick">Book a time</p>
+      <div class="bk-frame"><iframe id="bkFrame" title="Book a time with Sophon Finance Systems" src="" loading="lazy"></iframe></div>
+      <a class="bk-alt" id="bkNewtab" href="#" target="_blank" rel="noopener">Trouble loading? Open the booking page in a new tab &#8599;</a>
+    </div>
+
+    <!-- View 3: the email form (default, and the fallback before scheduling is set up) -->
+    <div id="bookForm">
     <p class="kicker">Free consultation</p>
     <h3 id="bookTitle">Show us where <strong>the hours go.</strong></h3>
     <p class="bk-sub">Tell us a little about the work that consumes your team's month. We'll reply personally within one business day &mdash; what an engine can take over, what it can't, and what a scoped first phase would cost.</p>
@@ -1195,18 +1289,71 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       <p class="bk-note">You'll get an instant confirmation email with our background, and a personal reply within one business day. No spam, ever.</p>
     </form>
+    </div><!-- /#bookForm -->
   </div>
 </div>
 <script>(function(){
   var ov=document.getElementById('bookov');
   if(!ov) return;
-  function open(e){ if(e)e.preventDefault(); ov.classList.add('open'); document.body.style.overflow='hidden'; var f=document.getElementById('bkName'); if(f) setTimeout(function(){f.focus();},60); }
-  function close(){ ov.classList.remove('open'); document.body.style.overflow=''; }
+
+  // ── Live self-scheduling via Google Calendar Appointment Schedules. ──────────
+  // Paste your two booking-page URLs below (create them in Google Calendar →
+  // "Appointment schedules", with Google Meet as the location — see the setup
+  // notes). Use the URL from each schedule's "Embed" / share option. While BOTH
+  // are blank the modal just shows the email form (current behavior), so nothing
+  // breaks before you set it up. Set one or both to switch on self-booking.
+  var BOOK30 = ""; // 30-minute intro call  — Google Appointment Schedule URL
+  var BOOK60 = ""; // 60-minute working session — Google Appointment Schedule URL
+
+  var urls = { "30": BOOK30, "60": BOOK60 };
+  var hasSched = !!(BOOK30 || BOOK60);
+  var choose=document.getElementById('bookChoose'),
+      sched=document.getElementById('bookSched'),
+      formv=document.getElementById('bookForm'),
+      bp=ov.querySelector('.bookp'),
+      frame=document.getElementById('bkFrame'),
+      newtab=document.getElementById('bkNewtab'),
+      schedKick=document.getElementById('bkSchedKick');
+  var LABELS = { "30":"30-minute intro call", "60":"60-minute working session" };
+
+  function view(v){
+    choose.hidden = (v!=='choose');
+    sched.hidden  = (v!=='sched');
+    formv.hidden  = (v!=='form');
+    if(bp) bp.classList.toggle('sched', v==='sched');
+    if(v!=='sched' && frame){ frame.src='about:blank'; } // stop the embed when not shown
+  }
+  // Hide any duration whose URL isn't configured; if none, we won't use the chooser.
+  ov.querySelectorAll('.bk-opt').forEach(function(b){ if(!urls[b.getAttribute('data-dur')]) b.hidden=true; });
+
+  function openSched(dur){
+    var u=urls[dur]; if(!u) return;
+    if(frame) frame.src=u;
+    if(newtab) newtab.href=u;
+    if(schedKick) schedKick.textContent=LABELS[dur]||'Book a time';
+    view('sched');
+  }
+
+  function open(e){
+    if(e && e.preventDefault) e.preventDefault();
+    view(hasSched ? 'choose' : 'form');
+    ov.classList.add('open'); document.body.style.overflow='hidden';
+    setTimeout(function(){
+      var f = hasSched ? ov.querySelector('.bk-opt:not([hidden])') : document.getElementById('bkName');
+      if(f) f.focus();
+    },60);
+  }
+  function close(){ ov.classList.remove('open'); document.body.style.overflow=''; if(frame) frame.src='about:blank'; }
+
+  ov.querySelectorAll('.bk-opt').forEach(function(b){ b.addEventListener('click', function(){ openSched(b.getAttribute('data-dur')); }); });
+  var toForm=document.getElementById('bkToForm'); if(toForm) toForm.addEventListener('click', function(){ view('form'); var n=document.getElementById('bkName'); if(n) n.focus(); });
+  var back=document.getElementById('bkBack'); if(back) back.addEventListener('click', function(){ view('choose'); });
+
   document.querySelectorAll('[data-book]').forEach(function(a){ a.addEventListener('click', open); });
   if(location.hash==='#book') setTimeout(open, 300);
   document.getElementById('bookClose').addEventListener('click', close);
   ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && ov.classList.contains('open')) close(); });
 })();</script>
 
 <script>(function(){
@@ -1238,17 +1385,34 @@
   </div>
   <div class="ask-body" id="askBody"></div>
   <form class="ask-foot" id="askForm" autocomplete="off">
-    <input id="askInput" type="text" placeholder="Ask about our engines, pricing, code&hellip;" aria-label="Type your question" maxlength="240">
+    <input id="askInput" type="text" placeholder="Ask me anything &mdash; engines, the close, K-1s, pricing, security&hellip;" aria-label="Type your question" maxlength="500">
     <button type="submit" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
   </form>
 </div>
+<style>
+  .ask-dots{ display:inline-flex; gap:5px; align-items:center; padding:3px 1px; }
+  .ask-dots i{ width:6px; height:6px; border-radius:50%; background:#8a94a6; display:inline-block; animation:askblink 1.2s infinite ease-in-out both; }
+  .ask-dots i:nth-child(2){ animation-delay:.16s; } .ask-dots i:nth-child(3){ animation-delay:.32s; }
+  @keyframes askblink{ 0%,80%,100%{ opacity:.25; transform:translateY(0);} 40%{ opacity:1; transform:translateY(-3px);} }
+  #askInput:disabled{ opacity:.6; }
+  @media (prefers-reduced-motion:reduce){ .ask-dots i{ animation:none; } }
+</style>
 <script>(function(){
   var launch=document.getElementById('ask-launch'), panel=document.getElementById('ask-panel'),
       body=document.getElementById('askBody'), form=document.getElementById('askForm'), input=document.getElementById('askInput');
   if(!launch||!panel) return;
 
-  var GREET="Hi, I'm Sophie — the Sophon assistant. Ask me about our engines (close, reconciliation, partnership tax, cash management), how it works, what it costs, or the code. What's eating your team's hours?";
-  var CHIPS=["Can you build reconciliation engines?","How does month-end close work?","What does it cost?","Show me the code"];
+  // ── Live AI when SOPHIE_API is set; offline keyword brain otherwise. ──────────
+  // SOPHIE_API points at a Cloudflare Worker that holds the Anthropic key as a
+  // secret (see /worker/README.md). Paste your deployed Worker URL below and
+  // Sophie becomes a real Claude-powered assistant. Leave it blank — or if the
+  // proxy is ever unreachable, rate-limited, or offline — and she answers from
+  // the built-in brain instead, so the site is never broken.
+  var SOPHIE_API = ""; // ← paste your Cloudflare Worker URL here to switch Sophie to live AI
+  var convo = [];      // running conversation (multi-turn memory) sent to the proxy
+
+  var GREET="Hi, I'm Sophie — the Sophon Finance assistant. Ask me anything: how our engines handle the close, reconciliation, or partnership tax; what a K-1 or a deterministic control actually is; what this costs; or how the code holds up. Where do your team's hours go?";
+  var CHIPS=["How does month-end close work?","Can you build a reconciliation engine?","What does it cost?","Is my data safe?","Talk to a human"];
   var FB={a:"Good question — I'm not certain on that one, but a real person can answer it fast. The first conversation is free.", l:[["Email us","mail"]], book:true};
   var FB2={a:"Still not finding it — let me hand you to a person. Email us or book a free call and we'll answer directly, usually within one business day.", l:[["Email us","mail"]], book:true};
   var fbCount=0;
@@ -1309,6 +1473,32 @@
     if(t==='li') return 'https://www.linkedin.com/in/sophonnarith/';
     return t;
   }
+  // Render a row of link buttons on a bot message. Handles on-page anchors
+  // (smooth-scroll), external links (new tab), and internal pages like
+  // engines/close.html (same tab). `book` appends the booking CTA.
+  function renderLinks(m, links, book){
+    links = links || [];
+    if(!links.length && !book) return;
+    var w=el('div','ask-links');
+    links.forEach(function(pair){
+      var t=pair[1], href=hrefFor(t), a=el('a','ask-link',pair[0]);
+      if(t.charAt(0)==='#'){
+        a.href=href;
+        a.addEventListener('click',function(e){ e.preventDefault(); closePanel(); var e2=document.querySelector(href); if(e2) e2.scrollIntoView({behavior:'smooth'}); });
+      } else if(/^(https?:|mailto:)/.test(href)){
+        a.href=href; a.target='_blank'; a.rel='noopener';
+      } else {
+        a.href=href; // internal relative page (engines/*.html) → navigate in same tab
+      }
+      w.appendChild(a);
+    });
+    if(book){
+      var b=el('a','ask-link','Book a free consultation'); b.href='#book';
+      b.addEventListener('click',function(e){ e.preventDefault(); closePanel(); var t=document.querySelector('[data-book]'); if(t) t.click(); });
+      w.appendChild(b);
+    }
+    m.appendChild(w);
+  }
   function norm(s){ return ' '+String(s).toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim()+' '; }
   function scoreTier(q,tier){
     var best=null, bs=0;
@@ -1337,31 +1527,127 @@
     if(isFb && fbCount>=1) intent=FB2;
     fbCount = isFb ? fbCount+1 : 0;
     var m=el('div','ask-msg bot'); m.appendChild(el('div',null,intent.a));
-    var links=(intent.l||[]).slice();
-    var wrap=null;
-    function ensureWrap(){ if(!wrap){ wrap=el('div','ask-links'); m.appendChild(wrap);} return wrap; }
-    links.forEach(function(pair){
-      var w=ensureWrap(), t=pair[1], href=hrefFor(t), a=el('a','ask-link',pair[0]);
-      if(t.charAt(0)==='#'){ a.href=href; a.addEventListener('click',function(e){ e.preventDefault(); closePanel(); var el2=document.querySelector(href); if(el2) el2.scrollIntoView({behavior:'smooth'}); }); }
-      else { a.href=href; a.target='_blank'; a.rel='noopener'; }
-      w.appendChild(a);
-    });
-    if(intent.book){ var w=ensureWrap(), b=el('a','ask-link','Book a free consultation'); b.href='#book'; b.addEventListener('click',function(e){ e.preventDefault(); closePanel(); var t=document.querySelector('[data-book]'); if(t) t.click(); }); w.appendChild(b); }
+    renderLinks(m, intent.l, intent.book);
     body.appendChild(m); scrollDown();
     if(intent.greetChips) addChips();
   }
   function addChips(){
     var c=el('div','ask-chips');
-    CHIPS.forEach(function(q){ var ch=el('button','ask-chip',q); ch.type='button'; ch.addEventListener('click',function(){ addUser(q); setTimeout(function(){ addBot(findIntent(q)); },160); }); c.appendChild(ch); });
+    CHIPS.forEach(function(q){ var ch=el('button','ask-chip',q); ch.type='button'; ch.addEventListener('click',function(){ send(q); }); c.appendChild(ch); });
     body.appendChild(c); scrollDown();
   }
+
+  // ── typing indicator ─────────────────────────────────────────────────────────
+  function showTyping(){
+    if(document.getElementById('ask-typing')) return;
+    var t=el('div','ask-msg bot'); t.id='ask-typing';
+    var d=el('span','ask-dots'); d.appendChild(el('i')); d.appendChild(el('i')); d.appendChild(el('i'));
+    t.appendChild(d); body.appendChild(t); scrollDown();
+  }
+  function removeTyping(){ var t=document.getElementById('ask-typing'); if(t) t.remove(); }
+
+  // Contextual link buttons appended after a live-AI answer, inferred from its text.
+  function attachLinks(m, text){
+    var q=' '+String(text).toLowerCase().replace(/[^a-z0-9]+/g,' ')+' ';
+    var links=[], seen={};
+    function add(label,tok){ if(seen[tok]) return; seen[tok]=1; links.push([label,tok]); }
+    if(/ close | month end | monthend /.test(q)) add('Month-End Close','engines/close.html');
+    if(/ reconcil| bank rec | recon /.test(q)) add('Reconciliation','engines/recon.html');
+    if(/ 1065 | k 1 | k1 | partnership tax /.test(q)) add('Partnership Tax','engines/tax.html');
+    if(/ validation | read only /.test(q)) add('Validation','engines/validation.html');
+    if(/ cash management | treasury | liquidity /.test(q)) add('Cash Management','engines/cash.html');
+    if(/ github | source | inspect | repository | the code | 67 664 | tests /.test(q)) add('Inspect the code','gh');
+    if(!links.length && / engine| engines /.test(q)) add('See the engines','#engines');
+    links=links.slice(0,2);
+    var book=/ book | call | consult| conversation | get started | contact | reach us | email us | pric| cost | quote /.test(q);
+    renderLinks(m, links, book);
+  }
+
+  // Build the messages payload: last turns, trimmed to start on a user message.
+  function payload(){
+    var arr=convo.slice(-16);
+    while(arr.length && arr[0].role!=='user') arr.shift();
+    return arr;
+  }
+
+  // ── live AI: stream Claude's reply from the proxy; reject so caller can fall back ──
+  // A watchdog aborts if the proxy stalls (no first byte, or a mid-stream hang) so
+  // the widget never freezes — on abort we fall back to the offline brain.
+  function streamAPI(){
+    var ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+    var wd=null, bubble=null, txt=null, acc='';
+    function arm(ms){ if(!ctrl) return; clearTimeout(wd); wd=setTimeout(function(){ try{ ctrl.abort(); }catch(e){} }, ms); }
+    arm(25000); // no first byte within 25s → abort → fallback
+    return fetch(SOPHIE_API, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'X-Sophie-Client':'1' },
+      body:JSON.stringify({ messages: payload() }),
+      signal: ctrl && ctrl.signal
+    }).then(function(res){
+      if(!res.ok || !res.body) throw new Error('http '+res.status);
+      var reader=res.body.getReader(), dec=new TextDecoder();
+      function pump(){
+        return reader.read().then(function(r){
+          if(r.done) return;
+          var chunk=dec.decode(r.value,{stream:true});
+          if(chunk){
+            acc+=chunk; arm(20000); // reset watchdog on activity (mid-stream stall guard)
+            if(!bubble){ removeTyping(); bubble=el('div','ask-msg bot'); txt=el('div'); bubble.appendChild(txt); body.appendChild(bubble); }
+            txt.textContent=acc; scrollDown();
+          }
+          return pump();
+        });
+      }
+      return pump();
+    }).then(function(){
+      clearTimeout(wd);
+      acc=(acc||'').trim();
+      if(!acc){ if(bubble) bubble.remove(); throw new Error('empty'); }
+      convo.push({ role:'assistant', content:acc });
+      attachLinks(bubble, acc); scrollDown();
+    }, function(err){
+      clearTimeout(wd);
+      // Mid-stream failure with text already on screen → keep it, treat as answered
+      // (don't double-reply). Nothing rendered yet → rethrow so send() falls back.
+      if(bubble && acc.trim()){
+        convo.push({ role:'assistant', content:acc.trim() });
+        attachLinks(bubble, acc.trim()); scrollDown();
+        return;
+      }
+      if(bubble) bubble.remove();
+      throw err;
+    });
+  }
+
+  // Fallback answer from the built-in brain; kept in convo so turns stay alternating.
+  function offlineReply(v){
+    var intent=findIntent(v);
+    addBot(intent);
+    convo.push({ role:'assistant', content:(intent.a||'').slice(0,1200) });
+  }
+
+  var busy=false;
+  function send(v){
+    v=String(v||'').trim(); if(!v || busy) return;
+    addUser(v); convo.push({ role:'user', content:v.slice(0,2000) });
+    input.value='';
+    if(!SOPHIE_API){ busy=true; setTimeout(function(){ offlineReply(v); busy=false; input.focus(); },150); return; }
+    busy=true; input.disabled=true; showTyping();
+    streamAPI().then(function(){
+      removeTyping(); input.disabled=false; busy=false; input.focus();
+    }).catch(function(){
+      removeTyping(); offlineReply(v); input.disabled=false; busy=false; input.focus();
+    });
+  }
+
   var greeted=false;
   function openPanel(){ panel.classList.add('open'); if(!greeted){ greeted=true; var g=el('div','ask-msg bot',GREET); body.appendChild(g); addChips(); } setTimeout(function(){ input.focus(); },80); }
   function closePanel(){ panel.classList.remove('open'); }
   launch.addEventListener('click',function(){ panel.classList.contains('open')?closePanel():openPanel(); });
   document.getElementById('askClose').addEventListener('click',closePanel);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') closePanel(); });
-  form.addEventListener('submit',function(e){ e.preventDefault(); var v=input.value.trim(); if(!v) return; addUser(v); input.value=''; setTimeout(function(){ addBot(findIntent(v)); },180); });
+  form.addEventListener('submit',function(e){ e.preventDefault(); send(input.value); });
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter' && !e.isComposing){ e.preventDefault(); send(input.value); } });
 })();</script>
 
 <script>
