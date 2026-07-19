@@ -115,6 +115,32 @@
   .nav-in { display:flex; align-items:center; justify-content:space-between; height:60px; gap:16px; }
   .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
   .brand-mark { flex:none; width:26px; height:26px; display:block; }
+  /* brand-mark micro-animation: the chart line draws itself on load, the peak dot
+     pops in, then every ~7s a glint of light travels up the line and the dot pings.
+     The dark baseline never moves — the line climbs, the foundation holds. */
+  .brand-mark .bm-line { stroke-dasharray:100; stroke-dashoffset:0; animation:bmdraw .9s cubic-bezier(.4,0,.2,1) .15s backwards; }
+  @keyframes bmdraw { from { stroke-dashoffset:100; } to { stroke-dashoffset:0; } }
+  .brand-mark .bm-dot { transform-box:fill-box; transform-origin:center; animation:bmdot .45s cubic-bezier(.34,1.56,.64,1) .95s backwards; }
+  @keyframes bmdot { from { transform:scale(0); } to { transform:scale(1); } }
+  .brand-mark .bm-glint { stroke-dasharray:16 184; stroke-dashoffset:16; opacity:0; animation:bmglint 7s linear 2.4s infinite; }
+  @keyframes bmglint {
+    0% { stroke-dashoffset:16; opacity:0; }
+    2% { opacity:.95; }
+    20% { stroke-dashoffset:-100; opacity:.95; }
+    23% { opacity:0; }
+    100% { stroke-dashoffset:-100; opacity:0; }
+  }
+  .brand-mark .bm-ping { opacity:0; transform-box:fill-box; transform-origin:center; animation:bmping 7s ease-out 2.4s infinite; }
+  @keyframes bmping {
+    0%, 16% { opacity:0; transform:scale(1); }
+    19% { opacity:.75; transform:scale(1.15); }
+    31% { opacity:0; transform:scale(2.7); }
+    100% { opacity:0; transform:scale(2.7); }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .brand-mark .bm-line, .brand-mark .bm-dot { animation:none; }
+    .brand-mark .bm-glint, .brand-mark .bm-ping { animation:none; opacity:0; }
+  }
   .brand-word { font-weight:600; font-size:14.5px; letter-spacing:.2px; white-space:nowrap; }
   .brand-word span { font-weight:300; }
   .nav-links { display:flex; align-items:center; gap:2px; }
@@ -742,8 +768,10 @@
   <div class="wrap nav-in">
     <a class="brand" href="#top" aria-label="Sophon Finance Systems — home">
       <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
-        <path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="38" cy="14" r="3" fill="#0f62fe"/>
+        <path class="bm-line" pathLength="100" d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="bm-glint" pathLength="100" d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#d0e2ff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle class="bm-dot" cx="38" cy="14" r="3" fill="#0f62fe"/>
+        <circle class="bm-ping" cx="38" cy="14" r="3" fill="none" stroke="#0f62fe" stroke-width="1.4"/>
         <rect x="10" y="35" width="28" height="3" fill="#161616"/>
       </svg>
       <span class="brand-word">Sophon <span>Finance Systems</span></span>
