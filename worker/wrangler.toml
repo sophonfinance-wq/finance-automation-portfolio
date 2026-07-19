@@ -1,0 +1,24 @@
+# Cloudflare Worker config for Sophie (the site assistant proxy).
+# Deploy with:  npx wrangler deploy   (from inside the worker/ folder)
+
+name = "sophie-proxy"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Per-IP rate limiting uses this KV namespace. It is REQUIRED: the Worker fails
+# closed and returns 503 until SOPHIE_RL is bound (so you can never accidentally
+# run an unthrottled proxy on your key). Create it once with:
+#   npx wrangler kv namespace create SOPHIE_RL
+# then paste the returned id below and uncomment these three lines.
+# [[kv_namespaces]]
+# binding = "SOPHIE_RL"
+# id = "PASTE_THE_ID_FROM_THE_COMMAND_ABOVE"
+
+# Escape hatch: to run without the KV limiter (only if you added a Cloudflare edge
+# Rate-Limiting rule instead), uncomment the next two lines.
+# [vars]
+# REQUIRE_RL = "false"
+
+# The ANTHROPIC_API_KEY is NOT stored here. It is a secret, set once with:
+#   npx wrangler secret put ANTHROPIC_API_KEY
+# Secrets are encrypted by Cloudflare and never appear in this file or the repo.
