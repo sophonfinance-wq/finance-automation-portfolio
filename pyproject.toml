@@ -1,0 +1,63 @@
+# Root tooling config for the finance-automation-portfolio.
+# Shared lint / type-check / test settings for all systems in the monorepo.
+# (Each system is a self-contained package; this file holds the common config.)
+
+[project]
+name = "finance-automation-portfolio"
+version = "1.1.0"
+description = "Nine runnable, deterministic Python systems for finance & tax — human-gated, fictional-data, CI-backed."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [{ name = "Sophonnarith Hang", email = "contact@sophonfinance.com" }]
+dependencies = ["openpyxl==3.1.5"]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.0", "ruff>=0.6", "mypy>=1.11"]
+
+[project.urls]
+Homepage = "https://sophonfinance.com"
+Repository = "https://github.com/sophonfinance-wq/finance-automation-portfolio"
+
+# ---------------------------------------------------------------------------
+# Testing
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = [
+  "monthly-close-automation",
+  "cash-reconciliation",
+  "cash-management",
+  "tax-surplus-engine",
+  "partnership-1065-automation",
+  "audit-automation",
+  "ai-validation-framework",
+  "knowledge-brain-engine",
+  "finance-atlas",
+]
+
+# ---------------------------------------------------------------------------
+# Ruff — lint + format (fast, no external formatter needed)
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["**/out", "docs", "assets"]
+
+[tool.ruff.lint]
+# Sensible, non-noisy default set; the deterministic engines should pass as-is.
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]  # line length is enforced by the formatter, not the linter
+
+# ---------------------------------------------------------------------------
+# mypy — type checking (the engines are already fully annotated)
+# ---------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.12"
+warn_unused_ignores = true
+warn_redundant_casts = true
+no_implicit_optional = true
+check_untyped_defs = true
+# Start pragmatic; tighten to strict per-package once green.
+ignore_missing_imports = true
+exclude = "(^|/)(out|docs|assets)/"
