@@ -243,12 +243,18 @@
 
   /* ============ FLAGSHIP ENGINES ============ */
   .flag { border:1px solid var(--border); background:#fff; margin-top:28px; }
-  .flag-head { display:flex; align-items:baseline; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    padding:22px 28px; border-bottom:1px solid var(--border); }
+  .flag-head { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    padding:42px 28px; border-bottom:1px solid var(--border); }
+  .flag-head > .flag-id, .flag-head > .flag-tag { position:relative; z-index:2; }
   .flag-id { display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
   .flag-num { font-family:var(--mono); font-size:12px; font-weight:500; color:var(--blue); letter-spacing:.5px; }
   .flag-id h3 { font-size:21px; font-weight:600; letter-spacing:-.2px; }
   .flag-tag { font-size:13.5px; color:var(--text-3); }
+  /* card background film (mini-hero behind headers/blocks) */
+  .filmbg { position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+  .filmbg video { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .filmbg::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, var(--bg) 0%, rgba(255,255,255,.58) 28%, rgba(255,255,255,.52) 72%, var(--bg) 100%); }
+  @media (prefers-reduced-motion:reduce){ .filmbg video { display:none; } }
   .flag-vis { background:#fff; }
   .flag-vis img, .flag-vis video { display:block; width:100%; max-width:920px; height:auto; margin:0 auto; }
   .flag-body { display:grid; grid-template-columns:1fr 1.1fr 1fr; }
@@ -778,6 +784,7 @@
 
     <article class="flag reveal" id="close">
       <div class="flag-head">
+        <div class="filmbg" aria-hidden="true"><video muted loop playsinline preload="none" data-cardfilm="assets/cardfilm-close.mp4"></video></div>
         <div class="flag-id"><span class="flag-num">ENGINE 01</span><h3>Month-End Close</h3></div>
         <span class="flag-tag">The recurring close, drafted under ten deterministic controls</span>
       </div>
@@ -813,6 +820,7 @@
 
     <article class="flag reveal" id="recon">
       <div class="flag-head">
+        <div class="filmbg" aria-hidden="true"><video muted loop playsinline preload="none" data-cardfilm="assets/cardfilm-recon.mp4"></video></div>
         <div class="flag-id"><span class="flag-num">ENGINE 02</span><h3>Cash &amp; Debt Reconciliation</h3></div>
         <span class="flag-tag">The full population of accounts &mdash; not a sample &mdash; matched and explained</span>
       </div>
@@ -847,6 +855,7 @@
 
     <article class="flag reveal">
       <div class="flag-head">
+        <div class="filmbg" aria-hidden="true"><video muted loop playsinline preload="none" data-cardfilm="assets/cardfilm-tax.mp4"></video></div>
         <div class="flag-id"><span class="flag-num">ENGINE 03</span><h3>Partnership Tax &middot; Form 1065</h3></div>
         <span class="flag-tag">Returns and K-1s, prepared for your CPA's review</span>
       </div>
@@ -1174,6 +1183,16 @@
   document.getElementById('bookClose').addEventListener('click', close);
   ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+})();</script>
+
+<script>(function(){
+  var vids=document.querySelectorAll('video[data-cardfilm]');
+  if(!vids.length) return;
+  function play(v){ if(!v.dataset.l){ var s=document.createElement('source'); s.src=v.getAttribute('data-cardfilm'); s.type='video/mp4'; v.appendChild(s); v.load(); v.dataset.l=1; } var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
+  if('IntersectionObserver'in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ var v=e.target; if(e.isIntersecting) play(v); else if(v.dataset.l) v.pause(); }); },{rootMargin:'150px'});
+    vids.forEach(function(v){ io.observe(v); });
+  } else { vids.forEach(play); }
 })();</script>
 
 <!-- ================= ASSISTANT PET (Sophie) ================= -->
