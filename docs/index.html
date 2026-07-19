@@ -576,16 +576,16 @@
     repeating-linear-gradient(0deg, rgba(15,98,254,.05) 0 1px, transparent 1px 56px),
     repeating-linear-gradient(90deg, rgba(15,98,254,.05) 0 1px, transparent 1px 56px),
     linear-gradient(180deg, rgba(255,255,255,.97) 0%, rgba(255,255,255,.9) 22%, rgba(255,255,255,.9) 78%, rgba(255,255,255,.97) 100%); }
-  #close-depth .cov-map { background:rgba(255,255,255,.88); border:1px solid var(--border-strong); padding:24px 22px 14px; margin:28px 0 0; }
+  #close-depth .cov-map { background:rgba(255,255,255,.88); border:1px solid var(--border); padding:24px 22px 14px; margin:28px 0 0; }
   #close-depth .cov-map svg { display:block; width:100%; height:auto; }
   #close-depth .cov-map .map-m { display:none; }
-  #close-depth .cov-map-note { font-family:var(--mono); font-size:11.5px; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin-top:12px; padding-top:10px; border-top:1px dashed var(--border-strong); }
+  #close-depth .cov-map-note { font-size:13px; color:var(--text-3); margin-top:12px; padding-top:10px; border-top:1px solid var(--border); }
   #close-depth .cov-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin-top:26px; }
-  #close-depth .cov-group { background:#fff; border:1px solid var(--border-strong); padding:0 0 8px; box-shadow:0 1px 0 rgba(15,42,92,.05); }
+  #close-depth .cov-group { background:#fff; border:1px solid var(--border); padding:0 0 8px; box-shadow:0 1px 0 rgba(15,42,92,.05); }
   #close-depth .cg-head { display:flex; align-items:center; gap:8px; padding:11px 13px 9px; border-bottom:1px solid var(--border); }
   #close-depth .cg-ic { width:18px; height:18px; flex:0 0 auto; color:var(--blue); }
   #close-depth .cov-group h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.6px; text-transform:uppercase; color:var(--text-2); margin:0; }
-  #close-depth .cg-id { margin-left:auto; font-family:var(--mono); font-size:10px; letter-spacing:.5px; color:var(--text-2); border:1px solid var(--border); background:var(--bg-alt); padding:2px 6px; white-space:nowrap; }
+  #close-depth .cg-id { margin-left:auto; font-family:var(--mono); font-size:10px; letter-spacing:.5px; color:var(--text-3); white-space:nowrap; }
   #close-depth .cg-chips { padding:12px 13px 4px; }
   #close-depth .cov-chip { display:inline-flex; align-items:center; gap:7px; font-size:13px; line-height:1.3; padding:6px 11px; margin:0 6px 6px 0; border:1px solid var(--border-strong); border-radius:2px; color:var(--text-2); background:#fff; font-family:var(--sans); cursor:pointer; transition:border-color .15s var(--ease), box-shadow .15s var(--ease); }
   #close-depth .cov-chip::before { content:""; width:7px; height:7px; flex:0 0 auto; border:1.4px solid #8d8d8d; border-radius:1px; background:transparent; }
@@ -1022,87 +1022,93 @@
       <p class="lead">The month-end close isn't a single script &mdash; it's a library of recurring workpapers, each with its own arithmetic. The close engine drafts or validates every one under the same rule: recompute it independently, tie it to the ledger, and refuse to post anything a person hasn't approved.</p>
     </div>
     <figure class="cov-map reveal" role="img" aria-label="Control-flow schematic: source data — general ledger, bank, schedules — feeds 29 deterministic controls in the close engine. 8 are draft-capable: entries drafted and held for approval. 21 are validation-only: recomputed and flagged, never posting. Every path crosses the human gate — zero post without a human. Every control recomputes independently, ties to the ledger, and fails closed.">
-      <svg class="map-d" viewBox="0 0 960 208" aria-hidden="true" font-family="IBM Plex Mono, ui-monospace, monospace">
+      <svg class="map-d" viewBox="0 0 960 208" aria-hidden="true" font-family="IBM Plex Sans, -apple-system, Arial, sans-serif">
         <defs>
-          <marker id="cmN" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#525252"/></marker>
+          <marker id="cmN" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#8d8d8d"/></marker>
           <marker id="cmB" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#0f62fe"/></marker>
           <marker id="cmG" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#198038"/></marker>
         </defs>
-        <rect x="16" y="64" width="112" height="60" fill="#fff" stroke="#8d8d8d" stroke-width="1.5"/>
-        <text x="72" y="90" font-size="14.5" fill="#161616" text-anchor="middle" letter-spacing="1">SOURCE</text>
-        <text x="72" y="108" font-size="10" fill="#525252" text-anchor="middle" letter-spacing=".4">GL &#183; BANK &#183; SCHED</text>
-        <path d="M128 94H146" fill="none" stroke="#525252" stroke-width="1.8" marker-end="url(#cmN)"/>
-        <rect x="152" y="44" width="240" height="100" fill="#fff" stroke="#161616" stroke-width="1.8"/>
-        <rect x="158" y="50" width="228" height="88" fill="none" stroke="#d0d0d0" stroke-width="1"/>
-        <text x="272" y="68" font-size="10" fill="#6f6f6f" text-anchor="middle" letter-spacing="2">CLOSE ENGINE</text>
-        <text x="212" y="116" font-size="44" font-weight="600" fill="#0f62fe" text-anchor="middle" letter-spacing="-1">29</text>
-        <text x="316" y="96" font-size="13.5" fill="#161616" text-anchor="middle" letter-spacing="1">DETERMINISTIC</text>
-        <text x="316" y="114" font-size="13.5" fill="#161616" text-anchor="middle" letter-spacing="1">CONTROLS</text>
+        <rect x="16" y="64" width="112" height="60" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <text x="72" y="88" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="10.5" fill="#0f62fe" text-anchor="middle" letter-spacing="1.5">SOURCE</text>
+        <text x="72" y="107" font-size="11.5" fill="#525252" text-anchor="middle">GL &#183; bank &#183; sched</text>
+        <path d="M128 94H146" fill="none" stroke="#8d8d8d" stroke-width="1.6" marker-end="url(#cmN)"/>
+        <rect x="152" y="44" width="240" height="100" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="153" y="45" width="238" height="4" fill="#0f62fe"/>
+        <text x="272" y="70" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="10" fill="#0f62fe" text-anchor="middle" letter-spacing="2">CLOSE ENGINE</text>
+        <text x="212" y="122" font-size="46" font-weight="600" fill="#161616" text-anchor="middle" letter-spacing="-1">29</text>
+        <text x="316" y="102" font-size="13.5" fill="#525252" text-anchor="middle">deterministic</text>
+        <text x="316" y="120" font-size="13.5" fill="#525252" text-anchor="middle">controls</text>
         <path d="M392 94H412V54H442" fill="none" stroke="#0f62fe" stroke-width="1.8" marker-end="url(#cmB)"/>
         <path d="M392 94H412V134H442" fill="none" stroke="#8d8d8d" stroke-width="1.8" marker-end="url(#cmN)"/>
-        <rect x="448" y="26" width="224" height="56" fill="#fff" stroke="#0f62fe" stroke-width="2"/>
-        <circle cx="466" cy="49" r="5" fill="#0f62fe"/>
-        <text x="480" y="53" font-size="15" font-weight="600" fill="#0f62fe" letter-spacing=".5">8 DRAFT-CAPABLE</text>
-        <text x="466" y="72" font-size="10.5" fill="#525252" letter-spacing=".4">drafted &#183; held for approval</text>
-        <rect x="448" y="106" width="224" height="56" fill="#fff" stroke="#8d8d8d" stroke-width="1.6"/>
-        <rect x="461" y="122" width="9" height="9" fill="none" stroke="#8d8d8d" stroke-width="1.6"/>
-        <text x="480" y="132" font-size="15" font-weight="600" fill="#393939" letter-spacing=".5">21 VALIDATION-ONLY</text>
-        <text x="466" y="151" font-size="10.5" fill="#525252" letter-spacing=".4">recomputed &#183; never posts</text>
+        <rect x="448" y="26" width="224" height="56" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="449" y="27" width="222" height="3.5" fill="#0f62fe"/>
+        <circle cx="468" cy="50" r="4.5" fill="#0f62fe"/>
+        <text x="480" y="55" font-size="14.5" font-weight="600" fill="#0f62fe">8 draft-capable</text>
+        <text x="466" y="73" font-size="11" fill="#525252">drafted &#183; held for approval</text>
+        <rect x="448" y="106" width="224" height="56" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="449" y="107" width="222" height="3.5" fill="#8d8d8d"/>
+        <rect x="462" y="123" width="9" height="9" fill="none" stroke="#8d8d8d" stroke-width="1.6"/>
+        <text x="480" y="134" font-size="14.5" font-weight="600" fill="#393939">21 validation-only</text>
+        <text x="466" y="152" font-size="11" fill="#525252">recomputed &#183; never posts</text>
         <path d="M672 54H694V94" fill="none" stroke="#0f62fe" stroke-width="1.8"/>
         <path d="M672 134H694V94" fill="none" stroke="#8d8d8d" stroke-width="1.8"/>
-        <path d="M694 94H722" fill="none" stroke="#525252" stroke-width="1.8"/>
+        <path d="M694 94H722" fill="none" stroke="#8d8d8d" stroke-width="1.8"/>
         <path d="M740 34V158" fill="none" stroke="#b0850f" stroke-width="1.8" stroke-dasharray="6 5"/>
         <circle cx="740" cy="74" r="9" fill="#fff" stroke="#161616" stroke-width="1.8"/>
         <path d="M726 101C726 87 754 87 754 101" fill="#fff" stroke="#161616" stroke-width="1.8"/>
-        <text x="740" y="178" font-size="11" fill="#8a6a00" text-anchor="middle" letter-spacing="1.2">HUMAN GATE</text>
+        <text x="740" y="178" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" fill="#8a6a00" text-anchor="middle" letter-spacing="1.2">HUMAN GATE</text>
         <path d="M756 94H782" fill="none" stroke="#198038" stroke-width="1.8" marker-end="url(#cmG)"/>
-        <rect x="788" y="64" width="156" height="60" fill="#fff" stroke="#198038" stroke-width="2"/>
-        <text x="814" y="106" font-size="34" font-weight="600" fill="#198038" text-anchor="middle" letter-spacing="-1">0</text>
-        <text x="884" y="92" font-size="11.5" fill="#161616" text-anchor="middle" letter-spacing=".6">POST WITHOUT</text>
-        <text x="884" y="108" font-size="11.5" fill="#161616" text-anchor="middle" letter-spacing=".6">A HUMAN</text>
+        <rect x="788" y="64" width="156" height="60" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="789" y="65" width="154" height="3.5" fill="#198038"/>
+        <text x="814" y="107" font-size="32" font-weight="600" fill="#198038" text-anchor="middle" letter-spacing="-1">0</text>
+        <text x="884" y="93" font-size="11.5" fill="#525252" text-anchor="middle">post without</text>
+        <text x="884" y="109" font-size="11.5" fill="#525252" text-anchor="middle">a human</text>
         <circle cx="944" cy="64" r="11" fill="#198038"/>
         <path d="M939 64l3.6 3.6L950 60" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      <svg class="map-m" viewBox="0 0 360 512" aria-hidden="true" font-family="IBM Plex Mono, ui-monospace, monospace">
+      <svg class="map-m" viewBox="0 0 360 512" aria-hidden="true" font-family="IBM Plex Sans, -apple-system, Arial, sans-serif">
         <defs>
-          <marker id="cmNm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#525252"/></marker>
+          <marker id="cmNm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#8d8d8d"/></marker>
           <marker id="cmBm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#0f62fe"/></marker>
           <marker id="cmGm" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#198038"/></marker>
         </defs>
-        <rect x="92" y="8" width="176" height="54" fill="#fff" stroke="#8d8d8d" stroke-width="1.5"/>
-        <text x="180" y="31" font-size="15" fill="#161616" text-anchor="middle" letter-spacing="1">SOURCE</text>
-        <text x="180" y="49" font-size="11" fill="#525252" text-anchor="middle" letter-spacing=".5">GL &#183; BANK &#183; SCHED</text>
-        <path d="M180 62V80" fill="none" stroke="#525252" stroke-width="1.8" marker-end="url(#cmNm)"/>
-        <rect x="40" y="84" width="280" height="98" fill="#fff" stroke="#161616" stroke-width="1.8"/>
-        <rect x="46" y="90" width="268" height="86" fill="none" stroke="#d0d0d0" stroke-width="1"/>
-        <text x="180" y="108" font-size="10" fill="#6f6f6f" text-anchor="middle" letter-spacing="2">CLOSE ENGINE</text>
-        <text x="120" y="160" font-size="42" font-weight="600" fill="#0f62fe" text-anchor="middle" letter-spacing="-1">29</text>
-        <text x="232" y="146" font-size="14" fill="#161616" text-anchor="middle" letter-spacing="1">DETERMINISTIC</text>
-        <text x="232" y="165" font-size="14" fill="#161616" text-anchor="middle" letter-spacing="1">CONTROLS</text>
-        <path d="M180 182V196" fill="none" stroke="#525252" stroke-width="1.8"/>
+        <rect x="92" y="8" width="176" height="54" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <text x="180" y="30" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" fill="#0f62fe" text-anchor="middle" letter-spacing="1.5">SOURCE</text>
+        <text x="180" y="50" font-size="11.5" fill="#525252" text-anchor="middle">GL &#183; bank &#183; sched</text>
+        <path d="M180 62V80" fill="none" stroke="#8d8d8d" stroke-width="1.8" marker-end="url(#cmNm)"/>
+        <rect x="40" y="84" width="280" height="98" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="41" y="85" width="278" height="4" fill="#0f62fe"/>
+        <text x="180" y="110" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="10" fill="#0f62fe" text-anchor="middle" letter-spacing="2">CLOSE ENGINE</text>
+        <text x="120" y="164" font-size="44" font-weight="600" fill="#161616" text-anchor="middle" letter-spacing="-1">29</text>
+        <text x="232" y="142" font-size="14" fill="#525252" text-anchor="middle">deterministic</text>
+        <text x="232" y="162" font-size="14" fill="#525252" text-anchor="middle">controls</text>
+        <path d="M180 182V196" fill="none" stroke="#8d8d8d" stroke-width="1.8"/>
         <path d="M180 196H96V218" fill="none" stroke="#0f62fe" stroke-width="1.8" marker-end="url(#cmBm)"/>
         <path d="M180 196H264V218" fill="none" stroke="#8d8d8d" stroke-width="1.8" marker-end="url(#cmNm)"/>
-        <rect x="16" y="222" width="160" height="76" fill="#fff" stroke="#0f62fe" stroke-width="2"/>
-        <circle cx="30" cy="248" r="4.5" fill="#0f62fe"/>
-        <text x="42" y="252" font-size="13" font-weight="600" fill="#0f62fe" letter-spacing=".3">8 DRAFT-CAPABLE</text>
-        <text x="30" y="272" font-size="10.5" fill="#525252" letter-spacing=".3">held for approval</text>
-        <rect x="184" y="222" width="160" height="76" fill="#fff" stroke="#8d8d8d" stroke-width="1.6"/>
-        <rect x="194" y="241" width="8" height="8" fill="none" stroke="#8d8d8d" stroke-width="1.6"/>
-        <text x="207" y="250" font-size="11.5" font-weight="600" fill="#393939" letter-spacing=".2">21 VALIDATION-ONLY</text>
-        <text x="196" y="270" font-size="10.5" fill="#525252" letter-spacing=".3">flagged &#183; never posts</text>
+        <rect x="16" y="222" width="160" height="76" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="17" y="223" width="158" height="3.5" fill="#0f62fe"/>
+        <circle cx="30" cy="250" r="4.5" fill="#0f62fe"/>
+        <text x="40" y="254" font-size="13" font-weight="600" fill="#0f62fe">8 draft-capable</text>
+        <text x="28" y="274" font-size="10.5" fill="#525252">held for approval</text>
+        <rect x="184" y="222" width="160" height="76" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="185" y="223" width="158" height="3.5" fill="#8d8d8d"/>
+        <rect x="194" y="243" width="8" height="8" fill="none" stroke="#8d8d8d" stroke-width="1.6"/>
+        <text x="206" y="252" font-size="12.5" font-weight="600" fill="#393939">21 validation-only</text>
+        <text x="194" y="274" font-size="10.5" fill="#525252">recomputed &#183; never posts</text>
         <path d="M96 298V322H180" fill="none" stroke="#0f62fe" stroke-width="1.8"/>
         <path d="M264 298V322H180" fill="none" stroke="#8d8d8d" stroke-width="1.8"/>
-        <path d="M180 322V342" fill="none" stroke="#525252" stroke-width="1.8"/>
+        <path d="M180 322V342" fill="none" stroke="#8d8d8d" stroke-width="1.8"/>
         <path d="M40 360H150" fill="none" stroke="#b0850f" stroke-width="1.8" stroke-dasharray="6 5"/>
         <path d="M210 360H320" fill="none" stroke="#b0850f" stroke-width="1.8" stroke-dasharray="6 5"/>
         <circle cx="180" cy="352" r="9" fill="#fff" stroke="#161616" stroke-width="1.8"/>
         <path d="M166 378C166 364 194 364 194 378" fill="#fff" stroke="#161616" stroke-width="1.8"/>
-        <text x="180" y="398" font-size="11" fill="#8a6a00" text-anchor="middle" letter-spacing="1.2">HUMAN GATE</text>
+        <text x="180" y="398" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="11" fill="#8a6a00" text-anchor="middle" letter-spacing="1.2">HUMAN GATE</text>
         <path d="M180 406V426" fill="none" stroke="#198038" stroke-width="1.8" marker-end="url(#cmGm)"/>
-        <rect x="70" y="432" width="220" height="64" fill="#fff" stroke="#198038" stroke-width="2"/>
-        <text x="110" y="475" font-size="34" font-weight="600" fill="#198038" text-anchor="middle" letter-spacing="-1">0</text>
-        <text x="212" y="461" font-size="12" fill="#161616" text-anchor="middle" letter-spacing=".5">POST WITHOUT</text>
-        <text x="212" y="478" font-size="12" fill="#161616" text-anchor="middle" letter-spacing=".5">A HUMAN</text>
+        <rect x="70" y="432" width="220" height="64" fill="#fff" stroke="#d0d0d0" stroke-width="1.2"/>
+        <rect x="71" y="433" width="218" height="3.5" fill="#198038"/>
+        <text x="110" y="477" font-size="32" font-weight="600" fill="#198038" text-anchor="middle" letter-spacing="-1">0</text>
+        <text x="212" y="462" font-size="12" fill="#525252" text-anchor="middle">post without</text>
+        <text x="212" y="479" font-size="12" fill="#525252" text-anchor="middle">a human</text>
         <circle cx="290" cy="432" r="10" fill="#198038"/>
         <path d="M285.5 432l3.3 3.3L295 428" fill="none" stroke="#fff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
