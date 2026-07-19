@@ -431,6 +431,47 @@
   .bookx { position:absolute; top:12px; right:12px; width:40px; height:40px; background:none; border:none; cursor:pointer; color:var(--text-2); font-size:22px; line-height:1; }
   .bookx:hover { color:var(--text); }
   @media (max-width:560px){ .bookov { padding:0; align-items:flex-end; } .bookp { max-width:none; max-height:94vh; padding:28px 22px 24px; } }
+  /* ===== assistant pet (Sophie) ===== */
+  #ask-launch { position:fixed; left:20px; bottom:20px; z-index:90; width:60px; height:60px; border-radius:50%; border:1px solid var(--border); background:#fff; box-shadow:0 6px 24px rgba(15,42,92,.16); cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center; transition:transform .18s ease, box-shadow .18s ease; }
+  #ask-launch:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(15,98,254,.24); }
+  #ask-launch svg { width:42px; height:42px; overflow:visible; }
+  #ask-launch::after { content:""; position:absolute; inset:-5px; border-radius:50%; border:2px solid var(--blue); opacity:0; animation:askpulse 3.4s ease-out infinite; pointer-events:none; }
+  @keyframes askpulse { 0%{opacity:.45; transform:scale(1);} 70%{opacity:0; transform:scale(1.28);} 100%{opacity:0;} }
+  .ask-bob { animation:askbob 3.4s ease-in-out infinite; transform-origin:50% 60%; }
+  @keyframes askbob { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-1.6px);} }
+  .ask-eye { transform-origin:center; transform-box:fill-box; animation:askblink 5.4s infinite; }
+  @keyframes askblink { 0%,93%,100%{transform:scaleY(1);} 96.5%{transform:scaleY(.12);} }
+  #ask-launch .ask-badge { position:absolute; top:-2px; right:-2px; width:15px; height:15px; border-radius:50%; background:var(--green); border:2px solid #fff; }
+  #ask-panel { position:fixed; left:20px; bottom:92px; z-index:110; width:min(372px,calc(100vw - 40px)); max-height:min(72vh,640px); background:#fff; border:1px solid var(--border); box-shadow:0 20px 64px rgba(15,42,92,.24); display:none; flex-direction:column; overflow:hidden; }
+  #ask-panel.open { display:flex; }
+  .ask-head { display:flex; align-items:center; gap:11px; padding:14px 15px; border-bottom:1px solid var(--border); background:var(--bg-alt); }
+  .ask-head svg { width:34px; height:34px; flex:none; }
+  .ask-head .ask-id b { font-size:14px; font-weight:600; display:block; line-height:1.25; }
+  .ask-head .ask-id span { font-family:var(--mono); font-size:10px; color:var(--green); letter-spacing:.3px; }
+  .ask-head .askx { margin-left:auto; background:none; border:none; cursor:pointer; font-size:22px; line-height:1; color:var(--text-3); width:34px; height:34px; }
+  .ask-head .askx:hover { color:var(--text); }
+  .ask-body { flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:11px; }
+  .ask-msg { max-width:90%; font-size:14px; line-height:1.5; padding:10px 13px; word-wrap:break-word; }
+  .ask-msg.bot { background:var(--bg-alt); color:var(--text); align-self:flex-start; }
+  .ask-msg.me { background:var(--blue); color:#fff; align-self:flex-end; }
+  .ask-links { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+  .ask-link { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; font-weight:600; color:var(--blue); text-decoration:none; border:1px solid var(--blue); padding:7px 11px; cursor:pointer; background:#fff; font-family:var(--sans); }
+  .ask-link:hover { background:var(--blue); color:#fff; }
+  .ask-chips { display:flex; flex-wrap:wrap; gap:7px; }
+  .ask-chip { font-size:12.5px; color:var(--blue); background:#fff; border:1px solid var(--border-strong); padding:7px 11px; cursor:pointer; font-family:var(--sans); text-align:left; }
+  .ask-chip:hover { border-color:var(--blue); background:var(--blue-tint); }
+  .ask-foot { display:flex; gap:8px; padding:11px 13px; border-top:1px solid var(--border); }
+  .ask-foot input { flex:1; font-family:var(--sans); font-size:14px; padding:10px 12px; background:var(--bg-alt); border:none; border-bottom:1px solid var(--border-strong); outline:none; -webkit-appearance:none; border-radius:0; }
+  .ask-foot input:focus { border-bottom-color:var(--blue); box-shadow:inset 0 -1px 0 var(--blue); }
+  .ask-foot button { background:var(--blue); border:none; color:#fff; cursor:pointer; padding:0 15px; display:flex; align-items:center; }
+  .ask-foot button:hover { background:var(--blue-hover); }
+  @media (max-width:520px){
+    #ask-launch { width:54px; height:54px; }
+    body.scrolled #ask-launch { bottom:76px; }
+    #ask-panel { left:10px; right:10px; width:auto; bottom:84px; max-height:70vh; }
+    body.scrolled #ask-panel { bottom:138px; }
+  }
+  @media (prefers-reduced-motion:reduce){ #ask-launch::after, .ask-bob, .ask-eye { animation:none; } }
   .mcta { position:fixed; left:0; right:0; bottom:0; z-index:70; display:none; }
   .mcta a { display:flex; align-items:center; justify-content:center; gap:10px; background:var(--blue); color:#fff;
     font-weight:500; font-size:15px; padding:15px; text-decoration:none; }
@@ -1133,6 +1174,151 @@
   document.getElementById('bookClose').addEventListener('click', close);
   ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+})();</script>
+
+<!-- ================= ASSISTANT PET (Sophie) ================= -->
+<button id="ask-launch" type="button" aria-label="Ask Sophie, the Sophon assistant" title="Ask me anything">
+  <svg viewBox="0 0 48 48" aria-hidden="true"><g class="ask-bob">
+    <line x1="24" y1="5.5" x2="24" y2="11" stroke="#0f62fe" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="4.6" r="2.4" fill="#0f62fe"/>
+    <rect x="9" y="11" width="30" height="25" rx="8" fill="#fff" stroke="#0f62fe" stroke-width="2.2"/>
+    <g class="ask-eye"><circle cx="19" cy="22" r="2.7" fill="#0f62fe"/><circle cx="29" cy="22" r="2.7" fill="#0f62fe"/></g>
+    <path d="M18.5 28.5c2 2.2 9 2.2 11 0" fill="none" stroke="#0f62fe" stroke-width="2" stroke-linecap="round"/>
+    <rect x="15" y="36" width="18" height="2.6" rx="1.3" fill="#161616"/>
+  </g></svg>
+  <span class="ask-badge" aria-hidden="true"></span>
+</button>
+<div id="ask-panel" role="dialog" aria-modal="false" aria-label="Chat with the Sophon assistant">
+  <div class="ask-head">
+    <svg viewBox="0 0 48 48" aria-hidden="true"><rect x="9" y="11" width="30" height="25" rx="8" fill="#fff" stroke="#0f62fe" stroke-width="2.2"/><line x1="24" y1="5.5" x2="24" y2="11" stroke="#0f62fe" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="4.6" r="2.4" fill="#0f62fe"/><circle cx="19" cy="22" r="2.7" fill="#0f62fe"/><circle cx="29" cy="22" r="2.7" fill="#0f62fe"/><path d="M18.5 28.5c2 2.2 9 2.2 11 0" fill="none" stroke="#0f62fe" stroke-width="2" stroke-linecap="round"/><rect x="15" y="36" width="18" height="2.6" rx="1.3" fill="#161616"/></svg>
+    <div class="ask-id"><b>Sophie</b><span>SOPHON ASSISTANT &middot; ONLINE</span></div>
+    <button class="askx" type="button" aria-label="Close chat" id="askClose">&#215;</button>
+  </div>
+  <div class="ask-body" id="askBody"></div>
+  <form class="ask-foot" id="askForm" autocomplete="off">
+    <input id="askInput" type="text" placeholder="Ask about our engines, pricing, code&hellip;" aria-label="Type your question" maxlength="240">
+    <button type="submit" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </form>
+</div>
+<script>(function(){
+  var launch=document.getElementById('ask-launch'), panel=document.getElementById('ask-panel'),
+      body=document.getElementById('askBody'), form=document.getElementById('askForm'), input=document.getElementById('askInput');
+  if(!launch||!panel) return;
+
+  var GREET="Hi, I'm Sophie — the Sophon assistant. Ask me about our engines (close, reconciliation, partnership tax, cash management), how it works, what it costs, or the code. What's eating your team's hours?";
+  var CHIPS=["Can you build reconciliation engines?","How does month-end close work?","What does it cost?","Show me the code"];
+  var FB={a:"Good question — I'm not certain on that one, but a real person can answer it fast. The first conversation is free.", l:[["Email us","mail"]], book:true};
+  var FB2={a:"Still not finding it — let me hand you to a person. Email us or book a free call and we'll answer directly, usually within one business day.", l:[["Email us","mail"]], book:true};
+  var fbCount=0;
+
+  var KB=[
+   {kw:["what do you do","what is this","who are you","what is sophon","what's sophon","about you","what can you do","explain","overview"],
+    a:"We build AI engines that take over the repetitive work of finance teams — close, reconciliation, partnership tax — and return it drafted, tied out, and cited to source. Independent verification checks every run, and your people approve every output.", l:[["What we do","#engines"]]},
+   {kw:["reconcil","recon","bank rec","cash reconciliation","debt reconciliation","match accounts","tie out cash","tie-out cash","account matching","exception","unmatched","cant match","closed account","migrated account","trace cash","subledger","ap subledger"],
+    a:"Yes — our Cash & Debt Reconciliation engine matches the full population of accounts (never a sample) against bank and lender records, classifies every exception by materiality, and traces cash out of closed or migrated accounts, with an evidence log behind every figure.", l:[["Reconciliation engine","#recon"]], book:true},
+   {kw:["month end","month-end","monthly close","the close","closing","close process","journal entr"," je ","close package","close checklist","accruals close","out of tie","doesnt tie","does not tie","out-of-tie","period end","book close"],
+    a:"Our Month-End Close engine drafts the recurring close under 29 deterministic controls — balanced journal entries tied to the GL, a close checklist, and a close package for your controller. It refuses to post any entry that doesn't tie.", l:[["Month-End Close","#close"]], book:true},
+   {kw:["partnership tax","1065","k-1","k1","capital account","tax return","partnership return","schedule k","roll forward","rollforward","roll-forward","allocations","special allocations","partners"],
+    a:"Our Partnership Tax engine drafts Form 1065 and a K-1 for every partner, tied to the ledger, with capital accounts rolled and an evidence binder — review-ready for your CPA, who reviews and files. Nothing files itself.", l:[["Partnership Tax","#tax"]], book:true},
+   {kw:["cash management","cash manager","treasury","liquidity","amortization","amortisation","depreciation","accruals","allocations","interest schedule"],
+    a:"Cash Management is our ninth system — amortization & depreciation, accruals & interest, allocations & fees, balances & continuity, and reporting packages, each under deterministic controls.", l:[["The full portfolio","#engines"]], book:true},
+   {kw:["engines","what engines","portfolio","all engines","other engines","full portfolio","list of","capabilities","how many engines","nine engines","validation","surplus","acb","triangulate","knowledge brain","atlas"],
+    a:"Nine public engines today: month-end close, cash & debt reconciliation, partnership tax (1065/K-1s), cash management, validation, tax surplus/ACB, triangulate, knowledge brain, and the finance operations atlas — all runnable and MIT-licensed. If your bottleneck isn't listed, we scope and build it.", l:[["See the full portfolio","#engines"],["Inspect the code","gh"]], book:true, t:2},
+   {kw:["custom","custom build","custom engine","bespoke","can you build","could you build","do you build","do you make","build something","build an engine","build us","build me","not listed","isn't listed","lease accounting","asc 842","intercompany","eliminations"],
+    a:"Beyond the nine public engines, we scope and build custom ones for the work that isn't in the lineup. Tell us the process that's eating your team's month and we'll say plainly what an engine can take over.", l:[["See the engines","#engines"]], book:true, t:2},
+   {kw:["self healing","self-healing","auto verification","auto-verification","control loop","independent recompute","how do you check","how do you verify","re-verify","reverify","recompute"],
+    a:"Every engine runs its own control loop: it watches its output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates the judgment calls to a person. Ties post with evidence; nothing self-certifies.", l:[["Auto Verification System","#loops"]]},
+   {kw:["human","oversight","control over","approve","approval","sign off","sign-off","rubber stamp","replace my team","replace staff","lose my job","take my job","jobs","controller","who owns","own the output","reject","redo","rework","send back","in the loop"],
+    a:"You keep the judgment. Every engine is human-gated — nothing files, posts, or finalizes without your team's sign-off. The engines do the repetitive work; your people approve every output.", l:[["How it stays human-gated","#loops"]]},
+   {kw:["accurate","accuracy","trust","reliable","how do i know","how do i trust","tests","testing","test coverage","evidence","cited","audit trail","error rate","make mistakes","hallucinat","made up","made-up","wrong number","gets it wrong","black box","blackbox"],
+    a:"67,664 automated tests gate every change, and 100% of computed figures ship with cited evidence — every number traces to source. Zero deliverables are finalized without your team's sign-off.", l:[["67,664 tests, by engine","#engineering"],["See the code","gh"]]},
+   {kw:["security","secure","confidential","privacy","my data","client data","data safe","is it safe","gdpr","share my data","where does my data","encrypt","nda","dpa","soc 2","soc2","who can see","our numbers","see our numbers","residency","data live","where does our data","train","our ledger"],
+    a:"Client work and client information stay confidential — every public example runs on fictional, seeded data, enforced by a deny-list confidentiality linter in the test suite. Your real data never appears in public code.", l:[["How we handle data","#engineering"]]},
+   {kw:["price","pricing","cost","how much","expensive","fees","fee","quote","budget","cheap","afford","rates","subscription","all-in","all in","price range","per engine","one-time","ongoing","worth it"],
+    a:"No software purchase. After a short observation of the actual work, we give fixed-scope pricing for a defined first phase — you'll know exactly what it takes over and what it costs before you spend anything. The first conversation is free.", l:[], book:true},
+   {kw:["how does it work","how it works","the process","get started","getting started","onboard","timeline","how long","first step","next step","implementation","how do we start","where do i start"],
+    a:"One conversation to start: you describe the work that consumes your team's month; we tell you plainly what an engine can take over, what it can't, and what a scoped first phase would cost. No purchase up front, and your people keep approval authority.", l:[], book:true},
+   {kw:["github","the code","open source","open-source","repo","repository"," mit ","license","run it","codespaces","verify yourself","technical","for engineers","inspect"],
+    a:"Don't take the website's word for it — the entire portfolio is public on GitHub: code, 67,664 tests, controls, and docs, MIT-licensed. Your engineers can read it, run it in Codespaces, and judge the work before you spend anything.", l:[["Inspect the code","gh"],["The engineering","#engineering"]]},
+   {kw:["who built","founder","your experience","kpmg","big four","big 4","background","are you a cpa","credential","qualified","sophonnarith","who is behind"],
+    a:"Sophon Finance Systems is built by Sophonnarith Hang — KPMG-trained, ex-Big Four, with Fortune 100 & 500 and international finance experience. Accounting-first engineering, all public on GitHub.", l:[["GitHub","ghp"],["LinkedIn","li"]]},
+   {kw:["integrate","integration","quickbooks","qbo","netsuite","sap","oracle","sage","xero","erp","excel","spreadsheet","export","connect to","our system","our stack","csv","flat file","infrastructure","hosted","on your servers"],
+    a:"The engines work from your exports — trial balance, GL, bank statements, schedules — so they fit alongside whatever ERP or ledger you run. Tell us your stack in a quick call and we'll confirm the fit.", l:[], book:true},
+   {kw:["book","consult","consultation","talk to","talk with","call","meeting","demo","contact","reach you","reach out","get in touch","speak","schedule"],
+    a:"Let's talk — the first conversation is free. Tell us where the hours go and we'll reply within one business day.", l:[["Email us","mail"]], book:true},
+   {kw:["scam","legit","real","too good","why so expensive","skeptic","doubt","proof","prove it"],
+    a:"Fair to be skeptical. That's why the whole thing is public: read the code and the 67,664 tests on GitHub, run any engine yourself, and every figure we produce is cited to source. Judge the work before you spend anything.", l:[["Inspect the code","gh"],["The engineering","#engineering"]]},
+   {kw:["thank","thanks","appreciate","great","awesome","perfect","helpful"],
+    a:"Anytime. When you're ready, a free consultation is the fastest way forward — or ask me anything else.", l:[], book:true, t:2},
+   {kw:["how long","timeline","how soon","go live","time to value","before we're live","up and running","when can we start"],
+    a:"It starts with one conversation and a short look at the actual work. From there we scope the build, set fixed-scope pricing, and stand up a first phase — you approve every output from day one.", l:[], book:true},
+   {kw:["pilot","poc","proof of concept","trial","one entity","single entity","start small","test run","try it on"],
+    a:"Yes — you can start small, with a single entity or one workflow, before rolling wider. Every engine is runnable and MIT-licensed, so your team can validate it on real (seeded) data first.", l:[["Engineering & tests","#engineering"]], book:true},
+   {kw:["reference","references","case study","case studies","other clients","testimonial","who else","working with"],
+    a:"The fastest proof is the public code and 67,664 tests — read and run any engine yourself. For fit and next steps, let's set up a quick conversation.", l:[["Inspect the code","gh"],["LinkedIn","li"]], book:true},
+   {kw:["hi","hello","hey","yo ","good morning","good afternoon","sup","howdy","hiya"],
+    a:GREET, l:[], greetChips:true, t:2}
+  ];
+
+  function hrefFor(t){
+    if(t==='gh') return 'https://github.com/sophonfinance-wq/finance-automation-portfolio';
+    if(t==='ghp') return 'https://github.com/sophonfinance-wq';
+    if(t==='mail') return 'mailto:contact@sophonfinance.com';
+    if(t==='li') return 'https://www.linkedin.com/in/sophonnarith/';
+    return t;
+  }
+  function norm(s){ return ' '+String(s).toLowerCase().replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim()+' '; }
+  function scoreTier(q,tier){
+    var best=null, bs=0;
+    for(var i=0;i<KB.length;i++){
+      var it=KB[i]; if((it.t||1)!==tier) continue;
+      var sc=0, kw=it.kw||[];
+      for(var j=0;j<kw.length;j++){
+        var k=kw[j].toLowerCase().trim(); if(!k) continue;
+        if(q.indexOf(' '+k+' ')>=0) sc+=k.length+2;
+        else if(k.length>=5 && q.indexOf(k)>=0) sc+=k.length;
+      }
+      if(sc>bs){ bs=sc; best=it; }
+    }
+    return best;
+  }
+  function findIntent(text){
+    var q=norm(text);
+    if(q.replace(/\s/g,'').length<1) return FB;
+    return scoreTier(q,1) || scoreTier(q,2) || FB;   // specific engines beat generic "can you build" / portfolio
+  }
+  function el(tag,cls,txt){ var e=document.createElement(tag); if(cls)e.className=cls; if(txt!=null)e.textContent=txt; return e; }
+  function scrollDown(){ body.scrollTop=body.scrollHeight; }
+  function addUser(text){ var m=el('div','ask-msg me',text); body.appendChild(m); scrollDown(); }
+  function addBot(intent){
+    var isFb=(intent===FB);
+    if(isFb && fbCount>=1) intent=FB2;
+    fbCount = isFb ? fbCount+1 : 0;
+    var m=el('div','ask-msg bot'); m.appendChild(el('div',null,intent.a));
+    var links=(intent.l||[]).slice();
+    var wrap=null;
+    function ensureWrap(){ if(!wrap){ wrap=el('div','ask-links'); m.appendChild(wrap);} return wrap; }
+    links.forEach(function(pair){
+      var w=ensureWrap(), t=pair[1], href=hrefFor(t), a=el('a','ask-link',pair[0]);
+      if(t.charAt(0)==='#'){ a.href=href; a.addEventListener('click',function(e){ e.preventDefault(); closePanel(); var el2=document.querySelector(href); if(el2) el2.scrollIntoView({behavior:'smooth'}); }); }
+      else { a.href=href; a.target='_blank'; a.rel='noopener'; }
+      w.appendChild(a);
+    });
+    if(intent.book){ var w=ensureWrap(), b=el('a','ask-link','Book a free consultation'); b.href='#book'; b.addEventListener('click',function(e){ e.preventDefault(); closePanel(); var t=document.querySelector('[data-book]'); if(t) t.click(); }); w.appendChild(b); }
+    body.appendChild(m); scrollDown();
+    if(intent.greetChips) addChips();
+  }
+  function addChips(){
+    var c=el('div','ask-chips');
+    CHIPS.forEach(function(q){ var ch=el('button','ask-chip',q); ch.type='button'; ch.addEventListener('click',function(){ addUser(q); setTimeout(function(){ addBot(findIntent(q)); },160); }); c.appendChild(ch); });
+    body.appendChild(c); scrollDown();
+  }
+  var greeted=false;
+  function openPanel(){ panel.classList.add('open'); if(!greeted){ greeted=true; var g=el('div','ask-msg bot',GREET); body.appendChild(g); addChips(); } setTimeout(function(){ input.focus(); },80); }
+  function closePanel(){ panel.classList.remove('open'); }
+  launch.addEventListener('click',function(){ panel.classList.contains('open')?closePanel():openPanel(); });
+  document.getElementById('askClose').addEventListener('click',closePanel);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closePanel(); });
+  form.addEventListener('submit',function(e){ e.preventDefault(); var v=input.value.trim(); if(!v) return; addUser(v); input.value=''; setTimeout(function(){ addBot(findIntent(v)); },180); });
 })();</script>
 
 <script>
