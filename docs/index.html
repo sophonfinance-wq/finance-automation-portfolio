@@ -374,11 +374,19 @@
   .term-bar { display:flex; align-items:center; gap:7px; padding:11px 16px; border-bottom:1px solid #393939; }
   .term-bar i { width:9px; height:9px; border-radius:50%; background:#525252; }
   .term-bar span { font-family:var(--mono); font-size:11px; color:#8d8d8d; margin-left:8px; }
-  .term-body { padding:18px 20px 22px; font-family:var(--mono); font-size:12.5px; line-height:1.9; color:#c6c6c6; overflow-x:auto; }
-  .term-body .cmd { color:#fff; white-space:nowrap; }
+  .term-body { padding:18px 20px 22px; font-family:var(--mono); font-size:12.5px; line-height:1.9; color:#c6c6c6; }
+  /* commands wrap with a hanging indent (no clipped lines on mobile); long URLs may break anywhere */
+  .term-body .cmd { color:#fff; white-space:pre-wrap; overflow-wrap:anywhere; padding-left:18px; text-indent:-18px; }
   .term-body .cmd::before { content:'$ '; color:#78a9ff; }
   .term-body .ok-line { color:#42be65; }
   .term-body .dim { color:#8d8d8d; }
+  .term-body .tcur { display:inline-block; width:8px; height:1.05em; background:#c6c6c6; vertical-align:text-bottom; margin-left:1px; animation:tblink 1.06s steps(1) infinite; }
+  @keyframes tblink { 50% { opacity:0; } }
+  .term-bar .term-ci { margin-left:auto; font-family:var(--mono); font-size:11px; letter-spacing:.4px; color:#42be65; white-space:nowrap; }
+  .term-bar .term-copy { background:none; border:1px solid #393939; border-radius:2px; color:#8d8d8d; font-family:var(--mono); font-size:10.5px; letter-spacing:.4px; padding:3px 9px; margin-left:10px; cursor:pointer; transition:color .15s, border-color .15s; }
+  .term-bar .term-copy:hover { color:#fff; border-color:#8d8d8d; }
+  @media (prefers-reduced-motion:reduce){ .term-body .tcur { animation:none; } }
+  @media (max-width:640px){ .term-body { font-size:11.5px; padding:14px 14px 18px; } .term-bar span { font-size:10px; } }
   .eng-points .pt { padding:16px 0; border-bottom:1px solid var(--border); }
   .eng-points .pt:first-child { padding-top:0; }
   .eng-points h3 { font-size:15.5px; font-weight:600; margin-bottom:4px; }
@@ -1291,9 +1299,9 @@
       <p class="lead">The entire engine portfolio is on GitHub &mdash; code, tests, controls, and documentation. Your technical reviewers can judge the work before you spend anything.</p>
     </div>
     <div class="eng-grid">
-      <div class="terminal reveal" role="img" aria-label="Terminal output: cloning the public repository and collecting 67,664 automated tests with pytest.">
-        <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>verify-it-yourself — bash</span></div>
-        <div class="term-body" aria-hidden="true">
+      <div class="terminal reveal">
+        <div class="term-bar"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span>verify-it-yourself — bash</span><span class="term-ci">&#9679; suite passing</span><button class="term-copy" type="button" id="termCopy" aria-label="Copy the verification commands">copy</button></div>
+        <div class="term-body" role="img" aria-label="Terminal transcript: git clone the public repository; pytest collects 67,664 tests; the curated suite passes; an opt-in sweep holds about 1.15 million generated invariants. Verified on fictional seeded data, MIT license.">
           <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
           <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
           <div class="cmd">pytest --collect-only -q | tail -1</div>
@@ -1301,6 +1309,7 @@
           <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
           <div class="ok-line">passed ✓</div>
           <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
+          <div class="ok-line">invariants held ✓</div>
           <div class="dim">verified 2026-07-17 · fictional seeded data · MIT license</div>
         </div>
       </div>
@@ -2033,6 +2042,71 @@
   if(h){ var target=null;
     chips.forEach(function(c){ if(c.getAttribute('data-key')===h[1]) target=c; });
     if(target){ open(target); setTimeout(function(){ target.scrollIntoView({block:'center'}); },80); } }
+})();
+</script>
+
+<script>(function(){
+  // verify-it-yourself terminal: types the real commands on first scroll-in,
+  // prints each result after a beat, ends on an idle blinking prompt.
+  // Reduced-motion and no-IO browsers keep the full static transcript.
+  var term=document.querySelector('#engineering .terminal'); if(!term) return;
+  var body=term.querySelector('.term-body'); if(!body) return;
+  var copyBtn=document.getElementById('termCopy');
+  if(copyBtn){ copyBtn.addEventListener('click',function(){
+    var cmds=[].map.call(body.querySelectorAll('.cmd'),function(el){
+      var c=el.cloneNode(true), d=c.querySelector('.dim'); if(d) d.remove();
+      return c.textContent.replace(/\u00a0/g,' ').trim();
+    }).filter(Boolean).join('\n');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(cmds).then(function(){
+        copyBtn.textContent='copied ✓';
+        setTimeout(function(){ copyBtn.textContent='copy'; },1600);
+      },function(){});
+    }
+  }); }
+  var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduced||!('IntersectionObserver'in window)) return;
+  var lines=[].slice.call(body.children), played=false;
+  var io=new IntersectionObserver(function(es){ es.forEach(function(e){
+    if(!e.isIntersecting||played) return; played=true; io.disconnect(); run();
+  }); },{threshold:.35});
+  io.observe(term);
+  function run(){
+    lines.forEach(function(l){ l.style.display='none'; });
+    var cur=document.createElement('span'); cur.className='tcur';
+    var i=0;
+    function next(){
+      if(i>=lines.length){ var idle=document.createElement('div'); idle.className='cmd'; idle.appendChild(cur); body.appendChild(idle); return; }
+      var line=lines[i++];
+      if(line.classList.contains('cmd')) typeLine(line,next);
+      else setTimeout(function(){ line.style.display=''; next(); }, line.classList.contains('ok-line')?430:280);
+    }
+    // Types one command line node-by-node (text + comment spans keep their colors),
+    // then swaps the ghost for the real line so the DOM ends byte-identical.
+    function typeLine(line,done){
+      var ghost=line.cloneNode(true), parts=[].slice.call(ghost.childNodes);
+      ghost.innerHTML=''; ghost.style.display='';
+      line.parentNode.insertBefore(ghost,line);
+      ghost.appendChild(cur);
+      var pi=0;
+      function nextPart(){
+        if(pi>=parts.length){ ghost.parentNode.removeChild(ghost); line.style.display=''; setTimeout(done,200); return; }
+        var node=parts[pi++], text=node.textContent||'';
+        var target=(node.nodeType===1)?node.cloneNode(false):document.createTextNode('');
+        ghost.insertBefore(target,cur);
+        var ci=0;
+        (function tick(){
+          if(ci<text.length){
+            var ch=text.charAt(ci++);
+            if(target.nodeType===3) target.nodeValue+=ch; else target.textContent+=ch;
+            setTimeout(tick, 13+Math.random()*22);
+          } else nextPart();
+        })();
+      }
+      setTimeout(nextPart, 340);
+    }
+    next();
+  }
 })();
 </script>
 </body>
