@@ -1877,7 +1877,7 @@ In `docs/index.html`, find the Triangulate card's link to `engines/triangulate.h
 
 - [ ] **Step 4: Preview locally (network-safe)**
 
-Run: `cd docs && py -3 -m http.server 8080` then open `http://localhost:8080/engines/triangulate.html` in a browser. Verify: die stack layers are clickable and the panel updates; schematic blocks link out; spec-strip footnotes resolve to the Substantiation list; motion swap plays; page prints as a single column with the static SVG. (The `intracorp.local` network resets the live domain — preview locally, never via sophonfinance.com.)
+Run: `cd docs && py -3 -m http.server 8080` then open `http://localhost:8080/engines/triangulate.html` in a browser. Verify: die stack layers are clickable and the panel updates; schematic blocks link out; spec-strip footnotes resolve to the Substantiation list; motion swap plays; page prints as a single column with the static SVG. (The workstation's corporate network resets the live domain — preview locally, never via sophonfinance.com.)
 
 - [ ] **Step 5: Run the FULL datasheet suite**
 

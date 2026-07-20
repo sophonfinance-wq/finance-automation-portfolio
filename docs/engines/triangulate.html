@@ -4,67 +4,96 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Triangulate — Sophon Finance Systems</title>
-<meta name="description" content="Separation of duties for AI work — no consensus, no sign-off — how the Triangulate engine works, what you provide, what you receive, and how to verify the engineering yourself on GitHub.">
+<meta name="description" content="Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, a human-gated verdict, and every figure re-derivable from the public repository.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#ffffff; --bg-alt:#f4f4f4; --border:#e0e0e0; --border-strong:#c6c6c6; --text:#161616; --text-2:#525252; --text-3:#6f6f6f; --blue:#0f62fe; --blue-hover:#0043ce; --blue-tint:#edf5ff; --green:#198038;
-    --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6; }
-  .wrap { width:100%; max-width:980px; margin:0 auto; padding:0 22px; }
-  header.nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 0; }
-  .nav-in { display:flex; align-items:center; gap:16px; }
-  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-  .brand-mark { width:24px; height:24px; }
-  .brand-word { font-weight:600; font-size:14px; letter-spacing:.2px; white-space:nowrap; }
-  .brand-word span { font-weight:300; }
-  .nav-in .backlink { margin-left:auto; color:var(--blue); text-decoration:none; font-size:14px; }
-  .nav-in .backlink:hover { text-decoration:underline; }
-  .btn { display:inline-flex; align-items:center; gap:18px; text-decoration:none; font-size:15px; padding:13px 18px; min-height:46px; border:1px solid transparent; }
-  .btn-p { background:var(--blue); color:#fff; } .btn-p:hover { background:var(--blue-hover); }
-  .btn-t { background:transparent; color:var(--blue); border-color:var(--blue); } .btn-t:hover { background:var(--blue); color:#fff; }
-  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
-  .hero { padding:54px 0 8px; }
-  h1 { font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-.3px; line-height:1.15; margin:8px 0 10px; }
-  h1 strong { font-weight:600; }
-  .tag { font-size:16px; color:var(--text-2); max-width:44em; }
-  .intro { font-size:16.5px; color:var(--text-2); max-width:46em; margin:18px 0 8px; }
-  figure.vis { margin:34px 0 8px; }
-  figure.vis img, figure.vis video { display:block; width:100%; height:auto; }
-  section { padding:34px 0 6px; }
-  h2 { font-size:clamp(20px,2.6vw,26px); font-weight:600; letter-spacing:-.2px; margin-bottom:14px; }
-  .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); }
-  .col { padding:22px 24px; }
-  .col + .col { border-left:1px solid var(--border); }
-  .col h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
-  .col.does h4 { color:var(--blue); } .col.gets h4 { color:var(--green); }
-  .item { display:flex; gap:9px; font-size:14px; color:var(--text-2); margin:9px 0; line-height:1.45; }
-  .item b { color:var(--text); }
-  .dot { flex:none; width:7px; height:7px; border-radius:50%; margin-top:7px; background:var(--border-strong); }
-  .does .dot { background:var(--blue); } .gets .dot { background:var(--green); }
-  .ctrl { border:1px solid var(--border); border-left:3px solid var(--blue); padding:18px 22px; margin-top:16px; }
-  .ctrl .lbl { font-family:var(--mono); font-size:11px; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:6px; }
-  .ctrl p { font-size:14.5px; color:var(--text-2); }
-  .ctrl .gate b { color:var(--text); }
-  .faq details { border:1px solid var(--border); padding:0; margin-top:10px; }
-  .faq summary { cursor:pointer; font-weight:600; font-size:15px; padding:15px 18px; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-  .faq summary::after { content:"+"; color:var(--blue); font-size:20px; font-weight:300; }
-  .faq details[open] summary::after { content:"\2212"; }
-  .faq details p { padding:0 18px 16px; font-size:14.5px; color:var(--text-2); }
-  .verify { background:var(--bg-alt); border:1px solid var(--border); padding:26px 26px 22px; margin-top:6px; }
-  .verify .runline { font-family:var(--mono); font-size:13px; background:#161616; color:#9ef0a0; padding:12px 16px; margin:14px 0 16px; overflow-x:auto; white-space:nowrap; }
-  .verify .links { display:flex; flex-wrap:wrap; gap:10px; }
-  .verify p { font-size:14.5px; color:var(--text-2); }
-  .cta { margin:44px 0 60px; background:var(--blue); color:#fff; padding:34px 30px; }
-  .cta h2 { color:#fff; margin-bottom:6px; }
-  .cta p { color:#d0e2ff; font-size:15px; max-width:44em; margin-bottom:18px; }
-  .btn-w { background:#fff; color:var(--blue); } .btn-w:hover { background:var(--blue-tint); }
-  .btn-wo { background:transparent; color:#fff; border-color:#fff; } .btn-wo:hover { background:rgba(255,255,255,.14); }
-  footer { border-top:1px solid var(--border); padding:18px 0 26px; font-size:13px; color:var(--text-3); }
-  footer a { color:var(--blue); text-decoration:none; }
-  @media (max-width:760px){ .cols { grid-template-columns:1fr; } .col + .col { border-left:none; border-top:1px solid var(--border); } }
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:24px;height:24px}
+.brand-word{font-weight:600;font-size:14px;letter-spacing:.2px;white-space:nowrap}
+.brand-word span{font-weight:300}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair h4{font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain h4{color:var(--blue)}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack (filled in Task 4) */
+.die{position:relative;margin:8px 0}
+.die-svg{width:100%;height:auto;display:block}
+.die-3d{display:none}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic (filled in Task 5) */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+@media (max-width:760px){.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{header.nav,.cta,.copybtn{display:none}.die-3d{display:none!important}.die-svg{display:block!important}section{break-inside:avoid}}
+.die-3d{perspective:1200px;margin:10px 0}
+.die-face{display:block;width:min(360px,80%);margin:0 auto;padding:12px 16px;border:1px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.die-face+ .die-face{margin-top:8px}
+.die-face:hover,.die-face:focus-visible{transform:translateX(6px);box-shadow:-4px 0 0 var(--blue);outline:none}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff}
+.js-3d .die-svg{display:none}
+.js-3d .die-3d{display:block}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (prefers-reduced-motion:reduce){.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+
 </style>
 </head>
 <body>
@@ -76,73 +105,177 @@
   <a class="backlink" href="/#engines">&larr; All engines</a>
   <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
 </div></header>
-
 <main class="wrap">
-  <div class="hero">
-    <p class="kicker">ENGINE 06 &middot; PORTFOLIO</p>
-    <h1><strong>Triangulate</strong></h1>
-    <p class="tag">Separation of duties for AI work &mdash; no consensus, no sign-off</p>
-    <p class="intro">AI work needs separation of duties too. Triangulate runs independent reviewer roles plus a deterministic auditor over the same work product &mdash; and if they disagree, the line stops. No consensus, no sign-off, no exceptions.</p>
+<section class="masthead">
+  <p class="kicker">ENGINE 06</p>
+  <p class="partline">SFS-E06-TRI &middot; AI VALIDATION &middot; REV 2026-07-20 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Triangulate</strong></h1>
+  <p class="tag">Separation of duties for AI work — no consensus, no sign-off</p>
+  <p class="intro">Triangulate runs independent reviewer roles plus a deterministic auditor over the same AI-assisted workpaper. When they disagree, the line stops and the work goes to a person. It is separation of duties applied to AI: an explicit authority hierarchy, not a multi-model majority vote.</p>
+  <p class="thesis">A processor buyer cannot re-run the vendor&#x27;s benchmark lab. Every figure on this page re-derives from the public repository — the benchmark is a command, not a press release.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k">functional block stack &middot; click a layer</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 400" role="img" aria-label="Exploded functional block stack: Human Gate, Deterministic Auditor, Reviewer, Specialist, Preparer over seeded fictional data">
+  <g class="die-layer" data-layer="gate"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Human Gate</text></g>
+  <g class="die-layer" data-layer="auditor"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Deterministic Auditor</text></g>
+  <g class="die-layer" data-layer="reviewer"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Reviewer</text></g>
+  <g class="die-layer" data-layer="specialist"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Specialist</text></g>
+  <g class="die-layer" data-layer="preparer"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Preparer</text></g>
+  <text x="40" y="390" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="gate" data-plain="A person makes the final call. The framework never overrides itself." data-eng="Deterministic gate maps severity to a verdict; sign-off authority is held by a human, not any model." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" aria-label="Human Gate layer — open detail">Human Gate</button>
+    <button class="die-face" data-layer="auditor" data-plain="Re-does the arithmetic itself, so no model is asked whether a number &#x27;looks right.&#x27;" data-eng="Mechanically re-derives every formula on a hashed clone; a tie-out mismatch is a Critical finding regardless of model opinion." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py" aria-label="Deterministic Auditor layer — open detail">Deterministic Auditor</button>
+    <button class="die-face" data-layer="reviewer" data-plain="Challenges the draft and flags issues — read-only, it cannot change the file." data-eng="Read-only reviewer role; the orchestrator hashes the workpaper before and after so a reviewer cannot mutate what it inspects." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py" aria-label="Reviewer layer — open detail">Reviewer</button>
+    <button class="die-face" data-layer="specialist" data-plain="A narrow second opinion or source analysis where the work needs one." data-eng="Specialist role supplies scoped second opinions; ranks below source data and signed work in the authority model." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py" aria-label="Specialist layer — open detail">Specialist</button>
+    <button class="die-face" data-layer="preparer" data-plain="Builds the first draft of the workpaper." data-eng="Preparer role produces the draft that the other roles then challenge; no self-review." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py" aria-label="Preparer layer — open detail">Preparer</button>
   </div>
-
-  <figure class="vis">
-    <img src="../assets/tile-triangulate.webp" data-video="../assets/tile-triangulate-motion.mp4" alt="Diagram: two reviewers, a specialist, and a deterministic auditor examine the same work; the check appears only where their beams agree — no consensus, no sign-off" loading="eager">
-  </figure>
-
-  <section>
-    <h2>How the work moves</h2>
-    <div class="cols">
-      <div class="col"><h4>You provide</h4><div class="item"><span class="dot"></span><span>The work product to verify</span></div></div>
-      <div class="col does"><h4>The engine does</h4><div class="item"><span class="dot"></span><span>Runs independent reviewer roles in parallel</span></div><div class="item"><span class="dot"></span><span>Runs a deterministic auditor alongside them</span></div><div class="item"><span class="dot"></span><span>Blocks sign-off on any disagreement</span></div></div>
-      <div class="col gets"><h4>You receive</h4><div class="item"><span class="dot"></span><span><b>Consensus verdict</b> or a stopped line</span></div><div class="item"><span class="dot"></span><span><b>Each reviewer's findings</b>, independently</span></div><div class="item"><span class="dot"></span><span><b>An audit trail</b> of the whole exchange</span></div></div>
-    </div>
-    <div class="ctrl"><span class="lbl">Controls</span><p>Independence by construction &middot; disagreement stops the line</p></div>
-    <div class="ctrl" style="border-left-color:var(--green)"><span class="lbl" style="color:var(--green)">Human gate</span><p class="gate"><b>A stopped line goes to a person &mdash; the framework never overrides itself.</b></p></div>
-  </section>
-
-  <section class="faq">
-    <h2>What customers ask</h2>
-    <details><summary>Why multiple reviewers?</summary><p>Redundancy catches slips; independence catches bias. Triangulate uses both, plus a deterministic auditor that can't be persuaded.</p></details><details><summary>What happens on disagreement?</summary><p>Nothing ships. The disagreement is documented and escalated to a person &mdash; that's the point.</p></details>
-  </section>
-
-  <section>
-    <h2>Verify it yourself</h2>
-    <div class="verify">
-      <p>Don't take this page's word for it. The engine is public, MIT-licensed, and runs on fictional seeded data &mdash; read the code, run it, and judge the work before you spend anything.</p>
-      <div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git<br>cd ai-validation-framework &nbsp;&amp;&amp;&nbsp; python -m triangulate</div>
-      <div class="links">
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ai-validation-framework" target="_blank" rel="noopener">Source on GitHub</a>
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/README.md" target="_blank" rel="noopener">Engine README</a>
-        <a class="btn btn-t" href="/tests/" >All tests, by engine</a>
-        <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="cta">
-    <h2>Show us where the hours go.</h2>
-    <p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. No software purchase &mdash; and your people keep approval authority.</p>
-    <a class="btn btn-w" href="/#book">Book a free consultation</a>
-    <a class="btn btn-wo" href="mailto:contact@sophonfinance.com">contact@sophonfinance.com</a>
+  <div class="die-panel" id="die-panel" role="region" aria-live="polite"><h4>Select a layer</h4><p>Each layer is an independent duty. Click any block for its plain-terms and engineering description.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">8,320<sup class="fn">1</sup></div><div class="l">Tests</div><div class="p">the checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">5<sup class="fn">2</sup></div><div class="l">Roles</div><div class="p">independent duties over one workpaper</div></div>
+  <div class="cell"><div class="v">PASS / FLAG / FAIL<sup class="fn">3</sup></div><div class="l">Verdict states</div></div>
+  <div class="cell"><div class="v">0 = PASS · non-zero = FLAG/FAIL<sup class="fn">4</sup></div><div class="l">Gate exit codes</div><div class="p">so it can act as a CI gate</div></div>
+  <div class="cell"><div class="v">offline, no API key<sup class="fn">5</sup></div><div class="l">Default mode</div></div>
+  <div class="cell"><div class="v">seeded + read-only<sup class="fn">6</sup></div><div class="l">Determinism</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">No high-stakes workpaper should rely on one AI system reporting &quot;looks good.&quot; Models agree too easily, invent support, miss the same issue twice, and explain a number without tying it to source. Triangulate assumes those failures will happen and builds the workflow around them.</p>
+  <p style="margin:10px 0"><b>An injected hallucination is caught by the arithmetic, not an opinion.</b> In the adversarial demo, an AI asserts a Total Revenue $49,000 over what the revenue streams actually sum to, backed only by an &#x27;AI assumption&#x27; — the lowest authority. Because that cell feeds tax and net, the single bad figure cascades. The Reviewer and the deterministic Auditor both flag it independently; the verdict is FAIL and the process exits non-zero.</p>
+  <p style="margin:10px 0"><b>The gate discriminates — a clean workpaper passes.</b> The clean sample runs the identical flow and returns PASS, proving the gate discriminates instead of always failing.</p>
+  <p style="margin:10px 0"><b>Arithmetic self-heals; judgment escalates.</b> The review loop re-derives the lowest broken formula cell from its own formula on a clone, then re-runs the full pipeline. The injected $49k error clears in one turn (FAIL → PASS). An AI-assumption input and a hardcoded cell have nothing to re-derive from, so they stay in the fix packet for a human (FAIL → FLAG).</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<svg class="schem" viewBox="0 0 950 402" role="img" aria-label="Functional block diagram of the Triangulate engine">
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,181 C235,181 235,67 270,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="61" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
+  <g class="schem-edge"><path d="M200,181 C235,181 235,181 270,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
+  <g class="schem-edge"><path d="M200,181 C235,181 235,295 270,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
+  <g class="schem-edge"><path d="M440,67 C475,67 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="61" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
+  <g class="schem-edge"><path d="M440,181 C475,181 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">tie-outs</text></g>
+  <g class="schem-edge gate"><path d="M680,181 C715,181 715,181 750,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">verdict</text></g>
+  <g class="schem-edge"><path d="M680,181 C355,181 355,181 30,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">fix packet (loop)</text></g>
+  <g class="schem-block" data-block="preparer"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py" target="_blank" rel="noopener"><rect x="30" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Preparer</text></a></g>
+  <g class="schem-block" data-block="reviewer"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py" target="_blank" rel="noopener"><rect x="270" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reviewer</text></a></g>
+  <g class="schem-block" data-block="specialist"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py" target="_blank" rel="noopener"><rect x="270" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Specialist</text></a></g>
+  <g class="schem-block" data-block="auditor"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py" target="_blank" rel="noopener"><rect x="270" y="258" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Deterministic Auditor</text></a></g>
+  <g class="schem-block" data-block="reconcile"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" target="_blank" rel="noopener"><rect x="510" y="144" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reconcile + Gate</text></a></g>
+  <g class="schem-block" data-block="human"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" target="_blank" rel="noopener"><rect x="750" y="144" width="170" height="74" rx="4" fill="#e6f4ea" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Human Gate</text></a></g>
+  <g class="schem-title"><line x1="30" y1="376" x2="920" y2="376" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="390" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E06-TRI &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-20</text></g>
+</svg></section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate</code><button class="copybtn" data-copy="python -m triangulate" aria-label="Copy command">copy</button></div></td><td>run the defective sample</td><td class="mono">VERDICT: FAIL [cannot sign off]</td><td class="mono">non-zero</td><td>builder memo, fix packet, change log, QA summary, verdict.json</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --sample clean</code><button class="copybtn" data-copy="python -m triangulate --sample clean" aria-label="Copy command">copy</button></div></td><td>run the clean sample</td><td class="mono">VERDICT: PASS</td><td class="mono">0</td><td>output/ artifacts + verdict.json</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --demo-adversarial</code><button class="copybtn" data-copy="python -m triangulate --demo-adversarial" aria-label="Copy command">copy</button></div></td><td>inject one hallucinated figure and catch it</td><td class="mono">VERDICT: FAIL · Critical=6</td><td class="mono">non-zero</td><td>fix packet showing cascade</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --sample adversarial</code><button class="copybtn" data-copy="python -m triangulate.loop --sample adversarial" aria-label="Copy command">copy</button></div></td><td>self-heal the injected error</td><td class="mono">FAIL → PASS</td><td class="mono">0</td><td>re-derivation change log</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --xlsx</code><button class="copybtn" data-copy="python -m triangulate --xlsx" aria-label="Copy command">copy</button></div></td><td>also emit a small .xlsx workpaper</td><td class="mono">VERDICT + workpaper.xlsx</td><td class="mono">non-zero</td><td>output/*.xlsx</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command">copy</button></div></td><td>run the engine&#x27;s test suite</td><td class="mono">test session summary</td><td class="mono">0</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Adversarial cascade depth<sup class="fn">7</sup></td><td class="mono"><b>6</b> Critical findings from 1 injected cell<br><span style="color:#6f6f6f;font-size:12.5px">one bad number, six downstream failures caught</span></td></tr>
+  <tr><td>Self-heal turns (adversarial)<sup class="fn">8</sup></td><td class="mono"><b>1</b> loop turn to PASS</td></tr>
+  <tr><td>Independent detectors<sup class="fn">9</sup></td><td class="mono"><b>2</b> roles flag the same cell</td></tr>
+  <tr><td>Engine tests<sup class="fn">10</sup></td><td class="mono"><b>8,320</b> tests</td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<table class="ds"><thead><tr><th>Authority</th><th>Level</th><th>Note</th></tr></thead><tbody><tr><td class="mono">1</td><td><b>Source data</b></td><td>signed/source evidence outranks everything</td></tr><tr><td class="mono">2</td><td><b>Signed work</b></td><td>prior signed work product</td></tr><tr><td class="mono">3</td><td><b>AI assumption</b></td><td>lowest authority; cannot outrank source</td></tr></tbody></table>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>Critical present</td><td class="mono"><b>FAIL</b></td><td>returned for rebuild; exits non-zero</td></tr><tr><td>High/unresolved judgment</td><td class="mono"><b>FLAG</b></td><td>fix packet escalated to a human</td></tr><tr><td>None</td><td class="mono"><b>PASS</b></td><td>eligible for human sign-off; exit 0</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only reviewer: the orchestrator hashes the workpaper before and after review steps, so a reviewer cannot mutate what it inspects.</li><li style="list-style:disc;margin-left:18px">Deterministic audit: every formula is mechanically re-derived; arithmetic decides, not model opinion.</li><li style="list-style:disc;margin-left:18px">Seeded, fictional data throughout the public demo.</li></ul>
+<p style="margin:8px 0"><b>Enterprise-safe mode (default).</b> deterministic mock reviewer, no API key, no network call, runnable in conservative corporate IT.</p><p style="margin:8px 0"><b>Agent-accelerated mode.</b> where approved, a live Anthropic Claude reviewer adapter can replace the mock reviewer; an optional orchestration layer for approved, agent-enabled environments; the platform runs fully without it.</p></section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The loop clears arithmetic; it cannot manufacture authority. An AI-assumption input or a hardcoded cell with no formula has nothing to re-derive from — those stay in the fix packet for a human.<sup class="fn">11</sup></li><li>The framework does not apply changes on its own or override its own verdict; final sign-off authority is held by a person.<sup class="fn">12</sup></li><li>The public demo runs offline with a deterministic mock reviewer; live-model results depend on the pinned model approved for that client environment.<sup class="fn">13</sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">the real CLI</span>
+<figure class="figwrap"><img src="../assets/tile-triangulate.webp" data-video="../assets/tile-triangulate-motion.mp4" alt="Screencast of the Triangulate CLI running on fictional seeded data" loading="lazy"></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git &amp;&amp; cd ai-validation-framework &amp;&amp; python -m triangulate</div><div class="runline">python -m triangulate --sample clean</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ai-validation-framework" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
   </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li><span class="fnid">1</span>py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README&#x27;s &quot;1,311&quot; is stale</li>
+    <li><span class="fnid">2</span>ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Human gatekeeper</li>
+    <li><span class="fnid">3</span>ai-validation-framework/README.md — verdicts and exit behavior</li>
+    <li><span class="fnid">4</span>ai-validation-framework/README.md — &quot;exits 0 on PASS and non-zero on FLAG/FAIL&quot;</li>
+    <li><span class="fnid">5</span>ai-validation-framework/README.md — &quot;default demo needs no API key and no network access&quot;</li>
+    <li><span class="fnid">6</span>ai-validation-framework/README.md — &quot;All sample data is fictional and seeded&quot;; read-only reviewer</li>
+    <li><span class="fnid">7</span>ai-validation-framework/README.md — &quot;Critical=6&quot; in --demo-adversarial</li>
+    <li><span class="fnid">8</span>ai-validation-framework/README.md — &quot;Turn 1 re-derive B5 … PASS&quot;</li>
+    <li><span class="fnid">9</span>ai-validation-framework/README.md — &quot;flagged independently by two roles&quot;</li>
+    <li><span class="fnid">10</span>py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README&#x27;s &quot;1,311&quot; is stale</li>
+    <li><span class="fnid">11</span>ai-validation-framework/README.md — review-loop section</li>
+    <li><span class="fnid">12</span>ai-validation-framework/README.md — human gate</li>
+    <li><span class="fnid">13</span>ai-validation-framework/README.md — two operating modes</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
 </main>
-
-<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
-
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ai-validation-framework" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
 <script>
-// motion upgrade: diagram image swaps to its silent looping video when visible
+// motion upgrade: poster image swaps to its silent looping video when visible
 document.querySelectorAll('img[data-video]').forEach(function(img){
-  var io=new IntersectionObserver(function(es){ es.forEach(function(e){
-    if(!e.isIntersecting) return; io.unobserve(img);
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(!e.isIntersecting)return;io.unobserve(img);
     var v=document.createElement('video');
-    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
-    v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay',''); v.setAttribute('loop',''); v.setAttribute('preload','auto');
-    v.poster=img.currentSrc||img.src; v.src=img.getAttribute('data-video');
-    v.width=img.width; v.height=img.height; v.setAttribute('role','img'); v.setAttribute('aria-label',img.alt);
-    img.replaceWith(v); var p=v.play(); if(p&&p.catch)p.catch(function(){});
-  }); },{rootMargin:'120px'});
+    v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;
+    v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('preload','auto');
+    v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+    v.setAttribute('role','img');v.setAttribute('aria-label',img.alt);
+    v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+    img.replaceWith(v);var p=v.play();if(p&&p.catch)p.catch(function(){});
+  });},{rootMargin:'120px'});
   io.observe(img);
 });
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// die stack: enable interactive representation only when JS is available
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce)return; // keep the static SVG for reduced-motion users
+  document.documentElement.classList.add('js-3d');
+  var panel=document.getElementById('die-panel');
+  die.querySelectorAll('.die-face').forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    function open(){
+      die.querySelectorAll('.die-face').forEach(function(b){b.setAttribute('aria-pressed','false');});
+      btn.setAttribute('aria-pressed','true');
+      var src=btn.getAttribute('data-src');
+      panel.innerHTML='<h4>'+btn.textContent+'</h4>'+
+        '<p><b>Plain terms.</b> '+btn.getAttribute('data-plain')+'</p>'+
+        '<p><b>Engineering.</b> '+btn.getAttribute('data-eng')+'</p>'+
+        '<p><a href="'+src+'" target="_blank" rel="noopener">Source on GitHub</a></p>';
+    }
+    btn.addEventListener('click',open);
+    btn.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}
+      if(e.key==='Escape'){btn.setAttribute('aria-pressed','false');}
+    });
+  });
+})();
+
 </script>
 </body>
 </html>
