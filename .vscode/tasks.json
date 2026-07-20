@@ -1,0 +1,115 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Python: test current file",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["-m", "pytest", "-q", "${file}"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Python: test selected engine",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["-m", "pytest", "-q"],
+      "options": {
+        "cwd": "${workspaceFolder}/${input:engineFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Python: test all engines (CI equivalent)",
+      "type": "process",
+      "command": "${workspaceFolder}/scripts/test-all.sh",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PYTHONIOENCODING": "utf-8"
+        }
+      },
+      "problemMatcher": [],
+      "group": "test"
+    },
+    {
+      "label": "Python: lint current file",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/ruff",
+      "args": ["check", "${file}"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Python: format current file",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/ruff",
+      "args": ["format", "${file}"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Website: preview on localhost:8000",
+      "type": "process",
+      "command": "${workspaceFolder}/.venv/bin/python",
+      "args": ["-m", "http.server", "8000", "--directory", "docs"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Worker: run locally",
+      "type": "npm",
+      "script": "dev",
+      "path": "worker/",
+      "problemMatcher": []
+    },
+    {
+      "label": "Setup: refresh local dependencies",
+      "type": "shell",
+      "command": "uv pip install --python .venv/bin/python -r requirements.txt 'ruff>=0.6' 'mypy>=1.11' && npm install --no-package-lock --no-audit --no-fund --prefix worker",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "engineFolder",
+      "type": "pickString",
+      "description": "Choose the finance engine to test",
+      "default": "cash-management",
+      "options": [
+        "cash-management",
+        "cash-reconciliation",
+        "monthly-close-automation",
+        "tax-surplus-engine",
+        "partnership-1065-automation",
+        "audit-automation",
+        "ai-validation-framework",
+        "knowledge-brain-engine",
+        "finance-atlas"
+      ]
+    }
+  ]
+}
+
