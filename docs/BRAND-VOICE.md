@@ -42,7 +42,8 @@ product.
 
 - Capitalize **"Tax"** when it is part of a title or label phrase (e.g., "Finance & Tax").
 - Use the canonical system names consistently: Month-End Close, Cash & Debt Reconciliation,
-  Tax Surplus / ACB, Partnership 1065 Automation, Validation Engine, Triangulate, Knowledge Brain.
+  Partnership 1065 Automation, Validation Engine, Tax Surplus / ACB, Triangulate,
+  Knowledge Brain, Finance Operations Atlas, Cash Management.
 - Write provider names plainly: "Anthropic Claude," and "ChatGPT" without a version number.
 
 ## Design
