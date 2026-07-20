@@ -240,9 +240,71 @@ def die_stack_html(spec: dict) -> str:
 
 
 def schematic_html(spec: dict) -> str:
+    blocks = spec["blocks"]
+    edges = spec["edges"]
+    by_id = {b["id"]: b for b in blocks}
+    cols = max(b["col"] for b in blocks) + 1
+    rows = max(b["row"] for b in blocks) + 1
+    cw, ch, pad = 170, 74, 30
+    gx, gy = cw + 70, ch + 40
+    width = pad * 2 + (cols - 1) * gx + cw
+    height = pad * 2 + (rows - 1) * gy + ch + 40  # title-block room
+
+    def cx(b): return pad + b["col"] * gx
+    def cy(b): return pad + b["row"] * gy
+
+    edge_svg = []
+    for e in edges:
+        a, b = by_id[e["from"]], by_id[e["to"]]
+        x1, y1 = cx(a) + cw, cy(a) + ch // 2
+        x2, y2 = cx(b), cy(b) + ch // 2
+        cls = "schem-edge gate" if e.get("gate") else "schem-edge"
+        mx = (x1 + x2) // 2
+        path = "M%d,%d C%d,%d %d,%d %d,%d" % (x1, y1, mx, y1, mx, y2, x2, y2)
+        label = ('<text x="%d" y="%d" font-family="IBM Plex Mono,monospace" '
+                 'font-size="10" fill="#6f6f6f" text-anchor="middle">%s</text>'
+                 % (mx, min(y1, y2) - 6, _esc(e["label"]))) if e.get("label") else ""
+        edge_svg.append(
+            '  <g class="%s"><path d="%s" fill="none" stroke="#0f62fe" '
+            'stroke-width="1.6" marker-end="url(#arrow)"/>%s</g>' % (cls, path, label))
+
+    kind_fill = {"role": "#ffffff", "audit": "#edf5ff", "gate": "#edf5ff",
+                 "human": "#e6f4ea"}
+    block_svg = []
+    for b in blocks:
+        x, y = cx(b), cy(b)
+        fill = kind_fill.get(b.get("kind", ""), "#ffffff")
+        block_svg.append(
+            '  <g class="schem-block" data-block="%s">'
+            '<a href="%s" target="_blank" rel="noopener">'
+            '<rect x="%d" y="%d" width="%d" height="%d" rx="4" fill="%s" '
+            'stroke="#0f62fe" stroke-width="1.6"/>'
+            '<text x="%d" y="%d" font-family="IBM Plex Sans,sans-serif" font-size="13" '
+            'font-weight="600" fill="#161616" text-anchor="middle">%s</text></a></g>'
+            % (_esc(b["id"]), _esc(b["source_link"]), x, y, cw, ch, fill,
+               x + cw // 2, y + ch // 2 + 4, _esc(b["label"])))
+
+    title_block = (
+        '  <g class="schem-title">'
+        '<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="#c6c6c6" stroke-width="1"/>'
+        '<text x="%d" y="%d" font-family="IBM Plex Mono,monospace" font-size="10" '
+        'fill="#6f6f6f">%s &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV %s</text></g>'
+        % (pad, height - 26, width - pad, height - 26, pad, height - 12,
+           _esc(spec["part_no"]), _esc(spec["rev"])))
+
+    svg = (
+        '<svg class="schem" viewBox="0 0 %d %d" role="img" '
+        'aria-label="Functional block diagram of the %s engine">\n'
+        '  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" '
+        'markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
+        '<path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>\n'
+        '%s\n%s\n%s\n</svg>'
+    ) % (width, height, _esc(spec["name"]),
+         "\n".join(edge_svg), "\n".join(block_svg), title_block)
+
     return ('<section><h2>Functional block diagram</h2>'
-            '<span class="zone-k">engineering</span>\n'
-            '<div><!-- schematic: Task 5 --></div></section>')
+            '<span class="zone-k">engineering &middot; each block links to its source</span>\n'
+            '%s</section>' % svg)
 
 
 # --- assembly --------------------------------------------------------------
