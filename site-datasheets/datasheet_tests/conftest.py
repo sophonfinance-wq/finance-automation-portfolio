@@ -13,3 +13,18 @@ def pytest_collection_modifyitems(items):
     """Every datasheet test is site tooling, not an engine test."""
     for item in items:
         item.add_marker("site_tooling")
+
+
+import pytest  # noqa: E402
+import datasheet_spec as ds  # noqa: E402
+import generate_datasheets as gen  # noqa: E402
+
+
+@pytest.fixture(scope="session")
+def spec() -> dict:
+    return ds.load_spec("triangulate")
+
+
+@pytest.fixture(scope="session")
+def rendered() -> str:
+    return gen.render("triangulate")
