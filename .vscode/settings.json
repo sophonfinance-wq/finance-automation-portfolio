@@ -1,0 +1,67 @@
+{
+  // Point VSCode at the repo-local venv (Python 3.12, matching CI).
+  // Without this the editor falls back to Apple's system Python 3.9, which
+  // cannot run these packages (pyproject requires-python = ">=3.12").
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/bin/python",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.diagnosticMode": "openFilesOnly",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}/monthly-close-automation",
+    "${workspaceFolder}/cash-reconciliation",
+    "${workspaceFolder}/cash-management",
+    "${workspaceFolder}/tax-surplus-engine",
+    "${workspaceFolder}/partnership-1065-automation",
+    "${workspaceFolder}/audit-automation",
+    "${workspaceFolder}/ai-validation-framework",
+    "${workspaceFolder}/knowledge-brain-engine",
+    "${workspaceFolder}/finance-atlas"
+  ],
+
+  // Tests run per package, like CI — not from the repo root.
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": ["monthly-close-automation"],
+  "python.testing.autoTestDiscoverOnSaveEnabled": true,
+
+  // Ruff is available for intentional formatting, but automatic lint/fix is
+  // disabled because the existing portfolio has known baseline findings.
+  "ruff.nativeServer": "on",
+  "ruff.lint.enable": false,
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.formatOnSave": false
+  },
+
+  "editor.rulers": [100],
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    ".venv": true,
+    "worker/node_modules": true
+  },
+  "search.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    ".venv": true,
+    "worker/node_modules": true,
+    "**/out": true,
+    "**/output": true
+  },
+  "files.watcherExclude": {
+    "**/.venv/**": true,
+    "**/node_modules/**": true,
+    "**/__pycache__/**": true,
+    "**/.pytest_cache/**": true
+  }
+}
