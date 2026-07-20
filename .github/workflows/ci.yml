@@ -41,7 +41,7 @@ jobs:
           # Each system is independent. If a package declares its own deps
           # (pyproject.toml or requirements.txt), install them so the suite is
           # robust even as packages diverge. Failures here are non-fatal.
-          for dir in monthly-close-automation cash-reconciliation cash-management tax-surplus-engine partnership-1065-automation audit-automation ai-validation-framework knowledge-brain-engine finance-atlas; do
+          for dir in monthly-close-automation cash-reconciliation cash-management tax-surplus-engine partnership-1065-automation audit-automation ai-validation-framework knowledge-brain-engine finance-atlas site-datasheets; do
             if [ -f "$dir/requirements.txt" ]; then
               echo "::group::pip install -r $dir/requirements.txt"
               pip install -r "$dir/requirements.txt" || echo "WARN: deps install failed for $dir (continuing)"
@@ -65,7 +65,7 @@ jobs:
           set +e
           overall=0
           failed_packages=""
-          for dir in monthly-close-automation cash-reconciliation cash-management tax-surplus-engine partnership-1065-automation audit-automation ai-validation-framework knowledge-brain-engine finance-atlas; do
+          for dir in monthly-close-automation cash-reconciliation cash-management tax-surplus-engine partnership-1065-automation audit-automation ai-validation-framework knowledge-brain-engine finance-atlas site-datasheets; do
             echo "::group::pytest $dir"
             ( cd "$dir" && python -m pytest -q )
             rc=$?
@@ -83,3 +83,10 @@ jobs:
             echo "FAILED packages:$failed_packages"
           fi
           exit "$overall"
+
+      - name: Datasheet generator drift check
+        shell: bash
+        run: |
+          # The committed page must equal a fresh render.
+          python site-datasheets/generate_datasheets.py --slug triangulate
+          git diff --exit-code docs/engines/triangulate.html

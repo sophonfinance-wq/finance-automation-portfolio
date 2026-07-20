@@ -9,10 +9,23 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 
+HERE = Path(__file__).resolve().parent
+
+
 def pytest_collection_modifyitems(items):
-    """Every datasheet test is site tooling, not an engine test."""
+    """Every datasheet test is site tooling, not an engine test.
+
+    NOTE: this hook receives the WHOLE session's items (pytest calls it once,
+    with everything collected — not just this directory), so the marker must
+    be scoped by path or a repo-root run would mark all engine tests too.
+    """
     for item in items:
-        item.add_marker("site_tooling")
+        try:
+            item_path = Path(str(item.fspath)).resolve()
+        except OSError:
+            continue
+        if item_path.is_relative_to(HERE):
+            item.add_marker("site_tooling")
 
 
 import pytest  # noqa: E402
