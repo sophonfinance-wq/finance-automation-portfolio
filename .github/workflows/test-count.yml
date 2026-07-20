@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          curated=$(python -m pytest --collect-only -q | tail -1)
+          curated=$(python -m pytest --collect-only -q -m "not site_tooling" | tail -1)
           echo "Curated: $curated"
           {
             echo "# Automated test count"
@@ -45,7 +45,7 @@ jobs:
             echo "## Curated suite (default \`pytest\`, gates CI)"
             echo ""
             echo '```'
-            echo "\$ pytest --collect-only -q | tail -1"
+            echo "\$ pytest --collect-only -q -m \"not site_tooling\" | tail -1"
             echo "$curated"
             echo '```'
             echo ""
@@ -53,11 +53,18 @@ jobs:
             echo ""
             echo "| Engine | Curated tests |"
             echo "|---|---:|"
-            python -m pytest --collect-only -q \
+            python -m pytest --collect-only -q -m "not site_tooling" \
               | grep '::' \
               | sed -E 's#/.*##' \
               | sort | uniq -c | sort -rn \
               | awk '{printf "| %s | %s |\n", $2, $1}'
+            echo ""
+            echo "### Site tooling (excluded from the engine headline above)"
+            echo ""
+            echo '```'
+            echo "\$ pytest --collect-only -q -m site_tooling | tail -1"
+            python -m pytest --collect-only -q -m "site_tooling" | tail -1
+            echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Collect the opt-in SWEEP tier
@@ -67,14 +74,14 @@ jobs:
           SWEEP: "1"
         run: |
           set -euo pipefail
-          sweep=$(python -m pytest --collect-only -q | tail -1)
+          sweep=$(python -m pytest --collect-only -q -m "not site_tooling" | tail -1)
           echo "Sweep: $sweep"
           {
             echo ""
             echo "## Opt-in property sweep (\`SWEEP=1 pytest\`)"
             echo ""
             echo '```'
-            echo "\$ SWEEP=1 pytest --collect-only -q | tail -1"
+            echo "\$ SWEEP=1 pytest --collect-only -q -m \"not site_tooling\" | tail -1"
             echo "$sweep"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
