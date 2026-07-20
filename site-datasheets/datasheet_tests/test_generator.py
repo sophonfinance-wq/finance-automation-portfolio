@@ -30,7 +30,6 @@ def test_document_is_well_formed():
     assert "Triangulate" in html
 
 
-@pytest.mark.xfail(reason="committed page written in Task 11", strict=False)
 def test_committed_page_is_fresh():
     page = gen.OUT_DIR / "triangulate.html"
     assert page.read_bytes() == gen.render("triangulate").encode("utf-8"), (
