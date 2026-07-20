@@ -21,3 +21,29 @@ document.querySelectorAll('.copybtn').forEach(function(b){
     }).catch(function(){});}
   });
 });
+// die stack: enable interactive representation only when JS is available
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce)return; // keep the static SVG for reduced-motion users
+  document.documentElement.classList.add('js-3d');
+  var panel=document.getElementById('die-panel');
+  die.querySelectorAll('.die-face').forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    function open(){
+      die.querySelectorAll('.die-face').forEach(function(b){b.setAttribute('aria-pressed','false');});
+      btn.setAttribute('aria-pressed','true');
+      var src=btn.getAttribute('data-src');
+      panel.innerHTML='<h4>'+btn.textContent+'</h4>'+
+        '<p><b>Plain terms.</b> '+btn.getAttribute('data-plain')+'</p>'+
+        '<p><b>Engineering.</b> '+btn.getAttribute('data-eng')+'</p>'+
+        '<p><a href="'+src+'" target="_blank" rel="noopener">Source on GitHub</a></p>';
+    }
+    btn.addEventListener('click',open);
+    btn.addEventListener('keydown',function(e){
+      if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}
+      if(e.key==='Escape'){btn.setAttribute('aria-pressed','false');}
+    });
+  });
+})();

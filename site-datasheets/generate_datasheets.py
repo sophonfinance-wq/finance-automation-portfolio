@@ -193,9 +193,50 @@ def integration_html(spec: dict, fn: Footnotes) -> str:
 # --- visual zones (STUBS — replaced in Tasks 4 and 5) ----------------------
 
 def die_stack_html(spec: dict) -> str:
-    return ('<section><h2>Architecture</h2>'
-            '<span class="zone-k">functional block stack</span>\n'
-            '<div class="die"><!-- die stack: Task 4 --></div></section>')
+    layers = spec["layers"]
+    n = len(layers)
+    # Static isometric SVG: stacked slabs (top parallelogram + front face), top layer first.
+    box_w, box_h, gap = 320, 46, 14
+    total_h = n * (box_h + gap) + 60 + 40
+    svg_layers = []
+    faces = []
+    for i, layer in enumerate(layers):
+        y = 20 + i * (box_h + gap)
+        top = "%d,%d %d,%d %d,%d %d,%d" % (
+            80, y, 80 + box_w, y, box_w + 40, y + 22, 40, y + 22)
+        front = "40,%d %d,%d %d,%d 40,%d" % (
+            y + 22, box_w + 40, y + 22, box_w + 40, y + 22 + box_h, y + 22 + box_h)
+        svg_layers.append(
+            '  <g class="die-layer" data-layer="%s">'
+            '<polygon points="%s" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/>'
+            '<polygon points="%s" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/>'
+            '<text x="60" y="%d" font-family="IBM Plex Mono,monospace" font-size="13" '
+            'fill="#161616">%s</text></g>'
+            % (_esc(layer["id"]), top, front, y + 22 + box_h // 2 + 4, _esc(layer["label"])))
+        faces.append(
+            '    <button class="die-face" data-layer="%s" '
+            'data-plain="%s" data-eng="%s" data-src="%s" '
+            'aria-label="%s layer — open detail">%s</button>'
+            % (_esc(layer["id"]), _esc(layer["plain"]), _esc(layer["engineering"]),
+               _esc(layer["source_link"]), _esc(layer["label"]), _esc(layer["label"])))
+    svg = ('<svg class="die-svg" viewBox="0 0 %d %d" role="img" '
+           'aria-label="Exploded functional block stack: %s over seeded fictional data">\n%s\n'
+           '  <text x="40" y="%d" font-family="IBM Plex Mono,monospace" font-size="11" '
+           'fill="#6f6f6f">substrate: seeded fictional data</text>\n</svg>'
+           % (box_w + 90, total_h,
+              _esc(", ".join(l["label"] for l in layers)),
+              "\n".join(svg_layers), total_h - 10))
+    faces_html = "\n".join(faces)
+    return (
+        '<section><h2>Architecture</h2>'
+        '<span class="zone-k">functional block stack &middot; click a layer</span>\n'
+        '<div class="die">\n%s\n'
+        '  <div class="die-3d" aria-hidden="false">\n%s\n  </div>\n'
+        '  <div class="die-panel" id="die-panel" role="region" aria-live="polite">'
+        '<h4>Select a layer</h4><p>Each layer is an independent duty. '
+        'Click any block for its plain-terms and engineering description.</p></div>\n'
+        '</div></section>'
+    ) % (svg, faces_html)
 
 
 def schematic_html(spec: dict) -> str:

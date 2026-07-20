@@ -69,3 +69,10 @@ footer a{color:var(--blue);text-decoration:none}
 @media (max-width:760px){.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{header.nav,.cta,.copybtn{display:none}.die-3d{display:none!important}.die-svg{display:block!important}section{break-inside:avoid}}
+.die-3d{perspective:1200px;margin:10px 0}
+.die-face{display:block;width:min(360px,80%);margin:0 auto;padding:12px 16px;border:1px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.die-face+ .die-face{margin-top:8px}
+.die-face:hover,.die-face:focus-visible{transform:translateX(6px);box-shadow:-4px 0 0 var(--blue);outline:none}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff}
+.js-3d .die-svg{display:none}
+.js-3d .die-3d{display:block}
