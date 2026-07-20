@@ -26,3 +26,28 @@ def test_triangulate_has_all_five_die_layers():
     for expected in ("Preparer", "Specialist", "Reviewer",
                      "Deterministic Auditor", "Human Gate"):
         assert expected in labels, expected
+
+
+import generate_datasheets as gen  # noqa: E402
+
+BRAND_VOICE = gen.REPO / "docs" / "BRAND-VOICE.md"
+
+NINE_NAMES = (
+    "Month-End Close", "Cash & Debt Reconciliation", "Partnership 1065 Automation",
+    "Validation Engine", "Tax Surplus / ACB", "Triangulate", "Knowledge Brain",
+    "Finance Operations Atlas", "Cash Management",
+)
+
+
+def test_brand_voice_lists_all_nine_engine_names():
+    text = BRAND_VOICE.read_text(encoding="utf-8")
+    for name in NINE_NAMES:
+        assert name in text, f"BRAND-VOICE.md missing canonical name: {name}"
+
+
+def test_page_h1_is_in_brand_voice_roster():
+    html = gen.render("triangulate")
+    # H1 strong text is the canonical name
+    assert "<h1><strong>Triangulate</strong></h1>" in html
+    text = BRAND_VOICE.read_text(encoding="utf-8")
+    assert "Triangulate" in text
