@@ -685,15 +685,23 @@
   }
 
   /* ---- story: the why film ---- */
-  /* Keep the film close to the hero contact line: roughly four text-line spaces
-     from the email to the "Watch this first" kicker. */
-  .hero { padding-bottom:32px; }
-  #story { padding-top:32px; }
-  .whyfilm { margin-top:28px; max-width:960px; }
-  .whyfilm-stage { position:relative; }
-  .whyfilm video { display:block; width:100%; height:auto; background:#000; border:0; box-shadow:none; }
+  /* Hand the hero directly into the film so its first frame is already visible at
+     the bottom of the initial desktop viewport. */
+  .hero { min-height:0; padding:32px 0 0; }
+  #story { padding-top:0; }
+  #story > .wrap { position:relative; }
+  #story .sec-head { position:absolute; z-index:3; top:24px; left:32px; right:32px; margin:0; }
+  #story .sec-head .kicker { color:#a9caff; text-shadow:0 1px 12px rgba(0,0,0,.65); }
+  #story .sec-head h2 { color:#fff; text-shadow:0 2px 22px rgba(0,0,0,.72); }
+  #story .sec-head .lead { color:rgba(255,255,255,.92); text-shadow:0 1px 14px rgba(0,0,0,.72); }
+  .whyfilm { margin-top:0; max-width:960px; }
+  .whyfilm-stage { position:relative; isolation:isolate; }
+  .whyfilm-stage::after { content:""; position:absolute; z-index:1; inset:0 0 auto; height:46%;
+    background:linear-gradient(180deg,rgba(5,13,30,.82) 0%,rgba(5,13,30,.46) 58%,transparent 100%);
+    pointer-events:none; }
+  .whyfilm video { position:relative; z-index:0; display:block; width:100%; height:auto; background:#000; border:0; box-shadow:none; }
   .film-sound { position:absolute; left:50%; bottom:16%; transform:translateX(-50%);
-    display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+    z-index:2; display:inline-flex; align-items:center; gap:9px; cursor:pointer;
     font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:.2px;
     color:#fff; background:rgba(10,16,32,.62); border:1px solid rgba(255,255,255,.35);
     -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
@@ -703,6 +711,12 @@
   .film-sound:hover { background:rgba(15,98,254,.85); }
   .film-sound:focus-visible { outline:2px solid #fff; outline-offset:2px; }
   .film-sound[hidden] { display:none; }
+  @media (max-width:640px){
+    #story .sec-head { top:16px; left:18px; right:18px; }
+    #story .sec-head h2 { font-size:26px; margin:7px 0 8px; }
+    #story .sec-head .lead { font-size:14px; line-height:1.4; }
+    .whyfilm-stage::after { height:64%; }
+  }
   @media (max-width:520px){ .film-sound { font-size:13px; padding:10px 15px; bottom:19%; } }
   .whyfilm figcaption { margin-top:14px; font-size:14.5px; color:var(--text-2); line-height:1.6; max-width:58em; }
   .whyfilm figcaption b { color:var(--text); }
