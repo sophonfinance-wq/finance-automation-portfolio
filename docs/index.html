@@ -901,7 +901,7 @@
       <p class="lead">Ninety seconds on why we build finance engines &mdash; and what stays human.</p>
     </div>
     <figure class="whyfilm reveal">
-      <video controls autoplay muted loop playsinline preload="metadata" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; unmute for narration">
+      <video id="whyFilm" controls muted loop playsinline preload="none" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; unmute for narration">
         <source src="assets/why-film.mp4" type="video/mp4">
         <track kind="captions" src="assets/why-film.vtt" srclang="en" label="English">
       </video>
@@ -2032,6 +2032,21 @@
 </script>
 <script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/tech-film-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
 <script>(function(){var v=document.getElementById("credVid");if(!v)return;var small=Math.min(screen.width,screen.height)<=820;if(small){v.querySelector("source").src="assets/cred-mobile.mp4";}function go(){var p=v.play();if(p&&p.catch)p.catch(function(){});}if("IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v.dataset.l){v.load();v.dataset.l=1;}go();}else{v.pause();}});},{rootMargin:"200px"}).observe(v);}else{v.load();go();}})();</script>
+<script>
+// Why film: play muted from the top of the story when a third of it scrolls into
+// view; pause off-screen; honor reduced motion (poster + play button instead).
+(function(){
+  var v=document.getElementById('whyFilm');if(!v)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  function go(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+  if('IntersectionObserver'in window){
+    new IntersectionObserver(function(es){es.forEach(function(e){
+      if(e.isIntersecting){if(!v.dataset.l){v.load();v.dataset.l=1;v.currentTime=0;}go();}
+      else{v.pause();}
+    });},{threshold:0.35}).observe(v);
+  }
+})();
+</script>
 <script>
 // Middle "cinema" band: start the shared hero clip from its MIDDLE (so it differs from
 // the top hero) and flash one corporate power word in/out every ~5.5s, like a brand film.
