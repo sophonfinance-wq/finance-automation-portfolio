@@ -67,6 +67,26 @@ def test_seeded_claims_are_spec_driven():
             assert "fictional, seeded" not in page, slug
 
 
+def test_real_cli_claim_requires_genuine_capture():
+    # "the real CLI" is a capture claim. It may render only when the spec says so
+    # explicitly AND its media is an actual CLI recording (a *-cli.mp4 whose caption
+    # says it was captured) — never as a fallback over the synthesized brand/tile
+    # animations, whose own captions call them concept visuals.
+    for slug in present_slugs():
+        media = ds.load_spec(slug)["media"]
+        page = gen.render(slug)
+        if "the real CLI" in page:
+            assert media.get("run_label") == "the real CLI", (
+                f"{slug}: 'the real CLI' rendered without the spec claiming it"
+            )
+            assert "-cli" in media["motion"].rsplit("/", 1)[-1], (
+                f"{slug}: 'the real CLI' claimed over non-capture media {media['motion']}"
+            )
+            assert "Captured" in media["caption"], (
+                f"{slug}: 'the real CLI' claimed but caption does not say Captured"
+            )
+
+
 def test_cli_exits_cleanly(tmp_path):
     target = tmp_path / "t.html"
     proc = subprocess.run(

@@ -1,7 +1,7 @@
 # Sophon Finance Systems — portfolio repo
 
-Nine deterministic finance/tax engines + a self-healing loop layer, all on seeded fictional
-data. One rule everywhere: **no material output rests on a single model's word.**
+Nine deterministic finance/tax engines + a self-healing loop layer, all on fictional data
+(seeded where the engine declares it). One rule everywhere: **no material output rests on a single model's word.**
 
 ## Orient in 30 seconds
 - Every engine is a self-contained package: `monthly-close-automation/close_engine`,
@@ -24,7 +24,7 @@ instead of rediscovering:
 - Releasing work: `/ship`
 
 ## House rules
-- Fictional, seeded data only — the atlas test suite lints a hashed confidentiality deny-list.
+- Fictional data only (seeded where the engine declares it) — the atlas test suite lints a hashed confidentiality deny-list.
 - Deterministic core: integer cents, seeded generators, byte-stable outputs. New code must not
   break byte-stability.
 - Engines refuse rather than fudge; loops never invent a number; validation never writes.

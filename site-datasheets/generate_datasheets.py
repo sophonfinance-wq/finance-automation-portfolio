@@ -211,10 +211,11 @@ def see_it_run_html(spec: dict) -> str:
         for c in m.get("crops", [])
     )
     crops_html = (f'<div class="media-crops">{crops}</div>') if crops else ""
-    # run_label is spec-driven and honest: Triangulate is a genuine CLI capture ("the real
-    # CLI"); engines that reuse the synthesized brand animation must say so, not claim a
-    # capture they don't have.
-    run_label = _esc(m.get("run_label", "the real CLI"))
+    # run_label is spec-driven and honest: only a spec whose media is a genuine CLI
+    # capture may say "the real CLI" (Triangulate). A spec that omits the field falls
+    # back to the modest claim, so reusing the synthesized brand animation can never
+    # silently advertise a capture that doesn't exist.
+    run_label = _esc(m.get("run_label", "brand animation"))
     return (
         f'<section><h2>See it run</h2><span class="zone-k">{run_label}</span>\n'
         '<figure class="figwrap"><img src="{}" data-video="{}" '
