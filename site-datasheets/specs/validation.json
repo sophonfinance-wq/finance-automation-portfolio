@@ -1,0 +1,181 @@
+{
+  "num": 4,
+  "slug": "validation",
+  "part_no": "SFS-E04-VAL",
+  "mnemonic": "VAL",
+  "family": "Read-Only Validation",
+  "name": "Validation Engine",
+  "tagline": "A read-only rules engine that flags workbook defects human review misses — and can never introduce one.",
+  "plain_summary": "The Validation Engine opens a finished Excel workbook read-only and runs six independent checks over it: whether the closing-surplus total is formula-driven rather than typed over, whether the trial balance ties out, whether stale review notes were left behind, whether the audit lineage flows inputs to formulas, whether draft-only MIN/MAX cap logic was ever replaced, and whether the sibling JSON export still agrees with the workbook. Each check yields a PASS, FAIL, or FLAG finding with a Sheet!Cell location, and the findings roll up to one verdict — PASS, REVIEW, or FAIL — plus a matching process exit code. It ships with a seeded synthetic generator so it runs end-to-end on fully fictional data, and it never writes to the file it audits.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Every count on this page is a command, not a claim. The six checks, the seven-workbook demo corpus, and the pinned test total each re-derive from the public repository.",
+  "layers_intro": "Each layer is an independent stage of the read-only pipeline. Select a layer for its plain-terms and engineering detail.",
+
+  "layers": [
+    {"id": "reporting", "label": "Verdict & Reporting",
+     "plain": "Rolls every finding up into one verdict — PASS, REVIEW, or FAIL — prints the findings, and writes the markdown and JSON reports. The verdict also becomes the process exit code, so a script or CI can act on it.",
+     "engineering": "overall_verdict() takes the worst per-workbook Verdict; build_json_report() / build_markdown_report() serialise the run; cli.main() maps the verdict to an exit code via _EXIT_BY_VERDICT (PASS 0, REVIEW 1, FAIL 2; usage error 3).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "runner", "label": "Registry Runner",
+     "plain": "For each workbook, runs the whole rule registry in order and collects the findings into one report — the same rules, in the same order, every time.",
+     "engineering": "validate_workbook() iterates REGISTRY of (rule_id, fn) pairs and extends WorkbookReport.findings; validate_folder() applies it to every *.xlsx in a folder, sorted, skipping ~$ lock files.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "rules", "label": "Rule Registry (6 checks)",
+     "plain": "The six independent checks that inspect the cells: expected-formula, debit/credit balance, forbidden text, lineage direction, leftover cap logic, and JSON tie-out. Adding a rule is one decorated function.",
+     "engineering": "The @check(rule_id) decorator appends each (WorkbookContext) -> list[Finding] function to REGISTRY. Rule configuration (EXPECTED_FORMULA_CELLS, FORBIDDEN_TEXT, trial-balance columns, evidence/detail cells) stays declarative at module top.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "context", "label": "Workbook Context (dual read-only load)",
+     "plain": "Loads each workbook twice read-only — once to see the formulas, once to see the cached values — and attaches the sibling JSON export if present. This is what makes the engine incapable of writing to the audited file.",
+     "engineering": "_load_context() calls load_workbook(read_only=True) with data_only=False and data_only=True; WorkbookContext exposes formula(), value(), iter_formula_cells(), and the parsed json_data from <stem>.json.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "corpus", "label": "Seeded Synthetic Corpus",
+     "plain": "A generator that writes a fully fictional set of workbooks — one clean, and one per rule each carrying a single planted defect — so the engine runs end-to-end with no real files and every rule has a live test case.",
+     "engineering": "generate_corpus() seeds the stdlib random module with SEED=20240614, builds four-tab workbooks (Surplus-Detail / Summary / Trial-Balance / Evidence) for fictional entities, plants one Defect per DEFECTS entry, and writes each .xlsx plus a .json sibling.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/generate.py"}
+  ],
+
+  "blocks": [
+    {"id": "gen", "label": "Seeded generator", "kind": "input", "col": 0, "row": 2,
+     "plain": "Writes fictional workbooks and JSON exports to ./samples — one clean and one per planted defect.",
+     "engineering": "generate.generate_corpus(out_dir, seed=20240614); wipes stale *.xlsx / *.json first, then writes the clean plus six defect workbooks with sibling .json.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/generate.py"},
+    {"id": "load", "label": "Dual read-only load", "kind": "process", "col": 1, "row": 2,
+     "plain": "Opens each workbook twice read-only (formulas and cached values) and attaches the sibling JSON export.",
+     "engineering": "engine._load_context(): load_workbook(read_only=True) twice (data_only False / True) plus json.loads(<stem>.json), wrapped in WorkbookContext.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "r_formula", "label": "expected_formula", "kind": "rule", "col": 2, "row": 0,
+     "plain": "Checks that cells which should be formula-driven hold a formula, not a typed-in number.",
+     "engineering": "check_expected_formula() over EXPECTED_FORMULA_CELLS; a literal is a FAIL.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "r_balance", "label": "debit_credit_balance", "kind": "rule", "col": 2, "row": 1,
+     "plain": "Sums the trial-balance debit and credit columns and confirms they tie out.",
+     "engineering": "check_debit_credit_balance() sums TB_DEBIT_COL / TB_CREDIT_COL from cached values; |diff| >= 1e-6 is a FAIL.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "r_text", "label": "forbidden_text", "kind": "rule", "col": 2, "row": 2,
+     "plain": "Scans every cell for stale review notes and internal / tool words (TODO, 'reviewer decision', tool names).",
+     "engineering": "check_forbidden_text() substring-matches FORBIDDEN_TEXT over iter_formula_cells(); a hit is a FLAG.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "r_lineage", "label": "lineage_direction", "kind": "rule", "col": 2, "row": 3,
+     "plain": "Confirms evidence cells are raw inputs (literals) and detail drivers are formulas; either inversion flags.",
+     "engineering": "check_lineage_direction() over EVIDENCE_INPUT_CELLS and DETAIL_DRIVER_CELLS; an inversion is a FLAG.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "r_cap", "label": "cap_logic_leftover", "kind": "rule", "col": 2, "row": 4,
+     "plain": "Detects leftover draft MIN/MAX cap logic that should have been replaced before final.",
+     "engineering": "check_cap_logic_leftover() applies a case-insensitive MIN/MAX open-paren regex over formula cells; a match is a FLAG.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "r_json", "label": "json_tieout", "kind": "rule", "col": 2, "row": 5,
+     "plain": "Cross-checks the sibling JSON export's closing_surplus against the workbook's resolved value.",
+     "engineering": "check_json_tieout() compares json_data['closing_surplus'] to _closing_surplus_value(); a mismatch is a FAIL, an unresolvable value a FLAG.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "verdict", "label": "Verdict roll-up", "kind": "decision", "col": 3, "row": 2,
+     "plain": "Collapses all findings for a workbook, and then the whole run, into one verdict — worst wins.",
+     "engineering": "WorkbookReport.verdict (any FAIL -> FAIL, else any FLAG -> REVIEW, else PASS), then overall_verdict() over all reports.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py"},
+    {"id": "reports", "label": "Reports + exit code", "kind": "output", "col": 4, "row": 2,
+     "plain": "Emits the markdown and JSON reports and returns an exit code encoding the verdict.",
+     "engineering": "build_markdown_report() / build_json_report() write the files; cli.main() returns _EXIT_BY_VERDICT[overall] (0 / 1 / 2), or 3 on a usage error.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/cli.py"}
+  ],
+  "edges": [
+    {"from": "gen", "to": "load", "label": "samples + JSON"},
+    {"from": "load", "to": "r_formula", "label": "context"},
+    {"from": "load", "to": "r_balance"},
+    {"from": "load", "to": "r_text"},
+    {"from": "load", "to": "r_lineage"},
+    {"from": "load", "to": "r_cap"},
+    {"from": "load", "to": "r_json"},
+    {"from": "r_formula", "to": "verdict", "label": "findings"},
+    {"from": "r_balance", "to": "verdict"},
+    {"from": "r_text", "to": "verdict"},
+    {"from": "r_lineage", "to": "verdict"},
+    {"from": "r_cap", "to": "verdict"},
+    {"from": "r_json", "to": "verdict"},
+    {"from": "verdict", "to": "reports", "label": "verdict + exit code"}
+  ],
+
+  "spec_strip": [
+    {"label": "Tests", "value": "4,814", "source": "python -m pytest --collect-only -q (audit-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json", "plain": "the checks that pin this engine's behavior"},
+    {"label": "Rules in registry", "value": "6", "source": "audit-automation/validation_engine/engine.py — REGISTRY; README rule table", "plain": "six independent checks run over every workbook"},
+    {"label": "Verdict states", "value": "PASS / REVIEW / FAIL", "source": "audit-automation/validation_engine/engine.py — Verdict enum", "plain": "the worst finding wins the workbook"},
+    {"label": "Exit codes", "value": "0 / 1 / 2 / 3", "source": "audit-automation/validation_engine/cli.py — _EXIT_BY_VERDICT and docstring", "plain": "PASS 0, REVIEW 1, FAIL 2, usage error 3"},
+    {"label": "Read passes / workbook", "value": "2 (read-only)", "source": "audit-automation/validation_engine/engine.py — _load_context", "plain": "opened twice read-only — formulas and cached values — never written"},
+    {"label": "Demo corpus", "value": "7 workbooks", "source": "audit-automation/validation_report.json — workbook_count; generate.py DEFECTS", "plain": "one clean plus one per rule, each with a single planted defect"}
+  ],
+
+  "problem_statement": "Large, formula-heavy financial workbooks must be checked before sign-off, and the errors that survive human review are the subtle ones: a total hardcoded on top of its formula, a trial balance off by a plug, a leftover 'reviewer decision' note, inverted lineage where an evidence input holds a formula, a draft MIN/MAX cap that was never removed, or a published JSON that no longer matches the workbook it came from. Checking these by eye across many near-identical workbooks is slow and error-prone, and asking an LLM 'did you fix everything?' returns a confident 'yes' whether or not it is true. This engine replaces that with a deterministic, read-only registry of checks that runs identically every time and cannot alter the audited file.",
+  "scenarios": [
+    {"title": "A hardcoded total slips past review",
+     "narrative": "Maple Fund LP's closing surplus was typed in as the literal 900 instead of the formula =B3+B4+B5. expected_formula fires FAIL at Surplus-Detail!B6 ('expected a formula but found hardcoded value: 900'), lineage_direction adds a FLAG on the same cell, and the workbook verdict is FAIL.",
+     "source": "audit-automation/README.md — committed example output"},
+    {"title": "A trial balance off by a plug",
+     "narrative": "Birchwood Op Co's trial balance no longer ties out. debit_credit_balance sums the columns and reports FAIL at Trial-Balance!B:C ('debit=885 vs credit=875, diff=10'), driving the workbook to FAIL.",
+     "source": "audit-automation/README.md — committed example output"},
+    {"title": "A published JSON disagrees with the workbook",
+     "narrative": "Demo Holdings LLC's sibling JSON export carries closing_surplus=1725 while the workbook resolves to 1700. json_tieout fires FAIL at json:closing_surplus, catching a published figure that drifted from its source.",
+     "source": "audit-automation/README.md — committed example output"}
+  ],
+
+  "instruction_set": [
+    {"cmd": "python run.py", "operation": "zero-arg quickstart: regenerate the fictional corpus into ./samples, validate it, and write both reports", "output": "generation line, per-workbook findings, 'Overall verdict: FAIL (7 workbook(s))'", "exit_code": "0 / 1 / 2 by verdict", "artifacts": "samples/*.xlsx + .json, validation_report.json, validation_report.md"},
+    {"cmd": "python -m validation_engine ./samples", "operation": "validate every .xlsx in a folder (read-only) and print findings", "output": "'=== <wb> === verdict: ...' blocks + overall verdict line", "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage", "artifacts": "none (stdout only)"},
+    {"cmd": "python -m validation_engine.generate", "operation": "write the seeded fictional workbooks + JSON exports into ./samples", "output": "'Wrote 7 fictional workbook(s) to <samples>' + names", "exit_code": "0", "artifacts": "samples/*.xlsx, samples/*.json"},
+    {"cmd": "python -m validation_engine ./samples --generate --json report.json --md report.md", "operation": "(re)generate the corpus, validate, and write the structured JSON + markdown reports", "output": "generation line + findings + 'Wrote JSON/markdown report'", "exit_code": "0 / 1 / 2 by verdict", "artifacts": "report.json, report.md"},
+    {"cmd": "python -m pytest -q", "operation": "run the test suite (defects caught, clean passes, report shape, read-only, determinism)", "output": "pytest summary line", "exit_code": "0 on pass", "artifacts": "none"}
+  ],
+
+  "benchmarks": [
+    {"label": "Demo workbooks validated", "value": "7", "unit": "workbooks", "source": "audit-automation/validation_report.json — workbook_count: 7, overall_verdict: FAIL", "plain": "the committed example run validates seven workbooks and returns overall FAIL"},
+    {"label": "Planted defects caught", "value": "6 of 6", "unit": "defects, one per rule", "source": "audit-automation/validation_engine/generate.py — DEFECTS; README example output", "plain": "one defect per rule is planted and each is caught by its own rule; the clean workbook passes"},
+    {"label": "Rules in registry", "value": "6", "unit": "checks", "source": "audit-automation/validation_engine/engine.py — REGISTRY; validation_report.json registry array", "plain": "six checks run over every workbook, each with a fixed severity"},
+    {"label": "Engine tests", "value": "4,814", "unit": "tests", "source": "python -m pytest --collect-only -q (audit-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json"}
+  ],
+
+  "control_characteristics": {
+    "verdict_map": [
+      {"severity": "Any FAIL finding (expected_formula, debit_credit_balance, or a json_tieout mismatch)", "verdict": "FAIL", "action": "exit code 2 — a hard defect is present; block sign-off"},
+      {"severity": "One or more FLAG findings and no FAIL (forbidden_text, lineage_direction, cap_logic_leftover, or an unresolvable json_tieout)", "verdict": "REVIEW", "action": "exit code 1 — human review before sign-off"},
+      {"severity": "Every finding PASS", "verdict": "PASS", "action": "exit code 0 — clean"}
+    ],
+    "guarantees": [
+      "Strictly read-only: every workbook is opened with read_only=True (twice) and never written, so the engine cannot introduce a defect — the audited file is byte-identical before and after, asserted by test_readonly_and_determinism.py.",
+      "Deterministic: a fixed order over REGISTRY plus a fixed generator seed (SEED=20240614) means identical inputs always yield identical findings in identical order.",
+      "Offline: the only third-party dependencies are openpyxl and pytest; synthetic data uses the stdlib random module — no network and no external services.",
+      "Refuses rather than fudges: json_tieout emits a FLAG, not a fabricated comparison, when the JSON has no closing_surplus key or the workbook value cannot be resolved.",
+      "Fail-safe roll-up: any single FAIL forces the whole run to FAIL and exit code 2 — a defect cannot be diluted by surrounding passes."
+    ],
+    "determinism": {"seeded": true, "read_only": true, "offline_default": true},
+    "plain": "The engine only reports; it never writes to, approves, or signs off the audited file. The PASS / REVIEW / FAIL verdict and its exit code (0 / 1 / 2, or 3 for a usage error) are the handoff a human reviewer or CI pipeline consumes to decide whether to proceed."
+  },
+
+  "limits": [
+    {"statement": "Never writes to an audited workbook — it opens files read-only (twice) and can only report, never introduce or fix a defect.", "source": "audit-automation/validation_engine/engine.py — _load_context load_workbook(read_only=True); README"},
+    {"statement": "Refuses to guess a JSON tie-out: if the export has no closing_surplus key or the workbook value cannot be resolved, it emits a FLAG rather than fabricating a pass or fail comparison.", "source": "audit-automation/validation_engine/engine.py — check_json_tieout"},
+    {"statement": "Only checks a fixed rule set against a fixed workbook schema (Surplus-Detail / Summary / Trial-Balance / Evidence); when an expected sheet is absent it skips rather than inventing findings.", "source": "audit-automation/validation_engine/engine.py — sheet-presence guards in each check"}
+  ],
+
+  "media": {
+    "poster": "../assets/tile-validation.webp",
+    "motion": "../assets/tile-validation-motion.mp4",
+    "poster_alt": "Isometric brand animation: a stack of sheets labeled 'Finished workbook' at left; a translucent glass bracket labeled 'Validation Engine — read-only, never writes' passing over a workbook at center with a blue scan glow; and an output stack at right tagged with three verdict chips — PASS (green), REVIEW (grey), FAIL (amber).",
+    "caption": "Animated overview of the read-only validation pass on fictional seeded data; run the commands above to reproduce.",
+    "run_label": "animated overview",
+    "crops": []
+  },
+
+  "quickstart": [
+    {"label": "Clone + run the quickstart", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/audit-automation && python run.py"},
+    {"label": "Validate an existing folder", "command": "python -m validation_engine ./samples"}
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/audit-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Validation Engine (SFS-E04-VAL) datasheet — a deterministic, read-only rules engine that runs six independent checks over finished .xlsx workbooks and their JSON exports, rolling PASS/REVIEW/FAIL findings up to one verdict and exit code; every figure re-derives from the public repository."
+  }
+}

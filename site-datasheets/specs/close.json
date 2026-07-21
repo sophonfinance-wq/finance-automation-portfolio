@@ -1,0 +1,239 @@
+{
+  "num": 1,
+  "slug": "close",
+  "part_no": "SFS-E01-CLS",
+  "mnemonic": "CLS",
+  "family": "Close Automation",
+  "name": "Month-End Close",
+  "tagline": "A deterministic month-end close that cannot silently go wrong — ten controls, proven",
+  "plain_summary": "The engine runs a full month-end close on a fictional three-entity group: it computes nine classes of recurring journal entry (prepaid amortization, depreciation, deferred rent and CAM, fixed-fee and management-fee accruals, note interest, G&A and insurance allocations, and exact-route postage), ties every backing schedule back to the ledger, and writes a JE register, an updated trial balance, and a close report. Before the close counts as clean, ten independent Close Sentinel controls re-check it for the ways a month-end silently goes wrong — a missed accrual, a one-sided intercompany entry, an asset depreciating past its life — and a CRITICAL finding blocks the close and fails the run's exit code. All money is integer cents so tie-outs are exact, and every run is seeded and reproducible.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A controller cannot take \"the close is clean\" on faith. Every figure on this page re-derives from the public repository by running the commands shown — detection is proven, not asserted.",
+  "layers_intro": "Each layer is an independent stage of the close, stacked from the pipeline gate down to the seeded data. Select a layer for its plain-terms and engineering detail.",
+
+  "layers": [
+    {"id": "cli", "label": "CLI & exit-code gate",
+     "plain": "Runs the close and turns the result into a green/red pipeline signal — it only reports success when the close is genuinely clean.",
+     "engineering": "argparse CLI (main() -> exit code). Flags: --period, --out, --seed, --sentinel/--no-sentinel, --demo-guardrails, --version. Exit is non-zero on any refused entry, a failed schedule tie, an unbalanced trial balance, or any CRITICAL Sentinel finding, so it can gate CI.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/cli.py"},
+    {"id": "sentinel", "label": "Close Sentinel — ten independent controls",
+     "plain": "An independent referee that re-checks the finished close for the ten classic ways a month-end silently goes wrong, and blocks it if any fire.",
+     "engineering": "ALL_CONTROLS = C1..C10 (re-balance, intercompany mirror, completeness calendar, asset-life guard, driver provenance, cross-foot, step-change, rounding policy, shadow recompute, period lock). Findings graded CRITICAL/WARN/INFO; C9 re-derives every amount from an implementation that imports nothing from the engine. The close is clean only when no CRITICAL finding exists.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/sentinel/controls.py"},
+    {"id": "engine", "label": "Recurring-entry engine & tie-out",
+     "plain": "Computes the nine recurring journal entries each month and ties every backing schedule back to the ledger before anything counts.",
+     "engineering": "CloseEngine.run() loads the opening TB, refuses invalid split maps and postage batches up front, posts nine categories in fixed order, then _tie_out() reconciles each schedule to its GL account (prepaid to acct 1400, fixed-fee to 2350, insurance to 1450, postage to 1460).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/engine.py"},
+    {"id": "model", "label": "Accounting model & balance control",
+     "plain": "The chart of accounts, journal entries, and ledger — enforcing the hard rule that debits equal credits, in total and within each entity leg.",
+     "engineering": "Ledger.post() raises OutOfTieError unless the entry balances in aggregate and (for intercompany) per entity. JournalEntry.balances_per_entity(); Ledger.trial_balance() and total_debits_credits() report signed integer cents.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/model.py"},
+    {"id": "money", "label": "Integer-cent money primitives",
+     "plain": "All money is whole cents, so splits and allocations always add back to the exact total with no penny lost or invented.",
+     "engineering": "to_cents (round-half-up), split_evenly (remainder lands on the final period), allocate_by_ratio (largest-remainder / Hamilton; raises unless weights sum to exactly 10000 bps). No float accumulation.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/money.py"},
+    {"id": "generate", "label": "Seeded synthetic data generator",
+     "plain": "Builds a fictional three-entity group and its sub-ledgers from a fixed seed, so every run is identical and re-derivable.",
+     "engineering": "generate_dataset(period, seed) emits entities DH/MF/BW, an opening trial balance, and prepaid/asset/lease/note/insurance/postage sub-ledgers using the stdlib random module only — no pandas, numpy, or faker.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/generate.py"}
+  ],
+
+  "blocks": [
+    {"id": "gen", "label": "Seeded dataset", "kind": "source", "col": 0, "row": 0,
+     "plain": "Fictional 3-entity group + sub-ledgers",
+     "engineering": "generate_dataset(period, seed=2026): entities, opening TB, prepaids, assets, leases, notes, insurance, postage.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/generate.py"},
+    {"id": "money", "label": "Integer-cent math", "kind": "foundation", "col": 0, "row": 1,
+     "plain": "Exact splits, no penny lost",
+     "engineering": "split_evenly, allocate_by_ratio (largest-remainder; weights sum to 10000 bps).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/money.py"},
+    {"id": "engine", "label": "Recurring-entry engine", "kind": "compute", "col": 1, "row": 0,
+     "plain": "Computes & posts 9 recurring JEs",
+     "engineering": "CloseEngine.run(): refuse invalid splits/postage, post 9 categories, balance gate per entity.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/engine.py"},
+    {"id": "model", "label": "Ledger + balance control", "kind": "control", "col": 1, "row": 1,
+     "plain": "Debits must equal credits, per entity too",
+     "engineering": "Ledger.post() raises OutOfTieError on aggregate or per-entity imbalance.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/model.py"},
+    {"id": "preflights", "label": "Read-only preflight family", "kind": "validation", "col": 1, "row": 2,
+     "plain": "13 validation-only checkers (PASS / NEEDS REVIEW)",
+     "engineering": "recurring_register, tb_package, group_operations, project_job_cost, personal_property_tax, payroll_recovery, headcount, je_package, budget_variance, cash_draw, trial_balance, audit_pbc, consolidation — never post.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/recurring_register.py"},
+    {"id": "tieout", "label": "Schedule to GL tie-out", "kind": "control", "col": 2, "row": 0,
+     "plain": "Each schedule must reconcile to its account",
+     "engineering": "_tie_out() -> TieResult per schedule; prepaid ties to acct 1400, fixed-fee to 2350, insurance to 1450, postage to 1460.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/engine.py"},
+    {"id": "shadow", "label": "Shadow recompute (C9)", "kind": "control", "col": 2, "row": 1,
+     "plain": "A second, independent computation of every amount",
+     "engineering": "sentinel/shadow.py re-derives (entity, category, account) -> (dr, cr) importing nothing from the engine; the posted register must match to the cent.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/sentinel/shadow.py"},
+    {"id": "sentinel", "label": "Close Sentinel C1-C10", "kind": "control", "col": 3, "row": 0,
+     "plain": "Ten controls block a silent close error",
+     "engineering": "run_sentinel(dataset, result) -> SentinelReport; any CRITICAL => not clean.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/sentinel/controls.py"},
+    {"id": "report", "label": "Register / TB / report", "kind": "output", "col": 4, "row": 0,
+     "plain": "Writes JE register, trial balance, close report",
+     "engineering": "write_outputs(): je_register.md/.json, trial_balance.md/.json, schedules.json, close_report.md, sentinel.json.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/report.py"},
+    {"id": "loop", "label": "Autonomous close loop", "kind": "loop", "col": 4, "row": 1,
+     "plain": "Auto-remediates in-period drift, quarantines what it cannot certify",
+     "engineering": "autonomous_close_loop(): observe -> detect -> remediate -> re-verify -> gate; resync the earliest drifted category from the seeded source of record; verdict AUTO-POSTED / AUTO-POSTED (PARTIAL) / HALTED. Deterministic and offline — no model calls.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/loop.py"},
+    {"id": "cligate", "label": "Verdict + exit-code gate", "kind": "gate", "col": 5, "row": 0,
+     "plain": "Clean close => exit 0; otherwise non-zero",
+     "engineering": "cli.main() and loop.verdict_exit_code(); a CRITICAL finding, a refused entry, or a failed tie => exit 1.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/close_engine/cli.py"}
+  ],
+
+  "edges": [
+    {"from": "gen", "to": "engine", "label": "seeded sub-ledgers"},
+    {"from": "money", "to": "engine", "label": "exact cents"},
+    {"from": "engine", "to": "model", "label": "post (balance gate)", "gate": true},
+    {"from": "engine", "to": "tieout", "label": "schedules"},
+    {"from": "tieout", "to": "sentinel", "label": "tied close", "gate": true},
+    {"from": "gen", "to": "sentinel", "label": "re-derive from source"},
+    {"from": "gen", "to": "shadow", "label": "raw data"},
+    {"from": "shadow", "to": "sentinel", "label": "C9: must agree to the cent", "gate": true},
+    {"from": "engine", "to": "report", "label": "register + TB"},
+    {"from": "sentinel", "to": "report", "label": "control findings"},
+    {"from": "report", "to": "cligate", "label": "artifacts"},
+    {"from": "sentinel", "to": "cligate", "label": "CRITICAL blocks -> exit 1", "gate": true},
+    {"from": "sentinel", "to": "loop", "label": "findings"},
+    {"from": "loop", "to": "cligate", "label": "verdict -> exit", "gate": true},
+    {"from": "preflights", "to": "cligate", "label": "PASS / NEEDS REVIEW", "gate": true}
+  ],
+
+  "spec_strip": [
+    {"label": "Recurring entries automated", "value": "9 classes",
+     "plain": "Nine kinds of month-end journal entry, each with a backing schedule",
+     "source": "monthly-close-automation/README.md 'What the engine computes' table; close_engine/engine.py run() posts 9 categories"},
+    {"label": "Deterministic controls", "value": "10 (C1-C10)",
+     "plain": "Ten independent checks; a single CRITICAL blocks the close",
+     "source": "close_engine/sentinel/controls.py ALL_CONTROLS list (C1..C10)"},
+    {"label": "Fault-injection coverage", "value": "12 faults, all caught",
+     "plain": "Twelve classic close errors, each caught by its mapped control",
+     "source": "close_engine/faults.py FAULTS dict; verified via `python -m close_engine --demo-guardrails` -> 'ALL GUARDRAILS HELD' (exit 0)"},
+    {"label": "Tests", "value": "15,687",
+     "plain": "Tests pytest collects for this engine",
+     "source": "python -m pytest --collect-only -q (monthly-close-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json"},
+    {"label": "Money precision", "value": "integer cents",
+     "plain": "All amounts are whole cents; allocations use largest-remainder",
+     "source": "close_engine/money.py (to_cents, split_evenly, allocate_by_ratio)"},
+    {"label": "Demo entity group", "value": "3 entities (DH/MF/BW)",
+     "plain": "A fictional three-entity group generated from a fixed seed",
+     "source": "close_engine/generate.py generate_dataset(); output/close_report.md 'Entity group'"}
+  ],
+
+  "problem_statement": "Month-end close at a large entity group is a recurring operational burden: many interdependent recurring journal entries, each with its own logic, spread across multiple operating entities and separate accounting databases. Run from memory or a static spreadsheet, errors accumulate and the close extends for days. The failures that hurt most are the silent ones — a recurring accrual that quietly stops posting, a fully depreciated asset that keeps depreciating, an allocation driven by a cumulative balance instead of the month's activity. Each looks exactly like a clean close until someone finds it quarters later.",
+
+  "scenarios": [
+    {"title": "A clean March close",
+     "narrative": "Running the close for 2026-03 posts all nine recurring entries balanced, ties every schedule to the GL (prepaid 8,100.00, fixed-fee 62,250.00, insurance 10,950.00, and postage account 1460 clearing to 0.00 in each entity), lands the trial balance at Dr 3,603,311.50 = Cr 3,603,311.50, and Sentinel reports zero findings — close status CLEAN, exit 0.",
+     "source": "monthly-close-automation/README.md 'Real example output' console summary + output/close_report.md; re-run: python -m close_engine --period 2026-03 --out ./output"},
+    {"title": "Prove the controls with injected faults",
+     "narrative": "The guardrail demo first runs a clean baseline (zero findings), then injects twelve classic close errors one at a time — an unbalanced opening, an ended asset still depreciating, a one-sided intercompany entry, a missing accrual, a rounding drift, a single-cent shadow tamper, a rewritten locked period, and more — and asserts each is caught by exactly the control designed for it. Verdict: ALL GUARDRAILS HELD (12 faults, baseline clean), exit 0.",
+     "source": "monthly-close-automation/README.md 'Fault-injection demo'; re-run: python -m close_engine --demo-guardrails"},
+    {"title": "Autonomous remediation of a drifted close",
+     "narrative": "Given a close contaminated with a drift profile (19 initial findings), the Autonomous Close Loop resyncs four drifted categories from the seeded sub-ledger of record over four turns (criticals fall 18 -> 1), quarantines the tampered locked prior period it has no authority to overwrite, and posts the current period on its own authority — verdict AUTO-POSTED (PARTIAL), exit 0, with a byte-identical settled register.",
+     "source": "monthly-close-automation/README.md 'Autonomous Close Loop' + output/autonomous_close_loop.md; re-run: python -m close_engine.loop --demo --out output"}
+  ],
+
+  "instruction_set": [
+    {"cmd": "python -m close_engine.generate --period 2026-03 --seed 2026", "operation": "Inspect the seeded synthetic dataset", "output": "Prints the fictional entity group and sub-ledgers", "exit_code": "0", "artifacts": "none (stdout only)"},
+    {"cmd": "python -m close_engine --period 2026-03 --out ./output", "operation": "Run a full month-end close (Sentinel on by default)", "output": "Tie-out summary + 'Close status: CLEAN'", "exit_code": "0 clean; 1 if refused / failed-tie / unbalanced / CRITICAL", "artifacts": "output/je_register.md+.json, trial_balance.md+.json, schedules.json, close_report.md, sentinel.json"},
+    {"cmd": "python run.py --period 2026-03 --out ./output", "operation": "Same close via the convenience wrapper", "output": "Identical to python -m close_engine", "exit_code": "0 / 1 (same semantics)", "artifacts": "same as above"},
+    {"cmd": "python -m close_engine --demo-guardrails", "operation": "Inject 12 faults; prove each is caught by its control", "output": "PASS table + 'Demo verdict: ALL GUARDRAILS HELD (12 faults, baseline clean)'", "exit_code": "0 only if baseline clean AND all 12 caught", "artifacts": "none (stdout only)"},
+    {"cmd": "python -m close_engine.loop --demo --out output", "operation": "Drift a close + a locked prior; run the autonomous loop", "output": "'Verdict: AUTO-POSTED (PARTIAL)' + turn-by-turn log", "exit_code": "0 (AUTO-POSTED / PARTIAL); 1 (HALTED)", "artifacts": "output/autonomous_close_loop.md + .html"},
+    {"cmd": "python -m close_engine.recurring_register --input samples/sample-recurring-register.json", "operation": "Read-only preflight of a recurring-JE register", "output": "Preflight summary + 'Verdict: PASS'", "exit_code": "0 PASS; non-zero on NEEDS REVIEW", "artifacts": "none; validation only (0 posting actions, 0 import payloads)"},
+    {"cmd": "python -m pytest -q", "operation": "Run the test suite", "output": "pytest pass/fail summary", "exit_code": "0 if all pass", "artifacts": "none"}
+  ],
+
+  "benchmarks": [
+    {"label": "Clean close, trial balance", "value": "3,603,311.50", "unit": "USD (Dr = Cr), 9 posted / 0 refused, exit 0",
+     "plain": "The March close balances to the cent with nothing refused",
+     "source": "Ran python -m close_engine --period 2026-03 (seed 2026); matches output/trial_balance.md and README console summary (Dr 3,603,311.50 / Cr 3,603,311.50 [OK])"},
+    {"label": "Guardrail fault coverage", "value": "12 / 12", "unit": "faults caught, baseline 0 findings, exit 0",
+     "plain": "Every injected close error caught by its mapped control",
+     "source": "Ran python -m close_engine --demo-guardrails -> 'ALL GUARDRAILS HELD (12 faults, baseline clean)'"},
+    {"label": "Autonomous loop remediation", "value": "18 -> 1", "unit": "criticals over 4 turns; verdict AUTO-POSTED (PARTIAL), 1 quarantined, exit 0",
+     "plain": "The loop clears in-period drift down to a single quarantined item and still posts",
+     "source": "output/autonomous_close_loop.md (19 initial findings); re-run: python -m close_engine.loop --demo --out output"},
+    {"label": "Postage exact-route allocation", "value": "4 / 5", "unit": "meter rows routed; acct 1460 clears to 0.00 in every entity",
+     "plain": "Four of five postage rows route to an approved job; the clearing account nets to zero",
+     "source": "output/close_report.md tie-out; README console summary 'Postage routes : 4/5 meter rows'"}
+  ],
+
+  "control_characteristics": {
+    "plain": "The core is a posting engine: it computes and posts journal entries against seeded synthetic data, then gates the result behind ten deterministic controls and an exit code. It mutates no real source of record, and a mechanically clean result on the read-only preflights is only 'READY FOR HUMAN REVIEW' — controller sign-off stays a human gate.",
+    "authority": [
+      {"rank": 1, "level": "HALT (C1 opening imbalance)", "note": "Action-authority precedence in the autonomous loop, not an evidence hierarchy. The loop has no authority to invent a broken opening carryforward, so it refuses to post and escalates to a human. HALT_CONTROLS = {C1} in loop.py; exit 1."},
+      {"rank": 2, "level": "QUARANTINE (C10 locked-period tamper)", "note": "A signed-off, locked prior period was altered; the loop will not overwrite it — it holds and logs, and still posts the current period. QUARANTINE_CONTROLS = {C10} in loop.py; verdict AUTO-POSTED (PARTIAL)."},
+      {"rank": 3, "level": "AUTO-REMEDIATE (C2-C9 in-period drift)", "note": "The loop is authorized to resync a drifted recurring-entry category to the seeded sub-ledger of record. AUTO_REMEDIABLE = {C2,C3,C4,C5,C6,C7,C8,C9} in loop.py."}
+    ],
+    "verdict_map": [
+      {"severity": "Sentinel: any CRITICAL (C1-C10)", "verdict": "NOT CLEAN", "action": "Close blocked; CLI exit 1"},
+      {"severity": "Sentinel: WARN (e.g. C7 step-change)", "verdict": "clean, reviewer-escalated", "action": "Close proceeds; flagged for a reviewer"},
+      {"severity": "Sentinel: INFO", "verdict": "clean", "action": "Corroborated note kept in the audit trail"},
+      {"severity": "Loop: auto-remediable CRITICAL (C2-C9)", "verdict": "AUTO-POSTED", "action": "Resync the category from the source of record; exit 0"},
+      {"severity": "Loop: C10 locked-period tamper", "verdict": "AUTO-POSTED (PARTIAL)", "action": "Quarantine + log; post the current period; exit 0"},
+      {"severity": "Loop: C1 opening imbalance", "verdict": "HALTED", "action": "Escalate to a human; exit 1"},
+      {"severity": "Preflight: gate fails", "verdict": "NEEDS REVIEW", "action": "Read-only; never posts (0 posting actions / 0 import payloads)"}
+    ],
+    "modes": [
+      {"name": "Authoritative close (posting)", "detail": "CloseEngine.run() computes and posts the nine recurring JEs, writes the register / TB / report, and Sentinel gates the exit code (cli.py)."},
+      {"name": "Read-only preflight (validation)", "detail": "13 validation-only modules validate an external JSON package and return PASS / NEEDS REVIEW; they never create a JE, import payload, or posting action (recurring_register.py and siblings)."},
+      {"name": "Guardrail demo (proof)", "detail": "--demo-guardrails injects 12 seeded faults and asserts each is caught by its mapped control at a qualifying severity (faults.py)."},
+      {"name": "Autonomous close loop (remediation)", "detail": "loop.py drives a drifted close back to a certifiable state (observe -> remediate -> re-verify -> gate) with a deterministic, logged gate policy. It is always offline and deterministic, with no model calls."}
+    ],
+    "guarantees": [
+      "All money is integer cents; tie-outs are exact (money.py).",
+      "Every JE balances debits == credits AND each entity leg self-balances, or it is refused (model.Ledger.post raises OutOfTieError).",
+      "Allocation weights must sum to exactly 10000 bps (100.00%) or the entry is refused, never coerced (money.allocate_by_ratio; engine refuses invalid splits).",
+      "Largest-remainder (Hamilton) allocation and split_evenly: parts sum exactly to the total, with no penny lost or created (money.py).",
+      "C9 shadow recompute: a second implementation importing nothing from the engine must agree to the cent before the close stands (sentinel/shadow.py).",
+      "Byte-identical settled register: the autonomous loop's output matches a clean engine run; it never invents a number (loop.py).",
+      "Period lock (C10): each closed register is sealed with a hash, so a later mutation of a locked period is detected on recompute.",
+      "Fully seeded and reproducible for a given seed; refused entries are reported, not silently posted.",
+      "Non-zero exit code on any refused entry, failed schedule tie, unbalanced TB, or CRITICAL finding — so it can gate a pipeline (cli.py)."
+    ],
+    "determinism": {"seeded": true, "read_only": false, "offline_default": true},
+    "gate_policy": {"human_approval_required": true, "demo_gate": "deterministic-policy", "note": "The posting engine runs against seeded synthetic data and never touches a real ERP or source of record. Every read-only preflight is explicit that a mechanically clean result is only 'READY FOR HUMAN REVIEW' — source refresh and tie, mapping, and controller sign-off remain manual human gates. The autonomous loop replaces the person only for deterministic, logged in-period remediation, and still HALTS on an opening imbalance (C1) and quarantines a locked-period tamper (C10) rather than acting unilaterally."}
+  },
+
+  "limits": [
+    {"statement": "Single functional currency only — there is no FX translation layer, and no control asserts anything about rate selection or translation differences.",
+     "source": "monthly-close-automation/README.md 'Scope and assumptions'"},
+    {"statement": "The 13 validation-only preflights never create a journal entry, import payload, posting action, or source-system mutation — a clean result is only 'READY FOR HUMAN REVIEW'.",
+     "source": "monthly-close-automation/README.md validation-only sections; close_engine/recurring_register.py and siblings"},
+    {"statement": "The autonomous loop refuses to post on a broken opening carryforward (HALT / C1) and never auto-overwrites a signed-off locked prior period (QUARANTINE / C10); it invents no numbers and its settled register is byte-identical to a clean run.",
+     "source": "close_engine/loop.py (HALT_CONTROLS, QUARANTINE_CONTROLS); README 'Autonomous does not mean ungated'"},
+    {"statement": "C9 proves dataset-to-register translation, not dataset truth: if the raw sub-ledger is wrong, both independent implementations agree on the same wrong number, and offsetting shifts within one (entity, category, account) GL cell are invisible to GL-level controls.",
+     "source": "monthly-close-automation/README.md 'Scope and assumptions'"}
+  ],
+
+  "media": {
+    "poster": "../assets/engine-close.webp",
+    "motion": "../assets/engine-close-motion.mp4",
+    "poster_alt": "Animated overview tile for the Month-End Close engine — the close pipeline and its ten Close Sentinel controls rendered as brand motion on fictional seeded data.",
+    "caption": "Animated overview of the close run on fictional seeded data; run the commands above to reproduce.",
+    "run_label": "animated overview",
+    "crops": []
+  },
+
+  "quickstart": [
+    {"label": "Clone + run a clean close", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/monthly-close-automation && python -m close_engine --period 2026-03 --out ./output"},
+    {"label": "Prove the controls (12 injected faults)", "command": "python -m close_engine --demo-guardrails"}
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/monthly-close-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/monthly-close-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Month-End Close (SFS-E01-CLS) datasheet — a deterministic, seeded month-end close engine that posts nine recurring journal-entry classes across a fictional three-entity group, ties every schedule to the ledger, and gates the result behind ten independent Close Sentinel controls; every figure re-derives from the public repository."
+  }
+}

@@ -3,68 +3,101 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cash Debt Reconciliation — Sophon Finance Systems</title>
-<meta name="description" content="The full population of accounts — not a sample — matched and explained — how the Cash Debt Reconciliation engine works, what you provide, what you receive, and how to verify the engineering yourself on GitHub.">
+<title>Cash &amp; Debt Reconciliation — Sophon Finance Systems</title>
+<meta name="description" content="Cash &amp; Debt Reconciliation (SFS-E02-RCN) datasheet — a deterministic engine that ties GL cash to bank ending balances and GL debt to a 3-part lender total by account number, materiality-gates the differences into clean/timing/flagged, and emits a 5-section evidence log; every figure re-derives from the public repository.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#ffffff; --bg-alt:#f4f4f4; --border:#e0e0e0; --border-strong:#c6c6c6; --text:#161616; --text-2:#525252; --text-3:#6f6f6f; --blue:#0f62fe; --blue-hover:#0043ce; --blue-tint:#edf5ff; --green:#198038;
-    --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6; }
-  .wrap { width:100%; max-width:980px; margin:0 auto; padding:0 22px; }
-  header.nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 0; }
-  .nav-in { display:flex; align-items:center; gap:16px; }
-  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-  .brand-mark { width:24px; height:24px; }
-  .brand-word { font-weight:600; font-size:14px; letter-spacing:.2px; white-space:nowrap; }
-  .brand-word span { font-weight:300; }
-  .nav-in .backlink { margin-left:auto; color:var(--blue); text-decoration:none; font-size:14px; }
-  .nav-in .backlink:hover { text-decoration:underline; }
-  .btn { display:inline-flex; align-items:center; gap:18px; text-decoration:none; font-size:15px; padding:13px 18px; min-height:46px; border:1px solid transparent; }
-  .btn-p { background:var(--blue); color:#fff; } .btn-p:hover { background:var(--blue-hover); }
-  .btn-t { background:transparent; color:var(--blue); border-color:var(--blue); } .btn-t:hover { background:var(--blue); color:#fff; }
-  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
-  .hero { padding:54px 0 8px; }
-  h1 { font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-.3px; line-height:1.15; margin:8px 0 10px; }
-  h1 strong { font-weight:600; }
-  .tag { font-size:16px; color:var(--text-2); max-width:44em; }
-  .intro { font-size:16.5px; color:var(--text-2); max-width:46em; margin:18px 0 8px; }
-  figure.vis { margin:34px 0 8px; }
-  figure.vis img, figure.vis video { display:block; width:100%; height:auto; }
-  section { padding:34px 0 6px; }
-  h2 { font-size:clamp(20px,2.6vw,26px); font-weight:600; letter-spacing:-.2px; margin-bottom:14px; }
-  .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); }
-  .col { padding:22px 24px; }
-  .col + .col { border-left:1px solid var(--border); }
-  .col h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
-  .col.does h4 { color:var(--blue); } .col.gets h4 { color:var(--green); }
-  .item { display:flex; gap:9px; font-size:14px; color:var(--text-2); margin:9px 0; line-height:1.45; }
-  .item b { color:var(--text); }
-  .dot { flex:none; width:7px; height:7px; border-radius:50%; margin-top:7px; background:var(--border-strong); }
-  .does .dot { background:var(--blue); } .gets .dot { background:var(--green); }
-  .ctrl { border:1px solid var(--border); border-left:3px solid var(--blue); padding:18px 22px; margin-top:16px; }
-  .ctrl .lbl { font-family:var(--mono); font-size:11px; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:6px; }
-  .ctrl p { font-size:14.5px; color:var(--text-2); }
-  .ctrl .gate b { color:var(--text); }
-  .faq details { border:1px solid var(--border); padding:0; margin-top:10px; }
-  .faq summary { cursor:pointer; font-weight:600; font-size:15px; padding:15px 18px; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-  .faq summary::after { content:"+"; color:var(--blue); font-size:20px; font-weight:300; }
-  .faq details[open] summary::after { content:"\2212"; }
-  .faq details p { padding:0 18px 16px; font-size:14.5px; color:var(--text-2); }
-  .verify { background:var(--bg-alt); border:1px solid var(--border); padding:26px 26px 22px; margin-top:6px; }
-  .verify .runline { font-family:var(--mono); font-size:13px; background:#161616; color:#9ef0a0; padding:12px 16px; margin:14px 0 16px; overflow-x:auto; white-space:nowrap; }
-  .verify .links { display:flex; flex-wrap:wrap; gap:10px; }
-  .verify p { font-size:14.5px; color:var(--text-2); }
-  .cta { margin:44px 0 60px; background:var(--blue); color:#fff; padding:34px 30px; }
-  .cta h2 { color:#fff; margin-bottom:6px; }
-  .cta p { color:#d0e2ff; font-size:15px; max-width:44em; margin-bottom:18px; }
-  .btn-w { background:#fff; color:var(--blue); } .btn-w:hover { background:var(--blue-tint); }
-  .btn-wo { background:transparent; color:#fff; border-color:#fff; } .btn-wo:hover { background:rgba(255,255,255,.14); }
-  footer { border-top:1px solid var(--border); padding:18px 0 26px; font-size:13px; color:var(--text-3); }
-  footer a { color:var(--blue); text-decoration:none; }
-  @media (max-width:760px){ .cols { grid-template-columns:1fr; } .col + .col { border-left:none; border-top:1px solid var(--border); } }
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:24px;height:24px}
+.brand-word{font-weight:600;font-size:14px;letter-spacing:.2px;white-space:nowrap}
+.brand-word span{font-weight:300}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
 </style>
 </head>
 <body>
@@ -76,73 +109,280 @@
   <a class="backlink" href="/#engines">&larr; All engines</a>
   <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
 </div></header>
-
 <main class="wrap">
-  <div class="hero">
-    <p class="kicker">ENGINE 02 &middot; FLAGSHIP</p>
-    <h1><strong>Cash &amp; Debt Reconciliation</strong></h1>
-    <p class="tag">The full population of accounts &mdash; not a sample &mdash; matched and explained</p>
-    <p class="intro">Sampling is a compromise. This engine reconciles the full population &mdash; every cash and debt account, GL against bank and lender records, line by line &mdash; and explains every exception it finds, classified by materiality. It even traces cash out of closed and migrated accounts, the places where balances usually go to disappear.</p>
+<section class="masthead">
+  <p class="kicker">ENGINE 02</p>
+  <p class="partline">SFS-E02-RCN &middot; RECONCILIATION &middot; REV 2026-07-20 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Cash &amp; Debt Reconciliation</strong></h1>
+  <p class="tag">Deterministic cash &amp; debt reconciliation, keyed by account number, materiality-gated.</p>
+  <p class="intro">The engine ties each entity&#x27;s GL cash to the bank ending balance and each GL loan to a 3-part lender total (principal + interest/reserve + late paydown), matching by account number so a figure never lands on the wrong row. Differences at or under a $50 materiality threshold are logged as timing noise; anything larger becomes a numbered flag for review. Every run emits the same 5-section evidence log — a Markdown file and a color-coded Excel workbook. An optional assurance loop restores a drifted package back to the seeded source of record and applies a materiality gate before it ships.</p>
+  <p class="thesis">A reconciliation is only as trustworthy as the evidence trail behind it. Every figure on this page re-derives from the public repository — the demo is a command you run, not a claim you take on faith.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 400" role="img" aria-label="Exploded functional block stack: Assurance loop &amp; materiality gate, CLI orchestration &amp; exit contract, Evidence-log rendering, Reconciliation core, Seeded synthetic substrate over seeded fictional data">
+  <g class="die-layer" data-layer="assurance"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Assurance loop &amp; materiality gate</text></g>
+  <g class="die-layer" data-layer="cli"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">CLI orchestration &amp; exit contract</text></g>
+  <g class="die-layer" data-layer="reporting"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Evidence-log rendering</text></g>
+  <g class="die-layer" data-layer="engine"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Reconciliation core</text></g>
+  <g class="die-layer" data-layer="substrate"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Seeded synthetic substrate</text></g>
+  <text x="40" y="390" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="assurance" data-plain="Optional watchdog: when the stored package drifts from source, it restores the drifted accounts one at a time and issues a PASS, FLAG, or FAIL verdict before anything ships." data-eng="observe -&gt; detect -&gt; remediate -&gt; re-verify -&gt; gate. A deviation sensor fingerprints each account against the baseline reconciliation of the pristine seed; resync_account restores every drifted GL/bank/lender/dormant field. Verdict: FAIL (not converged, exit 1), FLAG (converged, corrections above materiality, exit 0), PASS (converged, immaterial, exit 0)." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py" aria-label="Assurance loop &amp; materiality gate layer — open detail" aria-controls="die-panel" aria-expanded="false">Assurance loop &amp; materiality gate</button>
+    <button class="die-face" data-layer="cli" data-plain="The command you actually run: it wires the pieces together, prints the summary, and exits 0 because a flag is an expected result, not a crash." data-eng="argparse flags --threshold / --seed / --no-xlsx / --markdown-path / --xlsx-path call generate_dataset -&gt; reconcile -&gt; render_markdown / write_xlsx, then return 0 even when lines are flagged. run.py and __main__.py are thin aliases." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/cli.py" aria-label="CLI orchestration &amp; exit contract layer — open detail" aria-controls="die-panel" aria-expanded="false">CLI orchestration &amp; exit contract</button>
+    <button class="die-face" data-layer="reporting" data-plain="Turns the result into the same 5-section evidence log every time: a Markdown file and a color-coded Excel workbook." data-eng="render_markdown emits Summary / Cash / Debt / Flagged / Notes; write_xlsx builds a 5-sheet openpyxl workbook with green/yellow/red/grey status fills and accounting-style number formatting." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/report.py" aria-label="Evidence-log rendering layer — open detail" aria-controls="die-panel" aria-expanded="false">Evidence-log rendering</button>
+    <button class="die-face" data-layer="engine" data-plain="Ties each account to its source by account number, computes the difference, and labels it clean, timing, or flagged." data-eng="compute_variance = round(gl - source, 2); lender_three_part_total = principal + current_interest_reserve + late_paydown; classify against a $0.005 tie tolerance and the materiality threshold; account-number indexing (never row position); dormant/zero-activity skip; sequential FLAG-### ids across cash then debt." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py" aria-label="Reconciliation core layer — open detail" aria-controls="die-panel" aria-expanded="false">Reconciliation core</button>
+    <button class="die-face" data-layer="substrate" data-plain="Builds a repeatable set of books — GL, bank, and lender statements for four fictional entities — with known problems baked in to prove the engine catches them." data-eng="random.Random(seed) yields byte-identical GL/bank/lender workpapers and injects seeded discrepancies: a deposit-in-transit, a sub-threshold timing accrual, an outright keying error, a populated late-paydown leg (clean tie), and a dormant zero-activity account." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/generate.py" aria-label="Seeded synthetic substrate layer — open detail" aria-controls="die-panel" aria-expanded="false">Seeded synthetic substrate</button>
   </div>
-
-  <figure class="vis">
-    <img src="../assets/engine-recon.webp" data-video="../assets/engine-recon-motion.mp4" alt="Diagram: bank records and general ledger cards are paired line by line through the match engine; an amber card is flagged as an exception and explained, and a checked evidence log covers the full population" loading="eager">
-  </figure>
-
-  <section>
-    <h2>How the work moves</h2>
-    <div class="cols">
-      <div class="col"><h4>You provide</h4><div class="item"><span class="dot"></span><span>Bank statements &amp; registers</span></div><div class="item"><span class="dot"></span><span>Trial balance</span></div></div>
-      <div class="col does"><h4>The engine does</h4><div class="item"><span class="dot"></span><span>Matches GL to bank and lender records, account by account</span></div><div class="item"><span class="dot"></span><span>Classifies every exception by materiality</span></div><div class="item"><span class="dot"></span><span>Traces cash out of closed and migrated accounts</span></div></div>
-      <div class="col gets"><h4>You receive</h4><div class="item"><span class="dot"></span><span><b>Reconciliation for every account</b></span></div><div class="item"><span class="dot"></span><span><b>Exceptions classified</b> and explained</span></div><div class="item"><span class="dot"></span><span><b>Evidence log</b> behind every figure</span></div></div>
-    </div>
-    <div class="ctrl"><span class="lbl">Controls</span><p>Full population, never a sample &middot; materiality-gated exceptions</p></div>
-    <div class="ctrl" style="border-left-color:var(--green)"><span class="lbl" style="color:var(--green)">Human gate</span><p class="gate"><b>Your team signs off on every exception. No exception is closed without a person.</b></p></div>
-  </section>
-
-  <section class="faq">
-    <h2>What customers ask</h2>
-    <details><summary>Why full population instead of sampling?</summary><p>Because the account you didn't sample is where the surprise lives. Full-population matching costs an engine nothing &mdash; and gives your auditors an evidence log that covers everything.</p></details><details><summary>What counts as an exception?</summary><p>Anything that doesn't tie between GL and the bank or lender record &mdash; classified by materiality, explained in plain language, and held for your sign-off.</p></details><details><summary>Can it handle closed or migrated accounts?</summary><p>Yes &mdash; tracing cash across account closures and system migrations is a first-class feature, not an edge case.</p></details>
-  </section>
-
-  <section>
-    <h2>Verify it yourself</h2>
-    <div class="verify">
-      <p>Don't take this page's word for it. The engine is public, MIT-licensed, and runs on fictional seeded data &mdash; read the code, run it, and judge the work before you spend anything.</p>
-      <div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git<br>cd cash-reconciliation &nbsp;&amp;&amp;&nbsp; python run.py</div>
-      <div class="links">
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-reconciliation" target="_blank" rel="noopener">Source on GitHub</a>
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/README.md" target="_blank" rel="noopener">Engine README</a>
-        <a class="btn btn-t" href="/tests/" >All tests, by engine</a>
-        <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="cta">
-    <h2>Show us where the hours go.</h2>
-    <p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. No software purchase &mdash; and your people keep approval authority.</p>
-    <a class="btn btn-w" href="/#book">Book a free consultation</a>
-    <a class="btn btn-wo" href="mailto:contact@sophonfinance.com">contact@sophonfinance.com</a>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Each layer is an independent stage, from the seeded substrate up to the optional assurance loop. Select a layer for its plain-terms and engineering detail.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">$50.00 (default)<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Materiality threshold</div><div class="p">differences at or under $50 are timing noise; above becomes a numbered flag</div></div>
+  <div class="cell"><div class="v">9 (4 cash / 4 debt / 1 skipped)<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Accounts in scope</div><div class="p">the fixed seeded scenario across four fictional entities</div></div>
+  <div class="cell"><div class="v">3-part total<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Debt reconciliation</div><div class="p">principal + current interest/reserve + late paydown</div></div>
+  <div class="cell"><div class="v">$0.005<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Tie tolerance</div><div class="p">absolute variance at or below this is an exact tie; guards float noise</div></div>
+  <div class="cell"><div class="v">7,511<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Tests</div><div class="p">the checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">stdlib + openpyxl<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Dependencies</div><div class="p">no pandas / numpy / faker; runs offline and deterministic</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">Reconciling cash and debt means tying every bank and lender movement to the general ledger, explaining the differences, and keeping audit-ready evidence across many entities. Performed by hand the work is repetitive and slow, and the evidence trail comes out inconsistent from month to month. This engine automates the tie-out on a repeatable cadence, builds materiality and escalation into the process so reviewers see signal instead of noise, and produces a consistent, audit-ready evidence log every cycle.</p>
+  <p style="margin:10px 0"><b>March 2026 base reconciliation<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> python -m recon_engine reconciles the seeded March-2026 books: 9 accounts (4 cash, 4 debt, 1 dormant skipped) resolve to 5 clean, 1 timing, 2 flagged. FLAG-001 CASH-1001 (Maple Fund LP) is a -1,875.40 deposit-in-transit; FLAG-002 DEBT-2003 (Cedar Ridge Partners LLC) is a +12,500.00 keying error. The process exits 0.</p>
+  <p style="margin:10px 0"><b>The 3-part debt formula ties out<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> The debt section proves the optional third leg is wired through. DEBT-2000 (Demo Holdings LLC) carries a 7,500.00 late-paydown mirrored GL-to-lender and still ties clean at 0.00; DEBT-2002 (Birchwood Op Co) shows an 18.75 interest accrual booked in GL but not yet on the lender statement, which is under $50 and therefore a yellow timing item, not a flag.</p>
+  <p style="margin:10px 0"><b>The assurance loop restores a drifted package<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> python -m recon_engine.loop --demo injects three faults on baseline-clean accounts: CASH-1002 GL fat-fingered +4,830.25, DEBT-2000 lender statement dropped, DEBT-2001 mis-marked dormant. The loop resyncs those three accounts in three turns (budget 11), driving deviations from 3 to 0. Gross corrective movement of 4,831.25 exceeds the $50 materiality, so the verdict is FLAG with exit 0, and the scenario&#x27;s genuine flags are left untouched.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<svg class="schem" viewBox="0 0 1430 288" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Cash &amp; Debt Reconciliation engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,67 C235,67 235,67 270,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="59" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">GL/bank/lender workpapers</text></g>
+  <g class="schem-edge"><path d="M440,67 C475,67 475,67 510,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="59" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">in-scope, indexed by acct #</text></g>
+  <g class="schem-edge"><path d="M680,67 C715,67 715,67 750,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="59" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">signed variance</text></g>
+  <g class="schem-edge"><path d="M920,67 C955,67 955,67 990,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="955" y="59" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">clean/timing/flag + ids</text></g>
+  <g class="schem-edge"><path d="M1160,67 C1195,67 1195,67 1230,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="1195" y="59" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">5-section log + console</text></g>
+  <g class="schem-edge"><path d="M200,67 C235,67 235,181 270,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="116" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">pristine seed = source of record</text></g>
+  <g class="schem-edge"><path d="M440,181 C475,181 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">baseline outcomes</text></g>
+  <g class="schem-edge"><path d="M595,104 C595,240 595,240 571,240 L619,240 C595,240 595,240 595,218" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="233" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">current outcomes</text></g>
+  <g class="schem-edge"><path d="M680,181 C715,181 715,181 750,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">lowest deviating account</text></g>
+  <g class="schem-edge"><path d="M835,218 C835,240 835,240 811,240 L619,240 C595,240 595,240 595,104" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="233" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">re-verify until no drift</text></g>
+  <g class="schem-edge gate"><path d="M680,181 C835,181 835,181 990,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="835" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">converged -&gt; gate</text></g>
+  <g class="schem-block" data-block="b_generate"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded generator source on GitHub"><rect x="30" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Seeded generator</text></a></g>
+  <g class="schem-block" data-block="b_scope"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Scope &amp; account-number index source on GitHub"><rect x="270" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Scope &amp; account-number index</text></a></g>
+  <g class="schem-block" data-block="b_reconcile"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Variance + 3-part debt total source on GitHub"><rect x="510" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Variance + 3-part debt total</text></a></g>
+  <g class="schem-block" data-block="b_classify"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Materiality classify + flag ids source on GitHub"><rect x="750" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Materiality classify + flag ids</text></a></g>
+  <g class="schem-block" data-block="b_report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/report.py" target="_blank" rel="noopener" aria-label="Open 5-section evidence log source on GitHub"><rect x="990" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="1075" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">5-section evidence log</text></a></g>
+  <g class="schem-block" data-block="b_cli"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/cli.py" target="_blank" rel="noopener" aria-label="Open CLI summary + exit 0 source on GitHub"><rect x="1230" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="1315" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">CLI summary + exit 0</text></a></g>
+  <g class="schem-block" data-block="b_baseline"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py" target="_blank" rel="noopener" aria-label="Open Baseline reconcile (source of record) source on GitHub"><rect x="270" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Baseline reconcile (source of record)</text></a></g>
+  <g class="schem-block" data-block="b_sensor"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py" target="_blank" rel="noopener" aria-label="Open Deviation sensor source on GitHub"><rect x="510" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Deviation sensor</text></a></g>
+  <g class="schem-block" data-block="b_resync"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py" target="_blank" rel="noopener" aria-label="Open Resync to source source on GitHub"><rect x="750" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Resync to source</text></a></g>
+  <g class="schem-block" data-block="b_gate"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py" target="_blank" rel="noopener" aria-label="Open Materiality gate -&gt; verdict + exit code source on GitHub"><rect x="990" y="144" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="1075" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Materiality gate -&gt; verdict + exit code</text></a></g>
+  <g class="schem-title"><line x1="30" y1="262" x2="1400" y2="262" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="276" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E02-RCN &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-20</text></g>
+</svg><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded generator.</b> Builds the fictional GL, bank, and lender books with known discrepancies injected.</li><li><b>Scope &amp; account-number index.</b> Filters out dormant zero-activity rows and indexes each source by account number.</li><li><b>Variance + 3-part debt total.</b> Computes GL-minus-source for cash, and GL vs the 3-part lender total for debt.</li><li><b>Materiality classify + flag ids.</b> Labels each line clean, timing, or flagged and numbers the flags.</li><li><b>5-section evidence log.</b> Renders Summary / Cash / Debt / Flagged / Notes as Markdown and a color-coded xlsx.</li><li><b>CLI summary + exit 0.</b> Prints the run summary and flagged list; exits 0 even with flags.</li><li><b>Baseline reconcile (source of record).</b> Reconciles the pristine seeded dataset once to establish the authoritative outcomes.</li><li><b>Deviation sensor.</b> Compares each account&#x27;s current outcome to the baseline and lists what drifted.</li><li><b>Resync to source.</b> Restores every record the lowest-numbered deviating account owns back to the seeded truth.</li><li><b>Materiality gate -&gt; verdict + exit code.</b> Once nothing deviates, it decides PASS / FLAG / FAIL and sets the process exit code.</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded generator.</b> generate_dataset(seed=20260331) -&gt; SyntheticDataset (gl_records, bank_statements, lender_statements, injected).</li><li><b>Scope &amp; account-number index.</b> reconcile() loop: _is_zero_activity / dormant -&gt; _skip_line; _index_banks / _index_lenders build {account_number: statement}.</li><li><b>Variance + 3-part debt total.</b> _reconcile_cash vs bank.ending_balance; _reconcile_debt vs lender_three_part_total; compute_variance rounds to cents.</li><li><b>Materiality classify + flag ids.</b> classify(): |var| &lt;= 0.005 clean, &lt;= threshold timing, else flag; _assign_flag_ids -&gt; FLAG-001.. across cash then debt.</li><li><b>5-section evidence log.</b> render_markdown + write_xlsx (openpyxl, green/yellow/red/grey status fills).</li><li><b>CLI summary + exit 0.</b> cli.main prints period / materiality / counts / flagged and returns 0 (flags are expected, not failures).</li><li><b>Baseline reconcile (source of record).</b> assurance_loop: pristine = generate_dataset(seed); baseline = reconcile(pristine); budget = len(gl_records) + 2.</li><li><b>Deviation sensor.</b> _outcomes() fingerprint (classification + variance + source_label), then deviations(current, baseline) sorted by account.</li><li><b>Resync to source.</b> resync_account -&gt; _resync_records for gl/bank/lender; books each field change as an Adjustment; removes or restores whole records.</li><li><b>Materiality gate -&gt; verdict + exit code.</b> total = sum(adjustment magnitudes); not converged -&gt; FAIL (exit 1); total &gt; materiality -&gt; FLAG (exit 0); else PASS (exit 0). verdict_exit_code().</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python -m recon_engine</code><button class="copybtn" data-copy="python -m recon_engine" aria-label="Copy command: python -m recon_engine">copy</button></div></td><td>generate synthetic data, reconcile, write both logs</td><td class="mono">console summary: period, seed, materiality, in-scope counts, clean/timing/flagged, and the flagged list</td><td class="mono">0</td><td>evidence-log.md (committed), output/evidence-log.xlsx (gitignored)</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>convenience alias for python -m recon_engine (same args)</td><td class="mono">same console summary</td><td class="mono">0</td><td>evidence-log.md, output/evidence-log.xlsx</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m recon_engine --threshold 25</code><button class="copybtn" data-copy="python -m recon_engine --threshold 25" aria-label="Copy command: python -m recon_engine --threshold 25">copy</button></div></td><td>tighten materiality to $25</td><td class="mono">borderline variances reclassify between timing and flag</td><td class="mono">0</td><td>evidence-log.md (+ xlsx)</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m recon_engine --seed 7</code><button class="copybtn" data-copy="python -m recon_engine --seed 7" aria-label="Copy command: python -m recon_engine --seed 7">copy</button></div></td><td>regenerate synthetic data with a different seed</td><td class="mono">a new byte-deterministic dataset and log</td><td class="mono">0</td><td>evidence-log.md (+ xlsx)</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m recon_engine --no-xlsx</code><button class="copybtn" data-copy="python -m recon_engine --no-xlsx" aria-label="Copy command: python -m recon_engine --no-xlsx">copy</button></div></td><td>Markdown only; skip the workbook</td><td class="mono">console summary without the XLSX line</td><td class="mono">0</td><td>evidence-log.md</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m recon_engine.loop --demo</code><button class="copybtn" data-copy="python -m recon_engine.loop --demo" aria-label="Copy command: python -m recon_engine.loop --demo">copy</button></div></td><td>inject the drift profile and run the assurance loop</td><td class="mono">turn-by-turn Markdown; verdict PASS/FLAG/FAIL with gross movement vs materiality</td><td class="mono">0 (PASS/FLAG) or 1 (FAIL)</td><td>assurance_loop_report.md when --out DIR is given; otherwise stdout only</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the default test suite (the SWEEP-gated bulk grid is excluded)</td><td class="mono">pass/fail summary over 7,511 collected tests</td><td class="mono">0 on pass</td><td>none (.pytest_cache only)</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Tests collected<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>7,511</b> tests (default)<br><span style="color:#6f6f6f;font-size:12.5px">an exhaustive bulk invariant grid raises this to 162,479 with SWEEP=1</span></td></tr>
+  <tr><td>Seeded reconciliation<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>9</b> accounts (8 active + 1 skipped; 2 flagged)<br><span style="color:#6f6f6f;font-size:12.5px">5 clean, 1 timing, 2 flagged in the March-2026 seed</span></td></tr>
+  <tr><td>Loop convergence<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>3 -&gt; 0</b> deviations in 3 turns / budget 11<br><span style="color:#6f6f6f;font-size:12.5px">restores three injected faults to the source of record</span></td></tr>
+  <tr><td>Loop gross correction<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>4,831.25</b> USD across 3 booked corrections<br><span style="color:#6f6f6f;font-size:12.5px">material, so the verdict is FLAG (converged, exit 0) rather than PASS</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The base engine always exits 0 — a flag is an expected reconciliation outcome, not a program failure. The assurance loop adds an automated materiality gate: PASS and FLAG both exit 0 (FLAG surfaces material corrections so a reviewer sees what moved before the package ships), while FAIL exits 1 only on non-convergence. The gate labels and routes the output; it does not stand in for a human sign-off.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, offline default mode.</p><p><b>Demo gate.</b> automated-materiality-gate</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>|variance| &lt;= $0.005 (tie tolerance)</td><td class="mono"><b>clean (green)</b></td><td>note &#x27;ties to source&#x27;; no action</td></tr><tr><td>$0.005 &lt; |variance| &lt;= threshold ($50)</td><td class="mono"><b>timing (yellow)</b></td><td>comment as timing/noise, expected to clear; not escalated</td></tr><tr><td>|variance| &gt; threshold</td><td class="mono"><b>flag (red, FLAG-###)</b></td><td>assign a sequential flag id; escalate for review</td></tr><tr><td>dormant / zero-activity account</td><td class="mono"><b>skipped (grey)</b></td><td>skip with a documented note; no reconciliation required</td></tr><tr><td>loop: converged, total corrections &lt;= materiality</td><td class="mono"><b>PASS</b></td><td>clean to file; exit 0</td></tr><tr><td>loop: converged, total corrections &gt; materiality</td><td class="mono"><b>FLAG</b></td><td>ship with a note of what moved; exit 0</td></tr><tr><td>loop: not converged within the turn budget</td><td class="mono"><b>FAIL</b></td><td>escalate; exit 1</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Deterministic: random.Random(seed) yields byte-identical GL/bank/lender data, so a given seed always reproduces the same log (generate.py; --seed).</li><li style="list-style:disc;margin-left:18px">Account-number targeting: every value is resolved by account number in the key column, never by row index, which defeats off-by-one corruption (engine._index_banks / _index_lenders).</li><li style="list-style:disc;margin-left:18px">Integer-cent discipline: all money is round(..., 2) at every step (compute_variance, lender_three_part_total, ReconLine fields), with a $0.005 tie tolerance guarding float noise (engine.TIE_TOLERANCE).</li><li style="list-style:disc;margin-left:18px">Materiality gate: |variance| &lt;= threshold is timing/noise; above becomes a numbered FLAG-### escalation (engine.classify, _assign_flag_ids).</li><li style="list-style:disc;margin-left:18px">3-part debt formula: the GL loan is reconciled against principal + current_interest_reserve + late_paydown, the optional third leg included (engine.lender_three_part_total).</li><li style="list-style:disc;margin-left:18px">Loop fidelity: the assurance loop never invents a number; every correction restores a seeded record, and the settled reconciliation is identical to a pristine run (loop.py).</li><li style="list-style:disc;margin-left:18px">Exit contract: the base engine returns 0 even when lines are flagged, since a flag is an expected outcome; the loop returns 1 only on non-convergence (cli.main, loop.verdict_exit_code).</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>It refuses to force a tie on dormant, zero-activity accounts: they are skipped with a documented note rather than reconciled, keeping padding out of the population.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>The assurance loop refuses to converge by zeroing genuine reconciling items: the scenario&#x27;s real flags (deposit-in-transit, keying error) are part of the baseline and survive the loop; it restores fidelity to source, not &#x27;all clean&#x27;.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>The loop refuses to invent a number: every correction is a restoration of a seeded source record, so the settled reconciliation is byte-identical to a pristine run.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">animated overview</span>
+<figure class="figwrap"><img src="../assets/engine-recon.webp" data-video="../assets/engine-recon-motion.mp4" alt="Animated overview of the Cash &amp; Debt Reconciliation engine: seeded GL, bank, and lender books tie out by account number, with lines resolving to clean, timing, and flagged and a materiality gate on the differences." loading="lazy"><figcaption>Animated overview of the recon run on fictional seeded data; run the commands above to reproduce.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git &amp;&amp; cd finance-automation-portfolio/cash-reconciliation &amp;&amp; python -m recon_engine</div><div class="runline">python -m recon_engine.loop --demo</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-reconciliation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
   </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>recon_engine/__init__.py (MATERIALITY_THRESHOLD = 50.0); overridable via --threshold</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>python -m recon_engine console summary; evidence-log.md summary section</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>recon_engine/engine.py (lender_three_part_total)</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>recon_engine/engine.py (TIE_TOLERANCE)</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>python -m pytest --collect-only -q (cash-reconciliation/); verified 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>cash-reconciliation/pyproject.toml (openpyxl&gt;=3.1)</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>README.md &#x27;Real example output&#x27;; evidence-log.md summary and flagged sections</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>README.md debt example table; recon_engine/generate.py (injected late-paydown and timing difference)</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>README.md &#x27;Reconciliation Assurance Loop&#x27;; recon_engine/loop.py (demo_setup, assurance_loop)</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q in cash-reconciliation/ (measured, SWEEP unset); pinned in site-datasheets/counts.json</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>python -m recon_engine console summary (measured, exit 0)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>python -m recon_engine.loop --demo (measured)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>python -m recon_engine.loop --demo (measured: 4,830.25 GL fat-finger + 1.00 dormant-flag restore)</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>recon_engine/engine.py (_is_zero_activity, _skip_line); evidence-log.md dormant-account note</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>recon_engine/loop.py (docstring; demo_setup targets only baseline-clean accounts)</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>recon_engine/loop.py (resync_account; fields are only ever set back to pristine truth)</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
 </main>
-
-<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
-
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-reconciliation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
 <script>
-// motion upgrade: diagram image swaps to its silent looping video when visible
-document.querySelectorAll('img[data-video]').forEach(function(img){
-  var io=new IntersectionObserver(function(es){ es.forEach(function(e){
-    if(!e.isIntersecting) return; io.unobserve(img);
-    var v=document.createElement('video');
-    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
-    v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay',''); v.setAttribute('loop',''); v.setAttribute('preload','auto');
-    v.poster=img.currentSrc||img.src; v.src=img.getAttribute('data-video');
-    v.width=img.width; v.height=img.height; v.setAttribute('role','img'); v.setAttribute('aria-label',img.alt);
-    img.replaceWith(v); var p=v.play(); if(p&&p.catch)p.catch(function(){});
-  }); },{rootMargin:'120px'});
-  io.observe(img);
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
 });
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
 </script>
 </body>
 </html>
