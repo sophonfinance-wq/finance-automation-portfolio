@@ -21,7 +21,7 @@ Assume the author may have made mistakes or oversold things — find them.
 REPO: https://github.com/sophonfinance-wq/finance-automation-portfolio
 Setup: Python 3.12+, `pip install -r requirements.txt`, then
 `python -m pytest -q -m "not site_tooling"` from the repo root. Separately run
-`python -m pytest -q -m site_tooling` and confirm its 47-test guard suite. Confirm the reported
+`python -m pytest -q -m site_tooling` and confirm its 50-test guard suite. Confirm the reported
 totals (and each engine's sub-count) are correct; if any count is wrong, that's a finding. The
 framing is nine runnable systems, with public site-tooling guards reported separately from the
 67,664-test curated engine suite.

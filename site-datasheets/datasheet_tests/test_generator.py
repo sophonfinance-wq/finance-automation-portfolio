@@ -4,6 +4,7 @@ from __future__ import annotations
 import subprocess
 import sys
 
+import datasheet_spec as ds
 import generate_datasheets as gen
 
 from datasheet_tests.conftest import ROOT, present_slugs  # noqa: F401 (path bootstrap)
@@ -43,6 +44,27 @@ def test_committed_pages_are_fresh():
         assert page.read_bytes() == gen.render(slug).encode("utf-8"), (
             f"docs/engines/{slug}.html is stale — regenerate it"
         )
+
+
+def test_seeded_claims_are_spec_driven():
+    # The shared chrome (masthead legend, die-stack substrate, footer) may claim
+    # "seeded" only for an engine whose spec declares determinism.seeded=true —
+    # atlas and brain are deterministic but not seeded, and must not say so.
+    for slug in present_slugs():
+        spec = ds.load_spec(slug)
+        seeded = spec["control_characteristics"]["determinism"]["seeded"]
+        page = gen.render(slug)
+        if seeded:
+            assert "All data fictional and seeded." in page, slug
+            assert "substrate: seeded fictional data" in page, slug
+            assert "All public examples use fictional, seeded data." in page, slug
+        else:
+            assert "All data fictional." in page, slug
+            assert "substrate: fictional data" in page, slug
+            assert "All public examples use fictional data." in page, slug
+            assert "seeded fictional data" not in page, slug
+            assert "fictional and seeded" not in page, slug
+            assert "fictional, seeded" not in page, slug
 
 
 def test_cli_exits_cleanly(tmp_path):
