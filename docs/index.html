@@ -696,8 +696,8 @@
   #story .sec-head { margin:18px 0 12px; }
   #story .sec-head h2 { font-size:clamp(26px, 2.8vw, 36px); margin:6px 0 7px; }
   #story .sec-head .lead { font-size:15.5px; }
-  .whyfilm { margin-top:0; max-width:960px; }
-  .whyfilm-stage { position:relative; isolation:isolate; }
+  .whyfilm { width:100%; max-width:none; margin-top:0; }
+  .whyfilm-stage { position:relative; isolation:isolate; width:100%; }
   .whyfilm video { position:relative; z-index:0; display:block; width:100%; height:auto; background:#000; border:0; box-shadow:none; }
   .film-sound { position:absolute; left:50%; bottom:16%; transform:translateX(-50%);
     z-index:2; display:inline-flex; align-items:center; gap:9px; cursor:pointer;
@@ -718,7 +718,7 @@
     #story .sec-head .lead { font-size:14px; line-height:1.4; }
   }
   @media (max-width:520px){ .film-sound { font-size:13px; padding:10px 15px; bottom:19%; } }
-  .whyfilm figcaption { margin-top:14px; font-size:14.5px; color:var(--text-2); line-height:1.6; max-width:58em; }
+  .whyfilm figcaption { max-width:var(--wrap); margin:14px auto 0; font-size:14.5px; color:var(--text-2); line-height:1.6; }
   .whyfilm figcaption b { color:var(--text); }
   .whyfilm .filmsrc { display:block; margin-top:8px; font-family:var(--mono); font-size:10.5px; color:var(--text-3); letter-spacing:.3px; }
   .whyfilm .filmsrc code { font-family:var(--mono); }
@@ -893,7 +893,8 @@
       <h2>It&rsquo;s the work, <strong>not the people.</strong></h2>
       <p class="lead">Just over a minute on why we build finance engines &mdash; and what stays human.</p>
     </div>
-    <figure class="whyfilm reveal">
+  </div>
+  <figure class="whyfilm reveal">
       <div class="whyfilm-stage">
         <video id="whyFilm" autoplay muted loop playsinline controls preload="auto" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; unmute for narration">
           <source src="assets/why-film.mp4" type="video/mp4">
@@ -904,10 +905,9 @@
           <span>Tap for sound</span>
         </button>
       </div>
-      <figcaption><b>None of this is a criticism of accountants &mdash; we are accountants.</b> The engines absorb the mechanical month; your people keep the judgment and the final signature.<br>
+      <figcaption class="wrap"><b>None of this is a criticism of accountants &mdash; we are accountants.</b> The engines absorb the mechanical month; your people keep the judgment and the final signature.<br>
       <span class="filmsrc">Figures in the film: APQC &middot; Ventana Research / ISG &middot; FloQast / Dimensional Research &middot; FloQast / Univ. of Georgia &middot; WSJ / BLS &middot; engine runtime measured 2026-07-20 (<code>time python -m close_engine</code>)</span></figcaption>
-    </figure>
-  </div>
+  </figure>
 </section>
 
 <!-- ================= STATS ================= -->
