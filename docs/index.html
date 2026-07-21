@@ -686,7 +686,33 @@
 
   /* ---- story: the why film ---- */
   .whyfilm { margin-top:28px; max-width:960px; }
-  .whyfilm video { display:block; width:100%; height:auto; background:#f7f8fa; border:1px solid var(--border); box-shadow:0 24px 60px -30px rgba(15,42,92,.35); }
+  .whyfilm-stage { position:relative; }
+  /* No frame: the picture is feathered off at every edge so it dissolves into the
+     page instead of sitting in a box. Two gradients intersected = a soft rectangle;
+     the bottom stays nearly opaque so the native controls remain legible. */
+  .whyfilm video { display:block; width:100%; height:auto; background:transparent; border:0; box-shadow:none;
+    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%),
+                       linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%),
+               linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%);
+    mask-composite:intersect; }
+  @supports not (mask-composite:intersect) {
+    .whyfilm video { -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%);
+                     mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%); }
+  }
+  .film-sound { position:absolute; left:50%; bottom:16%; transform:translateX(-50%);
+    display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+    font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:.2px;
+    color:#fff; background:rgba(10,16,32,.62); border:1px solid rgba(255,255,255,.35);
+    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+    border-radius:999px; padding:11px 18px; line-height:1;
+    box-shadow:0 6px 24px rgba(0,0,0,.28); transition:opacity .25s, transform .25s, background .15s; }
+  .film-sound svg { width:17px; height:17px; }
+  .film-sound:hover { background:rgba(15,98,254,.85); }
+  .film-sound:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+  .film-sound[hidden] { display:none; }
+  @media (max-width:520px){ .film-sound { font-size:13px; padding:10px 15px; bottom:19%; } }
   .whyfilm figcaption { margin-top:14px; font-size:14.5px; color:var(--text-2); line-height:1.6; max-width:58em; }
   .whyfilm figcaption b { color:var(--text); }
   .whyfilm .filmsrc { display:block; margin-top:8px; font-family:var(--mono); font-size:10.5px; color:var(--text-3); letter-spacing:.3px; }
@@ -767,7 +793,8 @@
   audio.addEventListener('play',  function(){ setState(true); });
   audio.addEventListener('pause', function(){ setState(false); });
 
-  function tryPlay(){ var p = audio.play(); if (p && p.catch) p.catch(function(){}); }
+  // The brand film owns the audio: never start music over its narration.
+  function tryPlay(){ if (window.__filmHasSound) return; var p = audio.play(); if (p && p.catch) p.catch(function(){}); }
 
   var optedOut = false;
   try { optedOut = localStorage.getItem(KEY) === 'off'; } catch(e){}
@@ -854,6 +881,31 @@
   </div>
 </header>
 
+<!-- ================= THE STORY: WHY THIS EXISTS ================= -->
+<section id="story">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <p class="kicker">Watch this first</p>
+      <h2>It&rsquo;s the work, <strong>not the people.</strong></h2>
+      <p class="lead">Just over a minute on why we build finance engines &mdash; and what stays human.</p>
+    </div>
+    <figure class="whyfilm reveal">
+      <div class="whyfilm-stage">
+        <video id="whyFilm" autoplay muted loop playsinline controls preload="auto" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; unmute for narration">
+          <source src="assets/why-film.mp4" type="video/mp4">
+          <track kind="captions" src="assets/why-film.vtt" srclang="en" label="English">
+        </video>
+        <button id="filmSound" class="film-sound" type="button" aria-label="Turn on the film's sound">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a9 9 0 0 1 0 14"/></svg>
+          <span>Tap for sound</span>
+        </button>
+      </div>
+      <figcaption><b>None of this is a criticism of accountants &mdash; we are accountants.</b> The engines absorb the mechanical month; your people keep the judgment and the final signature.<br>
+      <span class="filmsrc">Figures in the film: APQC &middot; Ventana Research / ISG &middot; FloQast / Dimensional Research &middot; FloQast / Univ. of Georgia &middot; WSJ / BLS &middot; engine runtime measured 2026-07-20 (<code>time python -m close_engine</code>)</span></figcaption>
+    </figure>
+  </div>
+</section>
+
 <!-- ================= STATS ================= -->
 <div class="stats" role="complementary" aria-label="Verified facts">
   <div class="wrap stats-in">
@@ -871,25 +923,6 @@
       <span class="src">human gate in every engine</span></div>
   </div>
 </div>
-
-<!-- ================= THE STORY: WHY THIS EXISTS ================= -->
-<section class="alt" id="story">
-  <div class="wrap">
-    <div class="sec-head reveal">
-      <p class="kicker">Watch this first</p>
-      <h2>It&rsquo;s the work, <strong>not the people.</strong></h2>
-      <p class="lead">Ninety seconds on why we build finance engines &mdash; and what stays human. Sound on.</p>
-    </div>
-    <figure class="whyfilm reveal">
-      <video id="whyFilm" controls muted loop playsinline preload="none" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; unmute for narration">
-        <source src="assets/why-film.mp4" type="video/mp4">
-        <track kind="captions" src="assets/why-film.vtt" srclang="en" label="English">
-      </video>
-      <figcaption><b>None of this is a criticism of accountants &mdash; we are accountants.</b> The engines absorb the mechanical month; your people keep the judgment and the final signature.<br>
-      <span class="filmsrc">Figures in the film: APQC &middot; Ventana Research / ISG &middot; FloQast / Dimensional Research &middot; FloQast / Univ. of Georgia &middot; WSJ / BLS &middot; engine runtime measured 2026-07-20 (<code>time python -m close_engine</code>)</span></figcaption>
-    </figure>
-  </div>
-</section>
 
 <!-- ================= CREDENTIALS ================= -->
 <div class="cred">
@@ -2033,17 +2066,53 @@
 <script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/tech-film-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
 <script>(function(){var v=document.getElementById("credVid");if(!v)return;var small=Math.min(screen.width,screen.height)<=820;if(small){v.querySelector("source").src="assets/cred-mobile.mp4";}function go(){var p=v.play();if(p&&p.catch)p.catch(function(){});}if("IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v.dataset.l){v.load();v.dataset.l=1;}go();}else{v.pause();}});},{rootMargin:"200px"}).observe(v);}else{v.load();go();}})();</script>
 <script>
-// Why film: play muted from the top of the story when a third of it scrolls into
-// view; pause off-screen; honor reduced motion (poster + play button instead).
+// Why film: autoplays on load. Every browser blocks autoplay that starts WITH sound,
+// so it starts muted and switches the narration on at the visitor's first gesture
+// anywhere on the page — the same unlock the soundtrack button uses. The film owns
+// the audio: when it becomes audible the background music steps aside.
 (function(){
-  var v=document.getElementById('whyFilm');if(!v)return;
-  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  function go(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+  var v=document.getElementById('whyFilm'); if(!v) return;
+  var badge=document.getElementById('filmSound');
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function go(){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
+
+  function showBadge(on){ if(badge) badge.hidden=!on; }
+  showBadge(true);
+
+  function soundOn(){
+    v.muted=false;
+    if(v.volume<0.1) v.volume=1;
+    window.__filmHasSound=true;
+    var jz=document.getElementById('jazz-audio');
+    if(jz&&!jz.paused) jz.pause();   // narration wins over the background music
+    go();
+    showBadge(false);
+    unkick();
+  }
+
+  var evs=['pointerdown','touchstart','keydown','click'];
+  function unkick(){ evs.forEach(function(e){ window.removeEventListener(e,kick,true); }); }
+  function kick(e){
+    var t=e&&e.target;
+    // nodeType guard: contains() throws on a non-Node target (e.g. window).
+    if(t&&t.nodeType&&v.contains(t)) return;  // let native controls do their thing
+    soundOn();
+  }
+  if(badge) badge.addEventListener('click',function(e){ e.stopPropagation(); soundOn(); });
+  evs.forEach(function(e){ window.addEventListener(e,kick,{capture:true,passive:true}); });
+
+  // If the visitor mutes it again from the native controls, offer sound back.
+  v.addEventListener('volumechange',function(){
+    if(v.muted){ window.__filmHasSound=false; showBadge(true); }
+  });
+
+  if(reduce){ v.removeAttribute('autoplay'); v.pause(); showBadge(false); return; }
+  go();
+  // Don't burn cycles or talk to an empty room once it's scrolled past.
   if('IntersectionObserver'in window){
     new IntersectionObserver(function(es){es.forEach(function(e){
-      if(e.isIntersecting){if(!v.dataset.l){v.load();v.dataset.l=1;v.currentTime=0;}go();}
-      else{v.pause();}
-    });},{threshold:0.35}).observe(v);
+      if(e.isIntersecting) go(); else v.pause();
+    });},{threshold:0.25}).observe(v);
   }
 })();
 </script>
