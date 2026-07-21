@@ -4,67 +4,100 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Validation Engine — Sophon Finance Systems</title>
-<meta name="description" content="Read-only workbook review with PASS / REVIEW / FAIL verdicts — how the Validation Engine engine works, what you provide, what you receive, and how to verify the engineering yourself on GitHub.">
+<meta name="description" content="Validation Engine (SFS-E04-VAL) datasheet — a deterministic, read-only rules engine that runs six independent checks over finished .xlsx workbooks and their JSON exports, rolling PASS/REVIEW/FAIL findings up to one verdict and exit code; every figure re-derives from the public repository.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#ffffff; --bg-alt:#f4f4f4; --border:#e0e0e0; --border-strong:#c6c6c6; --text:#161616; --text-2:#525252; --text-3:#6f6f6f; --blue:#0f62fe; --blue-hover:#0043ce; --blue-tint:#edf5ff; --green:#198038;
-    --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6; }
-  .wrap { width:100%; max-width:980px; margin:0 auto; padding:0 22px; }
-  header.nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 0; }
-  .nav-in { display:flex; align-items:center; gap:16px; }
-  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-  .brand-mark { width:24px; height:24px; }
-  .brand-word { font-weight:600; font-size:14px; letter-spacing:.2px; white-space:nowrap; }
-  .brand-word span { font-weight:300; }
-  .nav-in .backlink { margin-left:auto; color:var(--blue); text-decoration:none; font-size:14px; }
-  .nav-in .backlink:hover { text-decoration:underline; }
-  .btn { display:inline-flex; align-items:center; gap:18px; text-decoration:none; font-size:15px; padding:13px 18px; min-height:46px; border:1px solid transparent; }
-  .btn-p { background:var(--blue); color:#fff; } .btn-p:hover { background:var(--blue-hover); }
-  .btn-t { background:transparent; color:var(--blue); border-color:var(--blue); } .btn-t:hover { background:var(--blue); color:#fff; }
-  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
-  .hero { padding:54px 0 8px; }
-  h1 { font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-.3px; line-height:1.15; margin:8px 0 10px; }
-  h1 strong { font-weight:600; }
-  .tag { font-size:16px; color:var(--text-2); max-width:44em; }
-  .intro { font-size:16.5px; color:var(--text-2); max-width:46em; margin:18px 0 8px; }
-  figure.vis { margin:34px 0 8px; }
-  figure.vis img, figure.vis video { display:block; width:100%; height:auto; }
-  section { padding:34px 0 6px; }
-  h2 { font-size:clamp(20px,2.6vw,26px); font-weight:600; letter-spacing:-.2px; margin-bottom:14px; }
-  .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); }
-  .col { padding:22px 24px; }
-  .col + .col { border-left:1px solid var(--border); }
-  .col h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
-  .col.does h4 { color:var(--blue); } .col.gets h4 { color:var(--green); }
-  .item { display:flex; gap:9px; font-size:14px; color:var(--text-2); margin:9px 0; line-height:1.45; }
-  .item b { color:var(--text); }
-  .dot { flex:none; width:7px; height:7px; border-radius:50%; margin-top:7px; background:var(--border-strong); }
-  .does .dot { background:var(--blue); } .gets .dot { background:var(--green); }
-  .ctrl { border:1px solid var(--border); border-left:3px solid var(--blue); padding:18px 22px; margin-top:16px; }
-  .ctrl .lbl { font-family:var(--mono); font-size:11px; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:6px; }
-  .ctrl p { font-size:14.5px; color:var(--text-2); }
-  .ctrl .gate b { color:var(--text); }
-  .faq details { border:1px solid var(--border); padding:0; margin-top:10px; }
-  .faq summary { cursor:pointer; font-weight:600; font-size:15px; padding:15px 18px; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-  .faq summary::after { content:"+"; color:var(--blue); font-size:20px; font-weight:300; }
-  .faq details[open] summary::after { content:"\2212"; }
-  .faq details p { padding:0 18px 16px; font-size:14.5px; color:var(--text-2); }
-  .verify { background:var(--bg-alt); border:1px solid var(--border); padding:26px 26px 22px; margin-top:6px; }
-  .verify .runline { font-family:var(--mono); font-size:13px; background:#161616; color:#9ef0a0; padding:12px 16px; margin:14px 0 16px; overflow-x:auto; white-space:nowrap; }
-  .verify .links { display:flex; flex-wrap:wrap; gap:10px; }
-  .verify p { font-size:14.5px; color:var(--text-2); }
-  .cta { margin:44px 0 60px; background:var(--blue); color:#fff; padding:34px 30px; }
-  .cta h2 { color:#fff; margin-bottom:6px; }
-  .cta p { color:#d0e2ff; font-size:15px; max-width:44em; margin-bottom:18px; }
-  .btn-w { background:#fff; color:var(--blue); } .btn-w:hover { background:var(--blue-tint); }
-  .btn-wo { background:transparent; color:#fff; border-color:#fff; } .btn-wo:hover { background:rgba(255,255,255,.14); }
-  footer { border-top:1px solid var(--border); padding:18px 0 26px; font-size:13px; color:var(--text-3); }
-  footer a { color:var(--blue); text-decoration:none; }
-  @media (max-width:760px){ .cols { grid-template-columns:1fr; } .col + .col { border-left:none; border-top:1px solid var(--border); } }
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:24px;height:24px}
+.brand-word{font-weight:600;font-size:14px;letter-spacing:.2px;white-space:nowrap}
+.brand-word span{font-weight:300}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
 </style>
 </head>
 <body>
@@ -76,73 +109,281 @@
   <a class="backlink" href="/#engines">&larr; All engines</a>
   <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
 </div></header>
-
 <main class="wrap">
-  <div class="hero">
-    <p class="kicker">ENGINE 04 &middot; PORTFOLIO</p>
-    <h1><strong>Validation Engine</strong></h1>
-    <p class="tag">Read-only workbook review with PASS / REVIEW / FAIL verdicts</p>
-    <p class="intro">A second pair of eyes for finished work: the Validation Engine reviews workbooks read-only &mdash; formula integrity, lineage, cross-sheet consistency &mdash; and returns PASS / REVIEW / FAIL verdicts with a byte-identical guarantee that it never modifies what it audits.</p>
+<section class="masthead">
+  <p class="kicker">ENGINE 04</p>
+  <p class="partline">SFS-E04-VAL &middot; READ-ONLY VALIDATION &middot; REV 2026-07-20 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Validation Engine</strong></h1>
+  <p class="tag">A read-only rules engine that flags workbook defects human review misses — and can never introduce one.</p>
+  <p class="intro">The Validation Engine opens a finished Excel workbook read-only and runs six independent checks over it: whether the closing-surplus total is formula-driven rather than typed over, whether the trial balance ties out, whether stale review notes were left behind, whether the audit lineage flows inputs to formulas, whether draft-only MIN/MAX cap logic was ever replaced, and whether the sibling JSON export still agrees with the workbook. Each check yields a PASS, FAIL, or FLAG finding with a Sheet!Cell location, and the findings roll up to one verdict — PASS, REVIEW, or FAIL — plus a matching process exit code. It ships with a seeded synthetic generator so it runs end-to-end on fully fictional data, and it never writes to the file it audits.</p>
+  <p class="thesis">Every count on this page is a command, not a claim. The six checks, the seven-workbook demo corpus, and the pinned test total each re-derive from the public repository.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 400" role="img" aria-label="Exploded functional block stack: Verdict &amp; Reporting, Registry Runner, Rule Registry (6 checks), Workbook Context (dual read-only load), Seeded Synthetic Corpus over seeded fictional data">
+  <g class="die-layer" data-layer="reporting"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Verdict &amp; Reporting</text></g>
+  <g class="die-layer" data-layer="runner"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Registry Runner</text></g>
+  <g class="die-layer" data-layer="rules"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Rule Registry (6 checks)</text></g>
+  <g class="die-layer" data-layer="context"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Workbook Context (dual read-only load)</text></g>
+  <g class="die-layer" data-layer="corpus"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Seeded Synthetic Corpus</text></g>
+  <text x="40" y="390" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="reporting" data-plain="Rolls every finding up into one verdict — PASS, REVIEW, or FAIL — prints the findings, and writes the markdown and JSON reports. The verdict also becomes the process exit code, so a script or CI can act on it." data-eng="overall_verdict() takes the worst per-workbook Verdict; build_json_report() / build_markdown_report() serialise the run; cli.main() maps the verdict to an exit code via _EXIT_BY_VERDICT (PASS 0, REVIEW 1, FAIL 2; usage error 3)." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" aria-label="Verdict &amp; Reporting layer — open detail" aria-controls="die-panel" aria-expanded="false">Verdict &amp; Reporting</button>
+    <button class="die-face" data-layer="runner" data-plain="For each workbook, runs the whole rule registry in order and collects the findings into one report — the same rules, in the same order, every time." data-eng="validate_workbook() iterates REGISTRY of (rule_id, fn) pairs and extends WorkbookReport.findings; validate_folder() applies it to every *.xlsx in a folder, sorted, skipping ~$ lock files." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" aria-label="Registry Runner layer — open detail" aria-controls="die-panel" aria-expanded="false">Registry Runner</button>
+    <button class="die-face" data-layer="rules" data-plain="The six independent checks that inspect the cells: expected-formula, debit/credit balance, forbidden text, lineage direction, leftover cap logic, and JSON tie-out. Adding a rule is one decorated function." data-eng="The @check(rule_id) decorator appends each (WorkbookContext) -&gt; list[Finding] function to REGISTRY. Rule configuration (EXPECTED_FORMULA_CELLS, FORBIDDEN_TEXT, trial-balance columns, evidence/detail cells) stays declarative at module top." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" aria-label="Rule Registry (6 checks) layer — open detail" aria-controls="die-panel" aria-expanded="false">Rule Registry (6 checks)</button>
+    <button class="die-face" data-layer="context" data-plain="Loads each workbook twice read-only — once to see the formulas, once to see the cached values — and attaches the sibling JSON export if present. This is what makes the engine incapable of writing to the audited file." data-eng="_load_context() calls load_workbook(read_only=True) with data_only=False and data_only=True; WorkbookContext exposes formula(), value(), iter_formula_cells(), and the parsed json_data from &lt;stem&gt;.json." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" aria-label="Workbook Context (dual read-only load) layer — open detail" aria-controls="die-panel" aria-expanded="false">Workbook Context (dual read-only load)</button>
+    <button class="die-face" data-layer="corpus" data-plain="A generator that writes a fully fictional set of workbooks — one clean, and one per rule each carrying a single planted defect — so the engine runs end-to-end with no real files and every rule has a live test case." data-eng="generate_corpus() seeds the stdlib random module with SEED=20240614, builds four-tab workbooks (Surplus-Detail / Summary / Trial-Balance / Evidence) for fictional entities, plants one Defect per DEFECTS entry, and writes each .xlsx plus a .json sibling." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/generate.py" aria-label="Seeded Synthetic Corpus layer — open detail" aria-controls="die-panel" aria-expanded="false">Seeded Synthetic Corpus</button>
   </div>
-
-  <figure class="vis">
-    <img src="../assets/tile-validation.webp" data-video="../assets/tile-validation-motion.mp4" alt="Diagram: a finished workbook passes under a read-only validation scanner that never writes, exiting unchanged with PASS, REVIEW, or FAIL verdict chips" loading="eager">
-  </figure>
-
-  <section>
-    <h2>How the work moves</h2>
-    <div class="cols">
-      <div class="col"><h4>You provide</h4><div class="item"><span class="dot"></span><span>The finished workbook to review</span></div></div>
-      <div class="col does"><h4>The engine does</h4><div class="item"><span class="dot"></span><span>Checks formula integrity and cell lineage</span></div><div class="item"><span class="dot"></span><span>Cross-checks internal consistency</span></div><div class="item"><span class="dot"></span><span>Issues PASS / REVIEW / FAIL verdicts with reasons</span></div></div>
-      <div class="col gets"><h4>You receive</h4><div class="item"><span class="dot"></span><span><b>Verdict report</b> per workbook</span></div><div class="item"><span class="dot"></span><span><b>Findings</b> with locations and reasons</span></div><div class="item"><span class="dot"></span><span><b>Byte-identical guarantee</b> &mdash; nothing altered</span></div></div>
-    </div>
-    <div class="ctrl"><span class="lbl">Controls</span><p>Read-only by construction &middot; the reviewed file is untouched, provably</p></div>
-    <div class="ctrl" style="border-left-color:var(--green)"><span class="lbl" style="color:var(--green)">Human gate</span><p class="gate"><b>Verdicts inform your reviewer &mdash; people decide what to do with a FAIL.</b></p></div>
-  </section>
-
-  <section class="faq">
-    <h2>What customers ask</h2>
-    <details><summary>Will it change my file?</summary><p>Never &mdash; the engine is read-only by construction and proves it: the reviewed workbook is byte-identical before and after.</p></details><details><summary>What triggers a REVIEW verdict?</summary><p>Findings that are real but judgment-dependent &mdash; the engine flags and explains them rather than guessing.</p></details>
-  </section>
-
-  <section>
-    <h2>Verify it yourself</h2>
-    <div class="verify">
-      <p>Don't take this page's word for it. The engine is public, MIT-licensed, and runs on fictional seeded data &mdash; read the code, run it, and judge the work before you spend anything.</p>
-      <div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git<br>cd audit-automation &nbsp;&amp;&amp;&nbsp; python run.py</div>
-      <div class="links">
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/audit-automation" target="_blank" rel="noopener">Source on GitHub</a>
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/README.md" target="_blank" rel="noopener">Engine README</a>
-        <a class="btn btn-t" href="/tests/" >All tests, by engine</a>
-        <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="cta">
-    <h2>Show us where the hours go.</h2>
-    <p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. No software purchase &mdash; and your people keep approval authority.</p>
-    <a class="btn btn-w" href="/#book">Book a free consultation</a>
-    <a class="btn btn-wo" href="mailto:contact@sophonfinance.com">contact@sophonfinance.com</a>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Each layer is an independent stage of the read-only pipeline. Select a layer for its plain-terms and engineering detail.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">4,814<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">6<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Rules in registry</div><div class="p">six independent checks run over every workbook</div></div>
+  <div class="cell"><div class="v">PASS / REVIEW / FAIL<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Verdict states</div><div class="p">the worst finding wins the workbook</div></div>
+  <div class="cell"><div class="v">0 / 1 / 2 / 3<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Exit codes</div><div class="p">PASS 0, REVIEW 1, FAIL 2, usage error 3</div></div>
+  <div class="cell"><div class="v">2 (read-only)<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Read passes / workbook</div><div class="p">opened twice read-only — formulas and cached values — never written</div></div>
+  <div class="cell"><div class="v">7 workbooks<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Demo corpus</div><div class="p">one clean plus one per rule, each with a single planted defect</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">Large, formula-heavy financial workbooks must be checked before sign-off, and the errors that survive human review are the subtle ones: a total hardcoded on top of its formula, a trial balance off by a plug, a leftover &#x27;reviewer decision&#x27; note, inverted lineage where an evidence input holds a formula, a draft MIN/MAX cap that was never removed, or a published JSON that no longer matches the workbook it came from. Checking these by eye across many near-identical workbooks is slow and error-prone, and asking an LLM &#x27;did you fix everything?&#x27; returns a confident &#x27;yes&#x27; whether or not it is true. This engine replaces that with a deterministic, read-only registry of checks that runs identically every time and cannot alter the audited file.</p>
+  <p style="margin:10px 0"><b>A hardcoded total slips past review<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> Maple Fund LP&#x27;s closing surplus was typed in as the literal 900 instead of the formula =B3+B4+B5. expected_formula fires FAIL at Surplus-Detail!B6 (&#x27;expected a formula but found hardcoded value: 900&#x27;), lineage_direction adds a FLAG on the same cell, and the workbook verdict is FAIL.</p>
+  <p style="margin:10px 0"><b>A trial balance off by a plug<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> Birchwood Op Co&#x27;s trial balance no longer ties out. debit_credit_balance sums the columns and reports FAIL at Trial-Balance!B:C (&#x27;debit=885 vs credit=875, diff=10&#x27;), driving the workbook to FAIL.</p>
+  <p style="margin:10px 0"><b>A published JSON disagrees with the workbook<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> Demo Holdings LLC&#x27;s sibling JSON export carries closing_surplus=1725 while the workbook resolves to 1700. json_tieout fires FAIL at json:closing_surplus, catching a published figure that drifted from its source.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<svg class="schem" viewBox="0 0 1190 744" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Validation Engine engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,295 C235,295 235,295 270,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="287" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">samples + JSON</text></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,67 510,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">context</text></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,295 510,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,409 510,409" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,523 510,523" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,637 510,637" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M680,67 C715,67 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
+  <g class="schem-edge"><path d="M680,181 C715,181 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M680,295 C715,295 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M680,409 C715,409 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M680,523 C715,523 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M680,637 C715,637 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/></g>
+  <g class="schem-edge"><path d="M920,295 C955,295 955,295 990,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="955" y="287" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">verdict + exit code</text></g>
+  <g class="schem-block" data-block="gen"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded generator source on GitHub"><rect x="30" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Seeded generator</text></a></g>
+  <g class="schem-block" data-block="load"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Dual read-only load source on GitHub"><rect x="270" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Dual read-only load</text></a></g>
+  <g class="schem-block" data-block="r_formula"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open expected_formula source on GitHub"><rect x="510" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">expected_formula</text></a></g>
+  <g class="schem-block" data-block="r_balance"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open debit_credit_balance source on GitHub"><rect x="510" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">debit_credit_balance</text></a></g>
+  <g class="schem-block" data-block="r_text"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open forbidden_text source on GitHub"><rect x="510" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">forbidden_text</text></a></g>
+  <g class="schem-block" data-block="r_lineage"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open lineage_direction source on GitHub"><rect x="510" y="372" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="413" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">lineage_direction</text></a></g>
+  <g class="schem-block" data-block="r_cap"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open cap_logic_leftover source on GitHub"><rect x="510" y="486" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="527" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">cap_logic_leftover</text></a></g>
+  <g class="schem-block" data-block="r_json"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open json_tieout source on GitHub"><rect x="510" y="600" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="641" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">json_tieout</text></a></g>
+  <g class="schem-block" data-block="verdict"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Verdict roll-up source on GitHub"><rect x="750" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict roll-up</text></a></g>
+  <g class="schem-block" data-block="reports"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/validation_engine/cli.py" target="_blank" rel="noopener" aria-label="Open Reports + exit code source on GitHub"><rect x="990" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="1075" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reports + exit code</text></a></g>
+  <g class="schem-title"><line x1="30" y1="718" x2="1160" y2="718" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="732" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E04-VAL &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-20</text></g>
+</svg><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded generator.</b> Writes fictional workbooks and JSON exports to ./samples — one clean and one per planted defect.</li><li><b>Dual read-only load.</b> Opens each workbook twice read-only (formulas and cached values) and attaches the sibling JSON export.</li><li><b>expected_formula.</b> Checks that cells which should be formula-driven hold a formula, not a typed-in number.</li><li><b>debit_credit_balance.</b> Sums the trial-balance debit and credit columns and confirms they tie out.</li><li><b>forbidden_text.</b> Scans every cell for stale review notes and internal / tool words (TODO, &#x27;reviewer decision&#x27;, tool names).</li><li><b>lineage_direction.</b> Confirms evidence cells are raw inputs (literals) and detail drivers are formulas; either inversion flags.</li><li><b>cap_logic_leftover.</b> Detects leftover draft MIN/MAX cap logic that should have been replaced before final.</li><li><b>json_tieout.</b> Cross-checks the sibling JSON export&#x27;s closing_surplus against the workbook&#x27;s resolved value.</li><li><b>Verdict roll-up.</b> Collapses all findings for a workbook, and then the whole run, into one verdict — worst wins.</li><li><b>Reports + exit code.</b> Emits the markdown and JSON reports and returns an exit code encoding the verdict.</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded generator.</b> generate.generate_corpus(out_dir, seed=20240614); wipes stale *.xlsx / *.json first, then writes the clean plus six defect workbooks with sibling .json.</li><li><b>Dual read-only load.</b> engine._load_context(): load_workbook(read_only=True) twice (data_only False / True) plus json.loads(&lt;stem&gt;.json), wrapped in WorkbookContext.</li><li><b>expected_formula.</b> check_expected_formula() over EXPECTED_FORMULA_CELLS; a literal is a FAIL.</li><li><b>debit_credit_balance.</b> check_debit_credit_balance() sums TB_DEBIT_COL / TB_CREDIT_COL from cached values; |diff| &gt;= 1e-6 is a FAIL.</li><li><b>forbidden_text.</b> check_forbidden_text() substring-matches FORBIDDEN_TEXT over iter_formula_cells(); a hit is a FLAG.</li><li><b>lineage_direction.</b> check_lineage_direction() over EVIDENCE_INPUT_CELLS and DETAIL_DRIVER_CELLS; an inversion is a FLAG.</li><li><b>cap_logic_leftover.</b> check_cap_logic_leftover() applies a case-insensitive MIN/MAX open-paren regex over formula cells; a match is a FLAG.</li><li><b>json_tieout.</b> check_json_tieout() compares json_data[&#x27;closing_surplus&#x27;] to _closing_surplus_value(); a mismatch is a FAIL, an unresolvable value a FLAG.</li><li><b>Verdict roll-up.</b> WorkbookReport.verdict (any FAIL -&gt; FAIL, else any FLAG -&gt; REVIEW, else PASS), then overall_verdict() over all reports.</li><li><b>Reports + exit code.</b> build_markdown_report() / build_json_report() write the files; cli.main() returns _EXIT_BY_VERDICT[overall] (0 / 1 / 2), or 3 on a usage error.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>zero-arg quickstart: regenerate the fictional corpus into ./samples, validate it, and write both reports</td><td class="mono">generation line, per-workbook findings, &#x27;Overall verdict: FAIL (7 workbook(s))&#x27;</td><td class="mono">0 / 1 / 2 by verdict</td><td>samples/*.xlsx + .json, validation_report.json, validation_report.md</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m validation_engine ./samples</code><button class="copybtn" data-copy="python -m validation_engine ./samples" aria-label="Copy command: python -m validation_engine ./samples">copy</button></div></td><td>validate every .xlsx in a folder (read-only) and print findings</td><td class="mono">&#x27;=== &lt;wb&gt; === verdict: ...&#x27; blocks + overall verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none (stdout only)</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m validation_engine.generate</code><button class="copybtn" data-copy="python -m validation_engine.generate" aria-label="Copy command: python -m validation_engine.generate">copy</button></div></td><td>write the seeded fictional workbooks + JSON exports into ./samples</td><td class="mono">&#x27;Wrote 7 fictional workbook(s) to &lt;samples&gt;&#x27; + names</td><td class="mono">0</td><td>samples/*.xlsx, samples/*.json</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m validation_engine ./samples --generate --json report.json --md report.md</code><button class="copybtn" data-copy="python -m validation_engine ./samples --generate --json report.json --md report.md" aria-label="Copy command: python -m validation_engine ./samples --generate --json report.json --md report.md">copy</button></div></td><td>(re)generate the corpus, validate, and write the structured JSON + markdown reports</td><td class="mono">generation line + findings + &#x27;Wrote JSON/markdown report&#x27;</td><td class="mono">0 / 1 / 2 by verdict</td><td>report.json, report.md</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the test suite (defects caught, clean passes, report shape, read-only, determinism)</td><td class="mono">pytest summary line</td><td class="mono">0 on pass</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Demo workbooks validated<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>7</b> workbooks<br><span style="color:#6f6f6f;font-size:12.5px">the committed example run validates seven workbooks and returns overall FAIL</span></td></tr>
+  <tr><td>Planted defects caught<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>6 of 6</b> defects, one per rule<br><span style="color:#6f6f6f;font-size:12.5px">one defect per rule is planted and each is caught by its own rule; the clean workbook passes</span></td></tr>
+  <tr><td>Rules in registry<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>6</b> checks<br><span style="color:#6f6f6f;font-size:12.5px">six checks run over every workbook, each with a fixed severity</span></td></tr>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>4,814</b> tests</td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine only reports; it never writes to, approves, or signs off the audited file. The PASS / REVIEW / FAIL verdict and its exit code (0 / 1 / 2, or 3 for a usage error) are the handoff a human reviewer or CI pipeline consumes to decide whether to proceed.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>Any FAIL finding (expected_formula, debit_credit_balance, or a json_tieout mismatch)</td><td class="mono"><b>FAIL</b></td><td>exit code 2 — a hard defect is present; block sign-off</td></tr><tr><td>One or more FLAG findings and no FAIL (forbidden_text, lineage_direction, cap_logic_leftover, or an unresolvable json_tieout)</td><td class="mono"><b>REVIEW</b></td><td>exit code 1 — human review before sign-off</td></tr><tr><td>Every finding PASS</td><td class="mono"><b>PASS</b></td><td>exit code 0 — clean</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Strictly read-only: every workbook is opened with read_only=True (twice) and never written, so the engine cannot introduce a defect — the audited file is byte-identical before and after, asserted by test_readonly_and_determinism.py.</li><li style="list-style:disc;margin-left:18px">Deterministic: a fixed order over REGISTRY plus a fixed generator seed (SEED=20240614) means identical inputs always yield identical findings in identical order.</li><li style="list-style:disc;margin-left:18px">Offline: the only third-party dependencies are openpyxl and pytest; synthetic data uses the stdlib random module — no network and no external services.</li><li style="list-style:disc;margin-left:18px">Refuses rather than fudges: json_tieout emits a FLAG, not a fabricated comparison, when the JSON has no closing_surplus key or the workbook value cannot be resolved.</li><li style="list-style:disc;margin-left:18px">Fail-safe roll-up: any single FAIL forces the whole run to FAIL and exit code 2 — a defect cannot be diluted by surrounding passes.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>Never writes to an audited workbook — it opens files read-only (twice) and can only report, never introduce or fix a defect.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>Refuses to guess a JSON tie-out: if the export has no closing_surplus key or the workbook value cannot be resolved, it emits a FLAG rather than fabricating a pass or fail comparison.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>Only checks a fixed rule set against a fixed workbook schema (Surplus-Detail / Summary / Trial-Balance / Evidence); when an expected sheet is absent it skips rather than inventing findings.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">animated overview</span>
+<figure class="figwrap"><img src="../assets/tile-validation.webp" data-video="../assets/tile-validation-motion.mp4" alt="Isometric brand animation: a stack of sheets labeled &#x27;Finished workbook&#x27; at left; a translucent glass bracket labeled &#x27;Validation Engine — read-only, never writes&#x27; passing over a workbook at center with a blue scan glow; and an output stack at right tagged with three verdict chips — PASS (green), REVIEW (grey), FAIL (amber)." loading="lazy"><figcaption>Animated overview of the read-only validation pass on fictional seeded data; run the commands above to reproduce.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git &amp;&amp; cd finance-automation-portfolio/audit-automation &amp;&amp; python run.py</div><div class="runline">python -m validation_engine ./samples</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/audit-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/audit-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
   </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q (audit-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>audit-automation/validation_engine/engine.py — REGISTRY; README rule table</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>audit-automation/validation_engine/engine.py — Verdict enum</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>audit-automation/validation_engine/cli.py — _EXIT_BY_VERDICT and docstring</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>audit-automation/validation_engine/engine.py — _load_context</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>audit-automation/validation_report.json — workbook_count; generate.py DEFECTS</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>audit-automation/README.md — committed example output</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>audit-automation/README.md — committed example output</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>audit-automation/README.md — committed example output</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>audit-automation/validation_report.json — workbook_count: 7, overall_verdict: FAIL</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>audit-automation/validation_engine/generate.py — DEFECTS; README example output</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>audit-automation/validation_engine/engine.py — REGISTRY; validation_report.json registry array</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>python -m pytest --collect-only -q (audit-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>audit-automation/validation_engine/engine.py — _load_context load_workbook(read_only=True); README</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>audit-automation/validation_engine/engine.py — check_json_tieout</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>audit-automation/validation_engine/engine.py — sheet-presence guards in each check</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
 </main>
-
-<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
-
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/audit-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
 <script>
-// motion upgrade: diagram image swaps to its silent looping video when visible
-document.querySelectorAll('img[data-video]').forEach(function(img){
-  var io=new IntersectionObserver(function(es){ es.forEach(function(e){
-    if(!e.isIntersecting) return; io.unobserve(img);
-    var v=document.createElement('video');
-    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
-    v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay',''); v.setAttribute('loop',''); v.setAttribute('preload','auto');
-    v.poster=img.currentSrc||img.src; v.src=img.getAttribute('data-video');
-    v.width=img.width; v.height=img.height; v.setAttribute('role','img'); v.setAttribute('aria-label',img.alt);
-    img.replaceWith(v); var p=v.play(); if(p&&p.catch)p.catch(function(){});
-  }); },{rootMargin:'120px'});
-  io.observe(img);
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
 });
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
 </script>
 </body>
 </html>

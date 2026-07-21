@@ -1,0 +1,186 @@
+{
+  "num": 2,
+  "slug": "recon",
+  "part_no": "SFS-E02-RCN",
+  "mnemonic": "RCN",
+  "family": "Reconciliation",
+  "name": "Cash & Debt Reconciliation",
+  "tagline": "Deterministic cash & debt reconciliation, keyed by account number, materiality-gated.",
+  "plain_summary": "The engine ties each entity's GL cash to the bank ending balance and each GL loan to a 3-part lender total (principal + interest/reserve + late paydown), matching by account number so a figure never lands on the wrong row. Differences at or under a $50 materiality threshold are logged as timing noise; anything larger becomes a numbered flag for review. Every run emits the same 5-section evidence log — a Markdown file and a color-coded Excel workbook. An optional assurance loop restores a drifted package back to the seeded source of record and applies a materiality gate before it ships.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A reconciliation is only as trustworthy as the evidence trail behind it. Every figure on this page re-derives from the public repository — the demo is a command you run, not a claim you take on faith.",
+  "layers_intro": "Each layer is an independent stage, from the seeded substrate up to the optional assurance loop. Select a layer for its plain-terms and engineering detail.",
+
+  "layers": [
+    {"id": "assurance", "label": "Assurance loop & materiality gate",
+     "plain": "Optional watchdog: when the stored package drifts from source, it restores the drifted accounts one at a time and issues a PASS, FLAG, or FAIL verdict before anything ships.",
+     "engineering": "observe -> detect -> remediate -> re-verify -> gate. A deviation sensor fingerprints each account against the baseline reconciliation of the pristine seed; resync_account restores every drifted GL/bank/lender/dormant field. Verdict: FAIL (not converged, exit 1), FLAG (converged, corrections above materiality, exit 0), PASS (converged, immaterial, exit 0).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py"},
+    {"id": "cli", "label": "CLI orchestration & exit contract",
+     "plain": "The command you actually run: it wires the pieces together, prints the summary, and exits 0 because a flag is an expected result, not a crash.",
+     "engineering": "argparse flags --threshold / --seed / --no-xlsx / --markdown-path / --xlsx-path call generate_dataset -> reconcile -> render_markdown / write_xlsx, then return 0 even when lines are flagged. run.py and __main__.py are thin aliases.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/cli.py"},
+    {"id": "reporting", "label": "Evidence-log rendering",
+     "plain": "Turns the result into the same 5-section evidence log every time: a Markdown file and a color-coded Excel workbook.",
+     "engineering": "render_markdown emits Summary / Cash / Debt / Flagged / Notes; write_xlsx builds a 5-sheet openpyxl workbook with green/yellow/red/grey status fills and accounting-style number formatting.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/report.py"},
+    {"id": "engine", "label": "Reconciliation core",
+     "plain": "Ties each account to its source by account number, computes the difference, and labels it clean, timing, or flagged.",
+     "engineering": "compute_variance = round(gl - source, 2); lender_three_part_total = principal + current_interest_reserve + late_paydown; classify against a $0.005 tie tolerance and the materiality threshold; account-number indexing (never row position); dormant/zero-activity skip; sequential FLAG-### ids across cash then debt.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py"},
+    {"id": "substrate", "label": "Seeded synthetic substrate",
+     "plain": "Builds a repeatable set of books — GL, bank, and lender statements for four fictional entities — with known problems baked in to prove the engine catches them.",
+     "engineering": "random.Random(seed) yields byte-identical GL/bank/lender workpapers and injects seeded discrepancies: a deposit-in-transit, a sub-threshold timing accrual, an outright keying error, a populated late-paydown leg (clean tie), and a dormant zero-activity account.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/generate.py"}
+  ],
+
+  "blocks": [
+    {"id": "b_generate", "label": "Seeded generator", "kind": "source", "col": 0, "row": 0,
+     "plain": "Builds the fictional GL, bank, and lender books with known discrepancies injected.",
+     "engineering": "generate_dataset(seed=20260331) -> SyntheticDataset (gl_records, bank_statements, lender_statements, injected).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/generate.py"},
+    {"id": "b_scope", "label": "Scope & account-number index", "kind": "filter", "col": 1, "row": 0,
+     "plain": "Filters out dormant zero-activity rows and indexes each source by account number.",
+     "engineering": "reconcile() loop: _is_zero_activity / dormant -> _skip_line; _index_banks / _index_lenders build {account_number: statement}.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py"},
+    {"id": "b_reconcile", "label": "Variance + 3-part debt total", "kind": "transform", "col": 2, "row": 0,
+     "plain": "Computes GL-minus-source for cash, and GL vs the 3-part lender total for debt.",
+     "engineering": "_reconcile_cash vs bank.ending_balance; _reconcile_debt vs lender_three_part_total; compute_variance rounds to cents.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py"},
+    {"id": "b_classify", "label": "Materiality classify + flag ids", "kind": "decision", "col": 3, "row": 0,
+     "plain": "Labels each line clean, timing, or flagged and numbers the flags.",
+     "engineering": "classify(): |var| <= 0.005 clean, <= threshold timing, else flag; _assign_flag_ids -> FLAG-001.. across cash then debt.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/engine.py"},
+    {"id": "b_report", "label": "5-section evidence log", "kind": "output", "col": 4, "row": 0,
+     "plain": "Renders Summary / Cash / Debt / Flagged / Notes as Markdown and a color-coded xlsx.",
+     "engineering": "render_markdown + write_xlsx (openpyxl, green/yellow/red/grey status fills).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/report.py"},
+    {"id": "b_cli", "label": "CLI summary + exit 0", "kind": "interface", "col": 5, "row": 0,
+     "plain": "Prints the run summary and flagged list; exits 0 even with flags.",
+     "engineering": "cli.main prints period / materiality / counts / flagged and returns 0 (flags are expected, not failures).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/cli.py"},
+    {"id": "b_baseline", "label": "Baseline reconcile (source of record)", "kind": "source", "col": 1, "row": 1,
+     "plain": "Reconciles the pristine seeded dataset once to establish the authoritative outcomes.",
+     "engineering": "assurance_loop: pristine = generate_dataset(seed); baseline = reconcile(pristine); budget = len(gl_records) + 2.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py"},
+    {"id": "b_sensor", "label": "Deviation sensor", "kind": "sensor", "col": 2, "row": 1,
+     "plain": "Compares each account's current outcome to the baseline and lists what drifted.",
+     "engineering": "_outcomes() fingerprint (classification + variance + source_label), then deviations(current, baseline) sorted by account.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py"},
+    {"id": "b_resync", "label": "Resync to source", "kind": "authority", "col": 3, "row": 1,
+     "plain": "Restores every record the lowest-numbered deviating account owns back to the seeded truth.",
+     "engineering": "resync_account -> _resync_records for gl/bank/lender; books each field change as an Adjustment; removes or restores whole records.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py"},
+    {"id": "b_gate", "label": "Materiality gate -> verdict + exit code", "kind": "gate", "col": 4, "row": 1,
+     "plain": "Once nothing deviates, it decides PASS / FLAG / FAIL and sets the process exit code.",
+     "engineering": "total = sum(adjustment magnitudes); not converged -> FAIL (exit 1); total > materiality -> FLAG (exit 0); else PASS (exit 0). verdict_exit_code().",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/recon_engine/loop.py"}
+  ],
+  "edges": [
+    {"from": "b_generate", "to": "b_scope", "label": "GL/bank/lender workpapers"},
+    {"from": "b_scope", "to": "b_reconcile", "label": "in-scope, indexed by acct #"},
+    {"from": "b_reconcile", "to": "b_classify", "label": "signed variance"},
+    {"from": "b_classify", "to": "b_report", "label": "clean/timing/flag + ids"},
+    {"from": "b_report", "to": "b_cli", "label": "5-section log + console"},
+    {"from": "b_generate", "to": "b_baseline", "label": "pristine seed = source of record"},
+    {"from": "b_baseline", "to": "b_sensor", "label": "baseline outcomes"},
+    {"from": "b_reconcile", "to": "b_sensor", "label": "current outcomes"},
+    {"from": "b_sensor", "to": "b_resync", "label": "lowest deviating account"},
+    {"from": "b_resync", "to": "b_reconcile", "label": "re-verify until no drift"},
+    {"from": "b_sensor", "to": "b_gate", "label": "converged -> gate", "gate": true}
+  ],
+
+  "spec_strip": [
+    {"label": "Materiality threshold", "value": "$50.00 (default)", "source": "recon_engine/__init__.py (MATERIALITY_THRESHOLD = 50.0); overridable via --threshold", "plain": "differences at or under $50 are timing noise; above becomes a numbered flag"},
+    {"label": "Accounts in scope", "value": "9 (4 cash / 4 debt / 1 skipped)", "source": "python -m recon_engine console summary; evidence-log.md summary section", "plain": "the fixed seeded scenario across four fictional entities"},
+    {"label": "Debt reconciliation", "value": "3-part total", "source": "recon_engine/engine.py (lender_three_part_total)", "plain": "principal + current interest/reserve + late paydown"},
+    {"label": "Tie tolerance", "value": "$0.005", "source": "recon_engine/engine.py (TIE_TOLERANCE)", "plain": "absolute variance at or below this is an exact tie; guards float noise"},
+    {"label": "Tests", "value": "7,511", "source": "python -m pytest --collect-only -q (cash-reconciliation/); verified 2026-07-20 and pinned in site-datasheets/counts.json", "plain": "the checks that pin this engine's behavior"},
+    {"label": "Dependencies", "value": "stdlib + openpyxl", "source": "cash-reconciliation/pyproject.toml (openpyxl>=3.1)", "plain": "no pandas / numpy / faker; runs offline and deterministic"}
+  ],
+
+  "problem_statement": "Reconciling cash and debt means tying every bank and lender movement to the general ledger, explaining the differences, and keeping audit-ready evidence across many entities. Performed by hand the work is repetitive and slow, and the evidence trail comes out inconsistent from month to month. This engine automates the tie-out on a repeatable cadence, builds materiality and escalation into the process so reviewers see signal instead of noise, and produces a consistent, audit-ready evidence log every cycle.",
+  "scenarios": [
+    {"title": "March 2026 base reconciliation",
+     "narrative": "python -m recon_engine reconciles the seeded March-2026 books: 9 accounts (4 cash, 4 debt, 1 dormant skipped) resolve to 5 clean, 1 timing, 2 flagged. FLAG-001 CASH-1001 (Maple Fund LP) is a -1,875.40 deposit-in-transit; FLAG-002 DEBT-2003 (Cedar Ridge Partners LLC) is a +12,500.00 keying error. The process exits 0.",
+     "source": "README.md 'Real example output'; evidence-log.md summary and flagged sections"},
+    {"title": "The 3-part debt formula ties out",
+     "narrative": "The debt section proves the optional third leg is wired through. DEBT-2000 (Demo Holdings LLC) carries a 7,500.00 late-paydown mirrored GL-to-lender and still ties clean at 0.00; DEBT-2002 (Birchwood Op Co) shows an 18.75 interest accrual booked in GL but not yet on the lender statement, which is under $50 and therefore a yellow timing item, not a flag.",
+     "source": "README.md debt example table; recon_engine/generate.py (injected late-paydown and timing difference)"},
+    {"title": "The assurance loop restores a drifted package",
+     "narrative": "python -m recon_engine.loop --demo injects three faults on baseline-clean accounts: CASH-1002 GL fat-fingered +4,830.25, DEBT-2000 lender statement dropped, DEBT-2001 mis-marked dormant. The loop resyncs those three accounts in three turns (budget 11), driving deviations from 3 to 0. Gross corrective movement of 4,831.25 exceeds the $50 materiality, so the verdict is FLAG with exit 0, and the scenario's genuine flags are left untouched.",
+     "source": "README.md 'Reconciliation Assurance Loop'; recon_engine/loop.py (demo_setup, assurance_loop)"}
+  ],
+
+  "instruction_set": [
+    {"cmd": "python -m recon_engine", "operation": "generate synthetic data, reconcile, write both logs", "output": "console summary: period, seed, materiality, in-scope counts, clean/timing/flagged, and the flagged list", "exit_code": "0", "artifacts": "evidence-log.md (committed), output/evidence-log.xlsx (gitignored)"},
+    {"cmd": "python run.py", "operation": "convenience alias for python -m recon_engine (same args)", "output": "same console summary", "exit_code": "0", "artifacts": "evidence-log.md, output/evidence-log.xlsx"},
+    {"cmd": "python -m recon_engine --threshold 25", "operation": "tighten materiality to $25", "output": "borderline variances reclassify between timing and flag", "exit_code": "0", "artifacts": "evidence-log.md (+ xlsx)"},
+    {"cmd": "python -m recon_engine --seed 7", "operation": "regenerate synthetic data with a different seed", "output": "a new byte-deterministic dataset and log", "exit_code": "0", "artifacts": "evidence-log.md (+ xlsx)"},
+    {"cmd": "python -m recon_engine --no-xlsx", "operation": "Markdown only; skip the workbook", "output": "console summary without the XLSX line", "exit_code": "0", "artifacts": "evidence-log.md"},
+    {"cmd": "python -m recon_engine.loop --demo", "operation": "inject the drift profile and run the assurance loop", "output": "turn-by-turn Markdown; verdict PASS/FLAG/FAIL with gross movement vs materiality", "exit_code": "0 (PASS/FLAG) or 1 (FAIL)", "artifacts": "assurance_loop_report.md when --out DIR is given; otherwise stdout only"},
+    {"cmd": "python -m pytest -q", "operation": "run the default test suite (the SWEEP-gated bulk grid is excluded)", "output": "pass/fail summary over 7,511 collected tests", "exit_code": "0 on pass", "artifacts": "none (.pytest_cache only)"}
+  ],
+
+  "benchmarks": [
+    {"label": "Tests collected", "value": "7,511", "unit": "tests (default)", "source": "python -m pytest --collect-only -q in cash-reconciliation/ (measured, SWEEP unset); pinned in site-datasheets/counts.json", "plain": "an exhaustive bulk invariant grid raises this to 162,479 with SWEEP=1"},
+    {"label": "Seeded reconciliation", "value": "9", "unit": "accounts (8 active + 1 skipped; 2 flagged)", "source": "python -m recon_engine console summary (measured, exit 0)", "plain": "5 clean, 1 timing, 2 flagged in the March-2026 seed"},
+    {"label": "Loop convergence", "value": "3 -> 0", "unit": "deviations in 3 turns / budget 11", "source": "python -m recon_engine.loop --demo (measured)", "plain": "restores three injected faults to the source of record"},
+    {"label": "Loop gross correction", "value": "4,831.25", "unit": "USD across 3 booked corrections", "source": "python -m recon_engine.loop --demo (measured: 4,830.25 GL fat-finger + 1.00 dormant-flag restore)", "plain": "material, so the verdict is FLAG (converged, exit 0) rather than PASS"}
+  ],
+
+  "control_characteristics": {
+    "verdict_map": [
+      {"severity": "|variance| <= $0.005 (tie tolerance)", "verdict": "clean (green)", "action": "note 'ties to source'; no action"},
+      {"severity": "$0.005 < |variance| <= threshold ($50)", "verdict": "timing (yellow)", "action": "comment as timing/noise, expected to clear; not escalated"},
+      {"severity": "|variance| > threshold", "verdict": "flag (red, FLAG-###)", "action": "assign a sequential flag id; escalate for review"},
+      {"severity": "dormant / zero-activity account", "verdict": "skipped (grey)", "action": "skip with a documented note; no reconciliation required"},
+      {"severity": "loop: converged, total corrections <= materiality", "verdict": "PASS", "action": "clean to file; exit 0"},
+      {"severity": "loop: converged, total corrections > materiality", "verdict": "FLAG", "action": "ship with a note of what moved; exit 0"},
+      {"severity": "loop: not converged within the turn budget", "verdict": "FAIL", "action": "escalate; exit 1"}
+    ],
+    "guarantees": [
+      "Deterministic: random.Random(seed) yields byte-identical GL/bank/lender data, so a given seed always reproduces the same log (generate.py; --seed).",
+      "Account-number targeting: every value is resolved by account number in the key column, never by row index, which defeats off-by-one corruption (engine._index_banks / _index_lenders).",
+      "Integer-cent discipline: all money is round(..., 2) at every step (compute_variance, lender_three_part_total, ReconLine fields), with a $0.005 tie tolerance guarding float noise (engine.TIE_TOLERANCE).",
+      "Materiality gate: |variance| <= threshold is timing/noise; above becomes a numbered FLAG-### escalation (engine.classify, _assign_flag_ids).",
+      "3-part debt formula: the GL loan is reconciled against principal + current_interest_reserve + late_paydown, the optional third leg included (engine.lender_three_part_total).",
+      "Loop fidelity: the assurance loop never invents a number; every correction restores a seeded record, and the settled reconciliation is identical to a pristine run (loop.py).",
+      "Exit contract: the base engine returns 0 even when lines are flagged, since a flag is an expected outcome; the loop returns 1 only on non-convergence (cli.main, loop.verdict_exit_code)."
+    ],
+    "determinism": {"seeded": true, "read_only": false, "offline_default": true},
+    "gate_policy": {"human_approval_required": false, "demo_gate": "automated-materiality-gate", "note": "The base engine always exits 0 — a flag is an expected reconciliation outcome, not a program failure. The assurance loop adds an automated materiality gate: PASS and FLAG both exit 0 (FLAG surfaces material corrections so a reviewer sees what moved before the package ships), while FAIL exits 1 only on non-convergence. The gate labels and routes the output; it does not stand in for a human sign-off."}
+  },
+
+  "limits": [
+    {"statement": "It refuses to force a tie on dormant, zero-activity accounts: they are skipped with a documented note rather than reconciled, keeping padding out of the population.", "source": "recon_engine/engine.py (_is_zero_activity, _skip_line); evidence-log.md dormant-account note"},
+    {"statement": "The assurance loop refuses to converge by zeroing genuine reconciling items: the scenario's real flags (deposit-in-transit, keying error) are part of the baseline and survive the loop; it restores fidelity to source, not 'all clean'.", "source": "recon_engine/loop.py (docstring; demo_setup targets only baseline-clean accounts)"},
+    {"statement": "The loop refuses to invent a number: every correction is a restoration of a seeded source record, so the settled reconciliation is byte-identical to a pristine run.", "source": "recon_engine/loop.py (resync_account; fields are only ever set back to pristine truth)"}
+  ],
+
+  "media": {
+    "poster": "../assets/engine-recon.webp",
+    "motion": "../assets/engine-recon-motion.mp4",
+    "poster_alt": "Animated overview of the Cash & Debt Reconciliation engine: seeded GL, bank, and lender books tie out by account number, with lines resolving to clean, timing, and flagged and a materiality gate on the differences.",
+    "caption": "Animated overview of the recon run on fictional seeded data; run the commands above to reproduce.",
+    "run_label": "animated overview",
+    "crops": []
+  },
+
+  "quickstart": [
+    {"label": "Clone + run the reconciliation", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/cash-reconciliation && python -m recon_engine"},
+    {"label": "Run the assurance loop demo", "command": "python -m recon_engine.loop --demo"}
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-reconciliation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-reconciliation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Cash & Debt Reconciliation (SFS-E02-RCN) datasheet — a deterministic engine that ties GL cash to bank ending balances and GL debt to a 3-part lender total by account number, materiality-gates the differences into clean/timing/flagged, and emits a 5-section evidence log; every figure re-derives from the public repository."
+  }
+}
