@@ -684,26 +684,13 @@
     #close-depth .cov-chip { font-size:12.5px; padding:5px 10px; }
   }
 
-  /* ---- story: the human baseline + the month with engines under it ---- */
-  .base-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:28px; }
-  .base-card { background:var(--bg); border:1px solid var(--border); border-left:3px solid #8d8d8d; padding:20px 22px; }
-  .base-card b { display:block; font-size:32px; font-weight:300; color:var(--text); line-height:1.05; font-variant-numeric:tabular-nums; }
-  .base-card b .unit { font-size:18px; font-weight:400; color:var(--text-2); }
-  .base-card .cap { display:block; font-size:13.5px; color:var(--text-2); margin-top:8px; line-height:1.5; }
-  .base-card .src { display:block; font-family:var(--mono); font-size:10.5px; color:var(--text-3); margin-top:10px; letter-spacing:.3px; }
-  .base-note { max-width:820px; margin-top:26px; padding:18px 22px; background:var(--bg); border-left:3px solid var(--blue); font-size:15.5px; color:var(--text-2); }
-  .base-note b { color:var(--text); }
-  .vs { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:28px; }
-  .vs-col { background:var(--bg); border:1px solid var(--border); padding:22px 26px 14px; }
-  .vs-col.now { border-top:3px solid #8d8d8d; }
-  .vs-col.next { border-top:3px solid var(--blue); }
-  .vs-col h3 { font-size:15px; font-weight:600; color:var(--text); margin-bottom:6px; }
-  .vs-col ul { list-style:none; margin:0; padding:0; }
-  .vs-col li { padding:10px 0 10px 24px; position:relative; border-top:1px solid var(--border); font-size:14.5px; color:var(--text-2); line-height:1.55; }
-  .vs-col li:first-child { border-top:none; }
-  .vs-col.now li::before { content:"\2014"; position:absolute; left:0; color:#8d8d8d; }
-  .vs-col.next li::before { content:"\2192"; position:absolute; left:0; color:var(--blue); }
-  .vs-col .vsrc { font-family:var(--mono); font-size:10.5px; color:var(--text-3); letter-spacing:.3px; }
+  /* ---- story: the why film ---- */
+  .whyfilm { margin-top:28px; max-width:960px; }
+  .whyfilm video { display:block; width:100%; height:auto; background:#f7f8fa; border:1px solid var(--border); box-shadow:0 24px 60px -30px rgba(15,42,92,.35); }
+  .whyfilm figcaption { margin-top:14px; font-size:14.5px; color:var(--text-2); line-height:1.6; max-width:58em; }
+  .whyfilm figcaption b { color:var(--text); }
+  .whyfilm .filmsrc { display:block; margin-top:8px; font-family:var(--mono); font-size:10.5px; color:var(--text-3); letter-spacing:.3px; }
+  .whyfilm .filmsrc code { font-family:var(--mono); }
 
   /* ---- with-you: audiences, plan, package ---- */
   .serve, .plan { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:28px; }
@@ -716,9 +703,8 @@
   .pkg ul { list-style:none; margin:14px 0 0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:8px 28px; }
   .pkg li { padding:9px 0 9px 26px; position:relative; font-size:14.5px; color:var(--text-2); line-height:1.55; border-top:1px solid var(--border); }
   .pkg li::before { content:""; position:absolute; left:2px; top:15px; width:12px; height:7px; border-left:2px solid var(--blue); border-bottom:2px solid var(--blue); transform:rotate(-45deg); }
-  @media (max-width:960px) { .base-grid { grid-template-columns:1fr 1fr; } .serve, .plan { grid-template-columns:1fr; } }
+  @media (max-width:960px) { .serve, .plan { grid-template-columns:1fr; } }
   @media (max-width:760px) { .vs { grid-template-columns:1fr; } .pkg ul { grid-template-columns:1fr; } }
-  @media (max-width:540px) { .base-grid { grid-template-columns:1fr; } }
 
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior:auto; }
@@ -912,51 +898,16 @@
     <div class="sec-head reveal">
       <p class="kicker">Why this exists</p>
       <h2>It&rsquo;s the work, <strong>not the people.</strong></h2>
-      <p class="lead">Every month, skilled accountants give up nights to work a machine should absorb: re-keying figures, chasing ties, re-checking spreadsheets against a deadline. The numbers below are the profession&rsquo;s own measurements of that grind. They are the reason these engines exist &mdash; not to replace your team, but to hand them finished, cited drafts instead of another blank workpaper.</p>
+      <p class="lead">Ninety seconds on why we build finance engines &mdash; and what stays human.</p>
     </div>
-    <div class="base-grid reveal">
-      <div class="base-card"><b>6.4 <span class="unit">days</span></b>
-        <span class="cap">Median calendar days to close the month; the bottom quartile needs 10 or more.</span>
-        <span class="src">APQC General Accounting benchmark, ~2,300 orgs</span></div>
-      <div class="base-card"><b>&asymp;61<span class="unit">%</span></b>
-        <span class="cap">Companies that close within six business days &mdash; a share essentially unchanged across 15 years of measurement.</span>
-        <span class="src">Ventana Research / ISG, Office of Finance</span></div>
-      <div class="base-card"><b>75<span class="unit">%</span></b>
-        <span class="cap">Accountants who have had to reopen a closed month to fix an error found later.</span>
-        <span class="src">FloQast / Dimensional Research, n=259</span></div>
-      <div class="base-card"><b>99<span class="unit">%</span></b>
-        <span class="cap">Report some degree of burnout; 81% have had the close disrupt life outside work.</span>
-        <span class="src">FloQast / Univ. of Georgia study, n=204</span></div>
-      <div class="base-card"><b>86<span class="unit">%</span></b>
-        <span class="cap">Audited operational spreadsheets found to contain at least one error.</span>
-        <span class="src">Panko, EuSPRIG field audits</span></div>
-      <div class="base-card"><b>300,000<span class="unit">+</span></b>
-        <span class="cap">US accountants and auditors who left the profession in just two years. The manual model is running out of people to run it.</span>
-        <span class="src">WSJ / Bureau of Labor Statistics, 2022</span></div>
-    </div>
-    <p class="base-note reveal"><b>None of this is a criticism of accountants &mdash; we are accountants.</b> It is what repetitive, deadline-stacked, manual work does to good people and good numbers. That part of the month belongs to a machine that never tires, never skips a check, and never minds re-deriving the same figure a thousand times. The judgment &mdash; and the final signature &mdash; stays with your people.</p>
-    <div class="vs reveal">
-      <div class="vs-col now">
-        <h3>The month as it runs today</h3>
-        <ul>
-          <li>Days of your most senior people&rsquo;s time spent on mechanical tie-outs and re-keying</li>
-          <li>Checks performed under fatigue, late at night, against a hard deadline</li>
-          <li>Spreadsheets standing in as the control environment</li>
-          <li>Evidence assembled after the fact &mdash; if there is time</li>
-          <li>Every departure or sick day at month-end is a risk to the close</li>
-        </ul>
-      </div>
-      <div class="vs-col next">
-        <h3>The month with engines under it</h3>
-        <ul>
-          <li>The demo close &mdash; nine entry classes, three entities, ten controls &mdash; runs end-to-end in 0.15 seconds. <span class="vsrc">time python -m close_engine &middot; measured 2026-07-20</span></li>
-          <li>Every re-run is byte-identical, and every figure ships cited to its source &mdash; verification never gets tired</li>
-          <li>In the field, AI has taken 7.5 days off the monthly close. <span class="vsrc">MIT Sloan / Stanford GSB study, 2025</span></li>
-          <li>Your team reviews finished drafts in daylight &mdash; 0 outputs finalized without their sign-off</li>
-          <li>The engine doesn&rsquo;t resign, and it works the same on day 3 of the close as on day 1</li>
-        </ul>
-      </div>
-    </div>
+    <figure class="whyfilm reveal">
+      <video controls preload="none" playsinline poster="assets/why-film-poster.jpg" width="1280" height="720">
+        <source src="assets/why-film.mp4" type="video/mp4">
+        <track kind="captions" src="assets/why-film.vtt" srclang="en" label="English" default>
+      </video>
+      <figcaption><b>None of this is a criticism of accountants &mdash; we are accountants.</b> The engines absorb the mechanical month; your people keep the judgment and the final signature.<br>
+      <span class="filmsrc">Figures in the film: APQC &middot; Ventana Research / ISG &middot; FloQast / Dimensional Research &middot; FloQast / Univ. of Georgia &middot; WSJ / BLS &middot; engine runtime measured 2026-07-20 (<code>time python -m close_engine</code>)</span></figcaption>
+    </figure>
   </div>
 </section>
 
@@ -1471,32 +1422,32 @@
     <div class="sec-head reveal">
       <p class="kicker">Worldwide &middot; every scale</p>
       <h2>One standard of rigor &mdash; <strong>from a family to a group.</strong></h2>
-      <p class="lead">The same deterministic engines run for a two-person family office and a multi-entity corporate close; what changes is scope, never rigor. We work worldwide, on site or remote, and we integrate with the team and systems you already have &mdash; your ledger stays the system of record, and your people stay the approvers.</p>
+      <p class="lead">The same engines run for a two-person family office and a multi-entity corporate close. What changes is scope &mdash; never rigor.</p>
     </div>
     <div class="serve reveal">
       <div>
         <h3>Businesses, small to enterprise</h3>
-        <p>Close, reconciliation, partnership tax, validation, and cash controls under your month &mdash; drafted by engines, verified independently, approved by your team. No rip-and-replace: the engines read from and reconcile to the ledger you run today.</p>
+        <p>Close, recon, tax, and cash controls under your month. No rip-and-replace &mdash; your ledger stays the system of record.</p>
       </div>
       <div>
         <h3>Families &amp; individuals</h3>
-        <p>For high-net-worth families and family offices: every account and entity tied out, K-1s that trace to the operating agreement, cross-border holdings mapped and re-derivable. Discretion by design &mdash; fewer hands on the data, and a full evidence trail of who saw and approved what.</p>
+        <p>Every account and entity tied out; K-1s that trace to the agreement. Discretion by design &mdash; fewer hands on the data, full evidence of who approved what.</p>
       </div>
       <div>
         <h3>Training &amp; consulting</h3>
-        <p>We come to you. On-site or remote, we train your team &mdash; or your family &mdash; to run, read, and challenge the engines, and we stay available as consultants as your operation grows. Runbooks and documentation included.</p>
+        <p>We come to you &mdash; on site or remote &mdash; and train your team or your family to run and challenge the engines. Runbooks included.</p>
       </div>
     </div>
     <div class="plan reveal d1">
       <div class="step"><span class="n">STEP 1 &mdash; MAP</span>
         <h3>Show us where the hours go</h3>
-        <p>One conversation and a short observation. We map your close, reconciliation, or tax workflow and tell you plainly what an engine can take over and what it can&rsquo;t.</p></div>
+        <p>One conversation. We tell you plainly what an engine can take over &mdash; and what it can&rsquo;t.</p></div>
       <div class="step"><span class="n">STEP 2 &mdash; RUN</span>
         <h3>Watch the engines run</h3>
-        <p>The relevant engines run against your data in a sandbox while your team watches the checks fire. Nothing touches your systems of record.</p></div>
+        <p>Your data, in a sandbox, while your team watches the checks fire. Nothing touches your systems of record.</p></div>
       <div class="step"><span class="n">STEP 3 &mdash; APPROVE</span>
         <h3>Your team keeps the gate</h3>
-        <p>Your people review, challenge, and sign. We hand over the finished capability and train the team that will own it.</p></div>
+        <p>Your people review and sign. We hand over the capability and train the team that owns it.</p></div>
     </div>
     <div class="pkg reveal d2">
       <h3>You don&rsquo;t get a login. You get a finished, governed capability &mdash; and the people who built it on call.</h3>
