@@ -265,14 +265,18 @@ def die_stack_html(spec: dict) -> str:
         y = 20 + i * (box_h + gap)
         top = f"{80},{y} {80 + box_w},{y} {box_w + 40},{y + 22} {40},{y + 22}"
         front = f"40,{y + 22} {box_w + 40},{y + 22} {box_w + 40},{y + 22 + box_h} 40,{y + 22 + box_h}"
+        # The label starts at x=60 and must stay inside the slab's front face
+        # (right edge x=360, ~290px of room): 13px mono fits ~37 chars, 11px ~44.
+        n = len(layer["label"])
+        label_px = 13 if n <= 36 else (11 if n <= 42 else 10)
         svg_layers.append(
             '  <g class="die-layer" data-layer="{}">'
             '<polygon points="{}" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/>'
             '<polygon points="{}" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/>'
-            '<text x="60" y="{}" font-family="IBM Plex Mono,monospace" font-size="13" '
+            '<text x="60" y="{}" font-family="IBM Plex Mono,monospace" font-size="{}" '
             'fill="#161616">{}</text></g>'.format(
                 _esc(layer["id"]), top, front,
-                y + 22 + box_h // 2 + 4, _esc(layer["label"]),
+                y + 22 + box_h // 2 + 4, label_px, _esc(layer["label"]),
             )
         )
         faces.append(
@@ -382,16 +386,21 @@ def schematic_html(spec: dict) -> str:
         _esc(spec["part_no"]), _esc(spec["rev"]),
     )
 
+    # Explicit width/height give the SVG an intrinsic size: desktop scales it down
+    # via max-width:100%, and the phone keeps it legible inside a horizontal-scroll
+    # wrapper (max-width:none under the mobile media query) instead of shrinking a
+    # multi-column diagram to an unreadable thumbnail.
     svg = (
-        '<svg class="schem" viewBox="0 0 {} {}" role="group" '
+        '<div class="schem-wrap"><svg class="schem" width="{}" height="{}" '
+        'viewBox="0 0 {} {}" role="group" '
         'aria-labelledby="schem-title">\n'
         '  <title id="schem-title">Functional block diagram of the {} engine</title>\n'
         '  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" '
         'markerWidth="7" markerHeight="7" orient="auto-start-reverse">'
         '<path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>\n'
-        '{}\n{}\n{}\n</svg>'
+        '{}\n{}\n{}\n</svg></div>'
     ).format(
-        width, height, _esc(spec["name"]),
+        width, height, width, height, _esc(spec["name"]),
         "\n".join(edge_svg), "\n".join(block_svg), title_block,
     )
 
