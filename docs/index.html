@@ -230,6 +230,7 @@
   .hero-sub b { color:var(--text); font-weight:600; }
   .hero-ctas { display:flex; flex-wrap:wrap; gap:1px; }
   .hero-ctas .btn { min-width:230px; }
+  .hero-ctas .cta-label-mobile { display:none; }
   .hero-img { display:none; }
   .hero-img img, .hero-img video { display:block; width:100%; height:auto; }
   .hero-img figcaption { font-family:var(--mono); font-size:11px; color:var(--text-3); margin-top:10px; letter-spacing:.4px; }
@@ -602,7 +603,11 @@
     .stat { border-left:none; padding:18px 14px 16px; }
     .stat b { font-size:30px; }
     .stat b .unit { font-size:18px; }
-    .hero-ctas .btn, .final-ctas .btn { width:100%; }
+    .final-ctas .btn { width:100%; }
+    .hero-ctas { display:grid; grid-template-columns:minmax(0,1fr) 116px; gap:6px; max-width:430px; }
+    .hero-ctas .btn { width:auto; min-width:0; min-height:46px; padding:10px 12px; gap:8px; font-size:14px; }
+    .hero-ctas .cta-label-desktop { display:none; }
+    .hero-ctas .cta-label-mobile { display:inline; }
     .flag-head, .flag-col, .flag-foot { padding-left:20px; padding-right:20px; }
     .flag-foot .gate { margin-left:0; }
     .founder { flex-direction:column; } .founder-photo { width:100%; } .founder-photo img { height:auto; min-height:0; aspect-ratio:3/2; object-position:center 18%; }
@@ -868,9 +873,9 @@
       <h1>Automate the work.<br><strong>Keep the judgment.</strong></h1>
       <p class="hero-sub">We build AI engines that take over the repetitive work of finance teams &mdash; close, reconciliation, partnership tax &mdash; and return it <b>drafted, tied out, and cited to source</b>. Independent verification checks every run. <b>Your people approve every output.</b></p>
       <div class="hero-ctas">
-        <a class="btn btn-p" href="#book" data-book>Book a free consultation
+        <a class="btn btn-p" href="#book" data-book aria-label="Book a free consultation"><span class="cta-label-desktop">Book a free consultation</span><span class="cta-label-mobile" aria-hidden="true">Book a call</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Inspect the engineering
+        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener" aria-label="Inspect the engineering on GitHub"><span class="cta-label-desktop">Inspect the engineering</span><span class="cta-label-mobile" aria-hidden="true">View code</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </div>
     </div>
