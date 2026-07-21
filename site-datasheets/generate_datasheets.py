@@ -314,6 +314,21 @@ def die_stack_html(spec: dict) -> str:
     )
 
 
+def _split_block_label(label: str) -> list[str]:
+    # A block rect is 170px wide (~156px of text room; 13px Plex Sans fits ~22
+    # chars). Longer labels split at the space that minimizes the longer line,
+    # so the text stays inside the shape instead of spilling past the border.
+    if len(label) <= 22:
+        return [label]
+    best = None
+    for i, ch in enumerate(label):
+        if ch == " ":
+            longer = max(i, len(label) - i - 1)
+            if best is None or longer < best[0]:
+                best = (longer, [label[:i], label[i + 1:]])
+    return best[1] if best else [label]
+
+
 def schematic_html(spec: dict) -> str:
     blocks = spec["blocks"]
     edges = spec["edges"]
@@ -322,13 +337,17 @@ def schematic_html(spec: dict) -> str:
     rows = max(b["row"] for b in blocks) + 1
     cw, ch, pad = 170, 74, 30
     gx, gy = cw + 70, ch + 40
+    # Wide edge labels are lifted into the corridor above their blocks, and
+    # collisions stack them 11px apart — the top row needs headroom for up to
+    # three stacked labels without leaving the canvas.
+    pad_top = pad + 14
     width = pad * 2 + (cols - 1) * gx + cw
-    height = pad * 2 + (rows - 1) * gy + ch + 40  # title-block room
+    height = pad_top + pad + (rows - 1) * gy + ch + 40  # title-block room
 
     def cx(b): return pad + b["col"] * gx
-    def cy(b): return pad + b["row"] * gy
+    def cy(b): return pad_top + b["row"] * gy
 
-    edge_svg = []
+    edge_geo = []
     for e in edges:
         a, b = by_id[e["from"]], by_id[e["to"]]
         x1, y1 = cx(a) + cw, cy(a) + ch // 2
@@ -340,21 +359,50 @@ def schematic_html(spec: dict) -> str:
             tx, ty = cx(b) + cw // 2, cy(b) + ch
             loop_y = height - 48
             path = f"M{sx},{sy} C{sx},{loop_y} {sx},{loop_y} {sx - 24},{loop_y} L{tx + 24},{loop_y} C{tx},{loop_y} {tx},{loop_y} {tx},{ty}"
-            lx, ly = (sx + tx) // 2, loop_y - 7
+            lx, ly, step = (sx + tx) // 2, loop_y - 7, 11
         else:
             mx = (x1 + x2) // 2
             path = f"M{x1},{y1} C{mx},{y1} {mx},{y2} {x2},{y2}"
-            lx, ly = mx, (y1 + y2) // 2 - 8
+            # A wire-level label sits inside the blocks' vertical band, so it may
+            # only stay there when it fits the inter-column gap (10px Plex Mono
+            # ~6.2px/char). Anything wider moves above the block tops into the
+            # clear inter-row corridor instead of printing across the shapes.
+            if len(e.get("label", "")) * 6.2 <= (gx - cw) - 6:
+                lx, ly = mx, (y1 + y2) // 2 - 8
+            else:
+                lx, ly = mx, min(cy(a), cy(b)) - 8
+            step = -11
+        edge_geo.append({"cls": cls, "path": path, "text": e.get("label", ""),
+                         "lx": lx, "ly": ly, "step": step})
+    # Second pass: labels that would print over an earlier label step away in
+    # 11px increments until clear — corridor labels step up, feedback-loop
+    # labels step down (up would push them into the bottom block row). Spec
+    # order, so the output stays byte-stable.
+    placed = []
+    for g in edge_geo:
+        if not g["text"]:
+            continue
+        half = len(g["text"]) * 6.2 / 2 + 4
+        for _ in range(4):
+            if not any(abs(g["ly"] - py) < 11 and abs(g["lx"] - px) < half + ph
+                       for px, py, ph in placed):
+                break
+            g["ly"] += g["step"]
+        placed.append((g["lx"], g["ly"], half))
+    edge_svg = []
+    for g in edge_geo:
         label = (
             '<text x="{}" y="{}" font-family="IBM Plex Mono,monospace" '
-            'font-size="10" fill="#6f6f6f" text-anchor="middle">{}</text>'.format(
-                lx, ly, _esc(e["label"])
+            'font-size="10" fill="#6f6f6f" text-anchor="middle" '
+            'paint-order="stroke" stroke="#ffffff" stroke-width="3">{}</text>'.format(
+                g["lx"], g["ly"], _esc(g["text"])
             )
-            if e.get("label") else ""
+            if g["text"] else ""
         )
         edge_svg.append(
-            f'  <g class="{cls}"><path d="{path}" fill="none" stroke="#0f62fe" '
-            f'stroke-width="1.6" marker-end="url(#arrow)"/>{label}</g>')
+            '  <g class="{}"><path d="{}" fill="none" stroke="#0f62fe" '
+            'stroke-width="1.6" marker-end="url(#arrow)"/>{}</g>'.format(
+                g["cls"], g["path"], label))
 
     kind_fill = {"role": "#ffffff", "audit": "#edf5ff", "gate": "#edf5ff",
                  "human": "#e6f4ea"}
@@ -362,17 +410,30 @@ def schematic_html(spec: dict) -> str:
     for b in blocks:
         x, y = cx(b), cy(b)
         fill = kind_fill.get(b.get("kind", ""), "#ffffff")
+        lines = _split_block_label(b["label"])
+        longest = max(len(line) for line in lines)
+        font_px = 13 if longest <= 22 else (12 if longest <= 26 else 11)
+        tx_c = x + cw // 2
+        if len(lines) == 1:
+            text_body = _esc(lines[0])
+            text_y = f' y="{y + ch // 2 + 4}"'
+        else:
+            text_body = (
+                f'<tspan x="{tx_c}" y="{y + ch // 2 - 4}">{_esc(lines[0])}</tspan>'
+                f'<tspan x="{tx_c}" y="{y + ch // 2 + 12}">{_esc(lines[1])}</tspan>'
+            )
+            text_y = ""
         block_svg.append(
             '  <g class="schem-block" data-block="{}">'
             '<a href="{}" target="_blank" rel="noopener" '
             'aria-label="Open {} source on GitHub">'
             '<rect x="{}" y="{}" width="{}" height="{}" rx="4" fill="{}" '
             'stroke="#0f62fe" stroke-width="1.6"/>'
-            '<text x="{}" y="{}" font-family="IBM Plex Sans,sans-serif" font-size="13" '
+            '<text x="{}"{} font-family="IBM Plex Sans,sans-serif" font-size="{}" '
             'font-weight="600" fill="#161616" text-anchor="middle">{}</text></a></g>'.format(
                 _esc(b["id"]), _esc(b["source_link"]), _esc(b["label"]),
                 x, y, cw, ch, fill,
-                x + cw // 2, y + ch // 2 + 4, _esc(b["label"]),
+                tx_c, text_y, font_px, text_body,
             )
         )
 
