@@ -24,9 +24,13 @@ def _collected_count(cwd: Path, *extra: str) -> int:
     env = os.environ.copy()
     env.pop("PYTEST_ADDOPTS", None)
     env["PYTHONDONTWRITEBYTECODE"] = "1"
+    # `-o addopts=` neutralizes each engine's own pyproject/ini addopts (several set
+    # "-q", which combined with our -q becomes -qq and suppresses the "N tests collected"
+    # summary in favor of per-file lines). Forcing empty addopts gives one stable format
+    # across all nine engines.
     proc = subprocess.run(
-        [sys.executable, "-m", "pytest", "--collect-only", "-q", *extra],
-        cwd=str(cwd), capture_output=True, text=True, timeout=120, env=env,
+        [sys.executable, "-m", "pytest", "--collect-only", "-q", "-o", "addopts=", *extra],
+        cwd=str(cwd), capture_output=True, text=True, timeout=180, env=env,
     )
     output = proc.stdout + "\n" + proc.stderr
     assert proc.returncode == 0, output[-4000:]
