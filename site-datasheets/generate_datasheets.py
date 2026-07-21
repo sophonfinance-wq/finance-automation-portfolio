@@ -202,8 +202,12 @@ def see_it_run_html(spec: dict) -> str:
         for c in m.get("crops", [])
     )
     crops_html = (f'<div class="media-crops">{crops}</div>') if crops else ""
+    # run_label is spec-driven and honest: Triangulate is a genuine CLI capture ("the real
+    # CLI"); engines that reuse the synthesized brand animation must say so, not claim a
+    # capture they don't have.
+    run_label = _esc(m.get("run_label", "the real CLI"))
     return (
-        '<section><h2>See it run</h2><span class="zone-k">the real CLI</span>\n'
+        f'<section><h2>See it run</h2><span class="zone-k">{run_label}</span>\n'
         '<figure class="figwrap"><img src="{}" data-video="{}" '
         'alt="{}" loading="lazy">'
         '<figcaption>{}</figcaption></figure>'
