@@ -685,22 +685,13 @@
   }
 
   /* ---- story: the why film ---- */
+  /* Keep the film close to the hero contact line: roughly four text-line spaces
+     from the email to the "Watch this first" kicker. */
+  .hero { padding-bottom:32px; }
+  #story { padding-top:32px; }
   .whyfilm { margin-top:28px; max-width:960px; }
   .whyfilm-stage { position:relative; }
-  /* No frame: the picture is feathered off at every edge so it dissolves into the
-     page instead of sitting in a box. Two gradients intersected = a soft rectangle;
-     the bottom stays nearly opaque so the native controls remain legible. */
-  .whyfilm video { display:block; width:100%; height:auto; background:transparent; border:0; box-shadow:none;
-    -webkit-mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%),
-                       linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%);
-    -webkit-mask-composite:source-in;
-    mask-image:linear-gradient(to right,transparent 0,#000 7%,#000 93%,transparent 100%),
-               linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%);
-    mask-composite:intersect; }
-  @supports not (mask-composite:intersect) {
-    .whyfilm video { -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%);
-                     mask-image:linear-gradient(to bottom,transparent 0,#000 8%,#000 97%,transparent 100%); }
-  }
+  .whyfilm video { display:block; width:100%; height:auto; background:#000; border:0; box-shadow:none; }
   .film-sound { position:absolute; left:50%; bottom:16%; transform:translateX(-50%);
     display:inline-flex; align-items:center; gap:9px; cursor:pointer;
     font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:.2px;
