@@ -74,7 +74,7 @@ Non-negotiables that define the product: independent verification checks every r
 Beyond these nine, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, intercompany/eliminations, whatever eats the client's month).
 
 # How the engines stay trustworthy
-Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional, seeded data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
+Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
 
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
