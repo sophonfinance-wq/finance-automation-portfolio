@@ -685,20 +685,15 @@
   }
 
   /* ---- story: the why film ---- */
-  /* Hand the hero directly into the film so its first frame is already visible at
-     the bottom of the initial desktop viewport. */
+  /* Hand the hero directly into a compact film introduction, then keep the
+     picture itself clear for the film's own on-screen typography. */
   .hero { min-height:0; padding:32px 0 0; }
   #story { padding-top:0; }
-  #story > .wrap { position:relative; }
-  #story .sec-head { position:absolute; z-index:3; top:24px; left:32px; right:32px; margin:0; }
-  #story .sec-head .kicker { color:#a9caff; text-shadow:0 1px 12px rgba(0,0,0,.65); }
-  #story .sec-head h2 { color:#fff; text-shadow:0 2px 22px rgba(0,0,0,.72); }
-  #story .sec-head .lead { color:rgba(255,255,255,.92); text-shadow:0 1px 14px rgba(0,0,0,.72); }
+  #story .sec-head { margin:16px 0 12px; }
+  #story .sec-head h2 { font-size:clamp(26px, 2.8vw, 36px); margin:6px 0 7px; }
+  #story .sec-head .lead { font-size:15.5px; }
   .whyfilm { margin-top:0; max-width:960px; }
   .whyfilm-stage { position:relative; isolation:isolate; }
-  .whyfilm-stage::after { content:""; position:absolute; z-index:1; inset:0 0 auto; height:46%;
-    background:linear-gradient(180deg,rgba(5,13,30,.82) 0%,rgba(5,13,30,.46) 58%,transparent 100%);
-    pointer-events:none; }
   .whyfilm video { position:relative; z-index:0; display:block; width:100%; height:auto; background:#000; border:0; box-shadow:none; }
   .film-sound { position:absolute; left:50%; bottom:16%; transform:translateX(-50%);
     z-index:2; display:inline-flex; align-items:center; gap:9px; cursor:pointer;
@@ -712,10 +707,9 @@
   .film-sound:focus-visible { outline:2px solid #fff; outline-offset:2px; }
   .film-sound[hidden] { display:none; }
   @media (max-width:640px){
-    #story .sec-head { top:16px; left:18px; right:18px; }
-    #story .sec-head h2 { font-size:26px; margin:7px 0 8px; }
+    #story .sec-head { margin:12px 0 10px; }
+    #story .sec-head h2 { font-size:25px; margin:5px 0 6px; }
     #story .sec-head .lead { font-size:14px; line-height:1.4; }
-    .whyfilm-stage::after { height:64%; }
   }
   @media (max-width:520px){ .film-sound { font-size:13px; padding:10px 15px; bottom:19%; } }
   .whyfilm figcaption { margin-top:14px; font-size:14.5px; color:var(--text-2); line-height:1.6; max-width:58em; }
