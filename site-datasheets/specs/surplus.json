@@ -1,0 +1,365 @@
+{
+  "num": 5,
+  "slug": "surplus",
+  "part_no": "SFS-E05-SRP",
+  "mnemonic": "SRP",
+  "family": "Cross-Border Tax",
+  "name": "Tax Surplus / ACB",
+  "tagline": "Foreign-affiliate surplus pools and ACB, re-derived to a human gate",
+  "plain_summary": "Tax Surplus / ACB rolls seeded fictional foreign-affiliate facts through per-entity, per-year surplus pools, a distribution waterfall, tier elevation, capital-event-only ACB, and per-layer FX. It emits traceable workpapers, independently rechecks structural identities, and can drive a drifted workpaper set back to a clean tie-out while reserving material changes for human review.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The public package exposes its intermediates, its reconciliation identities, and the exact commands behind the page. Its control claims can be re-run from the repository instead of accepted on presentation alone.",
+  "layers_intro": "Each layer has one duty: source facts feed the calculation, the harness challenges its exposed intermediates, and the bounded loop stops at a human-review boundary.",
+
+  "layers": [
+    {
+      "id": "human-gate",
+      "label": "Human Gate",
+      "plain": "A material correction is shown to a person before sign-off; an unresolved run is escalated.",
+      "engineering": "The assurance loop maps convergence and total CAD adjustment magnitude to PASS, FLAG, or FAIL. FLAG and PASS exit 0; FAIL exits 1. FLAG explicitly requires human review of what changed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/loop.py"
+    },
+    {
+      "id": "assurance-loop",
+      "label": "Assurance Loop",
+      "plain": "Finds the earliest broken fiscal period, restores it from source-derived results, and checks the whole structure again.",
+      "engineering": "observe -> detect -> remediate -> re-verify -> gate: each bounded turn settles the earliest failing year, books field-level adjustments, locks that period, and repeats until reconciliation passes or the budget is exhausted.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/loop.py"
+    },
+    {
+      "id": "reconciliation",
+      "label": "Reconciliation Harness",
+      "plain": "Recomputes the structural rules from published intermediates and identifies the entity, year, and amount of any break.",
+      "engineering": "reconcile.py independently checks pool and ACB conservation, waterfall limits, non-negative balances, roll-forward continuity, elevation, and the functional-currency ACB-layer tie-out. The --check CLI flag returns non-zero on a break.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/reconcile.py"
+    },
+    {
+      "id": "calculation",
+      "label": "Surplus / ACB Engine",
+      "plain": "Calculates each entity and year in order, carrying tax pools forward and moving ACB only for capital events.",
+      "engineering": "SurplusEngine processes entities bottom-up within each year: income plus the Reg. 5907(2) adjustment, exempt/taxable split, distribution-triggered elevation at ownership percentage, exempt-taxable-pre-acquisition waterfall, capital-event ACB, and closing-to-opening roll-forward.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/engine.py"
+    },
+    {
+      "id": "source-facts",
+      "label": "Seeded Fictional Facts",
+      "plain": "Creates a reproducible multi-tier example without client or employer data.",
+      "engineering": "generate_structure builds the fictional entities, fiscal-year facts, ownership chain, and FX table from DEFAULT_SEED = 20240607 unless --seed selects another reproducible run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/generate.py"
+    }
+  ],
+
+  "blocks": [
+    {
+      "id": "facts",
+      "label": "Fictional Source Facts",
+      "kind": "role",
+      "col": 0,
+      "row": 1,
+      "plain": "seeded entities, years, ownership, capital events, distributions, and FX",
+      "engineering": "generate_structure returns Structure plus YearFacts from a reproducible seed",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/generate.py"
+    },
+    {
+      "id": "engine",
+      "label": "SurplusEngine",
+      "kind": "role",
+      "col": 1,
+      "row": 1,
+      "plain": "rolls surplus pools and ACB forward",
+      "engineering": "bottom-up yearly computation; waterfall, elevation, ACB, and closing balances",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/engine.py"
+    },
+    {
+      "id": "reports",
+      "label": "Workpapers + Workbook",
+      "kind": "role",
+      "col": 2,
+      "row": 0,
+      "plain": "writes per-entity workpapers, summaries, FX analysis, reconciliation, and optional Excel",
+      "engineering": "report.py and workbook.py render the engine's exposed inputs, intermediates, and balances",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/cli.py"
+    },
+    {
+      "id": "reconcile",
+      "label": "Independent Reconciliation",
+      "kind": "audit",
+      "col": 2,
+      "row": 2,
+      "plain": "re-derives the identities and reports any break",
+      "engineering": "named checks compare expected and actual values within the implemented tolerance",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/reconcile.py"
+    },
+    {
+      "id": "loop",
+      "label": "Bounded Remediation Loop",
+      "kind": "gate",
+      "col": 3,
+      "row": 2,
+      "plain": "settles the earliest failing year and rechecks",
+      "engineering": "replaces drifted rows with authoritative engine results, journals field changes, locks the year, and repeats within a turn budget",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/loop.py"
+    },
+    {
+      "id": "human",
+      "label": "Human Review Boundary",
+      "kind": "human",
+      "col": 4,
+      "row": 2,
+      "plain": "reviews material changes or an unresolved failure",
+      "engineering": "FLAG is converged but material and requires review before sign-off; FAIL is a non-converged escalation",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/README.md"
+    }
+  ],
+  "edges": [
+    {"from": "facts", "to": "engine", "label": "source facts"},
+    {"from": "engine", "to": "reports", "label": "published results"},
+    {"from": "engine", "to": "reconcile", "label": "exposed intermediates"},
+    {"from": "reconcile", "to": "loop", "label": "breaks"},
+    {"from": "loop", "to": "engine", "label": "re-derive earliest period"},
+    {"from": "loop", "to": "human", "label": "PASS / FLAG / FAIL", "gate": true}
+  ],
+
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "7,498",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (tax-surplus-engine/); verified 2026-07-20 and pinned in site-datasheets/counts.json",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Default run",
+      "value": "FY2021-2024",
+      "source": "tax-surplus-engine/surplus_engine/cli.py -- --start defaults to 2021 and --end defaults to 2024"
+    },
+    {
+      "label": "Default seed",
+      "value": "20240607",
+      "source": "tax-surplus-engine/surplus_engine/generate.py -- DEFAULT_SEED"
+    },
+    {
+      "label": "Waterfall",
+      "value": "exempt -> taxable -> pre-acquisition capital",
+      "source": "tax-surplus-engine/surplus_engine/model.py -- POOL_ORDER; surplus_engine/engine.py -- run_waterfall",
+      "plain": "the implemented pool-consumption order"
+    },
+    {
+      "label": "Default reconciliation",
+      "value": "212 / 212 checks pass",
+      "source": "py -3 -m surplus_engine --start 2021 --end 2024 --check; reproduced 2026-07-20",
+      "plain": "identity-check instances across the default structure"
+    },
+    {
+      "label": "Loop verdicts",
+      "value": "PASS / FLAG / FAIL",
+      "source": "tax-surplus-engine/surplus_engine/loop.py -- _verdict and verdict_exit_code",
+      "plain": "PASS and FLAG exit 0; FAIL exits 1"
+    }
+  ],
+
+  "problem_statement": "Foreign-affiliate surplus and adjusted cost base are not one ending balance. They are connected roll-forwards across entities, years, ownership percentages, distributions, capital events, and exchange-rate layers. A spreadsheet can still look orderly while a stale opening, unsupported elevation, overdrawn pool, or mis-keyed ACB breaks the structure. This engine makes those mechanics explicit and gives a separate harness enough exposed detail to re-derive them.",
+  "scenarios": [
+    {
+      "title": "A clean default run proves every implemented identity",
+      "narrative": "The seeded FY2021-2024 structure runs through the engine and the --check gate. The current repository reports Reconciliation: OK with 212 of 212 identity-check instances passing and exits 0.",
+      "source": "py -3 -m surplus_engine --start 2021 --end 2024 --check (tax-surplus-engine/); reproduced 2026-07-20"
+    },
+    {
+      "title": "Per-layer FX exposes a basis result hidden by one closing rate",
+      "narrative": "In the seeded Cedar Mezz example, a 2023 contribution of 35,502.71 is returned in 2024 at a different rate. Closing USD ACB and the single-rate CAD amount are both zero, while the event-by-event CAD layers net to (660.35). The functional-currency layers still tie to the engine.",
+      "source": "tax-surplus-engine/README.md -- Per-layer FX; surplus_engine/fx.py -- acb_fx_reconciliations"
+    },
+    {
+      "title": "The demo clears seeded drift but does not conceal material corrections",
+      "narrative": "The built-in loop profile starts with six reconciliation breaks. It locks FY2021, FY2022, and FY2023 in three turns, reducing breaks 6 -> 4 -> 2 -> 0. Four booked adjustments total CAD 107,088.50, above the CAD 1,000.00 default materiality, so the converged run returns FLAG for human review and exits 0.",
+      "source": "py -3 -m surplus_engine.loop --demo (tax-surplus-engine/); reproduced 2026-07-20; surplus_engine/loop.py -- DEMO_FAULTS and DEFAULT_MATERIALITY_CAD"
+    }
+  ],
+
+  "instruction_set": [
+    {
+      "cmd": "python -m surplus_engine --start 2021 --end 2024",
+      "operation": "run the default fictional structure and print the consolidated summary",
+      "output": "Markdown summary on stdout",
+      "exit_code": "0 for a valid run",
+      "artifacts": "none unless --out is supplied"
+    },
+    {
+      "cmd": "python -m surplus_engine --start 2021 --end 2024 --out out",
+      "operation": "write the traceable workpaper package",
+      "output": "consolidated summary plus per-entity, FX-layer, and reconciliation reports",
+      "exit_code": "0 for a valid run",
+      "artifacts": "out/workpaper_<ENTITY>.md, consolidated_summary.md, fx_layer_analysis.md, reconciliation_report.md"
+    },
+    {
+      "cmd": "python -m surplus_engine --start 2021 --end 2024 --out out --xlsx",
+      "operation": "add the Excel representation to the report package",
+      "output": "the Markdown package plus surplus_model.xlsx",
+      "exit_code": "0 for a valid run",
+      "artifacts": "out/surplus_model.xlsx and the Markdown reports"
+    },
+    {
+      "cmd": "python -m surplus_engine --start 2021 --end 2024 --check",
+      "operation": "run the reconciliation harness as a process gate",
+      "output": "Reconciliation: OK (212/212 identity checks pass) on the default seeded run",
+      "exit_code": "0 when all checks pass; 1 on any identity break",
+      "artifacts": "none unless --out is supplied"
+    },
+    {
+      "cmd": "python -m surplus_engine --seed N",
+      "operation": "select a reproducible fictional-data seed",
+      "output": "consolidated summary for the selected seeded structure",
+      "exit_code": "0 for a valid run",
+      "artifacts": "none unless --out is supplied"
+    },
+    {
+      "cmd": "python -m surplus_engine --exempt-cap FRACTION",
+      "operation": "set the configurable exempt-distribution cap within 0..1",
+      "output": "summary using the selected cap",
+      "exit_code": "0 when valid; 2 outside 0..1",
+      "artifacts": "none unless --out is supplied"
+    },
+    {
+      "cmd": "python -m surplus_engine.loop --demo --out out",
+      "operation": "inject the built-in drift profile and run bounded remediation",
+      "output": "FLAG after three turns on the default demo",
+      "exit_code": "0 because FLAG is converged",
+      "artifacts": "out/assurance_loop_report.md and out/assurance_loop.html"
+    },
+    {
+      "cmd": "python -m surplus_engine.loop --demo --budget 0",
+      "operation": "demonstrate budget exhaustion without a remediation turn",
+      "output": "FAIL with the seeded breaks unresolved",
+      "exit_code": "1",
+      "artifacts": "none unless --out is supplied"
+    },
+    {
+      "cmd": "python -m surplus_engine.loop --materiality CAD_AMOUNT",
+      "operation": "set the threshold that separates a converged PASS from FLAG",
+      "output": "PASS or FLAG after reconciliation converges",
+      "exit_code": "0 when converged; 1 if the turn budget is exhausted",
+      "artifacts": "none unless --out is supplied"
+    },
+    {
+      "cmd": "python -m pytest -q",
+      "operation": "run the engine test suite",
+      "output": "pytest session summary",
+      "exit_code": "0 when green",
+      "artifacts": "none"
+    }
+  ],
+
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "7,498",
+      "unit": "tests collected",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (tax-surplus-engine/); verified 2026-07-20 and pinned in site-datasheets/counts.json"
+    },
+    {
+      "label": "Default structural gate",
+      "value": "212 / 212",
+      "unit": "identity checks pass",
+      "source": "py -3 -m surplus_engine --start 2021 --end 2024 --check; reproduced 2026-07-20"
+    },
+    {
+      "label": "Seeded drift remediation",
+      "value": "3",
+      "unit": "turns; breaks 6 -> 4 -> 2 -> 0",
+      "source": "py -3 -m surplus_engine.loop --demo; reproduced 2026-07-20"
+    },
+    {
+      "label": "Per-layer FX sign difference",
+      "value": "CAD (660.35)",
+      "unit": "per-layer ACB versus CAD 0.00 at one closing rate",
+      "source": "tax-surplus-engine/README.md -- seeded Cedar Mezz per-layer FX example; surplus_engine/fx.py"
+    }
+  ],
+
+  "control_characteristics": {
+    "verdict_map": [
+      {
+        "severity": "Converged; booked adjustments at or below materiality",
+        "verdict": "PASS",
+        "action": "clean to present for sign-off; exits 0"
+      },
+      {
+        "severity": "Converged; booked adjustments above materiality",
+        "verdict": "FLAG",
+        "action": "human reviews what changed before sign-off; exits 0"
+      },
+      {
+        "severity": "Not converged within the turn budget",
+        "verdict": "FAIL",
+        "action": "escalate with structural breaks unresolved; exits 1"
+      }
+    ],
+    "guarantees": [
+      "Seeded fictional inputs make the public run reproducible without client or employer data.",
+      "Surplus elevation occurs only when a subsidiary distributes and only at its ownership percentage; operating income alone does not elevate.",
+      "ACB changes only for capital contributions and applied returns of capital; an excess return surfaces as a deemed gain and ACB is floored at zero.",
+      "The reconciliation harness independently recomputes conservation, waterfall, continuity, elevation, and ACB FX-layer identities from exposed intermediates.",
+      "A settled loop result is built from the same authoritative engine re-derivation as a clean run, with every changed tracked field recorded as an adjustment."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": false,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "PASS and FLAG exit 0; FAIL exits 1",
+      "note": "The loop can restore structural consistency, but a FLAG requires a person to review material booked adjustments before sign-off, and a FAIL escalates without claiming convergence."
+    }
+  },
+
+  "limits": [
+    {
+      "statement": "The repository package is a fictional reference implementation over generated entities, facts, and FX rates; it does not reproduce a client or employer methodology or dataset.",
+      "source": "tax-surplus-engine/README.md -- confidentiality posture; surplus_engine/generate.py"
+    },
+    {
+      "statement": "The default 0.60 exempt-distribution cap is explicitly a fictional, configurable modeling constraint, not a claim that one ceiling applies to every real tax fact pattern.",
+      "source": "tax-surplus-engine/surplus_engine/engine.py -- EXEMPT_CAP comment; surplus_engine/cli.py -- --exempt-cap"
+    },
+    {
+      "statement": "The --check gate proves the structural identities implemented in reconcile.py within its 0.02 tolerance; it does not replace tax judgment or human approval.",
+      "source": "tax-surplus-engine/surplus_engine/reconcile.py -- DEFAULT_TOLERANCE and reconcile; README.md -- human gate"
+    },
+    {
+      "statement": "The loop remediates only by restoring source-derived engine values. It does not invent support for a value, and a non-converged run returns FAIL for escalation.",
+      "source": "tax-surplus-engine/surplus_engine/loop.py -- _settle_year, assurance_loop, and _verdict"
+    }
+  ],
+
+  "media": {
+    "poster": "../assets/tile-surplus.webp",
+    "motion": "../assets/tile-surplus-motion.mp4",
+    "poster_alt": "System illustration showing yearly filings flowing through the Surplus Engine into carried-forward tax pools with source tracing and per-layer FX",
+    "caption": "Portfolio system animation: yearly filings pass through the Surplus Engine into carried-forward tax pools, with source traceability and per-layer FX called out.",
+    "crops": []
+  },
+
+  "quickstart": [
+    {
+      "label": "Clone and run the structural gate",
+      "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --check"
+    },
+    {
+      "label": "Run the seeded remediation demo",
+      "command": "python -m surplus_engine.loop --demo --out out"
+    }
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/tax-surplus-engine",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Tax Surplus / ACB (SFS-E05-SRP) datasheet: a seeded foreign-affiliate surplus-pool and adjusted-cost-base engine with distribution waterfall, tier elevation, per-layer FX, independent reconciliation, and a bounded human-gated remediation loop."
+  }
+}

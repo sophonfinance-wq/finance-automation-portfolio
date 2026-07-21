@@ -1,0 +1,349 @@
+{
+  "num": 9,
+  "slug": "cash",
+  "part_no": "SFS-E09-CSH",
+  "mnemonic": "CSH",
+  "family": "Cash Controls",
+  "name": "Cash Management",
+  "tagline": "Five read-only cash controls that re-derive before review",
+  "plain_summary": "Cash Management independently re-derives five monthly cash controls: the bank-to-GL bridge, outstanding-check aging and crossfoot, wire segregation of duties, bank-register continuity, and concentration sweeps. It works in integer cents, reports findings without changing the inputs, and stops at readiness for human review. It never posts, drafts a journal entry, releases a wire, or writes back to a source system.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Cash is trusted only after the bridge, register, approvals, and sweep arithmetic can be re-derived. The public engine exposes those controls as deterministic validators and pins the behavior with an end-to-end tamper grid.",
+  "layers_intro": "Each layer is one implemented validation-only control. Select a layer for its business purpose and source-level behavior.",
+
+  "layers": [
+    {
+      "id": "bank-rec",
+      "label": "Bank Reconciliation",
+      "plain": "Rebuilds the bank and book sides of the reconciliation and checks that they meet.",
+      "engineering": "BankReconciliationValidator recomputes adjusted bank as ending balance plus deposits in transit minus outstanding checks plus bank errors, and adjusted book as GL balance plus interest minus charges plus book errors. Nonzero error plugs remain review items.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_rec.py"
+    },
+    {
+      "id": "checks",
+      "label": "Outstanding Checks",
+      "plain": "Crossfoots uncleared checks and flags records that break status, amount, date, uniqueness, or stale-date rules.",
+      "engineering": "OutstandingCheckValidator counts allowed statuses, re-adds outstanding and stale amounts, compares the result with the displayed total when supplied, and flags outstanding checks older than the configured stale-days policy.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/outstanding_checks.py"
+    },
+    {
+      "id": "wires",
+      "label": "Wire Approval",
+      "plain": "Checks that an approved or scheduled wire has two approvers and that neither one is the initiator.",
+      "engineering": "WireApprovalValidator enforces three distinct people across initiator, first approver, and second approver; approved or scheduled wires require the second approval, and scheduled dates cannot precede request dates.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/wire_approval.py"
+    },
+    {
+      "id": "register",
+      "label": "Bank Register",
+      "plain": "Rebuilds every running balance and checks opening, closing, prior-period, and optional bank-statement continuity.",
+      "engineering": "BankRegisterValidator re-derives the row chain from opening balance plus signed transaction amounts, foots the close, tests prior-close continuity, and records a review finding when an optional statement balance does not tie.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_register.py"
+    },
+    {
+      "id": "sweeps",
+      "label": "Cash Concentration",
+      "plain": "Re-adds sub-account sweeps and rebuilds the concentration-account roll-forward.",
+      "engineering": "CashConcentrationValidator compares the sum of unique sub-account sweep lines with concentration sweeps in, then re-derives closing as opening plus sweeps in minus disbursements.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cash_concentration.py"
+    }
+  ],
+
+  "blocks": [
+    {
+      "id": "demo",
+      "label": "Seeded Demo Inputs",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional cash records enter five independent controls",
+      "engineering": "cash_engine.cli._run_all builds the fixed demo inputs and invokes every validator",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cli.py"
+    },
+    {
+      "id": "bank-rec-control",
+      "label": "Bank / GL Bridge",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "re-derives both reconciliation sides",
+      "engineering": "adjusted bank == adjusted book",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_rec.py"
+    },
+    {
+      "id": "checks-control",
+      "label": "Check Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "crossfoots status and aging",
+      "engineering": "outstanding + stale amounts == displayed outstanding total",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/outstanding_checks.py"
+    },
+    {
+      "id": "wire-control",
+      "label": "Wire Segregation",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "requires distinct approval roles",
+      "engineering": "initiator, first approver, and second approver must be distinct",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/wire_approval.py"
+    },
+    {
+      "id": "register-control",
+      "label": "Register Continuity",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "rebuilds the running balance chain",
+      "engineering": "opening plus signed movements == re-derived closing",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_register.py"
+    },
+    {
+      "id": "sweep-control",
+      "label": "Sweep Tie-Out",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "re-adds sweep legs and the roll-forward",
+      "engineering": "sub-account sweep sum == sweeps in; opening + sweeps - disbursements == close",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cash_concentration.py"
+    },
+    {
+      "id": "aggregate",
+      "label": "CLI Readiness Result",
+      "kind": "gate",
+      "col": 2,
+      "row": 2,
+      "plain": "prints one verdict per control and combines mechanical cleanliness into the process exit code",
+      "engineering": "all_clean is the conjunction of result.mechanical_clean; clean returns 0 and any review-required result returns 1",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cli.py"
+    },
+    {
+      "id": "human",
+      "label": "Human Review",
+      "kind": "human",
+      "col": 3,
+      "row": 2,
+      "plain": "a person controls approval, release, and any posting",
+      "engineering": "every result carries manual gates and posting_authorized is always False",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/README.md"
+    }
+  ],
+  "edges": [
+    {"from": "demo", "to": "bank-rec-control", "label": "reconciliations"},
+    {"from": "demo", "to": "checks-control", "label": "check register"},
+    {"from": "demo", "to": "wire-control", "label": "wire requests"},
+    {"from": "demo", "to": "register-control", "label": "bank register"},
+    {"from": "demo", "to": "sweep-control", "label": "sweep lines"},
+    {"from": "bank-rec-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "checks-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "wire-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "register-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "sweep-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "aggregate", "to": "human", "label": "ready or needs review", "gate": true}
+  ],
+
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "5,290",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (cash-management/); 5,290 tests collected on 2026-07-20 and pinned in site-datasheets/counts.json",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "5",
+      "source": "cash-management/README.md — The five controls",
+      "plain": "independent monthly cash validations"
+    },
+    {
+      "label": "Invariant grid",
+      "value": "5,000 cases",
+      "source": "cash-management/cash_engine/tests/test_curated_invariant_grid.py — 1,000 cases per validator x 5 validators",
+      "plain": "constructed-to-tie inputs paired with targeted tampering"
+    },
+    {
+      "label": "Amount model",
+      "value": "integer cents",
+      "source": "cash-management/README.md — every amount is held in integer cents",
+      "plain": "no floating-point money arithmetic"
+    },
+    {
+      "label": "Verdicts",
+      "value": "READY FOR HUMAN REVIEW / NEEDS REVIEW",
+      "source": "cash-management/cash_engine/* — each result.verdict returns READY FOR HUMAN REVIEW when mechanically clean, otherwise NEEDS REVIEW",
+      "plain": "readiness is not approval"
+    },
+    {
+      "label": "Posting authority",
+      "value": "always false",
+      "source": "cash-management/cash_engine/* — each result.posting_authorized property returns False",
+      "plain": "the engine validates but cannot post"
+    }
+  ],
+
+  "problem_statement": "Cash can appear plausible while a bridge is out of tie, a stale check is unresolved, a wire lacks segregation of duties, a running balance has drifted, or sweep legs do not foot. A controller needs each control recomputed from structured inputs and every exception carried forward without turning mechanical cleanliness into approval.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs the complete monthly control set",
+      "narrative": "The CLI invokes all five validators on fictional data. Each reports READY FOR HUMAN REVIEW with zero findings, and the final line states that every control is read-only and nothing was posted.",
+      "source": "py -3 -m cash_engine --demo (cash-management/); output re-run on 2026-07-20; implementation in cash-management/cash_engine/cli.py"
+    },
+    {
+      "title": "A targeted tamper must trip the exact control",
+      "narrative": "Every point in the 5,000-case invariant grid runs once with an independently constructed tie and with at least one one-cent or one-field tamper. The wire-approval and cash-concentration grids exercise a second distinct tamper at every point. Each altered input must produce the exact finding code, so an implementation that always passes or always fails cannot satisfy the grid.",
+      "source": "cash-management/cash_engine/tests/test_curated_invariant_grid.py — module contract and five parametrized validator grids"
+    },
+    {
+      "title": "A wire cannot approve itself",
+      "narrative": "For an approved or scheduled wire, the engine requires a first and second approver and checks that the initiator and both approvers are three different people. Missing secondary approval, self-approval, duplicate approvers, and invalid scheduling each produce findings; the validator never releases the wire.",
+      "source": "cash-management/cash_engine/wire_approval.py — WireApprovalValidator and WireApprovalResult"
+    }
+  ],
+
+  "instruction_set": [
+    {
+      "cmd": "python -m cash_engine --demo",
+      "operation": "run all five controls on seeded fictional data",
+      "output": "five READY FOR HUMAN REVIEW lines; findings=0; All clean.",
+      "exit_code": "0 for the bundled clean demo",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m cash_engine",
+      "operation": "show the package command help",
+      "output": "usage and --demo option",
+      "exit_code": "0",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m pytest -q",
+      "operation": "run the cash engine behavior suites and invariant grid",
+      "output": "pytest result summary",
+      "exit_code": "0 when the suite passes",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m pytest --collect-only -q -o addopts=",
+      "operation": "re-derive the pinned engine test count",
+      "output": "5290 tests collected",
+      "exit_code": "0",
+      "artifacts": "none"
+    }
+  ],
+
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "5,290",
+      "unit": "tests collected",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (cash-management/); re-run 2026-07-20 and pinned in site-datasheets/counts.json",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Curated invariant grid",
+      "value": "5,000",
+      "unit": "parametrized cases",
+      "source": "cash-management/cash_engine/tests/test_curated_invariant_grid.py — 1,000 cases for each of five validators",
+      "plain": "end-to-end clean and tampered inputs"
+    },
+    {
+      "label": "Cases per validator",
+      "value": "1,000",
+      "unit": "grid points",
+      "source": "cash-management/cash_engine/tests/test_curated_invariant_grid.py — 1,000 cases per validator x 5 validators",
+      "plain": "the grid is distributed across all five controls"
+    },
+    {
+      "label": "Clean demo",
+      "value": "5 / 5",
+      "unit": "controls with zero findings",
+      "source": "py -3 -m cash_engine --demo (cash-management/); re-run 2026-07-20",
+      "plain": "the bundled fictional dataset exercises every control"
+    }
+  ],
+
+  "control_characteristics": {
+    "plain": "A mechanically clean result is only READY FOR HUMAN REVIEW. The source keeps approval, release, and posting outside the engine.",
+    "verdict_map": [
+      {
+        "severity": "No findings",
+        "verdict": "READY FOR HUMAN REVIEW",
+        "action": "send the mechanically clean result to the documented manual gates"
+      },
+      {
+        "severity": "One or more findings",
+        "verdict": "NEEDS REVIEW",
+        "action": "retain the findings for a person; do not post, release, or write back"
+      }
+    ],
+    "guarantees": [
+      "All five validators use integer cents and reject unsafe amount types instead of coercing them.",
+      "Each result is validation-only: posting_authorized is False and journal-entry, posting-action, and import-payload collections remain empty.",
+      "The public demo uses fixed fictional inputs, and the package declares no runtime dependencies.",
+      "The curated grid proves both sides of every control by coupling each constructed tie with at least one targeted tamper."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "READY FOR HUMAN REVIEW boundary",
+      "note": "The engine determines mechanical readiness only. Every result carries manual gates, and posting_authorized remains False."
+    }
+  },
+
+  "limits": [
+    {
+      "statement": "The engine never posts, drafts a journal entry, releases a wire, creates an import payload, or mutates a source system.",
+      "source": "cash-management/README.md and cash-management/cash_engine/* result types"
+    },
+    {
+      "statement": "READY FOR HUMAN REVIEW means the implemented mechanical checks found no findings; it is not sign-off or posting authorization.",
+      "source": "cash-management/README.md — Boundary; cash-management/cash_engine/* result.verdict and posting_authorized"
+    },
+    {
+      "statement": "The public package validates generic structured inputs and does not include a bank connector, workbook adapter, or source-system writeback path.",
+      "source": "cash-management/cash_engine/bank_rec.py, outstanding_checks.py, wire_approval.py, bank_register.py, and cash_concentration.py — module boundaries"
+    },
+    {
+      "statement": "A nonzero bank or book error plug is not self-certifying; it remains a review finding that requires approval.",
+      "source": "cash-management/cash_engine/bank_rec.py — BANK_ERROR_REVIEW_REQUIRED and BOOK_ERROR_REVIEW_REQUIRED"
+    }
+  ],
+
+  "media": {
+    "poster": "../assets/tile-cash.webp",
+    "motion": "../assets/tile-cash-motion.mp4",
+    "poster_alt": "Cash Management diagram with a bank record tied to the general ledger above check aging, two wire approvals, and a concentration sweep",
+    "caption": "The existing Cash Management engine tile depicts the bank-to-ledger tie-out together with check aging, dual wire approvals, and concentration sweep controls.",
+    "crops": []
+  },
+
+  "quickstart": [
+    {
+      "label": "Clone and run the complete fictional demo",
+      "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/cash-management && python -m cash_engine --demo"
+    },
+    {
+      "label": "Re-run the engine test collection",
+      "command": "python -m pytest --collect-only -q -o addopts="
+    }
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-management/cash_engine",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Cash Management (SFS-E09-CSH) datasheet — five deterministic, validation-only cash controls for bank-to-GL reconciliation, outstanding checks, wire segregation of duties, bank-register continuity, and concentration sweeps, all ending at an explicit human-review boundary."
+  }
+}
