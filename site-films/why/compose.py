@@ -204,13 +204,60 @@ def ov_speed(img, t):
           MONO_SOFT, blur=4, off=(0, 2))
 
 
+def tracked(img, cx, y, text, font, fill, tracking):
+    d = ImageDraw.Draw(img)
+    widths = [d.textlength(ch, font=font) for ch in text]
+    total = sum(widths) + tracking * (len(text) - 1)
+    x = cx - total / 2
+    for ch, w in zip(text, widths):
+        d.text((x, y), ch, font=font, fill=fill)
+        x += w + tracking
+
+
 def ov_close(img, t):
-    if t < 0.40:
+    if t < 0.62:
+        # Over the welcome handshake: the two taglines.
+        if t < 0.40:
+            return
+        a1 = ease_out((t - 0.42) / 0.2)
+        ctext(img, W / 2, 496, "AUTOMATE THE WORK.", F(58), (255, 255, 255, int(255 * a1)))
+        a2 = ease_out((t - 0.52) / 0.2)
+        ctext(img, W / 2, 566, "KEEP THE JUDGMENT.", F(58), (*BLUE[:3], int(255 * a2)))
         return
-    a1 = ease_out((t - 0.42) / 0.25)
-    ctext(img, W / 2, 496, "AUTOMATE THE WORK.", F(58), (255, 255, 255, int(255 * a1)))
-    a2 = ease_out((t - 0.58) / 0.25)
-    ctext(img, W / 2, 566, "KEEP THE JUDGMENT.", F(58), (*BLUE[:3], int(255 * a2)))
+    # Endcard: the exact brand lockup, drawn vector-crisp over the generated
+    # background plate — never AI-rendered typography.
+    k = (t - 0.62) / 0.38
+    d = ImageDraw.Draw(img)
+    a_g = int(255 * ease_out(k / 0.35))
+    if a_g > 0:
+        s = 3.2
+        ox, oy = W / 2 - 24 * s, 138
+        pts = [(ox + p[0] * s, oy + p[1] * s) for p in [(10, 30), (19, 21), (27, 26), (38, 14)]]
+        d.line(pts, fill=(255, 255, 255, a_g), width=10, joint="curve")
+        dot = (ox + 38 * s, oy + 14 * s)
+        d.ellipse([dot[0] - 10, dot[1] - 10, dot[0] + 10, dot[1] + 10],
+                  fill=(*BLUE_DEEP[:3], a_g))
+        d.rectangle([ox + 10 * s, oy + 35 * s, ox + 38 * s, oy + 38 * s],
+                    fill=(255, 255, 255, a_g))
+    a_w = int(255 * ease_out((k - 0.18) / 0.3))
+    if a_w > 0:
+        tracked(img, W / 2, 296, "SOPHON", F(118), (255, 255, 255, a_w), 30)
+    a_r = ease_out((k - 0.34) / 0.25)
+    if a_r > 0:
+        half = 185 * a_r
+        d.rectangle([W / 2 - half, 446, W / 2 + half, 451], fill=(*BLUE_DEEP[:3], 255))
+    a_f = int(255 * ease_out((k - 0.42) / 0.25))
+    if a_f > 0:
+        tracked(img, W / 2, 470, "FINANCE SYSTEMS", M(26), (200, 216, 245, a_f), 14)
+    a_t = int(255 * ease_out((k - 0.55) / 0.3))
+    if a_t > 0:
+        ctext(img, W / 2, 546, "AUTOMATE THE WORK.", F(34, "med"),
+              (255, 255, 255, a_t), blur=0, off=(0, 0), salpha=0)
+        ctext(img, W / 2, 592, "KEEP THE JUDGMENT.", F(34, "med"),
+              (*BLUE[:3], a_t), blur=0, off=(0, 0), salpha=0)
+    a_u = int(220 * ease_out((k - 0.7) / 0.28))
+    if a_u > 0:
+        tracked(img, W / 2, 658, "sophonfinance.com", M(19), (160, 178, 210, a_u), 3)
 
 
 OVERLAYS = {"open": ov_open, "days": ov_days, "reopen": ov_reopen, "people": ov_people,
@@ -226,7 +273,7 @@ SHOTS = {
     "turn":    [(WORK / "hf_turn.mp4", 0.2, 1.0)],
     "engines": [(WORK / "hf_founder1.mp4", 0.2, 0.50), (WORK / "hf_fmeet.mp4", 0.2, 0.50)],
     "speed":   [(ASSETS / "hero2-web.mp4", 6.2, 0.28), (ASSETS / "hero2-web.mp4", 21.1, 0.24), (ASSETS / "hero2-web.mp4", 24.2, 0.48)],
-    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.28), (WORK / "hf_welcome.mp4", 0.2, 0.34), (ASSETS / "hero2-web.mp4", 29.0, 0.38)],
+    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.28), (WORK / "hf_welcome.mp4", 0.2, 0.34), (WORK / "hf_endcard.mp4", 0.2, 0.38)],
 }
 
 CAPTIONS = {
