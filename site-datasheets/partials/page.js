@@ -38,32 +38,25 @@ document.querySelectorAll('.copybtn').forEach(function(b){
     }).catch(function(){});}
   });
 });
-// Die stack: buttons always work; pointer rotation is a progressive enhancement.
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
 (function(){
   var die=document.querySelector('.die');
   if(!die)return;
   var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
-  var reduce=!!(motionQuery&&motionQuery.matches);
   var printQuery=window.matchMedia&&window.matchMedia('print');
-  var pointerEnabled=!reduce;
   var stack=die.querySelector('.die-3d');
   var panel=document.getElementById('die-panel');
   var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
   var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
   if(!stack||!panel||!faces.length)return;
 
-  document.documentElement.classList.add(reduce?'js-static':'js-3d');
+  document.documentElement.classList.add('js-die');
   var promptMarkup=panel.innerHTML;
-  var suppressClickUntil=0;
   var selectedFace=null;
 
   function syncInstruction(){
     if(!instruction)return;
-    var staticView=!pointerEnabled||(motionQuery&&motionQuery.matches)||
-      (printQuery&&printQuery.matches);
-    instruction.textContent=staticView?
-      'functional block stack · static overview':
-      'functional block stack · drag to rotate · select a layer';
+    instruction.textContent='functional block stack · select a layer for detail';
   }
   [motionQuery,printQuery].forEach(function(query){
     if(!query)return;
@@ -127,14 +120,7 @@ document.querySelectorAll('.copybtn').forEach(function(b){
 
   faces.forEach(function(btn){
     btn.setAttribute('aria-pressed','false');
-    btn.addEventListener('click',function(e){
-      if(Date.now()<suppressClickUntil){
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      open(btn);
-    });
+    btn.addEventListener('click',function(){open(btn);});
   });
 
   die.addEventListener('keydown',function(e){
@@ -150,59 +136,4 @@ document.querySelectorAll('.copybtn').forEach(function(b){
       open(btn);
     }
   });
-
-  if(reduce)return; // Static SVG + flat buttons remain available above.
-
-  var DRAG_THRESHOLD=7;
-  var pointerId=null;
-  var startX=0;
-  var startY=0;
-  var startRotateX=62;
-  var startRotateZ=-28;
-  var rotationX=startRotateX;
-  var rotationZ=startRotateZ;
-  var dragged=false;
-  var startedOnFace=false;
-
-  function clamp(value,min,max){return Math.max(min,Math.min(max,value));}
-  function applyRotation(){
-    stack.style.setProperty('--die-rotate-x',rotationX.toFixed(2)+'deg');
-    stack.style.setProperty('--die-rotate-z',rotationZ.toFixed(2)+'deg');
-  }
-  stack.addEventListener('pointerdown',function(e){
-    if(e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0))return;
-    pointerId=e.pointerId;
-    startX=e.clientX;
-    startY=e.clientY;
-    startRotateX=rotationX;
-    startRotateZ=rotationZ;
-    dragged=false;
-    startedOnFace=!!(e.target.closest&&e.target.closest('.die-face'));
-  });
-  stack.addEventListener('pointermove',function(e){
-    if(e.pointerId!==pointerId)return;
-    var dx=e.clientX-startX;
-    var dy=e.clientY-startY;
-    if(!dragged){
-      if(Math.hypot(dx,dy)<DRAG_THRESHOLD)return;
-      dragged=true;
-      if(stack.setPointerCapture)stack.setPointerCapture(pointerId);
-      stack.classList.add('is-dragging');
-    }
-    e.preventDefault();
-    rotationX=clamp(startRotateX-dy*.12,55,70);
-    rotationZ=clamp(startRotateZ+dx*.18,-35,35);
-    applyRotation();
-  });
-  function finishPointer(e,blockClick){
-    if(e.pointerId!==pointerId)return;
-    if(blockClick&&dragged&&startedOnFace)suppressClickUntil=Date.now()+300;
-    stack.classList.remove('is-dragging');
-    if(stack.hasPointerCapture&&stack.hasPointerCapture(pointerId))stack.releasePointerCapture(pointerId);
-    pointerId=null;
-    dragged=false;
-    startedOnFace=false;
-  }
-  stack.addEventListener('pointerup',function(e){finishPointer(e,true);});
-  stack.addEventListener('pointercancel',function(e){finishPointer(e,false);});
 })();
