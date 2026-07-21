@@ -83,7 +83,7 @@ through the surplus logic.
 
 ---
 
-## 4. Partnership 1065 Automation
+## 4. Partnership Tax · Form 1065
 
 ```bash
 cd partnership-1065-automation

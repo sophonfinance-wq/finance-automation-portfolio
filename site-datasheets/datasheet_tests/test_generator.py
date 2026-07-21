@@ -4,9 +4,8 @@ from __future__ import annotations
 import subprocess
 import sys
 
-import pytest
-
 import generate_datasheets as gen
+
 from datasheet_tests.conftest import ROOT  # noqa: F401 (path bootstrap)
 
 
@@ -28,6 +27,11 @@ def test_document_is_well_formed():
     assert html.rstrip().endswith("</html>")
     assert "SFS-E06-TRI" in html
     assert "Triangulate" in html
+    assert 'id="fnref-1" href="#fn-1"' in html
+    assert 'id="fn-1"' in html
+    assert "automated-policy" in html
+    assert "triangulate-cli-verdict.webp" in html
+    assert "triangulate-cli-fix-packet.webp" in html
 
 
 def test_committed_page_is_fresh():

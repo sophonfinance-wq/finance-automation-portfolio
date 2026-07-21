@@ -11,6 +11,6 @@ Package `partnership_tax` in `partnership-1065-automation/`.
 python -m partnership_tax                    # full package: workpapers, 1065 preview JSON, K-1s, review checks
 python -m partnership_tax --section704c      # IRC 704(c) built-in gain module (ceiling rule)
 python -m partnership_tax --no-xlsx --out output
-python -m pytest -q                          # 1,605 tests
+python -m pytest -q                          # 8,605 tests
 ```
 Outputs land in `output/`: `tax_workpapers.md`, `form_1065_preview.json`, `section704c_k1_*.md`, `review_checks.md`. Review checks must all be OK for READY FOR REVIEW status.

@@ -3,7 +3,7 @@
 `--demo-adversarial` injects ONE hallucinated figure into an otherwise-clean
 workpaper. The pipeline must catch it deterministically (Reviewer *and*
 independent Auditor), return FAIL, and exit non-zero. A clean workpaper must
-still sign off. If any of that breaks, these tests break.
+remain eligible for external human approval. If any of that breaks, these tests break.
 """
 
 from __future__ import annotations
@@ -53,5 +53,8 @@ def test_cli_demo_exits_nonzero():
     assert main(["--demo-adversarial", "--no-artifacts"]) == 1
 
 
-def test_clean_workpaper_still_signs_off():
+def test_clean_workpaper_is_eligible_for_human_approval(capsys):
     assert main(["--sample", "clean", "--no-artifacts"]) == 0
+    output = capsys.readouterr().out
+    assert "PASS  [eligible for human approval]" in output
+    assert "PASS  [signed off]" not in output

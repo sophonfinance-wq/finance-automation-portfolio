@@ -12,7 +12,7 @@ python -m brain_engine ask "how do we handle FX on ACB?"
 python -m brain_engine --cite "distributions draw exempt surplus first"
 python -m brain_engine remediate "Surplus Review"     # reviewer corrections -> apply-ready prompt
 python -m brain_engine.loop --demo                    # INTEGRITY LOOP: re-derive tampered entries verbatim
-python -m pytest -q                                   # 1,511 tests
+python -m pytest -q                                   # 7,011 tests
 ```
 
 ## Loop verdicts (`brain_engine/loop.py`)

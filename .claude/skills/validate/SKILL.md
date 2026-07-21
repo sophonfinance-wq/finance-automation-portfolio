@@ -9,7 +9,7 @@ Package `validation_engine` in `audit-automation/`.
 ## Commands (run from `audit-automation/`)
 ```bash
 python run.py                 # audits the workbook set read-only; prints PASS/REVIEW/FAIL per book
-python -m pytest -q           # 1,314 tests incl. planted-defect suite
+python -m pytest -q           # 4,814 tests incl. planted-defect suite
 ```
 
 ## The one rule

@@ -28,9 +28,9 @@ def pytest_collection_modifyitems(items):
             item.add_marker("site_tooling")
 
 
-import pytest  # noqa: E402
 import datasheet_spec as ds  # noqa: E402
 import generate_datasheets as gen  # noqa: E402
+import pytest  # noqa: E402
 
 
 @pytest.fixture(scope="session")

@@ -3,8 +3,8 @@
 The reconciler takes every finding raised across the pipeline (Reviewer,
 Specialist, Audit), de-duplicates and ranks them using the severity taxonomy
 and the source-of-truth authority hierarchy, and produces a structured
-:class:`Verdict`. The :class:`HumanGate` then applies a policy to decide
-PASS vs. FLAG vs. FAIL and records the final sign-off.
+:class:`Verdict`. The :class:`HumanGate` then applies an automated policy to
+decide PASS vs. FLAG vs. FAIL. It does not record an actual human signature.
 """
 
 from __future__ import annotations
@@ -92,7 +92,7 @@ def severity_breakdown(findings: List[Finding]) -> Dict[str, int]:
 
 
 class HumanGate:
-    """Final sign-off policy.
+    """Automated eligibility policy at the human-approval boundary.
 
     Encodes the human gate as an explicit, auditable policy so the demo runs
     end-to-end without a person in the loop, while still modelling where the
@@ -103,7 +103,8 @@ class HumanGate:
     * only Medium/Low (or none) -> ``PASS`` with documented residual notes
 
     In production this policy would surface the reconciled packet to a senior
-    reviewer who retains final responsibility; here the policy *is* the gate.
+    reviewer who retains final responsibility. In the public demo it records
+    only the policy outcome, never a human signature.
     """
 
     def __init__(self, signer: str = "HumanGate(automated-policy)") -> None:
@@ -132,9 +133,9 @@ class HumanGate:
                 "No Critical or High findings. "
                 + (
                     f"{residual} residual Medium/Low item(s) documented; "
-                    "human accepts and signs off."
+                    "eligible for human review and sign-off."
                     if residual
-                    else "Clean run; human signs off."
+                    else "Clean run; eligible for human sign-off."
                 )
             )
 

@@ -11,7 +11,7 @@ Package `close_engine` in `monthly-close-automation/`. All data fictional, seede
 python -m close_engine --period 2026-03 --out ./output   # full close; exit != 0 if not clean
 python -m close_engine --demo-guardrails                 # inject 12 faults, prove all 10 controls (C1-C10) catch them
 python -m close_engine.loop --demo --out output          # AUTONOMOUS LOOP: resync drift from sub-ledger, quarantine C10 tamper
-python -m pytest -q                                      # 13,053 tests
+python -m pytest -q                                      # 15,687 tests
 ```
 
 ## Loop verdicts (`close_engine/loop.py`)

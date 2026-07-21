@@ -1,7 +1,8 @@
 name: test-count
 
 # Reproducible proof of the headline test count shown on sophonfinance.com/tests/.
-# Runs `pytest --collect-only` at the repo root and writes the numbers into the
+# Runs root collection with the engine/site-tooling tiers explicit, asserts the
+# live values against counts.json, and writes the numbers into the
 # GitHub Actions run summary, so anyone can click through from the site and see
 # the count regenerated from source — not just typed on a web page.
 
@@ -36,13 +37,20 @@ jobs:
         run: |
           set -euo pipefail
           curated=$(python -m pytest --collect-only -q -m "not site_tooling" | tail -1)
+          site_tooling=$(python -m pytest --collect-only -q -m "site_tooling" | tail -1)
+          curated_count=$(printf '%s\n' "$curated" | sed -E 's/^([0-9]+).*/\1/')
+          site_tooling_count=$(printf '%s\n' "$site_tooling" | sed -E 's/^([0-9]+).*/\1/')
+          expected_curated=$(python -c 'import json; print(json.load(open("site-datasheets/counts.json"))["portfolio_curated"]["tests"])')
+          expected_site_tooling=$(python -c 'import json; print(json.load(open("site-datasheets/counts.json"))["site_tooling"]["tests"])')
+          test "$curated_count" = "$expected_curated"
+          test "$site_tooling_count" = "$expected_site_tooling"
           echo "Curated: $curated"
           {
             echo "# Automated test count"
             echo ""
             echo "Regenerated from source on this runner — fictional/seeded data, MIT licensed."
             echo ""
-            echo "## Curated suite (default \`pytest\`, gates CI)"
+            echo "## Curated engine suite (\`pytest -m 'not site_tooling'\`, gates CI)"
             echo ""
             echo '```'
             echo "\$ pytest --collect-only -q -m \"not site_tooling\" | tail -1"
@@ -63,7 +71,7 @@ jobs:
             echo ""
             echo '```'
             echo "\$ pytest --collect-only -q -m site_tooling | tail -1"
-            python -m pytest --collect-only -q -m "site_tooling" | tail -1
+            echo "$site_tooling"
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
 

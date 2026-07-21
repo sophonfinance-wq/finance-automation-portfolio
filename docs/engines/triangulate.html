@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Triangulate — Sophon Finance Systems</title>
-<meta name="description" content="Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, a human-gated verdict, and every figure re-derivable from the public repository.">
+<meta name="description" content="Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, an automated policy verdict at an explicit human-approval boundary, and every figure re-derivable from the public repository.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -12,9 +12,11 @@
 :root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
   --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
 *{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
 body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
-.wrap{width:100%;max-width:1040px;margin:0 auto;padding:0 22px}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
 a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
 header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
 .nav-in{display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
@@ -40,8 +42,9 @@ h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-
 .zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
 .pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
-.pair h4{font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
-.pair .plain h4{color:var(--blue)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
 .strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
 .strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
 .strip .cell:nth-child(-n+3){border-top:0}
@@ -50,7 +53,7 @@ h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-
 .strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
 .strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
 sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
-table.ds{width:100%;border-collapse:collapse;font-size:14px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
 table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
 table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
 table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
@@ -59,6 +62,10 @@ table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
 .copybtn:hover{border-color:var(--blue);color:var(--blue)}
 .limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
 .figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
 .subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
 .subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px}
 .subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
@@ -69,30 +76,39 @@ table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
 .btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
 footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
 footer a{color:var(--blue);text-decoration:none}
-/* die stack (filled in Task 4) */
-.die{position:relative;margin:8px 0}
+/* die stack */
+.die{position:relative;margin:8px 0;perspective:1200px;perspective-origin:50% 42%}
 .die-svg{width:100%;height:auto;display:block}
 .die-3d{display:none}
 .die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
-.die-panel h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
 /* schematic (filled in Task 5) */
 .schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
-@media (max-width:760px){.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media print{header.nav,.cta,.copybtn{display:none}.die-3d{display:none!important}.die-svg{display:block!important}section{break-inside:avoid}}
-.die-3d{perspective:1200px;margin:10px 0}
-.die-face{display:block;width:min(360px,80%);margin:0 auto;padding:12px 16px;border:1px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);text-align:left;cursor:pointer;transition:transform .15s,box-shadow .15s}
-.die-face+ .die-face{margin-top:8px}
-.die-face:hover,.die-face:focus-visible{transform:translateX(6px);box-shadow:-4px 0 0 var(--blue);outline:none}
-.die-face[aria-pressed="true"]{background:var(--blue);color:#fff}
+.die-3d{--die-rotate-x:62deg;--die-rotate-z:-28deg;position:relative;width:min(540px,92%);min-height:430px;margin:18px auto 30px;padding:48px 20px 112px;place-items:center;grid-template:1fr/1fr;transform:rotateX(var(--die-rotate-x,62deg)) rotateZ(var(--die-rotate-z,-28deg));transform-style:preserve-3d;transform-origin:50% 52%;cursor:grab;touch-action:none;user-select:none;pointer-events:none;transition:transform .18s ease}
+.die-3d.is-dragging{cursor:grabbing;transition:none}
+.die-face{--layer-y:0px;--layer-z:0px;--layer-lift:0px;--layer-stack:10;grid-area:1/1;position:relative;display:block;width:min(420px,82vw);min-height:86px;margin:0;padding:16px 20px;border:1px solid var(--blue);border-radius:2px;background:var(--blue-tint);box-shadow:0 7px 0 #a6c8ff,0 12px 20px rgba(22,22,22,.16);font-family:var(--mono);font-size:13px;color:var(--text);text-align:left;cursor:pointer;pointer-events:auto;transform:translate3d(0,calc(var(--layer-y) - var(--layer-lift)),calc(var(--layer-z) + var(--layer-lift)));transform-style:preserve-3d;transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease;z-index:var(--layer-stack)}
+.die-face:nth-child(1){--layer-y:0px;--layer-z:0px;--layer-stack:10}
+.die-face:nth-child(2){--layer-y:27px;--layer-z:-44px;--layer-stack:9}
+.die-face:nth-child(3){--layer-y:54px;--layer-z:-88px;--layer-stack:8}
+.die-face:nth-child(4){--layer-y:81px;--layer-z:-132px;--layer-stack:7}
+.die-face:nth-child(5){--layer-y:108px;--layer-z:-176px;--layer-stack:6}
+.die-face:hover{--layer-lift:8px;box-shadow:0 8px 0 #78a9ff,0 16px 24px rgba(22,22,22,.2)}
+.die-face:focus-visible{--layer-lift:8px;outline:4px solid #f1c21b;outline-offset:5px;box-shadow:0 8px 0 #78a9ff,0 16px 24px rgba(22,22,22,.2)}
+.die-face[aria-pressed="true"]{--layer-lift:12px;background:var(--blue);color:#fff;box-shadow:0 8px 0 #002d9c,0 18px 26px rgba(22,22,22,.24)}
 .js-3d .die-svg{display:none}
-.js-3d .die-3d{display:block}
+.js-3d .die-3d{display:grid}
+.js-static .die-svg{display:block}
+.js-static .die-3d{display:grid;width:100%;min-height:0;padding:0;gap:8px;grid-template-columns:1fr;place-items:stretch;transform:none;cursor:default;touch-action:auto}
+.js-static .die-face{grid-area:auto;width:100%;min-height:0;transform:none;box-shadow:0 3px 0 #a6c8ff;user-select:auto}
+.js-static .die-face:hover,.js-static .die-face:focus-visible,.js-static .die-face[aria-pressed="true"]{transform:none}
 .schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
 .schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
 @keyframes flow{to{stroke-dashoffset:-12}}
-@media (prefers-reduced-motion:reduce){.schem-edge path{animation:none;stroke-dasharray:none}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die{overflow-x:clip}.die-3d{width:min(400px,78vw);min-height:360px}.die-face{width:min(320px,68vw);min-height:74px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.js-3d .die-svg,.js-static .die-svg{display:block!important}.js-3d .die-3d,.js-static .die-3d{display:grid!important;width:100%;min-height:0;padding:0;gap:8px;grid-template-columns:1fr;place-items:stretch;transform:none!important;cursor:default;touch-action:auto}.js-3d .die-face,.js-static .die-face{grid-area:auto;width:100%;min-height:0;transform:none!important;box-shadow:0 3px 0 #a6c8ff;user-select:auto}.schem-edge path{animation:none;stroke-dasharray:none}}
 .schem-block rect{transition:fill .15s}
 .schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
 
 </style>
 </head>
@@ -116,7 +132,7 @@ footer a{color:var(--blue);text-decoration:none}
   <p class="thesis">A processor buyer cannot re-run the vendor&#x27;s benchmark lab. Every figure on this page re-derives from the public repository — the benchmark is a command, not a press release.</p>
   <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
 </section>
-<section><h2>Architecture</h2><span class="zone-k">functional block stack &middot; click a layer</span>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
 <div class="die">
 <svg class="die-svg" viewBox="0 0 410 400" role="img" aria-label="Exploded functional block stack: Human Gate, Deterministic Auditor, Reviewer, Specialist, Preparer over seeded fictional data">
   <g class="die-layer" data-layer="gate"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Human Gate</text></g>
@@ -127,79 +143,91 @@ footer a{color:var(--blue);text-decoration:none}
   <text x="40" y="390" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
 </svg>
   <div class="die-3d" aria-hidden="false">
-    <button class="die-face" data-layer="gate" data-plain="A person makes the final call. The framework never overrides itself." data-eng="Deterministic gate maps severity to a verdict; sign-off authority is held by a human, not any model." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" aria-label="Human Gate layer — open detail">Human Gate</button>
-    <button class="die-face" data-layer="auditor" data-plain="Re-does the arithmetic itself, so no model is asked whether a number &#x27;looks right.&#x27;" data-eng="Mechanically re-derives every formula on a hashed clone; a tie-out mismatch is a Critical finding regardless of model opinion." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py" aria-label="Deterministic Auditor layer — open detail">Deterministic Auditor</button>
-    <button class="die-face" data-layer="reviewer" data-plain="Challenges the draft and flags issues — read-only, it cannot change the file." data-eng="Read-only reviewer role; the orchestrator hashes the workpaper before and after so a reviewer cannot mutate what it inspects." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py" aria-label="Reviewer layer — open detail">Reviewer</button>
-    <button class="die-face" data-layer="specialist" data-plain="A narrow second opinion or source analysis where the work needs one." data-eng="Specialist role supplies scoped second opinions; ranks below source data and signed work in the authority model." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py" aria-label="Specialist layer — open detail">Specialist</button>
-    <button class="die-face" data-layer="preparer" data-plain="Builds the first draft of the workpaper." data-eng="Preparer role produces the draft that the other roles then challenge; no self-review." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py" aria-label="Preparer layer — open detail">Preparer</button>
+    <button class="die-face" data-layer="gate" data-plain="The demo marks work eligible or blocked; a person makes the real-world approval decision." data-eng="HumanGate is a deterministic policy class: Critical → FAIL, High → FLAG, and Medium/Low → PASS with residual notes. PASS is eligibility for human sign-off, not a recorded human signature." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" aria-label="Human Gate layer — open detail" aria-controls="die-panel" aria-expanded="false">Human Gate</button>
+    <button class="die-face" data-layer="auditor" data-plain="Re-does the arithmetic itself, so no model is asked whether a number &#x27;looks right.&#x27;" data-eng="Mechanically re-derives every formula on a hashed clone; a tie-out mismatch is a Critical finding regardless of model opinion." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py" aria-label="Deterministic Auditor layer — open detail" aria-controls="die-panel" aria-expanded="false">Deterministic Auditor</button>
+    <button class="die-face" data-layer="reviewer" data-plain="Challenges the draft and flags issues — read-only, it cannot change the file." data-eng="Read-only reviewer role; the orchestrator hashes the workpaper before and after so a reviewer cannot mutate what it inspects." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py" aria-label="Reviewer layer — open detail" aria-controls="die-panel" aria-expanded="false">Reviewer</button>
+    <button class="die-face" data-layer="specialist" data-plain="A narrow second opinion or source analysis where the work needs one." data-eng="Specialist role supplies scoped second opinions; ranks below source data and signed work in the authority model." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py" aria-label="Specialist layer — open detail" aria-controls="die-panel" aria-expanded="false">Specialist</button>
+    <button class="die-face" data-layer="preparer" data-plain="Builds the first draft of the workpaper." data-eng="Preparer role produces the draft that the other roles then challenge; no self-review." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py" aria-label="Preparer layer — open detail" aria-controls="die-panel" aria-expanded="false">Preparer</button>
   </div>
-  <div class="die-panel" id="die-panel" role="region" aria-live="polite"><h4>Select a layer</h4><p>Each layer is an independent duty. Click any block for its plain-terms and engineering description.</p></div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Each layer is an independent duty. Click any block for its plain-terms and engineering description.</p></div>
 </div></section>
 <section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
 <div class="strip">
-  <div class="cell"><div class="v">8,320<sup class="fn">1</sup></div><div class="l">Tests</div><div class="p">the checks that pin this engine&#x27;s behavior</div></div>
-  <div class="cell"><div class="v">5<sup class="fn">2</sup></div><div class="l">Roles</div><div class="p">independent duties over one workpaper</div></div>
-  <div class="cell"><div class="v">PASS / FLAG / FAIL<sup class="fn">3</sup></div><div class="l">Verdict states</div></div>
-  <div class="cell"><div class="v">0 = PASS · non-zero = FLAG/FAIL<sup class="fn">4</sup></div><div class="l">Gate exit codes</div><div class="p">so it can act as a CI gate</div></div>
-  <div class="cell"><div class="v">offline, no API key<sup class="fn">5</sup></div><div class="l">Default mode</div></div>
-  <div class="cell"><div class="v">seeded + read-only<sup class="fn">6</sup></div><div class="l">Determinism</div></div>
+  <div class="cell"><div class="v">8,320<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">5<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Roles</div><div class="p">independent duties over one workpaper</div></div>
+  <div class="cell"><div class="v">PASS / FLAG / FAIL<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Verdict states</div></div>
+  <div class="cell"><div class="v">0 = PASS · non-zero = FLAG/FAIL<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Gate exit codes</div><div class="p">so it can act as a CI gate</div></div>
+  <div class="cell"><div class="v">offline, no API key<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Default mode</div></div>
+  <div class="cell"><div class="v">seeded + read-only<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Determinism</div></div>
 </div></section>
 <section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
   <p class="intro">No high-stakes workpaper should rely on one AI system reporting &quot;looks good.&quot; Models agree too easily, invent support, miss the same issue twice, and explain a number without tying it to source. Triangulate assumes those failures will happen and builds the workflow around them.</p>
-  <p style="margin:10px 0"><b>An injected hallucination is caught by the arithmetic, not an opinion.</b> In the adversarial demo, an AI asserts a Total Revenue $49,000 over what the revenue streams actually sum to, backed only by an &#x27;AI assumption&#x27; — the lowest authority. Because that cell feeds tax and net, the single bad figure cascades. The Reviewer and the deterministic Auditor both flag it independently; the verdict is FAIL and the process exits non-zero.</p>
-  <p style="margin:10px 0"><b>The gate discriminates — a clean workpaper passes.</b> The clean sample runs the identical flow and returns PASS, proving the gate discriminates instead of always failing.</p>
-  <p style="margin:10px 0"><b>Arithmetic self-heals; judgment escalates.</b> The review loop re-derives the lowest broken formula cell from its own formula on a clone, then re-runs the full pipeline. The injected $49k error clears in one turn (FAIL → PASS). An AI-assumption input and a hardcoded cell have nothing to re-derive from, so they stay in the fix packet for a human (FAIL → FLAG).</p>
+  <p style="margin:10px 0"><b>An injected hallucination is caught by the arithmetic, not an opinion<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> In the adversarial demo, an AI asserts a Total Revenue $49,000 over what the revenue streams actually sum to, backed only by an &#x27;AI assumption&#x27; — the lowest authority. Because that cell feeds tax and net, the single bad figure cascades. The Reviewer and the deterministic Auditor both flag it independently; the verdict is FAIL and the process exits non-zero.</p>
+  <p style="margin:10px 0"><b>The gate discriminates — a clean workpaper passes<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> The clean sample runs the identical flow and returns PASS, proving the gate discriminates instead of always failing.</p>
+  <p style="margin:10px 0"><b>Arithmetic self-heals; judgment escalates<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> The review loop re-derives the lowest broken formula cell from its own formula on a clone, then re-runs the full pipeline. The injected $49k error clears in one turn (FAIL → PASS). An AI-assumption input and a hardcoded cell have nothing to re-derive from, so they stay in the fix packet for a human (FAIL → FLAG).</p>
 </section>
 <section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
-<svg class="schem" viewBox="0 0 950 402" role="img" aria-label="Functional block diagram of the Triangulate engine">
+<svg class="schem" viewBox="0 0 950 402" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Triangulate engine</title>
   <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
-  <g class="schem-edge"><path d="M200,181 C235,181 235,67 270,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="61" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
-  <g class="schem-edge"><path d="M200,181 C235,181 235,181 270,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
-  <g class="schem-edge"><path d="M200,181 C235,181 235,295 270,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
-  <g class="schem-edge"><path d="M440,67 C475,67 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="61" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
-  <g class="schem-edge"><path d="M440,181 C475,181 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
-  <g class="schem-edge"><path d="M440,295 C475,295 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">tie-outs</text></g>
-  <g class="schem-edge gate"><path d="M680,181 C715,181 715,181 750,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">verdict</text></g>
-  <g class="schem-edge"><path d="M680,181 C355,181 355,181 30,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="175" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">fix packet (loop)</text></g>
-  <g class="schem-block" data-block="preparer"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py" target="_blank" rel="noopener"><rect x="30" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Preparer</text></a></g>
-  <g class="schem-block" data-block="reviewer"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py" target="_blank" rel="noopener"><rect x="270" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reviewer</text></a></g>
-  <g class="schem-block" data-block="specialist"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py" target="_blank" rel="noopener"><rect x="270" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Specialist</text></a></g>
-  <g class="schem-block" data-block="auditor"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py" target="_blank" rel="noopener"><rect x="270" y="258" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Deterministic Auditor</text></a></g>
-  <g class="schem-block" data-block="reconcile"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" target="_blank" rel="noopener"><rect x="510" y="144" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reconcile + Gate</text></a></g>
-  <g class="schem-block" data-block="human"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" target="_blank" rel="noopener"><rect x="750" y="144" width="170" height="74" rx="4" fill="#e6f4ea" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Human Gate</text></a></g>
+  <g class="schem-edge"><path d="M200,181 C235,181 235,67 270,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="116" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
+  <g class="schem-edge"><path d="M200,181 C235,181 235,181 270,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
+  <g class="schem-edge"><path d="M200,181 C235,181 235,295 270,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="230" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">draft</text></g>
+  <g class="schem-edge"><path d="M440,67 C475,67 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="116" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
+  <g class="schem-edge"><path d="M440,181 C475,181 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings</text></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,181 510,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="230" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">tie-outs</text></g>
+  <g class="schem-edge gate"><path d="M680,181 C715,181 715,181 750,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">verdict</text></g>
+  <g class="schem-edge"><path d="M595,218 C595,354 595,354 571,354 L139,354 C115,354 115,354 115,218" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="347" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">fix packet (loop)</text></g>
+  <g class="schem-block" data-block="preparer"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py" target="_blank" rel="noopener" aria-label="Open Preparer source on GitHub"><rect x="30" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Preparer</text></a></g>
+  <g class="schem-block" data-block="reviewer"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py" target="_blank" rel="noopener" aria-label="Open Reviewer source on GitHub"><rect x="270" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reviewer</text></a></g>
+  <g class="schem-block" data-block="specialist"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py" target="_blank" rel="noopener" aria-label="Open Specialist source on GitHub"><rect x="270" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Specialist</text></a></g>
+  <g class="schem-block" data-block="auditor"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py" target="_blank" rel="noopener" aria-label="Open Deterministic Auditor source on GitHub"><rect x="270" y="258" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Deterministic Auditor</text></a></g>
+  <g class="schem-block" data-block="reconcile"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py" target="_blank" rel="noopener" aria-label="Open Reconcile + Policy source on GitHub"><rect x="510" y="144" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reconcile + Policy</text></a></g>
+  <g class="schem-block" data-block="human"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/README.md" target="_blank" rel="noopener" aria-label="Open Human Approval source on GitHub"><rect x="750" y="144" width="170" height="74" rx="4" fill="#e6f4ea" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Human Approval</text></a></g>
   <g class="schem-title"><line x1="30" y1="376" x2="920" y2="376" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="390" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E06-TRI &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-20</text></g>
-</svg></section>
+</svg><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Preparer.</b> drafts the workpaper</li><li><b>Reviewer.</b> challenges the draft without changing it</li><li><b>Specialist.</b> adds a narrow second opinion where needed</li><li><b>Deterministic Auditor.</b> recomputes the arithmetic independently</li><li><b>Reconcile + Policy.</b> combines findings and applies the severity policy</li><li><b>Human Approval.</b> a person signs off — or doesn&#x27;t</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Preparer.</b> DemoPreparer builds draft; offline deterministic in the public demo</li><li><b>Reviewer.</b> read-only challenge; hash-guarded</li><li><b>Specialist.</b> scoped second opinion</li><li><b>Deterministic Auditor.</b> re-derives every formula mechanically</li><li><b>Reconcile + Policy.</b> findings reconciled; deterministic severity policy returns PASS, FLAG, or FAIL</li><li><b>Human Approval.</b> external approval boundary; the demo policy does not record or replace a human signature</li></ul></div></div>
+</section>
 <section><h2>Instruction set</h2><span class="zone-k">every public command</span>
 <table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
 <tbody>
-  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate</code><button class="copybtn" data-copy="python -m triangulate" aria-label="Copy command">copy</button></div></td><td>run the defective sample</td><td class="mono">VERDICT: FAIL [cannot sign off]</td><td class="mono">non-zero</td><td>builder memo, fix packet, change log, QA summary, verdict.json</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --sample clean</code><button class="copybtn" data-copy="python -m triangulate --sample clean" aria-label="Copy command">copy</button></div></td><td>run the clean sample</td><td class="mono">VERDICT: PASS</td><td class="mono">0</td><td>output/ artifacts + verdict.json</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --demo-adversarial</code><button class="copybtn" data-copy="python -m triangulate --demo-adversarial" aria-label="Copy command">copy</button></div></td><td>inject one hallucinated figure and catch it</td><td class="mono">VERDICT: FAIL · Critical=6</td><td class="mono">non-zero</td><td>fix packet showing cascade</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --sample adversarial</code><button class="copybtn" data-copy="python -m triangulate.loop --sample adversarial" aria-label="Copy command">copy</button></div></td><td>self-heal the injected error</td><td class="mono">FAIL → PASS</td><td class="mono">0</td><td>re-derivation change log</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --xlsx</code><button class="copybtn" data-copy="python -m triangulate --xlsx" aria-label="Copy command">copy</button></div></td><td>also emit a small .xlsx workpaper</td><td class="mono">VERDICT + workpaper.xlsx</td><td class="mono">non-zero</td><td>output/*.xlsx</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command">copy</button></div></td><td>run the engine&#x27;s test suite</td><td class="mono">test session summary</td><td class="mono">0</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate</code><button class="copybtn" data-copy="python -m triangulate" aria-label="Copy command: python -m triangulate">copy</button></div></td><td>run the defective sample</td><td class="mono">VERDICT: FAIL [cannot sign off]</td><td class="mono">non-zero</td><td>builder memo, fix packet, change log, QA summary, verdict.json</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --sample clean</code><button class="copybtn" data-copy="python -m triangulate --sample clean" aria-label="Copy command: python -m triangulate --sample clean">copy</button></div></td><td>run the clean sample</td><td class="mono">VERDICT: PASS</td><td class="mono">0</td><td>output/ artifacts + verdict.json</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --demo-adversarial</code><button class="copybtn" data-copy="python -m triangulate --demo-adversarial" aria-label="Copy command: python -m triangulate --demo-adversarial">copy</button></div></td><td>inject one hallucinated figure and catch it</td><td class="mono">VERDICT: FAIL · Critical=6</td><td class="mono">non-zero</td><td>fix packet showing cascade</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py --sample clean</code><button class="copybtn" data-copy="python run.py --sample clean" aria-label="Copy command: python run.py --sample clean">copy</button></div></td><td>use the equivalent script entrypoint</td><td class="mono">VERDICT: PASS</td><td class="mono">0</td><td>output/ artifacts + verdict.json</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --seed N</code><button class="copybtn" data-copy="python -m triangulate --seed N" aria-label="Copy command: python -m triangulate --seed N">copy</button></div></td><td>choose the deterministic fictional-data seed</td><td class="mono">selected sample verdict</td><td class="mono">verdict-dependent</td><td>output/ unless --no-artifacts</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --no-specialist</code><button class="copybtn" data-copy="python -m triangulate --no-specialist" aria-label="Copy command: python -m triangulate --no-specialist">copy</button></div></td><td>skip the optional Specialist step</td><td class="mono">verdict without specialist findings</td><td class="mono">verdict-dependent</td><td>output/ unless --no-artifacts</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --output DIR</code><button class="copybtn" data-copy="python -m triangulate --output DIR" aria-label="Copy command: python -m triangulate --output DIR">copy</button></div></td><td>write the audit trail to a chosen directory</td><td class="mono">selected sample verdict</td><td class="mono">verdict-dependent</td><td>DIR/*</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --no-artifacts</code><button class="copybtn" data-copy="python -m triangulate --no-artifacts" aria-label="Copy command: python -m triangulate --no-artifacts">copy</button></div></td><td>print the review without writing files</td><td class="mono">selected sample verdict</td><td class="mono">verdict-dependent</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --sample adversarial</code><button class="copybtn" data-copy="python -m triangulate.loop --sample adversarial" aria-label="Copy command: python -m triangulate.loop --sample adversarial">copy</button></div></td><td>self-heal the injected error</td><td class="mono">FAIL → PASS</td><td class="mono">0</td><td>re-derivation change log</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --sample defective</code><button class="copybtn" data-copy="python -m triangulate.loop --sample defective" aria-label="Copy command: python -m triangulate.loop --sample defective">copy</button></div></td><td>attempt repair and escalate unsupported judgment</td><td class="mono">FAIL → FLAG / ESCALATED</td><td class="mono">non-zero</td><td>fix packet; optional report</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --seed N</code><button class="copybtn" data-copy="python -m triangulate.loop --seed N" aria-label="Copy command: python -m triangulate.loop --seed N">copy</button></div></td><td>choose the loop&#x27;s deterministic data seed</td><td class="mono">selected loop verdict</td><td class="mono">verdict-dependent</td><td>optional report</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --budget N</code><button class="copybtn" data-copy="python -m triangulate.loop --budget N" aria-label="Copy command: python -m triangulate.loop --budget N">copy</button></div></td><td>cap remediation turns</td><td class="mono">final loop verdict</td><td class="mono">verdict-dependent</td><td>optional report</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate.loop --out DIR</code><button class="copybtn" data-copy="python -m triangulate.loop --out DIR" aria-label="Copy command: python -m triangulate.loop --out DIR">copy</button></div></td><td>write the Markdown loop report</td><td class="mono">final loop verdict</td><td class="mono">verdict-dependent</td><td>DIR/review_loop_report.md</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m triangulate --xlsx</code><button class="copybtn" data-copy="python -m triangulate --xlsx" aria-label="Copy command: python -m triangulate --xlsx">copy</button></div></td><td>also emit a small .xlsx workpaper</td><td class="mono">VERDICT + workpaper.xlsx</td><td class="mono">non-zero</td><td>output/*.xlsx</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the engine&#x27;s test suite</td><td class="mono">test session summary</td><td class="mono">0</td><td>none</td></tr>
 </tbody></table></section>
 <section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
 <table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
 <tbody>
-  <tr><td>Adversarial cascade depth<sup class="fn">7</sup></td><td class="mono"><b>6</b> Critical findings from 1 injected cell<br><span style="color:#6f6f6f;font-size:12.5px">one bad number, six downstream failures caught</span></td></tr>
-  <tr><td>Self-heal turns (adversarial)<sup class="fn">8</sup></td><td class="mono"><b>1</b> loop turn to PASS</td></tr>
-  <tr><td>Independent detectors<sup class="fn">9</sup></td><td class="mono"><b>2</b> roles flag the same cell</td></tr>
-  <tr><td>Engine tests<sup class="fn">10</sup></td><td class="mono"><b>8,320</b> tests</td></tr>
+  <tr><td>Adversarial cascade depth<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>6</b> Critical findings from 1 injected cell<br><span style="color:#6f6f6f;font-size:12.5px">one bad number, six downstream failures caught</span></td></tr>
+  <tr><td>Self-heal turns (adversarial)<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>1</b> loop turn to PASS</td></tr>
+  <tr><td>Independent detectors<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>2</b> roles flag the same cell</td></tr>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>8,320</b> tests</td></tr>
 </tbody></table></section>
 <section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
-<table class="ds"><thead><tr><th>Authority</th><th>Level</th><th>Note</th></tr></thead><tbody><tr><td class="mono">1</td><td><b>Source data</b></td><td>signed/source evidence outranks everything</td></tr><tr><td class="mono">2</td><td><b>Signed work</b></td><td>prior signed work product</td></tr><tr><td class="mono">3</td><td><b>AI assumption</b></td><td>lowest authority; cannot outrank source</td></tr></tbody></table>
-<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>Critical present</td><td class="mono"><b>FAIL</b></td><td>returned for rebuild; exits non-zero</td></tr><tr><td>High/unresolved judgment</td><td class="mono"><b>FLAG</b></td><td>fix packet escalated to a human</td></tr><tr><td>None</td><td class="mono"><b>PASS</b></td><td>eligible for human sign-off; exit 0</td></tr></tbody></table>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The demo&#x27;s HumanGate class applies the severity policy; an actual person remains the final approver.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only review roles, offline default mode.</p><p><b>Demo gate.</b> automated-policy</p></div></div>
+<table class="ds"><thead><tr><th>Authority</th><th>Level</th><th>Note</th></tr></thead><tbody><tr><td class="mono">1</td><td><b>Signed prior-year work</b></td><td>highest authority in the implemented enum</td></tr><tr><td class="mono">2</td><td><b>Management instruction</b></td><td>direct instruction from accountable management</td></tr><tr><td class="mono">3</td><td><b>Meeting decision</b></td><td>documented decision from the engagement record</td></tr><tr><td class="mono">4</td><td><b>Current-year source</b></td><td>current-period source data and evidence</td></tr><tr><td class="mono">5</td><td><b>Workbook formula</b></td><td>existing formula logic, subject to re-derivation</td></tr><tr><td class="mono">6</td><td><b>AI assumption</b></td><td>lowest authority; cannot outrank cited evidence</td></tr></tbody></table>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>Critical present</td><td class="mono"><b>FAIL</b></td><td>returned for rebuild; exits non-zero</td></tr><tr><td>High/unresolved judgment</td><td class="mono"><b>FLAG</b></td><td>fix packet escalated to a human</td></tr><tr><td>Medium/Low only, or none</td><td class="mono"><b>PASS</b></td><td>residual notes documented; eligible for human sign-off; exit 0</td></tr></tbody></table>
 <ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only reviewer: the orchestrator hashes the workpaper before and after review steps, so a reviewer cannot mutate what it inspects.</li><li style="list-style:disc;margin-left:18px">Deterministic audit: every formula is mechanically re-derived; arithmetic decides, not model opinion.</li><li style="list-style:disc;margin-left:18px">Seeded, fictional data throughout the public demo.</li></ul>
 <p style="margin:8px 0"><b>Enterprise-safe mode (default).</b> deterministic mock reviewer, no API key, no network call, runnable in conservative corporate IT.</p><p style="margin:8px 0"><b>Agent-accelerated mode.</b> where approved, a live Anthropic Claude reviewer adapter can replace the mock reviewer; an optional orchestration layer for approved, agent-enabled environments; the platform runs fully without it.</p></section>
 <section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
-<ul class="limits"><li>The loop clears arithmetic; it cannot manufacture authority. An AI-assumption input or a hardcoded cell with no formula has nothing to re-derive from — those stay in the fix packet for a human.<sup class="fn">11</sup></li><li>The framework does not apply changes on its own or override its own verdict; final sign-off authority is held by a person.<sup class="fn">12</sup></li><li>The public demo runs offline with a deterministic mock reviewer; live-model results depend on the pinned model approved for that client environment.<sup class="fn">13</sup></li></ul></section>
+<ul class="limits"><li>The loop clears arithmetic; it cannot manufacture authority. An AI-assumption input or a hardcoded cell with no formula has nothing to re-derive from — those stay in the fix packet for a human.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>The framework does not apply changes on its own or override its own verdict; final sign-off authority is held by a person.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>The public demo runs offline with a deterministic mock reviewer; live-model results depend on the pinned model approved for that client environment.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li></ul></section>
 <section><h2>See it run</h2><span class="zone-k">the real CLI</span>
-<figure class="figwrap"><img src="../assets/tile-triangulate.webp" data-video="../assets/tile-triangulate-motion.mp4" alt="Screencast of the Triangulate CLI running on fictional seeded data" loading="lazy"></figure></section>
+<figure class="figwrap"><img src="../assets/triangulate-cli.webp" data-video="../assets/triangulate-cli.mp4" alt="Screencast of the Triangulate CLI running on fictional seeded data" loading="lazy"><figcaption>Captured from the public deterministic <code>--demo-adversarial --no-artifacts</code> run.</figcaption></figure><div class="media-crops"><figure><img src="../assets/triangulate-cli-verdict.webp" alt="Triangulate terminal excerpt showing FAIL, six Critical findings, one Medium finding, and the automated-policy demo gate" loading="lazy"><figcaption>Verdict and severity summary</figcaption></figure><figure><img src="../assets/triangulate-cli-fix-packet.webp" alt="Triangulate terminal excerpt showing Reviewer and Deterministic Auditor tie-out findings for the injected fictional error" loading="lazy"><figcaption>Fix packet with independent detections</figcaption></figure></div></section>
 <section><h2>Integration</h2><span class="zone-k">how to run it</span>
 <p class="intro">Distribution: public repository, MIT license.</p>
 <div class="verify">
-<div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git &amp;&amp; cd ai-validation-framework &amp;&amp; python -m triangulate</div><div class="runline">python -m triangulate --sample clean</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+<div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git &amp;&amp; cd finance-automation-portfolio/ai-validation-framework &amp;&amp; python -m triangulate</div><div class="runline">python -m triangulate --sample clean</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
     <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ai-validation-framework" target="_blank" rel="noopener">Source on GitHub</a>
     <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/README.md" target="_blank" rel="noopener">Engine README</a>
     <a class="btn btn-t" href="/tests/">All tests, by engine</a>
@@ -207,39 +235,59 @@ footer a{color:var(--blue);text-decoration:none}
   </div>
 </div>
 <div class="subst"><span class="zone-k">Substantiation</span><ul>
-    <li><span class="fnid">1</span>py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README&#x27;s &quot;1,311&quot; is stale</li>
-    <li><span class="fnid">2</span>ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Human gatekeeper</li>
-    <li><span class="fnid">3</span>ai-validation-framework/README.md — verdicts and exit behavior</li>
-    <li><span class="fnid">4</span>ai-validation-framework/README.md — &quot;exits 0 on PASS and non-zero on FLAG/FAIL&quot;</li>
-    <li><span class="fnid">5</span>ai-validation-framework/README.md — &quot;default demo needs no API key and no network access&quot;</li>
-    <li><span class="fnid">6</span>ai-validation-framework/README.md — &quot;All sample data is fictional and seeded&quot;; read-only reviewer</li>
-    <li><span class="fnid">7</span>ai-validation-framework/README.md — &quot;Critical=6&quot; in --demo-adversarial</li>
-    <li><span class="fnid">8</span>ai-validation-framework/README.md — &quot;Turn 1 re-derive B5 … PASS&quot;</li>
-    <li><span class="fnid">9</span>ai-validation-framework/README.md — &quot;flagged independently by two roles&quot;</li>
-    <li><span class="fnid">10</span>py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README&#x27;s &quot;1,311&quot; is stale</li>
-    <li><span class="fnid">11</span>ai-validation-framework/README.md — review-loop section</li>
-    <li><span class="fnid">12</span>ai-validation-framework/README.md — human gate</li>
-    <li><span class="fnid">13</span>ai-validation-framework/README.md — two operating modes</li>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Policy gate + human approver</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>ai-validation-framework/README.md — verdicts and exit behavior</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>ai-validation-framework/README.md — &quot;exits 0 on PASS and non-zero on FLAG/FAIL&quot;</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>ai-validation-framework/README.md — &quot;default demo needs no API key and no network access&quot;</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>ai-validation-framework/README.md — &quot;All sample data is fictional and seeded&quot;; read-only reviewer</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python -m triangulate --demo-adversarial (ai-validation-framework/README.md)</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>python -m triangulate --sample clean (ai-validation-framework/README.md)</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>python -m triangulate.loop --sample adversarial / --sample defective (ai-validation-framework/README.md)</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>ai-validation-framework/README.md — &quot;Critical=6&quot; in --demo-adversarial</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>ai-validation-framework/README.md — &quot;Turn 1 re-derive B5 … PASS&quot;</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>ai-validation-framework/README.md — &quot;flagged independently by two roles&quot;</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>python -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>ai-validation-framework/README.md — review-loop section</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>ai-validation-framework/README.md — human gate</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>ai-validation-framework/README.md — two operating modes</li>
 </ul></div>
 <div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
 </section>
 </main>
 <footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ai-validation-framework" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
 <script>
-// motion upgrade: poster image swaps to its silent looping video when visible
-document.querySelectorAll('img[data-video]').forEach(function(img){
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){
-    if(!e.isIntersecting)return;io.unobserve(img);
-    var v=document.createElement('video');
-    v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;
-    v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('preload','auto');
-    v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
-    v.setAttribute('role','img');v.setAttribute('aria-label',img.alt);
-    v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
-    img.replaceWith(v);var p=v.play();if(p&&p.catch)p.catch(function(){});
-  });},{rootMargin:'120px'});
-  io.observe(img);
-});
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
 // copy-to-clipboard for instruction rows
 document.querySelectorAll('.copybtn').forEach(function(b){
   b.addEventListener('click',function(){
@@ -249,31 +297,173 @@ document.querySelectorAll('.copybtn').forEach(function(b){
     }).catch(function(){});}
   });
 });
-// die stack: enable interactive representation only when JS is available
+// Die stack: buttons always work; pointer rotation is a progressive enhancement.
 (function(){
   var die=document.querySelector('.die');
   if(!die)return;
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if(reduce)return; // keep the static SVG for reduced-motion users
-  document.documentElement.classList.add('js-3d');
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var reduce=!!(motionQuery&&motionQuery.matches);
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var pointerEnabled=!reduce;
+  var stack=die.querySelector('.die-3d');
   var panel=document.getElementById('die-panel');
-  die.querySelectorAll('.die-face').forEach(function(btn){
-    btn.setAttribute('aria-pressed','false');
-    function open(){
-      die.querySelectorAll('.die-face').forEach(function(b){b.setAttribute('aria-pressed','false');});
-      btn.setAttribute('aria-pressed','true');
-      var src=btn.getAttribute('data-src');
-      panel.innerHTML='<h4>'+btn.textContent+'</h4>'+
-        '<p><b>Plain terms.</b> '+btn.getAttribute('data-plain')+'</p>'+
-        '<p><b>Engineering.</b> '+btn.getAttribute('data-eng')+'</p>'+
-        '<p><a href="'+src+'" target="_blank" rel="noopener">Source on GitHub</a></p>';
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add(reduce?'js-static':'js-3d');
+  var promptMarkup=panel.innerHTML;
+  var suppressClickUntil=0;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    var staticView=!pointerEnabled||(motionQuery&&motionQuery.matches)||
+      (printQuery&&printQuery.matches);
+    instruction.textContent=staticView?
+      'functional block stack · static overview':
+      'functional block stack · drag to rotate · select a layer';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
     }
-    btn.addEventListener('click',open);
-    btn.addEventListener('keydown',function(e){
-      if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}
-      if(e.key==='Escape'){btn.setAttribute('aria-pressed','false');}
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(e){
+      if(Date.now()<suppressClickUntil){
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      open(btn);
     });
   });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+
+  if(reduce)return; // Static SVG + flat buttons remain available above.
+
+  var DRAG_THRESHOLD=7;
+  var pointerId=null;
+  var startX=0;
+  var startY=0;
+  var startRotateX=62;
+  var startRotateZ=-28;
+  var rotationX=startRotateX;
+  var rotationZ=startRotateZ;
+  var dragged=false;
+  var startedOnFace=false;
+
+  function clamp(value,min,max){return Math.max(min,Math.min(max,value));}
+  function applyRotation(){
+    stack.style.setProperty('--die-rotate-x',rotationX.toFixed(2)+'deg');
+    stack.style.setProperty('--die-rotate-z',rotationZ.toFixed(2)+'deg');
+  }
+  stack.addEventListener('pointerdown',function(e){
+    if(e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0))return;
+    pointerId=e.pointerId;
+    startX=e.clientX;
+    startY=e.clientY;
+    startRotateX=rotationX;
+    startRotateZ=rotationZ;
+    dragged=false;
+    startedOnFace=!!(e.target.closest&&e.target.closest('.die-face'));
+  });
+  stack.addEventListener('pointermove',function(e){
+    if(e.pointerId!==pointerId)return;
+    var dx=e.clientX-startX;
+    var dy=e.clientY-startY;
+    if(!dragged){
+      if(Math.hypot(dx,dy)<DRAG_THRESHOLD)return;
+      dragged=true;
+      if(stack.setPointerCapture)stack.setPointerCapture(pointerId);
+      stack.classList.add('is-dragging');
+    }
+    e.preventDefault();
+    rotationX=clamp(startRotateX-dy*.12,55,70);
+    rotationZ=clamp(startRotateZ+dx*.18,-35,35);
+    applyRotation();
+  });
+  function finishPointer(e,blockClick){
+    if(e.pointerId!==pointerId)return;
+    if(blockClick&&dragged&&startedOnFace)suppressClickUntil=Date.now()+300;
+    stack.classList.remove('is-dragging');
+    if(stack.hasPointerCapture&&stack.hasPointerCapture(pointerId))stack.releasePointerCapture(pointerId);
+    pointerId=null;
+    dragged=false;
+    startedOnFace=false;
+  }
+  stack.addEventListener('pointerup',function(e){finishPointer(e,true);});
+  stack.addEventListener('pointercancel',function(e){finishPointer(e,false);});
 })();
 
 </script>

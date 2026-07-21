@@ -9,7 +9,6 @@ import pytest
 from triangulate.model import AuthoritySource, Finding, Severity
 from triangulate.reconcile import (
     HumanGate,
-    Verdict,
     VerdictStatus,
     reconcile,
     severity_breakdown,
@@ -199,6 +198,7 @@ def test_human_gate_rationale_mentions_count():
 def test_human_gate_clean_rationale_when_no_findings():
     v = HumanGate().decide([])
     assert "Clean run" in v.rationale
+    assert "eligible for human sign-off" in v.rationale
 
 
 # --------------------------------------------------------------------------- #

@@ -84,6 +84,6 @@ class AdversarialPreparer(Preparer):
             "B5 feeds B7 (tax) and B8 (net), so the single bad figure propagates downstream.",
             "A human skim might accept a plausible-looking total. The deterministic audit "
             "cannot: the Reviewer and the independent Auditor each re-derive every formula,",
-            "raise a CRITICAL tie-out break on each affected cell, and the human gate returns",
+            "raise a CRITICAL tie-out break on each affected cell, and the automated policy gate returns",
             "FAIL -- the workpaper is blocked from sign-off. No model 'looks at it and says OK'.",
         ]

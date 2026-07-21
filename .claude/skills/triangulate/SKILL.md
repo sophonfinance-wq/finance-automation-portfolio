@@ -12,7 +12,7 @@ python -m triangulate --demo-adversarial     # inject $49k fake revenue; 6 CRITI
 python -m triangulate --sample defective     # AI-assumption + hardcoded-cell sample
 python -m triangulate.loop --sample adversarial   # REVIEW LOOP: FAIL -> PASS in 1 turn (B5 re-derived), exit 0
 python -m triangulate.loop --sample defective     # arithmetic fixed, judgment ESCALATED, exit 1
-python -m pytest -q                          # 1,320 tests
+python -m pytest -q                          # 8,320 tests
 ```
 
 ## Loop boundary (`triangulate/loop.py`)

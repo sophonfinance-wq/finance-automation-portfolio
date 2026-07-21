@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import re
 
-import generate_datasheets as gen
 import datasheet_spec as ds
+import generate_datasheets as gen
 
 
 def test_static_svg_has_one_layer_group_per_layer():
@@ -20,6 +20,8 @@ def test_each_layer_has_a_focusable_button_in_dom_order():
     html = gen.die_stack_html(spec)
     buttons = re.findall(r'<button class="die-face"[^>]*data-layer="([^"]+)"', html)
     assert buttons == [layer["id"] for layer in spec["layers"]]
+    assert html.count('aria-controls="die-panel"') == len(spec["layers"])
+    assert html.count('aria-expanded="false"') == len(spec["layers"])
 
 
 def test_both_representations_present():

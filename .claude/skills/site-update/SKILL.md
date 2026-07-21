@@ -4,13 +4,14 @@ description: "Update sophonfinance.com (docs/index.html on GitHub Pages) with ne
 ---
 # sophonfinance.com Updates
 
-The site is a single file: `docs/index.html`, served by GitHub Pages from `main` — **changes go live only when merged to main**.
+The site is served by GitHub Pages from `main`: `docs/index.html` is the landing page, and generated engine datasheets live under `docs/engines/`. **Changes go live only when merged to main**.
 
 ## Conventions
 - Sections: `<section class="alt" id="...">` on wash background; `.sec-kicker` eyebrow, `h2`, `.lead`. Scroll-reveal via `.reveal` classes (IntersectionObserver adds `.in`).
 - Palette vars in `:root`: `--navy #0f2a5c, --blue #2563eb, --sky #00a8ff, --slate, --wash`.
 - **Trap**: `.flow-caption` is styled for DARK bands (light text). On light sections use inline dark styles instead.
 - Assets must live under `docs/assets/` (Pages serves only /docs). Nav links are in the `.nav-links` block.
+- Engine datasheets are generated from `site-datasheets/specs/`; update the source spec or shared partials and regenerate instead of hand-editing `docs/engines/*.html`.
 - The "Self-Healing Operations" section (`#loops`) embeds `docs/assets/self-healing-loop.svg`.
 
 ## Verify before pushing

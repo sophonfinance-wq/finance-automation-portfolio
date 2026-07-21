@@ -32,8 +32,8 @@ class Severity(enum.IntEnum):
 
     Implemented as an ``IntEnum`` so severities are directly comparable and
     sortable (``Severity.CRITICAL > Severity.LOW``). The integer ordering is
-    the whole point: the reconciler ranks findings and the human gate keys its
-    pass/fail decision off the maximum severity present.
+    the whole point: the reconciler ranks findings and the automated gate policy
+    keys its pass/fail decision off the maximum severity present.
     """
 
     LOW = 1
