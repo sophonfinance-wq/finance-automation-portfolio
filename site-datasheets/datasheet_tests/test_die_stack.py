@@ -15,6 +15,14 @@ def test_static_svg_has_one_layer_group_per_layer():
     assert groups == len(spec["layers"]), (groups, len(spec["layers"]))
 
 
+def test_static_svg_is_isometric_and_dimensional():
+    """The hero reads as a 3-D exploded stack: each layer draws a top face AND a front
+    face (two polygons), so it is genuinely dimensional, not a flat vertical list."""
+    spec = ds.load_spec("triangulate")
+    html = gen.die_stack_html(spec)
+    assert html.count("<polygon") == 2 * len(spec["layers"])
+
+
 def test_each_layer_has_a_focusable_button_in_dom_order():
     spec = ds.load_spec("triangulate")
     html = gen.die_stack_html(spec)

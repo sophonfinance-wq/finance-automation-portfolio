@@ -76,36 +76,24 @@ figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
 .btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
 footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
 footer a{color:var(--blue);text-decoration:none}
-/* die stack */
-.die{position:relative;margin:8px 0;perspective:1200px;perspective-origin:50% 42%}
-.die-svg{width:100%;height:auto;display:block}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
 .die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
 .die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
 .die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
-/* schematic (filled in Task 5) */
+/* schematic */
 .schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
-.die-3d{--die-rotate-x:62deg;--die-rotate-z:-28deg;position:relative;width:min(540px,92%);min-height:430px;margin:18px auto 30px;padding:48px 20px 112px;place-items:center;grid-template:1fr/1fr;transform:rotateX(var(--die-rotate-x,62deg)) rotateZ(var(--die-rotate-z,-28deg));transform-style:preserve-3d;transform-origin:50% 52%;cursor:grab;touch-action:none;user-select:none;pointer-events:none;transition:transform .18s ease}
-.die-3d.is-dragging{cursor:grabbing;transition:none}
-.die-face{--layer-y:0px;--layer-z:0px;--layer-lift:0px;--layer-stack:10;grid-area:1/1;position:relative;display:block;width:min(420px,82vw);min-height:86px;margin:0;padding:16px 20px;border:1px solid var(--blue);border-radius:2px;background:var(--blue-tint);box-shadow:0 7px 0 #a6c8ff,0 12px 20px rgba(22,22,22,.16);font-family:var(--mono);font-size:13px;color:var(--text);text-align:left;cursor:pointer;pointer-events:auto;transform:translate3d(0,calc(var(--layer-y) - var(--layer-lift)),calc(var(--layer-z) + var(--layer-lift)));transform-style:preserve-3d;transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease;z-index:var(--layer-stack)}
-.die-face:nth-child(1){--layer-y:0px;--layer-z:0px;--layer-stack:10}
-.die-face:nth-child(2){--layer-y:27px;--layer-z:-44px;--layer-stack:9}
-.die-face:nth-child(3){--layer-y:54px;--layer-z:-88px;--layer-stack:8}
-.die-face:nth-child(4){--layer-y:81px;--layer-z:-132px;--layer-stack:7}
-.die-face:nth-child(5){--layer-y:108px;--layer-z:-176px;--layer-stack:6}
-.die-face:hover{--layer-lift:8px;box-shadow:0 8px 0 #78a9ff,0 16px 24px rgba(22,22,22,.2)}
-.die-face:focus-visible{--layer-lift:8px;outline:4px solid #f1c21b;outline-offset:5px;box-shadow:0 8px 0 #78a9ff,0 16px 24px rgba(22,22,22,.2)}
-.die-face[aria-pressed="true"]{--layer-lift:12px;background:var(--blue);color:#fff;box-shadow:0 8px 0 #002d9c,0 18px 26px rgba(22,22,22,.24)}
-.js-3d .die-svg{display:none}
-.js-3d .die-3d{display:grid}
-.js-static .die-svg{display:block}
-.js-static .die-3d{display:grid;width:100%;min-height:0;padding:0;gap:8px;grid-template-columns:1fr;place-items:stretch;transform:none;cursor:default;touch-action:auto}
-.js-static .die-face{grid-area:auto;width:100%;min-height:0;transform:none;box-shadow:0 3px 0 #a6c8ff;user-select:auto}
-.js-static .die-face:hover,.js-static .die-face:focus-visible,.js-static .die-face[aria-pressed="true"]{transform:none}
 .schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
 .schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
 @keyframes flow{to{stroke-dashoffset:-12}}
-@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die{overflow-x:clip}.die-3d{width:min(400px,78vw);min-height:360px}.die-face{width:min(320px,68vw);min-height:74px}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.js-3d .die-svg,.js-static .die-svg{display:block!important}.js-3d .die-3d,.js-static .die-3d{display:grid!important;width:100%;min-height:0;padding:0;gap:8px;grid-template-columns:1fr;place-items:stretch;transform:none!important;cursor:default;touch-action:auto}.js-3d .die-face,.js-static .die-face{grid-area:auto;width:100%;min-height:0;transform:none!important;box-shadow:0 3px 0 #a6c8ff;user-select:auto}.schem-edge path{animation:none;stroke-dasharray:none}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
 .schem-block rect{transition:fill .15s}
 .schem-block:hover rect{fill:var(--blue-tint)}
 @media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
@@ -297,32 +285,25 @@ document.querySelectorAll('.copybtn').forEach(function(b){
     }).catch(function(){});}
   });
 });
-// Die stack: buttons always work; pointer rotation is a progressive enhancement.
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
 (function(){
   var die=document.querySelector('.die');
   if(!die)return;
   var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
-  var reduce=!!(motionQuery&&motionQuery.matches);
   var printQuery=window.matchMedia&&window.matchMedia('print');
-  var pointerEnabled=!reduce;
   var stack=die.querySelector('.die-3d');
   var panel=document.getElementById('die-panel');
   var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
   var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
   if(!stack||!panel||!faces.length)return;
 
-  document.documentElement.classList.add(reduce?'js-static':'js-3d');
+  document.documentElement.classList.add('js-die');
   var promptMarkup=panel.innerHTML;
-  var suppressClickUntil=0;
   var selectedFace=null;
 
   function syncInstruction(){
     if(!instruction)return;
-    var staticView=!pointerEnabled||(motionQuery&&motionQuery.matches)||
-      (printQuery&&printQuery.matches);
-    instruction.textContent=staticView?
-      'functional block stack · static overview':
-      'functional block stack · drag to rotate · select a layer';
+    instruction.textContent='functional block stack · select a layer for detail';
   }
   [motionQuery,printQuery].forEach(function(query){
     if(!query)return;
@@ -386,14 +367,7 @@ document.querySelectorAll('.copybtn').forEach(function(b){
 
   faces.forEach(function(btn){
     btn.setAttribute('aria-pressed','false');
-    btn.addEventListener('click',function(e){
-      if(Date.now()<suppressClickUntil){
-        e.preventDefault();
-        e.stopPropagation();
-        return;
-      }
-      open(btn);
-    });
+    btn.addEventListener('click',function(){open(btn);});
   });
 
   die.addEventListener('keydown',function(e){
@@ -409,61 +383,6 @@ document.querySelectorAll('.copybtn').forEach(function(b){
       open(btn);
     }
   });
-
-  if(reduce)return; // Static SVG + flat buttons remain available above.
-
-  var DRAG_THRESHOLD=7;
-  var pointerId=null;
-  var startX=0;
-  var startY=0;
-  var startRotateX=62;
-  var startRotateZ=-28;
-  var rotationX=startRotateX;
-  var rotationZ=startRotateZ;
-  var dragged=false;
-  var startedOnFace=false;
-
-  function clamp(value,min,max){return Math.max(min,Math.min(max,value));}
-  function applyRotation(){
-    stack.style.setProperty('--die-rotate-x',rotationX.toFixed(2)+'deg');
-    stack.style.setProperty('--die-rotate-z',rotationZ.toFixed(2)+'deg');
-  }
-  stack.addEventListener('pointerdown',function(e){
-    if(e.isPrimary===false||(e.pointerType==='mouse'&&e.button!==0))return;
-    pointerId=e.pointerId;
-    startX=e.clientX;
-    startY=e.clientY;
-    startRotateX=rotationX;
-    startRotateZ=rotationZ;
-    dragged=false;
-    startedOnFace=!!(e.target.closest&&e.target.closest('.die-face'));
-  });
-  stack.addEventListener('pointermove',function(e){
-    if(e.pointerId!==pointerId)return;
-    var dx=e.clientX-startX;
-    var dy=e.clientY-startY;
-    if(!dragged){
-      if(Math.hypot(dx,dy)<DRAG_THRESHOLD)return;
-      dragged=true;
-      if(stack.setPointerCapture)stack.setPointerCapture(pointerId);
-      stack.classList.add('is-dragging');
-    }
-    e.preventDefault();
-    rotationX=clamp(startRotateX-dy*.12,55,70);
-    rotationZ=clamp(startRotateZ+dx*.18,-35,35);
-    applyRotation();
-  });
-  function finishPointer(e,blockClick){
-    if(e.pointerId!==pointerId)return;
-    if(blockClick&&dragged&&startedOnFace)suppressClickUntil=Date.now()+300;
-    stack.classList.remove('is-dragging');
-    if(stack.hasPointerCapture&&stack.hasPointerCapture(pointerId))stack.releasePointerCapture(pointerId);
-    pointerId=null;
-    dragged=false;
-    startedOnFace=false;
-  }
-  stack.addEventListener('pointerup',function(e){finishPointer(e,true);});
-  stack.addEventListener('pointercancel',function(e){finishPointer(e,false);});
 })();
 
 </script>

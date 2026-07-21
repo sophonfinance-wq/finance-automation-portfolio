@@ -9,42 +9,25 @@ CSS = (PARTIALS / "page.css").read_text(encoding="utf-8")
 JS = (PARTIALS / "page.js").read_text(encoding="utf-8")
 
 
-def test_die_stack_is_exploded_and_actually_three_dimensional():
-    """Do not let a flat vertical button list masquerade as the 3-D view."""
-    assert "perspective:1200px" in CSS
-    assert "transform-style:preserve-3d" in CSS
-    assert re.search(
-        r"transform:rotateX\(var\(--die-rotate-x,\s*62deg\)\)\s*"
-        r"rotateZ\(var\(--die-rotate-z,\s*-28deg\)\)",
-        CSS,
-    )
-    assert "transform:translate3d(" in CSS
-    assert ".die-3d{" in CSS and "pointer-events:none" in CSS
-    assert ".die-face{" in CSS and "pointer-events:auto" in CSS
-
-    depths = re.findall(
-        r"\.die-face:nth-child\(\d\)\{[^}]*--layer-z:(-?\d+)px", CSS
-    )
-    assert len(depths) == 5
-    assert len(set(depths)) == 5
-    assert ".js-3d .die-3d{display:grid}" in CSS
-
-
-def test_pointer_drag_has_a_threshold_bounds_and_click_suppression():
-    for event in ("pointerdown", "pointermove", "pointerup", "pointercancel"):
-        assert f"addEventListener('{event}'" in JS
-    threshold = re.search(r"var DRAG_THRESHOLD=(\d+)", JS)
-    assert threshold and int(threshold.group(1)) >= 5
-    threshold_guard = JS.index("Math.hypot(dx,dy)<DRAG_THRESHOLD")
-    pointer_capture = JS.index("setPointerCapture(pointerId)")
-    assert threshold_guard < pointer_capture
-    assert "setPointerCapture" in JS
-    assert "releasePointerCapture" in JS
-    assert "Date.now()<suppressClickUntil" in JS
-    assert "suppressClickUntil=Date.now()+300" in JS
-    assert "clamp(startRotateX-dy*.12,55,70)" in JS
-    assert "clamp(startRotateZ+dx*.18,-35,35)" in JS
-    assert "--die-rotate-x" in JS and "--die-rotate-z" in JS
+def test_die_stack_hero_is_the_contained_isometric_svg_with_interactive_cards():
+    """The dimensional view is the layout-reserving isometric SVG (see test_die_stack.py);
+    interaction is a flat, contained card list. The old free-floating CSS-3D stack
+    overflowed its box and overlapped the panel, so it must not come back."""
+    # Isometric SVG hero is present and sized to the content column.
+    assert ".die-svg{" in CSS
+    assert "max-width:540px" in CSS
+    # Interactive layer cards are revealed only once JS is active, and are full-width
+    # (they flow normally, so they cannot overlap the panel below).
+    assert ".die-3d{display:none}" in CSS
+    assert ".js-die .die-3d{display:flex;flex-direction:column" in CSS
+    assert ".die-face{" in CSS and "cursor:pointer" in CSS
+    assert ".die-face:focus-visible{" in CSS and "outline:4px solid #f1c21b" in CSS
+    assert "document.documentElement.classList.add('js-die')" in JS
+    # Guard against regressing to the overflowing 3-D transform.
+    assert "perspective:1200px" not in CSS
+    assert "translate3d(0,calc(var(--layer-y)" not in CSS
+    assert "--layer-z" not in CSS
+    assert "DRAG_THRESHOLD" not in JS
 
 
 def test_buttons_support_click_keyboard_and_full_escape_reset():
@@ -60,20 +43,15 @@ def test_buttons_support_click_keyboard_and_full_escape_reset():
 
 
 def test_reduced_motion_keeps_static_details_and_never_swaps_video():
+    # The video swap bails out entirely under reduced motion, before scanning any image.
     motion_guard = JS.index("if(motionQuery&&motionQuery.matches)return;")
     image_scan = JS.index("document.querySelectorAll('img[data-video]')")
     assert motion_guard < image_scan
-
-    # Detail wiring happens before the reduced-motion return; pointer wiring after it.
-    click_wiring = JS.index("btn.addEventListener('click'")
-    static_return = JS.index("if(reduce)return;")
-    pointer_wiring = JS.index("addEventListener('pointerdown'")
-    assert click_wiring < static_return < pointer_wiring
-    assert "reduce?'js-static':'js-3d'" in JS
-    assert "window.matchMedia&&window.matchMedia('print')" in JS
-    assert "query.addEventListener('change',syncInstruction)" in JS
-    assert ".js-static .die-3d{display:grid" in CSS
-    assert ".js-static .die-face{grid-area:auto" in CSS
+    # Layer detail is plain click/keyboard wiring — it does not depend on motion or pointer drag.
+    assert "btn.addEventListener('click'" in JS
+    assert "document.documentElement.classList.add('js-die')" in JS
+    # Reduced motion neutralizes all animation/transition (so the card hover lift is inert too).
+    assert re.search(r"@media \(prefers-reduced-motion:reduce\)\{\*\{animation:none!important;transition:none!important\}", CSS)
     assert ".motion-media>img{display:block!important}" in CSS
     assert ".motion-media>video{display:none!important}" in CSS
 
@@ -105,7 +83,7 @@ def test_mobile_tables_scroll_locally_and_navigation_can_wrap():
         CSS,
         re.DOTALL,
     )
-    assert CSS.index("@media (max-width:760px)") > CSS.index(".die-face{--layer-y:")
+    assert CSS.index("@media (max-width:760px)") > CSS.index(".die-face{")
     assert ".nav-in{flex-wrap:wrap" in CSS
     assert not re.search(r"html,body\{[^}]*overflow-x:(?:hidden|clip)", CSS)
 
