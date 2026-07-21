@@ -105,11 +105,17 @@ def validate_spec(spec: dict) -> list[str]:
 
     cc = spec.get("control_characteristics")
     if isinstance(cc, dict):
-        for key in ("authority", "verdict_map", "guarantees", "determinism",
-                    "gate_policy", "modes"):
+        # guarantees + determinism are universal; authority, verdict_map, modes, and
+        # gate_policy are Triangulate-shaped and OPTIONAL — an engine that has no ranked
+        # evidence hierarchy, no discrete verdict states, no operating modes, or no
+        # human-approval gate simply omits them rather than inventing structure. Each is
+        # validated only when present.
+        for key in ("guarantees", "determinism"):
             if key not in cc:
                 problems.append(f"control_characteristics missing {key}")
         for array_name, fields in _CONTROL_ROWS.items():
+            if array_name not in cc:
+                continue
             rows = cc.get(array_name, [])
             if not isinstance(rows, list) or not rows:
                 problems.append(
@@ -148,25 +154,26 @@ def validate_spec(spec: dict) -> list[str]:
                     problems.append(
                         f"control_characteristics.determinism.{key} must be boolean"
                     )
-        gate = cc.get("gate_policy")
-        if not isinstance(gate, dict):
-            problems.append("control_characteristics.gate_policy must be an object")
-        else:
-            if not isinstance(gate.get("human_approval_required"), bool):
-                problems.append(
-                    "control_characteristics.gate_policy.human_approval_required must be boolean"
-                )
-            for key in ("demo_gate", "note"):
-                if not isinstance(gate.get(key), str) or not gate[key].strip():
+        if "gate_policy" in cc:
+            gate = cc.get("gate_policy")
+            if not isinstance(gate, dict):
+                problems.append("control_characteristics.gate_policy must be an object")
+            else:
+                if not isinstance(gate.get("human_approval_required"), bool):
                     problems.append(
-                        f"control_characteristics.gate_policy.{key} must be non-empty"
+                        "control_characteristics.gate_policy.human_approval_required must be boolean"
                     )
+                for key in ("demo_gate", "note"):
+                    if not isinstance(gate.get(key), str) or not gate[key].strip():
+                        problems.append(
+                            f"control_characteristics.gate_policy.{key} must be non-empty"
+                        )
     elif "control_characteristics" in spec:
         problems.append("control_characteristics must be an object")
 
     media = spec.get("media")
     if isinstance(media, dict):
-        for field in ("poster", "motion"):
+        for field in ("poster", "motion", "poster_alt", "caption"):
             if not isinstance(media.get(field), str) or not media[field].strip():
                 problems.append(f"media missing {field}")
         if "crops" not in media:

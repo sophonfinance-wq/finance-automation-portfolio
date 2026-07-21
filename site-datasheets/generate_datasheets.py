@@ -129,43 +129,59 @@ def benchmarks_html(spec: dict, fn: Footnotes) -> str:
 
 def control_characteristics_html(spec: dict) -> str:
     cc = spec["control_characteristics"]
-    auth = "".join(
-        '<tr><td class="mono">{}</td><td><b>{}</b></td><td>{}</td></tr>'.format(
-            a["rank"], _esc(a["level"]), _esc(a["note"])
-        )
-        for a in cc["authority"]
-    )
-    vmap = "".join('<tr><td>{}</td><td class="mono"><b>{}</b></td><td>{}</td></tr>'.format(_esc(v["severity"]), _esc(v["verdict"]), _esc(v["action"]))
-                   for v in cc["verdict_map"])
-    guarantees = "".join(f'<li style="list-style:disc;margin-left:18px">{_esc(g)}</li>'
-                          for g in cc["guarantees"])
-    modes = "".join('<p style="margin:8px 0"><b>{}.</b> {}</p>'.format(_esc(m["name"]), _esc(m["detail"])) for m in cc["modes"])
     det = cc["determinism"]
     det_bits = []
     if det.get("seeded"):
         det_bits.append("seeded fictional inputs")
     if det.get("read_only"):
-        det_bits.append("read-only review roles")
+        det_bits.append("read-only operation")
     if det.get("offline_default"):
         det_bits.append("offline default mode")
     det_text = ", ".join(det_bits) if det_bits else "see the engine source"
-    gate = cc["gate_policy"]
+    guarantees = "".join(f'<li style="list-style:disc;margin-left:18px">{_esc(g)}</li>'
+                          for g in cc["guarantees"])
+    # Plain/engineering pair: the plain side takes the gate note when the engine has a
+    # human-approval gate, otherwise an optional control summary; the demo-gate line is
+    # only emitted for engines that actually have a gate policy.
+    gate = cc.get("gate_policy")
+    plain_text = _esc(gate["note"] if gate else cc.get("plain", ""))
+    det = _esc(det_text)
+    gate_line = f'<p><b>Demo gate.</b> {_esc(gate["demo_gate"])}</p>' if gate else ""
     pair = (
         '<div class="pair control-pair">'
-        '<div class="plain"><h3>Plain terms</h3><p>{}</p></div>'
+        f'<div class="plain"><h3>Plain terms</h3><p>{plain_text}</p></div>'
         '<div class="engineering"><h3>Engineering</h3>'
-        '<p><b>Deterministic envelope.</b> {}.</p>'
-        '<p><b>Demo gate.</b> {}</p></div></div>\n'.format(_esc(gate["note"]), _esc(det_text), _esc(gate["demo_gate"])))
-    return (
-        '<section><h2>Control characteristics</h2>'
-        '<span class="zone-k">engineering</span>\n'
-        f'{pair}'
-        '<table class="ds"><thead><tr><th>Authority</th><th>Level</th><th>Note</th></tr></thead>'
-        f'<tbody>{auth}</tbody></table>\n'
-        '<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead>'
-        f'<tbody>{vmap}</tbody></table>\n'
-        f'<ul style="margin-top:14px">{guarantees}</ul>\n{modes}</section>'
+        f'<p><b>Deterministic envelope.</b> {det}.</p>'
+        f'{gate_line}</div></div>\n'
     )
+    parts = [
+        '<section><h2>Control characteristics</h2>'
+        '<span class="zone-k">engineering</span>\n',
+        pair,
+    ]
+    if cc.get("authority"):
+        auth = "".join(
+            '<tr><td class="mono">{}</td><td><b>{}</b></td><td>{}</td></tr>'.format(
+                a["rank"], _esc(a["level"]), _esc(a["note"])
+            )
+            for a in cc["authority"]
+        )
+        parts.append(
+            '<table class="ds"><thead><tr><th>Authority</th><th>Level</th><th>Note</th></tr></thead>'
+            f'<tbody>{auth}</tbody></table>\n'
+        )
+    if cc.get("verdict_map"):
+        vmap = "".join('<tr><td>{}</td><td class="mono"><b>{}</b></td><td>{}</td></tr>'.format(_esc(v["severity"]), _esc(v["verdict"]), _esc(v["action"]))
+                       for v in cc["verdict_map"])
+        parts.append(
+            '<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead>'
+            f'<tbody>{vmap}</tbody></table>\n'
+        )
+    parts.append(f'<ul style="margin-top:14px">{guarantees}</ul>\n')
+    if cc.get("modes"):
+        parts.append("".join('<p style="margin:8px 0"><b>{}.</b> {}</p>'.format(_esc(m["name"]), _esc(m["detail"])) for m in cc["modes"]))
+    parts.append('</section>')
+    return "".join(parts)
 
 
 def limits_html(spec: dict, fn: Footnotes) -> str:
@@ -189,11 +205,11 @@ def see_it_run_html(spec: dict) -> str:
     return (
         '<section><h2>See it run</h2><span class="zone-k">the real CLI</span>\n'
         '<figure class="figwrap"><img src="{}" data-video="{}" '
-        'alt="Screencast of the Triangulate CLI running on fictional seeded data" '
-        'loading="lazy"><figcaption>Captured from the public deterministic '
-        '<code>--demo-adversarial --no-artifacts</code> run.</figcaption></figure>'
+        'alt="{}" loading="lazy">'
+        '<figcaption>{}</figcaption></figure>'
         '{}</section>'
-    ).format(_esc(m["poster"]), _esc(m["motion"]), crops_html)
+    ).format(_esc(m["poster"]), _esc(m["motion"]), _esc(m["poster_alt"]),
+             _esc(m["caption"]), crops_html)
 
 
 def integration_html(spec: dict, fn: Footnotes) -> str:
@@ -262,6 +278,11 @@ def die_stack_html(spec: dict) -> str:
         "\n".join(svg_layers), total_h - 10,
     )
     faces_html = "\n".join(faces)
+    layers_intro = _esc(spec.get(
+        "layers_intro",
+        "Each layer is an independent stage of the engine. "
+        "Select a layer for its plain-terms and engineering detail.",
+    ))
     return (
         '<section><h2>Architecture</h2>'
         '<span class="zone-k die-instruction">functional block stack &middot; static overview</span>\n'
@@ -269,8 +290,7 @@ def die_stack_html(spec: dict) -> str:
         f'  <div class="die-3d" aria-hidden="false">\n{faces_html}\n  </div>\n'
         '  <div class="die-panel" id="die-panel" role="region" '
         'aria-label="Architecture layer details" aria-live="polite">'
-        '<h3>Select a layer</h3><p>Each layer is an independent duty. '
-        'Click any block for its plain-terms and engineering description.</p></div>\n'
+        f'<h3>Select a layer</h3><p>{layers_intro}</p></div>\n'
         '</div></section>'
     )
 

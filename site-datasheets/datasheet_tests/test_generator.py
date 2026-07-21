@@ -6,7 +6,7 @@ import sys
 
 import generate_datasheets as gen
 
-from datasheet_tests.conftest import ROOT  # noqa: F401 (path bootstrap)
+from datasheet_tests.conftest import ROOT, present_slugs  # noqa: F401 (path bootstrap)
 
 
 def test_render_is_deterministic_in_process():
@@ -34,11 +34,15 @@ def test_document_is_well_formed():
     assert "triangulate-cli-fix-packet.webp" in html
 
 
-def test_committed_page_is_fresh():
-    page = gen.OUT_DIR / "triangulate.html"
-    assert page.read_bytes() == gen.render("triangulate").encode("utf-8"), (
-        "docs/engines/triangulate.html is stale — regenerate it"
-    )
+def test_committed_pages_are_fresh():
+    # Every engine that has a spec must have a committed page byte-identical to a fresh
+    # render — the drift guard that keeps generated HTML honest as new engines land.
+    for slug in present_slugs():
+        page = gen.OUT_DIR / f"{slug}.html"
+        assert page.is_file(), f"docs/engines/{slug}.html missing — generate it"
+        assert page.read_bytes() == gen.render(slug).encode("utf-8"), (
+            f"docs/engines/{slug}.html is stale — regenerate it"
+        )
 
 
 def test_cli_exits_cleanly(tmp_path):

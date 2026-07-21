@@ -11,6 +11,8 @@ from pathlib import Path
 import datasheet_spec as ds
 import generate_datasheets as gen
 
+from datasheet_tests.conftest import ROSTER, present_slugs
+
 COUNTS = gen.ROOT / "counts.json"
 
 
@@ -42,26 +44,31 @@ def test_counts_file_present_and_nonempty():
     assert data.get("site_tooling", {}).get("tests"), "counts.json missing site_tooling.tests"
 
 
-def test_spec_test_count_matches_counts_file():
+def test_spec_test_counts_match_counts_file():
+    # Every engine's cited "Tests" figure (spec strip) must equal counts.json[slug].tests,
+    # so no page can quote a number that isn't pinned.
     data = json.loads(COUNTS.read_text(encoding="utf-8"))
-    expected = data["triangulate"]["tests"]
-    spec = ds.load_spec("triangulate")
-    strip_counts = [_int(i["value"]) for i in spec["spec_strip"]
-                    if i["label"].lower() == "tests"]
-    bench_counts = [_int(b["value"]) for b in spec["benchmarks"]
-                    if "test" in b["label"].lower()]
-    assert expected in strip_counts, (expected, strip_counts)
-    assert expected in bench_counts, (expected, bench_counts)
+    for slug in present_slugs():
+        assert data.get(slug, {}).get("tests"), f"counts.json missing {slug}.tests"
+        expected = data[slug]["tests"]
+        spec = ds.load_spec(slug)
+        strip_counts = [_int(i["value"]) for i in spec["spec_strip"]
+                        if i["label"].lower() == "tests"]
+        assert expected in strip_counts, (slug, expected, strip_counts)
 
 
-def test_triangulate_count_matches_live_collection():
+def test_engine_counts_match_live_collection():
+    # The pinned count for each engine must equal what its own suite actually collects —
+    # the "no invented numbers" guarantee, re-derived from source on every CI run.
     data = json.loads(COUNTS.read_text(encoding="utf-8"))
-    actual = _collected_count(gen.REPO / "ai-validation-framework")
-    assert actual == data["triangulate"]["tests"], (
-        "Triangulate count drift: update evidence only after reviewing the live collection",
-        actual,
-        data["triangulate"]["tests"],
-    )
+    for slug in present_slugs():
+        engine_dir = ROSTER[slug]["engine_dir"]
+        actual = _collected_count(gen.REPO / engine_dir)
+        assert actual == data[slug]["tests"], (
+            f"{slug} count drift: refresh counts.json only after reviewing the live collection",
+            actual,
+            data[slug]["tests"],
+        )
 
 
 def test_site_tooling_count_matches_live_collection():

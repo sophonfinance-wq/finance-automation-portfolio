@@ -7,10 +7,26 @@ import re
 import datasheet_spec as ds
 import generate_datasheets as gen
 
+from datasheet_tests.conftest import ROSTER, present_slugs
+
 
 def test_triangulate_spec_is_valid():
     spec = ds.load_spec("triangulate")
     assert ds.validate_spec(spec) == []
+
+
+def test_every_present_spec_validates_and_matches_roster():
+    # As each engine's spec lands, it must validate and its identity (num / part_no /
+    # mnemonic / family / name) must match the one canonical §4 roster — so a wrong part
+    # number or a stale engine name fails here, not on the live page.
+    for slug in present_slugs():
+        assert slug in ROSTER, f"{slug!r} is not in the canonical roster"
+        spec = ds.load_spec(slug)
+        assert ds.validate_spec(spec) == [], (slug, ds.validate_spec(spec))
+        r = ROSTER[slug]
+        for key in ("num", "part_no", "mnemonic", "family", "name"):
+            assert spec[key] == r[key], (slug, key, spec.get(key), r[key])
+        assert spec["slug"] == slug
 
 
 def test_triangulate_roster_identity():

@@ -34,7 +34,8 @@ def _minimal_valid_spec() -> dict:
             "modes": [{"name": "offline", "detail": "d"}],
         },
         "limits": [{"statement": "x", "source": "s"}],
-        "media": {"poster": "p.webp", "motion": "m.mp4", "crops": []},
+        "media": {"poster": "p.webp", "motion": "m.mp4", "poster_alt": "a",
+                  "caption": "c", "crops": []},
         "links": {"readme": "r", "source": "s", "tests": "t", "codespaces": "c"},
         "meta": {"description": "d"},
     }
@@ -46,6 +47,17 @@ def test_minimal_spec_is_valid():
 
 def test_checked_in_spec_is_valid():
     assert ds.validate_spec(ds.load_spec("triangulate")) == []
+
+
+def test_control_zones_are_optional_for_non_triangulate_engines():
+    """authority / verdict_map / modes / gate_policy are Triangulate-shaped; an engine
+    without a ranked hierarchy, discrete verdicts, modes, or a human-approval gate omits
+    them. guarantees + determinism remain the only universally required control fields."""
+    spec = _minimal_valid_spec()
+    cc = spec["control_characteristics"]
+    for optional in ("authority", "verdict_map", "modes", "gate_policy"):
+        cc.pop(optional, None)
+    assert ds.validate_spec(spec) == []
 
 
 def test_missing_required_field_is_reported():
