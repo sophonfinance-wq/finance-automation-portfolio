@@ -22,6 +22,14 @@ def _esc(value) -> str:
     return html.escape(str(value))
 
 
+def _is_seeded(spec: dict) -> bool:
+    # Honesty gate for the shared chrome: "seeded" may only be claimed when the
+    # spec declares it (atlas and brain are deterministic but not seeded), and an
+    # absent flag claims less, never more.
+    det = spec.get("control_characteristics", {}).get("determinism", {})
+    return bool(det.get("seeded"))
+
+
 class Footnotes:
     """Collects (source) markers so zones 3 and 7 share one Substantiation list."""
 
@@ -55,7 +63,8 @@ def masthead_html(spec: dict) -> str:
         _esc(spec["part_no"]), _esc(spec["family"].upper()),
         _esc(spec["rev"]), _esc(spec["status"]))
     legend = ("PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. "
-              "All data fictional and seeded.")
+              + ("All data fictional and seeded." if _is_seeded(spec)
+                 else "All data fictional."))
     thesis = _esc(spec.get("marketing_thesis", ""))
     thesis_html = (f'  <p class="thesis">{thesis}</p>\n') if thesis else ""
     return (
@@ -271,15 +280,16 @@ def die_stack_html(spec: dict) -> str:
             'aria-label="{} layer — open detail" aria-controls="die-panel" '
             'aria-expanded="false">{}</button>'.format(_esc(layer["id"]), _esc(layer["plain"]), _esc(layer["engineering"]),
                _esc(layer["source_link"]), _esc(layer["label"]), _esc(layer["label"])))
+    substrate = "seeded fictional data" if _is_seeded(spec) else "fictional data"
     svg = (
         '<svg class="die-svg" viewBox="0 0 {} {}" role="img" '
-        'aria-label="Exploded functional block stack: {} over seeded fictional data">\n{}\n'
+        'aria-label="Exploded functional block stack: {} over {}">\n{}\n'
         '  <text x="40" y="{}" font-family="IBM Plex Mono,monospace" font-size="11" '
-        'fill="#6f6f6f">substrate: seeded fictional data</text>\n</svg>'
+        'fill="#6f6f6f">substrate: {}</text>\n</svg>'
     ).format(
         box_w + 90, total_h,
-        _esc(", ".join(layer["label"] for layer in layers)),
-        "\n".join(svg_layers), total_h - 10,
+        _esc(", ".join(layer["label"] for layer in layers)), substrate,
+        "\n".join(svg_layers), total_h - 10, substrate,
     )
     faces_html = "\n".join(faces)
     layers_intro = _esc(spec.get(
@@ -433,6 +443,9 @@ def render(slug: str) -> str:
         css=css, js=js,
         cta_book=CTA_BOOK,
         link_source=_esc(spec["links"]["source"]),
+        data_note=("All public examples use fictional, seeded data."
+                   if _is_seeded(spec)
+                   else "All public examples use fictional data."),
         masthead=ms, die_stack=dk, spec_strip=ss, plain_terms=pt, schematic=sc,
         instruction_set=ins, benchmarks=bm, control_characteristics=ctrl,
         limits=lim, see_it_run=sir, integration=integ,
