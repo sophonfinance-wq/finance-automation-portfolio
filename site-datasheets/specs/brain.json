@@ -1,0 +1,461 @@
+{
+  "num": 7,
+  "slug": "brain",
+  "part_no": "SFS-E07-KBN",
+  "mnemonic": "KBN",
+  "family": "Cited Knowledge",
+  "name": "Knowledge Brain",
+  "tagline": "Queryable institutional memory with a citation on every answer — or no answer",
+  "plain_summary": "Knowledge Brain turns fictional meeting transcripts into a deterministic TF-IDF index for cited questions, paste-ready footnotes, meeting prep, and review-remediation handoffs. Its remediation path generates a cited, apply-ready prompt and a PENDING change log; a downstream AI or operator owns execution and confirmation of the workpaper changes.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A knowledge system earns trust by carrying each quote back to its meeting, date, timestamp, and speaker — and by refusing to answer when no source clears the relevance floor.",
+  "layers_intro": "The stack preserves chain of custody from the transcript of record through retrieval and the downstream handoff. Select a layer for its plain-terms and engineering detail.",
+
+  "layers": [
+    {
+      "id": "handoff",
+      "label": "Downstream Handoff",
+      "plain": "Packages a reviewer's sourced instructions for the person or system that will perform the work.",
+      "engineering": "Remediation returns ordered ChangeDirectives, verbatim source quotes, a generated apply-ready prompt, and a one-to-one fix packet whose entries start PENDING. Execution and confirmation are downstream responsibilities.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/engine.py"
+    },
+    {
+      "id": "reporting",
+      "label": "Cited Renderers",
+      "plain": "Formats answers, footnotes, meeting briefs, prompts, and change logs with their sources attached.",
+      "engineering": "The reporting layer composes every returned quote with a provenance tag containing title, date, HH:MM:SS timestamp, and speaker; empty retrieval renders the refusal banner.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/report.py"
+    },
+    {
+      "id": "retrieval",
+      "label": "Deterministic Retrieval",
+      "plain": "Finds the most relevant recorded decisions without calling a model or a network service.",
+      "engineering": "A stdlib TF-IDF index scores knowledge cards by keyword and weighted topic tags. Results sort by descending score with card_id as the stable tie-break, and cards below MIN_RELEVANCE are excluded.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/engine.py"
+    },
+    {
+      "id": "extraction",
+      "label": "Verbatim Extraction",
+      "plain": "Lifts selected statements and review requests from the transcript without rewriting them.",
+      "engineering": "ExtractionSpec and DirectiveSpec resolve timestamped utterances into KnowledgeCards and ChangeDirectives; rule_text and request_text are copied byte-for-byte from the matched utterance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/generate.py"
+    },
+    {
+      "id": "transcript",
+      "label": "Transcript of Record",
+      "plain": "Keeps the exact words, speaker, meeting, date, and time behind every retrieved item.",
+      "engineering": "Meeting and Utterance are the source-of-truth dataclasses. Provenance carries meeting_id, title, date, speaker, and HH:MM:SS timestamp with each card or directive.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/model.py"
+    }
+  ],
+
+  "blocks": [
+    {
+      "id": "transcripts",
+      "label": "Fictional Transcripts",
+      "kind": "source",
+      "col": 0,
+      "row": 1,
+      "plain": "timestamped meeting utterances",
+      "engineering": "Meeting + ordered Utterance tuples form the transcript of record",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/model.py"
+    },
+    {
+      "id": "extract",
+      "label": "Verbatim Extractor",
+      "kind": "transform",
+      "col": 1,
+      "row": 1,
+      "plain": "selects recorded statements and review requests",
+      "engineering": "timestamp lookup creates byte-identical KnowledgeCards and ChangeDirectives",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/generate.py"
+    },
+    {
+      "id": "corpus_index",
+      "label": "Corpus + TF-IDF Index",
+      "kind": "index",
+      "col": 2,
+      "row": 1,
+      "plain": "stores cited cards and ranks them by topic",
+      "engineering": "BrainEngine builds a deterministic keyword/tag TF-IDF index over the fixed corpus",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/engine.py"
+    },
+    {
+      "id": "query",
+      "label": "Ask · Cite · Prep",
+      "kind": "query",
+      "col": 3,
+      "row": 0,
+      "plain": "answers a question, supplies one footnote, or prepares a meeting",
+      "engineering": "ask returns ranked hits, cite filters to authoritative kinds, and prep separates settled positions from open items",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/engine.py"
+    },
+    {
+      "id": "cited_output",
+      "label": "Cited Output or Refusal",
+      "kind": "output",
+      "col": 4,
+      "row": 0,
+      "plain": "returns sourced text or says there is no sourced answer",
+      "engineering": "citation_block binds the verbatim card text to its provenance; empty hits render REFUSAL",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/report.py"
+    },
+    {
+      "id": "review_directives",
+      "label": "Review Directives",
+      "kind": "review",
+      "col": 3,
+      "row": 2,
+      "plain": "retrieves the reviewer's recorded corrections in spoken order",
+      "engineering": "directives_for matches a review title or topic, then orders citations by meeting, timestamp, and directive_id",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/engine.py"
+    },
+    {
+      "id": "remediation_prompt",
+      "label": "Cited Apply-Ready Prompt",
+      "kind": "handoff",
+      "col": 4,
+      "row": 2,
+      "plain": "generates the prompt and a PENDING source-to-status map",
+      "engineering": "Remediation contains ordered directives, the generated prompt, and one FixPacketEntry per directive at STATUS_PENDING",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/engine.py"
+    },
+    {
+      "id": "downstream",
+      "label": "Downstream AI / Operator",
+      "kind": "external",
+      "col": 5,
+      "row": 2,
+      "plain": "performs the requested work outside the Brain",
+      "engineering": "external execution and confirmation boundary; the Brain's handoff ends with the cited prompt and PENDING log",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/README.md"
+    }
+  ],
+  "edges": [
+    {"from": "transcripts", "to": "extract", "label": "utterances"},
+    {"from": "extract", "to": "corpus_index", "label": "cards + directives"},
+    {"from": "corpus_index", "to": "query", "label": "ranked corpus"},
+    {"from": "query", "to": "cited_output", "label": "hits or refusal"},
+    {"from": "corpus_index", "to": "review_directives", "label": "matched review"},
+    {"from": "review_directives", "to": "remediation_prompt", "label": "ordered citations"},
+    {"from": "remediation_prompt", "to": "downstream", "label": "prompt + PENDING log"}
+  ],
+
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "7,011",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (knowledge-brain-engine/); live collection verified 2026-07-20 and pinned in site-datasheets/counts.json",
+      "plain": "the checks that pin this engine's behavior"
+    },
+    {
+      "label": "Meetings ingested",
+      "value": "5",
+      "source": "python -m brain_engine (knowledge-brain-engine/) — live index reports 5 meetings; brain_engine/generate.py builds the five-meeting fictional corpus",
+      "plain": "fictional transcripts in the runnable corpus"
+    },
+    {
+      "label": "Knowledge cards",
+      "value": "15",
+      "source": "python -m brain_engine (knowledge-brain-engine/) — live index reports 15 knowledge cards",
+      "plain": "cited decisions, rules, definitions, and open items"
+    },
+    {
+      "label": "Card kinds",
+      "value": "4",
+      "source": "brain_engine/model.py CARD_KINDS — decision, rule, definition, open-item; confirmed by the live index",
+      "plain": "three authoritative kinds plus parked open items"
+    },
+    {
+      "label": "Review directives",
+      "value": "4",
+      "source": "python -m brain_engine remediate \"Surplus Workpaper Review — Reviewer Corrections\" — live CLI emits 4 cited directives in spoken order",
+      "plain": "each mapped one-to-one to a PENDING log row"
+    },
+    {
+      "label": "Refusal exit",
+      "value": "3",
+      "source": "brain_engine/cli.py main — ask, cite, prep, and remediate return 3 when no sourced result exists; confirmed with an off-topic live CLI query",
+      "plain": "a scriptable no-source result"
+    }
+  ],
+
+  "problem_statement": "Finance and tax decisions often survive only as meeting memory or buried notes. When the same position is needed in a workpaper, disclosure, or review response, an uncited paraphrase is not enough: the user needs the recorded words, who said them, and when — or an explicit refusal when the source is absent.",
+  "scenarios": [
+    {
+      "title": "A workpaper assertion gets one traceable footnote",
+      "narrative": "Cite mode filters out open items, returns the best authoritative card, and renders its transcript text byte-identically with the meeting title, date, timestamp, and speaker attached.",
+      "source": "python -m brain_engine --cite \"return of capital in excess of basis is a deemed gain\"; brain_engine/engine.py cite; brain_engine/report.py render_citation"
+    },
+    {
+      "title": "An off-topic question produces a machine-readable refusal",
+      "narrative": "When no card clears the relevance floor, the CLI prints “No sourced answer — the brain does not guess” and exits 3 instead of filling the gap with a plausible answer.",
+      "source": "python -m brain_engine ask \"what is the office parking and lunch policy\"; live exit 3; brain_engine/cli.py and brain_engine/report.py"
+    },
+    {
+      "title": "A review meeting becomes a cited prompt, not an untracked edit",
+      "narrative": "The remediation command retrieves four fictional reviewer directives in spoken order and generates an apply-ready prompt plus a one-to-one change log at PENDING. A downstream AI or operator performs the edits and confirms their status.",
+      "source": "python -m brain_engine remediate \"Surplus Workpaper Review — Reviewer Corrections\"; brain_engine/engine.py remediate; knowledge-brain-engine/README.md Review → remediation"
+    },
+    {
+      "title": "Stored knowledge drift is re-derived only where the transcript supports it",
+      "narrative": "The integrity demo starts with four injected findings, re-derives three text-or-speaker corrections across two turns, and leaves the orphaned citation quarantined. The final verdict is ESCALATED with exit 3 because no utterance exists to support that record.",
+      "source": "python -m brain_engine.loop --demo (knowledge-brain-engine/); live demo output; brain_engine/loop.py"
+    }
+  ],
+
+  "instruction_set": [
+    {
+      "cmd": "python -m brain_engine",
+      "operation": "print the fictional corpus index",
+      "output": "meeting, card-kind, topic, and provenance catalogue",
+      "exit_code": "0",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine ask \"<question>\"",
+      "operation": "retrieve the best cited cards for a question",
+      "output": "ranked cited answer(s) or explicit refusal",
+      "exit_code": "0 sourced · 3 refusal",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine \"<question>\"",
+      "operation": "use the equivalent bare-question form",
+      "output": "ranked cited answer(s) or explicit refusal",
+      "exit_code": "0 sourced · 3 refusal",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine --cite \"<assertion>\"",
+      "operation": "return one paste-ready authoritative footnote",
+      "output": "verbatim quote + provenance tag or refusal",
+      "exit_code": "0 sourced · 3 refusal",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine --prep \"<topic>\"",
+      "operation": "assemble cited prior positions and open items",
+      "output": "meeting-prep briefing or refusal",
+      "exit_code": "0 sourced · 3 refusal",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine remediate \"<review>\"",
+      "operation": "generate a cited apply-ready remediation handoff",
+      "output": "ordered directives + generated prompt",
+      "exit_code": "0 sourced · 3 refusal · 2 missing topic",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine --seed N",
+      "operation": "accept the compatibility seed argument",
+      "output": "the unchanged hand-authored corpus; the current build ignores N",
+      "exit_code": "0",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine --min-relevance R ask \"<question>\"",
+      "operation": "set the retrieval relevance floor",
+      "output": "cited hits clearing R or refusal",
+      "exit_code": "0 / 3 · 2 if R is outside [0,1]",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine --out DIR",
+      "operation": "write all Markdown example deliverables",
+      "output": "index, citation, prep, remediation, and change-log files",
+      "exit_code": "0",
+      "artifacts": "DIR/brain_index.md · citation_example.md · meeting_prep_example.md · remediation_prompt.md · change_log.md"
+    },
+    {
+      "cmd": "python run.py --out DIR",
+      "operation": "use the convenience entrypoint",
+      "output": "the same five Markdown deliverables",
+      "exit_code": "0",
+      "artifacts": "DIR/*.md"
+    },
+    {
+      "cmd": "python -m brain_engine.loop",
+      "operation": "compare the clean knowledge corpus with its transcripts",
+      "output": "CLEAN integrity-loop report",
+      "exit_code": "0",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine.loop --demo",
+      "operation": "inject the documented internal knowledge-drift profile",
+      "output": "ESCALATED after supported drift is re-derived and the orphan is held",
+      "exit_code": "3",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine.loop --seed N",
+      "operation": "accept the loop's compatibility seed argument",
+      "output": "the same fixed-corpus integrity verdict; the current build ignores N",
+      "exit_code": "0 / 3",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine.loop --budget N",
+      "operation": "cap internal knowledge-remediation turns",
+      "output": "final CLEAN, REMEDIATED, or ESCALATED verdict",
+      "exit_code": "0 / 3",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m brain_engine.loop --out DIR",
+      "operation": "write the knowledge-integrity report",
+      "output": "integrity-loop verdict and report",
+      "exit_code": "0 / 3",
+      "artifacts": "DIR/integrity_loop_report.md"
+    },
+    {
+      "cmd": "python -m pytest -q",
+      "operation": "run the engine test suite",
+      "output": "pytest session summary",
+      "exit_code": "0",
+      "artifacts": "none"
+    }
+  ],
+
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "7,011",
+      "unit": "tests",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (knowledge-brain-engine/); verified 2026-07-20 and pinned in site-datasheets/counts.json",
+      "plain": "live collection, not the README's historical sample output"
+    },
+    {
+      "label": "Indexed fictional corpus",
+      "value": "15",
+      "unit": "knowledge cards across 5 meetings",
+      "source": "python -m brain_engine — live index summary; brain_engine/generate.py build_corpus"
+    },
+    {
+      "label": "Review handoff",
+      "value": "4",
+      "unit": "cited directives mapped one-to-one to PENDING entries",
+      "source": "python -m brain_engine remediate \"Surplus Workpaper Review — Reviewer Corrections\" — live CLI output; brain_engine/engine.py"
+    },
+    {
+      "label": "Integrity demo recovery",
+      "value": "3",
+      "unit": "corrections over 2 turns; 1 orphan quarantined",
+      "source": "python -m brain_engine.loop --demo — live output reports 3 corrections, 2 turns, and 1 quarantined orphan"
+    }
+  ],
+
+  "control_characteristics": {
+    "plain": "Every returned answer is tied to a recorded source. The remediation boundary ends with the generated cited prompt and PENDING log; execution and confirmation belong to the downstream user or system.",
+    "verdict_map": [
+      {
+        "severity": "No internal knowledge drift",
+        "verdict": "CLEAN",
+        "action": "nothing is changed; exit 0"
+      },
+      {
+        "severity": "All internal drift has transcript support",
+        "verdict": "REMEDIATED",
+        "action": "stored text or speaker is re-derived verbatim; exit 0"
+      },
+      {
+        "severity": "Orphaned source or turn budget exhausted",
+        "verdict": "ESCALATED",
+        "action": "unsupported entries are held for a human; exit 3"
+      }
+    ],
+    "guarantees": [
+      "Citation chain: returned card text is byte-identical to its transcript utterance, with meeting title, date, HH:MM:SS timestamp, and speaker attached.",
+      "Refuse-do-not-guess: ask, cite, prep, and remediation return no sourced content when retrieval or directive matching is empty.",
+      "Stable retrieval: fixed corpus and relevance floor produce the same scores and ranked order, with card_id as the final tie-break.",
+      "Handoff boundary: review remediation generates cited ordered directives, an apply-ready prompt, and PENDING log entries; downstream execution and confirmation are outside the Brain."
+    ],
+    "determinism": {
+      "seeded": false,
+      "read_only": false,
+      "offline_default": true
+    },
+    "modes": [
+      {
+        "name": "Ask",
+        "detail": "returns the best relevant cards with citation blocks, or refuses when no card clears the floor"
+      },
+      {
+        "name": "Cite",
+        "detail": "returns one authoritative decision, rule, or definition as a paste-ready footnote; open items are excluded"
+      },
+      {
+        "name": "Prep",
+        "detail": "groups relevant authoritative positions separately from open items for meeting preparation"
+      },
+      {
+        "name": "Remediate",
+        "detail": "generates the cited apply-ready prompt and PENDING change-log handoff from recorded review directives"
+      },
+      {
+        "name": "Integrity loop",
+        "detail": "compares stored cards and directives with the transcript of record, re-derives supported drift, and quarantines orphaned citations"
+      }
+    ]
+  },
+
+  "limits": [
+    {
+      "statement": "The public runnable corpus is hand-authored and fully fictional; it demonstrates the ingest-and-query stage but does not record or transcribe a live meeting.",
+      "source": "knowledge-brain-engine/README.md — public runnable version over invented transcripts; brain_engine/generate.py module documentation"
+    },
+    {
+      "statement": "Retrieval is deterministic keyword/tag TF-IDF, not semantic embeddings or a language model; a query still needs terms that score against the indexed cards.",
+      "source": "brain_engine/engine.py — stdlib TF-IDF index, tokenization, weighted tags, and MIN_RELEVANCE"
+    },
+    {
+      "statement": "Open items can appear in meeting prep but cannot support cite mode; if no authoritative card clears the floor, the engine refuses.",
+      "source": "brain_engine/model.py AUTHORITATIVE_KINDS; brain_engine/engine.py cite and prep"
+    },
+    {
+      "statement": "The remediation output stops at a cited apply-ready prompt and a change log whose entries begin PENDING; a downstream AI or operator performs the workpaper edits and confirms status.",
+      "source": "knowledge-brain-engine/README.md Review → remediation; brain_engine/engine.py Remediation and STATUS_PENDING; brain_engine/report.py"
+    },
+    {
+      "statement": "The integrity loop can re-derive stored knowledge text or speaker only when the cited transcript utterance exists. Orphaned citations are quarantined rather than repaired from a guess.",
+      "source": "brain_engine/loop.py — REMEDIABLE excludes ORPHANED; integrity_loop and verdict_exit_code"
+    }
+  ],
+
+  "media": {
+    "poster": "../assets/tile-brain.webp",
+    "motion": "../assets/tile-brain-motion.mp4",
+    "poster_alt": "Knowledge Brain system illustration showing meeting and SOP documents entering a queryable knowledge store, with a cited verbatim timestamped answer and a no-source no-answer control",
+    "caption": "Repository system animation: meeting and SOP sources feed the Knowledge Brain; answers leave cited verbatim and timestamped, while an unsourced query returns no answer.",
+    "crops": []
+  },
+
+  "quickstart": [
+    {
+      "label": "Clone and print the fictional brain index",
+      "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/knowledge-brain-engine && python -m brain_engine"
+    },
+    {
+      "label": "Retrieve one paste-ready cited footnote",
+      "command": "python -m brain_engine --cite \"return of capital in excess of basis is a deemed gain\""
+    },
+    {
+      "label": "Generate the cited review-remediation handoff",
+      "command": "python -m brain_engine remediate \"Surplus Workpaper Review — Reviewer Corrections\""
+    }
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/knowledge-brain-engine",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Knowledge Brain (SFS-E07-KBN) datasheet — deterministic, citation-governed retrieval over fictional meeting transcripts, with cited answers, paste-ready footnotes, meeting prep, explicit refusal, and a generated apply-ready remediation handoff whose execution and confirmation stay downstream."
+  }
+}

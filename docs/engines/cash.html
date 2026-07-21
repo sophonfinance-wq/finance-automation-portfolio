@@ -4,67 +4,100 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cash Management — Sophon Finance Systems</title>
-<meta name="description" content="The cash manager's monthly double-check, five read-only controls — how the Cash Management engine works, what you provide, what you receive, and how to verify the engineering yourself on GitHub.">
+<meta name="description" content="Cash Management (SFS-E09-CSH) datasheet — five deterministic, validation-only cash controls for bank-to-GL reconciliation, outstanding checks, wire segregation of duties, bank-register continuity, and concentration sweeps, all ending at an explicit human-review boundary.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root { --bg:#ffffff; --bg-alt:#f4f4f4; --border:#e0e0e0; --border-strong:#c6c6c6; --text:#161616; --text-2:#525252; --text-3:#6f6f6f; --blue:#0f62fe; --blue-hover:#0043ce; --blue-tint:#edf5ff; --green:#198038;
-    --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:var(--sans); color:var(--text); background:var(--bg); line-height:1.6; }
-  .wrap { width:100%; max-width:980px; margin:0 auto; padding:0 22px; }
-  header.nav { position:sticky; top:0; z-index:50; background:rgba(255,255,255,.96); backdrop-filter:blur(6px); border-bottom:1px solid var(--border); padding:14px 0; }
-  .nav-in { display:flex; align-items:center; gap:16px; }
-  .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-  .brand-mark { width:24px; height:24px; }
-  .brand-word { font-weight:600; font-size:14px; letter-spacing:.2px; white-space:nowrap; }
-  .brand-word span { font-weight:300; }
-  .nav-in .backlink { margin-left:auto; color:var(--blue); text-decoration:none; font-size:14px; }
-  .nav-in .backlink:hover { text-decoration:underline; }
-  .btn { display:inline-flex; align-items:center; gap:18px; text-decoration:none; font-size:15px; padding:13px 18px; min-height:46px; border:1px solid transparent; }
-  .btn-p { background:var(--blue); color:#fff; } .btn-p:hover { background:var(--blue-hover); }
-  .btn-t { background:transparent; color:var(--blue); border-color:var(--blue); } .btn-t:hover { background:var(--blue); color:#fff; }
-  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
-  .hero { padding:54px 0 8px; }
-  h1 { font-size:clamp(30px,5vw,46px); font-weight:300; letter-spacing:-.3px; line-height:1.15; margin:8px 0 10px; }
-  h1 strong { font-weight:600; }
-  .tag { font-size:16px; color:var(--text-2); max-width:44em; }
-  .intro { font-size:16.5px; color:var(--text-2); max-width:46em; margin:18px 0 8px; }
-  figure.vis { margin:34px 0 8px; }
-  figure.vis img, figure.vis video { display:block; width:100%; height:auto; }
-  section { padding:34px 0 6px; }
-  h2 { font-size:clamp(20px,2.6vw,26px); font-weight:600; letter-spacing:-.2px; margin-bottom:14px; }
-  .cols { display:grid; grid-template-columns:repeat(3,1fr); gap:0; border:1px solid var(--border); }
-  .col { padding:22px 24px; }
-  .col + .col { border-left:1px solid var(--border); }
-  .col h4 { font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); margin-bottom:12px; }
-  .col.does h4 { color:var(--blue); } .col.gets h4 { color:var(--green); }
-  .item { display:flex; gap:9px; font-size:14px; color:var(--text-2); margin:9px 0; line-height:1.45; }
-  .item b { color:var(--text); }
-  .dot { flex:none; width:7px; height:7px; border-radius:50%; margin-top:7px; background:var(--border-strong); }
-  .does .dot { background:var(--blue); } .gets .dot { background:var(--green); }
-  .ctrl { border:1px solid var(--border); border-left:3px solid var(--blue); padding:18px 22px; margin-top:16px; }
-  .ctrl .lbl { font-family:var(--mono); font-size:11px; letter-spacing:.8px; text-transform:uppercase; color:var(--text-3); display:block; margin-bottom:6px; }
-  .ctrl p { font-size:14.5px; color:var(--text-2); }
-  .ctrl .gate b { color:var(--text); }
-  .faq details { border:1px solid var(--border); padding:0; margin-top:10px; }
-  .faq summary { cursor:pointer; font-weight:600; font-size:15px; padding:15px 18px; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-  .faq summary::after { content:"+"; color:var(--blue); font-size:20px; font-weight:300; }
-  .faq details[open] summary::after { content:"\2212"; }
-  .faq details p { padding:0 18px 16px; font-size:14.5px; color:var(--text-2); }
-  .verify { background:var(--bg-alt); border:1px solid var(--border); padding:26px 26px 22px; margin-top:6px; }
-  .verify .runline { font-family:var(--mono); font-size:13px; background:#161616; color:#9ef0a0; padding:12px 16px; margin:14px 0 16px; overflow-x:auto; white-space:nowrap; }
-  .verify .links { display:flex; flex-wrap:wrap; gap:10px; }
-  .verify p { font-size:14.5px; color:var(--text-2); }
-  .cta { margin:44px 0 60px; background:var(--blue); color:#fff; padding:34px 30px; }
-  .cta h2 { color:#fff; margin-bottom:6px; }
-  .cta p { color:#d0e2ff; font-size:15px; max-width:44em; margin-bottom:18px; }
-  .btn-w { background:#fff; color:var(--blue); } .btn-w:hover { background:var(--blue-tint); }
-  .btn-wo { background:transparent; color:#fff; border-color:#fff; } .btn-wo:hover { background:rgba(255,255,255,.14); }
-  footer { border-top:1px solid var(--border); padding:18px 0 26px; font-size:13px; color:var(--text-3); }
-  footer a { color:var(--blue); text-decoration:none; }
-  @media (max-width:760px){ .cols { grid-template-columns:1fr; } .col + .col { border-left:none; border-top:1px solid var(--border); } }
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:24px;height:24px}
+.brand-word{font-weight:600;font-size:14px;letter-spacing:.2px;white-space:nowrap}
+.brand-word span{font-weight:300}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
 </style>
 </head>
 <body>
@@ -76,73 +109,276 @@
   <a class="backlink" href="/#engines">&larr; All engines</a>
   <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
 </div></header>
-
 <main class="wrap">
-  <div class="hero">
-    <p class="kicker">ENGINE 09 &middot; PORTFOLIO</p>
-    <h1><strong>Cash Management</strong></h1>
-    <p class="tag">The cash manager's monthly double-check, five read-only controls</p>
-    <p class="intro">The cash manager's month has its own checklist: does the bank tie to the GL, which checks went stale, did every wire carry two approvals, does the register carry forward, did the sweeps concentrate correctly. This engine runs all five as read-only controls &mdash; every one human-gated.</p>
+<section class="masthead">
+  <p class="kicker">ENGINE 09</p>
+  <p class="partline">SFS-E09-CSH &middot; CASH CONTROLS &middot; REV 2026-07-20 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Cash Management</strong></h1>
+  <p class="tag">Five read-only cash controls that re-derive before review</p>
+  <p class="intro">Cash Management independently re-derives five monthly cash controls: the bank-to-GL bridge, outstanding-check aging and crossfoot, wire segregation of duties, bank-register continuity, and concentration sweeps. It works in integer cents, reports findings without changing the inputs, and stops at readiness for human review. It never posts, drafts a journal entry, releases a wire, or writes back to a source system.</p>
+  <p class="thesis">Cash is trusted only after the bridge, register, approvals, and sweep arithmetic can be re-derived. The public engine exposes those controls as deterministic validators and pins the behavior with an end-to-end tamper grid.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 400" role="img" aria-label="Exploded functional block stack: Bank Reconciliation, Outstanding Checks, Wire Approval, Bank Register, Cash Concentration over seeded fictional data">
+  <g class="die-layer" data-layer="bank-rec"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Bank Reconciliation</text></g>
+  <g class="die-layer" data-layer="checks"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Outstanding Checks</text></g>
+  <g class="die-layer" data-layer="wires"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Wire Approval</text></g>
+  <g class="die-layer" data-layer="register"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Bank Register</text></g>
+  <g class="die-layer" data-layer="sweeps"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Cash Concentration</text></g>
+  <text x="40" y="390" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="bank-rec" data-plain="Rebuilds the bank and book sides of the reconciliation and checks that they meet." data-eng="BankReconciliationValidator recomputes adjusted bank as ending balance plus deposits in transit minus outstanding checks plus bank errors, and adjusted book as GL balance plus interest minus charges plus book errors. Nonzero error plugs remain review items." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_rec.py" aria-label="Bank Reconciliation layer — open detail" aria-controls="die-panel" aria-expanded="false">Bank Reconciliation</button>
+    <button class="die-face" data-layer="checks" data-plain="Crossfoots uncleared checks and flags records that break status, amount, date, uniqueness, or stale-date rules." data-eng="OutstandingCheckValidator counts allowed statuses, re-adds outstanding and stale amounts, compares the result with the displayed total when supplied, and flags outstanding checks older than the configured stale-days policy." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/outstanding_checks.py" aria-label="Outstanding Checks layer — open detail" aria-controls="die-panel" aria-expanded="false">Outstanding Checks</button>
+    <button class="die-face" data-layer="wires" data-plain="Checks that an approved or scheduled wire has two approvers and that neither one is the initiator." data-eng="WireApprovalValidator enforces three distinct people across initiator, first approver, and second approver; approved or scheduled wires require the second approval, and scheduled dates cannot precede request dates." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/wire_approval.py" aria-label="Wire Approval layer — open detail" aria-controls="die-panel" aria-expanded="false">Wire Approval</button>
+    <button class="die-face" data-layer="register" data-plain="Rebuilds every running balance and checks opening, closing, prior-period, and optional bank-statement continuity." data-eng="BankRegisterValidator re-derives the row chain from opening balance plus signed transaction amounts, foots the close, tests prior-close continuity, and records a review finding when an optional statement balance does not tie." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_register.py" aria-label="Bank Register layer — open detail" aria-controls="die-panel" aria-expanded="false">Bank Register</button>
+    <button class="die-face" data-layer="sweeps" data-plain="Re-adds sub-account sweeps and rebuilds the concentration-account roll-forward." data-eng="CashConcentrationValidator compares the sum of unique sub-account sweep lines with concentration sweeps in, then re-derives closing as opening plus sweeps in minus disbursements." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cash_concentration.py" aria-label="Cash Concentration layer — open detail" aria-controls="die-panel" aria-expanded="false">Cash Concentration</button>
   </div>
-
-  <figure class="vis">
-    <img src="../assets/tile-cash.webp" data-video="../assets/tile-cash-motion.mp4" alt="Diagram: a bank statement and a general ledger joined by a reconciliation bridge with a verified check; below, cash-manager controls — outstanding-check aging, wire dual-approval, and concentration sweeps" loading="eager">
-  </figure>
-
-  <section>
-    <h2>How the work moves</h2>
-    <div class="cols">
-      <div class="col"><h4>You provide</h4><div class="item"><span class="dot"></span><span>Bank statements</span></div><div class="item"><span class="dot"></span><span>GL cash accounts &amp; registers</span></div></div>
-      <div class="col does"><h4>The engine does</h4><div class="item"><span class="dot"></span><span>Reconciles bank to GL</span></div><div class="item"><span class="dot"></span><span>Ages outstanding and stale checks</span></div><div class="item"><span class="dot"></span><span>Verifies wire dual-approval, register continuity, and concentration sweeps</span></div></div>
-      <div class="col gets"><h4>You receive</h4><div class="item"><span class="dot"></span><span><b>Five control results</b>, evidence attached</span></div><div class="item"><span class="dot"></span><span><b>Exceptions</b> flagged for review</span></div><div class="item"><span class="dot"></span><span><b>A monthly cash package</b> for sign-off</span></div></div>
-    </div>
-    <div class="ctrl"><span class="lbl">Controls</span><p>Read-only controls &middot; wire dual-approval verified &middot; register continuity enforced</p></div>
-    <div class="ctrl" style="border-left-color:var(--green)"><span class="lbl" style="color:var(--green)">Human gate</span><p class="gate"><b>The cash manager signs off &mdash; the engine checks, people decide.</b></p></div>
-  </section>
-
-  <section class="faq">
-    <h2>What customers ask</h2>
-    <details><summary>Is it safe to point at real accounts?</summary><p>The controls are read-only by design &mdash; the engine verifies and reports; it never moves money and never writes to your systems.</p></details><details><summary>What does the demo show?</summary><p>The same five controls running against seeded, fictional data &mdash; run it in one command.</p></details>
-  </section>
-
-  <section>
-    <h2>Verify it yourself</h2>
-    <div class="verify">
-      <p>Don't take this page's word for it. The engine is public, MIT-licensed, and runs on fictional seeded data &mdash; read the code, run it, and judge the work before you spend anything.</p>
-      <div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git<br>cd cash-management &nbsp;&amp;&amp;&nbsp; python -m cash_engine --demo</div>
-      <div class="links">
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-management" target="_blank" rel="noopener">Source on GitHub</a>
-        <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/README.md" target="_blank" rel="noopener">Engine README</a>
-        <a class="btn btn-t" href="/tests/" >All tests, by engine</a>
-        <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="cta">
-    <h2>Show us where the hours go.</h2>
-    <p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. No software purchase &mdash; and your people keep approval authority.</p>
-    <a class="btn btn-w" href="/#book">Book a free consultation</a>
-    <a class="btn btn-wo" href="mailto:contact@sophonfinance.com">contact@sophonfinance.com</a>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Each layer is one implemented validation-only control. Select a layer for its business purpose and source-level behavior.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">5,290<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">5<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent monthly cash validations</div></div>
+  <div class="cell"><div class="v">5,000 cases<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Invariant grid</div><div class="p">constructed-to-tie inputs paired with targeted tampering</div></div>
+  <div class="cell"><div class="v">integer cents<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Amount model</div><div class="p">no floating-point money arithmetic</div></div>
+  <div class="cell"><div class="v">READY FOR HUMAN REVIEW / NEEDS REVIEW<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Verdicts</div><div class="p">readiness is not approval</div></div>
+  <div class="cell"><div class="v">always false<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Posting authority</div><div class="p">the engine validates but cannot post</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">Cash can appear plausible while a bridge is out of tie, a stale check is unresolved, a wire lacks segregation of duties, a running balance has drifted, or sweep legs do not foot. A controller needs each control recomputed from structured inputs and every exception carried forward without turning mechanical cleanliness into approval.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs the complete monthly control set<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI invokes all five validators on fictional data. Each reports READY FOR HUMAN REVIEW with zero findings, and the final line states that every control is read-only and nothing was posted.</p>
+  <p style="margin:10px 0"><b>A targeted tamper must trip the exact control<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> Every point in the 5,000-case invariant grid runs once with an independently constructed tie and with at least one one-cent or one-field tamper. The wire-approval and cash-concentration grids exercise a second distinct tamper at every point. Each altered input must produce the exact finding code, so an implementation that always passes or always fails cannot satisfy the grid.</p>
+  <p style="margin:10px 0"><b>A wire cannot approve itself<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> For an approved or scheduled wire, the engine requires a first and second approver and checks that the initiator and both approvers are three different people. Missing secondary approval, self-approval, duplicate approvers, and invalid scheduling each produce findings; the validator never releases the wire.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<svg class="schem" viewBox="0 0 950 630" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Cash Management engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,295 C235,295 235,67 270,67" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">reconciliations</text></g>
+  <g class="schem-edge"><path d="M200,295 C235,295 235,181 270,181" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="230" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">check register</text></g>
+  <g class="schem-edge"><path d="M200,295 C235,295 235,295 270,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="287" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">wire requests</text></g>
+  <g class="schem-edge"><path d="M200,295 C235,295 235,409 270,409" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="344" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">bank register</text></g>
+  <g class="schem-edge"><path d="M200,295 C235,295 235,523 270,523" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="401" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">sweep lines</text></g>
+  <g class="schem-edge"><path d="M440,67 C475,67 475,295 510,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="173" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings + verdict</text></g>
+  <g class="schem-edge"><path d="M440,181 C475,181 475,295 510,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="230" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings + verdict</text></g>
+  <g class="schem-edge"><path d="M440,295 C475,295 475,295 510,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="287" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings + verdict</text></g>
+  <g class="schem-edge"><path d="M440,409 C475,409 475,295 510,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="344" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings + verdict</text></g>
+  <g class="schem-edge"><path d="M440,523 C475,523 475,295 510,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="401" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">findings + verdict</text></g>
+  <g class="schem-edge gate"><path d="M680,295 C715,295 715,295 750,295" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="287" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle">ready or needs review</text></g>
+  <g class="schem-block" data-block="demo"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cli.py" target="_blank" rel="noopener" aria-label="Open Seeded Demo Inputs source on GitHub"><rect x="30" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Seeded Demo Inputs</text></a></g>
+  <g class="schem-block" data-block="bank-rec-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_rec.py" target="_blank" rel="noopener" aria-label="Open Bank / GL Bridge source on GitHub"><rect x="270" y="30" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="71" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Bank / GL Bridge</text></a></g>
+  <g class="schem-block" data-block="checks-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/outstanding_checks.py" target="_blank" rel="noopener" aria-label="Open Check Register source on GitHub"><rect x="270" y="144" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="185" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Check Register</text></a></g>
+  <g class="schem-block" data-block="wire-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/wire_approval.py" target="_blank" rel="noopener" aria-label="Open Wire Segregation source on GitHub"><rect x="270" y="258" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Wire Segregation</text></a></g>
+  <g class="schem-block" data-block="register-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/bank_register.py" target="_blank" rel="noopener" aria-label="Open Register Continuity source on GitHub"><rect x="270" y="372" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="413" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Register Continuity</text></a></g>
+  <g class="schem-block" data-block="sweep-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cash_concentration.py" target="_blank" rel="noopener" aria-label="Open Sweep Tie-Out source on GitHub"><rect x="270" y="486" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="527" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Sweep Tie-Out</text></a></g>
+  <g class="schem-block" data-block="aggregate"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cli.py" target="_blank" rel="noopener" aria-label="Open CLI Readiness Result source on GitHub"><rect x="510" y="258" width="170" height="74" rx="4" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">CLI Readiness Result</text></a></g>
+  <g class="schem-block" data-block="human"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/README.md" target="_blank" rel="noopener" aria-label="Open Human Review source on GitHub"><rect x="750" y="258" width="170" height="74" rx="4" fill="#e6f4ea" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="299" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Human Review</text></a></g>
+  <g class="schem-title"><line x1="30" y1="604" x2="920" y2="604" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="618" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E09-CSH &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-20</text></g>
+</svg><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Demo Inputs.</b> fictional cash records enter five independent controls</li><li><b>Bank / GL Bridge.</b> re-derives both reconciliation sides</li><li><b>Check Register.</b> crossfoots status and aging</li><li><b>Wire Segregation.</b> requires distinct approval roles</li><li><b>Register Continuity.</b> rebuilds the running balance chain</li><li><b>Sweep Tie-Out.</b> re-adds sweep legs and the roll-forward</li><li><b>CLI Readiness Result.</b> prints one verdict per control and combines mechanical cleanliness into the process exit code</li><li><b>Human Review.</b> a person controls approval, release, and any posting</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Demo Inputs.</b> cash_engine.cli._run_all builds the fixed demo inputs and invokes every validator</li><li><b>Bank / GL Bridge.</b> adjusted bank == adjusted book</li><li><b>Check Register.</b> outstanding + stale amounts == displayed outstanding total</li><li><b>Wire Segregation.</b> initiator, first approver, and second approver must be distinct</li><li><b>Register Continuity.</b> opening plus signed movements == re-derived closing</li><li><b>Sweep Tie-Out.</b> sub-account sweep sum == sweeps in; opening + sweeps - disbursements == close</li><li><b>CLI Readiness Result.</b> all_clean is the conjunction of result.mechanical_clean; clean returns 0 and any review-required result returns 1</li><li><b>Human Review.</b> every result carries manual gates and posting_authorized is always False</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python -m cash_engine --demo</code><button class="copybtn" data-copy="python -m cash_engine --demo" aria-label="Copy command: python -m cash_engine --demo">copy</button></div></td><td>run all five controls on seeded fictional data</td><td class="mono">five READY FOR HUMAN REVIEW lines; findings=0; All clean.</td><td class="mono">0 for the bundled clean demo</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m cash_engine</code><button class="copybtn" data-copy="python -m cash_engine" aria-label="Copy command: python -m cash_engine">copy</button></div></td><td>show the package command help</td><td class="mono">usage and --demo option</td><td class="mono">0</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the cash engine behavior suites and invariant grid</td><td class="mono">pytest result summary</td><td class="mono">0 when the suite passes</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest --collect-only -q -o addopts=</code><button class="copybtn" data-copy="python -m pytest --collect-only -q -o addopts=" aria-label="Copy command: python -m pytest --collect-only -q -o addopts=">copy</button></div></td><td>re-derive the pinned engine test count</td><td class="mono">5290 tests collected</td><td class="mono">0</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>5,290</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Curated invariant grid<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>5,000</b> parametrized cases<br><span style="color:#6f6f6f;font-size:12.5px">end-to-end clean and tampered inputs</span></td></tr>
+  <tr><td>Cases per validator<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>1,000</b> grid points<br><span style="color:#6f6f6f;font-size:12.5px">the grid is distributed across all five controls</span></td></tr>
+  <tr><td>Clean demo<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>5 / 5</b> controls with zero findings<br><span style="color:#6f6f6f;font-size:12.5px">the bundled fictional dataset exercises every control</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine determines mechanical readiness only. Every result carries manual gates, and posting_authorized remains False.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> READY FOR HUMAN REVIEW boundary</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings</td><td class="mono"><b>READY FOR HUMAN REVIEW</b></td><td>send the mechanically clean result to the documented manual gates</td></tr><tr><td>One or more findings</td><td class="mono"><b>NEEDS REVIEW</b></td><td>retain the findings for a person; do not post, release, or write back</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">All five validators use integer cents and reject unsafe amount types instead of coercing them.</li><li style="list-style:disc;margin-left:18px">Each result is validation-only: posting_authorized is False and journal-entry, posting-action, and import-payload collections remain empty.</li><li style="list-style:disc;margin-left:18px">The public demo uses fixed fictional inputs, and the package declares no runtime dependencies.</li><li style="list-style:disc;margin-left:18px">The curated grid proves both sides of every control by coupling each constructed tie with at least one targeted tamper.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never posts, drafts a journal entry, releases a wire, creates an import payload, or mutates a source system.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>READY FOR HUMAN REVIEW means the implemented mechanical checks found no findings; it is not sign-off or posting authorization.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>The public package validates generic structured inputs and does not include a bank connector, workbook adapter, or source-system writeback path.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>A nonzero bank or book error plug is not self-certifying; it remains a review finding that requires approval.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">the real CLI</span>
+<figure class="figwrap"><img src="../assets/tile-cash.webp" data-video="../assets/tile-cash-motion.mp4" alt="Cash Management diagram with a bank record tied to the general ledger above check aging, two wire approvals, and a concentration sweep" loading="lazy"><figcaption>The existing Cash Management engine tile depicts the bank-to-ledger tie-out together with check aging, dual wire approvals, and concentration sweep controls.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git &amp;&amp; cd finance-automation-portfolio/cash-management &amp;&amp; python -m cash_engine --demo</div><div class="runline">python -m pytest --collect-only -q -o addopts=</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-management/cash_engine" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
   </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>py -3 -m pytest --collect-only -q -o addopts= (cash-management/); 5,290 tests collected on 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>cash-management/README.md — The five controls</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>cash-management/cash_engine/tests/test_curated_invariant_grid.py — 1,000 cases per validator x 5 validators</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>cash-management/README.md — every amount is held in integer cents</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>cash-management/cash_engine/* — each result.verdict returns READY FOR HUMAN REVIEW when mechanically clean, otherwise NEEDS REVIEW</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>cash-management/cash_engine/* — each result.posting_authorized property returns False</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>py -3 -m cash_engine --demo (cash-management/); output re-run on 2026-07-20; implementation in cash-management/cash_engine/cli.py</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>cash-management/cash_engine/tests/test_curated_invariant_grid.py — module contract and five parametrized validator grids</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>cash-management/cash_engine/wire_approval.py — WireApprovalValidator and WireApprovalResult</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>py -3 -m pytest --collect-only -q -o addopts= (cash-management/); re-run 2026-07-20 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>cash-management/cash_engine/tests/test_curated_invariant_grid.py — 1,000 cases for each of five validators</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>cash-management/cash_engine/tests/test_curated_invariant_grid.py — 1,000 cases per validator x 5 validators</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>py -3 -m cash_engine --demo (cash-management/); re-run 2026-07-20</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>cash-management/README.md and cash-management/cash_engine/* result types</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>cash-management/README.md — Boundary; cash-management/cash_engine/* result.verdict and posting_authorized</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>cash-management/cash_engine/bank_rec.py, outstanding_checks.py, wire_approval.py, bank_register.py, and cash_concentration.py — module boundaries</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>cash-management/cash_engine/bank_rec.py — BANK_ERROR_REVIEW_REQUIRED and BOOK_ERROR_REVIEW_REQUIRED</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
 </main>
-
-<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
-
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-management/cash_engine" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
 <script>
-// motion upgrade: diagram image swaps to its silent looping video when visible
-document.querySelectorAll('img[data-video]').forEach(function(img){
-  var io=new IntersectionObserver(function(es){ es.forEach(function(e){
-    if(!e.isIntersecting) return; io.unobserve(img);
-    var v=document.createElement('video');
-    v.muted=true; v.defaultMuted=true; v.loop=true; v.autoplay=true; v.playsInline=true;
-    v.setAttribute('muted',''); v.setAttribute('playsinline',''); v.setAttribute('autoplay',''); v.setAttribute('loop',''); v.setAttribute('preload','auto');
-    v.poster=img.currentSrc||img.src; v.src=img.getAttribute('data-video');
-    v.width=img.width; v.height=img.height; v.setAttribute('role','img'); v.setAttribute('aria-label',img.alt);
-    img.replaceWith(v); var p=v.play(); if(p&&p.catch)p.catch(function(){});
-  }); },{rootMargin:'120px'});
-  io.observe(img);
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
 });
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
 </script>
 </body>
 </html>

@@ -1,0 +1,304 @@
+{
+  "num": 8,
+  "slug": "atlas",
+  "part_no": "SFS-E08-ATL",
+  "mnemonic": "ATL",
+  "family": "Documentation-as-Artifact",
+  "name": "Finance Operations Atlas",
+  "tagline": "A finance department's operating map, generated as one self-contained HTML file",
+  "plain_summary": "Finance Operations Atlas turns a typed Python model of drives, recurring workstreams, a location directory, and calendar events into a deterministic single-file HTML map. The fictional demonstration runs locally with no server, build chain, external resources, or third-party dependencies.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The map and renderer live in source. Every structural count on this page is recomputed by the Atlas CLI or its test suite.",
+  "layers_intro": "The Atlas is a data-to-artifact pipeline. Select a layer to see what it contributes to the generated map.",
+
+  "layers": [
+    {
+      "id": "artifact",
+      "label": "Single-File Artifact",
+      "plain": "One portable HTML file opens directly in a browser and carries the full department map.",
+      "engineering": "The generated UTF-8 document embeds its CSS, serialized data payload, and dependency-free JavaScript; it has no external resource dependency.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/generate.py"
+    },
+    {
+      "id": "views",
+      "label": "Interactive Views",
+      "plain": "Overview, Drive Map, Workstreams, Find It, and Calendar expose the same operating model from different angles.",
+      "engineering": "Five client-side views use native buttons, labelled regions, a live-filtered lookup table, and responsive layouts over one embedded payload.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/generate.py"
+    },
+    {
+      "id": "renderer",
+      "label": "Deterministic Renderer",
+      "plain": "Rebuilding from unchanged data produces the same file, so source changes create clean, reviewable diffs.",
+      "engineering": "The standard-library renderer uses no timestamps and no randomness; the generator tests require two runs to be byte-identical.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/generate.py"
+    },
+    {
+      "id": "model",
+      "label": "Typed Atlas Data",
+      "plain": "Drives, folders, process steps, lookup rows, and calendar events are maintained as source data rather than hand-edited page copy.",
+      "engineering": "atlas_data.py defines frozen dataclasses for Folder, Drive, Step, and Workstream plus tuple-backed Find It and calendar rows.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/atlas_data.py"
+    }
+  ],
+
+  "blocks": [
+    {
+      "id": "model",
+      "label": "Atlas Data Model",
+      "kind": "role",
+      "col": 0,
+      "row": 0,
+      "plain": "declares the fictional department map",
+      "engineering": "frozen dataclasses, tuples, metadata, and palette tokens",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/atlas_data.py"
+    },
+    {
+      "id": "payload",
+      "label": "Payload Builder",
+      "kind": "role",
+      "col": 1,
+      "row": 0,
+      "plain": "prepares one consistent map for every view",
+      "engineering": "flattens dataclasses, resolves palette keys, and preserves source order",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/generate.py"
+    },
+    {
+      "id": "render",
+      "label": "Deterministic Render",
+      "kind": "audit",
+      "col": 2,
+      "row": 0,
+      "plain": "combines the data with the page shell",
+      "engineering": "escapes metadata, serializes safe JSON, and substitutes inline CSS and JavaScript",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/generate.py"
+    },
+    {
+      "id": "artifact",
+      "label": "Single HTML File",
+      "kind": "role",
+      "col": 3,
+      "row": 0,
+      "plain": "opens locally without a server",
+      "engineering": "one committed UTF-8 artifact with no external resource tags or URLs",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/out/finance-operations-atlas.html"
+    },
+    {
+      "id": "views",
+      "label": "Five Atlas Views",
+      "kind": "role",
+      "col": 4,
+      "row": 0,
+      "plain": "turn the same model into browsable operating context",
+      "engineering": "Overview, Drive Map, Workstreams, Find It, and Calendar render client-side",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/generate.py"
+    }
+  ],
+  "edges": [
+    {"from": "model", "to": "payload", "label": "typed rows"},
+    {"from": "payload", "to": "render", "label": "resolved payload"},
+    {"from": "render", "to": "artifact", "label": "UTF-8 output"},
+    {"from": "artifact", "to": "views", "label": "embedded UI"}
+  ],
+
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "2,928",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (finance-atlas/); 2,928 tests collected on 2026-07-20 and pinned in site-datasheets/counts.json",
+      "plain": "the checks that pin the model, generator, artifact, and confidentiality boundary"
+    },
+    {
+      "label": "Views",
+      "value": "5",
+      "source": "finance-atlas/README.md — What the artifact contains: Overview, Drive Map, Workstreams, Find It, and Calendar",
+      "plain": "five ways into one shared operating model"
+    },
+    {
+      "label": "Map coverage",
+      "value": "5 nodes · 14 briefings",
+      "source": "finance-atlas/generate.py main() derives len(DRIVES) and the folder total; py -3 generate.py --out <temp> reported 5 (+14 folder briefings)",
+      "plain": "four fictional drives, the systems group, and their mapped areas"
+    },
+    {
+      "label": "Process coverage",
+      "value": "4 · 24 steps",
+      "source": "finance-atlas/generate.py main() derives len(WORKSTREAMS) and the step total; py -3 generate.py --out <temp> reported 4 (24 steps)",
+      "plain": "recurring workstreams and their clickable process steps"
+    },
+    {
+      "label": "Find It",
+      "value": "33 rows",
+      "source": "finance-atlas/README.md — Find It is a live-filtered 33-row lookup table; cross-checked by finance-atlas/generate.py CLI output",
+      "plain": "location entries filter as the user types"
+    },
+    {
+      "label": "Calendar",
+      "value": "16 events",
+      "source": "finance-atlas/README.md — Calendar contains 16 monthly, quarterly, and annual events; cross-checked by finance-atlas/generate.py CLI output",
+      "plain": "the recurring finance rhythm keyed to a December 31 year-end"
+    }
+  ],
+
+  "problem_statement": "Finance teams depend on structural knowledge: where records live, how recurring processes run, what conventions mean, and when work happens. When that context is scattered across people's memories and disconnected documents, onboarding slows down and handoffs become fragile.",
+  "scenarios": [
+    {
+      "title": "Find a record without relying on someone's memory",
+      "narrative": "The Find It view filters the location directory as the user types, connecting a requested record to its declared location and working notes. The demonstration carries 33 searchable rows across finance functions.",
+      "source": "finance-atlas/README.md — What the artifact contains and 60-second tour; finance-atlas/atlas_data.py FINDIT"
+    },
+    {
+      "title": "Open a recurring process at the step that matters",
+      "narrative": "Four workstream pipelines expose 24 clickable steps. Each step can show its declared inputs, outputs, locations, and watch-fors without requiring a separate process document.",
+      "source": "finance-atlas/README.md — Workstreams; finance-atlas/generate.py main() reported 4 workstreams and 24 steps"
+    },
+    {
+      "title": "Regenerate and redistribute one portable map",
+      "narrative": "Update atlas_data.py, rerun the standard-library generator, and redistribute one HTML file. With unchanged data, repeated runs produce byte-identical output, keeping review focused on real model changes.",
+      "source": "finance-atlas/README.md — The problem it solves and Regenerate it; finance-atlas/atlas_tests/test_generator.py"
+    }
+  ],
+
+  "instruction_set": [
+    {
+      "cmd": "py generate.py",
+      "operation": "render the Atlas to its default path",
+      "output": "model-count summary and output path",
+      "exit_code": "0",
+      "artifacts": "out/finance-operations-atlas.html"
+    },
+    {
+      "cmd": "py generate.py --out somewhere.html",
+      "operation": "render to a chosen output path",
+      "output": "model-count summary and chosen path",
+      "exit_code": "0",
+      "artifacts": "somewhere.html"
+    },
+    {
+      "cmd": "py generate.py --help",
+      "operation": "show the Atlas generator options",
+      "output": "usage: generate.py [-h] [--out OUT]",
+      "exit_code": "0",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "py -3 -m pytest -q",
+      "operation": "run the Atlas test suite",
+      "output": "pytest pass/fail summary",
+      "exit_code": "0 when the suite passes",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "py -3 -m pytest --collect-only -q -o addopts=",
+      "operation": "collect the Atlas test inventory without running it",
+      "output": "2,928 tests collected",
+      "exit_code": "0",
+      "artifacts": "none"
+    }
+  ],
+
+  "benchmarks": [
+    {
+      "label": "Repeat-build stability",
+      "value": "byte-identical",
+      "unit": "across two generator runs",
+      "source": "finance-atlas/atlas_tests/test_generator.py — test_two_generator_runs_are_byte_identical; locally reproduced on 2026-07-20 with matching SHA-256 hashes",
+      "plain": "unchanged source produces an unchanged artifact"
+    },
+    {
+      "label": "Drive-map coverage",
+      "value": "5 + 14",
+      "unit": "drive/system nodes + folder briefings",
+      "source": "finance-atlas/generate.py main() live CLI summary; finance-atlas/atlas_data.py DRIVES"
+    },
+    {
+      "label": "Workstream coverage",
+      "value": "4 / 24",
+      "unit": "workstreams / clickable steps",
+      "source": "finance-atlas/generate.py main() live CLI summary; finance-atlas/atlas_data.py WORKSTREAMS"
+    },
+    {
+      "label": "Location directory",
+      "value": "33",
+      "unit": "Find It rows",
+      "source": "finance-atlas/README.md — 33-row Find It table; finance-atlas/atlas_data.py FINDIT"
+    },
+    {
+      "label": "Recurring calendar",
+      "value": "16",
+      "unit": "monthly, quarterly, and annual events",
+      "source": "finance-atlas/README.md — 16 events; finance-atlas/atlas_data.py CALENDAR"
+    },
+    {
+      "label": "Engine tests",
+      "value": "2,928",
+      "unit": "tests",
+      "source": "py -3 -m pytest --collect-only -q -o addopts= (finance-atlas/); verified 2026-07-20 and pinned in site-datasheets/counts.json"
+    }
+  ],
+
+  "control_characteristics": {
+    "plain": "The Atlas guarantees a reproducible offline document generated from declared source data; it is not a live control, verification, or approval system.",
+    "guarantees": [
+      "No timestamps and no randomness: unchanged source data renders byte-identical output.",
+      "One self-contained HTML document: CSS, payload JSON, and dependency-free JavaScript are embedded with no server, CDN, or external resources.",
+      "All entities, people, paths, platforms, banks, and figures in the demonstration are fictional; tax content references public law only.",
+      "Native buttons, labelled regions, visible keyboard focus, responsive layouts, and reduced-motion handling are built into the generated page."
+    ],
+    "determinism": {
+      "seeded": false,
+      "read_only": false,
+      "offline_default": true
+    }
+  },
+
+  "limits": [
+    {
+      "statement": "This is a fictional demonstration artifact, not a published map of any real finance department, entity registry, drive, system, bank, or person.",
+      "source": "finance-atlas/README.md — demonstration-artifact disclaimer; finance-atlas/atlas_data.py module docstring"
+    },
+    {
+      "statement": "The Atlas renders the structure declared in atlas_data.py; it does not connect to, inspect, synchronize, or update live drives and systems.",
+      "source": "finance-atlas/README.md — single self-contained page with no server or external resources; finance-atlas/generate.py imports and render path"
+    },
+    {
+      "statement": "Updating the map requires editing its source data, rerunning the generator, and redistributing the resulting file; the artifact is not a live discovery service.",
+      "source": "finance-atlas/README.md — documentation-as-artifact workflow and Regenerate it"
+    },
+    {
+      "statement": "Tax content is limited to public-law references for CRA Form T1134 and the Regulation 5907 series.",
+      "source": "finance-atlas/README.md — demonstration-artifact scope; finance-atlas/atlas_data.py module docstring"
+    }
+  ],
+
+  "media": {
+    "poster": "../assets/tile-atlas.webp",
+    "motion": "../assets/tile-atlas-motion.mp4",
+    "poster_alt": "Isometric Finance Operations Atlas concept linking entities and bank accounts to systems and a canonical source, with a stale copy labelled as flagged",
+    "caption": "Concept visual from the repository's Atlas media. The generated Atlas is a fictional static-data demonstration, not a live system monitor.",
+    "crops": []
+  },
+
+  "quickstart": [
+    {
+      "label": "Clone and generate the default artifact",
+      "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/finance-atlas && py generate.py"
+    },
+    {
+      "label": "Generate to a chosen path",
+      "command": "py generate.py --out somewhere.html"
+    }
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/finance-atlas",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Finance Operations Atlas (SFS-E08-ATL) datasheet — a deterministic, standard-library generator that turns a typed fictional finance-operations model into one self-contained HTML map with five interactive views."
+  }
+}
