@@ -22,6 +22,9 @@ WORK = HERE / "work"
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 W, H, FPS = 1280, 720, 30
 TAIL = 0.9
+# The lockup used to still be fading up as the film cut to black. Hold the finished
+# endcard after the narration ends so it lands instead of flashing past.
+ENDCARD_HOLD = 1.80
 WHITE = (255, 255, 255, 255)
 BLUE = (92, 157, 255, 255)        # site blue lifted for legibility on footage
 BLUE_DEEP = (15, 98, 254, 255)    # exact site blue (glyph dot)
@@ -43,15 +46,33 @@ def _face(path, want):
     return 0
 
 
-IB, IM, IL = _face(HN, "Bold"), _face(HN, "Medium"), _face(HN, "Light")
+# macOS keeps every weight in one .ttc (selected by face index); Windows ships one
+# file per weight. Prefer Helvetica Neue/Menlo so a mac render stays identical to what
+# shipped, and fall back to the closest Windows equivalents (Arial is a Helvetica
+# metric clone; Consolas for Menlo) so the film is reproducible off a mac too.
+WINF = Path("C:/Windows/Fonts")
+
+if Path(HN).exists():
+    _SANS = {w: (HN, _face(HN, n)) for w, n in
+             (("bold", "Bold"), ("med", "Medium"), ("light", "Light"))}
+    _MONO = (MENLO, 0)
+else:
+    _alt = {"bold": WINF / "arialbd.ttf", "med": WINF / "arial.ttf",
+            "light": WINF / "arial.ttf", "mono": WINF / "consola.ttf"}
+    missing = sorted({p.name for p in _alt.values() if not p.exists()})
+    if missing:
+        raise SystemExit(f"no usable fonts: missing {missing} (and no Helvetica Neue)")
+    _SANS = {w: (str(_alt[w]), 0) for w in ("bold", "med", "light")}
+    _MONO = (str(_alt["mono"]), 0)
 
 
 def F(s, f="bold"):
-    return ImageFont.truetype(HN, s, index={"bold": IB, "med": IM, "light": IL}[f])
+    path, idx = _SANS[f]
+    return ImageFont.truetype(path, s, index=idx)
 
 
 def M(s):
-    return ImageFont.truetype(MENLO, s, index=0)
+    return ImageFont.truetype(_MONO[0], s, index=_MONO[1])
 
 
 def ease_out(t):
@@ -215,20 +236,24 @@ def tracked(img, cx, y, text, font, fill, tracking):
 
 
 def ov_close(img, t):
-    if t < 0.62:
-        # Over the welcome handshake: the two taglines.
-        if t < 0.40:
+    # Shot boundaries come from SHOTS["close"] so the overlay can never drift out of
+    # step with the cut, and the tagline timings are read against the handshake shot
+    # rather than the whole beat — that keeps them put when the endcard hold changes.
+    if t < ENDCARD_T0:
+        w = (t - WELCOME_T0) / (ENDCARD_T0 - WELCOME_T0)
+        if w < 0.353:
             return
-        a1 = ease_out((t - 0.42) / 0.2)
+        a1 = ease_out((w - 0.412) / 0.588)
         ctext(img, W / 2, 496, "AUTOMATE THE WORK.", F(58), (255, 255, 255, int(255 * a1)))
-        a2 = ease_out((t - 0.52) / 0.2)
+        a2 = ease_out((w - 0.706) / 0.588)
         ctext(img, W / 2, 566, "KEEP THE JUDGMENT.", F(58), (*BLUE[:3], int(255 * a2)))
         return
     # Endcard: the exact brand lockup, drawn vector-crisp over the generated
-    # background plate — never AI-rendered typography.
-    k = (t - 0.62) / 0.38
+    # background plate — never AI-rendered typography. The build finishes by k≈0.56
+    # so the finished lockup holds for the rest of the shot.
+    k = (t - ENDCARD_T0) / (1.0 - ENDCARD_T0)
     d = ImageDraw.Draw(img)
-    a_g = int(255 * ease_out(k / 0.35))
+    a_g = int(255 * ease_out(k / 0.16))
     if a_g > 0:
         s = 3.2
         ox, oy = W / 2 - 24 * s, 138
@@ -239,23 +264,23 @@ def ov_close(img, t):
                   fill=(*BLUE_DEEP[:3], a_g))
         d.rectangle([ox + 10 * s, oy + 35 * s, ox + 38 * s, oy + 38 * s],
                     fill=(255, 255, 255, a_g))
-    a_w = int(255 * ease_out((k - 0.18) / 0.3))
+    a_w = int(255 * ease_out((k - 0.10) / 0.16))
     if a_w > 0:
         tracked(img, W / 2, 296, "SOPHON", F(118), (255, 255, 255, a_w), 30)
-    a_r = ease_out((k - 0.34) / 0.25)
+    a_r = ease_out((k - 0.20) / 0.12)
     if a_r > 0:
         half = 185 * a_r
         d.rectangle([W / 2 - half, 446, W / 2 + half, 451], fill=(*BLUE_DEEP[:3], 255))
-    a_f = int(255 * ease_out((k - 0.42) / 0.25))
+    a_f = int(255 * ease_out((k - 0.26) / 0.12))
     if a_f > 0:
         tracked(img, W / 2, 470, "FINANCE SYSTEMS", M(26), (200, 216, 245, a_f), 14)
-    a_t = int(255 * ease_out((k - 0.55) / 0.3))
+    a_t = int(255 * ease_out((k - 0.34) / 0.14))
     if a_t > 0:
         ctext(img, W / 2, 546, "AUTOMATE THE WORK.", F(34, "med"),
               (255, 255, 255, a_t), blur=0, off=(0, 0), salpha=0)
         ctext(img, W / 2, 592, "KEEP THE JUDGMENT.", F(34, "med"),
               (*BLUE[:3], a_t), blur=0, off=(0, 0), salpha=0)
-    a_u = int(220 * ease_out((k - 0.7) / 0.28))
+    a_u = int(220 * ease_out((k - 0.44) / 0.12))
     if a_u > 0:
         tracked(img, W / 2, 658, "sophonfinance.com", M(19), (160, 178, 210, a_u), 3)
 
@@ -272,9 +297,37 @@ SHOTS = {
     "people":  [(WORK / "hf_team.mp4", 0.2, 1.0)],
     "turn":    [(WORK / "hf_turn.mp4", 0.2, 1.0)],
     "engines": [(WORK / "hf_founder1.mp4", 0.2, 0.50), (WORK / "hf_fmeet.mp4", 0.2, 0.50)],
-    "speed":   [(ASSETS / "hero2-web.mp4", 6.2, 0.28), (ASSETS / "hero2-web.mp4", 21.1, 0.24), (ASSETS / "hero2-web.mp4", 24.2, 0.48)],
-    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.28), (WORK / "hf_welcome.mp4", 0.2, 0.34), (WORK / "hf_endcard.mp4", 0.2, 0.38)],
+    "speed":   [(ASSETS / "hero2-web.mp4", 6.2, 0.280), (ASSETS / "hero2-web.mp4", 19.5, 0.268), (ASSETS / "hero2-web.mp4", 22.95, 0.452)],
+    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.225), (WORK / "hf_welcome.mp4", 0.2, 0.274), (WORK / "hf_endcard.mp4", 0.2, 0.501)],
 }
+
+# Where the close beat's cuts fall, as fractions of that beat — ov_close reads these
+# so the lockup always starts exactly on the endcard cut.
+WELCOME_T0 = SHOTS["close"][0][2]
+ENDCARD_T0 = SHOTS["close"][0][2] + SHOTS["close"][1][2]
+
+# Site hero clips are finished films: they carry their own brand cards, which must
+# never be re-cut into this one. Only these windows are usable footage. Measured off
+# the clips themselves — hero2 has a bright wordmark wipe mid-clip and a dark logo
+# outro on the tail, and a shot that overran the tail once leaked into the film.
+SAFE_WINDOWS = {
+    "hero-web.mp4": [(0.0, 77.16)],
+    "hero2-web.mp4": [(0.0, 16.95), (19.40, 28.90)],
+}
+
+
+def check_window(src, t0, length):
+    """Refuse to extract footage that strays outside a clip's usable windows."""
+    wins = SAFE_WINDOWS.get(src.name)
+    if wins is None:
+        return
+    t1 = t0 + length
+    if not any(a <= t0 and t1 <= b for a, b in wins):
+        raise SystemExit(
+            f"{src.name}: shot {t0:.2f}-{t1:.2f}s escapes the usable footage "
+            f"{wins}. That clip carries its own brand cards outside these windows; "
+            f"move the in-point or shorten the shot."
+        )
 
 CAPTIONS = {
     "open": "Every month, the books have to close. And every month, good people give up their nights to get there.",
@@ -286,6 +339,11 @@ CAPTIONS = {
     "speed": "Our public demo close runs in 0.15 seconds — checked, on every single run, by a verifier that never gets tired.",
     "close": "Machines do the work. Your people keep the judgment. Sophon Finance Systems.",
 }
+
+
+def beat_len(bid, durs):
+    """On-screen length of a beat: its narration, the tail gap, plus the endcard hold."""
+    return durs[bid] + TAIL + (ENDCARD_HOLD if bid == "close" else 0.0)
 
 
 def dur_of(p):
@@ -303,10 +361,11 @@ def extract(durs):
         shutil.rmtree(raw)
     raw.mkdir()
     for bid in ORDER:
-        beat_dur = durs[bid] + TAIL
+        beat_dur = beat_len(bid, durs)
         for si, (src, t0, share) in enumerate(SHOTS[bid]):
             outdir = raw / f"{bid}_{si}"
             outdir.mkdir()
+            check_window(src, t0, beat_dur * share + 0.3)
             subprocess.run([
                 FF, "-y", "-ss", f"{t0:.2f}", "-t", f"{beat_dur * share + 0.3:.2f}",
                 "-i", str(src),
@@ -322,7 +381,7 @@ def compose(raw, durs):
     frames.mkdir()
     n = 0
     for bi, bid in enumerate(ORDER):
-        beat_dur = durs[bid] + TAIL
+        beat_dur = beat_len(bid, durs)
         steps = int(round(beat_dur * FPS))
         bounds = []
         acc = 0.0
@@ -352,10 +411,14 @@ def compose(raw, durs):
 
 
 def mux(frames, durs, voice):
-    total = sum(durs[b] + TAIL for b in ORDER)
+    total = sum(beat_len(b, durs) for b in ORDER)
     gap = WORK / "gap.wav"
     subprocess.run([FF, "-y", "-f", "lavfi", "-i", f"anullsrc=r=44100:cl=mono:d={TAIL}",
                     str(gap)], check=True, capture_output=True)
+    hold = WORK / "hold.wav"
+    subprocess.run([FF, "-y", "-f", "lavfi", "-i",
+                    f"anullsrc=r=44100:cl=mono:d={ENDCARD_HOLD}", str(hold)],
+                   check=True, capture_output=True)
     lst = WORK / "vo_list.txt"
     with open(lst, "w") as fh:
         for b in ORDER:
@@ -363,6 +426,8 @@ def mux(frames, durs, voice):
             subprocess.run([FF, "-y", "-i", str(WORK / f"vo_{voice}_{b}.mp3"),
                             "-ar", "44100", "-ac", "1", str(wav)], check=True, capture_output=True)
             fh.write(f"file 'vo_{b}.wav'\nfile 'gap.wav'\n")
+        # Silence under the held endcard, so the music bed runs to the last frame.
+        fh.write("file 'hold.wav'\n")
     vo_all = WORK / "vo_all.wav"
     subprocess.run([FF, "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
                     "-ar", "44100", str(vo_all)], check=True, capture_output=True)
@@ -383,7 +448,10 @@ def mux(frames, durs, voice):
         mm = int(x // 60)
         return f"{mm:02d}:{x - mm * 60:06.3f}"
     pos = 0.0
-    with open(WORK / "why-film.vtt", "w") as fh:
+    # Explicit UTF-8 + LF: the captions carry em-dashes, and Python would otherwise
+    # write them in the platform's locale encoding (cp1252 on Windows), which browsers
+    # reject as invalid UTF-8.
+    with open(WORK / "why-film.vtt", "w", encoding="utf-8", newline="\n") as fh:
         fh.write("WEBVTT\n\n")
         for b in ORDER:
             d = durs[b] + TAIL
