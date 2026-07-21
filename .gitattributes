@@ -1,10 +1,22 @@
 *.pdf binary
+*.webp binary
+*.mp4 binary
+*.png binary
+*.jpg binary
+*.jpeg binary
 # Generated artifacts are byte-compared against a fresh render by their test
 # suites (finance-atlas test_committed_artifact_is_fresh, site-datasheets
 # test_committed_page_is_fresh). They must check out with LF on every platform
 # or those determinism guards fail on Windows working trees (autocrlf).
 docs/engines/*.html text eol=lf
 finance-atlas/out/*.html text eol=lf
-# Generator inputs are embedded into the rendered page; keep them LF so the
-# render is byte-identical across platforms.
-site-datasheets/** text eol=lf
+# Generator text inputs are embedded into the rendered page; keep them LF so
+# the render is byte-identical across platforms without classifying future
+# capture media as text.
+site-datasheets/**/*.py text eol=lf
+site-datasheets/**/*.json text eol=lf
+site-datasheets/**/*.tmpl text eol=lf
+site-datasheets/**/*.css text eol=lf
+site-datasheets/**/*.js text eol=lf
+site-datasheets/**/*.ini text eol=lf
+site-datasheets/**/*.txt text eol=lf

@@ -76,7 +76,7 @@ The orchestration layer does not replace the systems. It coordinates them.
 | Close Engine | run the close package, collect outputs, flag out-of-tie entries |
 | Reconciliation Engine | run bank/lender matching, summarize flagged reconciling items |
 | Surplus / ACB Engine | generate workpapers and summary packages for the tax model |
-| Partnership 1065 Automation | build the 1065 support package, K-1 preview, review checks, and summary draft |
+| Partnership Tax · Form 1065 | build the 1065 support package, K-1 preview, review checks, and summary draft |
 | Validation Engine | run read-only checks and turn failures into exception language |
 | Triangulate | route work through preparer, reviewer, specialist, audit, and human gate |
 | Knowledge Brain | retrieve prior decisions, assemble meeting prep, and pull verbatim, timestamped citations for workpapers; run review -> remediation (a reviewer's recorded corrections become cited directives plus an apply-ready remediation prompt, applied downstream by an AI or operator); or surface a refusal when no source qualifies |

@@ -46,7 +46,7 @@ the output reproducible.
 | Close Engine | `monthly-close-automation` | recurring journal entries, intercompany balancing, close evidence |
 | Reconciliation Engine | `cash-reconciliation` | GL-to-bank/lender matching with materiality classification |
 | Surplus / ACB Model | `tax-surplus-engine` | foreign-affiliate surplus pools, distribution waterfall, ACB ledger |
-| Partnership 1065 Automation | `partnership-1065-automation` | source intake, book-to-tax bridge, 1065 line mapping, K-1 preview, IRC §704(c) built-in gain |
+| Partnership Tax · Form 1065 | `partnership-1065-automation` | source intake, book-to-tax bridge, 1065 line mapping, K-1 preview, IRC §704(c) built-in gain |
 
 ### 3a. Knowledge / retrieval engine
 

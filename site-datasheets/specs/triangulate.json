@@ -13,8 +13,8 @@
 
   "layers": [
     {"id": "gate", "label": "Human Gate",
-     "plain": "A person makes the final call. The framework never overrides itself.",
-     "engineering": "Deterministic gate maps severity to a verdict; sign-off authority is held by a human, not any model.",
+     "plain": "The demo marks work eligible or blocked; a person makes the real-world approval decision.",
+     "engineering": "HumanGate is a deterministic policy class: Critical → FAIL, High → FLAG, and Medium/Low → PASS with residual notes. PASS is eligibility for human sign-off, not a recorded human signature.",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py"},
     {"id": "auditor", "label": "Deterministic Auditor",
      "plain": "Re-does the arithmetic itself, so no model is asked whether a number 'looks right.'",
@@ -40,21 +40,25 @@
      "engineering": "DemoPreparer builds draft; offline deterministic in the public demo",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/preparer.py"},
     {"id": "reviewer", "label": "Reviewer", "kind": "role", "col": 1, "row": 0,
+     "plain": "challenges the draft without changing it",
      "engineering": "read-only challenge; hash-guarded",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/reviewer.py"},
     {"id": "specialist", "label": "Specialist", "kind": "role", "col": 1, "row": 1,
+     "plain": "adds a narrow second opinion where needed",
      "engineering": "scoped second opinion",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/specialist.py"},
     {"id": "auditor", "label": "Deterministic Auditor", "kind": "audit", "col": 1, "row": 2,
+     "plain": "recomputes the arithmetic independently",
      "engineering": "re-derives every formula mechanically",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py"},
-    {"id": "reconcile", "label": "Reconcile + Gate", "kind": "gate", "col": 2, "row": 1,
-     "engineering": "severity → verdict; findings reconciled",
+    {"id": "reconcile", "label": "Reconcile + Policy", "kind": "gate", "col": 2, "row": 1,
+     "plain": "combines findings and applies the severity policy",
+     "engineering": "findings reconciled; deterministic severity policy returns PASS, FLAG, or FAIL",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py"},
-    {"id": "human", "label": "Human Gate", "kind": "human", "col": 3, "row": 1,
+    {"id": "human", "label": "Human Approval", "kind": "human", "col": 3, "row": 1,
      "plain": "a person signs off — or doesn't",
-     "engineering": "final authority; framework never overrides itself",
-     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py"}
+     "engineering": "external approval boundary; the demo policy does not record or replace a human signature",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/README.md"}
   ],
   "edges": [
     {"from": "preparer", "to": "reviewer", "label": "draft"},
@@ -68,8 +72,8 @@
   ],
 
   "spec_strip": [
-    {"label": "Tests", "value": "8,320", "source": "py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README's \"1,311\" is stale", "plain": "the checks that pin this engine's behavior"},
-    {"label": "Roles", "value": "5", "source": "ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Human gatekeeper", "plain": "independent duties over one workpaper"},
+    {"label": "Tests", "value": "8,320", "source": "python -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 and pinned in site-datasheets/counts.json", "plain": "the checks that pin this engine's behavior"},
+    {"label": "Roles", "value": "5", "source": "ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Policy gate + human approver", "plain": "independent duties over one workpaper"},
     {"label": "Verdict states", "value": "PASS / FLAG / FAIL", "source": "ai-validation-framework/README.md — verdicts and exit behavior"},
     {"label": "Gate exit codes", "value": "0 = PASS · non-zero = FLAG/FAIL", "source": "ai-validation-framework/README.md — \"exits 0 on PASS and non-zero on FLAG/FAIL\"", "plain": "so it can act as a CI gate"},
     {"label": "Default mode", "value": "offline, no API key", "source": "ai-validation-framework/README.md — \"default demo needs no API key and no network access\""},
@@ -93,7 +97,16 @@
     {"cmd": "python -m triangulate", "operation": "run the defective sample", "output": "VERDICT: FAIL [cannot sign off]", "exit_code": "non-zero", "artifacts": "builder memo, fix packet, change log, QA summary, verdict.json"},
     {"cmd": "python -m triangulate --sample clean", "operation": "run the clean sample", "output": "VERDICT: PASS", "exit_code": "0", "artifacts": "output/ artifacts + verdict.json"},
     {"cmd": "python -m triangulate --demo-adversarial", "operation": "inject one hallucinated figure and catch it", "output": "VERDICT: FAIL · Critical=6", "exit_code": "non-zero", "artifacts": "fix packet showing cascade"},
+    {"cmd": "python run.py --sample clean", "operation": "use the equivalent script entrypoint", "output": "VERDICT: PASS", "exit_code": "0", "artifacts": "output/ artifacts + verdict.json"},
+    {"cmd": "python -m triangulate --seed N", "operation": "choose the deterministic fictional-data seed", "output": "selected sample verdict", "exit_code": "verdict-dependent", "artifacts": "output/ unless --no-artifacts"},
+    {"cmd": "python -m triangulate --no-specialist", "operation": "skip the optional Specialist step", "output": "verdict without specialist findings", "exit_code": "verdict-dependent", "artifacts": "output/ unless --no-artifacts"},
+    {"cmd": "python -m triangulate --output DIR", "operation": "write the audit trail to a chosen directory", "output": "selected sample verdict", "exit_code": "verdict-dependent", "artifacts": "DIR/*"},
+    {"cmd": "python -m triangulate --no-artifacts", "operation": "print the review without writing files", "output": "selected sample verdict", "exit_code": "verdict-dependent", "artifacts": "none"},
     {"cmd": "python -m triangulate.loop --sample adversarial", "operation": "self-heal the injected error", "output": "FAIL → PASS", "exit_code": "0", "artifacts": "re-derivation change log"},
+    {"cmd": "python -m triangulate.loop --sample defective", "operation": "attempt repair and escalate unsupported judgment", "output": "FAIL → FLAG / ESCALATED", "exit_code": "non-zero", "artifacts": "fix packet; optional report"},
+    {"cmd": "python -m triangulate.loop --seed N", "operation": "choose the loop's deterministic data seed", "output": "selected loop verdict", "exit_code": "verdict-dependent", "artifacts": "optional report"},
+    {"cmd": "python -m triangulate.loop --budget N", "operation": "cap remediation turns", "output": "final loop verdict", "exit_code": "verdict-dependent", "artifacts": "optional report"},
+    {"cmd": "python -m triangulate.loop --out DIR", "operation": "write the Markdown loop report", "output": "final loop verdict", "exit_code": "verdict-dependent", "artifacts": "DIR/review_loop_report.md"},
     {"cmd": "python -m triangulate --xlsx", "operation": "also emit a small .xlsx workpaper", "output": "VERDICT + workpaper.xlsx", "exit_code": "non-zero", "artifacts": "output/*.xlsx"},
     {"cmd": "python -m pytest -q", "operation": "run the engine's test suite", "output": "test session summary", "exit_code": "0", "artifacts": "none"}
   ],
@@ -102,19 +115,22 @@
     {"label": "Adversarial cascade depth", "value": "6", "unit": "Critical findings from 1 injected cell", "source": "ai-validation-framework/README.md — \"Critical=6\" in --demo-adversarial", "plain": "one bad number, six downstream failures caught"},
     {"label": "Self-heal turns (adversarial)", "value": "1", "unit": "loop turn to PASS", "source": "ai-validation-framework/README.md — \"Turn 1 re-derive B5 … PASS\""},
     {"label": "Independent detectors", "value": "2", "unit": "roles flag the same cell", "source": "ai-validation-framework/README.md — \"flagged independently by two roles\""},
-    {"label": "Engine tests", "value": "8,320", "unit": "tests", "source": "py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README's \"1,311\" is stale"}
+    {"label": "Engine tests", "value": "8,320", "unit": "tests", "source": "python -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 and pinned in site-datasheets/counts.json"}
   ],
 
   "control_characteristics": {
     "authority": [
-      {"rank": 1, "level": "Source data", "note": "signed/source evidence outranks everything"},
-      {"rank": 2, "level": "Signed work", "note": "prior signed work product"},
-      {"rank": 3, "level": "AI assumption", "note": "lowest authority; cannot outrank source"}
+      {"rank": 1, "level": "Signed prior-year work", "note": "highest authority in the implemented enum"},
+      {"rank": 2, "level": "Management instruction", "note": "direct instruction from accountable management"},
+      {"rank": 3, "level": "Meeting decision", "note": "documented decision from the engagement record"},
+      {"rank": 4, "level": "Current-year source", "note": "current-period source data and evidence"},
+      {"rank": 5, "level": "Workbook formula", "note": "existing formula logic, subject to re-derivation"},
+      {"rank": 6, "level": "AI assumption", "note": "lowest authority; cannot outrank cited evidence"}
     ],
     "verdict_map": [
       {"severity": "Critical present", "verdict": "FAIL", "action": "returned for rebuild; exits non-zero"},
       {"severity": "High/unresolved judgment", "verdict": "FLAG", "action": "fix packet escalated to a human"},
-      {"severity": "None", "verdict": "PASS", "action": "eligible for human sign-off; exit 0"}
+      {"severity": "Medium/Low only, or none", "verdict": "PASS", "action": "residual notes documented; eligible for human sign-off; exit 0"}
     ],
     "guarantees": [
       "Read-only reviewer: the orchestrator hashes the workpaper before and after review steps, so a reviewer cannot mutate what it inspects.",
@@ -122,7 +138,7 @@
       "Seeded, fictional data throughout the public demo."
     ],
     "determinism": {"seeded": true, "read_only": true, "offline_default": true},
-    "gate_policy": {"human_gated": true, "note": "A stopped line goes to a person — the framework never overrides itself."},
+    "gate_policy": {"human_approval_required": true, "demo_gate": "automated-policy", "note": "The demo's HumanGate class applies the severity policy; an actual person remains the final approver."},
     "modes": [
       {"name": "Enterprise-safe mode (default)", "detail": "deterministic mock reviewer, no API key, no network call, runnable in conservative corporate IT."},
       {"name": "Agent-accelerated mode", "detail": "where approved, a live Anthropic Claude reviewer adapter can replace the mock reviewer; an optional orchestration layer for approved, agent-enabled environments; the platform runs fully without it."}
@@ -136,13 +152,16 @@
   ],
 
   "media": {
-    "poster": "../assets/tile-triangulate.webp",
-    "motion": "../assets/tile-triangulate-motion.mp4",
-    "crops": []
+    "poster": "../assets/triangulate-cli.webp",
+    "motion": "../assets/triangulate-cli.mp4",
+    "crops": [
+      {"path": "../assets/triangulate-cli-verdict.webp", "label": "Verdict and severity summary", "alt": "Triangulate terminal excerpt showing FAIL, six Critical findings, one Medium finding, and the automated-policy demo gate"},
+      {"path": "../assets/triangulate-cli-fix-packet.webp", "label": "Fix packet with independent detections", "alt": "Triangulate terminal excerpt showing Reviewer and Deterministic Auditor tie-out findings for the injected fictional error"}
+    ]
   },
 
   "quickstart": [
-    {"label": "Clone + run the defective sample", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd ai-validation-framework && python -m triangulate"},
+    {"label": "Clone + run the defective sample", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/ai-validation-framework && python -m triangulate"},
     {"label": "Run the clean sample (PASS)", "command": "python -m triangulate --sample clean"}
   ],
 
@@ -154,6 +173,6 @@
   },
 
   "meta": {
-    "description": "Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, a human-gated verdict, and every figure re-derivable from the public repository."
+    "description": "Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, an automated policy verdict at an explicit human-approval boundary, and every figure re-derivable from the public repository."
   }
 }

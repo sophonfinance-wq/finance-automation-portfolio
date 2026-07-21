@@ -37,7 +37,7 @@ def _print_section(title: str, lines: List[str]) -> None:
 
 def _verdict_banner(status: VerdictStatus) -> str:
     icon = {
-        VerdictStatus.PASS: "PASS  [signed off]",
+        VerdictStatus.PASS: "PASS  [eligible for human approval]",
         VerdictStatus.FLAG: "FLAG  [returned to Preparer]",
         VerdictStatus.FAIL: "FAIL  [cannot sign off]",
     }[status]
@@ -57,7 +57,7 @@ def render(result: PipelineResult) -> None:
     verdict = result.verdict
     print(f"\n{_verdict_banner(verdict.status)}")
     print(f"  Rationale     : {verdict.rationale}")
-    print(f"  Signed off by : {verdict.signed_off_by}")
+    print(f"  Gate record   : {verdict.signed_off_by}")
     counts = verdict.severity_counts
     print(
         "  Severity      : "

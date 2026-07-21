@@ -11,7 +11,7 @@ Package `surplus_engine` in `tax-surplus-engine/`. Seed 20240607. Canadian forei
 python -m surplus_engine --start 2021 --end 2024 --out out --xlsx
 python -m surplus_engine --start 2021 --end 2024 --check    # 212 identity checks; exit 1 on any break
 python -m surplus_engine.loop --demo --out out              # HUMAN-GATED LOOP: settle drifted periods earliest-first
-python -m pytest -q                                         # ~1,498 tests
+python -m pytest -q                                         # 7,498 tests
 ```
 
 ## Showpieces

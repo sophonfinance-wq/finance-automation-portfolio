@@ -3,9 +3,14 @@
 **For:** Claude Code (VS Code) picking this up fresh. Everything you need is in this file +
 the committed spec. Owner: Sophonnarith Hang (Sophon), contact@sophonfinance.com.
 
-## Where things stand
+> Historical handoff note: this file preserves the original implementation context.
+> Current behavior and claims are governed by `site-datasheets/specs/triangulate.json`,
+> the generator, and the executable tests; do not treat unchecked steps below as current
+> repository status.
 
-1. **Repo/branch:** you are in `finance-automation-portfolio`, branch
+## Original handoff state and standing constraints
+
+1. **Repo/branch at handoff:** `finance-automation-portfolio`, branch
    `feature/engine-datasheets` (based on `origin/main` @ `e5a374d`). **Local `main` is
    stale/diverged from the rewritten GitHub history — never merge it or base work on it.**
 2. **Approved design spec (read it first):**
@@ -14,22 +19,20 @@ the committed spec. Owner: Sophonnarith Hang (Sophon), contact@sophonfinance.com
    whole project: upgrade the nine `docs/engines/<slug>.html` brochure pages into
    chip-datasheet-grade pages; data-driven stdlib generator; 11-zone template; part
    numbers `SFS-E01-CLS … SFS-E09-CSH`.
-3. **Your next step:** invoke `superpowers:writing-plans`, write the implementation plan
-   to `docs/superpowers/plans/2026-07-20-engine-datasheets.md` using the recon facts
-   below (all verified 2026-07-20 against this checkout — do NOT re-scout), then execute
-   Phase 1 task-by-task (TDD, frequent commits).
+3. **Original next step (historical):** write the implementation plan from the recon
+   facts below, then execute Phase 1 task-by-task with tests. That planning step has
+   already been performed; verify the current checkout rather than replaying it.
 4. **Decisions already made — do not re-ask:** spec rev 2 approved in full; interactive
    in-browser visuals (CSS 3D + SVG, no three.js); Triangulate (Engine 06) exemplar
    first; full chip-datasheet register; test-count policy = `site_tooling` pytest marker
    excluded from headline counts, shown as a separate "site tooling" row.
 5. **Approval gate:** Sophon reviews the built page locally before any merge to main.
-6. **Push/auth:** `gh` is NOT authenticated on this machine. Sophon's GitHub session
-   lives in Chrome. When ready to push: ask Sophon first, then `gh auth login` device-code
-   flow (he approves the code in Chrome). Never push without asking.
-7. **Environment:** Windows 11. Use `py -3` (3.14.4) — bare `python` is the WindowsApps
-   stub. Repo targets Python ≥3.12; CI runs 3.12 on ubuntu-latest. Direct HTTPS to
-   sophonfinance.com is reset by the local network — preview via a local static server
-   over `docs/`, never the live domain.
+6. **Push/PR gate:** never push, open a PR, or merge without the owner's explicit
+   approval. After approval, use the repository's established authenticated workflow;
+   if credentials are unavailable, stop after the verified local handoff.
+7. **Environment:** the repo targets Python ≥3.12 and CI runs Python 3.12. Use
+   `python -m ...` commands in portable instructions. Preview through a local static
+   server rooted at `docs/`; live-domain access is not required for local verification.
 
 ## Suggested task breakdown (~16 bite-sized tasks)
 
@@ -46,7 +49,10 @@ the committed spec. Owner: Sophonnarith Hang (Sophon), contact@sophonfinance.com
 15. Homepage Triangulate card link + sitemap check
 16. Full verification: root pytest, local preview, print/reduced-motion/mobile checks
 
-## Recon facts (verified 2026-07-20 — cite these, don't re-derive)
+## Historical recon facts (verified 2026-07-20)
+
+These facts document the basis of the original plan. Re-run the relevant commands before
+making a current public claim; the checked-in spec and tests remain authoritative.
 
 ### Collision traps (violating these breaks root pytest + the published test-count workflow)
 - Test package MUST be `datasheet_tests/` (with `__init__.py`), NOT `tests/` —
@@ -127,10 +133,10 @@ lines 6,7,10,11,155,159,183,189,203,260,276; per-engine rows 212–256; add the
 `worker/src/index.js` 59, 82.
 
 ### Triangulate facts for `triangulate.json` (all verified live, seed 20240101)
-- **Tests: 8,320 collected** (`py -m pytest --collect-only -q` in
-  ai-validation-framework; full run 8,320 passed in ~8s). ⚠️ `README.md:8` of the
-  engine says "1,311 tests" — STALE; the datasheet must say 8,320 (flag the README fix
-  to Sophon as a follow-up; engine READMEs are out of scope).
+- **Tests: 8,320 collected** (`python -m pytest --collect-only -q` in
+  ai-validation-framework; full run 8,320 passed in ~8s). The engine README was stale
+  during the original recon and has since been synchronized to 8,320.
+- Portable quickstart: `git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/ai-validation-framework && python -m triangulate`.
 - Entry points: `python -m triangulate` (cli.py), `python run.py` (equivalent),
   `python -m triangulate.loop`. Package `__version__ = "1.0.0"`.
 - Pipeline flags: `--sample {clean,defective}` (default defective);
@@ -150,13 +156,17 @@ lines 6,7,10,11,155,159,183,189,203,260,276; per-engine rows 212–256; add the
   mutate); Reviewer `roles/reviewer.py` (flags, never mutates); Specialist
   `roles/specialist.py` (read-only second opinions; transform only when explicitly
   invoked); Auditor `roles/auditor.py` (deterministic — "a script cannot hallucinate
-  'yes'"); **Human gate = `class HumanGate` in `triangulate/reconcile.py` (NOT in
-  roles/)**.
-- Authority hierarchy (`model.py:58-77`, IntEnum, higher = more authoritative):
+  'yes'"); **`class HumanGate` in `triangulate/reconcile.py` is an automated severity
+  policy, not a person and not a recorded approval**. A real person remains the final
+  approver for escalations and sign-off.
+- Implemented authority hierarchy (`model.py:58-77`, higher is more authoritative):
   AI_ASSUMPTION=1 < WORKBOOK_FORMULA=2 < CURRENT_YEAR_SOURCE=3 < MEETING_DECISION=4 <
-  MANAGEMENT_INSTRUCTION=5 < SIGNED_PRIOR_YEAR=6.
-- Severity LOW=1..CRITICAL=4; HumanGate: any Critical → FAIL; else any High → FLAG;
-  else PASS. Tie-out tolerance 0.01. Fix packet = Critical/High subset. Dedup key
+  MANAGEMENT_INSTRUCTION=5 < SIGNED_PRIOR_YEAR=6. The public datasheet must render
+  these six evidence-authority levels in the reverse display order, highest to lowest.
+- Severity LOW=1..CRITICAL=4; the automated HumanGate policy maps any Critical → FAIL,
+  any High → FLAG, and Medium/Low only or no findings → PASS. PASS means eligible for
+  human sign-off with residual notes documented; it is not a human signature. Tie-out
+  tolerance 0.01. Fix packet = Critical/High subset. Dedup key
   (code, cell_ref); higher authority wins; sort (-severity, -authority, cell_ref).
 - Hash guard: `Workpaper.digest()` = sha256 of sort-keys JSON; orchestrator asserts
   digest unchanged around Reviewer/Specialist/Auditor steps, raises
@@ -208,9 +218,9 @@ lines 6,7,10,11,155,159,183,189,203,260,276; per-engine rows 212–256; add the
 ### BRAND-VOICE.md edit (exact target)
 Lines 44–45 (inside "## Terminology and mechanics"):
 `- Use the canonical system names consistently: Month-End Close, Cash & Debt Reconciliation,`
-`  Tax Surplus / ACB, Partnership 1065 Automation, Validation Engine, Triangulate, Knowledge Brain.`
-→ Replace with the nine site H1 names per spec §4 roster (note: engine 03 becomes
-"Partnership Tax · Form 1065" — the live site H1 wins per spec §2).
+`  Tax Surplus / ACB, Partnership Tax · Form 1065, Validation Engine, Triangulate, Knowledge Brain.`
+→ Expand this to the nine site H1 names per spec §4 roster; engine 03 is
+"Partnership Tax · Form 1065".
 
 ## Non-negotiables (from the spec — read §2, §5, §8 before coding)
 - Every number on the page carries a `source` and renders a substantiation footnote.

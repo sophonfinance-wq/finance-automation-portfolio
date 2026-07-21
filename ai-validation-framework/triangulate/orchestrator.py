@@ -7,7 +7,7 @@ Wires the pluggable roles into the validation flow::
       -> optional Specialist (second opinion + supporting transform)
       -> automated read-only Audit
       -> reconcile findings (severity taxonomy + authority hierarchy)
-      -> HumanGate sign-off -> VERDICT
+      -> automated HumanGate policy -> VERDICT -> external human approval boundary
       -> write audit-trail artifacts (Builder Memo, Fix Packet, Change Log,
          QA Summary) to ./output
 
@@ -55,7 +55,7 @@ class PipelineResult:
 
 
 class TriangulateOrchestrator:
-    """Runs the 3-role validation pipeline plus audit and human gate."""
+    """Runs the 3-role validation pipeline plus audit and gate policy."""
 
     def __init__(
         self,

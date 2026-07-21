@@ -158,15 +158,15 @@
       <div class="stat">
         <b>67,664</b>
         <span class="cap">tests in the curated suite &mdash; runs in minutes and gates every CI build</span>
-        <span class="src">pytest --collect-only &middot; verified 2026-07-17</span>
+        <span class="src">pytest --collect-only -m &quot;not site_tooling&quot; &middot; verified 2026-07-20</span>
       </div>
       <div class="stat">
         <b>~1.15M</b>
         <span class="cap">generated cases in the opt-in property sweep (1,147,870), asserting arithmetic invariants</span>
-        <span class="src">SWEEP=1 pytest --collect-only &middot; 2026-07-17</span>
+        <span class="src">SWEEP=1 pytest --collect-only -m &quot;not site_tooling&quot; &middot; 2026-07-20</span>
       </div>
       <div class="stat">
-        <b>8</b>
+        <b>9</b>
         <span class="cap">public finance engines, each self-contained and MIT-licensed</span>
         <span class="src">github.com/sophonfinance-wq</span>
       </div>
@@ -178,19 +178,20 @@
   <div class="wrap">
     <div class="sec-head">
       <h2>Reproduce it in your terminal</h2>
-      <p>Three commands. The curated count you see on the homepage is the literal output of <code style="font-family:var(--mono)">pytest --collect-only</code> &mdash; nothing hand-entered.</p>
+      <p>Clone the repository, enter it, and run the scoped commands. The curated count you see on the homepage is the literal output of <code style="font-family:var(--mono)">pytest --collect-only -m &quot;not site_tooling&quot;</code> &mdash; nothing hand-entered.</p>
     </div>
-    <div class="terminal" role="img" aria-label="Terminal: clone the repository, then pytest --collect-only reports 67664 tests collected, and the curated suite passes.">
+    <div class="terminal" role="img" aria-label="Terminal: clone and enter the repository, then pytest --collect-only excluding site tooling reports 67664 tests collected, and the curated suite passes.">
       <div class="term-bar"><i></i><i></i><i></i><span>verify-it-yourself — bash</span></div>
       <div class="term-body">
         <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
         <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
-        <div class="cmd">pytest --collect-only -q | tail -1</div>
+        <div class="cmd">cd finance-automation-portfolio</div>
+        <div class="cmd">pytest --collect-only -q -m "not site_tooling" | tail -1</div>
         <div class="ok">67664 tests collected</div>
-        <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
+        <div class="cmd">pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
         <div class="ok">passed ✓</div>
-        <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
-        <div class="dim">verified 2026-07-17 · fictional seeded data · MIT license</div>
+        <div class="cmd">SWEEP=1 pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
+        <div class="dim">verified 2026-07-20 · fictional seeded data · MIT license</div>
       </div>
     </div>
     <p class="term-cta">Prefer not to run it yourself? <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/test-count.yml" target="_blank" rel="noopener">See the count regenerated in our CI &rarr;</a> &mdash; every push re-runs the collection and prints the number into the run summary.</p>
@@ -255,9 +256,14 @@
             <td class="num">2,928</td>
           </tr>
           <tr class="total">
-            <td>Total &mdash; curated suite</td>
+            <td>Total &mdash; curated engine suite (excludes site tooling)</td>
             <td><a class="gh" href="https://github.com/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">view repository &rarr;</a></td>
             <td class="num">67,664</td>
+          </tr>
+          <tr>
+            <td><span class="eng">Site datasheet tooling &mdash; separate guard suite</span><span class="sub">generator, schema, freshness, accessibility, and page-budget guards &middot; excluded from the curated engine total above</span></td>
+            <td><a class="gh" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/site-datasheets/datasheet_tests" target="_blank" rel="noopener">site-datasheets/datasheet_tests &rarr;</a></td>
+            <td class="num">47</td>
           </tr>
         </tbody>
       </table>
@@ -274,14 +280,14 @@
     <div class="tiers">
       <div class="tier">
         <h3>Curated suite <span class="n">67,664 · default</span></h3>
-        <p>Hand-written unit and behaviour tests plus parametrized coverage across all nine systems, including a bounded invariant grid on every engine asserting exact identities &mdash; sum-preservation, banding, round-trips. Runs with <code>pytest</code> in minutes and gates every CI build.</p>
+        <p>Hand-written unit and behaviour tests plus parametrized coverage across all nine systems, including a bounded invariant grid on every engine asserting exact identities &mdash; sum-preservation, banding, round-trips. Runs with <code>pytest -m &quot;not site_tooling&quot;</code> in minutes and gates every CI build.</p>
       </div>
       <div class="tier">
         <h3>Property sweep <span class="n">~1.15M · opt-in</span></h3>
-        <p>Exhaustive <code>itertools.product</code> grids asserting sum-preservation, exact integer round-trips, arithmetic identities and determinism across the full integer input domain. Runs on demand with <code>SWEEP=1 pytest</code> &mdash; kept out of the default suite for speed.</p>
+        <p>Exhaustive <code>itertools.product</code> grids asserting sum-preservation, exact integer round-trips, arithmetic identities and determinism across the full integer input domain. Runs on demand with <code>SWEEP=1 pytest -m &quot;not site_tooling&quot;</code> &mdash; kept out of the default suite for speed.</p>
       </div>
     </div>
-    <p class="note">Every public example runs on fictional, seeded data &mdash; enforced by a deny-list confidentiality linter that is itself part of the test suite. Client information never appears in public code.</p>
+    <p class="note">A separate 47-test <code>site_tooling</code> suite validates the datasheet generator, schemas, freshness, accessibility, and page budgets. Run it with <code>pytest -m site_tooling</code>; it is deliberately excluded from the 67,664 curated engine total. Every public example runs on fictional, seeded data &mdash; enforced by a deny-list confidentiality linter that is itself part of the engine test suite. Client information never appears in public code.</p>
   </div>
 </section>
 

@@ -33,8 +33,8 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the full test suite (2,392 hand-written tests, expanded to 67,664 with invariant grids; runs in minutes)
-pytest
+# run the curated engine suite (2,392 hand-written tests, expanded to 67,664 with invariant grids; runs in minutes)
+pytest -m "not site_tooling"
 
 # run a system
 cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024
@@ -62,7 +62,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
-**3. Honest, tiered tests.** `pytest` runs the curated suite (~68k, gates CI); `SWEEP=1 pytest` runs an exhaustive property sweep (~1.15M generated cases). See [Testing](#testing).
+**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (~68k, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.15M generated cases). A separate 47-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
 
 **4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
 ```bash
@@ -135,9 +135,10 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Hand-written** (gates CI) | `pytest` | **2,392** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 9 systems. Runs in minutes. |
-| ↳ expanded with invariant grids | *(same `pytest` run)* | **67,664** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
-| **Property sweep** (opt-in) | `SWEEP=1 pytest` | **~1.15M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
+| **Hand-written** (gates CI) | `pytest -m "not site_tooling"` | **2,392** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 9 systems. Runs in minutes. |
+| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **67,664** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **47** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 67,664 curated engine total. |
+| **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.15M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
 default run (and CI) for speed and generated at import — the files stay small. It's there for
@@ -193,8 +194,8 @@ Each system has its own README with the regime it models, the run commands, and 
 **Surplus Assurance Loop** *(new)*
 <p><img src="./assets/systems/surplus-loop.gif" alt="Surplus Assurance Loop live demo" width="100%"></p>
 
-**Partnership 1065 Automation**
-<p><img src="./assets/systems/partnership-tax.gif" alt="Partnership 1065 Automation live demo" width="100%"></p>
+**Partnership Tax · Form 1065**
+<p><img src="./assets/systems/partnership-tax.gif" alt="Partnership Tax Form 1065 live demo" width="100%"></p>
 
 **Validation Engine**
 <p><img src="./assets/systems/validation.gif" alt="Validation Engine live demo" width="100%"></p>

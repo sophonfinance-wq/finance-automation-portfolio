@@ -1,7 +1,10 @@
 # Engine Datasheet Pages — Design
 
 **Date:** 2026-07-20 · **Rev:** 2 (post adversarial review, 4 lenses / 41 findings applied)
-**Status:** Pending owner review · **Owner:** Sophonnarith Hang · **Prepared with:** Claude Code
+**Status:** Historical design baseline; the built Phase 1 page still requires owner review before push or merge · **Owner:** Sophonnarith Hang · **Prepared with:** Claude Code
+
+> This document records the design intent. For current implementation truth, use
+> `site-datasheets/specs/triangulate.json`, the generator, and their tests.
 
 ## 1. Goal
 
@@ -40,11 +43,10 @@ From the **existing site conventions** (docs/engines/*.html, retained):
 - "Verify it yourself" block and consultation secondary CTA.
 - Sticky nav, brand mark, img→video motion-swap pattern.
 
-**Canonical names authority:** the nine H1s as rendered on the live engine pages (§4
-roster). BRAND-VOICE.md's canonical list currently names only seven engines and calls
-engine 03 "Partnership 1065 Automation"; **phase 1 updates BRAND-VOICE.md's roster to
-the nine site names** (explicitly in scope, see §11), and the §8 roster test asserts
-page H1s against BRAND-VOICE.md so there is one authority thereafter.
+**Canonical names authority:** the nine H1s in the §4 roster, including
+**Partnership Tax · Form 1065** for engine 03. Phase 1 aligns BRAND-VOICE.md with those
+nine names (explicitly in scope, see §11), and the §8 roster test asserts page H1s
+against BRAND-VOICE.md so there is one checked authority thereafter.
 
 ## 3. Architecture — data-driven generator (approved: option A)
 
@@ -135,7 +137,10 @@ generated from the `source` fields in the spec JSON.
    template-level, drawing hrefs from `links{}` — no CTA field in the spec JSON.
 2. **Interactive die stack (hero)** — an exploded isometric stack of the engine's
    functional blocks (Triangulate: Human Gate / Deterministic Auditor / Reviewer /
-   Specialist / Preparer over a substrate labeled "seeded fictional data").
+   Specialist / Preparer over a substrate labeled "seeded fictional data"). The
+   demo's `HumanGate` class is an automated severity-policy component; its PASS/FLAG/FAIL
+   result does not record a human decision. Any escalation or final sign-off still
+   requires an actual person outside the demo.
    **Progressive enhancement, single source:** the generator renders BOTH a static
    isometric SVG (the default state, built from the same `layers[]` data — fallback and
    interactive stack can never disagree) and the CSS-3D stack markup; JS adds a root
@@ -167,10 +172,14 @@ generated from the `source` fields in the spec JSON.
    figures. Time/money framing appears only as a labeled fictional illustration or a
    qualitative statement. Every figure carries `source` (→ Substantiation footnote).
 8. **Control characteristics (ENGINEERING)** — the "electrical characteristics" analog,
-   rendered from `control_characteristics{}` sub-keys (§7): authority hierarchy table,
+   rendered from `control_characteristics{}` sub-keys (§7): the six-level authority
+   hierarchy implemented by `AuthoritySource`, highest to lowest — Signed prior-year
+   work, Management instruction, Meeting decision, Current-year source, Workbook
+   formula, AI assumption — plus the
    severity→verdict mapping, read-only/hash guarantees, determinism (integer-cent,
-   seeded, byte-stable), gate policy (human-gated vs autonomous-with-quarantine), and
-   operating modes (offline mock / live Anthropic Claude reviewer). Wherever
+   seeded, byte-stable), gate policy, and operating modes (offline mock / live
+   Anthropic Claude reviewer). PASS means Medium/Low findings only, or no findings;
+   residual notes remain documented and actual approval remains human. Wherever
    autonomous/agent-enabled modes appear, the template emits the verbatim orchestration
    framing sentence (§2).
 9. **Operating limits** — the errata analog, from `limits[]`: what the engine refuses
@@ -297,17 +306,17 @@ published number goes stale. Implemented in the same phase-1 PR as the tests.
 
 ## 10. Deployment & logistics
 
-- Work happens on branch `feature/engine-datasheets` off `origin/main` in the local
-  clone at `C:\Users\SHang\Documents\New project\finance-automation-portfolio`.
-  (Local `main` had diverged from the rewritten GitHub history; it is left untouched.)
+- Work happens on branch `feature/engine-datasheets` based on `origin/main`. Before
+  rebasing or merging from another local branch, compare it with the remote reference
+  and preserve unrelated work.
 - The site is served by GitHub Pages from `docs/` (CNAME present). Pages source
   settings (main branch, `/docs` folder) are repo-settings-side — **confirm before
   merge**; merge to `main` then publishes automatically.
-- Push requires GitHub auth on this machine: `gh auth login` device-code flow, approved
-  in the owner's signed-in Chrome session, with the owner's go-ahead at that moment.
-- Observed local condition (2026-07): the workstation's network resets direct HTTPS to
-  sophonfinance.com; GitHub and raw.githubusercontent are unaffected. Preview via a
-  local static server over `docs/`.
+- Push and PR creation require the owner's explicit go-ahead. Use the repository's
+  established authenticated workflow only after that approval; if credentials are not
+  available, stop after the verified local handoff.
+- Preview the built page with a local static server rooted at `docs/`; live-domain
+  access is not part of the local verification requirement.
 
 ## 11. Scope boundaries
 

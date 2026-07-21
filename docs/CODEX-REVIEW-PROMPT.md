@@ -6,7 +6,7 @@ prompt below into Codex (or any independent reviewer) to run an adversarial audi
 in this repo.
 
 > Before sending: update the HEAD and expected test count. Current at last edit:
-> **`pytest` → 67,664 collected (curated suite) · `SWEEP=1 pytest` → 1,147,870 (property sweep) · 9 systems**
+> **`pytest -m "not site_tooling"` → 67,664 collected (curated suite) · `pytest -m site_tooling` → 47 collected (separate public-datasheet guards) · `SWEEP=1 pytest -m "not site_tooling"` → 1,147,870 (property sweep) · 9 systems** (verified 2026-07-20)
 > curated per system: (close 15,687 / partnership 8,605 / triangulate 8,320 / recon 7,511 / surplus 7,498 / knowledge-brain 7,011 / cash-management 5,290 / audit 4,814 / finance-atlas 2,928).
 
 ---
@@ -19,10 +19,12 @@ PUBLIC finance-automation portfolio. Do NOT rubber-stamp. RUN the code, don't ju
 Assume the author may have made mistakes or oversold things — find them.
 
 REPO: https://github.com/sophonfinance-wq/finance-automation-portfolio
-Setup: Python 3.12+, `pip install -r requirements.txt`, then `python -m pytest -q` from the
-repo root. Confirm the reported total (and each engine's sub-count) is correct; if any count is
-wrong, that's a finding. The framing is "7 runnable systems = 6 finance/tax/knowledge engines +
-Triangulate".
+Setup: Python 3.12+, `pip install -r requirements.txt`, then
+`python -m pytest -q -m "not site_tooling"` from the repo root. Separately run
+`python -m pytest -q -m site_tooling` and confirm its 47-test guard suite. Confirm the reported
+totals (and each engine's sub-count) are correct; if any count is wrong, that's a finding. The
+framing is nine runnable systems, with public site-tooling guards reported separately from the
+67,664-test curated engine suite.
 
 VERIFY EACH AREA INDEPENDENTLY:
 

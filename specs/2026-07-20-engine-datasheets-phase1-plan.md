@@ -2,6 +2,10 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+> **Historical plan:** this records the intended build sequence, not current completion
+> status. For current implementation truth, inspect `site-datasheets/specs/triangulate.json`,
+> the generator, the generated page, and the executable tests.
+
 **Goal:** Build a deterministic, data-driven generator that renders the Triangulate engine page at `docs/engines/triangulate.html` as an eleven-zone chip-style datasheet, with a full pytest suite, CI wiring, and the homepage link updated — shipping the exemplar in-place at its existing URL.
 
 **Architecture:** A stdlib-only Python generator (`site-datasheets/generate_datasheets.py`) reads one JSON spec per engine (`site-datasheets/specs/triangulate.json`) and renders it through a shared `string.Template` shell plus zone-helper functions that each return an HTML string — the exact pattern proven in `finance-atlas/generate.py`. Output is a pure function of spec + template (no timestamps, no environment reads), so two runs are byte-identical and the committed page must equal a fresh render. Interactivity is vanilla JS + CSS 3D + inline SVG; no bundler, no WebGL library, no new runtime dependencies.
@@ -19,7 +23,7 @@ Every task's requirements implicitly include these (verbatim from the design spe
 - **Every number is true and demonstrable.** Every figure in the spec-strip, benchmarks, scenarios, and limits carries a non-empty `source` pointer (file/test/command). No invented dollar-savings figures; money/time framing is qualitative or an explicitly labeled fictional illustration.
 - **Voice:** measured; no superlatives or exclamation-driven hype. No exclamation marks in body copy (permitted only inside `<pre>`/`<code>` CLI output). Banned phrases from BRAND-VOICE.md ("slide deck," "vibes," "marks its own homework," "press play," "wow moment," "command center," "game-changer") must not appear.
 - **Orchestration framing, verbatim wherever "autonomous"/"agent-enabled" appears:** *"an optional orchestration layer for approved, agent-enabled environments; the platform runs fully without it."*
-- **Knowledge Brain rule (applies to any page mentioning it):** never state or imply the engine applies/verifies changes; "hands-free" is banned. (Triangulate page must not claim it applies fixes autonomously without the human gate.)
+- **Knowledge Brain rule (applies to any page mentioning it):** never state or imply the engine applies/verifies changes; "hands-free" is banned. Triangulate's demo `HumanGate` is an automated severity policy, not a person: any escalation and final sign-off require an actual human outside the demo.
 - **Footer disclaimer on every page:** "All public examples use fictional, seeded data."
 - **Performance budget:** ≤ 150 KB per generated page (HTML + inline SVG/CSS/JS, both hero representations included).
 - **Part number for this engine:** `SFS-E06-TRI` · family "AI Validation" · slug `triangulate` · num `6`. Canonical H1: **Triangulate**.
@@ -337,8 +341,8 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
 
   "layers": [
     {"id": "gate", "label": "Human Gate",
-     "plain": "A person makes the final call. The framework never overrides itself.",
-     "engineering": "Deterministic gate maps severity to a verdict; sign-off authority is held by a human, not any model.",
+     "plain": "The demo marks work eligible or blocked; a person makes the real-world approval decision.",
+     "engineering": "HumanGate is an automated policy class: Critical → FAIL, High → FLAG, and Medium/Low → PASS with residual notes. PASS is eligibility for human sign-off, not a recorded human signature.",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py"},
     {"id": "auditor", "label": "Deterministic Auditor",
      "plain": "Re-does the arithmetic itself, so no model is asked whether a number 'looks right.'",
@@ -372,13 +376,13 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
     {"id": "auditor", "label": "Deterministic Auditor", "kind": "audit", "col": 1, "row": 2,
      "engineering": "re-derives every formula mechanically",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/roles/auditor.py"},
-    {"id": "reconcile", "label": "Reconcile + Gate", "kind": "gate", "col": 2, "row": 1,
-     "engineering": "severity → verdict; findings reconciled",
+    {"id": "reconcile", "label": "Reconcile + Policy", "kind": "gate", "col": 2, "row": 1,
+     "engineering": "findings reconciled; deterministic severity policy returns PASS, FLAG, or FAIL",
      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py"},
-    {"id": "human", "label": "Human Gate", "kind": "human", "col": 3, "row": 1,
+    {"id": "human", "label": "Human Approval", "kind": "human", "col": 3, "row": 1,
      "plain": "a person signs off — or doesn't",
-     "engineering": "final authority; framework never overrides itself",
-     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/triangulate/reconcile.py"}
+     "engineering": "external approval boundary; the demo policy does not record or replace a human signature",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ai-validation-framework/README.md"}
   ],
   "edges": [
     {"from": "preparer", "to": "reviewer", "label": "draft"},
@@ -392,8 +396,8 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
   ],
 
   "spec_strip": [
-    {"label": "Tests", "value": "8,320", "source": "py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README's \"1,311\" is stale", "plain": "the checks that pin this engine's behavior"},
-    {"label": "Roles", "value": "5", "source": "ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Human gatekeeper", "plain": "independent duties over one workpaper"},
+    {"label": "Tests", "value": "8,320", "source": "py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 and pinned in site-datasheets/counts.json", "plain": "the checks that pin this engine's behavior"},
+    {"label": "Roles", "value": "5", "source": "ai-validation-framework/README.md — Preparer, Reviewer, Specialist, Deterministic audit, Policy gate + human approver", "plain": "independent duties over one workpaper"},
     {"label": "Verdict states", "value": "PASS / FLAG / FAIL", "source": "ai-validation-framework/README.md — verdicts and exit behavior"},
     {"label": "Gate exit codes", "value": "0 = PASS · non-zero = FLAG/FAIL", "source": "ai-validation-framework/README.md — \"exits 0 on PASS and non-zero on FLAG/FAIL\"", "plain": "so it can act as a CI gate"},
     {"label": "Default mode", "value": "offline, no API key", "source": "ai-validation-framework/README.md — \"default demo needs no API key and no network access\""},
@@ -403,7 +407,7 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
   "problem_statement": "No high-stakes workpaper should rely on one AI system reporting \"looks good.\" Models agree too easily, invent support, miss the same issue twice, and explain a number without tying it to source. Triangulate assumes those failures will happen and builds the workflow around them.",
   "scenarios": [
     {"title": "An injected hallucination is caught by the arithmetic, not an opinion",
-     "narrative": "In the adversarial demo, an AI asserts a Total Revenue $49,000 over what the revenue streams actually sum to, backed only by an 'AI assumption' — the lowest authority. Because that cell feeds tax and net, the single bad figure cascades. The Reviewer and the deterministic Auditor both flag it independently; the verdict is FAIL and the process exits non-zero.",
+      "narrative": "In the adversarial demo, an AI asserts a Total Revenue $49,000 over what the revenue streams actually sum to, backed only by an AI assumption — the lowest implemented authority. Because that cell feeds tax and net, the single bad figure cascades. The Reviewer and the deterministic Auditor both flag it independently; the verdict is FAIL and the process exits non-zero.",
      "source": "python -m triangulate --demo-adversarial (ai-validation-framework/README.md)"},
     {"title": "The gate discriminates — a clean workpaper passes",
      "narrative": "The clean sample runs the identical flow and returns PASS, proving the gate discriminates instead of always failing.",
@@ -426,19 +430,22 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
     {"label": "Adversarial cascade depth", "value": "6", "unit": "Critical findings from 1 injected cell", "source": "ai-validation-framework/README.md — \"Critical=6\" in --demo-adversarial", "plain": "one bad number, six downstream failures caught"},
     {"label": "Self-heal turns (adversarial)", "value": "1", "unit": "loop turn to PASS", "source": "ai-validation-framework/README.md — \"Turn 1 re-derive B5 … PASS\""},
     {"label": "Independent detectors", "value": "2", "unit": "roles flag the same cell", "source": "ai-validation-framework/README.md — \"flagged independently by two roles\""},
-    {"label": "Engine tests", "value": "8,320", "unit": "tests", "source": "py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 — the README's \"1,311\" is stale"}
+    {"label": "Engine tests", "value": "8,320", "unit": "tests", "source": "py -3 -m pytest --collect-only -q (ai-validation-framework/); verified 2026-07-20 and pinned in site-datasheets/counts.json"}
   ],
 
   "control_characteristics": {
     "authority": [
-      {"rank": 1, "level": "Source data", "note": "signed/source evidence outranks everything"},
-      {"rank": 2, "level": "Signed work", "note": "prior signed work product"},
-      {"rank": 3, "level": "AI assumption", "note": "lowest authority; cannot outrank source"}
+      {"rank": 1, "level": "Signed prior-year work", "note": "highest authority in the implemented enum"},
+      {"rank": 2, "level": "Management instruction", "note": "direct instruction from accountable management"},
+      {"rank": 3, "level": "Meeting decision", "note": "documented decision from the engagement record"},
+      {"rank": 4, "level": "Current-year source", "note": "current-period source data and evidence"},
+      {"rank": 5, "level": "Workbook formula", "note": "existing formula logic, subject to re-derivation"},
+      {"rank": 6, "level": "AI assumption", "note": "lowest authority; cannot outrank cited evidence"}
     ],
     "verdict_map": [
       {"severity": "Critical present", "verdict": "FAIL", "action": "returned for rebuild; exits non-zero"},
       {"severity": "High/unresolved judgment", "verdict": "FLAG", "action": "fix packet escalated to a human"},
-      {"severity": "None", "verdict": "PASS", "action": "eligible for human sign-off; exit 0"}
+      {"severity": "Medium/Low only, or none", "verdict": "PASS", "action": "residual notes documented; eligible for human sign-off; exit 0"}
     ],
     "guarantees": [
       "Read-only reviewer: the orchestrator hashes the workpaper before and after review steps, so a reviewer cannot mutate what it inspects.",
@@ -446,7 +453,7 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
       "Seeded, fictional data throughout the public demo."
     ],
     "determinism": {"seeded": true, "read_only": true, "offline_default": true},
-    "gate_policy": {"human_gated": true, "note": "A stopped line goes to a person — the framework never overrides itself."},
+    "gate_policy": {"human_approval_required": true, "demo_gate": "automated-policy", "note": "The demo's HumanGate class applies the severity policy; an actual person remains the final approver."},
     "modes": [
       {"name": "Enterprise-safe mode (default)", "detail": "deterministic mock reviewer, no API key, no network call, runnable in conservative corporate IT."},
       {"name": "Agent-accelerated mode", "detail": "where approved, a live Anthropic Claude reviewer adapter can replace the mock reviewer; an optional orchestration layer for approved, agent-enabled environments; the platform runs fully without it."}
@@ -466,7 +473,7 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
   },
 
   "quickstart": [
-    {"label": "Clone + run the defective sample", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd ai-validation-framework && python -m triangulate"},
+    {"label": "Clone + run the defective sample", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/ai-validation-framework && python -m triangulate"},
     {"label": "Run the clean sample (PASS)", "command": "python -m triangulate --sample clean"}
   ],
 
@@ -478,7 +485,7 @@ Create `site-datasheets/specs/triangulate.json`. All values below are drawn from
   },
 
   "meta": {
-    "description": "Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, a human-gated verdict, and every figure re-derivable from the public repository."
+    "description": "Triangulate (SFS-E06-TRI) datasheet — separation of duties for AI-assisted financial workpapers: independent reviewer roles plus a deterministic auditor, an automated policy verdict at an explicit human-approval boundary, and every figure re-derivable from the public repository."
   }
 }
 ```
@@ -1398,7 +1405,7 @@ import generate_datasheets as gen
 BRAND_VOICE = gen.REPO / "docs" / "BRAND-VOICE.md"
 
 NINE_NAMES = (
-    "Month-End Close", "Cash & Debt Reconciliation", "Partnership 1065 Automation",
+    "Month-End Close", "Cash & Debt Reconciliation", "Partnership Tax · Form 1065",
     "Validation Engine", "Tax Surplus / ACB", "Triangulate", "Knowledge Brain",
     "Finance Operations Atlas", "Cash Management",
 )
@@ -1421,7 +1428,7 @@ def test_page_h1_is_in_brand_voice_roster():
 - [ ] **Step 2: Run the test to verify it fails**
 
 Run: `cd site-datasheets && py -3 -m pytest datasheet_tests/test_roster.py -v`
-Expected: FAIL — BRAND-VOICE.md currently names only seven engines (missing "Finance Operations Atlas", "Cash Management", "Validation Engine" as canonical list members, and uses "Partnership 1065 Automation").
+Expected at the time this plan was written: FAIL — BRAND-VOICE.md named only seven engines and used a stale engine 03 label. The canonical engine 03 name is "Partnership Tax · Form 1065".
 
 - [ ] **Step 3: Update the canonical roster in BRAND-VOICE.md**
 
@@ -1429,7 +1436,7 @@ In `docs/BRAND-VOICE.md`, replace the "Use the canonical system names consistent
 
 ```markdown
 - Use the canonical system names consistently: Month-End Close, Cash & Debt Reconciliation,
-  Partnership 1065 Automation, Validation Engine, Tax Surplus / ACB, Triangulate,
+  Partnership Tax · Form 1065, Validation Engine, Tax Surplus / ACB, Triangulate,
   Knowledge Brain, Finance Operations Atlas, Cash Management.
 ```
 
@@ -1635,7 +1642,7 @@ git commit -m "test(datasheets): voice lint + confidentiality deny-list over gen
 
 ## Task 9: Test-count reconciliation — counts.json + claim cross-check
 
-The spec-strip and benchmarks cite "8,320 tests" for the engine (verified 2026-07-20 via `pytest --collect-only`; the engine's own README says "1,311," which is stale — do not use it). This task pins the number to a refreshable `counts.json` so it cannot silently go stale again, and marks datasheet-tooling tests so they are excluded from the engine test-count headline.
+The spec-strip and benchmarks cite "8,320 tests" for the engine (verified 2026-07-20 via `pytest --collect-only`). This task pins the number to a refreshable `counts.json` so it cannot silently go stale again, synchronizes the engine README, and marks datasheet-tooling tests so they are excluded from the engine test-count headline.
 
 **Files:**
 - Create: `site-datasheets/counts.json`
@@ -1648,8 +1655,8 @@ The spec-strip and benchmarks cite "8,320 tests" for the engine (verified 2026-0
 
 - [ ] **Step 1: Capture the real engine test count**
 
-Run: `cd ai-validation-framework && py -3 -m pytest --collect-only -q | tail -1` (bare `python` on this machine is the WindowsApps stub — use `py -3`).
-Expected/confirmed 2026-07-20: `8320 tests collected`. The engine's own `README.md:8` says "1,311 tests," which is stale — the spec JSON and `counts.json` already use the verified 8,320 (fixed in Task 2). If a future re-run of this step gets a different number, treat that as current truth and update `counts.json` AND the spec's `spec_strip`/`benchmarks` values together — never let them diverge.
+Run from the repository root: `cd ai-validation-framework && python -m pytest --collect-only -q` and read the final collection summary.
+Expected/confirmed 2026-07-20: `8320 tests collected`. The spec JSON, `counts.json`, and engine README use the verified 8,320. If a future re-run of this step gets a different number, treat that as current truth and update all three together — never let them diverge.
 
 - [ ] **Step 2: Create counts.json**
 
@@ -1875,9 +1882,9 @@ In `site-datasheets/datasheet_tests/test_generator.py`, remove the `@pytest.mark
 
 In `docs/index.html`, find the Triangulate card's link to `engines/triangulate.html` (located earlier: `grep -n "engines/triangulate" docs/index.html`) and change its visible link text to "View datasheet" (keep the href). Show the exact before/after in the commit; do not alter other cards (those are phase 2/3).
 
-- [ ] **Step 4: Preview locally (network-safe)**
+- [ ] **Step 4: Preview locally**
 
-Run: `cd docs && py -3 -m http.server 8080` then open `http://localhost:8080/engines/triangulate.html` in a browser. Verify: die stack layers are clickable and the panel updates; schematic blocks link out; spec-strip footnotes resolve to the Substantiation list; motion swap plays; page prints as a single column with the static SVG. (The workstation's corporate network resets the live domain — preview locally, never via sophonfinance.com.)
+Run: `cd docs && python -m http.server 8080` then open `http://localhost:8080/engines/triangulate.html` in a browser. Verify: die stack layers are clickable and the panel updates; schematic blocks link out; spec-strip footnotes resolve to the Substantiation list; motion swap plays; page prints as a single column with the static SVG. Local preview is the required pre-push visual check; live-domain access is not required.
 
 - [ ] **Step 5: Run the FULL datasheet suite**
 
@@ -1897,9 +1904,11 @@ git add docs/engines/triangulate.html docs/index.html \
 git commit -m "feat(datasheets): ship Triangulate exemplar datasheet in place + homepage link"
 ```
 
-- [ ] **Step 8: Push and open a PR (with owner's go-ahead on auth)**
+- [ ] **Step 8: Push and open a PR (only with the owner's go-ahead)**
 
-Confirm with the owner before triggering the GitHub device-code flow (`gh auth login`, approved in their signed-in Chrome). Then:
+Obtain the owner's explicit approval before pushing or opening a PR. After approval,
+use the repository's established authenticated workflow. If credentials are unavailable,
+stop after the verified local handoff rather than changing authentication state.
 
 ```bash
 git push -u origin feature/engine-datasheets
@@ -1922,7 +1931,7 @@ Note: GitHub Pages source (main branch, `/docs`) is repo-settings-side — confi
 - §7 spec JSON schema → Task 1 validator + Task 2 data.
 - §8 tests (schema, determinism, claim-lint, size, link/asset, deny-list, voice-lint, roster-vs-BRAND-VOICE) → Tasks 1, 3, 6, 7, 8, 9; CI wiring + counts + marker → Tasks 9, 10.
 - §9 rollout phase-1 items (generator+template+spec+die+schematic; test suite+CI+counts+marker; BRAND-VOICE roster; capture script; ship in place + card link) → Tasks 1–11.
-- §10 deployment (branch, local preview, device-code auth, network quirk) → Task 11 steps 4, 8.
+- §10 deployment (branch, local preview, owner approval before push/PR) → Task 11 steps 4, 8.
 - §11 scope (BRAND-VOICE update, CI edits, capture script, homepage card link only) → Tasks 6, 10, 11; nothing beyond §9 homepage scope touched.
 
 **Placeholder scan:** No "TBD"/"implement later." Two intentional, bounded deferrals are explicit: `docs/tests` route (Task 7 Step 2 verifies the real route before asserting) and the test-count workflow's exact flag placement (Task 10 Step 3 records the edit after inspecting the workflow) — both require reading a file whose exact contents weren't captured in this plan; each names the command to run and the invariant to preserve.

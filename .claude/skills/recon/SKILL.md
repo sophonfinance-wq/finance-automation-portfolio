@@ -11,7 +11,7 @@ Package `recon_engine` in `cash-reconciliation/`. Seed 20260331, materiality $50
 python -m recon_engine                          # reconcile; writes evidence-log.md + xlsx
 python -m recon_engine --threshold 25 --no-xlsx
 python -m recon_engine.loop --demo              # ASSURANCE LOOP: restore drifted package to source
-python -m pytest -q                             # 1,011 tests
+python -m pytest -q                             # 7,511 tests
 ```
 
 ## Loop verdicts (`recon_engine/loop.py`)

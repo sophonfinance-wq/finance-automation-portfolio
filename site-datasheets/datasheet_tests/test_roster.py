@@ -1,7 +1,11 @@
 """The Triangulate spec loads, validates, and matches the §4 roster identity."""
 from __future__ import annotations
 
+import html
+import re
+
 import datasheet_spec as ds
+import generate_datasheets as gen
 
 
 def test_triangulate_spec_is_valid():
@@ -28,20 +32,25 @@ def test_triangulate_has_all_five_die_layers():
         assert expected in labels, expected
 
 
-import generate_datasheets as gen  # noqa: E402
-
 BRAND_VOICE = gen.REPO / "docs" / "BRAND-VOICE.md"
 
-NINE_NAMES = (
-    "Month-End Close", "Cash & Debt Reconciliation", "Partnership 1065 Automation",
-    "Validation Engine", "Tax Surplus / ACB", "Triangulate", "Knowledge Brain",
-    "Finance Operations Atlas", "Cash Management",
-)
+
+def _published_h1_names() -> list[str]:
+    names = []
+    for page in sorted(gen.OUT_DIR.glob("*.html")):
+        text = page.read_text(encoding="utf-8")
+        match = re.search(r"<h1><strong>(.*?)</strong></h1>", text)
+        assert match, f"missing canonical H1 in {page}"
+        names.append(html.unescape(match.group(1)))
+    return names
 
 
 def test_brand_voice_lists_all_nine_engine_names():
     text = BRAND_VOICE.read_text(encoding="utf-8")
-    for name in NINE_NAMES:
+    names = _published_h1_names()
+    assert len(names) == 9
+    assert len(set(names)) == 9
+    for name in names:
         assert name in text, f"BRAND-VOICE.md missing canonical name: {name}"
 
 

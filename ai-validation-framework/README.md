@@ -5,8 +5,8 @@
 
 Triangulate is the AI control framework at the center of this portfolio: a multi-agent
 LLM review pipeline with guardrails, built so AI can accelerate financial workpapers without
-becoming an unaccountable single point of failure. It ships with 1,311 tests covering the roles,
-the authority model, and the human-gated verdict.
+becoming an unaccountable single point of failure. It ships with 8,320 tests covering the roles,
+the authority model, the automated verdict policy, and the external human-approval boundary.
 
 The principle is straightforward: no high-stakes workpaper should rely on one AI system reporting
 "looks good." Instead, the work is split into separate roles, each with a defined mandate:
@@ -15,11 +15,12 @@ The principle is straightforward: no high-stakes workpaper should rely on one AI
 - **Reviewer** - challenges the draft and flags issues
 - **Specialist** - supports with narrow second opinions or source analysis
 - **Deterministic audit** - re-derives formulas and checks rules
-- **Human gatekeeper** - makes the final sign-off decision
+- **Policy gate + human approver** - automation marks work eligible or blocked; a person makes the final sign-off decision
 
 That is separation of duties applied to AI: an explicit authority hierarchy, not a multi-LLM
-majority vote. AI assumptions rank below source data and signed work, and a deterministic gate
-turns severity into a verdict.
+majority vote. AI assumptions rank below source data and signed work, and a deterministic policy
+turns severity into PASS, FLAG, or FAIL. In the public demo, `HumanGate` is that automated policy;
+PASS means eligible for a person's approval, not that a person has already signed.
 
 ---
 
@@ -146,7 +147,7 @@ defective:    Turns 1-2 clear the tie-outs; UNSUPPORTED_AI_ASSUMPTION + HARDCODE
 | Specialist | [`triangulate/roles/specialist.py`](./triangulate/roles/specialist.py) |
 | Deterministic audit | [`triangulate/roles/auditor.py`](./triangulate/roles/auditor.py) |
 | Severity and authority model | [`triangulate/model.py`](./triangulate/model.py) |
-| Finding reconciliation and human gate | [`triangulate/reconcile.py`](./triangulate/reconcile.py) |
+| Finding reconciliation and automated gate policy | [`triangulate/reconcile.py`](./triangulate/reconcile.py) |
 | Role orchestration | [`triangulate/orchestrator.py`](./triangulate/orchestrator.py) |
 
 The reviewer role is read-only by design. The orchestrator hashes the workpaper before and after
@@ -226,7 +227,8 @@ LLMs are useful, but they fail in ways that matter for accounting:
 Triangulate assumes those failures will occur and builds the workflow around them.
 
 The result is not "the AI said yes." The result is a fix packet, a severity ranking, a read-only
-audit trail, and a human-gated verdict — AI for speed, controls for defensibility.
+audit trail, an automated policy verdict, and an explicit human-approval boundary — AI for speed,
+controls for defensibility.
 
 How the review prompts themselves are engineered as controls — role injection, scope-bracketed
 templates, and negative constraints — is documented in
@@ -242,7 +244,7 @@ a signed source document — is written up in [Field Notes](./FIELD-NOTES.md).
 
 - Designed a multi-role AI validation framework for high-stakes financial workpapers.
 - Proved the control in the field: the source-first mandate caught an answer that unanimous multi-model review missed, and rejected a plausible reviewer finding on documentary evidence.
-- Applied separation of duties across AI roles: preparer, reviewer, specialist, audit, and human gate.
+- Applied separation of duties across AI roles, deterministic audit, an automated gate policy, and an external human approver.
 - Built deterministic read-only validation so the checker cannot corrupt the file it checks.
 - Created fix packets, QA summaries, and machine-readable verdicts for review evidence.
 - Designed the framework for two client realities: enterprise-safe operation and agent-accelerated operation with an optional orchestration layer for approved, agent-enabled environments.

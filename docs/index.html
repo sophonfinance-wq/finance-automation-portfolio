@@ -9,11 +9,12 @@
 
 <!--
   ============================================================
-  SITE FACTS — single source of truth (verified 2026-07-17)
+  SITE FACTS — single source of truth (verified 2026-07-20)
   ============================================================
   ENGINES_PUBLIC   = 9        (system dirs on origin/main; README badge "systems: 9 runnable")
-  TESTS_CURATED    = 67,664   (pytest --collect-only on origin/main, 2026-07-18)
-  TESTS_SWEEP      = ~1.15M   (opt-in property sweep, SWEEP=1 pytest; 1,147,870 on 2026-07-17)
+  TESTS_CURATED    = 67,664   (pytest --collect-only -m "not site_tooling", 2026-07-20)
+  TESTS_SITE_TOOLS = 47       (pytest --collect-only -m site_tooling; separate from curated total)
+  TESTS_SWEEP      = ~1.15M   (opt-in property sweep, SWEEP=1 pytest -m "not site_tooling"; 1,147,870 on 2026-07-20)
   LOOP_ENGINES     = 5        (close, surplus, reconciliation, knowledge brain, Triangulate)
   GITHUB           = https://github.com/sophonfinance-wq/finance-automation-portfolio
   LINKEDIN         = https://www.linkedin.com/in/sophonnarith/
@@ -1330,21 +1331,22 @@
     <div class="eng-grid">
       <div class="terminal reveal">
         <div class="term-bar"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span>verify-it-yourself — bash</span><span class="term-ci">&#9679; suite passing</span><button class="term-copy" type="button" id="termCopy" aria-label="Copy the verification commands">copy</button></div>
-        <div class="term-body" role="img" aria-label="Terminal transcript: git clone the public repository; pytest collects 67,664 tests; the curated suite passes; an opt-in sweep holds about 1.15 million generated invariants. Verified on fictional seeded data, MIT license.">
+        <div class="term-body" role="img" aria-label="Terminal transcript: clone and enter the public repository; pytest collects 67,664 curated engine tests while excluding site tooling; the curated suite passes; an opt-in sweep holds about 1.15 million generated invariants. Verified on fictional seeded data, MIT license.">
           <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
           <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
-          <div class="cmd">pytest --collect-only -q | tail -1</div>
+          <div class="cmd">cd finance-automation-portfolio</div>
+          <div class="cmd">pytest --collect-only -q -m "not site_tooling" | tail -1</div>
           <div class="ok-line">67664 tests collected</div>
-          <div class="cmd">pytest&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
+          <div class="cmd">pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
           <div class="ok-line">passed ✓</div>
-          <div class="cmd">SWEEP=1 pytest&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
+          <div class="cmd">SWEEP=1 pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.15M generated cases</span></div>
           <div class="ok-line">invariants held ✓</div>
-          <div class="dim">verified 2026-07-17 · fictional seeded data · MIT license</div>
+          <div class="dim">verified 2026-07-20 · fictional seeded data · MIT license</div>
         </div>
       </div>
       <div class="eng-points reveal d1">
         <div class="pt"><h3>67,664 tests, honestly tiered</h3>
-          <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.15M generated cases. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
+          <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.15M generated cases. A separate 47-test site-tooling suite guards the public datasheets and is excluded from the 67,664 engine total. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
         <div class="pt"><h3>Fictional data, by rule</h3>
           <p>Every public example runs on seeded, invented data. Client information never appears in public code &mdash; backed by a deny-list confidentiality linter in the test suite.</p></div>
         <div class="pt"><h3>Read it, run it, or both</h3>
@@ -1408,7 +1410,7 @@
 <div class="mcta"><a href="#book" data-book>Book a free consultation</a></div>
 
 <!-- ================= BOOKING MODAL ================= -->
-<div class="bookov" id="bookov" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
+<div class="bookov" id="book" role="dialog" aria-modal="true" aria-labelledby="bookTitle">
   <div class="bookp">
     <button class="bookx" type="button" aria-label="Close" id="bookClose">&#215;</button>
 
@@ -1469,7 +1471,7 @@
   </div>
 </div>
 <script>(function(){
-  var ov=document.getElementById('bookov');
+  var ov=document.getElementById('book');
   if(!ov) return;
 
   // ── Live self-scheduling via Google Calendar Appointment Schedules. ──────────

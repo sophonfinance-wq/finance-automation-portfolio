@@ -144,7 +144,7 @@ def make_adversarial_workpaper(seed: int = 20240101) -> Workpaper:
     skimming the workbook would likely miss a plausible-looking total -- but the
     deterministic auditor re-derives the formula and the discrepancy is
     impossible to hide. Reviewer **and** auditor must both raise a CRITICAL
-    tie-out break, and the human gate must return FAIL.
+    tie-out break, and the automated gate policy must return FAIL.
     """
     wp = make_clean_workpaper(seed)
     correct_total = wp.get("B5").value                 # ties to =B2+B3+B4
