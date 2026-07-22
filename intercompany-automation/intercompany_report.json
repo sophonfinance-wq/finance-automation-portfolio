@@ -1,0 +1,3856 @@
+{
+  "title": "Intercompany reciprocity control report",
+  "overall_verdict": "FAIL",
+  "file_count": 25,
+  "rule_count": 23,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "set_period_label",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "set_entities_exist",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ent_codes_unique",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ent_parent_defined",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ent_tree_acyclic",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rec_pairs_symmetric",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rec_amounts_reciprocal",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rec_no_self_balance",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "led_parties_distinct",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "led_amounts_positive",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "led_totals_foot",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "led_rollforward_ties",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "led_dates_inside_window",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "fund_equity_from_capital",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "fund_region_matches",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "fund_services_from_holdings",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "fund_advance_flows_down",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "liq_guarantor_minimum",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "liq_no_negative_cash",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "liq_target_band",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "appr_ledger_approved",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "appr_large_advance_flagged",
+      "severity": "FLAG",
+      "exceptions": 2
+    }
+  ],
+  "files": [
+    {
+      "document": "advance_upstream__Calderwood_Holdings",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "FLAG",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/13/to_entity",
+          "message": "advance 13 runs from NWCP to WCAP (up the chain); an advance that is not to a descendant is often a distribution or sweep and wants classifying"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 7 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "amount_not_integer__Westmere_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 5,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "FAIL",
+          "location": "amount:ledger.transactions[5].amount_cents",
+          "message": "AMOUNT_INVALID: ledger.transactions[5].amount_cents must be integer cents, got 10000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "FAIL",
+          "location": "amount:ledger.transactions[5].amount_cents",
+          "message": "AMOUNT_INVALID: ledger.transactions[5].amount_cents must be integer cents, got 10000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/totals/advance_cents",
+          "message": "advance lines sum to 435,000.00 but the ledger declares 535,000.00 (difference -100,000.00)"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "FAIL",
+          "location": "amount:ledger.transactions[5].amount_cents",
+          "message": "AMOUNT_INVALID: ledger.transactions[5].amount_cents must be integer cents, got 10000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "FAIL",
+          "location": "due_from_schedule:DF-2028-Q2/positions/WCAP->NWCP",
+          "message": "WCAP->NWCP: opening 180,000.00 plus advances 0.00 less repayments 0.00 = 120,000.00, but the closing balance is 220,000.00"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "FLAG",
+          "location": "amount:ledger.transactions[5].amount_cents",
+          "message": "AMOUNT_INVALID: ledger.transactions[5].amount_cents must be integer cents, got 10000000.5 -- amounts are integer cents and are never coerced"
+        }
+      ]
+    },
+    {
+      "document": "bad_period_label__Ashfield_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "FAIL",
+          "location": "file:bad_period_label__Ashfield_US_Group/period",
+          "message": "reporting period '2028-06' is not a YYYY-Qn label; every intercompany schedule is filed against a quarter and cannot be placed without one"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "clean__Rivermont_US_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "dangling_parent__Rivermont_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "FAIL",
+          "location": "entity_register:REG-2028/entities/WCAP/parent",
+          "message": "entity 'WCAP' names parent 'NOPE', which is not in the register"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_entity_code__Calderwood_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "FAIL",
+          "location": "entity_register:REG-2028/entities/NWCP",
+          "message": "entity code 'NWCP' appears 2 times in the register; codes must be unique or a balance keyed on it is ambiguous"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "equity_from_services__Westmere_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/11/from_entity",
+          "message": "equity funding 11 for 'Ballard Yard' comes from NWSV (Services), but project equity must be funded from the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "guarantor_short__Ashfield_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "FAIL",
+          "location": "liquidity_positions:LIQ-2028-Q2/positions/WCAP",
+          "message": "the guarantor WCAP holds 8,000,000.00, below its 10,000,000.00 minimum liquidity covenant (short 2,000,000.00)"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "large_advance__Rivermont_US_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "FLAG",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/13/amount_cents",
+          "message": "advance 13 of 600,000.00 meets the 500,000.00 second-signature threshold and should be reviewed before funding"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Calderwood_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "file:missing_artifact__Calderwood_Holdings/liquidity_positions",
+          "message": "period file carries no liquidity_positions; absent evidence is not a passing control, so no downstream rule may read it"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "negative_amount__Westmere_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/13/amount_cents",
+          "message": "transaction 13 carries a non-positive amount -1.00; direction is carried by the type and the parties, not the sign"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 7 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "negative_cash__Ashfield_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "FAIL",
+          "location": "liquidity_positions:LIQ-2028-Q2/positions/NWSV",
+          "message": "entity NWSV reports negative cash -5,000.00; a bank balance cannot be overdrawn on the books"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "FLAG",
+          "location": "liquidity_positions:LIQ-2028-Q2/positions/NWSV",
+          "message": "NWSV holds -5,000.00, below its target band floor of 200,000.00; it is undercapitalised for the cash it should carry"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "orphan_due_to__Rivermont_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "FAIL",
+          "location": "due_to_schedule:DT-2028-Q2/positions/NWCP->PRED",
+          "message": "NWCP books a due-to against PRED, but PRED books no due-from against NWCP; the receivable side is missing"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "parent_cycle__Calderwood_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "FAIL",
+          "location": "entity_register:REG-2028/entities/AAAA/parent",
+          "message": "the ownership chain from 'AAAA' cycles through 'AAAA' and never reaches the top parent; the group has no root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "FAIL",
+          "location": "entity_register:REG-2028/entities/BBBB/parent",
+          "message": "the ownership chain from 'BBBB' cycles through 'BBBB' and never reaches the top parent; the group has no root"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "reciprocity_off__Westmere_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "FAIL",
+          "location": "due_from_schedule:DF-2028-Q2/positions/HOLD->PRED",
+          "message": "HOLD books a due-from of 450,000.00 against PRED, but PRED books a due-to of 450,500.00 against HOLD (difference -500.00); the balance will not eliminate on consolidation"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "region_mismatch__Ashfield_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/11/from_entity",
+          "message": "equity funding 11 for a Seattle project comes from SWCP (region 'SoCal'); the funding entity's region must match the project's"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "rollforward_off__Rivermont_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "FAIL",
+          "location": "due_from_schedule:DF-2028-Q2/positions/WCAP->NWCP",
+          "message": "WCAP->NWCP: opening 180,000.00 plus advances 100,000.00 less repayments 0.00 = 220,000.00, but the closing balance is 221,000.00"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "same_party__Calderwood_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/13/to_entity",
+          "message": "repayment 13 moves cash from HOLD to itself; an entity cannot advance to or repay itself"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "self_balance__Westmere_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "FAIL",
+          "location": "due_from_schedule:DF-2028-Q2/positions/SWCP",
+          "message": "entity 'SWCP' books a due-from against itself; a counterparty has been mis-keyed"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "FAIL",
+          "location": "due_to_schedule:DT-2028-Q2/positions/SWCP",
+          "message": "entity 'SWCP' books a due-to against itself; a counterparty has been mis-keyed"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "services_from_capital__Ashfield_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/13/from_entity",
+          "message": "advance 13 funds NWSV (Services) from WCAP, but Services and predevelopment funding must come from the top parent 'HOLD'"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "FLAG",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/13/to_entity",
+          "message": "advance 13 runs from WCAP to NWSV (across the tree); an advance that is not to a descendant is often a distribution or sweep and wants classifying"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 7 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "target_breach__Rivermont_US_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "FLAG",
+          "location": "liquidity_positions:LIQ-2028-Q2/positions/NWCP",
+          "message": "NWCP holds 50,000.00, below its target band floor of 200,000.00; it is undercapitalised for the cash it should carry"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "totals_off__Calderwood_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/totals/advance_cents",
+          "message": "advance lines sum to 535,000.00 but the ledger declares 536,000.00 (difference -1,000.00)"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "txn_outside_window__Westmere_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "FLAG",
+          "location": "intercompany_ledger:LDG-2028-Q2/transactions/1/txn_date",
+          "message": "transaction 1 is dated 2028-08-15, outside the 2028-04-01..2028-06-30 window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "unapproved__Ashfield_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 referenced entity codes are registered"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "FAIL",
+          "location": "intercompany_ledger:LDG-2028-Q2/approved_by",
+          "message": "the intercompany ledger carries no approver; cash moved between entities without a sign-off"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    },
+    {
+      "document": "unknown_entity__Rivermont_US_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_label",
+          "status": "PASS",
+          "location": "-",
+          "message": "reporting period 2028-Q2 is well formed"
+        },
+        {
+          "rule": "set_entities_exist",
+          "status": "FAIL",
+          "location": "entity_register/ZZZZ",
+          "message": "code 'ZZZZ' is used at liquidity.entity but is not in the entity register; a position on an unregistered entity cannot be reconciled or eliminated"
+        },
+        {
+          "rule": "ent_codes_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entity codes are unique"
+        },
+        {
+          "rule": "ent_parent_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "every entity's parent is defined and the top parent is a root"
+        },
+        {
+          "rule": "ent_tree_acyclic",
+          "status": "PASS",
+          "location": "-",
+          "message": "every ownership chain reaches the top parent without a cycle"
+        },
+        {
+          "rule": "rec_pairs_symmetric",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are two-sided"
+        },
+        {
+          "rule": "rec_amounts_reciprocal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 intercompany pairs are reciprocal to the cent"
+        },
+        {
+          "rule": "rec_no_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "no entity holds a balance against itself"
+        },
+        {
+          "rule": "led_parties_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 advances and repayments move between two entities"
+        },
+        {
+          "rule": "led_amounts_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transaction amounts are positive"
+        },
+        {
+          "rule": "led_totals_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger totals foot from the transaction lines"
+        },
+        {
+          "rule": "led_rollforward_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 due-from balances roll forward from the ledger"
+        },
+        {
+          "rule": "led_dates_inside_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 transactions fall inside the reporting window"
+        },
+        {
+          "rule": "fund_equity_from_capital",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 equity fundings originate in the Capital group"
+        },
+        {
+          "rule": "fund_region_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 regional equity fundings match their project region"
+        },
+        {
+          "rule": "fund_services_from_holdings",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 Services/predevelopment fundings come from the top parent"
+        },
+        {
+          "rule": "fund_advance_flows_down",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 advances flow down the ownership chain"
+        },
+        {
+          "rule": "liq_guarantor_minimum",
+          "status": "PASS",
+          "location": "-",
+          "message": "the guarantor meets its minimum liquidity covenant"
+        },
+        {
+          "rule": "liq_no_negative_cash",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 entities report non-negative cash"
+        },
+        {
+          "rule": "liq_target_band",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 targeted entities sit inside their band"
+        },
+        {
+          "rule": "appr_ledger_approved",
+          "status": "PASS",
+          "location": "-",
+          "message": "the ledger is approved and dated"
+        },
+        {
+          "rule": "appr_large_advance_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 6 advances reach the review threshold"
+        }
+      ]
+    }
+  ]
+}
