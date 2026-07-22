@@ -1,0 +1,367 @@
+{
+  "num": 13,
+  "slug": "warranty",
+  "part_no": "SFS-E13-WRC",
+  "mnemonic": "WRC",
+  "family": "Insurance Claims",
+  "name": "Warranty Reimbursement",
+  "tagline": "The pool is finite",
+  "plain_summary": "A builder buys a warranty policy at the start of a project, then spends years claiming against it a few thousand dollars at a time. Each claim is trivially small; the policy behind them is not, and it is finite. This engine reads the artifacts the programme emits and runs twenty-two deterministic controls over them: are the policy terms internally consistent and is the pool intact, does each claim sit inside its policy period and its own quarterly window, is there a real warranty cost behind every claimed dollar, did the unit close before the defect, and is the money going to the insured entity. It never files, never pays and never writes to a source artifact.",
+  "rev": "2026-07-22",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failure mode here is accumulation. Any one claim is obviously fine, and nobody reviewing a single claim can see the running total or the boundary it is about to cross. A quarter still foots with an uncovered claim inside it. The engine ships one planted defect per registered control, so the benchmark is a command rather than a claim.",
+  "layers_intro": "Six control families run in registry order over each claim file. The first proves the others had something to read.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the claim file carries every artifact the controls below need, and declares a real reporting quarter.",
+      "engineering": "set_complete compares the doc_type values present against model.DOC_TYPES and FAILs when any of the five is absent or duplicated. Registered first because every downstream rule reads one artifact and returns nothing when it is missing -- absent evidence would otherwise read as a held control. set_period_label rejects a file that does not name a well-formed quarter, since every claim is filed against one and cannot be placed without it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "pol",
+      "label": "Policy Terms and the Pool",
+      "plain": "Checks the coverage limit is what the policy actually bought, and that claims have not spent past it.",
+      "engineering": "Six controls. Premium is re-derived as a basis-point rate on construction cost and the coverage limit as a multiple of the premium -- three numbers typed once at inception and trusted forever after, so a single mistyped cost silently rescales the whole policy. The policy term is re-derived from its start date and month count. Cumulative reimbursement is then held inside the limit, coverage remaining is derived rather than trusted, and a nearly-exhausted pool is flagged well before the claim that finally breaches it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "clm",
+      "label": "Claims and Reporting Periods",
+      "plain": "Checks each claim sits inside the right window and that the quarters add up to the total being claimed.",
+      "engineering": "Six controls. Each quarterly subtotal must foot from its own claim lines; the subtotals must sum to cumulative reimbursement, which is the link between the individual claims and the pool; and the amount being requested must equal the current quarter. Then two separate date tests, deliberately not merged: a claim must be inside its own reporting window, and it must be inside the policy period. A claim can satisfy the first and fail the second, and the quarter still foots -- which is exactly why the quarterly check cannot find it. Finally, duplicate vendor invoices are caught across quarters, matched on vendor and invoice rather than amount, because two repairs of equal value are common and are not each other.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "cost",
+      "label": "Cost Behind the Claim",
+      "plain": "Checks the builder actually spent the money being claimed, on something the policy covers.",
+      "engineering": "Three controls. Every claim must trace to a warranty cost transaction of the same amount, matched on vendor and invoice -- a claim with no cost behind it is a request for money never spent. The transaction must sit at a warranty cost code, because a cost outside those codes is not a warranty cost whatever its description says, and claiming it moves ordinary construction cost into the policy. Accounting dates outside the ledger's own window are flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "unit",
+      "label": "Coverage Begins at Close",
+      "plain": "Checks the home had actually been sold before the defect being claimed for.",
+      "engineering": "Two controls. Warranty coverage begins at close of escrow; before that the builder still owns the home and a defect is ordinary construction cost, which makes this the cheapest way to move cost into the policy. A claim must relate to a unit with a recorded close, and must be dated on or after it. The close date itself is covered -- the boundary is inclusive, and there are tests on both sides of it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "rem",
+      "label": "Remittance",
+      "plain": "Checks the reimbursement is approved and directed to the entity the policy insures.",
+      "engineering": "Three controls: the remittance entity must match the insured named on the policy, wire instructions must be complete enough to pay against, and the submission must carry an approver and a date. Money going to an entity the policy does not insure is a different problem from an accounting error, which is why the entity is compared rather than assumed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Claim Files",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional claim files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted defect per registered control, 25 files in total. Only construction cost, the two policy rates and the repair events are stated; premium, coverage limit, policy end, every subtotal, the cumulative total and the cost ledger are derived.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the claim file complete enough to read",
+      "engineering": "Two controls. Fails a file missing any of the five artifact types, so no downstream rule can hold vacuously.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "pol-control",
+      "label": "Policy and Pool",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the coverage limit real, and is there any left",
+      "engineering": "Six controls re-deriving premium, coverage limit and policy term, then holding cumulative claims inside the pool.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "clm-control",
+      "label": "Claims and Periods",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does each claim sit inside the right window",
+      "engineering": "Six controls: subtotals foot, subtotals sum to cumulative, the request matches this quarter, and two separate date boundaries plus cross-quarter duplicate detection.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "cost-control",
+      "label": "Cost Behind the Claim",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "was the money actually spent, on a covered thing",
+      "engineering": "Three controls tracing each claim to a warranty-coded job cost transaction of the same amount.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "unit-control",
+      "label": "Coverage Begins at Close",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "had the home been sold before the defect",
+      "engineering": "Two controls: the unit must have a recorded close of escrow, and the claim must be dated on or after it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "rem-control",
+      "label": "Remittance",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is the money approved and correctly directed",
+      "engineering": "Three controls over the insured entity, wire completeness and approval.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/engine.py"
+    },
+    {
+      "id": "ledger",
+      "label": "Warranty Cost Ledger",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "the job-cost transactions each claim is checked against",
+      "engineering": "Warranty costs at the designated cost codes. A cost outside them is not a warranty cost whatever its description says.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per claim file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/warranty_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "claim files" },
+    { "from": "set-control", "to": "pol-control", "label": "complete" },
+    { "from": "set-control", "to": "clm-control", "label": "complete" },
+    { "from": "set-control", "to": "cost-control", "label": "complete" },
+    { "from": "pol-control", "to": "unit-control", "label": "findings" },
+    { "from": "clm-control", "to": "rem-control", "label": "findings" },
+    { "from": "cost-control", "to": "ledger", "label": "traced to" },
+    { "from": "clm-control", "to": "ledger", "label": "traced to" },
+    { "from": "unit-control", "to": "report", "label": "findings" },
+    { "from": "rem-control", "to": "report", "label": "findings" },
+    { "from": "ledger", "to": "report", "label": "findings" },
+    { "from": "pol-control", "to": "report", "label": "findings" },
+    { "from": "clm-control", "to": "report", "label": "findings" },
+    { "from": "cost-control", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "299",
+      "source": "python -m pytest --collect-only -q -o addopts= (warranty-reimbursement-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(warranty_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every claim file"
+    },
+    {
+      "label": "Families",
+      "value": "6",
+      "source": "distinct rule-id prefixes in warranty_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Claim files",
+      "value": "25",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus one planted defect per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "5",
+      "source": "len(warranty_engine.model.DOC_TYPES)",
+      "plain": "policy, submission, claims history, cost ledger, closed units"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "warranty_engine/tests/test_control_semantics.py",
+      "plain": "one cent past the coverage limit is a failure"
+    }
+  ],
+  "problem_statement": "A warranty policy is bought once and drawn down for years in amounts too small to attract review. That combination is what makes the programme go wrong. The pool is finite, but no individual claim is anywhere near the limit, so the running total is the only place the breach is visible and nothing in a claim form shows it. The coverage limit itself descends from two derivations nobody re-examines after the policy is bound, so an error at inception rescales everything measured against it afterwards. And every claim sits at three boundaries at once -- its quarter, the policy period, and the close of escrow of the home it belongs to -- of which only the first is obvious from the document being reviewed. A claim dated outside the policy still lets its quarter foot perfectly. A defect claimed before the home was sold looks identical to one claimed after. These are not judgment calls; they are date comparisons and a running sum, which is what a deterministic control does better than a reviewer approving a $640 cabinet repair.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every claim file",
+      "narrative": "The CLI generates 25 fictional claim files -- one clean baseline and one carrying each planted defect -- then runs all 22 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (warranty-reimbursement-automation/); output re-run on demand"
+    },
+    {
+      "title": "A claim inside its quarter, outside the policy",
+      "narrative": "A test dates a claim one day past the policy end while leaving its quarterly window wide enough to contain it. The policy-period control fires and the quarterly subtotal control stays silent -- demonstrating why the two checks are deliberately separate rather than merged.",
+      "source": "warranty_engine/tests/test_control_semantics.py::test_claim_one_day_past_policy_end_fails"
+    },
+    {
+      "title": "The pool is exact at its boundary",
+      "narrative": "Cumulative reimbursement equal to the coverage limit to the cent passes; one cent more fails. A companion test asserts the exhausted pool is flagged for review rather than failed, because spending it precisely is valid and somebody still needs to know.",
+      "source": "warranty_engine/tests/test_control_semantics.py::test_cumulative_exactly_at_the_limit_passes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "generate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries one planted defect per control by design",
+      "artifacts": "warranty_report.md, warranty_report.json, samples/"
+    },
+    {
+      "cmd": "python -m warranty_engine samples",
+      "operation": "analyze an existing folder of claim files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m warranty_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "299 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "299",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (warranty-reimbursement-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(warranty_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "24",
+      "unit": "defect files",
+      "source": "len(warranty_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "warranty_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing in the claim file they were given. It is not an opinion on whether a repair was necessary, whether the insurer will pay, or whether the policy was the right one to buy.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "send the mechanically clean submission to the documented manual review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a nearly exhausted pool and incomplete wire details both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the submission does not go to the insurer until the failing control is cleared"
+      }
+    ],
+    "guarantees": [
+      "Read-only: claim files are parsed and never written back, so the engine cannot introduce the defect it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band anywhere in the registry.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; an unreadable policy period fails the claims that needed it rather than skipping quietly."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries one planted defect per registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never files a claim, pays one, or writes to a source artifact. It reports and stops.",
+      "source": "warranty-reimbursement-automation/README.md and warranty_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the five artifacts the programme keeps. It does not connect to an insurer, a bank or a job-cost system.",
+      "source": "warranty_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It checks that a claim traces to a warranty-coded cost, not that the repair was necessary or reasonably priced. That judgment is a reviewer's.",
+      "source": "warranty_engine/engine.py cost_claim_traces_to_ledger"
+    },
+    {
+      "statement": "Whether a defect is covered under the policy's terms is a coverage question the engine does not answer. It checks dates, codes, amounts and totals.",
+      "source": "warranty_engine/engine.py clm_claim_inside_policy_period"
+    },
+    {
+      "statement": "All shipped data is fictional. The corpus demonstrates the controls; it is not a record of any real policy, insurer, unit or claim.",
+      "source": "warranty_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-warranty.webp",
+    "motion": "../assets/engine-warranty-motion.mp4",
+    "poster_alt": "Warranty Claims diagram: a left-to-right derivation chain reading construction cost, premium, coverage limit; below it a meter showing claimed to date against coverage left; below that three cards each reading every claim must be inside the policy period, inside its own quarter, and after close of escrow; and a row of the six control families with their counts.",
+    "caption": "The Warranty Reimbursement engine tile states the two things a claim programme has to hold at once: a coverage limit derived from cost and premium, and a finite pool draining against it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/warranty-reimbursement-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/warranty-reimbursement-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Warranty Reimbursement (SFS-E13-WRC) datasheet -- twenty-two deterministic, read-only controls over a homebuilder's warranty claim programme: a coverage limit re-derived from construction cost, cumulative claims held inside a finite pool, and every claim tested against its quarter, the policy period and close of escrow. 299 tests, seeded fictional data."
+  }
+}
