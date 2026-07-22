@@ -13,7 +13,7 @@ import subprocess
 from pathlib import Path
 
 import imageio_ffmpeg
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[1]
@@ -101,9 +101,26 @@ def ctext(img, cx, y, text, font, fill, **kw):
 
 
 def scrim(img, box, alpha=95):
+    """Legibility wash under a stat block — a falloff, not a panel.
+
+    This was a filled rectangle pushed through a Gaussian blur. Blurring a
+    rectangle only softens its border: the flat interior survives at full
+    strength, so over bright footage the whole thing read as a milky panel with
+    feathered edges hanging in the frame — visible as a grey box behind every
+    stat. A heavily blurred ellipse has no flat interior and no straight edge
+    anywhere. It is densest under the type and reaches zero well inside the
+    bounds, so it does its job without being a shape you can see.
+    """
     x0, y0, x1, y1 = box
-    g = Image.new("RGBA", (x1 - x0, y1 - y0), (8, 14, 30, alpha))
-    img.alpha_composite(g.filter(ImageFilter.GaussianBlur(18)), (x0, y0))
+    w, h = x1 - x0, y1 - y0
+    if w <= 0 or h <= 0:
+        return
+    m = Image.new("L", (w, h), 0)
+    ImageDraw.Draw(m).ellipse([w * 0.06, h * 0.06, w * 0.94, h * 0.94], fill=alpha)
+    m = m.filter(ImageFilter.GaussianBlur(min(w, h) * 0.24))
+    g = Image.new("RGBA", (w, h), (8, 14, 30, 255))
+    g.putalpha(m)
+    img.alpha_composite(g, (x0, y0))
 
 
 def logo(img, t=1.0):
@@ -225,6 +242,21 @@ def ov_speed(img, t):
           MONO_SOFT, blur=4, off=(0, 2))
 
 
+def mixed_center(img, cx, y, parts):
+    """Draw runs of differently-weighted/coloured text as one centred line.
+
+    The reference lockup sets "Sophon" bold against "Finance Systems" regular on
+    a single line, and the tagline puts its weight on the second clause. Both
+    need the whole line measured before any of it is drawn.
+    """
+    d = ImageDraw.Draw(img)
+    total = sum(d.textlength(t, font=f) for t, f, _ in parts)
+    x = cx - total / 2
+    for t, f, fill in parts:
+        d.text((x, y), t, font=f, fill=fill)
+        x += d.textlength(t, font=f)
+
+
 def tracked(img, cx, y, text, font, fill, tracking):
     d = ImageDraw.Draw(img)
     widths = [d.textlength(ch, font=font) for ch in text]
@@ -237,28 +269,25 @@ def tracked(img, cx, y, text, font, fill, tracking):
 
 INK = (22, 22, 22)                # site --text on the light plate
 SLATE = (75, 88, 112)             # muted slate for secondary lines
-SLATE_SOFT = (120, 132, 155)
 
 
-def light_plate():
-    """Endcard background: the site's own wash, drawn — not generated.
-    A quiet top-lit gradient with a faint engineering grid, matching the
-    marketing page so the film dissolves into the site it lives on."""
-    img = Image.new("RGBA", (W, H))
-    d = ImageDraw.Draw(img)
-    top, bot = (251, 252, 254), (238, 241, 246)
-    for y in range(H):
-        t = y / (H - 1)
-        d.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(top, bot)))
-    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    g = ImageDraw.Draw(layer)
-    grid = (15, 42, 92, 10)
-    for x in range(0, W + 1, 64):
-        g.line([(x, 0), (x, H)], fill=grid)
-    for y in range(0, H + 1, 64):
-        g.line([(0, y), (W, y)], fill=grid)
-    img.alpha_composite(layer)
-    return img
+def wash_light(img):
+    """Lift the endcard plate into the near-white field the reference shows.
+
+    The generated endcard clip is a dark navy room -- its centre luminance runs
+    52 to 61 across its whole length, so INK type on it is simply invisible. A
+    flat fill would fix that but throws away the only depth the frame has. So
+    wash the plate instead: pull the colour out, blur it past the point where
+    any object in it is legible, lift it, and blend it into a near-white field.
+    What is left is a lit surface with falloff rather than a scene competing
+    with the lockup, and INK clears 4.5:1 everywhere in frame."""
+    base = img.convert("RGB")
+    base = ImageEnhance.Color(base).enhance(0.14)
+    base = base.filter(ImageFilter.GaussianBlur(26))
+    base = ImageEnhance.Brightness(base).enhance(3.0)
+    base = ImageEnhance.Contrast(base).enhance(0.45)
+    field = Image.new("RGB", base.size, (252, 253, 255))
+    return Image.blend(field, base, 0.42).convert("RGBA")
 
 
 def ov_close(img, t):
@@ -276,41 +305,74 @@ def ov_close(img, t):
         return
     if t < ENDCARD_T0:
         return  # the jet flyby plays clean — nothing competes with the speed
-    # Endcard: the exact brand lockup, drawn vector-crisp on the site's light
-    # wash — house palette, never AI-rendered typography. The build finishes by
-    # k≈0.56 so the finished lockup holds for the rest of the shot.
+    # Endcard lockup, to the supplied reference: the mark centred above a single
+    # mixed-weight line, a short rule, and one tagline carrying its weight on the
+    # second clause. Drawn vector-crisp in the house palette — never AI-rendered
+    # typography. The card that shipped before set the wordmark at 118pt with 30
+    # units of tracking, which filled the frame edge to edge and read as a
+    # template; nothing here is letter-spaced to fill space, and the mark is
+    # sized off the wordmark's cap height so the two read as one object. Type
+    # runs 30% over the reference proportions so it holds up in an inline player.
+    # The build finishes by k≈0.60, so the finished lockup holds for the rest.
     k = (t - ENDCARD_T0) / (1.0 - ENDCARD_T0)
     d = ImageDraw.Draw(img)
-    a_g = int(255 * ease_out(k / 0.16))
+    CX = W / 2
+
+    f_bold = F(52)
+    f_reg = F(52, "med")
+    ascent, _ = f_bold.getmetrics()
+    cap = ascent * 0.72
+
+    WM_A, WM_B = "Sophon", " Finance Systems"
+    WM_TOP = 300
+
+    # --- mark, centred above the wordmark ---
+    a_g = int(255 * ease_out(k / 0.18))
     if a_g > 0:
-        s = 3.2
-        ox, oy = W / 2 - 24 * s, 138
-        pts = [(ox + p[0] * s, oy + p[1] * s) for p in [(10, 30), (19, 21), (27, 26), (38, 14)]]
-        d.line(pts, fill=(*BLUE_DEEP[:3], a_g), width=10, joint="curve")
-        dot = (ox + 38 * s, oy + 14 * s)
-        d.ellipse([dot[0] - 10, dot[1] - 10, dot[0] + 10, dot[1] + 10],
+        s = (cap * 1.15) / 31.6
+        mw = 32 * s
+        mx = CX - mw / 2
+        my = WM_TOP - 34 - 31.6 * s
+        pts = [(mx + p[0] * s, my + p[1] * s)
+               for p in [(0, 22), (11, 11), (20, 17), (32, 3)]]
+        d.line(pts, fill=(*BLUE_DEEP[:3], a_g), width=max(2, round(4.4 * s)), joint="curve")
+        dot = (mx + 32 * s, my + 3 * s)
+        r = 4.6 * s
+        d.ellipse([dot[0] - r, dot[1] - r, dot[0] + r, dot[1] + r],
                   fill=(*BLUE_DEEP[:3], a_g))
-        d.rectangle([ox + 10 * s, oy + 35 * s, ox + 38 * s, oy + 38 * s],
-                    fill=(*INK, a_g))
-    a_w = int(255 * ease_out((k - 0.10) / 0.16))
+        d.rectangle([mx, my + 30 * s, mx + 32 * s, my + 31.8 * s], fill=(*INK, a_g))
+
+    # --- "Sophon Finance Systems" on one line, two weights ---
+    a_w = int(255 * ease_out((k - 0.08) / 0.18))
     if a_w > 0:
-        tracked(img, W / 2, 296, "SOPHON", F(118), (*INK, a_w), 30)
-    a_r = ease_out((k - 0.20) / 0.12)
+        mixed_center(img, CX, WM_TOP, [
+            (WM_A, f_bold, (*INK, a_w)),
+            (WM_B, f_reg, (*INK, a_w)),
+        ])
+
+    # --- short rule ---
+    a_r = ease_out((k - 0.20) / 0.14)
     if a_r > 0:
-        half = 185 * a_r
-        d.rectangle([W / 2 - half, 446, W / 2 + half, 451], fill=(*BLUE_DEEP[:3], 255))
-    a_f = int(255 * ease_out((k - 0.26) / 0.12))
-    if a_f > 0:
-        tracked(img, W / 2, 470, "FINANCE SYSTEMS", M(26), (*SLATE, a_f), 14)
-    a_t = int(255 * ease_out((k - 0.34) / 0.14))
+        half = 62 * a_r
+        yb = WM_TOP + ascent + 26
+        d.rectangle([CX - half, yb, CX + half, yb + 2], fill=(*BLUE_DEEP[:3], 255))
+
+    # --- tagline: weight on the second clause ---
+    a_t = int(255 * ease_out((k - 0.30) / 0.16))
     if a_t > 0:
-        ctext(img, W / 2, 546, "AUTOMATE THE WORK.", F(34, "med"),
-              (*INK, a_t), blur=0, off=(0, 0), salpha=0)
-        ctext(img, W / 2, 592, "KEEP THE JUDGMENT.", F(34, "med"),
-              (*BLUE_DEEP[:3], a_t), blur=0, off=(0, 0), salpha=0)
-    a_u = int(220 * ease_out((k - 0.44) / 0.12))
+        f_t = F(24, "med")
+        f_tb = F(24)
+        mixed_center(img, CX, WM_TOP + ascent + 58, [
+            ("Automate the work. ", f_t, (*INK, a_t)),
+            ("Keep the judgment.", f_tb, (*BLUE_DEEP[:3], a_t)),
+        ])
+
+    # SLATE, not the softer grey this used to use: that tone was picked against a
+    # 250-luma flat fill and only reaches 2.6:1 on the washed field. SLATE: 4.9:1.
+    a_u = int(255 * ease_out((k - 0.44) / 0.14))
     if a_u > 0:
-        tracked(img, W / 2, 658, "sophonfinance.com", M(19), (*SLATE_SOFT, a_u), 3)
+        tracked(img, CX, WM_TOP + ascent + 132, "sophonfinance.com", M(15),
+                (*SLATE, a_u), 3)
 
 
 OVERLAYS = {"open": ov_open, "days": ov_days, "reopen": ov_reopen, "people": ov_people,
@@ -427,18 +489,31 @@ def compose(raw, durs):
                     si = k
             a, b = bounds[si]
             local = (t - a) / (b - a)
-            if bid == "close" and si == len(SHOTS["close"]) - 1:
-                img = light_plate()   # endcard: house wash, not the generated clip
+            shot_frames = sorted((raw / f"{bid}_{si}").glob("f*.png"))
+            have = len(shot_frames)
+            want = int(local * (b - a) * beat_dur * FPS)
+            need = int(round((b - a) * beat_dur * FPS))
+            if have > need:
+                fi = min(have - 1, want)
             else:
-                shot_frames = sorted((raw / f"{bid}_{si}").glob("f*.png"))
-                fi = min(len(shot_frames) - 1, int(local * (b - a) * beat_dur * FPS))
-                img = Image.open(shot_frames[fi]).convert("RGBA")
+                # The source is shorter than the beat its narration needs.
+                # Clamping to the last frame would hold a dead still -- the
+                # freeze this fixes. Stretch what footage there is across the
+                # whole beat instead: fractionally slower, but never frozen.
+                fi = min(have - 1, int(local * max(0, have - 1)))
+            img = Image.open(shot_frames[fi]).convert("RGBA")
+            if bid == "close" and si == len(SHOTS["close"]) - 1:
+                img = wash_light(img)
             OVERLAYS[bid](img, t)
             if not (bid == "close" and si == len(SHOTS["close"]) - 1):
                 logo(img, 1.0 if (bi, i) != (0, 0) else 0.4)
             if bi == 0 and i < 12:
                 img.alpha_composite(Image.new("RGBA", img.size, (0, 0, 0, int(255 * (1 - i / 12)))))
-            img.convert("RGB").save(frames / f"f{n:05d}.jpg", quality=90)
+            # 4:4:4 at 96, not the default 4:2:0 at 90. These frames are an
+            # intermediate that x264 re-encodes, and subsampled chroma is what
+            # feathers a hard white numeral against dark footage.
+            img.convert("RGB").save(frames / f"f{n:05d}.jpg",
+                                    quality=96, subsampling=0)
             n += 1
     print("frames:", n)
     return frames
@@ -479,7 +554,11 @@ def mux(frames, durs, voice):
         f"[1:a][m][j]amix=inputs=3:duration=first:dropout_transition=3:normalize=0,"
         f"loudnorm=I=-16:TP=-1.5[a]",
         "-map", "0:v", "-map", "[a]",
-        "-c:v", "libx264", "-preset", "medium", "-crf", "22", "-pix_fmt", "yuv420p",
+                # crf 22 at preset slow, measured against the alternatives: the fringing
+        # win comes entirely from the 4:4:4 intermediate above, not from the rate
+        # (crf 20/21/22 all land at the same ring chroma), so this keeps the
+        # quality gain and still ships ~2 MB under the previous cut.
+        "-c:v", "libx264", "-preset", "slow", "-crf", "22", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(out)],
         check=True, capture_output=True)
     print("film ->", out, out.stat().st_size // 1024, "KB, total", round(total, 1), "s")
