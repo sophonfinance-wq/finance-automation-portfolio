@@ -1,0 +1,385 @@
+{
+  "num": 14,
+  "slug": "intercompany",
+  "part_no": "SFS-E14-ICO",
+  "mnemonic": "ICO",
+  "family": "Consolidation Controls",
+  "name": "Intercompany Reciprocity",
+  "tagline": "Two sides, one balance",
+  "plain_summary": "A development group is a tree of entities, not one company: a holding parent over a services arm that carries the payroll and a capital arm that guarantees the construction loans, plus a predevelopment entity that carries land while it is entitled. Cash moves between them constantly, and every move lands two entries on two sets of books kept by two people. This engine reads the artifacts the consolidation process emits and runs twenty-three deterministic controls over them: is the entity tree itself sound, does every due-from equal the due-to that faces it, does each closing balance roll forward from the transactions that moved it, did the cash come from the protocol-correct entity and flow down the ownership chain, and does the guarantor meet its liquidity covenant. It never funds, never sweeps and never writes to a source artifact.",
+  "rev": "2026-07-22",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failure mode here lives between two entities, never inside one. Each company's own books foot; the break only surfaces at consolidation, when the intercompany balances are supposed to eliminate to zero and instead leave a residual nobody can source. By then the period is closed. A one-sided balance, a closing that quietly stopped tying to the ledger, an advance funded from the wrong arm of the group -- none of these move a single entity out of balance, which is exactly why a person closing one set of books cannot see them. The engine ships one planted defect per registered control, so the benchmark is a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each period file. The first proves the others had something to read, and that every code they resolve exists.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the period file carries every schedule the controls below need, and that every entity code it names is registered.",
+      "engineering": "set_complete compares the doc_type values present against model.DOC_TYPES and FAILs when any of the six is absent or duplicated -- registered first because every downstream rule reads one artifact and returns nothing when it is missing, so absent evidence would otherwise read as a held control. set_period_label rejects a file that does not name a well-formed quarter. set_entities_exist gathers every code used in the ledger, the two balance schedules, the liquidity positions and the protocol, and FAILs any that the register has never heard of -- a position on an unregistered entity cannot be reconciled or eliminated, and the row still foots on its own line.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "ent",
+      "label": "The Entity Tree",
+      "plain": "Checks the ownership tree is sound before anything is measured against it.",
+      "engineering": "Three controls. Entity codes must be unique, or a balance keyed on one is ambiguous. Each entity's parent must be a known code, and only the top parent may be a root. The ownership chain from every entity must reach the top parent without a cycle -- a parent loop leaves the group with no root, so 'flows down the chain' has no meaning and the funding-direction control below cannot be evaluated.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "rec",
+      "label": "Reciprocity",
+      "plain": "Checks the two sides of every intercompany balance agree, to the cent.",
+      "engineering": "Three controls, and the spine of the engine. Every due-from pair must be faced by a due-to pair and vice versa, or a receivable is an orphan the counterparty never acknowledged. Matched pairs must be equal to the cent -- two controllers book the two sides independently and the reconciliation exists precisely because they drift. And no entity may hold a balance against itself, which inflates both the receivable and payable totals by the same amount so the group still appears to eliminate. When every pair is reciprocal, the intercompany balances cancel on consolidation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "led",
+      "label": "Roll-Forward from the Ledger",
+      "plain": "Checks each closing balance is what the transactions that moved it actually produce.",
+      "engineering": "Five controls. Advances and repayments must move between two distinct entities, amounts are positive integer cents with direction carried by the transaction type rather than the sign, and the ledger totals foot from their own lines. The roll-forward is the link to the balances: each due-from closing must equal its opening plus advances less repayments, where a repayment's cash flows debtor-to-creditor and reduces the reversed pair. Equity fundings are excluded on purpose -- they debit an investment account, not a due-from -- so a closing that moved by an equity amount has booked capital as a receivable. Transactions dated outside the reporting window are flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "fund",
+      "label": "Funding Protocol",
+      "plain": "Checks each dollar came from the entity the protocol says it must, in the right region and direction.",
+      "engineering": "Four controls drawn from the cash-flow protocol. Project equity must originate from a Capital-group entity, and from the capital entity of the project's own region -- cross-region funding puts a project on the wrong balance sheet. Services and predevelopment funding must come from the top parent, never the Capital group, which crosses the wall between the group that guarantees the loans and the group that carries the people. And an advance should flow down the ownership chain to a descendant; one running up the chain or across the tree is flagged, because it is more often a distribution or a cash sweep mislabelled.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "liq",
+      "label": "Liquidity Covenants",
+      "plain": "Checks the guarantor holds its covenant minimum and no entity is over- or under-funded.",
+      "engineering": "Three controls. The guarantor of the construction loans must hold at least its minimum liquidity -- falling under the floor is a covenant breach whether or not any single transaction looks wrong. No entity may report negative cash. And each entity with a protocol target band is flagged, not failed, when its cash sits outside the band: far below is undercapitalised for the cash it should carry, far above is cash the sweep should have pulled up.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "appr",
+      "label": "Governance",
+      "plain": "Checks the ledger is approved and that large advances are surfaced for a second look.",
+      "engineering": "Two controls: the intercompany ledger must carry an approver and a date, because cash moved between entities without a sign-off is a control gap; and any single advance at or above the protocol's second-signature threshold is flagged for review, which is cheaper than discovering an unreviewed eight-figure advance after the quarter closed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Period Files",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional intercompany period files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted defect per registered control, 25 files in total. Only the entity tree, the protocol thresholds, the opening balances and the period transactions are stated; every closing balance, every due-to mirror and the ledger totals are derived.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the file complete, and does every code it names exist",
+      "engineering": "Three controls. Fails a file missing any of the six artifact types or naming an entity the register does not carry, so no downstream rule holds vacuously.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "ent-control",
+      "label": "Entity Tree",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the ownership tree itself sound",
+      "engineering": "Three controls: unique codes, defined parents, and an acyclic chain that reaches the top parent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "rec-control",
+      "label": "Reciprocity",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does every due-from equal the due-to that faces it",
+      "engineering": "Three controls: every pair two-sided, matched pairs equal to the cent, and no entity holding a balance against itself.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "led-control",
+      "label": "Roll-Forward",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the closing tie to the transactions that moved it",
+      "engineering": "Five controls tying each due-from closing to opening plus advances less repayments, with equity excluded and the ledger totals footing from their lines.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "fund-control",
+      "label": "Funding Protocol",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "did the cash come from the right entity, region and direction",
+      "engineering": "Four controls: equity from the Capital group, region-matched, Services and predevelopment funded from the top parent, and advances flowing down the chain.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "liq-control",
+      "label": "Liquidity Covenants",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the guarantor meet its floor, and is anyone off-target",
+      "engineering": "Three controls over the guarantor minimum, non-negative cash, and the protocol target bands.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "appr-control",
+      "label": "Governance",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is the ledger approved and are large advances surfaced",
+      "engineering": "Two controls over ledger approval and a second-signature threshold on large advances.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
+    },
+    {
+      "id": "register",
+      "label": "Entity Register",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "the entity tree every rule resolves codes against",
+      "engineering": "Each entity's code, group, parent and region. Reciprocity, funding direction and funding source are all evaluated against this one authority.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per period file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "period files" },
+    { "from": "set-control", "to": "ent-control", "label": "complete" },
+    { "from": "set-control", "to": "rec-control", "label": "complete" },
+    { "from": "set-control", "to": "led-control", "label": "complete" },
+    { "from": "ent-control", "to": "register", "label": "resolves" },
+    { "from": "rec-control", "to": "register", "label": "resolves" },
+    { "from": "fund-control", "to": "register", "label": "resolves" },
+    { "from": "led-control", "to": "rec-control", "label": "balances" },
+    { "from": "ent-control", "to": "report", "label": "findings" },
+    { "from": "rec-control", "to": "report", "label": "findings" },
+    { "from": "led-control", "to": "report", "label": "findings" },
+    { "from": "fund-control", "to": "report", "label": "findings" },
+    { "from": "liq-control", "to": "report", "label": "findings" },
+    { "from": "appr-control", "to": "report", "label": "findings" },
+    { "from": "register", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "310",
+      "source": "python -m pytest --collect-only -q -o addopts= (intercompany-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "23",
+      "source": "len(intercompany_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every period file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in intercompany_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Period files",
+      "value": "25",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus one planted defect per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(intercompany_engine.model.DOC_TYPES)",
+      "plain": "register, protocol, ledger, due-from, due-to, liquidity"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "intercompany_engine/tests/test_control_semantics.py",
+      "plain": "one cent between the two sides is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A development group runs as a tree of legal entities, and cash never stops moving between them: advances down the chain to fund predevelopment and overhead, repayments back up out of land sales, equity into projects. Each of those movements is booked twice, on two sets of books, by two people. The arithmetic on each set of books foots perfectly. Nothing inside any one company is out of balance. The break, when there is one, exists only in the space between two entities -- a due-from that one side carries larger than the due-to the other acknowledges, a closing balance that quietly stopped tying to the transactions that moved it, an advance funded from the capital arm when the protocol says it must come from the top parent. None of these move a single entity out of balance, so a person closing one company cannot see them; they surface only at consolidation, when the intercompany balances are supposed to eliminate to zero and instead leave a residual nobody can source, after the period is closed. These are not judgment calls. They are equalities: a due-from against a due-to, a closing against a roll-forward, a funding source against a rule -- which is what a deterministic control settles better than a controller reconciling one entity at a time.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every period file",
+      "narrative": "The CLI generates 25 fictional period files -- one clean baseline and one carrying each planted defect -- then runs all 23 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (intercompany-automation/); output re-run on demand"
+    },
+    {
+      "title": "A drift of one cent between the two sides",
+      "narrative": "A test moves a single due-to closing by one cent. The reciprocity control fires, and the pair-symmetry and roll-forward controls stay silent -- the balance is still two-sided and still ties to its own ledger, which is exactly why the drift is invisible on either entity alone and only a check spanning both finds it.",
+      "source": "intercompany_engine/tests/test_control_semantics.py::test_one_cent_of_drift_breaks_reciprocity"
+    },
+    {
+      "title": "The group eliminates to zero",
+      "narrative": "A test sums every due-from closing and every due-to closing on the clean baseline and asserts the two totals are equal -- the property that makes the intercompany balances cancel on consolidation. It holds because every pair is reciprocal, which is the thing the registry is built to keep true.",
+      "source": "intercompany_engine/tests/test_control_semantics.py::test_group_intercompany_eliminates_to_zero"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "generate the seeded fictional corpus, run all twenty-three controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries one planted defect per control by design",
+      "artifacts": "intercompany_report.md, intercompany_report.json, samples/"
+    },
+    {
+      "cmd": "python -m intercompany_engine samples",
+      "operation": "analyze an existing folder of period files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m intercompany_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "310 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "310",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (intercompany-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "23",
+      "unit": "controls",
+      "source": "len(intercompany_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "24",
+      "unit": "defect files",
+      "source": "len(intercompany_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "intercompany_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing between the two sides of the intercompany balances they were given. It is not an opinion on whether an advance was commercially wise, whether an entity is adequately capitalised for its business, or whether the group structure is the right one.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean positions into the documented consolidation review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an advance running up the chain, a cash target out of band, and a large advance awaiting a second signature all land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the positions do not go to consolidation until the failing control is cleared"
+      }
+    ],
+    "guarantees": [
+      "Read-only: period files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band between a due-from and the due-to it faces.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing due-to schedule fails completeness rather than letting reciprocity pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries one planted defect per registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never funds an entity, sweeps cash, or writes to a source artifact. It reports and stops.",
+      "source": "intercompany-automation/README.md and intercompany_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the six schedules the consolidation keeps. It does not connect to a bank, a general ledger or a treasury system.",
+      "source": "intercompany_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It checks that a balance is reciprocal and rolls forward, not whether the underlying advance was commercially reasonable or on arm's-length terms. That judgment is a reviewer's.",
+      "source": "intercompany_engine/engine.py rec_amounts_reciprocal"
+    },
+    {
+      "statement": "It reads the funding protocol as data and tests conformance to it; whether the protocol itself is the right policy is a treasury question the engine does not answer.",
+      "source": "intercompany_engine/engine.py fund_services_from_holdings"
+    },
+    {
+      "statement": "All shipped data is fictional. The corpus demonstrates the controls; it is not a record of any real entity, group, advance or balance.",
+      "source": "intercompany_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-intercompany.webp",
+    "motion": "../assets/engine-intercompany-motion.mp4",
+    "poster_alt": "Intercompany Reciprocity diagram: on the left an ownership tree of eight fictional legal entities, HOLD at the top over WCAP, SVCS and PRED, then NWCP, SWCP, NWSV and SWSV; on the right two facing ledger cards, a DUE-FROM schedule of positive amounts and a DUE-TO schedule of their exact negatives, joined by an equals sign and totalling plus and minus the same figure to show the balances eliminate to zero; and a footer strip reading 23 controls, 310 tests, read-only, SFS-E14-ICO.",
+    "caption": "The Intercompany Reciprocity engine tile states the thing that has to hold between two entities at once: a due-from on one set of books equal to the due-to on another, so the group eliminates to zero on consolidation.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/intercompany-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Intercompany Reciprocity (SFS-E14-ICO) datasheet -- twenty-three deterministic, read-only controls over a development group's intercompany balances and cash-flow funding protocol: every due-from reconciled to the due-to that faces it, each closing rolled forward from the ledger, funding traced to the protocol-correct entity, and the guarantor's liquidity covenant held. 310 tests, seeded fictional data."
+  }
+}

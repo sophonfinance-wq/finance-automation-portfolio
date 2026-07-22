@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intercompany Reciprocity — Sophon Finance Systems</title>
+<meta name="description" content="Intercompany Reciprocity (SFS-E14-ICO) datasheet -- twenty-three deterministic, read-only controls over a development group&#x27;s intercompany balances and cash-flow funding protocol: every due-from reconciled to the due-to that faces it, each closing rolled forward from the ledger, funding traced to the protocol-correct entity, and the guarantor&#x27;s liquidity covenant held. 310 tests, seeded fictional data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:30px;height:30px;flex:none}
+.brand-word{font-weight:600;font-size:18px;letter-spacing:.2px;white-space:nowrap;line-height:1.15}
+.brand-word span{font-weight:300}
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}.brand-tag{font-size:8.5px;letter-spacing:.8px}}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.schem-wrap{overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px;overflow-wrap:anywhere}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}.schem-wrap svg.schem{width:auto;max-width:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+<main class="wrap">
+<section class="masthead">
+  <p class="kicker">ENGINE 14</p>
+  <p class="partline">SFS-E14-ICO &middot; CONSOLIDATION CONTROLS &middot; REV 2026-07-22 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Intercompany Reciprocity</strong></h1>
+  <p class="tag">Two sides, one balance</p>
+  <p class="intro">A development group is a tree of entities, not one company: a holding parent over a services arm that carries the payroll and a capital arm that guarantees the construction loans, plus a predevelopment entity that carries land while it is entitled. Cash moves between them constantly, and every move lands two entries on two sets of books kept by two people. This engine reads the artifacts the consolidation process emits and runs twenty-three deterministic controls over them: is the entity tree itself sound, does every due-from equal the due-to that faces it, does each closing balance roll forward from the transactions that moved it, did the cash come from the protocol-correct entity and flow down the ownership chain, and does the guarantor meet its liquidity covenant. It never funds, never sweeps and never writes to a source artifact.</p>
+  <p class="thesis">The failure mode here lives between two entities, never inside one. Each company&#x27;s own books foot; the break only surfaces at consolidation, when the intercompany balances are supposed to eliminate to zero and instead leave a residual nobody can source. By then the period is closed. A one-sided balance, a closing that quietly stopped tying to the ledger, an advance funded from the wrong arm of the group -- none of these move a single entity out of balance, which is exactly why a person closing one set of books cannot see them. The engine ships one planted defect per registered control, so the benchmark is a command rather than a claim.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 520" role="img" aria-label="Exploded functional block stack: Structural Precondition, The Entity Tree, Reciprocity, Roll-Forward from the Ledger, Funding Protocol, Liquidity Covenants, Governance over seeded fictional data">
+  <g class="die-layer" data-layer="set"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Structural Precondition</text></g>
+  <g class="die-layer" data-layer="ent"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">The Entity Tree</text></g>
+  <g class="die-layer" data-layer="rec"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Reciprocity</text></g>
+  <g class="die-layer" data-layer="led"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Roll-Forward from the Ledger</text></g>
+  <g class="die-layer" data-layer="fund"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Funding Protocol</text></g>
+  <g class="die-layer" data-layer="liq"><polygon points="80,320 400,320 360,342 40,342" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,342 360,342 360,388 40,388" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="369" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Liquidity Covenants</text></g>
+  <g class="die-layer" data-layer="appr"><polygon points="80,380 400,380 360,402 40,402" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,402 360,402 360,448 40,448" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="429" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Governance</text></g>
+  <text x="40" y="510" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="set" data-plain="Checks the period file carries every schedule the controls below need, and that every entity code it names is registered." data-eng="set_complete compares the doc_type values present against model.DOC_TYPES and FAILs when any of the six is absent or duplicated -- registered first because every downstream rule reads one artifact and returns nothing when it is missing, so absent evidence would otherwise read as a held control. set_period_label rejects a file that does not name a well-formed quarter. set_entities_exist gathers every code used in the ledger, the two balance schedules, the liquidity positions and the protocol, and FAILs any that the register has never heard of -- a position on an unregistered entity cannot be reconciled or eliminated, and the row still foots on its own line." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="Structural Precondition layer — open detail" aria-controls="die-panel" aria-expanded="false">Structural Precondition</button>
+    <button class="die-face" data-layer="ent" data-plain="Checks the ownership tree is sound before anything is measured against it." data-eng="Three controls. Entity codes must be unique, or a balance keyed on one is ambiguous. Each entity&#x27;s parent must be a known code, and only the top parent may be a root. The ownership chain from every entity must reach the top parent without a cycle -- a parent loop leaves the group with no root, so &#x27;flows down the chain&#x27; has no meaning and the funding-direction control below cannot be evaluated." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="The Entity Tree layer — open detail" aria-controls="die-panel" aria-expanded="false">The Entity Tree</button>
+    <button class="die-face" data-layer="rec" data-plain="Checks the two sides of every intercompany balance agree, to the cent." data-eng="Three controls, and the spine of the engine. Every due-from pair must be faced by a due-to pair and vice versa, or a receivable is an orphan the counterparty never acknowledged. Matched pairs must be equal to the cent -- two controllers book the two sides independently and the reconciliation exists precisely because they drift. And no entity may hold a balance against itself, which inflates both the receivable and payable totals by the same amount so the group still appears to eliminate. When every pair is reciprocal, the intercompany balances cancel on consolidation." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="Reciprocity layer — open detail" aria-controls="die-panel" aria-expanded="false">Reciprocity</button>
+    <button class="die-face" data-layer="led" data-plain="Checks each closing balance is what the transactions that moved it actually produce." data-eng="Five controls. Advances and repayments must move between two distinct entities, amounts are positive integer cents with direction carried by the transaction type rather than the sign, and the ledger totals foot from their own lines. The roll-forward is the link to the balances: each due-from closing must equal its opening plus advances less repayments, where a repayment&#x27;s cash flows debtor-to-creditor and reduces the reversed pair. Equity fundings are excluded on purpose -- they debit an investment account, not a due-from -- so a closing that moved by an equity amount has booked capital as a receivable. Transactions dated outside the reporting window are flagged." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="Roll-Forward from the Ledger layer — open detail" aria-controls="die-panel" aria-expanded="false">Roll-Forward from the Ledger</button>
+    <button class="die-face" data-layer="fund" data-plain="Checks each dollar came from the entity the protocol says it must, in the right region and direction." data-eng="Four controls drawn from the cash-flow protocol. Project equity must originate from a Capital-group entity, and from the capital entity of the project&#x27;s own region -- cross-region funding puts a project on the wrong balance sheet. Services and predevelopment funding must come from the top parent, never the Capital group, which crosses the wall between the group that guarantees the loans and the group that carries the people. And an advance should flow down the ownership chain to a descendant; one running up the chain or across the tree is flagged, because it is more often a distribution or a cash sweep mislabelled." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="Funding Protocol layer — open detail" aria-controls="die-panel" aria-expanded="false">Funding Protocol</button>
+    <button class="die-face" data-layer="liq" data-plain="Checks the guarantor holds its covenant minimum and no entity is over- or under-funded." data-eng="Three controls. The guarantor of the construction loans must hold at least its minimum liquidity -- falling under the floor is a covenant breach whether or not any single transaction looks wrong. No entity may report negative cash. And each entity with a protocol target band is flagged, not failed, when its cash sits outside the band: far below is undercapitalised for the cash it should carry, far above is cash the sweep should have pulled up." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="Liquidity Covenants layer — open detail" aria-controls="die-panel" aria-expanded="false">Liquidity Covenants</button>
+    <button class="die-face" data-layer="appr" data-plain="Checks the ledger is approved and that large advances are surfaced for a second look." data-eng="Two controls: the intercompany ledger must carry an approver and a date, because cash moved between entities without a sign-off is a control gap; and any single advance at or above the protocol&#x27;s second-signature threshold is flagged for review, which is cheaper than discovering an unreviewed eight-figure advance after the quarter closed." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" aria-label="Governance layer — open detail" aria-controls="die-panel" aria-expanded="false">Governance</button>
+  </div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Seven control families run in registry order over each period file. The first proves the others had something to read, and that every code they resolve exists.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">310<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">23<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent rules run over every period file</div></div>
+  <div class="cell"><div class="v">7<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Families</div><div class="p">groups of controls, each answering one question</div></div>
+  <div class="cell"><div class="v">25<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Period files</div><div class="p">one clean baseline plus one planted defect per control</div></div>
+  <div class="cell"><div class="v">6<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Artifacts read</div><div class="p">register, protocol, ledger, due-from, due-to, liquidity</div></div>
+  <div class="cell"><div class="v">0<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Tolerance</div><div class="p">one cent between the two sides is a break, not a rounding band</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">A development group runs as a tree of legal entities, and cash never stops moving between them: advances down the chain to fund predevelopment and overhead, repayments back up out of land sales, equity into projects. Each of those movements is booked twice, on two sets of books, by two people. The arithmetic on each set of books foots perfectly. Nothing inside any one company is out of balance. The break, when there is one, exists only in the space between two entities -- a due-from that one side carries larger than the due-to the other acknowledges, a closing balance that quietly stopped tying to the transactions that moved it, an advance funded from the capital arm when the protocol says it must come from the top parent. None of these move a single entity out of balance, so a person closing one company cannot see them; they surface only at consolidation, when the intercompany balances are supposed to eliminate to zero and instead leave a residual nobody can source, after the period is closed. These are not judgment calls. They are equalities: a due-from against a due-to, a closing against a roll-forward, a funding source against a rule -- which is what a deterministic control settles better than a controller reconciling one entity at a time.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs every control over every period file<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI generates 25 fictional period files -- one clean baseline and one carrying each planted defect -- then runs all 23 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.</p>
+  <p style="margin:10px 0"><b>A drift of one cent between the two sides<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> A test moves a single due-to closing by one cent. The reciprocity control fires, and the pair-symmetry and roll-forward controls stay silent -- the balance is still two-sided and still ties to its own ledger, which is exactly why the drift is invisible on either entity alone and only a check spanning both finds it.</p>
+  <p style="margin:10px 0"><b>The group eliminates to zero<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> A test sums every due-from closing and every due-to closing on the clean baseline and asserts the two totals are equal -- the property that makes the intercompany balances cancel on consolidation. It holds because every pair is reciprocal, which is the thing the registry is built to keep true.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<div class="schem-wrap"><svg class="schem" width="950" height="530" viewBox="0 0 950 530" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Intercompany Reciprocity engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,309 C235,309 235,81 270,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">period files</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,482 355,482 331,482 L379,482 C355,482 355,482 355,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="475" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,482 355,482 331,482 L379,482 C355,482 355,482 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="486" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,482 355,482 331,482 L379,482 C355,482 355,482 355,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="497" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,195 C475,195 475,423 510,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,309 C475,309 475,423 510,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M595,118 C595,482 595,482 571,482 L619,482 C595,482 595,482 595,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="475" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M355,460 C355,482 355,482 331,482 L379,482 C355,482 355,482 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="508" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">balances</text></g>
+  <g class="schem-edge"><path d="M440,195 C595,195 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M440,423 C595,423 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,309 C715,309 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-block" data-block="corpus"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded Period Files source on GitHub"><rect x="30" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Seeded Period Files</text></a></g>
+  <g class="schem-block" data-block="set-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Structural Precondition source on GitHub"><rect x="270" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="77">Structural</tspan><tspan x="355" y="93">Precondition</tspan></text></a></g>
+  <g class="schem-block" data-block="ent-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Entity Tree source on GitHub"><rect x="270" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Entity Tree</text></a></g>
+  <g class="schem-block" data-block="rec-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Reciprocity source on GitHub"><rect x="270" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Reciprocity</text></a></g>
+  <g class="schem-block" data-block="led-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Roll-Forward source on GitHub"><rect x="270" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Roll-Forward</text></a></g>
+  <g class="schem-block" data-block="fund-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Funding Protocol source on GitHub"><rect x="510" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="85" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Funding Protocol</text></a></g>
+  <g class="schem-block" data-block="liq-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Liquidity Covenants source on GitHub"><rect x="510" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Liquidity Covenants</text></a></g>
+  <g class="schem-block" data-block="appr-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Governance source on GitHub"><rect x="510" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Governance</text></a></g>
+  <g class="schem-block" data-block="register"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/model.py" target="_blank" rel="noopener" aria-label="Open Entity Register source on GitHub"><rect x="510" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Entity Register</text></a></g>
+  <g class="schem-block" data-block="report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/report.py" target="_blank" rel="noopener" aria-label="Open Verdict and Findings source on GitHub"><rect x="750" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict and Findings</text></a></g>
+  <g class="schem-title"><line x1="30" y1="504" x2="920" y2="504" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="518" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E14-ICO &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-22</text></g>
+</svg></div><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Period Files.</b> fictional intercompany period files enter the control registry</li><li><b>Structural Precondition.</b> is the file complete, and does every code it names exist</li><li><b>Entity Tree.</b> is the ownership tree itself sound</li><li><b>Reciprocity.</b> does every due-from equal the due-to that faces it</li><li><b>Roll-Forward.</b> does the closing tie to the transactions that moved it</li><li><b>Funding Protocol.</b> did the cash come from the right entity, region and direction</li><li><b>Liquidity Covenants.</b> does the guarantor meet its floor, and is anyone off-target</li><li><b>Governance.</b> is the ledger approved and are large advances surfaced</li><li><b>Entity Register.</b> the entity tree every rule resolves codes against</li><li><b>Verdict and Findings.</b> every finding, with the reason it exists, ends at a person</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Period Files.</b> generate_corpus writes one clean baseline plus one planted defect per registered control, 25 files in total. Only the entity tree, the protocol thresholds, the opening balances and the period transactions are stated; every closing balance, every due-to mirror and the ledger totals are derived.</li><li><b>Structural Precondition.</b> Three controls. Fails a file missing any of the six artifact types or naming an entity the register does not carry, so no downstream rule holds vacuously.</li><li><b>Entity Tree.</b> Three controls: unique codes, defined parents, and an acyclic chain that reaches the top parent.</li><li><b>Reciprocity.</b> Three controls: every pair two-sided, matched pairs equal to the cent, and no entity holding a balance against itself.</li><li><b>Roll-Forward.</b> Five controls tying each due-from closing to opening plus advances less repayments, with equity excluded and the ledger totals footing from their lines.</li><li><b>Funding Protocol.</b> Four controls: equity from the Capital group, region-matched, Services and predevelopment funded from the top parent, and advances flowing down the chain.</li><li><b>Liquidity Covenants.</b> Three controls over the guarantor minimum, non-negative cash, and the protocol target bands.</li><li><b>Governance.</b> Two controls over ledger approval and a second-signature threshold on large advances.</li><li><b>Entity Register.</b> Each entity&#x27;s code, group, parent and region. Reciprocity, funding direction and funding source are all evaluated against this one authority.</li><li><b>Verdict and Findings.</b> Findings roll up per period file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>generate the seeded fictional corpus, run all twenty-three controls, write both reports</td><td class="mono">per-file verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries one planted defect per control by design</td><td>intercompany_report.md, intercompany_report.json, samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m intercompany_engine samples</code><button class="copybtn" data-copy="python -m intercompany_engine samples" aria-label="Copy command: python -m intercompany_engine samples">copy</button></div></td><td>analyze an existing folder of period files without regenerating it</td><td class="mono">per-file verdicts and findings</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none unless --json or --md is passed</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m intercompany_engine samples --generate --quiet</code><button class="copybtn" data-copy="python -m intercompany_engine samples --generate --quiet" aria-label="Copy command: python -m intercompany_engine samples --generate --quiet">copy</button></div></td><td>regenerate the corpus and print only the overall verdict</td><td class="mono">a single verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest</code><button class="copybtn" data-copy="python -m pytest" aria-label="Copy command: python -m pytest">copy</button></div></td><td>run the full test suite for this engine</td><td class="mono">310 passed</td><td class="mono">0 when every test passes</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>310</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Registered controls<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>23</b> controls<br><span style="color:#6f6f6f;font-size:12.5px">counted from the registry, not from documentation</span></td></tr>
+  <tr><td>Planted defects<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>24</b> defect files<br><span style="color:#6f6f6f;font-size:12.5px">every registered control has at least one file that trips it</span></td></tr>
+  <tr><td>Control coverage<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>100</b> percent of controls with a planted defect<br><span style="color:#6f6f6f;font-size:12.5px">no control ships without a file demonstrating it firing</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> FAIL on the bundled corpus, by design -- it carries one planted defect per registered control</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings above PASS</td><td class="mono"><b>PASS</b></td><td>carry the mechanically clean positions into the documented consolidation review</td></tr><tr><td>One or more FLAG, no FAIL</td><td class="mono"><b>REVIEW</b></td><td>a human resolves each flag; an advance running up the chain, a cash target out of band, and a large advance awaiting a second signature all land here</td></tr><tr><td>One or more FAIL</td><td class="mono"><b>FAIL</b></td><td>the positions do not go to consolidation until the failing control is cleared</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only: period files are parsed and never written back, so the engine cannot introduce the break it reports.</li><li style="list-style:disc;margin-left:18px">Integer cents throughout, compared with exact equality; there is no tolerance band between a due-from and the due-to it faces.</li><li style="list-style:disc;margin-left:18px">A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced.</li><li style="list-style:disc;margin-left:18px">Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.</li><li style="list-style:disc;margin-left:18px">Absent evidence is never a passing control; a missing due-to schedule fails completeness rather than letting reciprocity pass unread.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never funds an entity, sweeps cash, or writes to a source artifact. It reports and stops.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>It reads the six schedules the consolidation keeps. It does not connect to a bank, a general ledger or a treasury system.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>It checks that a balance is reciprocal and rolls forward, not whether the underlying advance was commercially reasonable or on arm&#x27;s-length terms. That judgment is a reviewer&#x27;s.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>It reads the funding protocol as data and tests conformance to it; whether the protocol itself is the right policy is a treasury question the engine does not answer.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li><li>All shipped data is fictional. The corpus demonstrates the controls; it is not a record of any real entity, group, advance or balance.<sup class="fn"><a id="fnref-18" href="#fn-18" aria-label="See substantiation 18">18</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">brand animation</span>
+<figure class="figwrap"><img src="../assets/engine-intercompany.webp" data-video="../assets/engine-intercompany-motion.mp4" alt="Intercompany Reciprocity diagram: on the left an ownership tree of eight fictional legal entities, HOLD at the top over WCAP, SVCS and PRED, then NWCP, SWCP, NWSV and SWSV; on the right two facing ledger cards, a DUE-FROM schedule of positive amounts and a DUE-TO schedule of their exact negatives, joined by an equals sign and totalling plus and minus the same figure to show the balances eliminate to zero; and a footer strip reading 23 controls, 310 tests, read-only, SFS-E14-ICO." loading="lazy"><figcaption>The Intercompany Reciprocity engine tile states the thing that has to hold between two entities at once: a due-from on one set of books equal to the due-to on another, so the group eliminates to zero on consolidation.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">python run.py</div><div class="runline">python -m pytest</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/intercompany-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+  </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (intercompany-automation/)</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>len(intercompany_engine.engine.REGISTRY)</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>distinct rule-id prefixes in intercompany_engine.engine.REGISTRY</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>samples/*.json after python run.py</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>len(intercompany_engine.model.DOC_TYPES)</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>intercompany_engine/tests/test_control_semantics.py</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python run.py (intercompany-automation/); output re-run on demand</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>intercompany_engine/tests/test_control_semantics.py::test_one_cent_of_drift_breaks_reciprocity</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>intercompany_engine/tests/test_control_semantics.py::test_group_intercompany_eliminates_to_zero</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q -o addopts= (intercompany-automation/)</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>len(intercompany_engine.engine.REGISTRY)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>len(intercompany_engine.generate.DEFECTS)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>intercompany_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>intercompany-automation/README.md and intercompany_engine/tests/test_readonly_and_determinism.py</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>intercompany_engine/model.py DOC_TYPES</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>intercompany_engine/engine.py rec_amounts_reciprocal</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>intercompany_engine/engine.py fund_services_from_holdings</li>
+    <li id="fn-18"><a class="fnid" href="#fnref-18" aria-label="Back to reference 18">18</a>intercompany_engine/generate.py</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
+</main>
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/intercompany-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+<script>
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
