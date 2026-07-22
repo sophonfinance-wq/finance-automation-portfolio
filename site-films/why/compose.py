@@ -214,6 +214,32 @@ def tracked(img, cx, y, text, font, fill, tracking):
         x += w + tracking
 
 
+INK = (22, 22, 22)                # site --text on light plate
+SLATE = (75, 88, 112)             # muted slate for secondary lines
+SLATE_SOFT = (120, 132, 155)
+
+
+def light_plate():
+    """Endcard background: the site's own wash, drawn — not generated.
+    A quiet top-lit gradient with a faint engineering grid, matching the
+    marketing page so the film dissolves into the site it lives on."""
+    img = Image.new("RGBA", (W, H))
+    d = ImageDraw.Draw(img)
+    top, bot = (251, 252, 254), (238, 241, 246)
+    for y in range(H):
+        t = y / (H - 1)
+        d.line([(0, y), (W, y)], fill=tuple(int(a + (b - a) * t) for a, b in zip(top, bot)))
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    g = ImageDraw.Draw(layer)
+    grid = (15, 42, 92, 10)
+    for x in range(0, W + 1, 64):
+        g.line([(x, 0), (x, H)], fill=grid)
+    for y in range(0, H + 1, 64):
+        g.line([(0, y), (W, y)], fill=grid)
+    img.alpha_composite(layer)
+    return img
+
+
 def ov_close(img, t):
     if t < 0.62:
         # Over the welcome handshake: the two taglines.
@@ -224,8 +250,8 @@ def ov_close(img, t):
         a2 = ease_out((t - 0.52) / 0.2)
         ctext(img, W / 2, 566, "KEEP THE JUDGMENT.", F(58), (*BLUE[:3], int(255 * a2)))
         return
-    # Endcard: the exact brand lockup, drawn vector-crisp over the generated
-    # background plate — never AI-rendered typography.
+    # Endcard: the exact brand lockup, drawn vector-crisp on the site's light
+    # wash — house palette, never AI-rendered typography.
     k = (t - 0.62) / 0.38
     d = ImageDraw.Draw(img)
     a_g = int(255 * ease_out(k / 0.35))
@@ -233,31 +259,31 @@ def ov_close(img, t):
         s = 3.2
         ox, oy = W / 2 - 24 * s, 138
         pts = [(ox + p[0] * s, oy + p[1] * s) for p in [(10, 30), (19, 21), (27, 26), (38, 14)]]
-        d.line(pts, fill=(255, 255, 255, a_g), width=10, joint="curve")
+        d.line(pts, fill=(*BLUE_DEEP[:3], a_g), width=10, joint="curve")
         dot = (ox + 38 * s, oy + 14 * s)
         d.ellipse([dot[0] - 10, dot[1] - 10, dot[0] + 10, dot[1] + 10],
                   fill=(*BLUE_DEEP[:3], a_g))
         d.rectangle([ox + 10 * s, oy + 35 * s, ox + 38 * s, oy + 38 * s],
-                    fill=(255, 255, 255, a_g))
+                    fill=(*INK, a_g))
     a_w = int(255 * ease_out((k - 0.18) / 0.3))
     if a_w > 0:
-        tracked(img, W / 2, 296, "SOPHON", F(118), (255, 255, 255, a_w), 30)
+        tracked(img, W / 2, 296, "SOPHON", F(118), (*INK, a_w), 30)
     a_r = ease_out((k - 0.34) / 0.25)
     if a_r > 0:
         half = 185 * a_r
         d.rectangle([W / 2 - half, 446, W / 2 + half, 451], fill=(*BLUE_DEEP[:3], 255))
     a_f = int(255 * ease_out((k - 0.42) / 0.25))
     if a_f > 0:
-        tracked(img, W / 2, 470, "FINANCE SYSTEMS", M(26), (200, 216, 245, a_f), 14)
+        tracked(img, W / 2, 470, "FINANCE SYSTEMS", M(26), (*SLATE, a_f), 14)
     a_t = int(255 * ease_out((k - 0.55) / 0.3))
     if a_t > 0:
         ctext(img, W / 2, 546, "AUTOMATE THE WORK.", F(34, "med"),
-              (255, 255, 255, a_t), blur=0, off=(0, 0), salpha=0)
+              (*INK, a_t), blur=0, off=(0, 0), salpha=0)
         ctext(img, W / 2, 592, "KEEP THE JUDGMENT.", F(34, "med"),
-              (*BLUE[:3], a_t), blur=0, off=(0, 0), salpha=0)
+              (*BLUE_DEEP[:3], a_t), blur=0, off=(0, 0), salpha=0)
     a_u = int(220 * ease_out((k - 0.7) / 0.28))
     if a_u > 0:
-        tracked(img, W / 2, 658, "sophonfinance.com", M(19), (160, 178, 210, a_u), 3)
+        tracked(img, W / 2, 658, "sophonfinance.com", M(19), (*SLATE_SOFT, a_u), 3)
 
 
 OVERLAYS = {"open": ov_open, "days": ov_days, "reopen": ov_reopen, "people": ov_people,
@@ -337,9 +363,12 @@ def compose(raw, durs):
                     si = k
             a, b = bounds[si]
             local = (t - a) / (b - a)
-            shot_frames = sorted((raw / f"{bid}_{si}").glob("f*.png"))
-            fi = min(len(shot_frames) - 1, int(local * (b - a) * beat_dur * FPS))
-            img = Image.open(shot_frames[fi]).convert("RGBA")
+            if bid == "close" and si == 2:
+                img = light_plate()   # endcard: house wash, not the generated clip
+            else:
+                shot_frames = sorted((raw / f"{bid}_{si}").glob("f*.png"))
+                fi = min(len(shot_frames) - 1, int(local * (b - a) * beat_dur * FPS))
+                img = Image.open(shot_frames[fi]).convert("RGBA")
             OVERLAYS[bid](img, t)
             if not (bid == "close" and si == 2):
                 logo(img, 1.0 if (bi, i) != (0, 0) else 0.4)
