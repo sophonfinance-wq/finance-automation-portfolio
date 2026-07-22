@@ -126,7 +126,7 @@
     backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--border); }
   .nav-in { display:flex; align-items:center; justify-content:space-between; height:60px; gap:16px; }
   .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); }
-  .brand-mark { flex:none; width:26px; height:26px; display:block; }
+  .brand-mark { flex:none; width:30px; height:30px; display:block; }
   /* brand-mark micro-animation: the chart line draws itself on load, the peak dot
      pops in, then every ~7s a glint of light travels up the line and the dot pings.
      The dark baseline never moves — the line climbs, the foundation holds. */
@@ -153,8 +153,14 @@
     .brand-mark .bm-line, .brand-mark .bm-dot { animation:none; }
     .brand-mark .bm-glint, .brand-mark .bm-ping { animation:none; opacity:0; }
   }
-  .brand-word { font-weight:600; font-size:14.5px; letter-spacing:.2px; white-space:nowrap; }
+  .brand-word { font-weight:600; font-size:18px; letter-spacing:.2px; white-space:nowrap; line-height:1.15; }
   .brand-word span { font-weight:300; }
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;
+  font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);
+  white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}
+  .brand-tag{font-size:8.5px;letter-spacing:.8px}}
   .nav-links { display:flex; align-items:center; gap:2px; }
   .nav-links a:not(.btn) { color:var(--blue); text-decoration:none; font-size:14px; font-weight:400; padding:8px 14px; }
   .nav-links a:not(.btn):hover { background:var(--bg-alt); }
@@ -812,7 +818,7 @@
         <circle class="bm-ping" cx="38" cy="14" r="3" fill="none" stroke="#0f62fe" stroke-width="1.4"/>
         <rect x="10" y="35" width="28" height="3" fill="#161616"/>
       </svg>
-      <span class="brand-word">Sophon <span>Finance Systems</span></span>
+      <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
     </a>
     <button class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="navlinks">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#161616" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -841,7 +847,6 @@
   </div>
   <div class="wrap hero-grid">
     <div>
-      <p class="kicker">FINANCE &amp; ACCOUNTING AUTOMATION</p>
       <h1>Automate the work.<br><strong>Keep the judgment.</strong></h1>
       <p class="hero-sub">We build AI engines that take over the repetitive work of finance teams &mdash; close, reconciliation, partnership tax &mdash; and return it <b>drafted, tied out, and cited to source</b>. Independent verification checks every run. <b>Your people approve every output.</b></p>
       <div class="hero-ctas">
