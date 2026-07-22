@@ -9,6 +9,6 @@ Packages `atlas_data` + `generate` in `finance-atlas/`.
 ## Commands (run from `finance-atlas/`)
 ```bash
 python generate.py            # writes out/finance-operations-atlas.html (deterministic, single file)
-python -m pytest -q           # 2,928 tests incl. parametrized deny-list confidentiality linter
+python -m pytest -q           # 2,952 tests incl. parametrized deny-list confidentiality linter
 ```
 The test suite lints every shipped file against a hashed deny-list — never add real client/employer terms anywhere in this repo.

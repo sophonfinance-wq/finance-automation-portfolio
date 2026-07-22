@@ -56,7 +56,7 @@ Non-negotiables that define the product: independent verification checks every r
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
 - 10 public engines, all runnable and MIT-licensed.
-- 69,887 automated tests gate every change in CI.
+- 69,911 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close alone runs 29 deterministic controls.
@@ -80,7 +80,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 69,887 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 69,911 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

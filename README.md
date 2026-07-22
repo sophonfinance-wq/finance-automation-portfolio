@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (2,480 hand-written tests, expanded to 69,887 with invariant grids; runs in minutes)
+# run the curated engine suite (2,480 hand-written tests, expanded to 69,911 with invariant grids; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -137,8 +137,8 @@ demand:
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
 | **Hand-written** (gates CI) | `pytest -m "not site_tooling"` | **2,392** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 10 systems. Runs in minutes. |
-| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **69,887** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
-| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 69,887 curated engine total. |
+| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **69,911** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 69,911 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.26M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
@@ -147,7 +147,7 @@ exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
 Test cases by system (hand-written + grid expansion): close **15,687** · partnership **8,605** · triangulate **8,320** ·
 recon **7,511** · tax-surplus **7,498** · knowledge-brain **7,011** · cash-management **5,290** · validation **4,814** ·
-atlas **2,928** (including a parametrized deny-list confidentiality linter across every shipped file) · accounts payable **2,223**.
+atlas **2,952** (including a parametrized deny-list confidentiality linter across every shipped file) · accounts payable **2,223**.
 
 ---
 
