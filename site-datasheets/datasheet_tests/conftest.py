@@ -47,6 +47,7 @@ ROSTER: dict[str, dict] = {
     "atlas":       {"num": 8, "part_no": "SFS-E08-ATL", "mnemonic": "ATL", "family": "Documentation-as-Artifact",  "name": "Finance Operations Atlas",    "engine_dir": "finance-atlas"},
     "cash":        {"num": 9, "part_no": "SFS-E09-CSH", "mnemonic": "CSH", "family": "Cash Controls",              "name": "Cash Management",             "engine_dir": "cash-management"},
     "ap":          {"num": 10, "part_no": "SFS-E10-APX", "mnemonic": "APX", "family": "Payables Controls",        "name": "Accounts Payable",            "engine_dir": "accounts-payable-automation"},
+    "draw":        {"num": 11, "part_no": "SFS-E11-DRW", "mnemonic": "DRW", "family": "Draw Controls",           "name": "Project Draw",                "engine_dir": "project-draw-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"

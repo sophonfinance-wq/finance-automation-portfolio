@@ -30,7 +30,7 @@ product.
 
 ## Accuracy and confidentiality (non-negotiable)
 
-- Every claim is true and demonstrable. Current facts: **ten runnable systems, a 69,911-test curated suite (plus an opt-in ~1.26M-case property/invariant sweep), fully
+- Every claim is true and demonstrable. Current facts: **eleven runnable systems, a 70,303-test curated suite (plus an opt-in ~1.26M-case property/invariant sweep), fully
   fictional data (seeded where the engine declares it), MIT-licensed, CI-backed.** (Verified via `pytest --collect-only -m "not site_tooling"` 2026-07-21.) A separate **51-test `site_tooling` suite** validates the generated public datasheets and is excluded from the curated engine total. Keep numbers current with the repository.
 - The Knowledge Brain **generates** an apply-ready, cited remediation prompt and a change-log; a
   downstream AI or operator applies the changes. Never state or imply that the engine itself applies
@@ -43,7 +43,8 @@ product.
 - Capitalize **"Tax"** when it is part of a title or label phrase (e.g., "Finance & Tax").
 - Use the canonical system names consistently: Month-End Close, Cash & Debt Reconciliation,
   Partnership Tax · Form 1065, Validation Engine, Tax Surplus / ACB, Triangulate,
-  Knowledge Brain, Finance Operations Atlas, Cash Management, Accounts Payable.
+  Knowledge Brain, Finance Operations Atlas, Cash Management, Accounts Payable,
+  Project Draw.
 - Write provider names plainly: "Anthropic Claude," and "ChatGPT" without a version number.
 
 ## Design

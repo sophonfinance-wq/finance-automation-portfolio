@@ -1,0 +1,391 @@
+{
+  "num": 11,
+  "slug": "draw",
+  "part_no": "SFS-E11-DRW",
+  "mnemonic": "DRW",
+  "family": "Draw Controls",
+  "name": "Project Draw",
+  "tagline": "The identity a draw has to prove",
+  "plain_summary": "A construction loan draw is the moment a developer asks a lender for money, and it is almost entirely arithmetic. This engine reads the artifacts the draw cycle already emits and runs thirty-four deterministic controls over them: do cumulative draws equal cumulative costs, does the form the lender receives agree with the working paper behind it, was contingency drawn only as fast as the work was earned, and were the costs actually incurred inside the period being billed. It never bills, never funds, and never writes to a source artifact. Every exception it raises ends at a person.",
+  "rev": "2026-07-22",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failure modes here are not exotic, which is exactly why they survive review: a retention release moved in one schedule but not the other, a contingency line drawn faster than the work it covers, a cost posted two days after cutoff and billed anyway. Each is invisible in a spreadsheet and obvious to a rule. The engine ships one planted defect per registered control, so the benchmark is a command rather than a claim.",
+  "layers_intro": "Eight control families run in registry order over each draw package. The first proves the others had something to read.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the package actually carries every artifact the controls below need, and that they all describe the same period.",
+      "engineering": "set_complete compares the doc_type values present against model.DOC_TYPES and FAILs when any of the six is absent or duplicated. Registered first because every downstream rule reads one artifact and returns nothing when it is missing -- absent evidence would otherwise read as a held control. set_period_aligned then rejects a package assembled from a reconciliation for one month and a calendar for another, which ties internally and still bills the wrong period.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "recon",
+      "label": "Reconciliation Identity",
+      "plain": "Confirms the money drawn to date equals the money spent to date.",
+      "engineering": "Eight controls over the job-cost-to-draw reconciliation. The core is recon_draws_tie_costs: total draws to date less costs to date net of retention must be exactly zero, compared with integer-cent equality and no tolerance band. The other seven localise why it broke -- a column that does not foot, a funding total drifted from the ledger, retention carried with the wrong sign, or a release removed from the retention column without being added to the current period.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "form",
+      "label": "Lender Form Agreement",
+      "plain": "Checks the form the lender receives agrees with the working papers behind it.",
+      "engineering": "Eight controls over the draw request form: each line cross-foots (previous plus this request equals disbursed), remaining funds derives from revised budget less disbursed, revised budget derives from original plus adjustments, every column total foots from its lines, disbursed to date matches the reconciliation, previous applications ties to the trial balance, this period's request matches the cost detail subtotaled by category, and no line shows negative funds to complete.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "cont",
+      "label": "Contingency Discipline",
+      "plain": "Checks contingency was drawn only as fast as the work it is meant to cover was earned.",
+      "engineering": "Hard-cost contingency is capped at the actual percent complete of hard costs and soft-cost contingency at that of soft costs, governed separately. The percent-complete denominator deliberately excludes the contingency line itself: if it counted toward its own class's progress, a project could bootstrap entitlement by spending contingency to raise the figure that authorises spending it. Progress is floored, not rounded, so the ceiling can only ever be stricter than the procedure allows.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "cut",
+      "label": "Cycle and Cutoff",
+      "plain": "Checks the costs being billed were actually incurred and posted inside the period.",
+      "engineering": "Five controls over the cost detail and cycle calendar: every cost dated inside the draw month, every cost posted on or before the posting deadline, approvals cleared within their stated SLA, cycle milestones falling in their intended order, and the package submitted by its target date. A package prepared before its own posting deadline was assembled from an incomplete ledger.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "acc",
+      "label": "Accrual Policy",
+      "plain": "Checks accruals were used only where policy allows, and reversed afterwards.",
+      "engineering": "Accruing an unposted cost doubles the work of preparing the draw and creates a reconciliation item the following month, so policy restricts it to material amounts and to items that must be paid immediately. acc_only_material flags an immaterial accrual carrying neither justification; acc_prior_period_reversed fails a prior accrual left unreversed, which would otherwise draw the same cost twice when the real invoice posts.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "doc",
+      "label": "Supporting Documentation",
+      "plain": "Checks the package is supportable: signed, backed up, and sent to everyone who needs it.",
+      "engineering": "Four controls over the supporting-documentation index: the form is signed by someone on the authorized signer list and the signature is dated, every transaction at or above the lender's backup threshold has an invoice copy indexed, a schedule of values is attached where the lender requires one, and the submittal reached every required recipient. A missing invoice copy is one of the named conditions under which a lender is not obliged to fund at all.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "fund",
+      "label": "Funding and Follow-up",
+      "plain": "Checks the money arrived inside the agreed window, and that a late draw was chased.",
+      "engineering": "Three controls: funding received within the loan agreement's stated number of days, a follow-up on record when it was not, and the project carrying its working-capital floor. The follow-up control only fires when the draw is actually late, so a package funded on time is never asked to evidence a chase it never needed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Draw Packages",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional draw packages enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted defect per registered control, 37 packages in total. The baseline is derived rather than typed -- line disbursements are chosen and every dependent figure is computed from them -- so a planted defect is guaranteed to be the only thing wrong.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the package complete enough to be worth reading",
+      "engineering": "Two controls. Fails a package missing any of the six artifact types, so no downstream rule can hold vacuously.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "recon-control",
+      "label": "Reconciliation Identity",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "do draws to date equal costs to date",
+      "engineering": "Eight controls. C minus D must be exactly zero; the rest localise the break.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "form-control",
+      "label": "Lender Form Agreement",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does the lender's form match its working paper",
+      "engineering": "Eight controls covering cross-foot, derivation, column footing and three cross-artifact ties.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "cont-control",
+      "label": "Contingency Discipline",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "was contingency drawn only as fast as work was earned",
+      "engineering": "Two controls, governed per cost class, with the contingency line excluded from its own denominator.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "cut-control",
+      "label": "Cycle and Cutoff",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "were these costs incurred inside the period billed",
+      "engineering": "Five controls over accounting dates, posting dates, approval SLAs and milestone ordering.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "acc-control",
+      "label": "Accrual Policy",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "were accruals within policy and reversed",
+      "engineering": "Two controls: materiality with an immediate-payment exemption, and prior-period reversal.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "doc-control",
+      "label": "Supporting Documentation",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is the package signed, backed up and distributed",
+      "engineering": "Four controls over signature authority, invoice backup coverage, schedule of values and distribution.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "fund-control",
+      "label": "Funding and Follow-up",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "did the money arrive, and was a late draw chased",
+      "engineering": "Three controls over the agreement's funding window, follow-up evidence and the working-capital floor.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/engine.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per package: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports are byte-stable, carrying no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/draw_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "draw packages" },
+    { "from": "set-control", "to": "recon-control", "label": "complete" },
+    { "from": "set-control", "to": "form-control", "label": "complete" },
+    { "from": "set-control", "to": "cont-control", "label": "complete" },
+    { "from": "recon-control", "to": "cut-control", "label": "findings" },
+    { "from": "form-control", "to": "acc-control", "label": "findings" },
+    { "from": "form-control", "to": "doc-control", "label": "findings" },
+    { "from": "cont-control", "to": "fund-control", "label": "findings" },
+    { "from": "cut-control", "to": "report", "label": "findings" },
+    { "from": "acc-control", "to": "report", "label": "findings" },
+    { "from": "doc-control", "to": "report", "label": "findings" },
+    { "from": "fund-control", "to": "report", "label": "findings" },
+    { "from": "recon-control", "to": "report", "label": "findings" },
+    { "from": "form-control", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "392",
+      "source": "python -m pytest --collect-only -q -o addopts= (project-draw-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "34",
+      "source": "len(draw_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every draw package"
+    },
+    {
+      "label": "Families",
+      "value": "8",
+      "source": "distinct rule-id prefixes in draw_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Packages",
+      "value": "37",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus one planted defect per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(draw_engine.model.DOC_TYPES)",
+      "plain": "the fixed-format documents a draw cycle emits"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "draw_engine/tests/test_control_semantics.py",
+      "plain": "one cent of drift in the reconciliation is a failure"
+    }
+  ],
+  "problem_statement": "Three draw failures recur across development accounting and all three survive review, because each one foots on the page the preparer is looking at. Retention released in the reconciliation but never moved into the current period leaves the schedule internally consistent and the identity broken. Contingency drawn ahead of percent complete looks like an ordinary line item until the final draw arrives with nothing left to fund the work that remains. A cost posted after cutoff and billed anyway creates a reconciliation item that surfaces a month later, by which time the draw it belongs to has already funded. None of the three is exotic; all three are arithmetic, and arithmetic is exactly what a deterministic control asserts better than a reviewer under a deadline.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every package",
+      "narrative": "The CLI generates 37 fictional draw packages -- one clean baseline and one carrying each planted defect -- then runs all 34 controls over each. The clean package returns PASS with no flags; every defect package returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (project-draw-automation/); output re-run on demand"
+    },
+    {
+      "title": "One cent of drift fails the reconciliation",
+      "narrative": "The identity is asserted with integer-cent equality and no tolerance band. Tests move the reconciliation by a single cent in each direction and assert the control fails both times, then restore it and assert the control holds. A control that tolerates a penny has not proved the draw ties.",
+      "source": "draw_engine/tests/test_control_semantics.py::test_recon_identity_has_no_tolerance"
+    },
+    {
+      "title": "Contingency cannot authorise itself",
+      "narrative": "Percent complete is measured on the productive lines of a cost class, excluding the contingency line. A test pushes contingency exactly to its ceiling and asserts it passes, then one cent past and asserts it fails -- which would not hold if the contingency line's own spend inflated the progress that authorises it.",
+      "source": "draw_engine/tests/test_control_semantics.py::test_contingency_ceiling_excludes_itself_from_progress"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "generate the seeded fictional corpus, run all thirty-four controls, write both reports",
+      "output": "per-package verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries one planted defect per control by design",
+      "artifacts": "draw_report.md, draw_report.json, samples/"
+    },
+    {
+      "cmd": "python -m draw_engine samples",
+      "operation": "analyze an existing folder of draw packages without regenerating it",
+      "output": "per-package verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m draw_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "392 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "392",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (project-draw-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "34",
+      "unit": "controls",
+      "source": "len(draw_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "36",
+      "unit": "defect packages",
+      "source": "len(draw_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one package that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "draw_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a package demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing in the artifacts they were given. It is not an opinion on whether the draw should be funded, and it does not replace the lender's own review or the project accountant's judgment about a variance.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "send the mechanically clean package to the documented manual review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag before submittal; none of them blocks arithmetically"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the package does not go to the lender until the failing control is cleared"
+      }
+    ],
+    "guarantees": [
+      "Read-only: packages are parsed and never written back, so the engine cannot introduce the defect it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band anywhere in the registry.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a package missing an artifact fails the structural precondition before any other rule runs."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries one planted defect per registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never bills a lender, funds a draw, posts a cost or writes to a source artifact. It reports and stops.",
+      "source": "project-draw-automation/README.md and draw_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the six fixed-format artifacts a draw cycle emits. It does not connect to a lender portal, an accounting ledger or a bank.",
+      "source": "draw_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It cannot judge whether a declared variance is adequately explained -- only that an explanation is present when a variance is. That judgment is a reviewer's.",
+      "source": "draw_engine/engine.py recon_variance_explained"
+    },
+    {
+      "statement": "Lender-specific requirements vary by loan agreement. The engine checks the requirements declared in the package, not the agreement itself.",
+      "source": "draw_engine/engine.py doc_schedule_of_values and fund_within_agreement_days"
+    },
+    {
+      "statement": "All shipped data is fictional. The corpus demonstrates the controls; it is not a record of any real project, lender or draw.",
+      "source": "draw_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-draw.webp",
+    "motion": "../assets/engine-draw-motion.mp4",
+    "poster_alt": "Project Draw diagram: four blocks labelled A fundings to date, B this draw requested, C draws to date and D costs net of retention, arranged as A plus B equals C minus D, above a banded assertion that C minus D must equal zero exactly, and a row of the eight control families with their counts.",
+    "caption": "The Project Draw engine tile states the identity the package exists to prove: fundings to date plus this request equal draws to date, which must equal costs to date net of retention, exactly.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-draw-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/project-draw-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Project Draw (SFS-E11-DRW) datasheet -- thirty-four deterministic, read-only controls over a construction loan draw package: the reconciliation identity, lender-form agreement, contingency discipline, cutoff, accrual policy and supporting documentation. 392 tests, seeded fictional data."
+  }
+}

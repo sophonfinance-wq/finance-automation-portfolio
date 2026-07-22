@@ -61,11 +61,17 @@ def _published_h1_names() -> list[str]:
     return names
 
 
-def test_brand_voice_lists_all_ten_engine_names():
+def test_brand_voice_lists_every_published_engine_name():
+    """Every published datasheet's canonical name appears in the brand voice doc.
+
+    The expected count is taken from ROSTER rather than written down here, so
+    adding an engine does not require editing this test -- the previous version
+    hard-coded ten and failed on the eleventh for the wrong reason.
+    """
     text = BRAND_VOICE.read_text(encoding="utf-8")
     names = _published_h1_names()
-    assert len(names) == 10
-    assert len(set(names)) == 10
+    assert len(names) == len(ROSTER)
+    assert len(set(names)) == len(ROSTER)
     for name in names:
         assert name in text, f"BRAND-VOICE.md missing canonical name: {name}"
 
