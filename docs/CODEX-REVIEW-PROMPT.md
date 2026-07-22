@@ -6,8 +6,8 @@ prompt below into Codex (or any independent reviewer) to run an adversarial audi
 in this repo.
 
 > Before sending: update the HEAD and expected test count. Current at last edit:
-> **`pytest -m "not site_tooling"` → 70,881 collected (curated suite) · `pytest -m site_tooling` → 51 collected (separate public-datasheet guards) · `SWEEP=1 pytest -m "not site_tooling"` → 1,255,041 (property sweep) · 10 systems** (verified 2026-07-21)
-> curated per system: (close 15,687 / partnership 8,605 / triangulate 8,320 / recon 7,511 / surplus 7,498 / knowledge-brain 7,011 / cash-management 5,290 / audit 4,814 / finance-atlas 2,952 / accounts-payable 2,223).
+> **`pytest -m "not site_tooling"` → 71,191 collected (curated suite) · `pytest -m site_tooling` → 51 collected (separate public-datasheet guards) · `SWEEP=1 pytest -m "not site_tooling"` → 1,255,041 (property sweep) · 14 systems** (verified 2026-07-21)
+> curated per system: (close 15,687 / partnership 8,605 / triangulate 8,320 / recon 7,511 / surplus 7,498 / knowledge-brain 7,011 / cash-management 5,290 / audit 4,814 / finance-atlas 2,952 / accounts-payable 2,223 / project-draw 392 / buyer-upgrades 279 / warranty 299 / intercompany 310).
 
 ---
 
@@ -23,8 +23,8 @@ Setup: Python 3.12+, `pip install -r requirements.txt`, then
 `python -m pytest -q -m "not site_tooling"` from the repo root. Separately run
 `python -m pytest -q -m site_tooling` and confirm its 51-test guard suite. Confirm the reported
 totals (and each engine's sub-count) are correct; if any count is wrong, that's a finding. The
-framing is thirteen runnable systems, with public site-tooling guards reported separately from the
-70,881-test curated engine suite.
+framing is fourteen runnable systems, with public site-tooling guards reported separately from the
+71,191-test curated engine suite.
 
 VERIFY EACH AREA INDEPENDENTLY:
 
