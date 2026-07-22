@@ -1227,7 +1227,7 @@
       </svg>
       <figcaption class="cov-map-note">Every control recomputes independently &#183; ties to the ledger &#183; fails closed</figcaption>
     </figure>
-    <script>(function(){var f=document.querySelector('#close-depth .cov-map');if(!f)return;var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm||!('IntersectionObserver'in window))return;f.classList.add('cm-anim');var ns=[].slice.call(f.querySelectorAll('.cm-n29')),ran=false;function cnt(el){var fin=el.textContent,tgt=parseInt(fin,10);if(isNaN(tgt))return;var t0=null;el.textContent='0';requestAnimationFrame(function tick(t){if(t0===null)t0=t;var p=Math.min(1,(t-t0)/900),e=1-Math.pow(1-p,3);el.textContent=String(Math.round(tgt*e));if(p<1)requestAnimationFrame(tick);else el.textContent=fin;});}function run(){if(ran)return;ran=true;f.classList.add('cm-run');setTimeout(function(){ns.forEach(cnt);},560);setTimeout(function(){f.classList.remove('cm-anim');f.classList.remove('cm-run');f.classList.add('cm-done');},5000);}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.disconnect();setTimeout(run,160);}});},{threshold:.2});io.observe(f);setTimeout(function(){if(!ran){ran=true;f.classList.remove('cm-anim');f.classList.add('cm-done');}},6000);})();</script><div class="cov-grid reveal">
+    <script>(function(){var f=document.querySelector('#close-depth .cov-map');if(!f)return;var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(rm||!('IntersectionObserver'in window))return;f.classList.add('cm-anim');var ns=[].slice.call(f.querySelectorAll('.cm-n29')),ran=false;function cnt(el){var fin=el.textContent,tgt=parseInt(fin,10);if(isNaN(tgt))return;var t0=null,done=false;function settle(){if(done)return;done=true;el.textContent=fin;document.removeEventListener('visibilitychange',onHide);}function onHide(){if(document.hidden)settle();}document.addEventListener('visibilitychange',onHide);setTimeout(settle,2000);el.textContent='0';requestAnimationFrame(function tick(t){if(done)return;if(t0===null)t0=t;var p=Math.min(1,(t-t0)/900),e=1-Math.pow(1-p,3);el.textContent=String(Math.round(tgt*e));if(p<1)requestAnimationFrame(tick);else settle();});}function run(){if(ran)return;ran=true;f.classList.add('cm-run');setTimeout(function(){ns.forEach(cnt);},560);setTimeout(function(){f.classList.remove('cm-anim');f.classList.remove('cm-run');f.classList.add('cm-done');},5000);}var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.disconnect();setTimeout(run,160);}});},{threshold:.2});io.observe(f);setTimeout(function(){if(!ran){ran=true;f.classList.remove('cm-anim');f.classList.add('cm-done');}},6000);})();</script><div class="cov-grid reveal">
       <div class="cov-group">
         <div class="cg-head">
           <svg class="cg-ic" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M2.5 4.5H7V8h4v3.5h4V15h2"/><path d="M2.5 17h15"/></svg>
@@ -1849,6 +1849,8 @@
   #close-depth .cov-grid .cov-chip:active { transform:none; transition-duration:.06s; }
   /* open state must win over :hover — equal specificity, declared later.
      transform is deliberately not restated, so an open chip still lifts. */
+  /* MUST out-specify :hover -- an open+hovered chip would render #0043ce on
+     #0f62fe, which is 1.55:1 and an outright WCAG failure. Do not simplify. */
   #close-depth .cov-grid .cov-chip[aria-expanded="true"],
   #close-depth .cov-grid .cov-chip[aria-expanded="true"]:hover,
   #close-depth .cov-grid .cov-chip[aria-expanded="true"]:focus-visible {
@@ -2117,7 +2119,8 @@
      halo on the draft-capable branch. Both are stroke-only shapes OUTSIDE their
      box, so nothing is ever tinted behind copy. */
   #close-depth .cov-map .cm-glow { filter:blur(2px); }
-  #close-depth .cov-map.cm-done .cm-glow { opacity:.14; }
+  /* the bloom resolves to nothing: the JS resting state must be the same
+     drawing the no-JS and reduced-motion renders show. */
   /* the travelling bead: a single short dash pushed along a copy of the connector */
   #close-depth .cov-map .cm-pulse { stroke-dasharray:8 92; }
   /* the arrowheads are markers, which dashes cannot hide — so they are switched
@@ -2195,7 +2198,7 @@
   @keyframes cmSettle{ 0% { opacity:0; transform:translateY(-5px); } 100% { opacity:1; transform:translateY(0); } }
   @keyframes cmPop   { 0% { opacity:0; transform:scale(.4); } 100% { opacity:1; transform:scale(1); } }
   @keyframes cmRing  { 0% { opacity:0; transform:scale(1.045); } 30% { opacity:.45; } 100% { opacity:0; transform:scale(1); } }
-  @keyframes cmGlow  { 0% { opacity:0; } 25% { opacity:.45; } 100% { opacity:.14; } }
+  @keyframes cmGlow  { 0% { opacity:0; } 25% { opacity:.45; } 100% { opacity:0; } }
   @keyframes cmBead  { 0% { stroke-dashoffset:100; opacity:0; } 10% { opacity:1; } 84% { opacity:1; } 100% { stroke-dashoffset:0; opacity:0; } }
 
   /* Reduced motion: JS never arms the sequence, so this only catches a preference
