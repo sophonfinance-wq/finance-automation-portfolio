@@ -1,0 +1,2980 @@
+{
+  "title": "Buyer upgrade control report",
+  "overall_verdict": "FAIL",
+  "book_count": 22,
+  "rule_count": 20,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "set_period_aligned",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_upgrade_maps_to_a_unit",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_no_duplicate_orders",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_closed_has_close_date",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "def_released_only_on_close",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "def_unit_total_is_deposit",
+      "severity": "FAIL",
+      "exceptions": 5
+    },
+    {
+      "rule": "def_schedule_ties_ledger",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "def_revenue_ties_ledger",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "cos_entry_balances",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cos_only_closed_units_costed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cos_costs_within_committed",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "cos_change_order_referenced",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "tax_derived_from_rate",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "tax_not_recognised_as_revenue",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "tie_ctc_revenue_to_proforma",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tie_ctc_costs_to_proforma",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tie_proforma_to_variance",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tie_ctc_units_foot",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "flag_actual_on_closed_units",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "books": [
+    {
+      "document": "amount_not_integer__Brightwater_Commons",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "FAIL",
+          "location": "amount:register.orders[O-1001].price_cents",
+          "message": "AMOUNT_INVALID: register.orders[O-1001].price_cents must be integer cents, got 2800000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "FAIL",
+          "location": "closings_schedule:CLS-2027-04/units/U-01",
+          "message": "unit U-01: recognised 28,000.00 + deferred 0.00 = 28,000.00, but the register contracts 0.00 of upgrades"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "FAIL",
+          "location": "amount:register.orders[O-1001].price_cents",
+          "message": "AMOUNT_INVALID: register.orders[O-1001].price_cents must be integer cents, got 2800000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "clean__Alderpoint_Terraces",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "closed_no_date__Copperfield_Yards",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "FAIL",
+          "location": "closings_schedule:CLS-2027-04/units/U-02/close_date",
+          "message": "unit U-02 is marked closed but carries no readable close-of-escrow date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "cost_before_close__Dunmore_Flats",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "FAIL",
+          "location": "cost_to_complete_upgrades:CTC-2027-04/units/U-03/cost_of_sales_cents",
+          "message": "unit U-03 has 5,940.00 relieved to cost of sales but has not closed; cost follows revenue"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "cost_overrun__Alderpoint_Terraces",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "FLAG",
+          "location": "cost_to_complete_upgrades:CTC-2027-04/units/U-04/costs_to_date_cents",
+          "message": "unit U-04 has incurred 9,450.00 against a committed cost of 7,650.00 (123.52%); an executed change order should raise the commitment before the cost lands"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "ctc_no_foot__Brightwater_Commons",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "FAIL",
+          "location": "cost_to_complete_upgrades:CTC-2027-04/totals/committed_cost_cents",
+          "message": "committed cost: unit rows sum to 73,710.00 but the total declares 74,360.00 (difference -650.00)"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "ctc_vs_proforma_cost__Copperfield_Yards",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "FAIL",
+          "location": "proforma_upgrade_lines:PFA-2027-04/upgrade_costs_to_date_cents",
+          "message": "the cost-to-complete reports 62,242.50 of costs to date; the proforma's upgrade job-cost line carries -61,542.50, which negates to 61,542.50 (difference 700.00)"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "ctc_vs_proforma_rev__Dunmore_Flats",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "FAIL",
+          "location": "proforma_upgrade_lines:PFA-2027-04/upgrade_income_cents",
+          "message": "the cost-to-complete reports 122,850.00 of net upgrade revenue; the proforma carries 124,350.00 (difference -1,500.00)"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "deferred_vs_ledger__Alderpoint_Terraces",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "FAIL",
+          "location": "ledger:unearned_revenue_upgrades",
+          "message": "the closings schedule carries 34,750.00 of deferred upgrade revenue but the ledger balance is 36,000.00 (difference -1,250.00)"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_order__Brightwater_Commons",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 17,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "FAIL",
+          "location": "upgrade_order_register:UPR-2027-04/orders/O-1001",
+          "message": "upgrade order O-1001 appears 2 times; a duplicate double-counts both the liability and the revenue it becomes"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "FAIL",
+          "location": "closings_schedule:CLS-2027-04/units/U-01",
+          "message": "unit U-01: recognised 28,000.00 + deferred 0.00 = 28,000.00, but the register contracts 56,000.00 of upgrades"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 7 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "FAIL",
+          "location": "ledger:sales_tax_payable",
+          "message": "orders carry 14,330.75 of sales tax but the liability account holds 11,670.75; tax collected is owed onward, not earned"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "early_recognition__Copperfield_Yards",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 17,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "FAIL",
+          "location": "closings_schedule:CLS-2027-04/units/U-03/revenue_recognised_cents",
+          "message": "unit U-03 has not closed but 22,000.00 of upgrade revenue is already recognised; the money is a liability until close of escrow"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "FAIL",
+          "location": "ledger:unearned_revenue_upgrades",
+          "message": "the closings schedule carries 12,750.00 of deferred upgrade revenue but the ledger balance is 34,750.00 (difference -22,000.00)"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "FAIL",
+          "location": "ledger:revenue_upgrades",
+          "message": "the schedule recognises 110,100.00 of upgrade revenue but the ledger carries 88,100.00 (difference 22,000.00)"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "entry_unbalanced__Dunmore_Flats",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "FAIL",
+          "location": "ledger:contra_wip_upgrades",
+          "message": "cost of sales 52,860.00 and contra work-in-progress -50,860.00 do not offset (net 2,000.00); the closing entry reclassifies cost, it does not create it"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Alderpoint_Terraces",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 16,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "book:missing_artifact__Alderpoint_Terraces/proforma_upgrade_lines",
+          "message": "book carries no proforma_upgrade_lines; absent evidence is not a passing control, so no downstream rule may read it"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "no_change_order__Brightwater_Commons",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "FLAG",
+          "location": "cost_to_complete_upgrades:CTC-2027-04/units/U-05/change_order_ref",
+          "message": "unit U-05 is committed at 23,040.00 against a budget of 20,640.00 with no change order referenced"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "orphan_unit__Copperfield_Yards",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "FAIL",
+          "location": "upgrade_order_register:UPR-2027-04/orders/O-1004/unit",
+          "message": "upgrade order O-1004 references unit 'U-99', which is not on the closings schedule"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "FAIL",
+          "location": "closings_schedule:CLS-2027-04/units/U-03",
+          "message": "unit U-03: recognised 0.00 + deferred 22,000.00 = 22,000.00, but the register contracts 0.00 of upgrades"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "period_drift__Dunmore_Flats",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "FAIL",
+          "location": "cost_to_complete_upgrades:CTC-2027-04/period",
+          "message": "document period '2027-03' does not match the book period '2027-04'"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "proforma_vs_variance__Alderpoint_Terraces",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "FAIL",
+          "location": "proforma_upgrade_lines:PFA-2027-04/variance_tab_net_cents",
+          "message": "upgrade income 122,850.00 plus the job-cost line -62,242.50 = 60,607.50, but the variance tab shows 60,932.50"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "revenue_vs_ledger__Brightwater_Commons",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "FAIL",
+          "location": "ledger:revenue_upgrades",
+          "message": "the schedule recognises 88,100.00 of upgrade revenue but the ledger carries 87,200.00 (difference 900.00)"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "stale_basis__Copperfield_Yards",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "FLAG",
+          "location": "cost_to_complete_upgrades:CTC-2027-04/units/U-01/revenue_basis",
+          "message": "unit U-01 has closed but its revenue is still marked 'budgeted'; a closed unit's figure is a fact, not a forecast"
+        }
+      ]
+    },
+    {
+      "document": "tax_in_revenue__Dunmore_Flats",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "FAIL",
+          "location": "ledger:sales_tax_payable",
+          "message": "orders carry 11,670.75 of sales tax but the liability account holds 11,370.75; tax collected is owed onward, not earned"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "tax_wrong__Alderpoint_Terraces",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised plus deferred equals contracted on 6 units"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "schedule deferred total ties the ledger at 34,750.00"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "FAIL",
+          "location": "upgrade_order_register:UPR-2027-04/orders/O-1003/sales_tax_cents",
+          "message": "order O-1003: 9,200.00 at 9.50% derives 874.00 of sales tax, but 914.00 is recorded"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "FAIL",
+          "location": "ledger:sales_tax_payable",
+          "message": "orders carry 11,710.75 of sales tax but the liability account holds 11,670.75; tax collected is owed onward, not earned"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    },
+    {
+      "document": "unit_total_off__Brightwater_Commons",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 artifact types present exactly once"
+        },
+        {
+          "rule": "set_period_aligned",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dated artifact declares period 2027-04"
+        },
+        {
+          "rule": "unit_upgrade_maps_to_a_unit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade orders map to a scheduled unit"
+        },
+        {
+          "rule": "unit_no_duplicate_orders",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 upgrade order ids are unique"
+        },
+        {
+          "rule": "unit_closed_has_close_date",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closed unit(s) carry a close date"
+        },
+        {
+          "rule": "def_released_only_on_close",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognition follows close of escrow across 6 units"
+        },
+        {
+          "rule": "def_unit_total_is_deposit",
+          "status": "FAIL",
+          "location": "closings_schedule:CLS-2027-04/units/U-04",
+          "message": "unit U-04: recognised 0.00 + deferred 13,250.00 = 13,250.00, but the register contracts 12,750.00 of upgrades"
+        },
+        {
+          "rule": "def_schedule_ties_ledger",
+          "status": "FAIL",
+          "location": "ledger:unearned_revenue_upgrades",
+          "message": "the closings schedule carries 35,250.00 of deferred upgrade revenue but the ledger balance is 34,750.00 (difference 500.00)"
+        },
+        {
+          "rule": "def_revenue_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "recognised revenue ties the ledger at 88,100.00"
+        },
+        {
+          "rule": "cos_entry_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales and contra-WIP offset exactly at 52,860.00"
+        },
+        {
+          "rule": "cos_only_closed_units_costed",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost of sales taken only on closed units across 6 rows"
+        },
+        {
+          "rule": "cos_costs_within_committed",
+          "status": "PASS",
+          "location": "-",
+          "message": "costs to date are within committed cost on 6 units"
+        },
+        {
+          "rule": "cos_change_order_referenced",
+          "status": "PASS",
+          "location": "-",
+          "message": "every commitment change carries a reference across 6 units"
+        },
+        {
+          "rule": "tax_derived_from_rate",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax derives correctly on all 6 orders"
+        },
+        {
+          "rule": "tax_not_recognised_as_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "sales tax of 11,670.75 sits in the liability account"
+        },
+        {
+          "rule": "tie_ctc_revenue_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete revenue ties the proforma"
+        },
+        {
+          "rule": "tie_ctc_costs_to_proforma",
+          "status": "PASS",
+          "location": "-",
+          "message": "cost-to-complete costs tie the proforma job-cost line"
+        },
+        {
+          "rule": "tie_proforma_to_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "the proforma reconciles to its own variance tab"
+        },
+        {
+          "rule": "tie_ctc_units_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all three columns foot across 6 units"
+        },
+        {
+          "rule": "flag_actual_on_closed_units",
+          "status": "PASS",
+          "location": "-",
+          "message": "the budgeted/actual marker matches close status on 6 units"
+        }
+      ]
+    }
+  ]
+}
