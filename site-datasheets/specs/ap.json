@@ -1,0 +1,371 @@
+{
+  "num": 10,
+  "slug": "ap",
+  "part_no": "SFS-E10-APX",
+  "mnemonic": "APX",
+  "family": "Payables Controls",
+  "name": "Accounts Payable",
+  "tagline": "The payables cycle proved rather than assumed",
+  "plain_summary": "Accounts payable is where controls are asserted most often and proven least often. This engine reads the fixed-format posting artifacts the cycle already emits and runs thirty deterministic controls over them: did the post actually happen and balance, is this payment allowed to be released yet, is every job routed to a valid approver chain with duties segregated, and will year-end information reporting be complete. It never posts, never pays, and never writes to a source artifact. Every exception it raises ends at a person.",
+  "rev": "2026-07-21",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A control engine is only credible if it can be wrong in public. This one ships the defects it claims to catch: one planted defect per registered control, each of which must trip its own control and leave the other twenty-nine silent. The benchmark is a command, not a claim.",
+  "layers_intro": "Six control families run in registry order over each document set. The first proves the others had something to read.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the document set actually carries every artifact the controls below need to read.",
+      "engineering": "check_set_complete compares the doc_type values present against model.DOC_TYPES and FAILs when any of the five are absent. Registered first because every other rule iterates one artifact type and returns nothing when it is missing -- absent evidence would otherwise read as a held control and the set would be filed as PASS.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "post",
+      "label": "Posting Integrity",
+      "plain": "Confirms the posting run happened, balanced, and was not aborted.",
+      "engineering": "Eight controls over the invoice posting report: proof figure exactly zero, ledger recap debits equal credits, posting totals balanced, zero rejects, a non-zero posted count, no blocking error marker, job-cost recap tied to the payable cost total, and header date agreeing with the file-name stamp.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "gate",
+      "label": "Payment Release Gate",
+      "plain": "Checks every compliance gate is closed before a payment is allowed out.",
+      "engineering": "Eight controls over the payment selection register: taxpayer certificate on file before a first payment, waivers from the subcontractor and its lower tiers, insurance current at the payment date and meeting contract minimums, funding confirmed, no duplicate obligation in the run, retention and tax lines present and rate-consistent, and off-cycle payments carrying a recorded approver.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "route",
+      "label": "Routing and Duties",
+      "plain": "Checks every job reaches a real approver chain and that nobody approves their own work.",
+      "engineering": "Five controls over the workflow routing matrix: every active job maps to exactly one workflow, every workflow has an approver and a named final-review group, data-entry and final-review roles are held by different people, and direct-post workflows are explicitly enumerated.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "ir",
+      "label": "Information Reporting",
+      "plain": "Checks year-end vendor reporting will be complete and correctly identified.",
+      "engineering": "Five controls over the information reporting register: every vendor over the reporting threshold is evaluated, each reportable vendor carries a structurally valid taxpayer identification number, no two vendor records share one identifier, and filed-form counts reconcile to the expected list per entity.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "cmt",
+      "label": "Commitment Hygiene",
+      "plain": "Checks commitments mirror their contracts and change orders attach where they belong.",
+      "engineering": "Three controls over the commitment register: the schedule of values mirrors the contract rather than collapsing to a single lump line, commitment identifiers follow the project and vendor convention, and every change order attaches to a commitment that exists in the register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Document Sets",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional posting document sets enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted defect per registered control from a single seeded Random instance",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "proves the controls below had something to read",
+      "engineering": "check_set_complete -- FAILs when any of the five artifact types is absent",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "post-control",
+      "label": "Posting Integrity",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "did the post happen, and did it balance",
+      "engineering": "eight controls: proof, ledger recap, posting totals, rejects, posted count, error markers, job-cost tie, header date",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "gate-control",
+      "label": "Payment Release Gate",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is this payment allowed out yet",
+      "engineering": "eight controls: taxpayer certificate, waivers, insurance currency and limits, funding, duplicates, retention, off-cycle approval",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "route-control",
+      "label": "Routing and Duties",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does every job reach a real approver, with duties split",
+      "engineering": "five controls: job mapping, approver presence, final-review group, duty segregation, declared direct-post",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "ir-control",
+      "label": "Information Reporting",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "will year-end reporting be complete",
+      "engineering": "five controls: threshold coverage, identifier presence and structure, split-vendor detection, filed-count reconciliation",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "cmt-control",
+      "label": "Commitment Hygiene",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "do commitments mirror their contracts",
+      "engineering": "three controls: schedule of values not a lump line, identifier convention, change-order attachment",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/engine.py"
+    },
+    {
+      "id": "findings",
+      "label": "Findings",
+      "kind": "artifact",
+      "col": 2,
+      "row": 2,
+      "plain": "each control yields a finding carrying its own rationale",
+      "engineering": "frozen Finding(rule, status, location, message); location is doc_type:document_id/field path and the message states why the control exists",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/model.py"
+    },
+    {
+      "id": "verdict",
+      "label": "Verdict",
+      "kind": "verdict",
+      "col": 3,
+      "row": 2,
+      "plain": "one verdict per document set, worst finding wins",
+      "engineering": "any FAIL rolls up to FAIL; otherwise any FLAG rolls up to REVIEW; otherwise PASS. The process exit code carries the same verdict.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/ap_engine/model.py"
+    },
+    {
+      "id": "gate-human",
+      "label": "Human Gate",
+      "kind": "gate",
+      "col": 4,
+      "row": 2,
+      "plain": "a person decides; the engine has no write path",
+      "engineering": "the engine emits markdown and JSON only. It holds no connection to a ledger, payment provider or approval system, so nothing it produces can post or pay.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/README.md"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "document sets" },
+    { "from": "corpus", "to": "post-control", "label": "posting reports" },
+    { "from": "corpus", "to": "gate-control", "label": "selection registers" },
+    { "from": "corpus", "to": "route-control", "label": "routing matrix" },
+    { "from": "corpus", "to": "ir-control", "label": "vendor register" },
+    { "from": "corpus", "to": "cmt-control", "label": "commitments" },
+    { "from": "set-control", "to": "findings", "label": "findings" },
+    { "from": "post-control", "to": "findings", "label": "findings" },
+    { "from": "gate-control", "to": "findings", "label": "findings" },
+    { "from": "route-control", "to": "findings", "label": "findings" },
+    { "from": "ir-control", "to": "findings", "label": "findings" },
+    { "from": "cmt-control", "to": "findings", "label": "findings" },
+    { "from": "findings", "to": "verdict", "label": "roll-up" },
+    { "from": "verdict", "to": "gate-human", "label": "decision" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "2,223",
+      "source": "python -m pytest --collect-only -q -o addopts= (accounts-payable-automation/); 2,223 tests collected on 2026-07-21 and pinned in site-datasheets/counts.json",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "30",
+      "source": "accounts-payable-automation/ap_engine/engine.py REGISTRY; mirrored in the rule-registry table of accounts-payable-automation/README.md",
+      "plain": "independent payables controls, run in registry order"
+    },
+    {
+      "label": "Families",
+      "value": "6",
+      "source": "accounts-payable-automation/ap_engine/engine.py RULE_FAMILIES",
+      "plain": "groups the controls fall into, from structural to commitment hygiene"
+    },
+    {
+      "label": "Planted defects",
+      "value": "30",
+      "source": "accounts-payable-automation/ap_engine/generate.py DEFECTS; test_checks_coverage.py asserts the defect set equals the registry",
+      "plain": "one deliberate fault per control, so none can silently stop working"
+    },
+    {
+      "label": "Artifact types",
+      "value": "5",
+      "source": "accounts-payable-automation/ap_engine/model.py DOC_TYPES",
+      "plain": "the source documents a payables cycle emits"
+    },
+    {
+      "label": "Write paths",
+      "value": "0",
+      "source": "accounts-payable-automation/ap_engine/tests/test_readonly_and_determinism.py -- source artifacts are hashed before and after a run and asserted byte-identical",
+      "plain": "the engine reports; it never posts, pays, or edits a source"
+    }
+  ],
+  "problem_statement": "Three payables failures recur across the industry and all three are invisible to the people running the cycle. A posting run aborts on batch contention and is filed as though it succeeded -- the report still balances, because nothing moved. A payment is released through an open compliance gate: no taxpayer certificate on a first payment, waivers missing from a subcontractor's lower tiers, insurance expired before the payment date. And a routing matrix drifts until a job maps to no workflow, or one person holds both data entry and final review. Each is deterministic to detect from artifacts that already exist, and none of them needs a model's judgment.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every document set",
+      "narrative": "The CLI generates thirty-one fictional document sets -- one clean baseline plus one planted defect per control -- and runs all thirty controls over each. The clean set reports PASS with every control held; each defective set reports the exact control it was built to trip. The run exits 2 because the corpus deliberately contains failures.",
+      "source": "python run.py (accounts-payable-automation/); output re-run on 2026-07-21; committed as accounts-payable-automation/ap_report.md"
+    },
+    {
+      "title": "Absent evidence must not read as a passing control",
+      "narrative": "One fixture removes an entire artifact type from its document set. Every control that reads that artifact returns nothing, which without a structural precondition would render as a clean result. The set_complete control is registered first and fails the set, so the report opens with proof that the controls below it had something to read.",
+      "source": "accounts-payable-automation/ap_engine/engine.py check_set_complete; fixture in generate.py _defect_set_incomplete; asserted in ap_engine/tests/test_generate_and_cli_coverage.py"
+    },
+    {
+      "title": "Every control must prove both of its sides",
+      "narrative": "Each of the thirty controls is exercised against its own planted defect, which it must catch, and against the clean baseline, where it must stay silent. A coverage test asserts the planted-defect set and the registry are the same set, so a control cannot be added without a fixture that exercises it, and an implementation that always passes or always fails cannot satisfy the suite.",
+      "source": "accounts-payable-automation/ap_engine/tests/test_planted_defects.py (152 cases) and test_checks_coverage.py"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "generate the seeded fictional corpus, run all thirty controls, write both artifacts",
+      "output": "per-document-set verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries one planted defect per control",
+      "artifacts": "ap_report.md, ap_report.json, samples/"
+    },
+    {
+      "cmd": "python -m ap_engine ./samples",
+      "operation": "analyze an existing folder of document sets, read-only",
+      "output": "per-document-set verdicts and findings",
+      "exit_code": "0 PASS, 1 REVIEW, 2 FAIL, 3 usage or IO error",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m ap_engine ./samples --quiet",
+      "operation": "print only the overall verdict line",
+      "output": "a single overall verdict line",
+      "exit_code": "0 PASS, 1 REVIEW, 2 FAIL, 3 usage or IO error",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m pytest -q",
+      "operation": "run the curated suite exactly as CI does",
+      "output": "2,223 passed",
+      "exit_code": "0",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "2,223",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (accounts-payable-automation/); re-run 2026-07-21 and pinned in site-datasheets/counts.json",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Curated invariant grid",
+      "value": "1,977",
+      "unit": "parametrized cases",
+      "source": "accounts-payable-automation/ap_engine/tests/test_curated_invariant_grid.py",
+      "plain": "bounded arithmetic and verdict identities, asserted exactly over integers"
+    },
+    {
+      "label": "Planted-defect cases",
+      "value": "152",
+      "unit": "cases",
+      "source": "accounts-payable-automation/ap_engine/tests/test_planted_defects.py",
+      "plain": "every control against its own defect and against a clean baseline"
+    },
+    {
+      "label": "Opt-in property sweep",
+      "value": "99,223",
+      "unit": "tests collected",
+      "source": "SWEEP=1 python -m pytest --collect-only -q -o addopts= (accounts-payable-automation/); re-run 2026-07-21",
+      "plain": "the exhaustive grid, gated behind SWEEP=1 so it never slows CI"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing. It is not sign-off, and it is not authorization to pay. Release, approval and posting all stay outside the engine.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "send the mechanically clean result to the documented manual gates"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "route the flagged items to a person for judgment; do not treat as cleared"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "hold the affected posting or payment and resolve at source before re-running"
+      }
+    ],
+    "guarantees": [
+      "Money is integer cents everywhere and is compared with exact equality; there is no tolerance band anywhere in this engine, and a non-integer amount is rejected rather than coerced.",
+      "The engine is read-only: source artifacts are hashed before and after a run and asserted byte-identical, so it is structurally incapable of introducing the defects it looks for.",
+      "One planted defect exists per registered control, and a coverage test asserts the two sets are identical, so a control cannot be added without a fixture that exercises it.",
+      "The structural precondition control runs first, so a document set missing an artifact type cannot report as clean simply because the controls that read it never ran.",
+      "The package declares no runtime dependencies; the optional workbook rendering is behind a guarded import and never byte-compared."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries one planted defect per control",
+      "note": "The engine has no write path and therefore no autonomy to gate. A verdict is an input to a person's decision, never a substitute for it: posting, payment release and approval all remain outside the engine, and no finding it raises is actioned without review."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts, releases a payment, drafts a journal entry, creates an import payload, or mutates a source system. It has no connection to a ledger, payment provider or approval system.",
+      "source": "accounts-payable-automation/README.md and ap_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "A PASS verdict means the implemented mechanical controls found nothing; it is not sign-off, audit assurance, or authorization to pay.",
+      "source": "accounts-payable-automation/README.md -- verdict roll-up; site-datasheets/specs/ap.json control_characteristics.plain"
+    },
+    {
+      "statement": "The engine reads structured document sets, not scanned images. There is no optical character recognition, and an artifact with no machine-readable content is reported as unclassifiable rather than guessed at.",
+      "source": "specs/2026-07-21-ap-engine-design.md -- Out of scope"
+    },
+    {
+      "statement": "There is no remediation loop. Resyncing to authority and booking adjustments is a mutation, which a read-only control engine must not perform; this engine is a sensor other loops consume.",
+      "source": "specs/2026-07-21-ap-engine-design.md -- Architecture; accounts-payable-automation/README.md -- What this demonstrates"
+    },
+    {
+      "statement": "All shipped data is fictional and seeded. The engine names no commercial software product and carries no real vendor, entity, person, or document identifier.",
+      "source": "accounts-payable-automation/README.md confidentiality note; finance-atlas/atlas_tests/test_deny_list.py repo-sweep surface"
+    }
+  ],
+  "media": {
+    "poster": "../assets/tile-ap.webp",
+    "motion": "../assets/tile-ap-motion.mp4",
+    "poster_alt": "Accounts Payable diagram: a posting report and a ledger recap joined by a green verified check reading debits equals credits and proof zero, above four payment release gates for taxpayer certificate, lien waivers, insurance and funding, each ticked green",
+    "caption": "The Accounts Payable engine tile depicts the posting tie-out above the four payment release gates, with the note that any unmet gate holds the payment for a person.",
+    "crops": []
+  },
+  "quickstart": [
+    { "label": "Run the seeded demo", "command": "python run.py" },
+    { "label": "Run the tests", "command": "python -m pytest -q" }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/accounts-payable-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/accounts-payable-automation/ap_engine",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Accounts Payable (SFS-E10-APX) datasheet -- thirty deterministic, read-only controls over the payables cycle: posting integrity, the payment release gate, approver routing with duties segregated, information reporting, and commitment hygiene, all ending at an explicit human-review boundary."
+  }
+}

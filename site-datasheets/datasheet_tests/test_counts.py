@@ -27,7 +27,7 @@ def _collected_count(cwd: Path, *extra: str) -> int:
     # `-o addopts=` neutralizes each engine's own pyproject/ini addopts (several set
     # "-q", which combined with our -q becomes -qq and suppresses the "N tests collected"
     # summary in favor of per-file lines). Forcing empty addopts gives one stable format
-    # across all nine engines.
+    # across all ten engines.
     proc = subprocess.run(
         [sys.executable, "-m", "pytest", "--collect-only", "-q", "-o", "addopts=", *extra],
         cwd=str(cwd), capture_output=True, text=True, timeout=180, env=env,

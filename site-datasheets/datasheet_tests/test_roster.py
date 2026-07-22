@@ -61,11 +61,11 @@ def _published_h1_names() -> list[str]:
     return names
 
 
-def test_brand_voice_lists_all_nine_engine_names():
+def test_brand_voice_lists_all_ten_engine_names():
     text = BRAND_VOICE.read_text(encoding="utf-8")
     names = _published_h1_names()
-    assert len(names) == 9
-    assert len(set(names)) == 9
+    assert len(names) == 10
+    assert len(set(names)) == 10
     for name in names:
         assert name in text, f"BRAND-VOICE.md missing canonical name: {name}"
 

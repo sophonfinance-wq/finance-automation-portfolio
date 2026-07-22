@@ -9,7 +9,7 @@ All data is fictional and seeded. Nothing here references a real entity, person,
 
 ## 60-second framing
 
-> "This repository is nine runnable systems that automate the finance work teams still do by hand:
+> "This repository is ten runnable systems that automate the finance work teams still do by hand:
 > close, reconciliation, partnership tax prep, complex international tax modeling, read-only workbook
 > validation, a citation-governed knowledge brain over meeting transcripts, and an interactive finance
 > operations atlas. Above that sits an AI
