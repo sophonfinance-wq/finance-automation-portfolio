@@ -195,8 +195,8 @@
   .hero-video { position:absolute; inset:0; z-index:0; }
   .hero-video video { width:100%; height:100%; object-fit:cover; object-position:50% 38%; }
   .hero-wash { position:absolute; inset:0; z-index:1;
-    background:linear-gradient(90deg, rgba(255,255,255,.83) 0%, rgba(255,255,255,.75) 34%, rgba(255,255,255,.53) 58%, rgba(255,255,255,.29) 100%); }
-  @media (max-width:820px){ .hero-wash { background:rgba(255,255,255,.75); } }
+    background:linear-gradient(90deg, rgba(255,255,255,.73) 0%, rgba(255,255,255,.65) 34%, rgba(255,255,255,.43) 58%, rgba(255,255,255,.19) 100%); }
+  @media (max-width:820px){ .hero-wash { background:rgba(255,255,255,.65); } }
   @media (prefers-reduced-motion:reduce){ .hero-video video { display:none; } }
   .cinema { position:relative; overflow:hidden; height:min(62vh,560px); min-height:340px; }
   .cinema::before, .cinema::after { content:""; position:absolute; left:0; right:0; z-index:1; height:clamp(48px,10vh,96px); pointer-events:none; }
@@ -711,7 +711,11 @@
   #story .sec-head .lead { font-size:15.5px; }
   .whyfilm { width:100%; max-width:none; margin-top:0; }
   .whyfilm-stage { position:relative; isolation:isolate; width:100%; }
-  .whyfilm video { position:relative; z-index:0; display:block; width:100%; height:auto; background:#000; border:0; box-shadow:none; }
+  /* feather the film into the page: a soft inward fade of the background color on every
+     edge — pure overlay (below the sound badge), never blocks the native controls */
+  .whyfilm-stage::after { content:""; position:absolute; inset:0; z-index:1;
+    box-shadow:inset 0 0 34px 14px var(--bg); pointer-events:none; }
+  .whyfilm video { position:relative; z-index:0; display:block; width:100%; height:auto; background:var(--bg); border:0; box-shadow:none; }
   .film-sound { position:absolute; left:50%; bottom:16%; transform:translateX(-50%);
     z-index:2; display:inline-flex; align-items:center; gap:9px; cursor:pointer;
     font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:.2px;
@@ -761,87 +765,6 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<!-- ================= AMBIENT AUDIO (smooth jazz, off by default) ================= -->
-<style>
-  #jazz-toggle{
-    position:fixed; right:20px; bottom:20px; z-index:60;
-    display:inline-flex; align-items:center; gap:9px;
-    font-family:var(--sans); font-size:13px; font-weight:500; letter-spacing:.2px;
-    color:var(--text); background:rgba(255,255,255,.9);
-    -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
-    border:1px solid var(--border-strong); border-radius:999px;
-    padding:9px 15px 9px 13px; cursor:pointer; line-height:1;
-    box-shadow:0 2px 10px rgba(22,22,22,.08); transition:border-color .15s, box-shadow .15s, color .15s;
-  }
-  #jazz-toggle:hover{ border-color:var(--blue); box-shadow:0 4px 16px rgba(15,98,254,.16); }
-  #jazz-toggle:focus-visible{ outline:2px solid var(--blue); outline-offset:2px; }
-  #jazz-toggle .jz-eq{ display:inline-flex; align-items:flex-end; gap:2px; height:14px; width:16px; }
-  #jazz-toggle .jz-eq span{ width:3px; height:4px; background:var(--blue); border-radius:1px; transform-origin:bottom; }
-  #jazz-toggle[aria-pressed="true"] .jz-eq span{ animation:jz-bounce .9s ease-in-out infinite; }
-  #jazz-toggle[aria-pressed="true"] .jz-eq span:nth-child(2){ animation-delay:.18s; }
-  #jazz-toggle[aria-pressed="true"] .jz-eq span:nth-child(3){ animation-delay:.36s; }
-  #jazz-toggle[aria-pressed="true"] .jz-eq span:nth-child(4){ animation-delay:.54s; }
-  #jazz-toggle[aria-pressed="false"] .jz-eq span{ height:4px; opacity:.5; }
-  #jazz-toggle .jz-label{ white-space:nowrap; }
-  @keyframes jz-bounce{ 0%,100%{ height:4px; } 50%{ height:14px; } }
-  @media (prefers-reduced-motion:reduce){ #jazz-toggle .jz-eq span{ animation:none !important; } }
-  @media (max-width:520px){ #jazz-toggle .jz-label{ display:none; } #jazz-toggle{ padding:11px 13px; } }
-</style>
-<audio id="jazz-audio" loop preload="none">
-  <source src="assets/site-music.mp3" type="audio/mpeg">
-</audio>
-<button id="jazz-toggle" type="button" aria-pressed="false" aria-label="Play background music — J.S. Bach, Air on the G String, performed by the U.S. Air Force Strings (public domain)" title="J.S. Bach — Air (BWV 1068) · U.S. Air Force Strings">
-  <span class="jz-eq" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-  <span class="jz-label">Soundtrack</span>
-</button>
-<script>
-(function(){
-  var audio = document.getElementById('jazz-audio');
-  var btn   = document.getElementById('jazz-toggle');
-  if (!audio || !btn) return;
-  var KEY = 'sfs-music';
-  audio.volume = 0.35;
-
-  function setState(on){
-    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    btn.setAttribute('aria-label', on ? 'Pause background music' : 'Play background music');
-    btn.querySelector('.jz-label').textContent = on ? 'Playing' : 'Soundtrack';
-  }
-
-  // Button reflects the ACTUAL playback state, so it never claims "Playing" while muted-blocked.
-  audio.addEventListener('play',  function(){ setState(true); });
-  audio.addEventListener('pause', function(){ setState(false); });
-
-  // The brand film owns the audio: never start music over its narration.
-  function tryPlay(){ if (window.__filmHasSound) return; var p = audio.play(); if (p && p.catch) p.catch(function(){}); }
-
-  var optedOut = false;
-  try { optedOut = localStorage.getItem(KEY) === 'off'; } catch(e){}
-
-  // Manual toggle — a pause is remembered so we stop nagging that visitor.
-  btn.addEventListener('click', function(){
-    if (audio.paused){ optedOut = false; try{ localStorage.setItem(KEY,'on'); }catch(e){} tryPlay(); }
-    else { optedOut = true; audio.pause(); try{ localStorage.setItem(KEY,'off'); }catch(e){} }
-  });
-
-  // Default ON. Browsers (especially iOS/Android) block audio-with-sound until the
-  // visitor interacts, so we buffer eagerly and start on the very first tap, scroll,
-  // or keypress anywhere on the page — unless this visitor has paused before.
-  if (!optedOut){
-    try { audio.preload = 'auto'; audio.load(); } catch(e){}
-    tryPlay(); // desktop with media engagement may start right away
-    var evs = ['pointerdown','touchstart','keydown','scroll','click'];
-    function unkick(){ evs.forEach(function(ev){ window.removeEventListener(ev, kick, true); }); }
-    function kick(e){
-      if (optedOut) { unkick(); return; }
-      if (e && e.target && btn.contains(e.target)) return; // let the toggle handle its own taps
-      if (audio.paused) tryPlay();
-      if (!audio.paused) unkick(); // once it's really playing, stop listening
-    }
-    evs.forEach(function(ev){ window.addEventListener(ev, kick, { capture:true, passive:true }); });
-  }
-})();
-</script>
 
 <!-- ================= NAV ================= -->
 <div class="nav">
@@ -910,7 +833,7 @@
   </div>
   <figure class="whyfilm reveal">
       <div class="whyfilm-stage">
-        <video id="whyFilm" autoplay muted loop playsinline controls preload="auto" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; unmute for narration">
+        <video id="whyFilm" autoplay muted playsinline controls preload="auto" poster="assets/why-film-poster.jpg" width="1280" height="720" aria-label="Brand film: why Sophon Finance Systems exists — sourced statistics over live scenes; narration begins the moment you interact with the page">
           <source src="assets/why-film.mp4" type="video/mp4">
           <track kind="captions" src="assets/why-film.vtt" srclang="en" label="English">
         </video>
@@ -2026,7 +1949,7 @@
 
   // motion enhancement: labeled diagrams upgrade to silent looping video.
   // Reduced-motion and no-JS users keep the static images (early return above).
-  function playLoop(v) { if (v && v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
+  function playLoop(v) { if (v && v.paused && v.dataset.ended !== '1') { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
   function playAll() { document.querySelectorAll('video').forEach(playLoop); }
 
   document.querySelectorAll('img[data-video]').forEach(function (img) {
@@ -2095,25 +2018,27 @@
 <script>(function(){var small=Math.min(screen.width,screen.height)<=820||(navigator.connection&&navigator.connection.saveData);function prep(id,mob){var v=document.getElementById(id);if(!v)return null;if(small){v.querySelector("source").src=mob;v.load();}return v;}var v1=prep("heroVid","assets/hero-mobile.mp4");if(v1){var p=v1.play();if(p&&p.catch)p.catch(function(){});}var v2=prep("heroVid2","assets/hero-mobile.mp4");if(v2&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v2.dataset.l){v2.load();v2.dataset.l=1;}var q=v2.play();if(q&&q.catch)q.catch(function(){});}else{v2.pause();}});},{rootMargin:"200px"}).observe(v2);}else if(v2){v2.load();var r=v2.play();if(r&&r.catch)r.catch(function(){});}var v3=prep("heroVid3","assets/tech-film-mobile.mp4");if(v3&&"IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v3.dataset.l){v3.load();v3.dataset.l=1;}var q=v3.play();if(q&&q.catch)q.catch(function(){});}else{v3.pause();}});},{rootMargin:"200px"}).observe(v3);}else if(v3){v3.load();var r=v3.play();if(r&&r.catch)r.catch(function(){});}})();</script>
 <script>(function(){var v=document.getElementById("credVid");if(!v)return;var small=Math.min(screen.width,screen.height)<=820;if(small){v.querySelector("source").src="assets/cred-mobile.mp4";}function go(){var p=v.play();if(p&&p.catch)p.catch(function(){});}if("IntersectionObserver"in window){new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){if(!v.dataset.l){v.load();v.dataset.l=1;}go();}else{v.pause();}});},{rootMargin:"200px"}).observe(v);}else{v.load();go();}})();</script>
 <script>
-// Why film: autoplays on load. Every browser blocks autoplay that starts WITH sound,
-// so it starts muted and switches the narration on at the visitor's first gesture
-// anywhere on the page — the same unlock the soundtrack button uses. The film owns
-// the audio: when it becomes audible the background music steps aside.
+// Why film narrates the whole page. Every browser blocks autoplay that starts WITH
+// sound, so it starts muted on load; the visitor's first gesture anywhere on the page
+// switches the narration on AND restarts from line one, so the whole dialogue is
+// heard. It then keeps playing while they scroll — the film is the page's audio —
+// and plays through ONCE (no loop, no restart from the resilience handlers).
 (function(){
   var v=document.getElementById('whyFilm'); if(!v) return;
   var badge=document.getElementById('filmSound');
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function go(){ var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
+  function go(){ if(v.dataset.ended==='1') return; var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
 
   function showBadge(on){ if(badge) badge.hidden=!on; }
   showBadge(true);
+  v.addEventListener('ended',function(){ v.dataset.ended='1'; showBadge(false); });
 
   function soundOn(){
     v.muted=false;
     if(v.volume<0.1) v.volume=1;
     window.__filmHasSound=true;
-    var jz=document.getElementById('jazz-audio');
-    if(jz&&!jz.paused) jz.pause();   // narration wins over the background music
+    v.dataset.ended='';
+    try{ v.currentTime=0; }catch(e){}   // start the story from line one
     go();
     showBadge(false);
     unkick();
@@ -2132,17 +2057,11 @@
 
   // If the visitor mutes it again from the native controls, offer sound back.
   v.addEventListener('volumechange',function(){
-    if(v.muted){ window.__filmHasSound=false; showBadge(true); }
+    if(v.muted){ window.__filmHasSound=false; if(v.dataset.ended!=='1') showBadge(true); }
   });
 
   if(reduce){ v.removeAttribute('autoplay'); v.pause(); showBadge(false); return; }
   go();
-  // Don't burn cycles or talk to an empty room once it's scrolled past.
-  if('IntersectionObserver'in window){
-    new IntersectionObserver(function(es){es.forEach(function(e){
-      if(e.isIntersecting) go(); else v.pause();
-    });},{threshold:0.25}).observe(v);
-  }
 })();
 </script>
 <script>
