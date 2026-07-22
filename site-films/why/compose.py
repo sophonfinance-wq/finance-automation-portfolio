@@ -24,7 +24,24 @@ W, H, FPS = 1280, 720, 30
 TAIL = 0.9
 # The lockup used to still be fading up as the film cut to black. Hold the finished
 # endcard after the narration ends so it lands instead of flashing past.
-ENDCARD_HOLD = 1.80
+#
+# The endcard is an absolute length now, not a share of the beat: the card is on
+# screen for exactly this long whatever the close narration happens to measure.
+ENDCARD_SECONDS = 5.00
+# Seconds the lockup takes to build. The stages in ov_close are keyed to this rather
+# than to the shot length, so lengthening the card lengthens the hold instead of
+# slowing every fade-up. 3.15 is the card length the build was graded against.
+ENDCARD_BUILD = 3.15
+# The close beat's body -- the three narrative shots -- is still sized the old way:
+# narration + TAIL + BODY_PAD, split by the graded weights. Those are exactly the
+# terms that produced today's cut, so pinning the endcard cannot move the other
+# three shots for any narration length. BODY_PAD is the old ENDCARD_HOLD; it no
+# longer describes the endcard, it is just the padding that beat always carried.
+BODY_PAD = 1.80
+CLOSE_BODY_W = (0.225, 0.274, 0.160)
+# Set by close_layout() once the narration has been measured. None until then: a
+# fixed-seconds shot inside a narration-length beat cannot be a constant share.
+ENDCARD_HOLD = None
 WHITE = (255, 255, 255, 255)
 BLUE = (92, 157, 255, 255)        # site blue lifted for legibility on footage
 BLUE_DEEP = (15, 98, 254, 255)    # exact site blue (glyph dot)
@@ -86,41 +103,32 @@ def ease_back(t):
     return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2
 
 
-def stext(img, xy, text, font, fill, blur=7, off=(0, 4), salpha=185):
-    """Transparent overlay text: soft shadow + crisp face, no background card."""
-    sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    ImageDraw.Draw(sh).text((xy[0] + off[0], xy[1] + off[1]), text, font=font,
-                            fill=(0, 0, 0, salpha))
-    img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(blur)))
+def stext(img, xy, text, font, fill, blur=1.5, off=(0, 0), salpha=255, grow=5):
+    """Overlay text: a contact shadow hugging the glyph, then a crisp face.
+
+    The shadow is dilated before it is blurred, and that ordering is the point.
+    Blurring an undilated glyph spreads its ink outward *and* thins it, so the
+    old overlays got the worst of both: a wide grey haze you could see, and only
+    41/255 of shadow left under the stroke, which is the one place it does any
+    work. Growing the mask first puts near-solid ink under the glyph and a couple
+    of pixels around it; a 1.5px blur then takes the hard edge off.
+
+    This is what lets the stat blocks carry no background wash at all. Measured
+    over 209 frames of the real footage: with the old drop shadow nothing cleared
+    4.5:1 once the wash was removed; with this, everything does.
+    """
+    m = Image.new("L", img.size, 0)
+    ImageDraw.Draw(m).text((xy[0] + off[0], xy[1] + off[1]), text, font=font, fill=salpha)
+    m = m.filter(ImageFilter.MaxFilter(grow)).filter(ImageFilter.GaussianBlur(blur))
+    sh = Image.new("RGBA", img.size, (0, 0, 0, 255))
+    sh.putalpha(m)
+    img.alpha_composite(sh)
     ImageDraw.Draw(img).text(xy, text, font=font, fill=fill)
 
 
 def ctext(img, cx, y, text, font, fill, **kw):
     w = ImageDraw.Draw(img).textlength(text, font=font)
     stext(img, (cx - w / 2, y), text, font, fill, **kw)
-
-
-def scrim(img, box, alpha=95):
-    """Legibility wash under a stat block — a falloff, not a panel.
-
-    This was a filled rectangle pushed through a Gaussian blur. Blurring a
-    rectangle only softens its border: the flat interior survives at full
-    strength, so over bright footage the whole thing read as a milky panel with
-    feathered edges hanging in the frame — visible as a grey box behind every
-    stat. A heavily blurred ellipse has no flat interior and no straight edge
-    anywhere. It is densest under the type and reaches zero well inside the
-    bounds, so it does its job without being a shape you can see.
-    """
-    x0, y0, x1, y1 = box
-    w, h = x1 - x0, y1 - y0
-    if w <= 0 or h <= 0:
-        return
-    m = Image.new("L", (w, h), 0)
-    ImageDraw.Draw(m).ellipse([w * 0.06, h * 0.06, w * 0.94, h * 0.94], fill=alpha)
-    m = m.filter(ImageFilter.GaussianBlur(min(w, h) * 0.24))
-    g = Image.new("RGBA", (w, h), (8, 14, 30, 255))
-    g.putalpha(m)
-    img.alpha_composite(g, (x0, y0))
 
 
 def logo(img, t=1.0):
@@ -154,12 +162,11 @@ def ov_days(img, t):
     if ts <= 0:
         return
     x = slide(715, ts, True)
-    scrim(img, (int(x) - 30, 140, 1270, 470))
     stext(img, (x, 160), "6.4", F(150), WHITE)
     stext(img, (x + 290, 240), "DAYS", F(54), BLUE)
     stext(img, (x, 330), "the median monthly close —", F(30, "med"), WHITE)
     stext(img, (x, 370), "barely moved in 15 years", F(30, "med"), WHITE)
-    stext(img, (x, 424), "APQC benchmark · Ventana/ISG", M(16), MONO_SOFT, blur=4, off=(0, 2))
+    stext(img, (x, 424), "APQC benchmark · Ventana/ISG", M(16), MONO_SOFT, blur=1.0, salpha=220, grow=3)
 
 
 def ov_reopen(img, t):
@@ -167,28 +174,25 @@ def ov_reopen(img, t):
     if ts <= 0:
         return
     x = slide(64, ts, False)
-    scrim(img, (int(x) - 30, 150, int(x) + 560, 480))
     stext(img, (x, 168), "75%", F(150), WHITE)
     stext(img, (x, 340), "have reopened the books", F(32, "med"), BLUE)
     stext(img, (x, 382), "to fix an error found after close", F(28, "med"), WHITE)
-    stext(img, (x, 432), "FloQast / Dimensional Research", M(16), MONO_SOFT, blur=4, off=(0, 2))
+    stext(img, (x, 432), "FloQast / Dimensional Research", M(16), MONO_SOFT, blur=1.0, salpha=220, grow=3)
 
 
 def ov_people(img, t):
     t1 = (t - 0.1) / 0.28
     if t1 > 0:
         x = slide(64, t1, False)
-        scrim(img, (int(x) - 26, 120, int(x) + 440, 330))
         stext(img, (x, 138), "99%", F(104), WHITE)
         stext(img, (x, 258), "report burnout", F(29, "med"), BLUE)
-        stext(img, (x, 296), "FloQast / Univ. of Georgia", M(15), MONO_SOFT, blur=4, off=(0, 2))
+        stext(img, (x, 296), "FloQast / Univ. of Georgia", M(15), MONO_SOFT, blur=1.0, salpha=220, grow=3)
     t2 = (t - 0.42) / 0.28
     if t2 > 0:
         x = slide(740, t2, True)
-        scrim(img, (int(x) - 26, 380, 1270, 600))
         stext(img, (x, 398), "300,000", F(96), WHITE)
         stext(img, (x, 510), "walked away in two years", F(28, "med"), BLUE)
-        stext(img, (x, 548), "WSJ / Bureau of Labor Statistics", M(15), MONO_SOFT, blur=4, off=(0, 2))
+        stext(img, (x, 548), "WSJ / Bureau of Labor Statistics", M(15), MONO_SOFT, blur=1.0, salpha=220, grow=3)
 
 
 def ov_turn(img, t):
@@ -203,8 +207,6 @@ def ov_turn(img, t):
 
 def ov_engines(img, t):
     words = [("DRAFT", WHITE), ("VERIFY", BLUE), ("APPROVE", WHITE)]
-    if (t - 0.15) / 0.2 > 0:
-        scrim(img, (150, 560, 1130, 680), alpha=110)
     x = 235
     for i, (w_, col) in enumerate(words):
         ts = (t - (0.15 + i * 0.2)) / 0.2
@@ -233,13 +235,12 @@ def ov_speed(img, t):
     if ts <= 0:
         return
     x = slide(700, ts, True)
-    scrim(img, (int(x) - 30, 150, 1270, 490))
     stext(img, (x, 172), "0.15", F(150), WHITE)
     stext(img, (x + 350, 252), "SEC", F(54), BLUE)
     stext(img, (x, 342), "our demo close, end to end —", F(29, "med"), WHITE)
     stext(img, (x, 380), "checked on every single run", F(29, "med"), BLUE)
     stext(img, (x, 434), "measured 2026-07-20 · time python -m close_engine", M(15),
-          MONO_SOFT, blur=4, off=(0, 2))
+          MONO_SOFT, blur=1.0, salpha=220, grow=3)
 
 
 def mixed_center(img, cx, y, parts):
@@ -269,6 +270,25 @@ def tracked(img, cx, y, text, font, fill, tracking):
 
 INK = (22, 22, 22)                # site --text on the light plate
 SLATE = (75, 88, 112)             # muted slate for secondary lines
+
+
+_QR = None
+
+
+def qr_code():
+    """The site QR, downscaled by an exact integer factor so it stays crisp.
+
+    The asset is 984px at 24px per module, error correction H. 984 -> 164 is an
+    exact 6x reduction, which lands every module on a whole 4px block: NEAREST
+    then introduces no interpolation and the symbol stays pure two-tone through
+    the JPEG intermediate and x264. Resampling to a non-multiple size would grey
+    the module edges, which is what breaks scanning after compression.
+    """
+    global _QR
+    if _QR is None:
+        src = Image.open(HERE / "assets" / "qr-sophonfinance.png").convert("RGBA")
+        _QR = src.resize((164, 164), Image.NEAREST)
+    return _QR
 
 
 def wash_light(img):
@@ -313,18 +333,22 @@ def ov_close(img, t):
     # template; nothing here is letter-spaced to fill space, and the mark is
     # sized off the wordmark's cap height so the two read as one object. Type
     # runs 30% over the reference proportions so it holds up in an inline player.
-    # The build finishes by k≈0.60, so the finished lockup holds for the rest.
-    k = (t - ENDCARD_T0) / (1.0 - ENDCARD_T0)
+    # k is progress through ENDCARD_BUILD seconds, not through the shot: the card is
+    # pinned at ENDCARD_SECONDS, and the extra time has to become hold rather than a
+    # slower fade-up. The build finishes around k≈0.60 and the lockup holds after.
+    k = ((t - ENDCARD_T0) / (1.0 - ENDCARD_T0)) * (ENDCARD_SECONDS / ENDCARD_BUILD)
     d = ImageDraw.Draw(img)
     CX = W / 2
 
-    f_bold = F(52)
-    f_reg = F(52, "med")
+    f_bold = F(65)
+    f_reg = F(65, "med")
     ascent, _ = f_bold.getmetrics()
     cap = ascent * 0.72
 
     WM_A, WM_B = "Sophon", " Finance Systems"
-    WM_TOP = 300
+    # Every offset below is measured off WM_TOP, and WM_TOP is set so the whole
+    # block -- mark through QR -- spans y 78..642 and centres exactly on 360.
+    WM_TOP = 174
 
     # --- mark, centred above the wordmark ---
     a_g = int(255 * ease_out(k / 0.18))
@@ -332,7 +356,7 @@ def ov_close(img, t):
         s = (cap * 1.15) / 31.6
         mw = 32 * s
         mx = CX - mw / 2
-        my = WM_TOP - 34 - 31.6 * s
+        my = WM_TOP - 44 - 31.6 * s
         pts = [(mx + p[0] * s, my + p[1] * s)
                for p in [(0, 22), (11, 11), (20, 17), (32, 3)]]
         d.line(pts, fill=(*BLUE_DEEP[:3], a_g), width=max(2, round(4.4 * s)), joint="curve")
@@ -353,26 +377,33 @@ def ov_close(img, t):
     # --- short rule ---
     a_r = ease_out((k - 0.20) / 0.14)
     if a_r > 0:
-        half = 62 * a_r
-        yb = WM_TOP + ascent + 26
-        d.rectangle([CX - half, yb, CX + half, yb + 2], fill=(*BLUE_DEEP[:3], 255))
+        half = 78 * a_r
+        yb = WM_TOP + 93
+        d.rectangle([CX - half, yb, CX + half, yb + 3], fill=(*BLUE_DEEP[:3], 255))
 
     # --- tagline: weight on the second clause ---
     a_t = int(255 * ease_out((k - 0.30) / 0.16))
     if a_t > 0:
-        f_t = F(24, "med")
-        f_tb = F(24)
-        mixed_center(img, CX, WM_TOP + ascent + 58, [
-            ("Automate the work. ", f_t, (*INK, a_t)),
-            ("Keep the judgment.", f_tb, (*BLUE_DEEP[:3], a_t)),
+        mixed_center(img, CX, WM_TOP + 134, [
+            ("Automate the work. ", F(30, "med"), (*INK, a_t)),
+            ("Keep the judgment.", F(30), (*BLUE_DEEP[:3], a_t)),
         ])
 
-    # SLATE, not the softer grey this used to use: that tone was picked against a
-    # 250-luma flat fill and only reaches 2.6:1 on the washed field. SLATE: 4.9:1.
+    # The address was a 15pt tracked whisper -- unreadable in an inline player, and
+    # it is the one thing on the card a viewer might actually need to act on. 32pt.
     a_u = int(255 * ease_out((k - 0.44) / 0.14))
     if a_u > 0:
-        tracked(img, CX, WM_TOP + ascent + 132, "sophonfinance.com", M(15),
-                (*SLATE, a_u), 3)
+        tracked(img, CX, WM_TOP + 228, "sophonfinance.com", M(32), (*INK, a_u), 6)
+
+    # --- QR to the site, on its own white plate ---
+    a_q = int(255 * ease_out((k - 0.52) / 0.16))
+    if a_q > 0:
+        qr = qr_code()
+        plate = Image.new("RGBA", (198, 198), (255, 255, 255, 255))
+        plate.paste(qr, ((198 - qr.width) // 2, (198 - qr.height) // 2))
+        if a_q < 255:
+            plate.putalpha(plate.getchannel("A").point(lambda v: v * a_q // 255))
+        img.alpha_composite(plate, (541, 444))
 
 
 OVERLAYS = {"open": ov_open, "days": ov_days, "reopen": ov_reopen, "people": ov_people,
@@ -388,16 +419,43 @@ SHOTS = {
     "turn":    [(WORK / "hf_turn.mp4", 0.2, 1.0)],
     "engines": [(WORK / "hf_founder1.mp4", 0.2, 0.50), (WORK / "hf_fmeet.mp4", 0.2, 0.50)],
     "speed":   [(ASSETS / "hero2-web.mp4", 6.2, 0.280), (ASSETS / "hero2-web.mp4", 19.5, 0.268), (ASSETS / "hero2-web.mp4", 22.95, 0.452)],
-    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.225), (WORK / "hf_welcome.mp4", 0.2, 0.274),
-                (WORK / "hf_jet.mp4", 0.9, 0.160), (WORK / "hf_endcard.mp4", 0.2, 0.341)],
+    # The close shares are placeholders; close_layout() overwrites them once the
+    # narration is measured. hf_endcard.mp4 runs 5.04s and the card now wants 5.0s
+    # of it, so its in-point drops to 0.0 -- at 0.2 the extract yields fewer frames
+    # than the shot needs and compose() would slow-stretch the plate to fill.
+    "close":   [(WORK / "hf_sign.mp4", 0.2, None), (WORK / "hf_welcome.mp4", 0.2, None),
+                (WORK / "hf_jet.mp4", 0.9, None), (WORK / "hf_endcard.mp4", 0.0, None)],
 }
 
 # Where the close beat's cuts fall, as fractions of that beat — ov_close reads these
 # so the lockup always starts exactly on the endcard cut. The jet flyby sits clean
 # between the handshake and the endcard: no overlay text competes with the speed.
-WELCOME_T0 = SHOTS["close"][0][2]
-JET_T0 = SHOTS["close"][0][2] + SHOTS["close"][1][2]
-ENDCARD_T0 = JET_T0 + SHOTS["close"][2][2]
+# Derived, not written down: the endcard holds a fixed number of seconds inside a
+# beat whose length follows the narration, so these fractions move with it.
+WELCOME_T0 = JET_T0 = ENDCARD_T0 = None
+
+
+def close_layout(durs):
+    """Pin the endcard at ENDCARD_SECONDS and renormalise the close beat around it.
+
+    Shares stay the unit extract()/compose() speak in; they just stop being
+    constants. The three narrative shots are sized first, by the pre-endcard
+    formula, so they keep the absolute lengths they have today; the endcard's fixed
+    seconds are added after and the four renormalised. Hardcoding the resulting
+    fractions instead would pin the layout to one measured mp3 -- re-record the
+    close VO and the handshake, welcome and jet shots would all silently change.
+    """
+    global WELCOME_T0, JET_T0, ENDCARD_T0, ENDCARD_HOLD
+    body = durs["close"] + TAIL + BODY_PAD
+    secs = [w * body for w in CLOSE_BODY_W] + [ENDCARD_SECONDS]
+    beat = sum(secs)
+    sh = [s / beat for s in secs]
+    SHOTS["close"] = [(src, t0, s) for (src, t0, _), s in zip(SHOTS["close"], sh)]
+    WELCOME_T0 = sh[0]
+    JET_T0 = sh[0] + sh[1]
+    ENDCARD_T0 = JET_T0 + sh[2]
+    ENDCARD_HOLD = beat - durs["close"] - TAIL
+    return secs
 
 # Site hero clips are finished films: they carry their own brand cards, which must
 # never be re-cut into this one. Only these windows are usable footage. Measured off
@@ -436,7 +494,11 @@ CAPTIONS = {
 
 def beat_len(bid, durs):
     """On-screen length of a beat: its narration, the tail gap, plus the endcard hold."""
-    return durs[bid] + TAIL + (ENDCARD_HOLD if bid == "close" else 0.0)
+    if bid != "close":
+        return durs[bid] + TAIL
+    if ENDCARD_HOLD is None:
+        raise SystemExit("close_layout(durs) must run before the close beat is sized")
+    return durs[bid] + TAIL + ENDCARD_HOLD
 
 
 def dur_of(p):
@@ -592,6 +654,7 @@ def main():
     args = ap.parse_args()
     durs = {b: dur_of(WORK / f"vo_{args.voice}_{b}.mp3") for b in ORDER}
     print("vo durations:", {k: round(v, 2) for k, v in durs.items()})
+    print("close shots (s):", [round(s, 3) for s in close_layout(durs)])
     frames = compose(extract(durs), durs)
     mux(frames, durs, args.voice)
     if args.install:
