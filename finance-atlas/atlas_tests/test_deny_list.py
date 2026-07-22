@@ -128,6 +128,13 @@ DENYLIST: Tuple[Tuple[str, int], ...] = (
     ("b8630f105667e74d5cde1c329c0385035a28c381f9e8195777d45b919305f68c", 3),
     ("86c1d185caea74184ba4585c9a1e18e7b75df81437d2c98fb70ec2e00851f56f", 2),
     ("955d212a26c8b77af7c55b1b7e375d7024855f8d1ab51ec88cd1cfd9f625e033", 2),
+    # Construction / real-estate AP tooling in the same class as the entries above.
+    # Both the fused and spaced spellings are listed: matching is exact per n-gram,
+    # so a one-word entry never matches the two-word form, or vice versa.
+    ("c024b43b13548acf45c5da8c5be04fde9a0fb2a42df69972238857f0a40ba32e", 1),
+    ("5379c826c1ab2b0990f7a5808dd8a59bd20a805841ee07d815c01c87d88fd328", 2),
+    ("55af965522a877fbb91c42cc317bc592e7ac2282c8b986ea24d9d19b87f3e6de", 1),
+    ("cfbd7ff585b42feee8f81570af72fb00fbbcf5b6277ce8b6991a287a089320b5", 2),
 )
 
 #: Non-confidential canary phrases used ONLY by the matcher self-tests.
@@ -241,7 +248,7 @@ def test_surface_is_clean_of_denied_term(
 # ---------------------------------------------------------------------------
 
 def test_deny_list_has_expected_size() -> None:
-    assert len(DENYLIST) == 85
+    assert len(DENYLIST) == 89
 
 
 def test_deny_list_digests_are_unique() -> None:
