@@ -55,8 +55,8 @@ Model of the business: there is no software to buy. After a short observation of
 Non-negotiables that define the product: independent verification checks every run; every computed figure ships with cited evidence traceable to source; and nothing files, posts, or finalizes without a human's sign-off. The client always keeps the judgment.
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
-- 9 public engines, all runnable and MIT-licensed.
-- 67,664 automated tests gate every change in CI.
+- 10 public engines, all runnable and MIT-licensed.
+- 69,887 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close alone runs 29 deterministic controls.
@@ -71,7 +71,8 @@ Non-negotiables that define the product: independent verification checks every r
 7. Knowledge Brain — institutional knowledge as a citation-governed base; every answer quotes its source verbatim with a timestamp. No source, no answer. (page: engines/brain.html)
 8. Finance Operations Atlas — a living map of entities, bank accounts, systems, and canonical sources of truth; stale copies get flagged. (page: engines/atlas.html)
 9. Cash Management — the cash manager's monthly double-check: bank-to-GL rec, outstanding/stale checks, wire dual-approval, register continuity, concentration sweeps; five read-only controls. (page: engines/cash.html)
-Beyond these nine, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, intercompany/eliminations, whatever eats the client's month).
+10. Accounts Payable — read-only payables controls: posting integrity, payment release gates, duty segregation, information reporting. (page: engines/ap.html)
+Beyond these ten, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, intercompany/eliminations, whatever eats the client's month).
 
 # How the engines stay trustworthy
 Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
@@ -79,7 +80,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 67,664 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 69,887 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

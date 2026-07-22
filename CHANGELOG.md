@@ -13,6 +13,21 @@ All notable changes to this project are documented here. The format is based on
 ## [Unreleased]
 
 ### Added
+- **Accounts Payable engine** (`SFS-E10-APX`, `accounts-payable-automation/ap_engine`) — the
+  platform's tenth system: a deterministic, read-only control engine for the payables cycle,
+  running thirty controls in six families over seeded fictional posting document sets. Posting
+  integrity (including a control for a run that aborted and was filed as though it succeeded),
+  the payment release gate, approver routing with duties segregated, information reporting, and
+  commitment hygiene. Integer cents throughout with exact comparison and no tolerance band; no
+  remediation loop, because a read-only sensor must not mutate what it inspects.
+- **Structural precondition control** (`set_complete`) — registered first so a document set
+  missing an artifact type cannot report clean merely because the controls that read it never
+  ran. Absent evidence is not a held control.
+- Seeded fictional corpus carrying exactly one planted defect per registered control plus a
+  clean baseline, with a coverage test asserting the defect set and the registry are identical,
+  so a control cannot be added without a fixture that exercises it.
+- Public datasheet at `docs/engines/ap.html` from `site-datasheets/specs/ap.json`, plus the
+  engine tile, flow diagram, and homepage/test-page registration for a tenth system.
 - Fictional postage-allocation engine for signed meter detail: exact one-route-per-project
   gating, structured project/job/cost schedules, per-entity intercompany mirrors, refund
   reversals, and per-entity clearing of unallocated postage.

@@ -12,7 +12,7 @@ cd "$(dirname "$0")/.." || exit 1
 
 say() { printf "\n\033[1;36m== %s ==\033[0m\n" "$1"; }
 
-say "Test suite — 257 tests pin every engine's behavior"
+say "Test suite — 69,887 tests pin every engine's behavior"
 python -m pytest -q
 
 say "Month-End Close Engine — recurring JEs + schedule-to-GL tie-outs"
@@ -29,6 +29,9 @@ say "Partnership 1065 + IRC section 704(c) built-in gain"
 
 say "Validation Engine — read-only checks (a FAIL verdict on planted defects is the intended demo outcome)"
 ( cd audit-automation && python run.py )
+
+say "Accounts Payable — read-only payables controls (posting integrity, payment release gates, duty segregation)"
+( cd accounts-payable-automation && python run.py )
 
 say "Triangulate — AI separation of duties (preparer / reviewer / specialist / audit / human gate)"
 ( cd ai-validation-framework && python run.py --sample clean --output output )
