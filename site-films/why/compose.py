@@ -107,20 +107,20 @@ def scrim(img, box, alpha=95):
 
 
 def logo(img, t=1.0):
-    """Site brand mark + wordmark, top-left."""
+    """Site brand mark + wordmark, top-left — sized to read, not to whisper."""
     a = int(235 * min(1.0, t * 3))
-    ox, oy, s = 46, 38, 1.05
+    ox, oy, s = 46, 38, 2.1
     pts = [(ox + p[0] * s, oy + p[1] * s) for p in [(10, 30), (19, 21), (27, 26), (38, 14)]]
     sh = Image.new("RGBA", img.size, (0, 0, 0, 0))
-    ImageDraw.Draw(sh).line(pts, fill=(0, 0, 0, 150), width=4, joint="curve")
-    img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(5)))
+    ImageDraw.Draw(sh).line(pts, fill=(0, 0, 0, 150), width=8, joint="curve")
+    img.alpha_composite(sh.filter(ImageFilter.GaussianBlur(7)))
     d = ImageDraw.Draw(img)
-    d.line(pts, fill=(255, 255, 255, a), width=4, joint="curve")
+    d.line(pts, fill=(255, 255, 255, a), width=8, joint="curve")
     dot = (ox + 38 * s, oy + 14 * s)
-    d.ellipse([dot[0] - 4, dot[1] - 4, dot[0] + 4, dot[1] + 4], fill=(*BLUE_DEEP[:3], a))
+    d.ellipse([dot[0] - 8, dot[1] - 8, dot[0] + 8, dot[1] + 8], fill=(*BLUE_DEEP[:3], a))
     d.rectangle([ox + 10 * s, oy + 35 * s, ox + 38 * s, oy + 38 * s], fill=(255, 255, 255, a))
-    stext(img, (ox + 52, oy + 12), "SOPHON FINANCE SYSTEMS", M(15), (255, 255, 255, a),
-          blur=4, off=(0, 2), salpha=130)
+    stext(img, (ox + 104, oy + 24), "SOPHON FINANCE SYSTEMS", M(28), (255, 255, 255, a),
+          blur=5, off=(0, 3), salpha=130)
 
 
 def slide(final_x, t, from_right=True, dist=380):
@@ -265,8 +265,8 @@ def ov_close(img, t):
     # Shot boundaries come from SHOTS["close"] so the overlay can never drift out of
     # step with the cut, and the tagline timings are read against the handshake shot
     # rather than the whole beat — that keeps them put when the endcard hold changes.
-    if t < ENDCARD_T0:
-        w = (t - WELCOME_T0) / (ENDCARD_T0 - WELCOME_T0)
+    if t < JET_T0:
+        w = (t - WELCOME_T0) / (JET_T0 - WELCOME_T0)
         if w < 0.353:
             return
         a1 = ease_out((w - 0.412) / 0.588)
@@ -274,6 +274,8 @@ def ov_close(img, t):
         a2 = ease_out((w - 0.706) / 0.588)
         ctext(img, W / 2, 566, "KEEP THE JUDGMENT.", F(58), (*BLUE[:3], int(255 * a2)))
         return
+    if t < ENDCARD_T0:
+        return  # the jet flyby plays clean — nothing competes with the speed
     # Endcard: the exact brand lockup, drawn vector-crisp on the site's light
     # wash — house palette, never AI-rendered typography. The build finishes by
     # k≈0.56 so the finished lockup holds for the rest of the shot.
@@ -324,13 +326,16 @@ SHOTS = {
     "turn":    [(WORK / "hf_turn.mp4", 0.2, 1.0)],
     "engines": [(WORK / "hf_founder1.mp4", 0.2, 0.50), (WORK / "hf_fmeet.mp4", 0.2, 0.50)],
     "speed":   [(ASSETS / "hero2-web.mp4", 6.2, 0.280), (ASSETS / "hero2-web.mp4", 19.5, 0.268), (ASSETS / "hero2-web.mp4", 22.95, 0.452)],
-    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.225), (WORK / "hf_welcome.mp4", 0.2, 0.274), (WORK / "hf_endcard.mp4", 0.2, 0.501)],
+    "close":   [(WORK / "hf_sign.mp4", 0.2, 0.225), (WORK / "hf_welcome.mp4", 0.2, 0.274),
+                (WORK / "hf_jet.mp4", 0.9, 0.160), (WORK / "hf_endcard.mp4", 0.2, 0.341)],
 }
 
 # Where the close beat's cuts fall, as fractions of that beat — ov_close reads these
-# so the lockup always starts exactly on the endcard cut.
+# so the lockup always starts exactly on the endcard cut. The jet flyby sits clean
+# between the handshake and the endcard: no overlay text competes with the speed.
 WELCOME_T0 = SHOTS["close"][0][2]
-ENDCARD_T0 = SHOTS["close"][0][2] + SHOTS["close"][1][2]
+JET_T0 = SHOTS["close"][0][2] + SHOTS["close"][1][2]
+ENDCARD_T0 = JET_T0 + SHOTS["close"][2][2]
 
 # Site hero clips are finished films: they carry their own brand cards, which must
 # never be re-cut into this one. Only these windows are usable footage. Measured off
@@ -422,14 +427,14 @@ def compose(raw, durs):
                     si = k
             a, b = bounds[si]
             local = (t - a) / (b - a)
-            if bid == "close" and si == 2:
+            if bid == "close" and si == len(SHOTS["close"]) - 1:
                 img = light_plate()   # endcard: house wash, not the generated clip
             else:
                 shot_frames = sorted((raw / f"{bid}_{si}").glob("f*.png"))
                 fi = min(len(shot_frames) - 1, int(local * (b - a) * beat_dur * FPS))
                 img = Image.open(shot_frames[fi]).convert("RGBA")
             OVERLAYS[bid](img, t)
-            if not (bid == "close" and si == 2):
+            if not (bid == "close" and si == len(SHOTS["close"]) - 1):
                 logo(img, 1.0 if (bi, i) != (0, 0) else 0.4)
             if bi == 0 and i < 12:
                 img.alpha_composite(Image.new("RGBA", img.size, (0, 0, 0, int(255 * (1 - i / 12)))))
@@ -460,13 +465,19 @@ def mux(frames, durs, voice):
     vo_all = WORK / "vo_all.wav"
     subprocess.run([FF, "-y", "-f", "concat", "-safe", "0", "-i", str(lst),
                     "-ar", "44100", str(vo_all)], check=True, capture_output=True)
+    # The jet whoosh lands exactly on the flyby cut in the close beat.
+    jet_at = sum(beat_len(b, durs) for b in ORDER[:-1]) + beat_len("close", durs) * JET_T0
+    jet_ms = int(jet_at * 1000)
     out = WORK / "why-film.mp4"
     subprocess.run([
         FF, "-y", "-framerate", str(FPS), "-i", str(frames / "f%05d.jpg"),
         "-i", str(vo_all), "-i", str(ASSETS / "site-music.mp3"),
+        "-i", str(WORK / "hf_jet_whoosh.mp3"),
         "-filter_complex",
         f"[2:a]volume=0.14,afade=t=in:d=2,afade=t=out:st={total-3:.2f}:d=3,atrim=0:{total:.2f}[m];"
-        f"[1:a][m]amix=inputs=2:duration=first:dropout_transition=3,loudnorm=I=-16:TP=-1.5[a]",
+        f"[3:a]volume=0.85,adelay={jet_ms}|{jet_ms},apad,atrim=0:{total:.2f}[j];"
+        f"[1:a][m][j]amix=inputs=3:duration=first:dropout_transition=3:normalize=0,"
+        f"loudnorm=I=-16:TP=-1.5[a]",
         "-map", "0:v", "-map", "[a]",
         "-c:v", "libx264", "-preset", "medium", "-crf", "22", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(out)],
