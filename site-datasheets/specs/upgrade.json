@@ -1,0 +1,384 @@
+{
+  "num": 12,
+  "slug": "upgrade",
+  "part_no": "SFS-E12-BUP",
+  "mnemonic": "BUP",
+  "family": "Revenue Recognition",
+  "name": "Buyer Upgrades",
+  "tagline": "A liability until the unit closes",
+  "plain_summary": "A buyer pays for a home upgrade months before the home closes. That money is not revenue when it arrives -- it is a liability, and it stays one until the unit actually closes. Between those two dates the same figure has to appear consistently in four places, each maintained by a different person on a different cadence. This engine reads all four and runs twenty deterministic controls over them: does every upgrade belong to a real unit exactly once, is deferred revenue released on close and only on close, does the closing entry balance, is sales tax carried as a liability, and do the four schedules agree. It never posts and never writes to a source artifact.",
+  "rev": "2026-07-22",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failure mode here is almost never a wrong number. It is the same number failing to move everywhere at once -- released in the schedule but not the ledger, repriced in one report and not the next. Those breaks survive review precisely because every individual page still foots. The engine ships one planted defect per registered control, so the benchmark is a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each upgrade book. The first proves the others had something to read.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the book carries every artifact the controls below need, and that they all describe the same period.",
+      "engineering": "set_complete compares the doc_type values present against model.DOC_TYPES and FAILs when any of the five is absent or duplicated. Registered first because every downstream rule reads one artifact and returns nothing when it is missing -- absent evidence would otherwise read as a held control. set_period_aligned rejects a book assembled from a schedule for one month and a cost report for another.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "unit",
+      "label": "Unit Integrity",
+      "plain": "Checks every upgrade belongs to a real unit, exactly once, and that closed units carry a close date.",
+      "engineering": "Three controls. An upgrade billed against a unit absent from the closings schedule has no close date to release it, so it would sit in deferred revenue indefinitely without anyone noticing it was orphaned. A duplicated order id double-counts both the liability and the revenue it becomes. A unit flagged closed without a date cannot be shown to have been recognised in the right period, because the date is what every recognition rule keys on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "def",
+      "label": "Deferred Revenue Lifecycle",
+      "plain": "Checks the money stays a liability until the unit closes, then moves in full.",
+      "engineering": "Four controls. Recognition is gated on close of escrow and nothing else -- not payment, not completion, not settlement. Recognised plus deferred must equal what the buyer contracted, so nothing leaks between the two buckets. Both totals are then tied to their own ledger accounts, which is the month-end comparison that catches a release posted in one place and not the other.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "cos",
+      "label": "Cost of Sales",
+      "plain": "Checks the closing entry balances and that cost follows revenue rather than leading it.",
+      "engineering": "Four controls. Cost of sales debited must exactly offset contra work-in-progress credited: the entry reclassifies accumulated cost, it does not create it, so a flipped sign makes the entry sum to twice the cost rather than to nothing. Cost of sales is taken only for closed units. Costs beyond the committed amount, and commitments beyond the original budget without a change order reference, are flagged for a human rather than failed -- the resolution is a change order somebody has to execute, not an arithmetic correction.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "tax",
+      "label": "Sales Tax",
+      "plain": "Checks tax collected is owed onward rather than counted as earnings.",
+      "engineering": "Tax on each order is derived from the declared basis-point rate with the same truncating arithmetic the order itself uses, so the reported line and the derived line compare with exact equality. The total is then tied to the liability account. Folding tax into revenue inflates the top line and understates what is owed to the taxing authority -- and because both move together, the schedule still foots.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "tie",
+      "label": "Four-Way Agreement",
+      "plain": "Checks the closings schedule, ledger, cost-to-complete and proforma all carry the same number.",
+      "engineering": "Four controls. Net upgrade revenue on the cost-to-complete ties the proforma's upgrade income; costs to date tie the proforma's job-cost line; the proforma reconciles to its own variance tab; and the cost-to-complete totals foot from its own unit rows. The cost tie negates one side deliberately, because the two artifacts carry opposite sign conventions -- comparing them raw would fire on every correct book and hold on one where the sign was wrong.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "flag",
+      "label": "Budgeted Versus Actual",
+      "plain": "Checks the marker that tells a reader whether a figure is a forecast or a fact.",
+      "engineering": "Wrong in both directions is caught: a closed unit still marked budgeted, and an open unit marked actual. Left stale after close, a real number keeps being treated as an estimate somebody is free to revise. This flags rather than fails -- nothing is misstated, but a human has to correct the marker before the report is relied on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Upgrade Books",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional upgrade books enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted defect per registered control, 22 books in total. Only the units and their orders are stated; every dependent figure is derived, so a planted defect is guaranteed to be the only thing wrong.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the book complete enough to be worth reading",
+      "engineering": "Two controls. Fails a book missing any of the five artifact types, so no downstream rule can hold vacuously.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "unit-control",
+      "label": "Unit Integrity",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "does every upgrade belong to a real unit, once",
+      "engineering": "Three controls over orphaned units, duplicate order ids and closed units missing a close date.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "def-control",
+      "label": "Deferred Revenue",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is revenue released on close, and only on close",
+      "engineering": "Four controls: the recognition gate, the per-unit split, and both ledger ties.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "cos-control",
+      "label": "Cost of Sales",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the closing entry balance, and follow revenue",
+      "engineering": "Four controls over entry balance, timing, committed cost and change order references.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "tax-control",
+      "label": "Sales Tax",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is tax a liability rather than revenue",
+      "engineering": "Two controls: derivation from the declared rate, and the tie to the liability account.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "tie-control",
+      "label": "Four-Way Agreement",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the four schedules carry the same number",
+      "engineering": "Four controls chaining cost-to-complete, proforma, variance tab and the unit rows beneath them.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "flag-control",
+      "label": "Budgeted Versus Actual",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is the forecast/fact marker current",
+      "engineering": "One control, wrong in both directions: stale after close, or premature before it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/engine.py"
+    },
+    {
+      "id": "ledger",
+      "label": "Ledger Balances",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "the book of record every schedule is tied back to",
+      "engineering": "Five accounts: unearned revenue, revenue, cost of sales, contra work-in-progress and sales tax payable. A missing balance fails the tie that needed it rather than skipping quietly.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per book: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/upgrade_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "upgrade books" },
+    { "from": "set-control", "to": "unit-control", "label": "complete" },
+    { "from": "set-control", "to": "def-control", "label": "complete" },
+    { "from": "set-control", "to": "cos-control", "label": "complete" },
+    { "from": "unit-control", "to": "tax-control", "label": "findings" },
+    { "from": "def-control", "to": "tie-control", "label": "findings" },
+    { "from": "cos-control", "to": "flag-control", "label": "findings" },
+    { "from": "def-control", "to": "ledger", "label": "tied to" },
+    { "from": "cos-control", "to": "ledger", "label": "tied to" },
+    { "from": "tax-control", "to": "ledger", "label": "tied to" },
+    { "from": "tax-control", "to": "report", "label": "findings" },
+    { "from": "tie-control", "to": "report", "label": "findings" },
+    { "from": "flag-control", "to": "report", "label": "findings" },
+    { "from": "ledger", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "279",
+      "source": "python -m pytest --collect-only -q -o addopts= (buyer-upgrade-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "20",
+      "source": "len(upgrade_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every upgrade book"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in upgrade_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Books",
+      "value": "22",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus one planted defect per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "5",
+      "source": "len(upgrade_engine.model.DOC_TYPES)",
+      "plain": "the schedules an upgrade programme keeps"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "upgrade_engine/tests/test_control_semantics.py",
+      "plain": "one cent recognised early is a failure"
+    }
+  ],
+  "problem_statement": "An upgrade programme keeps four schedules of the same money, and the money changes character exactly once: on the day the unit closes it stops being a liability and becomes revenue. Every recurring failure here is that change happening in some schedules and not others. A unit closes and the deferred balance is released in the closings schedule but never posted to the ledger, so the liability account carries a balance for units that no longer exist. An upgrade is repriced and the cost-to-complete is updated while the proforma keeps the old figure, so margin is reported against a price nobody is charging. A change order is executed and the committed cost never lands, so an overrun looks like an overrun rather than an approved increase. None of these makes any individual page fail to foot, which is exactly why they survive review and why a rule finds them and a reviewer does not.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every book",
+      "narrative": "The CLI generates 22 fictional upgrade books -- one clean baseline and one carrying each planted defect -- then runs all 20 controls over each. The clean book returns PASS with no flags; every defect book returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (buyer-upgrade-automation/); output re-run on demand"
+    },
+    {
+      "title": "Paid, finished and settled is still not revenue",
+      "narrative": "A test sets buyer-paid, work-complete and invoice-settled on an open unit and asserts the recognition control stays silent, because none of those recognises revenue. A companion test recognises a single cent before close and asserts it fails. There is no immaterial amount of premature recognition.",
+      "source": "upgrade_engine/tests/test_control_semantics.py::test_paid_and_complete_is_still_not_recognised"
+    },
+    {
+      "title": "A flipped sign is caught in both directions",
+      "narrative": "The cost-to-complete states cost positive and the proforma states it negative, so the tie negates one side. Tests assert that the correct negative line passes and that a positive one fails -- the check that would be inverted by the obvious raw comparison.",
+      "source": "upgrade_engine/tests/test_control_semantics.py::test_proforma_cost_sign_is_enforced"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "generate the seeded fictional corpus, run all twenty controls, write both reports",
+      "output": "per-book verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries one planted defect per control by design",
+      "artifacts": "upgrade_report.md, upgrade_report.json, samples/"
+    },
+    {
+      "cmd": "python -m upgrade_engine samples",
+      "operation": "analyze an existing folder of upgrade books without regenerating it",
+      "output": "per-book verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m upgrade_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "279 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "279",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (buyer-upgrade-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "20",
+      "unit": "controls",
+      "source": "len(upgrade_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "21",
+      "unit": "defect books",
+      "source": "len(upgrade_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one book that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "upgrade_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a book demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing in the four schedules they were given. It is not an opinion on whether an upgrade was priced correctly or whether the programme is profitable, and it does not replace the controller's review.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "send the mechanically clean book to the documented manual review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; none of them misstates a figure"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "a schedule disagrees with another or with the ledger; correct it before the close package is relied on"
+      }
+    ],
+    "guarantees": [
+      "Read-only: books are parsed and never written back, so the engine cannot introduce the defect it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band anywhere in the registry.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "A missing ledger balance fails the tie that needed it rather than skipping quietly; all four accounts are covered by parametrized tests."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries one planted defect per registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, recognises revenue or writes to a source artifact. It reports and stops.",
+      "source": "buyer-upgrade-automation/README.md and upgrade_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the five artifacts an upgrade programme keeps. It does not connect to a sales system, an accounting ledger or an escrow provider.",
+      "source": "upgrade_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It checks that a commitment change carries a change order reference, not that the change order was properly authorised. That judgment is a reviewer's.",
+      "source": "upgrade_engine/engine.py cos_change_order_referenced"
+    },
+    {
+      "statement": "Sales tax is derived from the rate the book declares. The engine does not determine which jurisdiction's rate applies or whether an upgrade is taxable.",
+      "source": "upgrade_engine/engine.py tax_derived_from_rate"
+    },
+    {
+      "statement": "All shipped data is fictional. The corpus demonstrates the controls; it is not a record of any real buyer, unit or project.",
+      "source": "upgrade_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-upgrade.webp",
+    "motion": "../assets/engine-upgrade-motion.mp4",
+    "poster_alt": "Buyer Upgrades diagram: three blocks reading deposit, close of escrow and revenue connected left to right by arrows, with close of escrow highlighted as the only trigger; below, a banded assertion that four schedules must carry one number, and a row of the seven control families with their counts.",
+    "caption": "The Buyer Upgrades engine tile states the gate the whole programme turns on: a deposit is a liability until close of escrow, and only then does it become revenue.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/buyer-upgrade-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/buyer-upgrade-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Buyer Upgrades (SFS-E12-BUP) datasheet -- twenty deterministic, read-only controls over a homebuilder's upgrade programme: deferred revenue released only on close of escrow, the closing entry balanced, sales tax held as a liability, and four schedules tied to one number. 279 tests, seeded fictional data."
+  }
+}
