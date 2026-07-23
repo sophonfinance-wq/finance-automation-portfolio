@@ -218,6 +218,8 @@ Each system has its own README with the regime it models, the run commands, and 
 The **[Guided Demo & Walkthrough](./docs/DEMO-WALKTHROUGH.md)** shows the command to run for each
 system, what to inspect, and what it proves. For how these map to specific finance, tax, and
 engineering competencies, see the **[Case Study](./docs/CASE-STUDY.md)**.
+For the control discipline behind safe file operations, dry-run defaults, and repeated fixture
+stress testing, see **[Operational Hardening Patterns](./docs/OPERATIONAL-HARDENING.md)**.
 
 ---
 
