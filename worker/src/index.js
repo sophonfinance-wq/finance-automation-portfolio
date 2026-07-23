@@ -55,8 +55,8 @@ Model of the business: there is no software to buy. After a short observation of
 Non-negotiables that define the product: independent verification checks every run; every computed figure ships with cited evidence traceable to source; and nothing files, posts, or finalizes without a human's sign-off. The client always keeps the judgment.
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
-- 10 public engines, all runnable and MIT-licensed.
-- 69,911 automated tests gate every change in CI.
+- 14 public engines, all runnable and MIT-licensed.
+- 71,191 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close alone runs 29 deterministic controls.
@@ -72,7 +72,11 @@ Non-negotiables that define the product: independent verification checks every r
 8. Finance Operations Atlas — a living map of entities, bank accounts, systems, and canonical sources of truth; stale copies get flagged. (page: engines/atlas.html)
 9. Cash Management — the cash manager's monthly double-check: bank-to-GL rec, outstanding/stale checks, wire dual-approval, register continuity, concentration sweeps; five read-only controls. (page: engines/cash.html)
 10. Accounts Payable — read-only payables controls: posting integrity, payment release gates, duty segregation, information reporting. (page: engines/ap.html)
-Beyond these ten, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, intercompany/eliminations, whatever eats the client's month).
+11. Project Draw — the construction loan draw proved before it reaches the lender: the reconciliation identity at zero tolerance, the lender's form tied to its working papers and the trial balance, contingency held to percent-complete, cutoff and supporting documentation; 34 read-only controls that flag exceptions and never bill or fund. (page: engines/draw.html)
+12. Buyer Upgrades — a buyer's upgrade money is a liability until the unit closes: deferred revenue released only on close of escrow, the closing entry balanced, sales tax held as a liability, four schedules tied to one number; 20 read-only controls that never post. (page: engines/upgrade.html)
+13. Warranty Reimbursement — a warranty policy bought once and drawn down for years in amounts too small to attract review: a coverage limit re-derived from construction cost, cumulative claims held inside a finite pool, every claim tested against its quarter, the policy period and close of escrow; 22 read-only controls that never file or pay. (page: engines/warranty.html)
+14. Intercompany Reciprocity — a development group's intercompany balances: every due-from reconciled to the due-to that faces it, each closing rolled forward from the ledger, funding traced to the protocol-correct entity and down the ownership chain, the guarantor's liquidity covenant held; 23 read-only controls that never fund or sweep. (page: engines/intercompany.html)
+Beyond these fourteen, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
 
 # How the engines stay trustworthy
 Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
@@ -80,7 +84,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 69,911 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 71,191 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 
