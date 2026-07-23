@@ -95,7 +95,7 @@ All controls held.
 **Verdict:** FAIL (PASS 22, FLAG 0, FAIL 1)
 
 - **FAIL** `fund_equity_from_capital` @ `intercompany_ledger:LDG-2028-Q2/transactions/11/from_entity`  
-  equity funding 11 for 'Ballard Yard' comes from NWSV (Services), but project equity must be funded from the Capital group
+  equity funding 11 for 'Brightwater Commons' comes from NWSV (Services), but project equity must be funded from the Capital group
 
 ### guarantor_short__Ashfield_US_Group
 
