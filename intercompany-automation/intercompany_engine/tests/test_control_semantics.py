@@ -156,7 +156,7 @@ def test_equity_does_not_roll_a_due_from(cf: dict[str, Any], tmp_path: Path) -> 
     """Equity debits an investment account, not a due-from, so it never moves one."""
     _txns(cf).append({
         "txn_no": _next_no(cf), "txn_type": TXN_EQUITY, "from_entity": "NWCP",
-        "project": "Interbay Lofts", "region": "Seattle", "amount_cents": d(75_000),
+        "project": "Alderpoint Terraces", "region": "Seattle", "amount_cents": d(75_000),
         "txn_date": "2028-05-03", "purpose": "project equity funding",
     })
     _resync_totals(cf)
@@ -211,13 +211,13 @@ def test_equity_from_the_capital_group_passes(cf: dict[str, Any], tmp_path: Path
 
 def test_equity_from_outside_capital_fails(cf: dict[str, Any], tmp_path: Path) -> None:
     """Project equity routed around the capital arm breaks the guarantor structure."""
-    next(t for t in _txns(cf) if t.get("project") == "Ballard Yard")["from_entity"] = "SVCS"
+    next(t for t in _txns(cf) if t.get("project") == "Brightwater Commons")["from_entity"] = "SVCS"
     assert _fired(_write(tmp_path, cf), "fund_equity_from_capital")
 
 
 def test_cross_region_equity_fails(cf: dict[str, Any], tmp_path: Path) -> None:
     """The Southern California capital entity may not fund a Seattle project."""
-    next(t for t in _txns(cf) if t.get("project") == "Ballard Yard")["from_entity"] = "SWCP"
+    next(t for t in _txns(cf) if t.get("project") == "Brightwater Commons")["from_entity"] = "SWCP"
     assert _fired(_write(tmp_path, cf), "fund_region_matches")
 
 

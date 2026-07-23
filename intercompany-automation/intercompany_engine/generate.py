@@ -7,7 +7,7 @@ other carries exactly **one** planted defect, built to make a named control fire
 
 Everything here is invented. The entity group, its projects, the reporting period
 and every amount are fictional and the period is set in a fictional future. No
-real Intracorp entity, person, bank, project or path appears anywhere. The
+real entity, person, bank, project or path appears anywhere. The
 generator is deterministic and takes no seed.
 
 The baseline is derived, not typed
@@ -118,8 +118,8 @@ REPAYMENTS: tuple[tuple[str, str, int, str, str], ...] = (
 
 #: ``(capital_entity, project, region, dollars, date, purpose)`` -- project equity.
 EQUITY: tuple[tuple[str, str, str, int, str, str], ...] = (
-    ("NWCP", "Ballard Yard", "Seattle", 350_000, "2028-04-18", "project equity funding"),
-    ("SWCP", "Tustin Row", "SoCal", 420_000, "2028-05-28", "project equity funding"),
+    ("NWCP", "Brightwater Commons", "Seattle", 350_000, "2028-04-18", "project equity funding"),
+    ("SWCP", "Copperfield Yards", "SoCal", 420_000, "2028-05-28", "project equity funding"),
 )
 
 #: ``(code, cash_dollars)`` -- period-end cash positions.
@@ -403,12 +403,12 @@ def _txn_outside_window(f: dict[str, Any]) -> None:
 
 def _equity_from_services(f: dict[str, Any]) -> None:
     # Funded from a Services entity in the right region, so only the group is wrong.
-    _equity_txn(f, "Ballard Yard")["from_entity"] = "NWSV"
+    _equity_txn(f, "Brightwater Commons")["from_entity"] = "NWSV"
 
 
 def _region_mismatch(f: dict[str, Any]) -> None:
     # Funded from the wrong region's capital entity; the group is still Capital.
-    _equity_txn(f, "Ballard Yard")["from_entity"] = "SWCP"
+    _equity_txn(f, "Brightwater Commons")["from_entity"] = "SWCP"
 
 
 def _services_from_capital(f: dict[str, Any]) -> None:
