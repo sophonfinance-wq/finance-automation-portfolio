@@ -6,10 +6,10 @@
   "family": "Consolidation Controls",
   "name": "Intercompany Reciprocity",
   "tagline": "Two sides, one balance",
-  "plain_summary": "A development group is a tree of entities, not one company: a holding parent over a services arm that carries the payroll and a capital arm that guarantees the construction loans, plus a predevelopment entity that carries land while it is entitled. Cash moves between them constantly, and every move lands two entries on two sets of books kept by two people. This engine reads the artifacts the consolidation process emits and runs twenty-three deterministic controls over them: is the entity tree itself sound, does every due-from equal the due-to that faces it, does each closing balance roll forward from the transactions that moved it, did the cash come from the protocol-correct entity and flow down the ownership chain, and does the guarantor meet its liquidity covenant. It never funds, never sweeps and never writes to a source artifact.",
+  "plain_summary": "A development group is a tree of entities, not one company: a holding parent over a services arm that carries the payroll and a capital arm that guarantees the construction loans, plus a predevelopment entity that carries land while it is entitled. Cash moves between them constantly, and every move lands two entries on two sets of books kept by two people. This engine reads the artifacts the consolidation process emits and runs twenty-three deterministic controls over them: is the entity tree itself sound, does every due-from equal the due-to that faces it, does each closing balance roll forward from the transactions that moved it, does the cash come from the protocol-correct entity and flow down the ownership chain, and does the guarantor meet its liquidity covenant. It never funds, never sweeps and never writes to a source artifact.",
   "rev": "2026-07-22",
   "status": "PRODUCTION",
-  "marketing_thesis": "The failure mode here lives between two entities, never inside one. Each company's own books foot; the break only surfaces at consolidation, when the intercompany balances are supposed to eliminate to zero and instead leave a residual nobody can source. By then the period is closed. A one-sided balance, a closing that quietly stopped tying to the ledger, an advance funded from the wrong arm of the group -- none of these move a single entity out of balance, which is exactly why a person closing one set of books cannot see them. The engine ships one planted defect per registered control, so the benchmark is a command rather than a claim.",
+  "marketing_thesis": "The failure mode here lives between two entities, never inside one. Each company's own books foot; the break only surfaces at consolidation, when the intercompany balances are supposed to eliminate to zero and instead leave a residual nobody can source. By then the period is closed. A one-sided balance, a closing that quietly stopped tying to the ledger, an advance funded from the wrong arm of the group -- none of these move a single entity out of balance, which is exactly why a person closing one set of books cannot see them. The engine ships a planted-defect file for every registered control, so the benchmark is a command rather than a claim.",
   "layers_intro": "Seven control families run in registry order over each period file. The first proves the others had something to read, and that every code they resolve exists.",
   "layers": [
     {
@@ -30,7 +30,7 @@
       "id": "rec",
       "label": "Reciprocity",
       "plain": "Checks the two sides of every intercompany balance agree, to the cent.",
-      "engineering": "Three controls, and the spine of the engine. Every due-from pair must be faced by a due-to pair and vice versa, or a receivable is an orphan the counterparty never acknowledged. Matched pairs must be equal to the cent -- two controllers book the two sides independently and the reconciliation exists precisely because they drift. And no entity may hold a balance against itself, which inflates both the receivable and payable totals by the same amount so the group still appears to eliminate. When every pair is reciprocal, the intercompany balances cancel on consolidation.",
+      "engineering": "Three controls, and the core of the engine. Every due-from pair must be faced by a due-to pair and vice versa, or a receivable is an orphan the counterparty never acknowledged. Matched pairs must be equal to the cent -- two controllers book the two sides independently and the reconciliation exists precisely because they drift. And no entity may hold a balance against itself, which inflates both the receivable and payable totals by the same amount so the group still appears to eliminate. When every pair is reciprocal, the intercompany balances cancel on consolidation.",
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
     },
     {
@@ -44,14 +44,14 @@
       "id": "fund",
       "label": "Funding Protocol",
       "plain": "Checks each dollar came from the entity the protocol says it must, in the right region and direction.",
-      "engineering": "Four controls drawn from the cash-flow protocol. Project equity must originate from a Capital-group entity, and from the capital entity of the project's own region -- cross-region funding puts a project on the wrong balance sheet. Services and predevelopment funding must come from the top parent, never the Capital group, which crosses the wall between the group that guarantees the loans and the group that carries the people. And an advance should flow down the ownership chain to a descendant; one running up the chain or across the tree is flagged, because it is more often a distribution or a cash sweep mislabelled.",
+      "engineering": "Four controls drawn from the cash-flow protocol. Project equity must originate from a Capital-group entity, and from the capital entity of the project's own region -- cross-region funding puts a project on the wrong balance sheet. Services and predevelopment funding must come from the top parent, never the Capital group, which crosses the wall between the group that guarantees the loans and the group that carries the people. And an advance should flow down the ownership chain to a descendant; one running up the chain or across the tree is flagged, because it is more often a distribution or a cash sweep mislabeled.",
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
     },
     {
       "id": "liq",
       "label": "Liquidity Covenants",
       "plain": "Checks the guarantor holds its covenant minimum and no entity is over- or under-funded.",
-      "engineering": "Three controls. The guarantor of the construction loans must hold at least its minimum liquidity -- falling under the floor is a covenant breach whether or not any single transaction looks wrong. No entity may report negative cash. And each entity with a protocol target band is flagged, not failed, when its cash sits outside the band: far below is undercapitalised for the cash it should carry, far above is cash the sweep should have pulled up.",
+      "engineering": "Three controls. The guarantor of the construction loans must hold at least its minimum liquidity -- falling under the floor is a covenant breach whether or not any single transaction looks wrong. No entity may report negative cash. And each entity with a protocol target band is flagged, not failed, when its cash sits outside the band: far below is undercapitalized for the cash it should carry, far above is cash the sweep should have pulled up.",
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
     },
     {
@@ -70,7 +70,7 @@
       "col": 0,
       "row": 2,
       "plain": "fictional intercompany period files enter the control registry",
-      "engineering": "generate_corpus writes one clean baseline plus one planted defect per registered control, 25 files in total. Only the entity tree, the protocol thresholds, the opening balances and the period transactions are stated; every closing balance, every due-to mirror and the ledger totals are derived.",
+      "engineering": "generate_corpus writes one clean baseline plus 24 planted-defect files, at least one for every registered control, 25 files in total. Only the entity tree, the protocol thresholds, the opening balances and the period transactions are stated; every closing balance, every due-to mirror and the ledger totals are derived.",
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/generate.py"
     },
     {
@@ -119,7 +119,7 @@
       "kind": "control",
       "col": 2,
       "row": 0,
-      "plain": "did the cash come from the right entity, region and direction",
+      "plain": "does the cash come from the right entity, region and direction",
       "engineering": "Four controls: equity from the Capital group, region-matched, Services and predevelopment funded from the top parent, and advances flowing down the chain.",
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/intercompany-automation/intercompany_engine/engine.py"
     },
@@ -204,7 +204,7 @@
       "label": "Period files",
       "value": "25",
       "source": "samples/*.json after python run.py",
-      "plain": "one clean baseline plus one planted defect per control"
+      "plain": "one clean baseline plus 24 planted-defect files, at least one per control"
     },
     {
       "label": "Artifacts read",
@@ -242,7 +242,7 @@
       "cmd": "python run.py",
       "operation": "generate the seeded fictional corpus, run all twenty-three controls, write both reports",
       "output": "per-file verdicts and every actionable finding, then the overall verdict",
-      "exit_code": "2 for the bundled corpus, which carries one planted defect per control by design",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
       "artifacts": "intercompany_report.md, intercompany_report.json, samples/"
     },
     {
@@ -298,7 +298,7 @@
     }
   ],
   "control_characteristics": {
-    "plain": "A clean result means the implemented mechanical controls found nothing between the two sides of the intercompany balances they were given. It is not an opinion on whether an advance was commercially wise, whether an entity is adequately capitalised for its business, or whether the group structure is the right one.",
+    "plain": "A clean result means the implemented mechanical controls found nothing between the two sides of the intercompany balances they were given. It is not an opinion on whether an advance was commercially wise, whether an entity is adequately capitalized for its business, or whether the group structure is the right one.",
     "verdict_map": [
       {
         "severity": "No findings above PASS",
@@ -330,7 +330,7 @@
     },
     "gate_policy": {
       "human_approval_required": true,
-      "demo_gate": "FAIL on the bundled corpus, by design -- it carries one planted defect per registered control",
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
       "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides."
     }
   },
