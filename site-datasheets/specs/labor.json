@@ -1,0 +1,413 @@
+{
+  "num": 20,
+  "slug": "labor",
+  "part_no": "SFS-E20-LAB",
+  "mnemonic": "LAB",
+  "family": "Labor Allocation",
+  "name": "Project Labor Charge",
+  "tagline": "Charged only when authorized",
+  "plain_summary": "An employee's time is not free to a project just because the company already pays the salary; the fully-burdened cost -- salary plus payroll taxes plus benefits -- has to be charged over, and only where a project manager authorized it in advance. Before a charge lands, the manager notifies the project accountant with a start date, a cost code, a budget confirmation, and the monthly charge -- a fixed amount or a percentage of the burdened cost. This engine reads the artifacts a monthly charge run emits -- the employee register, the project register, the authorizations, the charge ledger, the monthly invoices and the general-ledger positions -- and runs twenty-six deterministic controls over them. Does every monthly charge trace to a valid authorization, noticed in advance and on a real cost code with budget confirmed; does the amount re-derive from the authorization to the cent; is nothing charged before the authorized start; does cumulative project labor stay inside the budget parameter; and does each monthly invoice foot to its charges and tie the ledger. It re-derives every percentage charge with the same truncating-rate primitive that produced it, compares each figure with exact equality, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failures here do not look wrong in a monthly invoice run, which is exactly why they survive to the job that ends up underwater. A fixed amount was authorized and the ledger charges a different one, or a percentage charge drifts a cent from what the burdened cost resolves to -- the invoice still totals cleanly and the project simply carries the wrong number. A charge lands for a month before the authorized start, because the notice was late or the start slipped and the charge did not: the month is real, the amount is right, and the charge should not exist at all. A charge posts to a project or a cost code nobody named, and the money is on the wrong job. And the cumulative charge crosses the labor budget while every individual month looked ordinary. Footing into an invoice is necessary and not sufficient. The engine re-derives each charge where the authorization put it, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Eight control families run in registry order over each charge-run file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the charge-run file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of is not a readable date, since the charge run is measured to it. Every downstream rule returns nothing when its artifact is absent -- ctx.one hands back None rather than raising -- so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "emp",
+      "label": "Employee Register",
+      "plain": "Checks the employee register is sound: every employee is fully described, ids are unique, and the fully-burdened monthly cost is positive.",
+      "engineering": "Three controls. emp_required_fields proves every employee carries the id and name the authorization and charge read. emp_id_unique rejects a repeated id, which makes the burdened cost -- and every percentage charge derived from it -- ambiguous. emp_burdened_cost_positive proves the fully-burdened monthly cost is a positive integer of cents, because it is the base a percentage authorization multiplies and a zero or negative burden would silently zero out every percentage charge that rides on it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "prj",
+      "label": "Project Register",
+      "plain": "Checks the project register is sound: every project carries a code, a name, at least one cost code, and a positive labor budget.",
+      "engineering": "Three controls. prj_required_fields proves each project carries a code, a name and at least one cost code, so an authorization can name a code that exists on it. prj_code_unique rejects a duplicate code, which makes the labor budget the project carries ambiguous. prj_budget_positive proves the labor budget is a positive integer of cents -- the ceiling every cumulative-charge control is measured against, and a zero or negative one makes the overrun test meaningless.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "auth",
+      "label": "Charge Authorization",
+      "plain": "Checks each authorization is complete, names a real employee, project and cost code, was noticed in advance with budget confirmed, and resolves to the monthly charge its method implies.",
+      "engineering": "Eight controls and the advance-notice contract. auth_required_fields proves each authorization carries the fields every charge is checked against. auth_employee_exists and auth_project_exists resolve the named employee and project against their registers. auth_notice_before_start proves the notice date is on or before the authorized start -- the control the whole notify-in-advance rule exists to enforce, because a notice after the start is a charge authorized in arrears. auth_cost_code_on_project proves the authorized cost code exists on the project it charges, not merely somewhere. auth_budget_confirmed proves the authorization records that budget was confirmed before charging began. auth_method_valid proves the method is fixed or percent. auth_charge_derives re-derives the resolved monthly charge -- the truncating rate applied to the burdened cost for a percentage, the stated amount for a fixed -- and compares to the cent, so a percentage resolved on a stale burden, or simply keyed wrong, is caught before a single month is charged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "chg",
+      "label": "Monthly Charge",
+      "plain": "Checks every monthly charge traces to an authorization: on an authorized pair, on or after the start, at the resolved amount, on the named cost code, in a well-formed month.",
+      "engineering": "Five controls and the heart of the engine. chg_authorized compares each charge's employee-project pair against the authorizations on file, so labor cost cannot land on a project no project manager agreed to carry it. chg_not_before_start proves no charge falls in a month before its authorization's start month -- the other half of authorized ahead of time, charged only from then on. chg_amount_matches_auth is the control the engine exists for: each charge equals the authorization's resolved monthly charge to the cent, so a charge that foots perfectly into its invoice is still caught a cent adrift of what was authorized. chg_cost_code_matches_auth proves the charge posts to the cost code the authorization named, not merely a valid one on the same project. chg_period_valid proves the period is a well-formed YYYY-MM month, so it cannot hide from the invoice and start-date tests.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "bud",
+      "label": "Budget",
+      "plain": "Checks cumulative project labor stays inside the budget parameter -- a hard failure over the line, a review flag inside the warning band.",
+      "engineering": "Two controls, one hard and one tolerant. bud_within_budget FAILs a cumulative labor charge that exceeds the project's labor budget, because the job is being charged more labor than it was ever cleared to carry and every month that passes makes the correction larger. bud_near_budget FLAGs, for review rather than failure, a cumulative charge at or above the warning band the project itself carries in labor_budget_warn_bps -- the single tolerant control, and it reads its band from the register rather than inventing one, so the next authorization gets a human's eyes before the line is crossed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "inv",
+      "label": "Monthly Invoice",
+      "plain": "Checks each monthly invoice foots to the charges beneath it and that every charged project-period is invoiced exactly once.",
+      "engineering": "Two controls. inv_total_ties_charges proves each invoice total equals the sum of that project-period's charges at zero tolerance, because between the charges and the bill is an addition and an addition is where a labor charge stops being a ledger row and becomes a number on a bill. inv_matches_charge_periods compares the two sets both ways: a charged project-period with no invoice is labor cost that was never billed, an invoice with no charges bills a project for a month it did not work, and both foot cleanly in isolation, which is exactly why the two sets are compared.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "gl",
+      "label": "Ledger",
+      "plain": "Checks the general-ledger control totals tie: the labor-charge total re-sums the charges and the invoice-control total re-sums the invoices.",
+      "engineering": "Two controls that carry the charge run off the working paper and onto the books. gl_total_ties_ledger re-sums every charge line and proves the ledger's total_labor_charge_cents equals it to the cent. gl_invoice_total_ties re-sums every monthly invoice and proves the invoice-control account equals it. Between the working paper and the accounting is a posting, and a posting is where an allocation stops being arithmetic and becomes a number somebody reports on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Charge-Run Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional monthly charge-run files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus 27 planted-defect files, at least one for every registered control, 28 files in total. Only the employees, the projects and the authorizations are stated; every authorization's resolved monthly charge, the monthly charge lines, the invoice totals they foot into and the two general-ledger control totals are derived, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the charge-run file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "emp-control",
+      "label": "Employee Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the employee register sound",
+      "engineering": "Three controls: every employee fully described, ids unique, and a positive fully-burdened monthly cost -- the base a percentage charge multiplies.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "prj-control",
+      "label": "Project Register",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is the project register sound",
+      "engineering": "Three controls: every project has a code, a name and at least one cost code, codes are unique, and the labor budget is a positive ceiling.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "auth-control",
+      "label": "Charge Authorization",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is each authorization complete, in advance, and correctly resolved",
+      "engineering": "Eight controls: required fields, a known employee and project, notice on or before the start, a cost code that exists on the project, budget confirmed, a valid method, and a resolved monthly charge that re-derives to the cent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "chg-control",
+      "label": "Monthly Charge",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does every monthly charge match the authorization that permits it",
+      "engineering": "Five controls: an authorized employee-project pair, no charge before the start month, the amount equal to the resolved charge, the cost code the authorization named, and a well-formed period.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "bud-control",
+      "label": "Budget",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does cumulative labor stay inside the project's budget",
+      "engineering": "Two controls: a hard failure over the labor budget, and a review flag at or above the warning band the project itself carries.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "inv-control",
+      "label": "Monthly Invoice",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does each invoice foot to its charges",
+      "engineering": "Two controls: each invoice total equals the sum of that project-period's charges, and every charged project-period is invoiced exactly once.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "gl-control",
+      "label": "Ledger",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does the ledger tie the general ledger",
+      "engineering": "Two controls: the labor-charge total re-sums every charge line, and the invoice-control total re-sums every monthly invoice.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Employee, Project & Authorization Registers",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the registers and authorizations every charge control resolves against",
+      "engineering": "The employee register carries each employee's id, name and fully-burdened monthly cost; the project register carries each project's code, name, cost codes, labor budget and warning band; the authorizations carry which employee, to which project, on what cost code, from what start, by what method, and the resolved monthly charge. The authorization, charge and budget controls are all evaluated against these three authorities.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per charge-run file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/labor_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "charge-run files" },
+    { "from": "set-control", "to": "emp-control", "label": "complete" },
+    { "from": "set-control", "to": "prj-control", "label": "complete" },
+    { "from": "set-control", "to": "auth-control", "label": "complete" },
+    { "from": "set-control", "to": "chg-control", "label": "complete" },
+    { "from": "set-control", "to": "bud-control", "label": "complete" },
+    { "from": "set-control", "to": "inv-control", "label": "complete" },
+    { "from": "set-control", "to": "gl-control", "label": "complete" },
+    { "from": "emp-control", "to": "registers", "label": "resolves" },
+    { "from": "prj-control", "to": "registers", "label": "resolves" },
+    { "from": "auth-control", "to": "registers", "label": "resolves" },
+    { "from": "auth-control", "to": "chg-control", "label": "authorizes" },
+    { "from": "chg-control", "to": "bud-control", "label": "accumulates" },
+    { "from": "chg-control", "to": "inv-control", "label": "foots into" },
+    { "from": "chg-control", "to": "gl-control", "label": "posts to ledger" },
+    { "from": "inv-control", "to": "gl-control", "label": "invoice control" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "emp-control", "to": "report", "label": "findings" },
+    { "from": "prj-control", "to": "report", "label": "findings" },
+    { "from": "auth-control", "to": "report", "label": "findings" },
+    { "from": "chg-control", "to": "report", "label": "findings" },
+    { "from": "bud-control", "to": "report", "label": "findings" },
+    { "from": "inv-control", "to": "report", "label": "findings" },
+    { "from": "gl-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "382",
+      "source": "python -m pytest --collect-only -q -o addopts= (labor-charge-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "26",
+      "source": "len(labor_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every charge-run file"
+    },
+    {
+      "label": "Families",
+      "value": "8",
+      "source": "distinct rule-id prefixes in labor_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Charge-run files",
+      "value": "28",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus 27 planted-defect files, at least one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(labor_engine.model.DOC_TYPES)",
+      "plain": "employee register, project register, charge authorizations, charge ledger, monthly invoice, GL positions"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "labor_engine/tests/test_control_semantics.py::test_charge_matches_its_authorization_to_the_cent",
+      "plain": "one cent adrift of the authorization is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A contractor charges its own employees' labor to the projects they work on, and the cost is not free just because payroll already paid it -- the fully-burdened figure has to be charged over, and only where a project manager authorized it in advance. The manager notifies the project accountant ahead of time: a start date, a cost code, a confirmation the labor budget can carry it, and the monthly charge as a fixed amount or a percentage of the burdened cost. Four failures hide inside the monthly run, and none of them look wrong in a column of ordinary numbers. The charge outruns the authorization -- a fixed amount charged at a different figure, or a percentage a cent adrift of what the burden resolves to -- and the invoice still totals cleanly. The charge predates the authorized start, because the notice was late or the start slipped and the charge did not follow it; the month is real, the amount is right, and the charge should not exist at all. The charge lands on a project or a cost code nobody named, and the money is on the wrong job. And the cumulative charge crosses the project's labor budget while each individual month looked ordinary, so nobody notices until the job is underwater. None of these are judgment calls. They are equalities -- a charge against its re-derivation, a charge date against the authorized start, a pair against the authorizations on file, a cumulative total against the budget -- which a deterministic control settles better than a spreadsheet inherited by whoever holds it this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every charge-run file",
+      "narrative": "The CLI generates 28 fictional charge-run files -- one clean baseline and one carrying each of the 27 planted defects -- then runs all 26 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (labor-charge-automation/); labor_engine/tests/test_planted_defects.py::test_defect_fires_its_intended_rule"
+    },
+    {
+      "title": "A charge foots into its invoice but is a cent adrift of the authorization",
+      "narrative": "A boundary test moves the monthly charge for one employee-project-period a single cent either side of the resolved figure. chg_amount_matches_auth fires on the cent above and the cent below and stays silent exactly at it -- a charge can foot perfectly into its invoice and still be a cent adrift of the authorization that permits it, and this is the control that catches it.",
+      "source": "labor_engine/tests/test_control_semantics.py::test_charge_matches_its_authorization_to_the_cent"
+    },
+    {
+      "title": "Nothing is charged before the authorized start",
+      "narrative": "The whole process exists so the accountant is told in advance, and two boundary tests bracket it: a start anywhere within a charged month still allows that month's charge, while a start the following month makes chg_not_before_start fire; separately, a notice dated the day after the authorized start makes auth_notice_before_start fire, because that is a charge authorized in arrears.",
+      "source": "labor_engine/tests/test_control_semantics.py::test_a_charge_may_not_predate_the_start_month"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-six controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "labor_report.json, labor_report.md, samples/"
+    },
+    {
+      "cmd": "python -m labor_engine samples",
+      "operation": "analyze an existing folder of charge-run files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m labor_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "382 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "382",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (labor-charge-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "26",
+      "unit": "controls",
+      "source": "len(labor_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "27",
+      "unit": "defect files",
+      "source": "len(labor_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "labor_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the charge run they were given: every monthly charge traces to an authorization noticed in advance, re-derives from it to the cent, falls on or after the authorized start, stays inside the labor budget, and foots through its invoice to the general ledger. It is not an opinion on whether the burdened rate is the right rate, whether the project should carry the employee at all, or whether the authorized amount was a good deal.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean charge run into the documented invoice and job-cost review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a cumulative labor charge that has reached the project's warning band lands here before the next authorization is approved"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the charge does not post until the failing control is cleared -- an amount adrift of its authorization, a charge before the authorized start, a charge on an unauthorized project or cost code, an invoice that does not foot, a budget overrun, or a ledger that does not tie"
+      }
+    ],
+    "guarantees": [
+      "Read-only: charge-run files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band on any tie-out, and the single tolerant control reads its warning band from the project register rather than inventing one.",
+      "One derivation: a percentage charge is re-derived with the same truncating-rate primitive that produced it, so a mismatch is a real difference and never an artifact of two roundings.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a labor charge posts to a project."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a charge, moves money, or writes to a source artifact. It reports and stops.",
+      "source": "labor-charge-automation/README.md and labor_engine/tests/test_readonly_and_determinism.py::test_analysis_does_not_touch_the_source"
+    },
+    {
+      "statement": "It reads the six artifacts a monthly charge run emits. It does not connect to a payroll system, a project-accounting platform, a billing system or the general ledger.",
+      "source": "labor_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about whether a labor charge was authorized and computed correctly, not about how the employee was paid. Payroll owns the burdened rate; this engine owns the charge that rides on it.",
+      "source": "labor_engine/model.py module docstring (Scope: authorization and arithmetic, not payroll)"
+    },
+    {
+      "statement": "It proves a charge re-derives from its authorization and ties, not whether the authorized method -- a fixed amount or a percentage of burdened cost -- was the right one to choose. That judgment is a reviewer's.",
+      "source": "labor_engine/engine.py check_auth_charge_derives"
+    },
+    {
+      "statement": "All shipped data is fictional and the charge cycle is set in a fictional future. The corpus demonstrates the controls; it is not a record of any real contractor, employee, project, cost code, burdened cost or authorization.",
+      "source": "labor_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-labor.svg",
+    "motion": "../assets/engine-labor.svg",
+    "poster_alt": "Project Labor Charge diagram: at the top left an authorization card labelled AUTHORIZED IN ADVANCE carries a start date, a cost code, a budget-confirmed check and a method -- a fixed amount or a percentage of burdened cost; an arrow runs right through a monthly charge row that must re-derive from it to the cent, then into a monthly invoice tile that foots the charges beneath it, then onto two general-ledger control totals that tie; along the bottom a budget bar for the project fills toward a labor-budget ceiling with a warning band marked before the hard line, one cumulative charge sitting inside the band; a small note shows a charge dated before the authorized start being rejected; and a footer strip reading 26 controls, 382 tests, read-only, SFS-E20-LAB.",
+    "caption": "The Project Labor Charge engine tile states the identity that has to hold: every monthly charge traces to an authorization noticed in advance, re-derives from it to the cent, lands only on or after the authorized start and only where it was authorized, stays inside the project's labor budget, and foots through its invoice to the ledger.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/labor-charge-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/labor-charge-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Project Labor Charge (SFS-E20-LAB) datasheet -- twenty-six deterministic, read-only controls over a contractor's monthly run of charging employee labor to projects: the advance authorization a project manager gives before an employee is charged, the monthly charge that must re-derive from it to the cent, the authorized start no charge may predate, the project labor budget the cumulative charge must stay inside, and the invoice that foots to its charges and ties the general ledger. 382 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

@@ -1,0 +1,409 @@
+{
+  "num": 21,
+  "slug": "lien",
+  "part_no": "SFS-E21-LWV",
+  "mnemonic": "LWV",
+  "family": "Lien Waivers",
+  "name": "Lien Waiver Tracking",
+  "tagline": "No lien survives the payment",
+  "plain_summary": "A residential developer pays down a chain -- a general contractor, its subcontractors, their own lower-tier subs and material suppliers -- and every party in that chain can file a mechanics lien against the project. A lien waiver is the release that gives the lien up, and it has to march in lockstep with the money: the right kind of waiver, running through the right date, for the right amount, at every tier. This engine reads the artifacts the subcontractor payment cycle emits -- the contract register and its tier chain, the payment register, the waiver register, the lower-tier register, the exposure summary and the waiver log -- and runs twenty-five deterministic controls over them. Is every progress payment covered by a waiver that reaches its paid-through date, does every cleared payment carry an unconditional release and not merely the conditional signed at payment, did every required lower-tier party release far enough through a date re-derived from its parent's own payments, and does the unwaived exposure per project re-derive from the payments and the releases. It re-derives each tie-out where the money actually landed, compares each one with exact equality, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failures here do not look wrong while a waiver is on file, which is exactly why they survive to closing. A subcontractor signs a conditional waiver when it is paid -- conditional on the cheque clearing -- and owes an unconditional one once it has; the cheque clears, nobody chases the unconditional, and the folder looks complete because a waiver is on record while the lien right is still live. A waiver runs through a date, and a release that stops a month short of the work the payment covered leaves the last tranche unwaived with a waiver still sitting in the file. And the subcontractor's own release does not reach its rebar supplier, paid out of that same progress payment: a downstream lien survives the upstream release and attaches to the same title. Having a waiver on file is necessary and not sufficient. The engine proves the right kind of waiver reaches the right date at every tier, re-derives the unwaived exposure a title company would price the deal on, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Eight control families run in registry order over each portfolio file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the portfolio file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of is not a readable date, since every coverage and ageing test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "party",
+      "label": "Contract Register",
+      "plain": "Checks the contract register is sound and that the subcontractor tier chain holds together.",
+      "engineering": "Five controls. party_required_fields proves every subcontract carries the sub id, name and project the coverage tests read. party_unique_ids rejects a repeated sub id, because that id joins the register to every payment and waiver and a duplicate makes each join ambiguous. party_tier_valid rejects a tier that is not a whole number of one or greater, since tier drives the release chain. party_lower_tier_parent proves a lower-tier subcontract names a real parent sitting above it, so its release can be tied to the payment it was funded from. party_project_exists rejects a mistyped project name, which is not a loud error -- it silently drops the party out of the per-project exposure roll-up while the total still looks complete.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "pay",
+      "label": "Payment Register",
+      "plain": "Checks every progress payment is fully described, tied to a real sub, positive, and sensibly dated.",
+      "engineering": "Four controls. pay_required_fields proves each payment carries the id, sub, project, period, paid-through date, amount and cleared flag coverage reads. pay_sub_exists rejects a payment naming a sub not in the contract register. pay_amount_positive rejects a zero, negative or fractional-cent amount -- a payment is money already out the door, and a non-positive one is not a progress payment. pay_dates_sensible rejects a paid-through date that will not parse or that runs past the review date; the paid-through date is the far edge every downstream coverage test aims a waiver at, so an unreadable or future one makes those tests meaningless.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "wvr",
+      "label": "Waiver Register",
+      "plain": "Checks every waiver is well-formed, uniquely identified, of a known type, tied to a real payment, and for the amount of the payment it backs.",
+      "engineering": "Five controls. wvr_required_fields proves each waiver carries the fields coverage reads. wvr_unique_ids rejects a repeated waiver id, because a waiver must be uniquely identifiable to be tracked. wvr_type_valid rejects any type that is not conditional or unconditional -- the distinction is the whole point, and a third, unrecognised type cannot be reasoned about. wvr_references_payment rejects a waiver that releases against a payment not in the register, whose coverage can never be proven. wvr_amount_ties_payment proves a waiver releases exactly the amount of the payment it backs, to the cent: a waiver for less leaves the balance unwaived, a waiver for more releases a lien over money never paid, and only an exact tie proves the release still matches the money.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "cov",
+      "label": "Coverage",
+      "plain": "Checks every payment is covered to its paid-through date, that every cleared payment is released unconditionally, and that a stale conditional is flagged.",
+      "engineering": "Three controls and the core of the engine. cov_payment_covered is the first line of defence: it FAILs a payment with no waiver whose through-date reaches its paid-through date, money out the door with the lien right still live, and it asks only that some release reach the date. cov_cleared_unconditional is the control the engine exists for -- a conditional waiver releases only if the payment clears, and once it has, the unconditional release is owed; a cleared payment sitting behind a conditional alone looks covered and is not, and only this control can see that the conditional still reaches the date while the unconditional runs short. cov_stale_conditional is a deliberate review signal that flags an uncleared conditional aged past the point it should have been upgraded, reading its ageing band from the waiver register rather than inventing one.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "tier",
+      "label": "Lower Tiers",
+      "plain": "Checks every required lower-tier party released, far enough, through a correctly re-derived date.",
+      "engineering": "Three controls. tier_party_has_waiver FAILs a required lower-tier party with no readable waiver-through date on record -- the subcontractor's own release does not reach its rebar supplier, and a party that never released is a downstream lien that survived the upstream release. tier_waiver_covers proves a lower-tier release runs through its parent's paid-through date; a supplier that releases only through last month while its sub was paid through this month has left the most recent downstream work unwaived. tier_required_recomputes proves that required date is the parent tier-1 sub's own latest paid-through date rather than a figure typed in and trusted -- if the register carries a different one, the coverage test above is aimed at the wrong day.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "exp",
+      "label": "Exposure",
+      "plain": "Checks the unwaived exposure per project re-derives and that every paid project appears.",
+      "engineering": "Two controls. exp_recomputes rebuilds the unwaived exposure per project from the payments and the releases -- a payment counts against its project until an unconditional waiver stands behind it -- rather than trusting the carried-forward total a controller reports to the lender, and compares to the cent. exp_all_projects_present FAILs a project that carries payments but is absent from the exposure summary, because a dropped project reports no exposure at all, which reads as fully waived when it may be the opposite.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Waiver Log",
+      "plain": "Checks the waiver-log counts reconcile to the register.",
+      "engineering": "Two controls that reconcile the roll-up a reader quotes. rpt_waiver_counts_tie proves the total, conditional and unconditional waiver counts in the log match the register, a hard failure because these are the counts the log claims to summarise. rpt_covered_count_ties is a review-level reconciliation on the headline figure -- how many payments carry an unconditional release -- FLAGged rather than failed because it is the number a reader is most likely to quote and least likely to recompute.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Portfolio Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional waiver-book files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus 26 planted-defect files, at least one for every registered control, 27 files in total. Only the subcontracts, the payments and the lower-tier parties are stated; every waiver behind each payment, the date each party must release through, the unwaived exposure per project and the waiver-log counts are re-derived, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the portfolio file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "party-control",
+      "label": "Contract Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and does the tier chain hold",
+      "engineering": "Five controls: required fields, unique sub ids, a whole tier of one or greater, a lower-tier subcontract sitting under a real parent, and a project the portfolio actually runs.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "pay-control",
+      "label": "Payment Register",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is each progress payment fully and sensibly described",
+      "engineering": "Four controls: required fields, a sub that exists in the register, a positive integer-cent amount, and a paid-through date that parses and does not run past the review date.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "wvr-control",
+      "label": "Waiver Register",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is each waiver well-formed and tied to a real payment for the right amount",
+      "engineering": "Five controls: required fields, unique waiver ids, a known conditional-or-unconditional type, a payment that exists, and an amount that ties the payment to the cent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "cov-control",
+      "label": "Coverage",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is every payment covered and every cleared payment released unconditionally",
+      "engineering": "Three controls: some release reaches each payment's paid-through date, a cleared payment carries an unconditional release through that date, and a stale conditional past the register's ageing band is flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "tier-control",
+      "label": "Lower Tiers",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "did every required lower-tier party release, far enough, through the right date",
+      "engineering": "Three controls: every required party has released, its release reaches its parent's paid-through date, and that required date re-derives from the parent's own latest payment.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "exp-control",
+      "label": "Exposure",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the unwaived exposure per project re-derive",
+      "engineering": "Two controls: exposure re-derives to the cent as the payments no unconditional waiver yet stands behind, and every project carrying a payment appears in the summary.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Waiver Log",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the waiver-log counts reconcile to the register",
+      "engineering": "Two controls: the total, conditional and unconditional counts tie the register, and the count of unconditionally-released payments reconciles as a review flag.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Contract, Payment & Waiver Registers",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "the joined authorities every coverage rule resolves against",
+      "engineering": "The contract register carries each sub's id, tier, parent and project; the payment register carries each progress payment's sub, project, period, paid-through date, amount and cleared flag; the waiver register carries each release's type, through-date, amount and the payment it backs. Coverage, lower-tier and exposure are all evaluated against these three authorities, and the unwaived-exposure definition is shared so the engine and the generator cannot drift on what unwaived means.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per portfolio file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/lien_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "portfolio files" },
+    { "from": "set-control", "to": "party-control", "label": "complete" },
+    { "from": "set-control", "to": "pay-control", "label": "complete" },
+    { "from": "set-control", "to": "wvr-control", "label": "complete" },
+    { "from": "set-control", "to": "cov-control", "label": "complete" },
+    { "from": "set-control", "to": "tier-control", "label": "complete" },
+    { "from": "set-control", "to": "exp-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "party-control", "to": "registers", "label": "resolves" },
+    { "from": "pay-control", "to": "registers", "label": "resolves" },
+    { "from": "wvr-control", "to": "registers", "label": "resolves" },
+    { "from": "pay-control", "to": "cov-control", "label": "paid-through date" },
+    { "from": "wvr-control", "to": "cov-control", "label": "releases" },
+    { "from": "pay-control", "to": "tier-control", "label": "parent paid date" },
+    { "from": "wvr-control", "to": "exp-control", "label": "unconditional releases" },
+    { "from": "pay-control", "to": "exp-control", "label": "payments" },
+    { "from": "wvr-control", "to": "rpt-control", "label": "waiver counts" },
+    { "from": "cov-control", "to": "report", "label": "findings" },
+    { "from": "tier-control", "to": "report", "label": "findings" },
+    { "from": "exp-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "373",
+      "source": "python -m pytest --collect-only -q -o addopts= (lien-waiver-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "25",
+      "source": "len(lien_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every portfolio file"
+    },
+    {
+      "label": "Families",
+      "value": "8",
+      "source": "distinct rule-id prefixes in lien_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Portfolio files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus 26 planted-defect files, at least one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(lien_engine.model.DOC_TYPES)",
+      "plain": "contract register, payment register, waiver register, lower-tier register, exposure summary, waiver log"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "lien_engine/tests/test_control_semantics.py::test_exposure_recomputes_to_the_cent",
+      "plain": "one cent of unwaived exposure on the wrong project is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A residential developer pays down a tier chain -- a general contractor, its subcontractors, and their own lower-tier subs and material suppliers -- and every party in it can file a mechanics lien against the project. A lien waiver is the release, and it has to march in lockstep with the money: the right kind of waiver, running through the right date, for the right amount, at every tier. Three failures hide inside that, and none of them look wrong while a waiver is on file. A subcontractor signs a conditional waiver when it is paid, conditional on the cheque clearing, and owes an unconditional one once it has; the cheque clears, the unconditional is never chased, and the file looks complete because a waiver is on record while the lien right is still live. A waiver runs through a date, and a release that stops short of the work the payment covered leaves the last tranche unwaived, unnoticed because there is a waiver in the folder. And the subcontractor's own release does not reach its supplier, paid out of that same progress payment: a downstream lien survives the upstream release and attaches to the same title. None of these are judgment calls. They are equalities and coverage tests -- a release against the date it must reach, a waiver amount against the payment, an unwaived exposure against its re-derivation -- which a deterministic control settles better than a spreadsheet inherited by whoever holds it this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every portfolio file",
+      "narrative": "The CLI generates 27 fictional portfolio files -- one clean baseline and one carrying each of the 26 planted defects -- then runs all 25 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (lien-waiver-automation/); lien_engine/tests/test_planted_defects.py::test_defect_fires_its_intended_rule"
+    },
+    {
+      "title": "The conditional does not survive the cheque",
+      "narrative": "A test shortens the unconditional waiver on a cleared payment so it no longer reaches the paid-through date, while the conditional still does. cov_cleared_unconditional fires because a conditional release does not survive the cheque clearing, and cov_payment_covered stays silent because a release still reaches the date -- proof that a waiver on file is necessary but not sufficient.",
+      "source": "lien_engine/tests/test_control_semantics.py::test_a_cleared_payment_needs_an_unconditional_that_reaches_the_date"
+    },
+    {
+      "title": "The lower-tier release reaches the parent's paid date, to the day",
+      "narrative": "A test moves a lower-tier party's release one day either side of the date its parent was paid through. A day short, tier_waiver_covers fires because the most recent downstream work is unwaived; on the day or beyond, it stays silent -- the same one-day boundary that separates a covered supplier from a surviving downstream lien.",
+      "source": "lien_engine/tests/test_control_semantics.py::test_lower_tier_release_reaches_the_parents_paid_date"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-five controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "lien_report.json, lien_report.md, samples/"
+    },
+    {
+      "cmd": "python -m lien_engine samples",
+      "operation": "analyze an existing folder of portfolio files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m lien_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "373 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "373",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (lien-waiver-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "25",
+      "unit": "controls",
+      "source": "len(lien_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(lien_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "lien_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the waiver coverage they were given: every payment is covered to its paid-through date, every cleared payment carries an unconditional release, every required lower-tier party released far enough, and the unwaived exposure re-derives. It is not an opinion on whether a waiver is in the correct statutory form, whether the payment should have gone out, or whether the developer's lien-law strategy is sound.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean waiver book into the documented coverage and reporting review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a conditional waiver aged past its upgrade window and a covered-payment count that does not reconcile both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the waiver book is not treated as clear until the failing control is cleared -- a cleared payment with no unconditional release, a short or missing lower-tier waiver, or an exposure that does not re-derive"
+      }
+    ],
+    "guarantees": [
+      "Read-only: portfolio files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band on a waiver amount or an exposure figure, and the single tolerant control reads its ageing band from the waiver register rather than inventing one.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a waiver book is clear to close over."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never chases a waiver, releases a lien, moves a payment, or writes to a source artifact. It reports and stops.",
+      "source": "lien-waiver-automation/README.md and lien_engine/tests/test_readonly_and_determinism.py::test_analysis_does_not_touch_the_source"
+    },
+    {
+      "statement": "It reads the six artifacts the subcontractor payment cycle emits. It does not connect to a construction-accounting system, a bank, a lien-service portal or the general ledger.",
+      "source": "lien_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about whether a lien waiver stands behind every dollar already paid, not whether the payment should have gone out: invoice approval, three-way match and budget release gate a payment, and the accounts-payable engine owns that gate. Nothing here re-authorises a payment.",
+      "source": "lien_engine/engine.py module docstring (Scope)"
+    },
+    {
+      "statement": "It proves the right kind of waiver reaches the right date for the right amount at every tier; it does not opine on whether a waiver is in the statutory form a given jurisdiction requires or whether it is properly executed. That judgment is a reviewer's.",
+      "source": "lien_engine/engine.py check_cov_cleared_unconditional"
+    },
+    {
+      "statement": "All shipped data is fictional and the construction period is set in a fictional future. The corpus demonstrates the controls; it is not a record of any real developer, subcontractor, supplier, project, payment or waiver.",
+      "source": "lien_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-lien.svg",
+    "motion": "../assets/engine-lien.svg",
+    "poster_alt": "Lien Waiver Tracking diagram: at the top a payment chain runs from the developer down to a tier-1 subcontractor and on to a lower-tier supplier, each arrow labelled with a progress payment; beside each payment a pair of stacked cards shows the conditional waiver signed at payment and the unconditional waiver owed once the cheque clears, with a check mark only when both are present and reach the paid-through date; a date ruler underneath shows a waiver's through-date meeting the payment's paid-through date to the day, and one card stopping a month short is flagged; at the lower tier a supplier's release is checked against the date its parent was paid through; a per-project exposure meter on the right sums the payments no unconditional waiver yet stands behind; and a footer strip reads 25 controls, 373 tests, read-only, SFS-E21-LWV.",
+    "caption": "A concept view of the Lien Waiver Tracking engine: every progress payment down the subcontractor tier chain matched to a release of the right kind, through the right date, for the right amount, with the unwaived exposure per project re-derived so that no downstream lien survives to attach to the developer's title.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/lien-waiver-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/lien-waiver-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Lien Waiver Tracking (SFS-E21-LWV) datasheet -- twenty-five deterministic, read-only controls over a residential developer's mechanics-lien waiver coverage: the contract register and its tier chain, every progress payment covered to its paid-through date, every cleared payment released unconditionally and not merely conditionally, every required lower-tier party released through a date re-derived from its parent's own payments, and the unwaived exposure per project re-derived from the payments and the releases. 373 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **seventeen runnable systems, a
-72,364-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **twenty-one runnable systems, a
+73,805-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
 
 ---
 
@@ -105,7 +105,11 @@ Each is now encoded as a control in the portfolio:
 | Property tax controls — parcel completeness through platting and split, each jurisdiction's own statutory calendar and delinquency arithmetic, ownership traced through closing, and the accrual behind it (26 controls) | `property-tax-automation` | 389 |
 | Surety bond & collateral controls — bond-register continuity, cash-collateral recovery on release, premium stopped on released bonds, aggregate penal sum held to the indemnity limit (29 controls) | `surety-bond-automation` | 420 |
 | Insurance cost allocation — one master premium apportioned across every project's job cost to the residual cent, allocation basis tied to the data, builder's-risk term and value, and the carrier audit true-up returned to the deposit-bearers (24 controls) | `insurance-allocation-automation` | 364 |
-| **Total** | **17 systems** | **72,364** |
+| Insurance compliance controls — certificate-of-insurance completeness, coverage limits and additional-insured endorsements, policy-period and expiry tracking (22 controls) | `coi-compliance-automation` | 340 |
+| Expense & P-Card controls — receipt completeness, policy-limit and category enforcement, approval routing, duplicate and split-transaction detection (23 controls) | `expense-report-automation` | 346 |
+| Project labor charge controls — timecard-to-job-cost allocation, labor-rate and burden tie-out, cost-code completeness, period cutoff (26 controls) | `labor-charge-automation` | 382 |
+| Lien waiver tracking controls — conditional/unconditional waiver completeness by pay application, through-date tie-out, joint-check and supplier coverage (25 controls) | `lien-waiver-automation` | 373 |
+| **Total** | **21 systems** | **73,805** |
 
 ---
 
