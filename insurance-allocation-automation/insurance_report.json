@@ -1,0 +1,4226 @@
+{
+  "title": "Insurance cost allocation control report",
+  "overall_verdict": "FAIL",
+  "file_count": 26,
+  "rule_count": 24,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_no_duplicate",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_term_runs_forwards",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_no_coverage_gap",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_tower_has_no_gap",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "alloc_basis_declared",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "alloc_project_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "alloc_only_covered_projects",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "alloc_basis_data_complete",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "alloc_sums_to_premium",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "alloc_shares_recompute",
+      "severity": "FAIL",
+      "exceptions": 9
+    },
+    {
+      "rule": "alloc_no_negative",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "br_value_ties_budget",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "br_term_covers_construction",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "br_completed_project_removed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aud_true_up_sums",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aud_credits_deposit_bearers",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aud_uses_deposit_basis",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "aud_basis_restated",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "gl_allocation_ties_job_cost",
+      "severity": "FAIL",
+      "exceptions": 8
+    },
+    {
+      "rule": "gl_prepaid_amortisation_ties",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "gl_total_ties_programme",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_per_unit_recomputes",
+      "severity": "FLAG",
+      "exceptions": 8
+    }
+  ],
+  "files": [
+    {
+      "document": "allocation_short__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 3,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029",
+          "message": "policy GL-2029 allocates 233,500.00 against a premium of 234,000.00 (difference -500.00); the residual is on no project at all"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-101",
+          "message": "policy GL-2029 allocates 88,630.60 to PRJ-101; 234,000.00 weighted by hard_cost_cents derives 89,130.60 (difference -500.00)"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-101",
+          "message": "project PRJ-101 carries 237,690.00 of insurance in job cost; the allocation schedule gives it 237,190.00 (difference 500.00)"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-101/per_unit_cents",
+          "message": "project PRJ-101 reports 5,942.25 per unit; 237,190.00 across 40 units is 5,929.75"
+        }
+      ]
+    },
+    {
+      "document": "amount_not_integer__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 5,
+        "FLAG": 2
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "FAIL",
+          "location": "amount:allocation[GL-2029/PRJ-102].allocated_cents",
+          "message": "AMOUNT_INVALID: allocation[GL-2029/PRJ-102].allocated_cents must be integer cents, got 6685380.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "amount:allocation[GL-2029/PRJ-102].allocated_cents",
+          "message": "AMOUNT_INVALID: allocation[GL-2029/PRJ-102].allocated_cents must be integer cents, got 6685380.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "FAIL",
+          "location": "amount:allocation[GL-2029/PRJ-102].allocated_cents",
+          "message": "AMOUNT_INVALID: allocation[GL-2029/PRJ-102].allocated_cents must be integer cents, got 6685380.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "amount:allocation[GL-2029/PRJ-102].allocated_cents",
+          "message": "AMOUNT_INVALID: allocation[GL-2029/PRJ-102].allocated_cents must be integer cents, got 6685380.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-102",
+          "message": "project PRJ-102 carries 178,275.60 of insurance in job cost; the allocation schedule gives it 111,421.80 (difference 66,853.80)"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "amount:allocation[GL-2029/PRJ-102].allocated_cents",
+          "message": "AMOUNT_INVALID: allocation[GL-2029/PRJ-102].allocated_cents must be integer cents, got 6685380.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-102/per_unit_cents",
+          "message": "project PRJ-102 reports 5,942.52 per unit; 111,421.80 across 30 units is 3,714.06"
+        }
+      ]
+    },
+    {
+      "document": "audit_no_final_basis__Ardenne_Field_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "FLAG",
+          "location": "audit_register:AUDIT-2029/audits/AUD-2028/reallocation/PRJ-101/final_basis_cents",
+          "message": "audit AUD-2028 records no final exposure for PRJ-101; next year's deposit will be estimated from the figure this audit just corrected"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "audit_true_up_short__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "FAIL",
+          "location": "audit_register:AUDIT-2029/audits/AUD-2028/reallocation",
+          "message": "audit AUD-2028 reallocates 17,900.00 of a 18,000.00 true-up (difference -100.00)"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "FAIL",
+          "location": "audit_register:AUDIT-2029/audits/AUD-2028/reallocation/PRJ-101",
+          "message": "audit AUD-2028 credits 6,756.20 to PRJ-101; the deposit basis derives 6,856.20 (difference -100.00)"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "audit_wrong_basis__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "FAIL",
+          "location": "audit_register:AUDIT-2029/audits/AUD-2028/reallocation/PRJ-101",
+          "message": "audit AUD-2028 credits 6,806.20 to PRJ-101; the deposit basis derives 6,856.20 (difference -50.00)"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "FAIL",
+          "location": "audit_register:AUDIT-2029/audits/AUD-2028/reallocation/PRJ-102",
+          "message": "audit AUD-2028 credits 5,192.60 to PRJ-102; the deposit basis derives 5,142.60 (difference 50.00)"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "audit_wrong_bearers__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "FAIL",
+          "location": "audit_register:AUDIT-2029/audits/AUD-2028/reallocation/PRJ-777",
+          "message": "audit AUD-2028 on policy GL-2028 credits PRJ-777, which never bore the deposit premium on that policy"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "br_term_short__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/BR-2029/inception_date",
+          "message": "policy BR-2029 runs 2029-07-01 to 2030-07-01 while PRJ-101 builds 2029-08-01 to 2030-08-01; the construction is not fully bracketed"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "builders_value_adrift__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 3,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/BR-2029/PRJ-101",
+          "message": "policy BR-2029 allocates 32,004.00 to PRJ-101; 72,000.00 weighted by insured_value_cents derives 27,000.00 (difference 5,004.00)"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/BR-2029/PRJ-102",
+          "message": "policy BR-2029 allocates 23,997.60 to PRJ-102; 72,000.00 weighted by insured_value_cents derives 31,500.00 (difference -7,502.40)"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/BR-2029/PRJ-103",
+          "message": "policy BR-2029 allocates 15,998.40 to PRJ-103; 72,000.00 weighted by insured_value_cents derives 13,500.00 (difference 2,498.40)"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "FLAG",
+          "location": "project_register:PROJ-2029/projects/PRJ-102/insured_value_cents",
+          "message": "project PRJ-102 is insured for 5,600,000.00 against a hard-cost budget of 3,600,000.00 (tolerance 360,000.00)"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "completed_still_scheduled__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/BR-2029/covered_projects",
+          "message": "policy BR-2029 still schedules PRJ-101, which is complete; it is taking a share of a builder's risk premium for cover that no longer applies"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "coverage_gap__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/GL-2029/inception_date",
+          "message": "general_liability (primary) expires 2029-07-01 on GL-2028 and does not resume until 2029-09-01 on GL-2029, leaving 62 uninsured day(s)"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2029/prepaid_insurance_cents",
+          "message": "prepaid insurance carries 300,673.95; straight-line amortisation of the policy register to 2029-10-01 gives 336,486.46 (difference -35,812.51)"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_policy__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/GL-2029",
+          "message": "policy GL-2029 appears 2 times; its premium is counted 2 times in the programme total"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2029/prepaid_insurance_cents",
+          "message": "prepaid insurance carries 300,673.95; straight-line amortisation of the policy register to 2029-10-01 gives 475,693.12 (difference -175,019.17)"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2029/total_insurance_cost_cents",
+          "message": "the ledger carries 612,000.00 of programme cost; the policy register sums to 846,000.00 (difference -234,000.00)"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "inverted_term__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/XS-2029/inception_date",
+          "message": "policy XS-2029 incepts 2029-07-01 and expires 2029-06-01; the term does not run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2029/prepaid_insurance_cents",
+          "message": "prepaid insurance carries 300,673.95; straight-line amortisation of the policy register to 2029-10-01 gives 228,871.22 (difference 71,802.73)"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "jobcost_untied__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-101",
+          "message": "project PRJ-101 carries 237,940.00 of insurance in job cost; the allocation schedule gives it 237,690.00 (difference 250.00)"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "gl_positions:-",
+          "message": "gl_positions is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "missing_basis_value__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "FAIL",
+          "location": "project_register:PROJ-2029/projects/PRJ-104/hard_cost_cents",
+          "message": "project PRJ-104 is covered by policy GL-2028 on a hard_cost_cents basis but carries 0; it would drop out of the weighting and move every other project's share"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "FAIL",
+          "location": "project_register:PROJ-2029/projects/PRJ-104/hard_cost_cents",
+          "message": "project PRJ-104 is covered by policy GL-2029 on a hard_cost_cents basis but carries 0; it would drop out of the weighting and move every other project's share"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "FAIL",
+          "location": "project_register:PROJ-2029/projects/PRJ-104/hard_cost_cents",
+          "message": "project PRJ-104 is covered by policy XS-2029 on a hard_cost_cents basis but carries 0; it would drop out of the weighting and move every other project's share"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "missing_required_field__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/GL-2029",
+          "message": "policy GL-2029 is missing carrier"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "negative_share__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 5,
+        "FLAG": 2
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-101",
+          "message": "policy GL-2029 allocates 156,007.80 to PRJ-101; 234,000.00 weighted by hard_cost_cents derives 89,130.60 (difference 66,877.20)"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-104",
+          "message": "policy GL-2029 allocates -33,438.60 to PRJ-104; 234,000.00 weighted by hard_cost_cents derives 33,438.60 (difference -66,877.20)"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-104",
+          "message": "policy GL-2029 allocates -33,438.60 to PRJ-104; a negative share nets to the right total and leaves two wrong numbers behind it"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-101",
+          "message": "project PRJ-101 carries 237,690.00 of insurance in job cost; the allocation schedule gives it 304,567.20 (difference -66,877.20)"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-104",
+          "message": "project PRJ-104 carries 77,166.00 of insurance in job cost; the allocation schedule gives it 10,288.80 (difference 66,877.20)"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-101/per_unit_cents",
+          "message": "project PRJ-101 reports 5,942.25 per unit; 304,567.20 across 40 units is 7,614.18"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-104/per_unit_cents",
+          "message": "project PRJ-104 reports 4,287.00 per unit; 10,288.80 across 18 units is 571.60"
+        }
+      ]
+    },
+    {
+      "document": "per_unit_wrong__Stonecrest_Communities",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-101/per_unit_cents",
+          "message": "project PRJ-101 reports 5,952.25 per unit; 237,690.00 across 40 units is 5,942.25"
+        }
+      ]
+    },
+    {
+      "document": "prepaid_untied__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2029/prepaid_insurance_cents",
+          "message": "prepaid insurance carries 301,173.95; straight-line amortisation of the policy register to 2029-10-01 gives 300,673.95 (difference 500.00)"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "programme_total_untied__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2029/total_insurance_cost_cents",
+          "message": "the ledger carries 613,000.00 of programme cost; the policy register sums to 612,000.00 (difference 1,000.00)"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "share_misallocated__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 4,
+        "FLAG": 2
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-101",
+          "message": "policy GL-2029 allocates 88,830.60 to PRJ-101; 234,000.00 weighted by hard_cost_cents derives 89,130.60 (difference -300.00)"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-102",
+          "message": "policy GL-2029 allocates 67,153.80 to PRJ-102; 234,000.00 weighted by hard_cost_cents derives 66,853.80 (difference 300.00)"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-101",
+          "message": "project PRJ-101 carries 237,690.00 of insurance in job cost; the allocation schedule gives it 237,390.00 (difference 300.00)"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "FAIL",
+          "location": "job_cost_ledger:JOBCOST-2029/postings/PRJ-102",
+          "message": "project PRJ-102 carries 178,275.60 of insurance in job cost; the allocation schedule gives it 178,575.60 (difference -300.00)"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-101/per_unit_cents",
+          "message": "project PRJ-101 reports 5,942.25 per unit; 237,390.00 across 40 units is 5,934.75"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "FLAG",
+          "location": "allocation_summary:SUMMARY-2029/projects/PRJ-102/per_unit_cents",
+          "message": "project PRJ-102 reports 5,942.52 per unit; 178,575.60 across 30 units is 5,952.52"
+        }
+      ]
+    },
+    {
+      "document": "tower_gap__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/XS-2029/attachment_point_cents",
+          "message": "excess policy XS-2029 attaches at 6,000,000.00 over a primary limit of 5,000,000.00; 1,000,000.00 of the tower is uninsured"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "uncovered_project__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/BR-2029/PRJ-104",
+          "message": "policy BR-2029 allocates cost to PRJ-104, which is not on its covered schedule; that project is carrying cover it does not have"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "undeclared_basis__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "FAIL",
+          "location": "policy_register:POL-2029/policies/BR-2029/allocation_basis",
+          "message": "policy BR-2029 declares allocation basis 'square_feet', which is not one of ('hard_cost_cents', 'insured_value_cents', 'unit_count')"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every allocation names a project in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate exactly their schedule"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 4 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    },
+    {
+      "document": "unknown_project__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts present"
+        },
+        {
+          "rule": "pol_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies are fully described"
+        },
+        {
+          "rule": "pol_no_duplicate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy numbers are unique"
+        },
+        {
+          "rule": "pol_term_runs_forwards",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policy terms run forwards"
+        },
+        {
+          "rule": "pol_no_coverage_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 renewal handovers are seamless"
+        },
+        {
+          "rule": "pol_tower_has_no_gap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 excess layers attach without a gap"
+        },
+        {
+          "rule": "alloc_basis_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies declare a known basis"
+        },
+        {
+          "rule": "alloc_project_exists",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-777",
+          "message": "policy GL-2029 allocates to project 'PRJ-777', which is not in the register"
+        },
+        {
+          "rule": "alloc_only_covered_projects",
+          "status": "FAIL",
+          "location": "allocation_schedule:ALLOC-2029/allocations/GL-2029/PRJ-777",
+          "message": "policy GL-2029 allocates cost to PRJ-777, which is not on its covered schedule; that project is carrying cover it does not have"
+        },
+        {
+          "rule": "alloc_basis_data_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 covered projects carry their basis"
+        },
+        {
+          "rule": "alloc_sums_to_premium",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 policies allocate to the cent"
+        },
+        {
+          "rule": "alloc_shares_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 shares re-derive from their basis"
+        },
+        {
+          "rule": "alloc_no_negative",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 allocations are positive"
+        },
+        {
+          "rule": "br_value_ties_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 insured values track their budget"
+        },
+        {
+          "rule": "br_term_covers_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 builder's risk terms bracket construction"
+        },
+        {
+          "rule": "br_completed_project_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled projects are still building"
+        },
+        {
+          "rule": "aud_true_up_sums",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 audits reallocate to the cent"
+        },
+        {
+          "rule": "aud_credits_deposit_bearers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 true-ups return to the projects that paid"
+        },
+        {
+          "rule": "aud_uses_deposit_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 credits split on the deposit basis"
+        },
+        {
+          "rule": "aud_basis_restated",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 audit rows restate their basis"
+        },
+        {
+          "rule": "gl_allocation_ties_job_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "job cost ties the allocation across 5 projects"
+        },
+        {
+          "rule": "gl_prepaid_amortisation_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "unearned premium of 300,673.95 ties prepaid"
+        },
+        {
+          "rule": "gl_total_ties_programme",
+          "status": "PASS",
+          "location": "-",
+          "message": "programme cost of 612,000.00 ties the ledger"
+        },
+        {
+          "rule": "rpt_per_unit_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 per-unit metrics recompute"
+        }
+      ]
+    }
+  ]
+}

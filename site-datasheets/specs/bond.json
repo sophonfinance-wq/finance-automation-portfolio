@@ -1,0 +1,388 @@
+{
+  "num": 16,
+  "slug": "bond",
+  "part_no": "SFS-E16-BND",
+  "mnemonic": "BND",
+  "family": "Surety & Collateral",
+  "name": "Surety Bond & Collateral",
+  "tagline": "Cash that never comes back",
+  "plain_summary": "A developer cannot pull a permit, record a plat or hand a finished street over to a city without first posting surety, so the bonds accumulate: a statutory licence bond per operating entity, a performance bond per set of subdivision improvements, a maintenance bond that runs through the warranty period after the work is accepted, a street-use bond for the right of way. Each carries its own obligee, term and premium, and some are backed by the developer's own cash lodged as collateral. This engine reads the eight artifacts a bond programme emits and runs twenty-nine deterministic controls over them across the whole lifecycle: is the register itself sound, does each bond meet its statute and take the right obligee, is it in force and continuously renewed, was it released only after the obligation ended, did the collateral follow the bond and come back, did premium stop at release, and does aggregate exposure still fit inside the facility. It reads and reports; it never writes to a bond, a ledger or the surety.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The money at risk here is not owed, it is already paid, and that is exactly why nothing catches it. A bond does its job, the city accepts the work, the obligation ends, the register is marked released -- and unless someone writes to the surety the collateral simply stays where it is, raising no payable, ageing on no report, sitting in restricted cash indistinguishable from cash. The mirror failure is a bond nobody released: premium renews on an obligation that ended two years ago and its penal sum keeps consuming the facility's aggregate limit until the next project's bond is declined for capacity the programme does not need. Neither leaves a single account out of balance, which is why a person closing the books cannot see them; both are lifecycle breaks, visible only when the collateral, the premium and the exposure are each tested against the life of the bond rather than against themselves. The engine ships a planted-defect file for every registered control, so the benchmark is a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each programme file. The first proves the others had something to read; the rest walk the bond from the register it lives in to the exposure it consumes.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the programme file carries every artifact the controls below read, and that the stated review date is legible.",
+      "engineering": "set_complete is the one structural control and it runs first, deliberately owning the 'missing artifact' finding: it compares the doc_type values present against the eight artifacts in model.DOC_TYPES and FAILs when any is absent or duplicated, because a control that silently passes on absent input reports assurance it never performed. It also FAILs when the as_of review date carried in the file is not a readable date -- every expiry, ageing and horizon test downstream is made against that stated clock and never against date.today(), so a bad as_of would quietly poison all of them at once.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "reg",
+      "label": "Register",
+      "plain": "Checks the bond register itself is sound before anything is measured against it.",
+      "engineering": "Five controls. Bond numbers must be unique, because the number is the join key to the collateral and premium ledgers and a duplicate silently doubles or halves every total built on it depending which side of the join you stand. Every bond must carry the fields the rest of the programme reads -- a bond with no obligee cannot be released, there is nobody to ask. Status, bond type and obligee kind must be drawn from the declared vocabularies, since a status the engine does not know is not a harmless label: every lifecycle control keys off it, so an unknown value quietly exempts the bond from the controls that matter most. A term must run forwards, effective before expiration, or the expiry and amortisation maths is meaningless rather than merely wrong. And every bond must point at a project that exists in the register, because the project is where the obligation-end date comes from.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "stat",
+      "label": "Statutory Status",
+      "plain": "Checks each bond meets the statute it answers to and sits with the right obligee.",
+      "engineering": "Three controls. A statutory bond must be written for at least its jurisdiction's minimum penal sum -- a floor set by the state, not by the job or the surety, so a cent under it leaves the registration it supports defective rather than merely under-covered, and a boundary test pins equal as passing and one cent under as failing. The obligee kind must match the bond type: a licence bond is held by a state agency, a permit or plat bond by the permitting municipality, and a mismatch usually means the bond was filed with the wrong body and secures nothing (FLAG). And a permit- or plat-linked bond must record the permit number the release will one day be requested against, or the release stalls on evidence nobody kept (FLAG).",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "life",
+      "label": "Bond Lifecycle",
+      "plain": "Checks the bond is in force, continuously renewed, and released only when the obligation actually ended.",
+      "engineering": "Seven controls, and the reason the engine exists. A bond carried active must not have already expired past the review date, or the programme believes it holds cover it does not hold. Bonds inside the renewal horizon are surfaced as a decision rather than an error (FLAG). A renewal must pick up no later than the day after the prior term ended -- life_renewal_continuity FAILs on the unbonded gap between two bonds that each look perfectly valid alone, the exact window a claim would land in, and a boundary test fixes the day-after start as continuous and one day later as a break. A released bond must carry the obligee's release date and release reference. It must not be released before the obligation it secures ended -- warranty end for a maintenance bond, acceptance for a performance or plat bond. A maintenance bond must not incept before the work was accepted (FLAG). And the headline: life_no_release_while_collateral_outstanding FAILs a released bond that still holds collateral with nothing recorded as chasing it -- a refund genuinely in flight is fine and says so, silence is the failure.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "coll",
+      "label": "Collateral",
+      "plain": "Checks the collateral followed the bond in three directions at once, and came back.",
+      "engineering": "Six controls, with the spine of the engine tied three ways at zero tolerance. Posted collateral can never exceed the penal sum it supports -- it may equal the penal sum but not pass it by a cent, which is almost always the same digits shifted one place left. The register's stated outstanding balance must equal postings less refunds in the ledger, two independent records of the same money compared with no rounding band. The total outstanding must equal the restricted-cash balance on the general ledger, the leg that makes the other two matter, because the register can agree with its own ledger and still disagree with the balance sheet that gets audited. Cumulative refunds may never exceed cumulative postings, or another bond's recovery has quietly been consumed. Collateral still outstanding after release is aged into bands so a stale refund escalates rather than sitting at one severity forever (FLAG), and an outstanding balance with no recorded custodian is flagged, because recovery starts with knowing who holds the money (FLAG).",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "prem",
+      "label": "Premium",
+      "plain": "Checks premium is rated, amortised, and stopped when the bond was released.",
+      "engineering": "Five controls. prem_rate_within_schedule is the single deliberately tolerant control in the engine -- it compares premium charged to the rate card applied to the penal sum, floored at the surety's minimum premium, but reads its tolerance band from the schedule rather than inventing one, so it is a FLAG, and a boundary test pins the tolerance edge as passing and one cent past it as flagging. No premium period may begin after the bond was released, because renewal is usually automatic and release is usually manual, so the default outcome for a forgotten discharge is that it keeps billing a charge small enough to clear approval unquestioned. Unamortised prepaid premium is re-derived straight-line across the days of each term to the as_of date and tied to the balance sheet at zero tolerance rather than trusting the number carried forward. A return premium must cite the rider that reduced the penal sum (FLAG). And every ledger entry type must be in vocabulary, since both ledgers are summed by type and an unknown type is silently excluded from every total built on it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "expo",
+      "label": "Aggregate Exposure",
+      "plain": "Checks aggregate exposure still fits inside the facility, and the summary foots.",
+      "engineering": "Two controls. Active penal sums together must fit inside the indemnity agreement's aggregate limit -- exposure is consumed by every bond still carried active, including the ones whose obligations ended years ago, so a programme that does not release cleanly runs out of capacity long before it runs out of credit, and a boundary test allows exposure to reach the limit but not pass it. And the exposure-by-obligee summary that gets reported to the surety and to management must foot to the active register it was drawn from, or the capacity conversation is being had over a number nobody can source.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Programme Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional bond programme files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus 30 planted-defect files, at least one for every registered control, 31 files in total. Only the facility, the rate card, the statutory minimums, the projects, the bonds and the two ledgers are stated; every premium, outstanding-collateral, restricted-cash and prepaid figure the engine later checks as a tie-out is derived by the generator from those inputs, so the relationships it tests are the same ones that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the programme file complete, and is the review date legible",
+      "engineering": "One control, run first. FAILs a file missing or duplicating any of the eight artifacts, or carrying an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "reg-control",
+      "label": "Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register itself sound",
+      "engineering": "Five controls: unique bond numbers, required fields present, status, type and obligee kind in vocabulary, terms running forwards, and every bond mapped to a real project.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "stat-control",
+      "label": "Statutory Status",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does each bond meet its statute and take the right obligee",
+      "engineering": "Three controls over the statutory minimum penal sum, the obligee kind matching the bond type, and a permit reference on permit-linked bonds.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "life-control",
+      "label": "Bond Lifecycle",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is the bond in force, renewed, and released only when the obligation ended",
+      "engineering": "Seven controls over expiry, the renewal horizon, continuity of cover, release evidence, release timing against the obligation end, maintenance inception, and the headline collateral-outstanding-on-a-released-bond control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "coll-control",
+      "label": "Collateral",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "did the collateral follow the bond, and did it come back",
+      "engineering": "Six controls tying collateral to the penal sum, to its own ledger and to restricted cash at zero tolerance, plus refund-over-posted, ageing and custodian checks.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "prem-control",
+      "label": "Premium",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is the premium rated, amortised and stopped at release",
+      "engineering": "Five controls: the one tolerant rate-card band, no premium after release, straight-line prepaid amortisation tied to the GL, a rider on every return premium, and entry types in vocabulary.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "expo-control",
+      "label": "Aggregate Exposure",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does exposure fit the facility, and does the summary foot",
+      "engineering": "Two controls: active penal sums inside the aggregate limit, and the exposure-by-obligee summary footing to the register it was drawn from.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/engine.py"
+    },
+    {
+      "id": "register",
+      "label": "Bond Register",
+      "kind": "data",
+      "col": 2,
+      "row": 3,
+      "plain": "the register every rule resolves bond numbers against",
+      "engineering": "Each bond's number, project, type, obligee, status, term, penal sum and stated collateral. The bond number is the join key to both ledgers, so the three-way tie between register, ledger and general ledger is evaluated against this one authority.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per programme file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/bond_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "programme files" },
+    { "from": "set-control", "to": "reg-control", "label": "complete" },
+    { "from": "set-control", "to": "stat-control", "label": "complete" },
+    { "from": "set-control", "to": "life-control", "label": "complete" },
+    { "from": "set-control", "to": "coll-control", "label": "complete" },
+    { "from": "set-control", "to": "prem-control", "label": "complete" },
+    { "from": "set-control", "to": "expo-control", "label": "complete" },
+    { "from": "reg-control", "to": "register", "label": "resolves" },
+    { "from": "stat-control", "to": "register", "label": "resolves" },
+    { "from": "coll-control", "to": "register", "label": "resolves" },
+    { "from": "life-control", "to": "coll-control", "label": "collateral" },
+    { "from": "reg-control", "to": "report", "label": "findings" },
+    { "from": "stat-control", "to": "report", "label": "findings" },
+    { "from": "life-control", "to": "report", "label": "findings" },
+    { "from": "coll-control", "to": "report", "label": "findings" },
+    { "from": "prem-control", "to": "report", "label": "findings" },
+    { "from": "expo-control", "to": "report", "label": "findings" },
+    { "from": "register", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "420",
+      "source": "python -m pytest bond_engine/tests -q (surety-bond-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "29",
+      "source": "len(bond_engine.engine.REGISTRY)",
+      "plain": "independent lifecycle rules run over every programme file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in bond_engine.engine.REGISTRY",
+      "plain": "set, reg, stat, life, coll, prem, expo -- each answering one question"
+    },
+    {
+      "label": "Programme files",
+      "value": "31",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus 30 planted-defect files, at least one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(bond_engine.model.DOC_TYPES)",
+      "plain": "facility, statutory table, rate card, projects, bond register, collateral ledger, premium ledger, GL positions"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "bond_engine/tests/test_control_semantics.py",
+      "plain": "one cent is a break, not a rounding band -- except the one premium control that reads its band from the rate card"
+    }
+  ],
+  "problem_statement": "A residential developer cannot pull a permit, record a plat or hand a finished street over to a city without posting surety, so the bonds accumulate into a portfolio of obligations with staggered terms and different obligees, and the cash attached to them moves in two directions: premium out, collateral out, and then -- if anyone remembers to ask -- collateral back. Nothing in the ordinary accounting cycle notices when that last step does not happen. A bond does its job, the work is accepted, the obligation ends and the register is marked released, and unless someone writes to the surety the collateral simply stays where it is: it raises no payable, ages on no report, and sits in restricted cash indistinguishable from cash until the register is reconciled to the restricted-cash ledger and someone finds a released bond still carrying a balance. The mirror failure is a bond nobody released, still consuming the facility's aggregate limit and still renewing premium on an obligation that ended two years ago, until the next project's bond is declined for capacity the programme does not actually need. None of these move a single account out of balance, which is exactly why a person closing the books cannot see them -- they are lifecycle breaks, and a lifecycle break is only visible when the collateral, the premium and the exposure are each tested against the life of the bond rather than against themselves. These are not judgment calls; they are equalities and date comparisons -- a release date against an obligation end, an outstanding balance against zero, a stated total against restricted cash -- which is what a deterministic control settles better than a reviewer working one bond at a time.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every programme file",
+      "narrative": "The CLI regenerates 31 fictional programme files -- one clean baseline and one carrying each planted defect -- then runs all 29 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (surety-bond-automation/); output re-run on demand"
+    },
+    {
+      "title": "A released bond with collateral and nobody chasing it",
+      "narrative": "A test drops a single refund entry so a released bond keeps an outstanding collateral balance with no refund recorded as in flight. life_no_release_while_collateral_outstanding fires -- the cash sits in restricted cash looking exactly like cash -- while the same defect with a refund status recorded stays silent, because the control asks for a chase, not for the money to already be back.",
+      "source": "bond_engine/tests/test_control_semantics.py::test_released_bond_with_outstanding_collateral_and_no_status_fails"
+    },
+    {
+      "title": "The unbonded window between two valid renewals",
+      "narrative": "A boundary test slides a renewal's effective date across the day after the prior term expired. Starting the same day or the next day passes as continuous cover; one clear day later fails, because that gap -- invisible afterwards, since both bonds look valid on their own -- is exactly the window in which the obligation was unbonded.",
+      "source": "bond_engine/tests/test_control_semantics.py::test_renewal_continuity_allows_only_a_seamless_handover"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-nine controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "bond_report.md, bond_report.json, samples/"
+    },
+    {
+      "cmd": "python -m bond_engine samples",
+      "operation": "analyze an existing folder of programme files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m bond_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "420 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "420",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (surety-bond-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "29",
+      "unit": "controls",
+      "source": "len(bond_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "30",
+      "unit": "defect files",
+      "source": "len(bond_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "bond_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the mechanical lifecycle controls found nothing between a bond and the collateral, premium and exposure that have to follow it. It is not an opinion on whether a bond should have been written, whether the collateral posted was commercially sensible, or whether the programme is the right size for the business.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean programme into the documented bond and collateral review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a premium off the rate card, a bond nearing expiry, a stale refund ageing, and a return premium with no rider all land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the programme does not go to review until the failing control is cleared -- collateral outstanding on a released bond, a renewal gap, exposure over the facility, or a register that does not tie to restricted cash"
+      }
+    ],
+    "guarantees": [
+      "Read-only: programme files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact equality; the only tolerance is prem_rate_within_schedule, which reads its band from the rate schedule rather than inventing one.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced.",
+      "Deterministic and byte-stable: every date test is made against the as_of carried in the file, never the system clock, so the same inputs produce the same findings in the same order with no timestamps or absolute paths.",
+      "Absent evidence is never a passing control; a missing artifact fails set_complete rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether to write to the surety, release a bond or recover the collateral."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never writes to a bond, a ledger, the surety or the general ledger. It reports and stops.",
+      "source": "surety-bond-automation/README.md and bond_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the eight artifacts a bond programme emits. It does not connect to the surety's system, a bank, or the general ledger it ties out against.",
+      "source": "bond_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It tests that a bond meets its statute and that its collateral, premium and exposure follow its lifecycle, not whether the bond should have been written or the collateral was commercially reasonable. That judgment is a reviewer's.",
+      "source": "bond_engine/engine.py check_stat_licence_minimum"
+    },
+    {
+      "statement": "One control is deliberately tolerant and says so: premium against the rate card is a reasonableness band read from the schedule, a FLAG rather than a FAIL. Everything else compares at zero tolerance.",
+      "source": "bond_engine/engine.py check_prem_rate_within_schedule"
+    },
+    {
+      "statement": "All shipped data is fictional and the review period is set in a fictional future. The corpus demonstrates the controls; it is not a record of any real developer, surety, state, city, project, bond or amount.",
+      "source": "bond_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-bond.svg",
+    "motion": "../assets/engine-bond.svg",
+    "poster_alt": "Surety Bond & Collateral diagram: on the left a bond register of fictional bonds -- a licence bond held by a state agency, and performance, maintenance and permit bonds held by a municipality -- each with an obligee, a term and a penal sum, with one bond marked released; a curved arrow labelled collateral runs from the released bond down into a restricted-cash box that stays full while nothing chases it, captioned 'released, obligation ended, cash still here'; on the right a three-way tie-out joins the register, the collateral ledger (posted less refunded) and the restricted-cash balance with equals signs, showing the balance that has to hold at zero tolerance; and a footer strip reads 29 controls, 420 tests, read-only, SFS-E16-BND.",
+    "caption": "The Surety Bond & Collateral engine tile states the quiet failure it exists to catch: a bond released and its obligation ended, yet the developer's own cash still sitting with the surety in restricted cash with nothing recorded as chasing it back.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/surety-bond-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/surety-bond-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Surety Bond & Collateral (SFS-E16-BND) datasheet -- twenty-nine deterministic, read-only controls over a residential developer's surety bond programme: the register's integrity, each bond's statute and obligee, its lifecycle from in-force through continuous renewal to a release that comes only after the obligation ended, the collateral tied three ways to the penal sum, its own ledger and restricted cash, premium rated and stopped at release, and aggregate exposure held inside the facility. The control the programme exists for FAILs a released bond whose collateral is still with the surety with nothing chasing it. 420 tests, 31 seeded fictional programme files, integer cents at zero tolerance."
+  }
+}

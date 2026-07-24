@@ -51,6 +51,9 @@ ROSTER: dict[str, dict] = {
     "upgrade":     {"num": 12, "part_no": "SFS-E12-BUP", "mnemonic": "BUP", "family": "Revenue Recognition",     "name": "Buyer Upgrades",              "engine_dir": "buyer-upgrade-automation"},
     "warranty":    {"num": 13, "part_no": "SFS-E13-WRC", "mnemonic": "WRC", "family": "Insurance Claims",        "name": "Warranty Reimbursement",      "engine_dir": "warranty-reimbursement-automation"},
     "intercompany":{"num": 14, "part_no": "SFS-E14-ICO", "mnemonic": "ICO", "family": "Consolidation Controls",  "name": "Intercompany Reciprocity",    "engine_dir": "intercompany-automation"},
+    "proptax":     {"num": 15, "part_no": "SFS-E15-PPT", "mnemonic": "PPT", "family": "Property Tax Controls",   "name": "Property Tax",                "engine_dir": "property-tax-automation"},
+    "bond":        {"num": 16, "part_no": "SFS-E16-BND", "mnemonic": "BND", "family": "Surety & Collateral",     "name": "Surety Bond & Collateral",    "engine_dir": "surety-bond-automation"},
+    "insurance":   {"num": 17, "part_no": "SFS-E17-INS", "mnemonic": "INS", "family": "Insurance Allocation",    "name": "Insurance Cost Allocation",   "engine_dir": "insurance-allocation-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"
