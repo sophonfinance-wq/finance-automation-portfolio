@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **twenty-one runnable systems, a
-73,805-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **twenty-six runnable systems, a
+75,794-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
 
 ---
 
@@ -109,7 +109,12 @@ Each is now encoded as a control in the portfolio:
 | Expense & P-Card controls — receipt completeness, policy-limit and category enforcement, approval routing, duplicate and split-transaction detection (23 controls) | `expense-report-automation` | 346 |
 | Project labor charge controls — timecard-to-job-cost allocation, labor-rate and burden tie-out, cost-code completeness, period cutoff (26 controls) | `labor-charge-automation` | 382 |
 | Lien waiver tracking controls — conditional/unconditional waiver completeness by pay application, through-date tie-out, joint-check and supplier coverage (25 controls) | `lien-waiver-automation` | 373 |
-| **Total** | **21 systems** | **73,805** |
+| Equity waterfall & JV promote — preferred-return accrual, capital-account roll-forward, tier sequencing and pari-passu splits, hurdle-IRR re-solution, promote/carry split and dilution recompute, each distributed dollar re-derived from the executed operating agreement | `equity-waterfall-automation` | 449 |
+| Project proforma integrity — source-and-use balance, cost/budget equalities, interest-reserve adequacy, the profit→waterfall→distribution tie-out chain, margin/return re-derivation and reporting-calendar completeness across every quarterly proforma | `proforma-integrity-automation` | 381 |
+| Gross-receipts & excise tax — each jurisdiction's tax re-derived from the GL revenue pull times the in-force classification rate, tied to the filed worksheet, with deductions, thresholds, rate-effective dates and filing-calendar completeness | `gross-receipts-tax-automation` | 400 |
+| Filing obligation calendar — every entity × jurisdiction obligation proved filed or validly extended before its statutory due date, fixed-amount vouchers re-derived, and the status register tied to filed evidence with nothing missing or orphaned | `filing-calendar-automation` | 369 |
+| Energy-efficient home credit (§45L) — every claimed dwelling unit gated on close-of-escrow date and RESNET/HERS certification, multiplied by the dated statutory per-unit amount, rolled up per project/region/fiscal year with net-benefit and partner allocation and a full cross-artifact tie-out | `energy-credit-automation` | 390 |
+| **Total** | **26 systems** | **75,794** |
 
 ---
 

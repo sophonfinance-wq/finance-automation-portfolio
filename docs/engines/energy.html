@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Energy-Efficient Home Credit — Sophon Finance Systems</title>
+<meta name="description" content="Energy-Efficient Home Credit (SFS-E26-EEH) datasheet -- twenty-six deterministic, read-only controls over a homebuilder&#x27;s IRC §45L credit: the per-unit register and each claimed dwelling gated on its close-of-escrow date falling in the fiscal-year window and on or before the statutory sunset, certified by a named RESNET/HERS rater and claimed once, with the gross credit re-derived as units times the dated statutory per-unit amount, and the report tie-out, the roll-up totals, the roll-forward identity, the net-benefit derivation and the partner allocation all recomputed from the unit register beneath them. 390 tests, seeded fictional data, a planted-defect file for every control.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:30px;height:30px;flex:none}
+.brand-word{font-weight:600;font-size:18px;letter-spacing:.2px;white-space:nowrap;line-height:1.15}
+.brand-word span{font-weight:300}
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}.brand-tag{font-size:8.5px;letter-spacing:.8px}}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.schem-wrap{overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px;overflow-wrap:anywhere}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}.schem-wrap svg.schem{width:auto;max-width:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+<main class="wrap">
+<section class="masthead">
+  <p class="kicker">ENGINE 26</p>
+  <p class="partline">SFS-E26-EEH &middot; ENERGY TAX CREDIT &middot; REV 2026-07-24 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Energy-Efficient Home Credit</strong></h1>
+  <p class="tag">Did the unit close in the period, and was it certified?</p>
+  <p class="intro">A homebuilder earns the IRC §45L credit one dwelling unit at a time, and it has to prove, unit by unit, that each claimed unit clears two gates at once -- it closed inside the fiscal-year window being filed, and it holds an energy certificate from a certified RESNET/HERS rater -- and then that every dollar stacked on top of that count was recomputed, not typed. The gross credit is nothing more than the number of qualifying units times the dated statutory per-unit amount, and profit addback, tax effect, net benefit and partner split are each arithmetic on that product. This engine reads the six artifacts the credit record carries -- the per-unit register, the credit worksheet, the units-by-period roll-forward, the partner allocation, the closings schedule and the final certification report -- and runs twenty-six deterministic controls over them. Is the file complete and are the period and sunset dates readable, is the unit register sound and every unit tied to a project the worksheet carries, did every claimed unit close in the period and on or before the statutory sunset, is every claimed unit certified and its certificate signed by a named rater, is any unit claimed again that a prior filing already took, does each unit and each project&#x27;s gross credit re-derive as units times the dated rate, does the report&#x27;s certified units times rate tie its total credit, do the project counts tie the register and the region subtotals and grand totals foot, does the roll-forward identity hold, do the addback, tax effect and net benefit re-derive, do the partner shares sum to the net benefit and re-derive from ownership, and do the report, worksheet and closings schedule reconcile on one credited-unit number. It compares every credit figure with exact ==, treats the sunset gate as &lt;= so a unit closing on the sunset date is still eligible, and never writes to a source artifact.</p>
+  <p class="thesis">The §45L credit looks like the safest number on a footed worksheet: units times two thousand dollars, then a few lines of tax arithmetic beneath it. That is exactly why it drifts. None of the ways it goes wrong look wrong in a column of dwelling counts. A unit is claimed that closed a year before the fiscal window opened, or after the statutory sunset that sits inside the window, or was never certified by a rater -- the computation still foots and the units underneath it do not qualify. The same dwelling is claimed in two successive period filings, each internally consistent, the overlap visible only across them. And the rollup -- gross credit, the report&#x27;s certified-unit tie-out, the roll-forward identity, the net-benefit derivation, the partner allocation -- is stated on a number nobody recomputed from the unit register beneath it. The engine rebuilds every credit figure from the register and the dated statutory rate and compares with exact ==, checks the two eligibility gates as genuinely independent because the sunset falls mid-period, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A unit claimed out of period, past the sunset, or uncertified is invisible until an examiner recomputes the credit the builder already took.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 820" role="img" aria-label="Exploded functional block stack: Structural Precondition, Unit Register, Eligibility Gating, Certification, No Double-Count, Statutory Rate, Report Tie-Out, Roll-Up Tie-Out, Roll-Forward, Net-Benefit Derivation, Partner Allocation, Cross-Artifact Reconciliation over seeded fictional data">
+  <g class="die-layer" data-layer="set"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Structural Precondition</text></g>
+  <g class="die-layer" data-layer="unit"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Unit Register</text></g>
+  <g class="die-layer" data-layer="elig"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Eligibility Gating</text></g>
+  <g class="die-layer" data-layer="cert"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Certification</text></g>
+  <g class="die-layer" data-layer="dup"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">No Double-Count</text></g>
+  <g class="die-layer" data-layer="rate"><polygon points="80,320 400,320 360,342 40,342" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,342 360,342 360,388 40,388" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="369" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Statutory Rate</text></g>
+  <g class="die-layer" data-layer="rpt"><polygon points="80,380 400,380 360,402 40,402" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,402 360,402 360,448 40,448" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="429" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Report Tie-Out</text></g>
+  <g class="die-layer" data-layer="roll"><polygon points="80,440 400,440 360,462 40,462" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,462 360,462 360,508 40,508" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="489" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Roll-Up Tie-Out</text></g>
+  <g class="die-layer" data-layer="fwd"><polygon points="80,500 400,500 360,522 40,522" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,522 360,522 360,568 40,568" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="549" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Roll-Forward</text></g>
+  <g class="die-layer" data-layer="net"><polygon points="80,560 400,560 360,582 40,582" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,582 360,582 360,628 40,628" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="609" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Net-Benefit Derivation</text></g>
+  <g class="die-layer" data-layer="alloc"><polygon points="80,620 400,620 360,642 40,642" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,642 360,642 360,688 40,688" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="669" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Partner Allocation</text></g>
+  <g class="die-layer" data-layer="recon"><polygon points="80,680 400,680 360,702 40,702" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,702 360,702 360,748 40,748" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="729" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Cross-Artifact Reconciliation</text></g>
+  <text x="40" y="810" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="set" data-plain="Checks the credit file carries every artifact the controls below read, exactly once, and that the period window and sunset date are legible." data-eng="One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable or inverted period window and an unreadable sunset date, since every close-of-escrow test is measured to them, and FAILs a missing or non-integer statutory per-unit amount or effective rate, without which the credit cannot be re-derived. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Structural Precondition layer — open detail" aria-controls="die-panel" aria-expanded="false">Structural Precondition</button>
+    <button class="die-face" data-layer="unit" data-plain="Checks the unit register is sound: unique ids, the required fields present, and every unit tied to a project the worksheet accounts for." data-eng="Three controls. unit_unique_ids rejects a unit id that appears twice, because the id is what a certificate, a closing and a credit are all attributed to, and a duplicate is how the same dwelling ends up counted twice. unit_required_fields proves each unit carries the descriptive fields the controls read -- unit id, project id, address and close-of-escrow date. unit_project_known proves every unit names a project the credit worksheet carries, without which its credit would be counted in the register and lost in the worksheet, or the reverse." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Unit Register layer — open detail" aria-controls="die-panel" aria-expanded="false">Unit Register</button>
+    <button class="die-face" data-layer="elig" data-plain="Checks every claimed unit closed inside the fiscal-year window and on or before the statutory sunset." data-eng="Two controls, deliberately separate because the sunset sits inside the fiscal-year window and a unit can clear one gate while failing the other. elig_close_in_period FAILs a claimed unit whose close-of-escrow date falls outside the period, which takes the credit into the wrong year -- or takes it at all, if that year was never open. elig_within_sunset FAILs a claimed unit that closed after the statutory sunset even if it closed inside the fiscal year; the gate is &lt;= so a unit closing exactly on the sunset date is still eligible." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Eligibility Gating layer — open detail" aria-controls="die-panel" aria-expanded="false">Eligibility Gating</button>
+    <button class="die-face" data-layer="cert" data-plain="Checks every claimed unit is certified and that its certificate names the rater who signed it." data-eng="Two controls. cert_present_for_credited FAILs a claimed unit with no RESNET/HERS certificate on file or no certificate reference, because only a unit that closed and was certified flows to the credit -- an uncertified claim is a credit the builder cannot substantiate. cert_rater_id FAILs a certified, claimed unit whose certificate names no rater id: one certificate per dwelling, signed by a certified rater, and a certificate with no rater id is unsigned evidence that names no one accountable for the energy determination it attests." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Certification layer — open detail" aria-controls="die-panel" aria-expanded="false">Certification</button>
+    <button class="die-face" data-layer="dup" data-plain="Checks no claimed unit was already claimed in a prior period filing." data-eng="One control. dup_no_double_count FAILs a claimed unit that also appears in the closings schedule&#x27;s prior-period list, because the §45L credit is taken once per dwelling, in the year it closed. A unit claimed here and in the prior filing is a credit taken twice -- each filing internally consistent, the overlap visible only across them." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="No Double-Count layer — open detail" aria-controls="die-panel" aria-expanded="false">No Double-Count</button>
+    <button class="die-face" data-layer="rate" data-plain="Checks each unit carries the dated statutory per-unit amount and each project&#x27;s gross credit re-derives as units times that rate." data-eng="Two controls. rate_per_unit FAILs a claimed unit credited any figure other than the dated statutory per-unit amount to the cent, and an unclaimed unit credited anything but zero -- a credited amount struck at any other figure is a per-unit rate the statute does not authorise. rate_gross_credit FAILs a project whose stated gross credit is not exactly its qualifying-unit count times the dated rate; a gross credit that is not that product is a credit the unit count does not support. A credit figure that is not integer cents raises AMOUNT_INVALID contained to the one row it was read on." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Statutory Rate layer — open detail" aria-controls="die-panel" aria-expanded="false">Statutory Rate</button>
+    <button class="die-face" data-layer="rpt" data-plain="Checks the final report&#x27;s certified units times the rate equals the total credit stated on its face." data-eng="One control. rpt_units_times_rate FAILs when the certification report&#x27;s total certified-unit count times the statutory per-unit rate does not equal the total credit received it states. The face of the report carries both numbers; one is the other times the rate, and a total that is not that product is a report that does not foot to itself." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Report Tie-Out layer — open detail" aria-controls="die-panel" aria-expanded="false">Report Tie-Out</button>
+    <button class="die-face" data-layer="roll" data-plain="Checks the project unit counts tie the register and the region subtotals and grand totals foot from the project lines." data-eng="Three controls. roll_project_units FAILs a project whose worksheet qualifying-unit count does not equal its claimed units in the register, catching a count maintained beside the register rather than derived from it. roll_grand_total FAILs a worksheet whose total units, gross credit or net benefit does not foot from the project lines -- the classic broken footer. roll_region_subtotal FAILs a per-region subtotal that is not exactly the gross credit of the projects in that region, and a region set that does not match the regions the projects occupy." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Roll-Up Tie-Out layer — open detail" aria-controls="die-panel" aria-expanded="false">Roll-Up Tie-Out</button>
+    <button class="die-face" data-layer="fwd" data-plain="Checks the roll-forward identity holds, the period windows are ordered and disjoint, and flags projects with units still to close." data-eng="Three controls. fwd_total_identity FAILs a project whose total units do not equal its closings across every period plus the units left to close, which is how a closing gets double-counted or dropped. fwd_period_bounds FAILs period windows that run backward, overlap one another, or do not number one per closings column -- any of which lets a closing fall in two periods or in none. fwd_remaining_to_close is a FLAG, not a failure: it marks a project with units still to close in a future period, a credit still to come, kept on the reviewer&#x27;s radar for the next filing." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Roll-Forward layer — open detail" aria-controls="die-panel" aria-expanded="false">Roll-Forward</button>
+    <button class="die-face" data-layer="net" data-plain="Checks the profit addback, the tax effect at the effective rate, and the net benefit each re-derive from the gross credit." data-eng="Three controls. net_addback FAILs a project whose profit addback is not exactly its gross credit, since the credit is added back to book profit dollar for dollar before it is taxed. net_tax_effect FAILs a tax effect that is not minus the credit at the effective rate computed with truncating division. net_benefit FAILs a net benefit that is not the gross credit plus the tax effect -- the last link in the chain, and the number a partner allocation is then split from, so a break here propagates." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Net-Benefit Derivation layer — open detail" aria-controls="die-panel" aria-expanded="false">Net-Benefit Derivation</button>
+    <button class="die-face" data-layer="alloc" data-plain="Checks the partner shares sum to the net benefit and each re-derives from ownership at largest-remainder." data-eng="Two controls. alloc_shares_sum FAILs when the split of the net benefit across partners does not add back to the net benefit it divides -- allocation cannot lose or create a cent. alloc_share_rederived FAILs a partner share that is not its ownership basis points of the net benefit apportioned by the largest-remainder method, so the residual cent lands deterministically; it also FAILs ownership weights that do not foot to 10000 bps. A share that does not re-derive is an allocation someone adjusted by hand." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Partner Allocation layer — open detail" aria-controls="die-panel" aria-expanded="false">Partner Allocation</button>
+    <button class="die-face" data-layer="recon" data-plain="Checks the report, worksheet and closings schedule reconcile on one credited-unit number, and flags any certification gap." data-eng="Three controls. recon_final_report_ties FAILs when the report&#x27;s certified-unit count, the worksheet&#x27;s total qualifying units and the closings schedule&#x27;s credited-unit count are not one number, counted from three directions. recon_closed_ge_credited FAILs a project that credits more units than it physically closed, since only closed units can be credited. recon_certification_gap is a FLAG, not a failure: it marks a project that closed more units than it credited -- a credit possibly left on the table for units whose certificates were never chased." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" aria-label="Cross-Artifact Reconciliation layer — open detail" aria-controls="die-panel" aria-expanded="false">Cross-Artifact Reconciliation</button>
+  </div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Twelve control families run in registry order over each credit file. The first proves the others had something to read and that the period and sunset dates are legible, because a control that passes on absent evidence reports assurance it never performed.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">390<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">26<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent rules run over every credit file</div></div>
+  <div class="cell"><div class="v">12<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Families</div><div class="p">groups of controls, each answering one question</div></div>
+  <div class="cell"><div class="v">28<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Credit files</div><div class="p">one clean baseline plus twenty-seven planted-defect files</div></div>
+  <div class="cell"><div class="v">6<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Artifacts read</div><div class="p">unit register, credit worksheet, period roll-forward, partner allocation, closings schedule, final report</div></div>
+  <div class="cell"><div class="v">0<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Tolerance</div><div class="p">a credit a cent off the re-derivation is a break, not a rounding band</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">A homebuilder claims the IRC §45L energy-efficient home credit one dwelling unit at a time, and it has to prove, unit by unit, that each claimed unit clears two gates at once -- it closed (close-of-escrow) inside the fiscal-year window being filed, and it holds an energy certificate from a certified RESNET/HERS rater -- and then that every dollar stacked above that count was recomputed rather than typed. The gross credit is nothing more than the qualifying-unit count times the dated statutory per-unit amount, and the profit addback, the tax effect at the effective rate, the net benefit and the partner split are each arithmetic on that product. Three failures hide inside that, none of which look wrong on a footed worksheet. A unit is claimed that closed a year before the window opened, or after the statutory sunset that sits inside the window, or was never certified by a rater -- the computation still foots and the units underneath it do not qualify. The same dwelling is claimed in two successive period filings, each internally consistent, the overlap visible only across them. And the rollup -- the worksheet&#x27;s gross credit, the report&#x27;s certified-unit tie-out, the roll-forward identity, the net-benefit derivation or the partner allocation -- is stated on a number nobody recomputed from the unit register underneath it. None of these are judgment calls. They are equalities and comparisons -- a close date against a period window and a sunset with &lt;=, a gross credit against units times the dated rate with exact ==, a stated total against its re-derivation -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks the credit this year.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs every control over every credit file<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI generates twenty-eight fictional credit files -- one clean baseline and one carrying each of the twenty-seven planted defects -- then runs all twenty-six controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.</p>
+  <p style="margin:10px 0"><b>The two eligibility gates are genuinely independent<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> The statutory sunset is seeded inside the fiscal-year window, so a unit can close in the period yet after the sunset. One defect file moves a unit&#x27;s close date before the window opened and trips elig_close_in_period; another moves it past the sunset but inside the year and trips elig_within_sunset -- proving the two gates catch different failures, each checked with &lt;= at its boundary.</p>
+  <p style="margin:10px 0"><b>The credit is recomputed, not read back<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> A defect file adds a claimed unit to the register without re-deriving the worksheet, so the worksheet&#x27;s qualifying-unit count no longer ties the register. roll_project_units rebuilds the count from the claimed register units and fails, proving the worksheet is recomputed from the dwellings beneath it rather than trusted as stated.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<div class="schem-wrap"><svg class="schem" width="950" height="758" viewBox="0 0 950 758" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Energy-Efficient Home Credit engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,651 C235,651 235,81 270,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">credit files</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="703" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="714" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="725" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,574" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="736" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,688" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="747" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="73" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,195 510,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,309 510,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,423 510,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,537 510,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,651 510,651" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,195 C595,195 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,423 C595,423 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,651 C595,651 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="472" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,309 C715,309 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,537 C715,537 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="415" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,651 C715,651 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="472" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,651 C475,651 475,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">gross credit</text></g>
+  <g class="schem-edge"><path d="M440,537 C595,537 595,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="529" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="290" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="461" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,537 C715,537 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="529" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,651 C715,651 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="586" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M835,346 C835,710 835,710 811,710 L859,710 C835,710 835,710 835,574" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="835" y="703" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-block" data-block="corpus"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded Credit Files source on GitHub"><rect x="30" y="614" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="655" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Seeded Credit Files</text></a></g>
+  <g class="schem-block" data-block="set-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Structural Precondition source on GitHub"><rect x="270" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="77">Structural</tspan><tspan x="355" y="93">Precondition</tspan></text></a></g>
+  <g class="schem-block" data-block="unit-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Unit Register source on GitHub"><rect x="270" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Unit Register</text></a></g>
+  <g class="schem-block" data-block="elig-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Eligibility Gating source on GitHub"><rect x="270" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Eligibility Gating</text></a></g>
+  <g class="schem-block" data-block="cert-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Certification source on GitHub"><rect x="270" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Certification</text></a></g>
+  <g class="schem-block" data-block="dup-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open No Double-Count source on GitHub"><rect x="270" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">No Double-Count</text></a></g>
+  <g class="schem-block" data-block="rate-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Statutory Rate source on GitHub"><rect x="270" y="614" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="655" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Statutory Rate</text></a></g>
+  <g class="schem-block" data-block="rpt-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Report Tie-Out source on GitHub"><rect x="510" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="85" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Report Tie-Out</text></a></g>
+  <g class="schem-block" data-block="roll-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Roll-Up Tie-Out source on GitHub"><rect x="510" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Roll-Up Tie-Out</text></a></g>
+  <g class="schem-block" data-block="fwd-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Roll-Forward source on GitHub"><rect x="510" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Roll-Forward</text></a></g>
+  <g class="schem-block" data-block="net-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Net-Benefit Derivation source on GitHub"><rect x="510" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Net-Benefit Derivation</text></a></g>
+  <g class="schem-block" data-block="alloc-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Partner Allocation source on GitHub"><rect x="510" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Partner Allocation</text></a></g>
+  <g class="schem-block" data-block="recon-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Cross-Artifact Reconciliation source on GitHub"><rect x="510" y="614" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="595" y="647">Cross-Artifact</tspan><tspan x="595" y="663">Reconciliation</tspan></text></a></g>
+  <g class="schem-block" data-block="registers"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/model.py" target="_blank" rel="noopener" aria-label="Open Register, Worksheet &amp; Statute source on GitHub"><rect x="750" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="835" y="305">Register,</tspan><tspan x="835" y="321">Worksheet &amp; Statute</tspan></text></a></g>
+  <g class="schem-block" data-block="report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/report.py" target="_blank" rel="noopener" aria-label="Open Verdict and Findings source on GitHub"><rect x="750" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict and Findings</text></a></g>
+  <g class="schem-title"><line x1="30" y1="732" x2="920" y2="732" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="746" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E26-EEH &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-24</text></g>
+</svg></div><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Credit Files.</b> fictional §45L credit files enter the control registry</li><li><b>Structural Precondition.</b> is the credit file complete and the period and sunset dates legible</li><li><b>Unit Register.</b> is the register sound and every unit attributable</li><li><b>Eligibility Gating.</b> did every claimed unit close in the period and before the sunset</li><li><b>Certification.</b> is every claimed unit certified and its certificate signed</li><li><b>No Double-Count.</b> was any unit already claimed in a prior filing</li><li><b>Statutory Rate.</b> does the credit re-derive as units times the dated rate</li><li><b>Report Tie-Out.</b> does the report&#x27;s units times rate tie its total credit</li><li><b>Roll-Up Tie-Out.</b> do the counts, subtotals and grand totals foot</li><li><b>Roll-Forward.</b> does the roll-forward identity hold and what remains to close</li><li><b>Net-Benefit Derivation.</b> do addback, tax effect and net benefit re-derive</li><li><b>Partner Allocation.</b> do the partner shares sum and re-derive from ownership</li><li><b>Cross-Artifact Reconciliation.</b> do the artifacts reconcile on one credited-unit number</li><li><b>Register, Worksheet &amp; Statute.</b> the artifacts and dated rate every rule resolves against</li><li><b>Verdict and Findings.</b> every finding, with the reason it exists, ends at a person</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Credit Files.</b> generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-eight files in total. Only the units -- their close dates, certification and claim status -- the projects, the roll-forward columns, the partner ownership and the statutory parameters are stated; each unit&#x27;s credited amount, every project&#x27;s gross credit, addback, tax effect and net benefit, the region and grand totals, the partner shares, the closings counts and the final-report tie-out are re-derived through the same credit kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.</li><li><b>Structural Precondition.</b> One control. FAILs a file missing any of the six artifact types or carrying a duplicate, an unreadable or inverted period window, an unreadable sunset date, or a missing / non-integer statute, so no downstream rule holds vacuously on absent evidence.</li><li><b>Unit Register.</b> Three controls: unique unit ids, the required descriptive fields present, and a worksheet project for every unit the register carries.</li><li><b>Eligibility Gating.</b> Two independent controls, because the statutory sunset sits inside the fiscal-year window: the close-of-escrow date falls in the period, and it falls on or before the sunset, each checked with &lt;= at its boundary.</li><li><b>Certification.</b> Two controls: every claimed unit carries a RESNET/HERS certificate reference and is marked certified, and every certified claim names the rater id who signed the energy determination.</li><li><b>No Double-Count.</b> One control: no claimed unit appears in the closings schedule&#x27;s prior-period list, because the §45L credit is taken once per dwelling and the overlap is visible only across successive filings.</li><li><b>Statutory Rate.</b> Two controls: each unit&#x27;s credited amount is the dated statutory per-unit rate (or zero if unclaimed), and each project&#x27;s gross credit is exactly its qualifying units times that rate, compared to the cent with exact ==.</li><li><b>Report Tie-Out.</b> One control: the final certification report&#x27;s total certified-unit count times the statutory per-unit rate equals the total credit received stated on its face.</li><li><b>Roll-Up Tie-Out.</b> Three controls: each project&#x27;s worksheet unit count ties its claimed register units, every region subtotal ties its projects&#x27; gross credit, and the grand totals foot from the project lines.</li><li><b>Roll-Forward.</b> Three controls: total units = closings per period + remaining, the period windows are ordered and disjoint with one column each, and a project with units still to close in a future period is flagged for the next filing.</li><li><b>Net-Benefit Derivation.</b> Three controls: the profit addback equals the gross credit, the tax effect is minus the credit at the effective rate with truncating division, and the net benefit is the gross credit plus the tax effect.</li><li><b>Partner Allocation.</b> Two controls: the partner shares sum to the worksheet&#x27;s total net benefit, and each share re-derives from its ownership basis points at the largest-remainder method that lands the residual cent deterministically.</li><li><b>Cross-Artifact Reconciliation.</b> Three controls: the report, worksheet and closings schedule tie on one credited-unit count, no project credits more units than it closed, and a project that closed more than it credited is flagged as a certification gap worth chasing.</li><li><b>Register, Worksheet &amp; Statute.</b> The unit register carries each unit&#x27;s id, project, address, close-of-escrow date, certification and claim status; the credit worksheet carries the per-project units-times-rate line and the region and grand totals; the roll-forward, partner allocation, closings schedule and final report carry the derived counts and figures; and the file-level statute carries the dated per-unit amount, the effective rate, the period window and the sunset date. Every eligibility, rate, roll-up, net-benefit, allocation and reconciliation control resolves against these through the shared credit kernel.</li><li><b>Verdict and Findings.</b> Findings roll up per credit file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>regenerate the seeded fictional corpus, run all twenty-six controls, write both reports</td><td class="mono">per-file verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries a planted defect for every control by design</td><td>energy_report.json, energy_report.md, samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m energy_engine samples</code><button class="copybtn" data-copy="python -m energy_engine samples" aria-label="Copy command: python -m energy_engine samples">copy</button></div></td><td>analyze an existing folder of credit files without regenerating it</td><td class="mono">per-file verdicts and findings</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none unless --json or --md is passed</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m energy_engine samples --generate --quiet</code><button class="copybtn" data-copy="python -m energy_engine samples --generate --quiet" aria-label="Copy command: python -m energy_engine samples --generate --quiet">copy</button></div></td><td>regenerate the corpus and print only the overall verdict</td><td class="mono">a single verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest energy_engine/tests -q</code><button class="copybtn" data-copy="python -m pytest energy_engine/tests -q" aria-label="Copy command: python -m pytest energy_engine/tests -q">copy</button></div></td><td>run the full test suite for this engine</td><td class="mono">390 passed</td><td class="mono">0 when every test passes</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>390</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Registered controls<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>26</b> controls<br><span style="color:#6f6f6f;font-size:12.5px">counted from the registry, not from documentation</span></td></tr>
+  <tr><td>Planted defects<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>27</b> defect files<br><span style="color:#6f6f6f;font-size:12.5px">every registered control has at least one file that trips it</span></td></tr>
+  <tr><td>Control coverage<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>100</b> percent of controls with a planted defect<br><span style="color:#6f6f6f;font-size:12.5px">no control ships without a file demonstrating it firing</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a unit is carried into the claim and whether a certificate or closing is chased.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings above PASS</td><td class="mono"><b>PASS</b></td><td>carry the mechanically clean credit file into the documented sign-off and filing review</td></tr><tr><td>One or more FLAG, no FAIL</td><td class="mono"><b>REVIEW</b></td><td>a human resolves each flag; a project with units still to close in a future period and a certification gap where more units closed than were certified both land here</td></tr><tr><td>One or more FAIL</td><td class="mono"><b>FAIL</b></td><td>the unit or figure is not carried into the claim until the failing control is cleared -- a unit out of period, past the sunset or uncertified, a double count, or a credit that does not recompute</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only: credit files are parsed and never written back, so the engine cannot introduce the break it reports.</li><li style="list-style:disc;margin-left:18px">Integer cents throughout, compared with exact ==; there is no tolerance band on a credit figure, and a cent off the re-derivation is reported as a break.</li><li style="list-style:disc;margin-left:18px">A credit figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.</li><li style="list-style:disc;margin-left:18px">One credit kernel: the controls and the generator share the kernel in energy_engine.credit, so a determination cannot disagree with the data that produced it.</li><li style="list-style:disc;margin-left:18px">The two eligibility gates are independent: the sunset sits inside the fiscal-year window and each gate is checked with &lt;= at its boundary, so a unit closing exactly on the sunset date is still eligible.</li><li style="list-style:disc;margin-left:18px">Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.</li><li style="list-style:disc;margin-left:18px">Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never files a return, claims a credit, issues or requests a certificate, contacts a rater, or writes to a source artifact. It reads the credit file and stops.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>It reads the six artifacts the credit record emits. It does not connect to a rating provider, a closing system, a general ledger or the underlying certificates.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>It proves a unit clears the mechanical gates -- closed in period, within the sunset, certified with a named rater -- not that the unit genuinely meets the §45L energy-saving requirement or that its certificate is authentic. That judgment is a rater&#x27;s and a reviewer&#x27;s.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>It re-derives the credit at the dated statutory per-unit amount and effective rate the file carries; it does not decide whether that rate or that effective tax rate is the correct one for the year and taxpayer.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li><li>It takes the closing and certification records at face value: it confirms the register and worksheet foot and reconcile, not that a closing actually occurred. All shipped data is fictional and the fiscal year is set in a fictional future.<sup class="fn"><a id="fnref-18" href="#fn-18" aria-label="See substantiation 18">18</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">brand animation</span>
+<figure class="figwrap"><img src="../assets/engine-energy.svg" data-video="../assets/engine-energy.svg" alt="Energy-Efficient Home Credit diagram: down the left a stack of dwelling-unit cards, each carrying a close-of-escrow date and a RESNET/HERS certificate tile; a fiscal-year timeline across the centre with the statutory sunset marked inside the window, one unit stamped OUT OF PERIOD before it opens and one stamped PAST SUNSET after the sunset but still inside the year, and one card marked UNCERTIFIED; a credit worksheet panel showing qualifying units times the dated $2,000 per-unit rate footing to a gross credit, then addback, tax effect and net benefit, with a partner-allocation split beneath; on the right a final certification report whose certified units times rate ties its total credit; and a footer strip reading 26 controls, 12 families, 390 tests, read-only, SFS-E26-EEH." loading="lazy"><figcaption>The Energy-Efficient Home Credit engine tile states the question that has to hold unit by unit: every claimed dwelling closed inside the fiscal-year window and on or before the statutory sunset, certified by a named rater, claimed once, with the gross credit, the report tie-out, the roll-up totals, the net benefit and the partner shares all recomputed from the unit register and the dated statutory rate.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">python run.py</div><div class="runline">python -m pytest energy_engine/tests -q</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/energy-credit-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+  </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (energy-credit-automation/)</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>len(energy_engine.engine.REGISTRY)</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>distinct rule-id prefixes in energy_engine.engine.REGISTRY</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>samples/*.json after python run.py</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>len(energy_engine.model.DOC_TYPES)</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>energy_engine/tests boundary tests on the cent and the sunset date</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python run.py (energy-credit-automation/); energy_engine/tests planted-defect suite</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>energy_engine/generate.py DEFECTS close_out_of_period / close_after_sunset</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>energy_engine/generate.py DEFECTS project_units_wrong -&gt; roll_project_units</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q -o addopts= (energy-credit-automation/)</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>len(energy_engine.engine.REGISTRY)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>len(energy_engine.generate.DEFECTS)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>energy_engine/tests: every registered rule has a planted defect</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>energy-credit-automation/README.md and energy_engine read-only / determinism tests</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>energy_engine/model.py DOC_TYPES</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>energy_engine/engine.py cert_ and elig_ families</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>energy_engine/engine.py _statute and the rate_ / net_ families</li>
+    <li id="fn-18"><a class="fnid" href="#fnref-18" aria-label="Back to reference 18">18</a>energy_engine/generate.py</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
+</main>
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/energy-credit-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+<script>
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
+</script>
+</body>
+</html>

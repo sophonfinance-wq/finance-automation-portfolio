@@ -12,7 +12,7 @@ cd "$(dirname "$0")/.." || exit 1
 
 say() { printf "\n\033[1;36m== %s ==\033[0m\n" "$1"; }
 
-say "Test suite — 73,805 tests pin every engine's behavior"
+say "Test suite — 75,794 tests pin every engine's behavior"
 python -m pytest -q
 
 say "Month-End Close Engine — recurring JEs + schedule-to-GL tie-outs"

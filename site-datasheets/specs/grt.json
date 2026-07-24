@@ -1,0 +1,472 @@
+{
+  "num": 24,
+  "slug": "grt",
+  "part_no": "SFS-E24-GRT",
+  "mnemonic": "GRT",
+  "family": "Gross-Receipts Tax",
+  "name": "Gross-Receipts & Excise Tax",
+  "tagline": "Is the tax the tax the receipts produce?",
+  "plain_summary": "A developer that manages projects across several taxing jurisdictions owes a gross-receipts or excise tax in each one -- a state Business & Occupation tax, a city excise, a territorial general-excise tax -- and each carries its own classification rate, filing cadence, deductions, thresholds and due dates, and each rate can change mid-year. The tax on a worksheet is a derived figure, and it goes wrong in ways that look right on the page: a base that does not tie the general-ledger pull, a rate that was right last quarter, a deduction taken after it was exhausted, a below-threshold rule claimed above the threshold, a filing that is missing, late or unapproved. This engine reads the seven artifacts the reconciliation file carries -- the entity register, the jurisdiction rate table, the GL revenue pull, the filing register of worksheets, the per-filing tax summary, the business-licence register and the portfolio excise report -- and runs twenty-seven deterministic controls over them. Is the file complete and the review date legible, is the entity register sound and every entity's filing scope declared, is each jurisdiction's cadence known and its rate windows forward-running, does the GL pull tie the worksheet's gross, does each worksheet re-derive its base, apply the rate in force for the period, and recompute its pre-credit tax, credit and tax due to the cent, is every expected filing present, on time and approved before it was filed, is each licence active, and does the portfolio rollup recompute from the worksheets beneath it. It re-derives every tax through the same kernel that produced the data, compares every figure with exact ==, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The tax on a worksheet is arithmetic that already happened, and every place it can go wrong is a place the paper still looks finished. A revenue line drops on the way from the GL pull to the worksheet and the base is short, so the tax is short, and the return files clean. A classification rate changes mid-year and last quarter's rate is applied to this quarter's receipts -- the multiplication is internally consistent and still wrong. A standard deduction already spent is taken again, a small-business credit is read off the wrong bracket, a below-threshold no-tax rule is claimed on receipts over the threshold. A filing that should exist for an entity-jurisdiction-period simply is not there, or went out after its due date, or before anyone approved it. And the portfolio total a controller signs is a number maintained beside the summary rather than re-added from it. None of these announce themselves; each surfaces when an assessment arrives. The engine re-derives every worksheet's base, rate, credit and tax from the receipts and the rate table through the one kernel that generated the data, enumerates every expected filing from the calendar and proves it present, timely and approved, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A tax computed on an unreconciled base, or at a stale rate, is invisible until the jurisdiction recomputes it for you.",
+  "layers_intro": "Eleven control families run in registry order over each reconciliation file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the reconciliation file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of is not a readable date, since every due-date and renewal test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "ent",
+      "label": "Entity Register",
+      "plain": "Checks the entity register is sound and every active entity's filing scope is declared and known.",
+      "engineering": "Two controls. ent_unique_ids rejects an entity id that appears twice, because the id joins the register to every ledger line, worksheet and licence, and a duplicate makes a filing ambiguous about which entity it belongs to. ent_jurisdictions_declared proves each active entity declares a non-empty set of filing jurisdictions and that every one is in the jurisdiction register, so no calendar control passes vacuously on an empty obligation and no filing scope points at a jurisdiction with no rate table.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "jur",
+      "label": "Jurisdiction Rate Table",
+      "plain": "Checks each jurisdiction carries a known cadence and classification, and that its rate windows run forward with a non-negative rate.",
+      "engineering": "Two controls. jur_cadence_valid proves each jurisdiction files at one of the known cadences and carries a classification, since the cadence is how the calendar builds its expected-period set and the classification is how the rate keys to a worksheet. jur_rate_windows_sound rejects a rate window entered back to front or carrying a negative basis-point rate; a window that does not run forward covers no day it should, and a negative rate is a rate no receipts should ever be taxed at.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "rev",
+      "label": "GL Revenue Pull",
+      "plain": "Checks the general-ledger pull is well-formed, uniquely keyed, attributable, mapped to a worksheet, and that each worksheet's gross sums the lines under it.",
+      "engineering": "Five controls. rev_required_fields proves each ledger line carries the descriptive and amount fields the controls read. rev_line_unique rejects a GL line id shared across two lines, which means one receipt was counted twice into the base. rev_entity_known proves each line names an entity and a jurisdiction in the registers. rev_ledger_mapped proves every line has a worksheet to carry it -- a receipt with no worksheet is revenue earned in a jurisdiction and never taxed there. rev_gross_ties_ledger is the base-completeness core: each worksheet's stated gross must sum the GL lines under its entity-jurisdiction-classification-period key, so a line dropped on the way to the worksheet is a base short of the receipts and the tax is short with it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "fil",
+      "label": "Filing Register",
+      "plain": "Checks every worksheet is well-formed, unique per obligation, and attributable to a known entity and jurisdiction.",
+      "engineering": "Three controls. fil_required_fields proves each worksheet carries the descriptive fields the controls read -- id, entity, jurisdiction, classification, period, period start, due date and worksheet reference. fil_unique rejects both a duplicate worksheet id and a second worksheet for the same entity-jurisdiction-classification-period obligation, because two worksheets for one obligation double-count the tax and leave the rollup ambiguous about which one governs. fil_refs_exist proves every worksheet names an entity and a jurisdiction that are actually in the registers.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "eff",
+      "label": "Rate in Force",
+      "plain": "Checks the rate the worksheet applied is the classification rate that was in force for the period.",
+      "engineering": "One control. eff_rate_matches_period looks up the classification rate whose window covers the period's start date from the jurisdiction's rate table and compares it to the rate the worksheet applied. A classification rate that changed mid-year is the trap: a worksheet that applied the prior window's rate to a period inside the new window is internally consistent and still wrong, and a period no window covers at all is a period with no rate to tax it. The window span is closed on both ends, so a period starting exactly on the day a new rate opens is taxed at the new rate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "rate",
+      "label": "Tax Re-derivation",
+      "plain": "Checks the pre-credit tax equals base times rate, and the tax due equals the pre-credit tax net of the credit.",
+      "engineering": "Two controls. rate_tax_before_credit_recomputes proves the tax before any credit equals the taxable base struck at the classification rate, compared with exact == using the platform's truncating basis-point arithmetic. rate_tax_due_recomputes proves the tax that reaches the return equals the pre-credit tax less the credit, clamped at zero so a credit never becomes a refund. A figure derived any other way does not tie to the cent, and a tax that re-derives to a different cent is a tax nobody recomputed from the base and the rate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "ded",
+      "label": "Deductions & Credits",
+      "plain": "Checks the base, the non-taxable back-out and the credit all follow the jurisdiction's own rules.",
+      "engineering": "Three controls. ded_base_recomputes proves the taxable base equals gross less the non-taxable back-out and the standard deduction, clamped at zero; a base that does not re-derive is a base adjusted after the receipts were reconciled to it. ded_nontaxable_ties_ledger proves each worksheet's back-out sums the non-taxable portions the GL pull carries, because an overstated back-out is an understated base and the tax with it. ded_credit_recomputes rebuilds the credit from the jurisdiction's threshold and small-business rules -- a below-threshold no-tax rule credits the whole tax away only when receipts fall below the threshold, otherwise the small-business schedule applies -- so a credit read off the wrong bracket, or claimed above the threshold, does not pass.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "cal",
+      "label": "Filing Calendar",
+      "plain": "Checks every expected filing is present, on time, flagged when due soon, and approved before it was filed.",
+      "engineering": "Four controls. cal_completeness enumerates, for each active entity, each jurisdiction it files in and each period that jurisdiction expects, and proves a worksheet exists -- a hole here is an obligation nobody filed. cal_due_date_gate proves a filed worksheet went out on or before its due date. cal_due_soon is a FLAG, not a failure: it marks an unfiled worksheet due inside the file's own lead-time window, not yet late but due to be filed. cal_approval_before_filing FAILs a worksheet filed with no approval signature, or approved after it was filed, because a return that went out unreviewed is a return no one signed off.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "lic",
+      "label": "Business Licence",
+      "plain": "Checks each active entity holds an active licence in every jurisdiction it files in, and flags a renewal due inside the lead window.",
+      "engineering": "Two controls. lic_status_active FAILs an active entity that files in a jurisdiction where it holds no business licence, or holds one whose status is not active, because a gross-receipts filing rests on a live registration the jurisdiction recognises. lic_renewal_current is a FLAG, not a failure: it marks an active licence whose renewal date falls inside the file's own lead-time window -- still active, but due to be renewed before it lapses.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Portfolio Rollup",
+      "plain": "Checks the tax summary recomputes from the worksheets it summarises and the portfolio totals tie the summary.",
+      "engineering": "Two controls. rpt_summary_recomputes is the control the engine exists for: the tax summary is a determination, and a determination not recomputed from the receipts and the rate table is an assertion, so the engine rebuilds every summarised tax-due figure from the worksheet's gross, back-out and standard deduction through the shared kernel -- base, rate, credit and net -- and compares. rpt_report_totals_tie proves the portfolio report's total tax due and filing count tie the summary, because a total maintained beside the summary rather than re-added from it drifts the first time a worksheet moves and nobody re-adds the column.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Reconciliation Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional gross-receipts & excise tax reconciliation files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-nine files in total. Only the entities, the jurisdiction rate table, the GL revenue lines and the worksheet calendar facts are stated; each worksheet's gross, back-out, base, rate, pre-credit tax, credit and tax due, the per-filing tax summary and the portfolio totals are derived through the same tax kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the reconciliation file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "ent-control",
+      "label": "Entity Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and every filing scope declared",
+      "engineering": "Two controls: unique entity ids, and every active entity declaring a non-empty set of filing jurisdictions that all exist in the jurisdiction register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "jur-control",
+      "label": "Jurisdiction Rate Table",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is the cadence known and every rate window sound",
+      "engineering": "Two controls: a known cadence and a classification on every jurisdiction, and rate windows that run forward with a non-negative basis-point rate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "rev-control",
+      "label": "GL Revenue Pull",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is the pull sound, attributable, mapped, and does the base tie it",
+      "engineering": "Five controls: required fields present, unique line ids, a known entity and jurisdiction on every line, every line mapped to a worksheet, and each worksheet's gross summing the GL lines under it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "fil-control",
+      "label": "Filing Register",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "is every worksheet well-formed, unique per obligation and attributable",
+      "engineering": "Three controls: required descriptive fields present, one worksheet per obligation with a unique id, and a known entity and jurisdiction for every worksheet.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "eff-control",
+      "label": "Rate in Force",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "was the rate the worksheet used the rate in force for the period",
+      "engineering": "One control: the classification rate whose window covers the period's start date is looked up and compared to the rate the worksheet applied, catching a stale rate and an uncovered period.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "rate-control",
+      "label": "Tax Re-derivation",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the tax re-derive from base times rate, net of credit",
+      "engineering": "Two controls: the pre-credit tax equals the base struck at the rate, and the tax due equals the pre-credit tax net of the credit clamped at zero, both compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "ded-control",
+      "label": "Deductions & Credits",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "do the base, the back-out and the credit follow the rules",
+      "engineering": "Three controls: the base re-derives from gross less back-out less standard deduction, the back-out ties the ledger, and the credit re-derives from the jurisdiction's threshold and small-business schedule.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "cal-control",
+      "label": "Filing Calendar",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "is every expected filing present, timely and approved",
+      "engineering": "Four controls: every expected filing enumerated and present, filed on or before its due date, flagged when unfiled and due soon, and approved before it was filed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "lic-control",
+      "label": "Business Licence",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "is each licence active, and any renewal flagged",
+      "engineering": "Two controls: every active entity holds an active licence in each jurisdiction it files in, and an active licence renewing inside the lead window is flagged for renewal.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Portfolio Rollup",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "does the rollup recompute from the worksheets",
+      "engineering": "Two controls: each summarised tax-due figure re-derives from the worksheet's receipts through the shared kernel, and the portfolio total and filing count tie the summary.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers & Rate Table",
+      "kind": "control",
+      "col": 3,
+      "row": 3,
+      "plain": "the entity register, rate table, GL pull and worksheets every rule resolves against",
+      "engineering": "The entity register carries each entity's id, status and required jurisdictions; the jurisdiction rate table carries each jurisdiction's cadence, classification, rate windows, threshold and small-business cap and the periods expected this cycle; the GL revenue pull carries the receipts lines; the filing register carries the worksheets. Revenue, rate, deduction, calendar and rollup controls all resolve against these, and the tax for a worksheet re-derives from its gross, back-out and standard deduction through the one kernel in grt_engine.grt.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 4,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per reconciliation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/grt_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "reconciliation files" },
+    { "from": "set-control", "to": "ent-control", "label": "complete" },
+    { "from": "set-control", "to": "jur-control", "label": "complete" },
+    { "from": "set-control", "to": "rev-control", "label": "complete" },
+    { "from": "set-control", "to": "fil-control", "label": "complete" },
+    { "from": "set-control", "to": "eff-control", "label": "complete" },
+    { "from": "set-control", "to": "rate-control", "label": "complete" },
+    { "from": "set-control", "to": "ded-control", "label": "complete" },
+    { "from": "set-control", "to": "cal-control", "label": "complete" },
+    { "from": "set-control", "to": "lic-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "ent-control", "to": "registers", "label": "resolves" },
+    { "from": "jur-control", "to": "registers", "label": "resolves" },
+    { "from": "rev-control", "to": "registers", "label": "resolves" },
+    { "from": "fil-control", "to": "registers", "label": "resolves" },
+    { "from": "eff-control", "to": "registers", "label": "resolves" },
+    { "from": "rate-control", "to": "registers", "label": "resolves" },
+    { "from": "ded-control", "to": "registers", "label": "resolves" },
+    { "from": "cal-control", "to": "registers", "label": "resolves" },
+    { "from": "lic-control", "to": "registers", "label": "resolves" },
+    { "from": "rate-control", "to": "rpt-control", "label": "re-derived tax" },
+    { "from": "ded-control", "to": "rpt-control", "label": "re-derived tax" },
+    { "from": "ent-control", "to": "report", "label": "findings" },
+    { "from": "jur-control", "to": "report", "label": "findings" },
+    { "from": "rev-control", "to": "report", "label": "findings" },
+    { "from": "fil-control", "to": "report", "label": "findings" },
+    { "from": "eff-control", "to": "report", "label": "findings" },
+    { "from": "rate-control", "to": "report", "label": "findings" },
+    { "from": "ded-control", "to": "report", "label": "findings" },
+    { "from": "cal-control", "to": "report", "label": "findings" },
+    { "from": "lic-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "400",
+      "source": "python -m pytest --collect-only -q -o addopts= (gross-receipts-tax-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "27",
+      "source": "len(grt_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every reconciliation file"
+    },
+    {
+      "label": "Families",
+      "value": "11",
+      "source": "distinct rule-id prefixes in grt_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Reconciliation files",
+      "value": "29",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-eight planted-defect files, one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(grt_engine.model.DOC_TYPES)",
+      "plain": "entity register, jurisdiction rate table, GL revenue pull, filing register, tax summary, licence register, excise report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "grt_engine/tests/test_control_semantics.py::test_tax_due_recomputes_to_the_cent",
+      "plain": "a tax a cent off the re-derived figure is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A developer that manages projects across several taxing jurisdictions owes a gross-receipts or excise tax in each one -- a state Business & Occupation tax, a city excise, a territorial general-excise tax -- and each carries its own classification rate, its own filing cadence (monthly, quarterly, annual), its own deductions, thresholds and due dates, and each rate can change mid-year. The filer prepares one worksheet per entity per jurisdiction per period and files it. The tax on that worksheet is a derived figure, and four failures hide inside it, none of which look wrong on the page. The base does not tie the ledger: a revenue line is omitted or a non-taxable back-out is overstated, and the tax is computed on a base nobody reconciled to the GL pull. The rate is the wrong rate: a classification rate changed mid-year and the worksheet applied last quarter's rate to this quarter's receipts, and the arithmetic is internally consistent and still wrong. A deduction or credit is misapplied: a standard deduction already exhausted is taken again, a below-threshold no-tax rule is claimed above the threshold, or a small-business credit is read off the wrong bracket. And the calendar has a hole: an entity-jurisdiction-period that should have a filing has none, a return was filed after its due date, or filed before anyone approved it. None of these are judgment calls. They are equalities and comparisons -- a base against the GL, a rate against the window that covers the period, a re-derived tax against the number filed, a filing against the calendar -- which a deterministic control settles better than a spreadsheet inherited by whoever prepares the returns this year. This engine audits the tax return; where a cost lands on a project is a separate engine's job, and this one explicitly declines to check it.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every reconciliation file",
+      "narrative": "The CLI generates twenty-nine fictional reconciliation files -- one clean baseline and one carrying each of the twenty-eight planted defects -- then runs all twenty-seven controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (gross-receipts-tax-automation/); grt_engine/tests/test_planted_defects.py::test_defect_fires_its_intended_rule"
+    },
+    {
+      "title": "A rate that was right last quarter is wrong for this period",
+      "narrative": "A boundary test sets a classification rate window to change mid-year and files a worksheet for a period inside the new window at the prior window's rate. eff_rate_matches_period looks up the rate whose window covers the period's start date and fails because the worksheet applied a rate no longer in force, even though the tax computed on it re-derives internally -- a rate right one quarter and stale the next is invisible in a column of consistent arithmetic.",
+      "source": "grt_engine/tests/test_control_semantics.py::test_rate_in_force_at_the_window_boundary"
+    },
+    {
+      "title": "The determination is recomputed, not read back",
+      "narrative": "A test flips a summarised tax-due figure to contradict its worksheet's receipts. rpt_summary_recomputes rebuilds the tax from the worksheet's gross, back-out and standard deduction through the shared kernel -- base, rate, credit and net -- and fails because the stated determination no longer matches the receipts, proving the rollup is recomputed rather than trusted.",
+      "source": "grt_engine/tests/test_control_semantics.py::test_summary_must_recompute_from_receipts"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-seven controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "grt_report.json, grt_report.md, samples/"
+    },
+    {
+      "cmd": "python -m grt_engine samples",
+      "operation": "analyze an existing folder of reconciliation files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m grt_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest grt_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "400 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "400",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (gross-receipts-tax-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "27",
+      "unit": "controls",
+      "source": "len(grt_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "28",
+      "unit": "defect files",
+      "source": "len(grt_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "grt_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the receipts and worksheets they were given: every worksheet's base ties the GL pull, the rate applied was the rate in force for the period, the base, credit and tax re-derive to the cent, every expected filing is present, on time and approved, every licence is active, and the portfolio rollup recomputes from the worksheets beneath it. It is not an opinion on whether the rate table states the correct statutory rates, whether a receipt was classified into the right activity, or whether the underlying return was accepted by the jurisdiction.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean reconciliation file into the documented sign-off and filing review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an unfiled worksheet due inside the lead-time window and a business licence due to renew inside it both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the worksheet is not treated as filed correctly until the failing control is cleared -- a base off the ledger, a stale rate, a misapplied deduction or credit, a missing, late or unapproved filing, or a rollup that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: reconciliation files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a tax, and a cent off the re-derived figure is reported as a break.",
+      "An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One tax computation: the controls and the generator share the kernel in grt_engine.grt, so a re-derived tax cannot disagree with the data that produced it.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a worksheet is treated as filed correctly and whether a return or renewal is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never files a return, contacts a jurisdiction, remits a payment, chases a renewal, or writes to a source artifact. It reads the reconciliation file and stops.",
+      "source": "gross-receipts-tax-automation/README.md and grt_engine/tests/test_readonly_and_determinism.py::test_analysis_does_not_touch_the_source"
+    },
+    {
+      "statement": "It reads the seven artifacts the reconciliation process emits. It does not connect to a general-ledger system, a jurisdiction's e-file portal, a licensing authority or the underlying returns.",
+      "source": "grt_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about whether the tax on the worksheet is the tax the receipts produce, not where a cost lands: cost allocation across projects is a separate engine's job, and this engine explicitly declines to check it.",
+      "source": "grt_engine/engine.py module docstring (Scope)"
+    },
+    {
+      "statement": "It proves a worksheet's tax re-derives from the rate table it was given, not that the rate table states the correct statutory rates or that a receipt was classified into the right activity. That judgment is a reviewer's.",
+      "source": "grt_engine/engine.py check_eff_rate_matches_period"
+    },
+    {
+      "statement": "It takes the receipts at face value: it confirms the base ties the GL pull provided, not that the pull is complete against the books or that the return was accepted by the jurisdiction. All shipped data is fictional and every period is set in a fictional future.",
+      "source": "grt_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-grt.svg",
+    "motion": "../assets/engine-grt.svg",
+    "poster_alt": "Gross-Receipts & Excise Tax diagram: down the left a GL revenue pull feeds a worksheet; a jurisdiction rate table in the centre shows a classification rate window changing mid-year, with the rate in force for the period highlighted; the worksheet re-derives base = gross less back-out less standard deduction, tax = base times rate, net of a threshold or small-business credit, tied with exact equals to the number filed; below it a filing calendar marks one obligation present and on time, one unfiled and due soon, one filed but unapproved; on the right a portfolio excise report with a total tax due and filing count that recompute from the worksheets; and a footer strip reading 27 controls, 11 families, 400 tests, read-only, SFS-E24-GRT.",
+    "caption": "The Gross-Receipts & Excise Tax engine tile states the question that has to hold worksheet by worksheet: every base tied to the GL pull, struck at the rate in force for the period, net of the deductions and credits the jurisdiction's rules allow, tied to the cent to the number filed, with the filing calendar complete, timely and approved and a portfolio rollup that recomputes from the worksheets beneath it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest grt_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/gross-receipts-tax-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/gross-receipts-tax-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Gross-Receipts & Excise Tax (SFS-E24-GRT) datasheet -- twenty-seven deterministic, read-only controls over a developer's multi-jurisdiction gross-receipts and excise tax filings: the entity register and jurisdiction rate table, every worksheet's base tied to the GL revenue pull, the classification rate in force for the period, the base, credit and tax re-derived to the cent, the filing calendar proved complete, timely and approved, every business licence active, and a portfolio rollup whose total tax due and filing count recompute from the worksheets beneath them. The engine audits the tax return; the cost-allocation engine explicitly declines to. 400 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

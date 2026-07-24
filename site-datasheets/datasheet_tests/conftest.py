@@ -58,6 +58,11 @@ ROSTER: dict[str, dict] = {
     "expense":     {"num": 19, "part_no": "SFS-E19-EXP", "mnemonic": "EXP", "family": "Expense Controls",        "name": "Expense & P-Card",            "engine_dir": "expense-report-automation"},
     "labor":       {"num": 20, "part_no": "SFS-E20-LAB", "mnemonic": "LAB", "family": "Labor Allocation",        "name": "Project Labor Charge",        "engine_dir": "labor-charge-automation"},
     "lien":        {"num": 21, "part_no": "SFS-E21-LWV", "mnemonic": "LWV", "family": "Lien Waivers",            "name": "Lien Waiver Tracking",        "engine_dir": "lien-waiver-automation"},
+    "waterfall":   {"num": 22, "part_no": "SFS-E22-WFL", "mnemonic": "WFL", "family": "Equity Waterfall",        "name": "Equity Waterfall & JV Promote", "engine_dir": "equity-waterfall-automation"},
+    "proforma":    {"num": 23, "part_no": "SFS-E23-QPR", "mnemonic": "QPR", "family": "Proforma Integrity",      "name": "Project Proforma Integrity",  "engine_dir": "proforma-integrity-automation"},
+    "grt":         {"num": 24, "part_no": "SFS-E24-GRT", "mnemonic": "GRT", "family": "Gross-Receipts Tax",      "name": "Gross-Receipts & Excise Tax", "engine_dir": "gross-receipts-tax-automation"},
+    "filing":      {"num": 25, "part_no": "SFS-E25-DUE", "mnemonic": "DUE", "family": "Filing Compliance",       "name": "Filing Obligation Calendar",  "engine_dir": "filing-calendar-automation"},
+    "energy":      {"num": 26, "part_no": "SFS-E26-EEH", "mnemonic": "EEH", "family": "Energy Tax Credit",       "name": "Energy-Efficient Home Credit", "engine_dir": "energy-credit-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"

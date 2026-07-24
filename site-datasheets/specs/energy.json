@@ -1,0 +1,485 @@
+{
+  "num": 26,
+  "slug": "energy",
+  "part_no": "SFS-E26-EEH",
+  "mnemonic": "EEH",
+  "family": "Energy Tax Credit",
+  "name": "Energy-Efficient Home Credit",
+  "tagline": "Did the unit close in the period, and was it certified?",
+  "plain_summary": "A homebuilder earns the IRC §45L credit one dwelling unit at a time, and it has to prove, unit by unit, that each claimed unit clears two gates at once -- it closed inside the fiscal-year window being filed, and it holds an energy certificate from a certified RESNET/HERS rater -- and then that every dollar stacked on top of that count was recomputed, not typed. The gross credit is nothing more than the number of qualifying units times the dated statutory per-unit amount, and profit addback, tax effect, net benefit and partner split are each arithmetic on that product. This engine reads the six artifacts the credit record carries -- the per-unit register, the credit worksheet, the units-by-period roll-forward, the partner allocation, the closings schedule and the final certification report -- and runs twenty-six deterministic controls over them. Is the file complete and are the period and sunset dates readable, is the unit register sound and every unit tied to a project the worksheet carries, did every claimed unit close in the period and on or before the statutory sunset, is every claimed unit certified and its certificate signed by a named rater, is any unit claimed again that a prior filing already took, does each unit and each project's gross credit re-derive as units times the dated rate, does the report's certified units times rate tie its total credit, do the project counts tie the register and the region subtotals and grand totals foot, does the roll-forward identity hold, do the addback, tax effect and net benefit re-derive, do the partner shares sum to the net benefit and re-derive from ownership, and do the report, worksheet and closings schedule reconcile on one credited-unit number. It compares every credit figure with exact ==, treats the sunset gate as <= so a unit closing on the sunset date is still eligible, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The §45L credit looks like the safest number on a footed worksheet: units times two thousand dollars, then a few lines of tax arithmetic beneath it. That is exactly why it drifts. None of the ways it goes wrong look wrong in a column of dwelling counts. A unit is claimed that closed a year before the fiscal window opened, or after the statutory sunset that sits inside the window, or was never certified by a rater -- the computation still foots and the units underneath it do not qualify. The same dwelling is claimed in two successive period filings, each internally consistent, the overlap visible only across them. And the rollup -- gross credit, the report's certified-unit tie-out, the roll-forward identity, the net-benefit derivation, the partner allocation -- is stated on a number nobody recomputed from the unit register beneath it. The engine rebuilds every credit figure from the register and the dated statutory rate and compares with exact ==, checks the two eligibility gates as genuinely independent because the sunset falls mid-period, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A unit claimed out of period, past the sunset, or uncertified is invisible until an examiner recomputes the credit the builder already took.",
+  "layers_intro": "Twelve control families run in registry order over each credit file. The first proves the others had something to read and that the period and sunset dates are legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the credit file carries every artifact the controls below read, exactly once, and that the period window and sunset date are legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable or inverted period window and an unreadable sunset date, since every close-of-escrow test is measured to them, and FAILs a missing or non-integer statutory per-unit amount or effective rate, without which the credit cannot be re-derived. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "unit",
+      "label": "Unit Register",
+      "plain": "Checks the unit register is sound: unique ids, the required fields present, and every unit tied to a project the worksheet accounts for.",
+      "engineering": "Three controls. unit_unique_ids rejects a unit id that appears twice, because the id is what a certificate, a closing and a credit are all attributed to, and a duplicate is how the same dwelling ends up counted twice. unit_required_fields proves each unit carries the descriptive fields the controls read -- unit id, project id, address and close-of-escrow date. unit_project_known proves every unit names a project the credit worksheet carries, without which its credit would be counted in the register and lost in the worksheet, or the reverse.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "elig",
+      "label": "Eligibility Gating",
+      "plain": "Checks every claimed unit closed inside the fiscal-year window and on or before the statutory sunset.",
+      "engineering": "Two controls, deliberately separate because the sunset sits inside the fiscal-year window and a unit can clear one gate while failing the other. elig_close_in_period FAILs a claimed unit whose close-of-escrow date falls outside the period, which takes the credit into the wrong year -- or takes it at all, if that year was never open. elig_within_sunset FAILs a claimed unit that closed after the statutory sunset even if it closed inside the fiscal year; the gate is <= so a unit closing exactly on the sunset date is still eligible.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "cert",
+      "label": "Certification",
+      "plain": "Checks every claimed unit is certified and that its certificate names the rater who signed it.",
+      "engineering": "Two controls. cert_present_for_credited FAILs a claimed unit with no RESNET/HERS certificate on file or no certificate reference, because only a unit that closed and was certified flows to the credit -- an uncertified claim is a credit the builder cannot substantiate. cert_rater_id FAILs a certified, claimed unit whose certificate names no rater id: one certificate per dwelling, signed by a certified rater, and a certificate with no rater id is unsigned evidence that names no one accountable for the energy determination it attests.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "dup",
+      "label": "No Double-Count",
+      "plain": "Checks no claimed unit was already claimed in a prior period filing.",
+      "engineering": "One control. dup_no_double_count FAILs a claimed unit that also appears in the closings schedule's prior-period list, because the §45L credit is taken once per dwelling, in the year it closed. A unit claimed here and in the prior filing is a credit taken twice -- each filing internally consistent, the overlap visible only across them.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "rate",
+      "label": "Statutory Rate",
+      "plain": "Checks each unit carries the dated statutory per-unit amount and each project's gross credit re-derives as units times that rate.",
+      "engineering": "Two controls. rate_per_unit FAILs a claimed unit credited any figure other than the dated statutory per-unit amount to the cent, and an unclaimed unit credited anything but zero -- a credited amount struck at any other figure is a per-unit rate the statute does not authorise. rate_gross_credit FAILs a project whose stated gross credit is not exactly its qualifying-unit count times the dated rate; a gross credit that is not that product is a credit the unit count does not support. A credit figure that is not integer cents raises AMOUNT_INVALID contained to the one row it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Report Tie-Out",
+      "plain": "Checks the final report's certified units times the rate equals the total credit stated on its face.",
+      "engineering": "One control. rpt_units_times_rate FAILs when the certification report's total certified-unit count times the statutory per-unit rate does not equal the total credit received it states. The face of the report carries both numbers; one is the other times the rate, and a total that is not that product is a report that does not foot to itself.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "roll",
+      "label": "Roll-Up Tie-Out",
+      "plain": "Checks the project unit counts tie the register and the region subtotals and grand totals foot from the project lines.",
+      "engineering": "Three controls. roll_project_units FAILs a project whose worksheet qualifying-unit count does not equal its claimed units in the register, catching a count maintained beside the register rather than derived from it. roll_grand_total FAILs a worksheet whose total units, gross credit or net benefit does not foot from the project lines -- the classic broken footer. roll_region_subtotal FAILs a per-region subtotal that is not exactly the gross credit of the projects in that region, and a region set that does not match the regions the projects occupy.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "fwd",
+      "label": "Roll-Forward",
+      "plain": "Checks the roll-forward identity holds, the period windows are ordered and disjoint, and flags projects with units still to close.",
+      "engineering": "Three controls. fwd_total_identity FAILs a project whose total units do not equal its closings across every period plus the units left to close, which is how a closing gets double-counted or dropped. fwd_period_bounds FAILs period windows that run backward, overlap one another, or do not number one per closings column -- any of which lets a closing fall in two periods or in none. fwd_remaining_to_close is a FLAG, not a failure: it marks a project with units still to close in a future period, a credit still to come, kept on the reviewer's radar for the next filing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "net",
+      "label": "Net-Benefit Derivation",
+      "plain": "Checks the profit addback, the tax effect at the effective rate, and the net benefit each re-derive from the gross credit.",
+      "engineering": "Three controls. net_addback FAILs a project whose profit addback is not exactly its gross credit, since the credit is added back to book profit dollar for dollar before it is taxed. net_tax_effect FAILs a tax effect that is not minus the credit at the effective rate computed with truncating division. net_benefit FAILs a net benefit that is not the gross credit plus the tax effect -- the last link in the chain, and the number a partner allocation is then split from, so a break here propagates.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "alloc",
+      "label": "Partner Allocation",
+      "plain": "Checks the partner shares sum to the net benefit and each re-derives from ownership at largest-remainder.",
+      "engineering": "Two controls. alloc_shares_sum FAILs when the split of the net benefit across partners does not add back to the net benefit it divides -- allocation cannot lose or create a cent. alloc_share_rederived FAILs a partner share that is not its ownership basis points of the net benefit apportioned by the largest-remainder method, so the residual cent lands deterministically; it also FAILs ownership weights that do not foot to 10000 bps. A share that does not re-derive is an allocation someone adjusted by hand.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "recon",
+      "label": "Cross-Artifact Reconciliation",
+      "plain": "Checks the report, worksheet and closings schedule reconcile on one credited-unit number, and flags any certification gap.",
+      "engineering": "Three controls. recon_final_report_ties FAILs when the report's certified-unit count, the worksheet's total qualifying units and the closings schedule's credited-unit count are not one number, counted from three directions. recon_closed_ge_credited FAILs a project that credits more units than it physically closed, since only closed units can be credited. recon_certification_gap is a FLAG, not a failure: it marks a project that closed more units than it credited -- a credit possibly left on the table for units whose certificates were never chased.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Credit Files",
+      "kind": "source",
+      "col": 0,
+      "row": 5,
+      "plain": "fictional §45L credit files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-eight files in total. Only the units -- their close dates, certification and claim status -- the projects, the roll-forward columns, the partner ownership and the statutory parameters are stated; each unit's credited amount, every project's gross credit, addback, tax effect and net benefit, the region and grand totals, the partner shares, the closings counts and the final-report tie-out are re-derived through the same credit kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the credit file complete and the period and sunset dates legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, an unreadable or inverted period window, an unreadable sunset date, or a missing / non-integer statute, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "unit-control",
+      "label": "Unit Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and every unit attributable",
+      "engineering": "Three controls: unique unit ids, the required descriptive fields present, and a worksheet project for every unit the register carries.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "elig-control",
+      "label": "Eligibility Gating",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "did every claimed unit close in the period and before the sunset",
+      "engineering": "Two independent controls, because the statutory sunset sits inside the fiscal-year window: the close-of-escrow date falls in the period, and it falls on or before the sunset, each checked with <= at its boundary.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "cert-control",
+      "label": "Certification",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is every claimed unit certified and its certificate signed",
+      "engineering": "Two controls: every claimed unit carries a RESNET/HERS certificate reference and is marked certified, and every certified claim names the rater id who signed the energy determination.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "dup-control",
+      "label": "No Double-Count",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "was any unit already claimed in a prior filing",
+      "engineering": "One control: no claimed unit appears in the closings schedule's prior-period list, because the §45L credit is taken once per dwelling and the overlap is visible only across successive filings.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "rate-control",
+      "label": "Statutory Rate",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "does the credit re-derive as units times the dated rate",
+      "engineering": "Two controls: each unit's credited amount is the dated statutory per-unit rate (or zero if unclaimed), and each project's gross credit is exactly its qualifying units times that rate, compared to the cent with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Report Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the report's units times rate tie its total credit",
+      "engineering": "One control: the final certification report's total certified-unit count times the statutory per-unit rate equals the total credit received stated on its face.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "roll-control",
+      "label": "Roll-Up Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the counts, subtotals and grand totals foot",
+      "engineering": "Three controls: each project's worksheet unit count ties its claimed register units, every region subtotal ties its projects' gross credit, and the grand totals foot from the project lines.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "fwd-control",
+      "label": "Roll-Forward",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the roll-forward identity hold and what remains to close",
+      "engineering": "Three controls: total units = closings per period + remaining, the period windows are ordered and disjoint with one column each, and a project with units still to close in a future period is flagged for the next filing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "net-control",
+      "label": "Net-Benefit Derivation",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do addback, tax effect and net benefit re-derive",
+      "engineering": "Three controls: the profit addback equals the gross credit, the tax effect is minus the credit at the effective rate with truncating division, and the net benefit is the gross credit plus the tax effect.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "alloc-control",
+      "label": "Partner Allocation",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "do the partner shares sum and re-derive from ownership",
+      "engineering": "Two controls: the partner shares sum to the worksheet's total net benefit, and each share re-derives from its ownership basis points at the largest-remainder method that lands the residual cent deterministically.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "recon-control",
+      "label": "Cross-Artifact Reconciliation",
+      "kind": "control",
+      "col": 2,
+      "row": 5,
+      "plain": "do the artifacts reconcile on one credited-unit number",
+      "engineering": "Three controls: the report, worksheet and closings schedule tie on one credited-unit count, no project credits more units than it closed, and a project that closed more than it credited is flagged as a certification gap worth chasing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Register, Worksheet & Statute",
+      "kind": "control",
+      "col": 3,
+      "row": 2,
+      "plain": "the artifacts and dated rate every rule resolves against",
+      "engineering": "The unit register carries each unit's id, project, address, close-of-escrow date, certification and claim status; the credit worksheet carries the per-project units-times-rate line and the region and grand totals; the roll-forward, partner allocation, closings schedule and final report carry the derived counts and figures; and the file-level statute carries the dated per-unit amount, the effective rate, the period window and the sunset date. Every eligibility, rate, roll-up, net-benefit, allocation and reconciliation control resolves against these through the shared credit kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per credit file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/energy_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "credit files" },
+    { "from": "set-control", "to": "unit-control", "label": "complete" },
+    { "from": "set-control", "to": "elig-control", "label": "complete" },
+    { "from": "set-control", "to": "cert-control", "label": "complete" },
+    { "from": "set-control", "to": "dup-control", "label": "complete" },
+    { "from": "set-control", "to": "rate-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "set-control", "to": "roll-control", "label": "complete" },
+    { "from": "set-control", "to": "fwd-control", "label": "complete" },
+    { "from": "set-control", "to": "net-control", "label": "complete" },
+    { "from": "set-control", "to": "alloc-control", "label": "complete" },
+    { "from": "set-control", "to": "recon-control", "label": "complete" },
+    { "from": "unit-control", "to": "registers", "label": "resolves" },
+    { "from": "elig-control", "to": "registers", "label": "resolves" },
+    { "from": "cert-control", "to": "registers", "label": "resolves" },
+    { "from": "rate-control", "to": "registers", "label": "resolves" },
+    { "from": "roll-control", "to": "registers", "label": "resolves" },
+    { "from": "fwd-control", "to": "registers", "label": "resolves" },
+    { "from": "net-control", "to": "registers", "label": "resolves" },
+    { "from": "alloc-control", "to": "registers", "label": "resolves" },
+    { "from": "recon-control", "to": "registers", "label": "resolves" },
+    { "from": "rate-control", "to": "rpt-control", "label": "gross credit" },
+    { "from": "dup-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "net-control", "to": "report", "label": "findings" },
+    { "from": "alloc-control", "to": "report", "label": "findings" },
+    { "from": "recon-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "390",
+      "source": "python -m pytest --collect-only -q -o addopts= (energy-credit-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "26",
+      "source": "len(energy_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every credit file"
+    },
+    {
+      "label": "Families",
+      "value": "12",
+      "source": "distinct rule-id prefixes in energy_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Credit files",
+      "value": "28",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-seven planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(energy_engine.model.DOC_TYPES)",
+      "plain": "unit register, credit worksheet, period roll-forward, partner allocation, closings schedule, final report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "energy_engine/tests boundary tests on the cent and the sunset date",
+      "plain": "a credit a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A homebuilder claims the IRC §45L energy-efficient home credit one dwelling unit at a time, and it has to prove, unit by unit, that each claimed unit clears two gates at once -- it closed (close-of-escrow) inside the fiscal-year window being filed, and it holds an energy certificate from a certified RESNET/HERS rater -- and then that every dollar stacked above that count was recomputed rather than typed. The gross credit is nothing more than the qualifying-unit count times the dated statutory per-unit amount, and the profit addback, the tax effect at the effective rate, the net benefit and the partner split are each arithmetic on that product. Three failures hide inside that, none of which look wrong on a footed worksheet. A unit is claimed that closed a year before the window opened, or after the statutory sunset that sits inside the window, or was never certified by a rater -- the computation still foots and the units underneath it do not qualify. The same dwelling is claimed in two successive period filings, each internally consistent, the overlap visible only across them. And the rollup -- the worksheet's gross credit, the report's certified-unit tie-out, the roll-forward identity, the net-benefit derivation or the partner allocation -- is stated on a number nobody recomputed from the unit register underneath it. None of these are judgment calls. They are equalities and comparisons -- a close date against a period window and a sunset with <=, a gross credit against units times the dated rate with exact ==, a stated total against its re-derivation -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks the credit this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every credit file",
+      "narrative": "The CLI generates twenty-eight fictional credit files -- one clean baseline and one carrying each of the twenty-seven planted defects -- then runs all twenty-six controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (energy-credit-automation/); energy_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The two eligibility gates are genuinely independent",
+      "narrative": "The statutory sunset is seeded inside the fiscal-year window, so a unit can close in the period yet after the sunset. One defect file moves a unit's close date before the window opened and trips elig_close_in_period; another moves it past the sunset but inside the year and trips elig_within_sunset -- proving the two gates catch different failures, each checked with <= at its boundary.",
+      "source": "energy_engine/generate.py DEFECTS close_out_of_period / close_after_sunset"
+    },
+    {
+      "title": "The credit is recomputed, not read back",
+      "narrative": "A defect file adds a claimed unit to the register without re-deriving the worksheet, so the worksheet's qualifying-unit count no longer ties the register. roll_project_units rebuilds the count from the claimed register units and fails, proving the worksheet is recomputed from the dwellings beneath it rather than trusted as stated.",
+      "source": "energy_engine/generate.py DEFECTS project_units_wrong -> roll_project_units"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-six controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "energy_report.json, energy_report.md, samples/"
+    },
+    {
+      "cmd": "python -m energy_engine samples",
+      "operation": "analyze an existing folder of credit files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m energy_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest energy_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "390 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "390",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (energy-credit-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "26",
+      "unit": "controls",
+      "source": "len(energy_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "27",
+      "unit": "defect files",
+      "source": "len(energy_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "energy_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the units they were given: every claimed unit closed inside the fiscal-year window and on or before the sunset, held a certificate signed by a rater, was not claimed in a prior filing, and every credit figure -- per-unit amount, project gross credit, report tie-out, roll-up totals, net benefit and partner shares -- recomputes from the register and the dated statutory rate. It is not an opinion on whether a unit genuinely meets the §45L energy-saving requirement, whether a certificate is authentic, whether the statutory rate or effective tax rate applied is the right one for the year, or whether the underlying closing actually occurred.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean credit file into the documented sign-off and filing review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a project with units still to close in a future period and a certification gap where more units closed than were certified both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the unit or figure is not carried into the claim until the failing control is cleared -- a unit out of period, past the sunset or uncertified, a double count, or a credit that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: credit files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a credit figure, and a cent off the re-derivation is reported as a break.",
+      "A credit figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One credit kernel: the controls and the generator share the kernel in energy_engine.credit, so a determination cannot disagree with the data that produced it.",
+      "The two eligibility gates are independent: the sunset sits inside the fiscal-year window and each gate is checked with <= at its boundary, so a unit closing exactly on the sunset date is still eligible.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a unit is carried into the claim and whether a certificate or closing is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never files a return, claims a credit, issues or requests a certificate, contacts a rater, or writes to a source artifact. It reads the credit file and stops.",
+      "source": "energy-credit-automation/README.md and energy_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the six artifacts the credit record emits. It does not connect to a rating provider, a closing system, a general ledger or the underlying certificates.",
+      "source": "energy_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves a unit clears the mechanical gates -- closed in period, within the sunset, certified with a named rater -- not that the unit genuinely meets the §45L energy-saving requirement or that its certificate is authentic. That judgment is a rater's and a reviewer's.",
+      "source": "energy_engine/engine.py cert_ and elig_ families"
+    },
+    {
+      "statement": "It re-derives the credit at the dated statutory per-unit amount and effective rate the file carries; it does not decide whether that rate or that effective tax rate is the correct one for the year and taxpayer.",
+      "source": "energy_engine/engine.py _statute and the rate_ / net_ families"
+    },
+    {
+      "statement": "It takes the closing and certification records at face value: it confirms the register and worksheet foot and reconcile, not that a closing actually occurred. All shipped data is fictional and the fiscal year is set in a fictional future.",
+      "source": "energy_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-energy.svg",
+    "motion": "../assets/engine-energy.svg",
+    "poster_alt": "Energy-Efficient Home Credit diagram: down the left a stack of dwelling-unit cards, each carrying a close-of-escrow date and a RESNET/HERS certificate tile; a fiscal-year timeline across the centre with the statutory sunset marked inside the window, one unit stamped OUT OF PERIOD before it opens and one stamped PAST SUNSET after the sunset but still inside the year, and one card marked UNCERTIFIED; a credit worksheet panel showing qualifying units times the dated $2,000 per-unit rate footing to a gross credit, then addback, tax effect and net benefit, with a partner-allocation split beneath; on the right a final certification report whose certified units times rate ties its total credit; and a footer strip reading 26 controls, 12 families, 390 tests, read-only, SFS-E26-EEH.",
+    "caption": "The Energy-Efficient Home Credit engine tile states the question that has to hold unit by unit: every claimed dwelling closed inside the fiscal-year window and on or before the statutory sunset, certified by a named rater, claimed once, with the gross credit, the report tie-out, the roll-up totals, the net benefit and the partner shares all recomputed from the unit register and the dated statutory rate.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest energy_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/energy-credit-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/energy-credit-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Energy-Efficient Home Credit (SFS-E26-EEH) datasheet -- twenty-six deterministic, read-only controls over a homebuilder's IRC §45L credit: the per-unit register and each claimed dwelling gated on its close-of-escrow date falling in the fiscal-year window and on or before the statutory sunset, certified by a named RESNET/HERS rater and claimed once, with the gross credit re-derived as units times the dated statutory per-unit amount, and the report tie-out, the roll-up totals, the roll-forward identity, the net-benefit derivation and the partner allocation all recomputed from the unit register beneath them. 390 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}
