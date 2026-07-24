@@ -1,0 +1,388 @@
+{
+  "num": 15,
+  "slug": "proptax",
+  "part_no": "SFS-E15-PPT",
+  "mnemonic": "PPT",
+  "family": "Property Tax Controls",
+  "name": "Property Tax",
+  "tagline": "Whose parcel is it now?",
+  "plain_summary": "A homebuilder does not have one property tax bill; it has a parcel that keeps dividing. A project begins as a single parent parcel, is platted into dozens of lots, and then the lots close to buyers one at a time over many months -- and each closing moves exactly one parcel off the developer's books while the county tax roll keeps billing the account it always has. The bill is genuine, the payee is genuinely the county, the amount genuinely matches the notice; the only thing wrong is whose parcel it is, and that fact lives in a closing file the person approving the payment has never seen. On top of that, every jurisdiction runs its own calendar -- its own fiscal year, its own instalment count, its own penalty arithmetic -- so applying one county's habits to another's parcel is how a delinquency is found after the penalty has attached. This engine reads the eight artifacts a property tax cycle emits and runs twenty-six deterministic controls over them: is the roll file complete, does the register carry one live parcel for every lot the plat created, does each charge follow from the assessed value, do the instalments match this jurisdiction's own regime, did the tax follow the ownership through each closing, does the accrual stop at escrow and tie to the ledger, and does what was paid match what was actually owed. It never pays a county, never touches a payables run and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failure mode here is not a wrong number; it is a right number billed to the wrong owner. A homebuilder's exposure drifts because the unit of taxation -- the parcel -- and the unit of ownership come apart continuously: a parent parcel is platted into lots, the lots close one at a time, and the roll keeps billing the account it always has. Every ordinary check waves the payment through, because nothing about the invoice is false except whose house it is for, and that fact lives in a closing file the approver never sees. The second failure mode is the calendar: a portfolio across state lines answers to regimes that share no due dates, no instalment count and no penalty arithmetic, so one county's habits applied to another's parcel surface as a delinquency only after the penalty has attached. No control hard-codes a due date or a rate -- each reads the profile for its own parcel's jurisdiction, so a fourth regime is a row, not a patch. The engine ships a planted-defect roll file for every registered control, so the benchmark is a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each roll file. The first proves the others had something to read; the rest walk the parcel from the register, through its assessment and instalment calendar, across each closing, into the accrual, and out to what was actually paid.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the roll file carries every artifact the controls below read, and that the tax year and review date are readable.",
+      "engineering": "One control, registered first on purpose. set_complete fails a roll file that is missing any of the eight artifact types model.DOC_TYPES names, or that carries more than one of any of them -- a control that silently passes because its input is absent reports assurance it never performed, so absence is owned here rather than downstream. It also fails when as_of is not a readable date, because every delinquency and ageing test is made against that stated clock and never against the system clock, and when tax_year is missing, because every statutory due date is derived from it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "par",
+      "label": "Parcel Register",
+      "plain": "Checks the parcel register is sound and carries one live parcel for every lot the plat created.",
+      "engineering": "Five controls. Parcel numbers must be unique, because the parcel number is the join key to the instalments, the closings and the accrual, and a duplicate counts one parcel's tax twice on one side of the join. Every parcel must carry its project, jurisdiction, status and lot, and a status inside the held/sold/retired vocabulary the ownership controls key off. Every parcel must map to a project in the register and sit in a jurisdiction that has a regime profile, or it would skip the calendar controls rather than fail them. And par_plat_completeness counts live parcels per project against the lot count the plat created: a plat of forty lots showing thirty-nine parcels is not missing a bill, it is still being billed for the fortieth on the parent parcel nobody retired -- which is why the retired parent is excluded from the count on purpose.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "asmt",
+      "label": "Assessment",
+      "plain": "Checks the assessment foots, the charge follows from it, and a sharp move is surfaced while the protest window is still open.",
+      "engineering": "Four controls. Land plus improvements must equal the total assessed value at zero tolerance, because the two components reassess on different triggers and a total that does not equal its parts reconciles to neither. The annual charge is re-derived as the levy rate applied to the assessed value rather than trusted off the notice -- the notice is a third-party document and its one checkable fact is pure arithmetic. An assessment that moved more than the reporting threshold year over year is FLAGged, not failed, because the protest window opens and closes on the assessment and is usually shut by the time the bill arrives. And an exemption or abatement with no authority cited is FLAGged, because an exemption nobody can source is one the assessor can withdraw.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "inst",
+      "label": "Instalments",
+      "plain": "Checks the instalments match this jurisdiction's own calendar and penalty arithmetic, not a default.",
+      "engineering": "Five controls, and the ones that make a multi-state portfolio safe. A parcel's instalments must sum to its annual charge at zero tolerance, or the schedule was rounded until it looked split and the penny surfaces as a delinquency years later. The instalment count and every due date are compared to the regime profile for the parcel's own jurisdiction -- nothing is hard-coded, so a mid-year fiscal regime that pushes its second instalment into the following calendar year is correct here, and one state's calendar applied to another's parcel fails here rather than at the penalty. Penalty and interest are re-derived, never read off the notice, because the county's figure is the one being checked: penalty attaches once on the whole instalment the moment it is late, interest accrues per whole thirty-day period past the due date, both at the regime's own rates. The same sequence must not be scheduled twice, and a paid instalment with no receipt reference is FLAGged as asserted rather than evidenced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "own",
+      "label": "Ownership & Closings",
+      "plain": "Checks the tax followed the ownership through each closing -- the spine of the engine.",
+      "engineering": "Six controls. Every closing must name a parcel on the register, and the register's status must agree with the closing file, because every ownership control below reads that status. own_no_payment_after_escrow is the control the engine exists for: it compares each instalment's due period against the parcel's close of escrow -- not the payment date, because a period is the seller's or the buyer's by when it ran -- and fails a payment made for a period that began after the parcel closed. The two prorated shares must sum to the annual charge at zero tolerance, because they settle with two different parties and a sum that is off means somebody paid twice or nobody paid at all. The seller's share is re-derived from the days actually held in the regime's own fiscal year, so the same closing date yields different shares in two regimes whose fiscal years open six months apart. And where a regime reassesses on change of ownership, a missing supplemental is FLAGged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "acr",
+      "label": "Accrual",
+      "plain": "Checks the accrual matches the charge, stops at escrow and ties to the ledger.",
+      "engineering": "Four controls, the ledger side of the same facts. A held parcel's monthly accruals must sum to its annual charge at zero tolerance -- property tax is one of the few charges known in full at the start of the year, so an accrual that does not foot is a mistake, not an estimate. acr_stops_at_escrow is the mirror of the headline payment control: accruing tax in a month after the parcel closed overstates the liability and understates the margin on a sale that already happened. Total accrued tax must equal the general-ledger liability it is supposed to sit behind. And whether tax is capitalised into the job or expensed is FLAGged against the project's stage, because carrying cost on land under development belongs in the job and the same charge on a finished project is period expense.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "pay",
+      "label": "Payment",
+      "plain": "Checks what was paid equals what was actually owed.",
+      "engineering": "One control. pay_amount_ties_notice re-adds the instalment plus any re-derived penalty and interest and compares it to what was paid, at zero tolerance. It is the last arithmetic in the cycle and the one that catches a payment made against the wrong notice: paying the right county the right way for the wrong parcel produces a figure that matches nothing else in the file.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Roll Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional property tax roll files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus twenty-seven planted-defect files, at least one built to trip each registered control, twenty-eight roll files in total. Only the regimes, the projects, the parcels' assessed values and the closings are stated; every annual charge, instalment split, due date, penalty, proration, monthly accrual and ledger balance is derived, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the roll file complete, and are the tax year and review date readable",
+      "engineering": "One control. Fails a file missing any of the eight artifacts, carrying a duplicate, or naming an unreadable as_of or tax_year, so no downstream rule holds vacuously.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "par-control",
+      "label": "Parcel Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound, and does it cover the whole plat",
+      "engineering": "Five controls: unique parcel numbers, required fields, project mapping, a known regime, and one live parcel per lot the plat created.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "asmt-control",
+      "label": "Assessment",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does the assessment foot and the charge follow from it",
+      "engineering": "Four controls: components tie the total, the charge re-derives from the levy rate, a sharp variance is surfaced for protest, and an exemption cites its authority.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "inst-control",
+      "label": "Instalments",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "do the instalments match this jurisdiction's calendar",
+      "engineering": "Five controls: shares tie the annual charge, count and dates match the regime, penalty and interest re-derive, no duplicate sequence, and a paid instalment carries a receipt.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "own-control",
+      "label": "Ownership & Closings",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "did the tax follow the ownership through each closing",
+      "engineering": "Six controls: the closing names a real parcel, status agrees with the closing file, no payment for a post-escrow period, both prorated shares sum to the charge and re-derive from days held, and a supplemental is recorded where the regime reassesses on transfer.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "acr-control",
+      "label": "Accrual",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the accrual match the charge, stop at escrow and tie to the ledger",
+      "engineering": "Four controls: monthly accruals foot to the annual charge, accrual stops at escrow, the total ties the general ledger, and capitalisation matches the project's stage.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "pay-control",
+      "label": "Payment",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does what was paid match what was actually owed",
+      "engineering": "One control: paid equals the instalment plus any re-derived penalty and interest, at zero tolerance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/engine.py"
+    },
+    {
+      "id": "regime",
+      "label": "Regime Table & Register",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "the jurisdiction profiles and parcel register every rule resolves against",
+      "engineering": "Each jurisdiction's fiscal-year opening, instalment count, due dates and penalty rates, and each parcel's status, jurisdiction and annual charge. The calendar, proration and ownership controls are all evaluated against these two authorities; no due date, instalment count or rate is hard-coded into a control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per roll file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it, and reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/proptax_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "roll files" },
+    { "from": "set-control", "to": "par-control", "label": "complete" },
+    { "from": "set-control", "to": "asmt-control", "label": "complete" },
+    { "from": "set-control", "to": "inst-control", "label": "complete" },
+    { "from": "set-control", "to": "own-control", "label": "complete" },
+    { "from": "par-control", "to": "regime", "label": "resolves" },
+    { "from": "asmt-control", "to": "inst-control", "label": "annual charge" },
+    { "from": "inst-control", "to": "regime", "label": "regime profile" },
+    { "from": "own-control", "to": "regime", "label": "fiscal calendar" },
+    { "from": "own-control", "to": "acr-control", "label": "close of escrow" },
+    { "from": "own-control", "to": "pay-control", "label": "ownership" },
+    { "from": "par-control", "to": "report", "label": "findings" },
+    { "from": "asmt-control", "to": "report", "label": "findings" },
+    { "from": "inst-control", "to": "report", "label": "findings" },
+    { "from": "own-control", "to": "report", "label": "findings" },
+    { "from": "acr-control", "to": "report", "label": "findings" },
+    { "from": "pay-control", "to": "report", "label": "findings" },
+    { "from": "regime", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "389",
+      "source": "python -m pytest --collect-only -q -o addopts= (property-tax-automation/proptax_engine/tests)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "26",
+      "source": "len(proptax_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every roll file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in proptax_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Roll files",
+      "value": "28",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-seven planted-defect files, at least one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(proptax_engine.model.DOC_TYPES)",
+      "plain": "regime table, project and parcel registers, assessment history, instalments, closings, accrual, general ledger"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "proptax_engine/tests/test_control_semantics.py::test_seller_share_is_re_derived_to_the_cent",
+      "plain": "one cent between a proration and the annual charge is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A homebuilder's property tax exposure does not go wrong in the arithmetic on one bill; it goes wrong because the unit of taxation and the unit of ownership come apart, continuously, in a direction nobody is watching. A project starts as one parent parcel, is platted into dozens of lots, and the lots close to buyers one at a time over many months -- and each closing moves exactly one parcel off the developer's books while the county tax roll keeps billing the account it always has. The invoice is genuine, the payee is genuinely the county, the amount genuinely matches the notice; the only thing wrong is whose parcel it is, and that fact lives in a closing file the person approving the payment has never seen. Nothing in the payables cycle catches it. The second failure is the calendar: a developer across state lines answers to regimes that share no due dates, no instalment count and no penalty arithmetic, so applying one jurisdiction's habits to another's parcel is how a delinquency is found after the penalty has already attached. None of these are judgment calls. They are equalities -- a charge against a levy rate, a proration against the days actually held, a due date against a regime, a payment against the period it covers -- which is what a deterministic control settles better than a person approving one genuine-looking bill at a time.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every roll file",
+      "narrative": "The CLI regenerates twenty-eight fictional roll files -- one clean baseline and twenty-seven each carrying a planted defect -- then runs all twenty-six controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (property-tax-automation/); output re-run on demand"
+    },
+    {
+      "title": "One closing date, two regimes, two different seller's shares",
+      "narrative": "A test closes two parcels on the same day in two jurisdictions whose fiscal years open six months apart, and asserts the seller's shares come out in different proportions of the year held -- the cheapest proof that nothing about the calendar is hard-coded, since a single date cannot produce two answers unless the regime, not the code, decides the fiscal year.",
+      "source": "proptax_engine/tests/test_control_semantics.py::test_the_same_closing_date_prorates_differently_by_regime"
+    },
+    {
+      "title": "The roll kept billing a parcel that had already closed",
+      "narrative": "A test marks a post-escrow instalment paid on a parcel that closed months earlier; own_no_payment_after_escrow fires because the instalment's due period began after close of escrow, even though the payment is otherwise genuine -- the exact break a payables approver cannot see and a check spanning the closing file catches.",
+      "source": "proptax_engine/tests/test_control_semantics.py::test_paying_a_post_escrow_instalment_fails"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-six controls over every roll file, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "non-zero for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "proptax_report.md, proptax_report.json, samples/"
+    },
+    {
+      "cmd": "python -m proptax_engine samples",
+      "operation": "analyze an existing folder of roll files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m proptax_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "389 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "389",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (property-tax-automation/proptax_engine/tests)",
+      "plain": "live collection from the engine's test directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "26",
+      "unit": "controls",
+      "source": "len(proptax_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "27",
+      "unit": "defect files",
+      "source": "len(proptax_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "proptax_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong between a parcel's tax, its ownership and its jurisdiction's calendar in the artifacts they were given. It is not an opinion on whether an assessment should be protested, whether a parcel is worth what the county says, or whether a project's structure is the right one.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean roll into the documented property tax review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an assessment worth protesting, a missing receipt, an exemption without authority and a capitalisation that disagrees with the project's stage all land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the roll does not clear until the failing control is resolved -- a payment for a post-escrow period, a proration that does not sum, a due date that is not the jurisdiction's"
+      }
+    ],
+    "guarantees": [
+      "Read-only: roll files are parsed and never written back, so the engine cannot introduce the error it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band between a proration and the annual charge it must sum to, or between a re-derived penalty and the one on the notice.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Deterministic and byte-stable: the same roll file produces the same findings in the same order, made against the as_of carried in the file rather than the system clock, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing instalment schedule fails completeness rather than letting the calendar and payment controls pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a bill is paid."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never pays a county, touches a payables run, or writes to a source artifact. It reports and stops.",
+      "source": "property-tax-automation/README.md and proptax_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the eight artifacts a property tax cycle emits. It does not connect to a county assessor, a payables system or a general ledger.",
+      "source": "proptax_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It checks that a charge follows from the assessed value, not whether the assessment itself is fair or worth protesting. That judgment, and its deadline, are a reviewer's.",
+      "source": "proptax_engine/engine.py check_asmt_variance_surfaced"
+    },
+    {
+      "statement": "It reads each jurisdiction's regime as data and tests conformance to it; whether a profile correctly captures a real statute is a tax question the engine does not answer.",
+      "source": "proptax_engine/engine.py check_inst_matches_regime_calendar"
+    },
+    {
+      "statement": "All shipped data is fictional -- the portfolio, the states, the counties, the parcels and every assessed value are invented, and the tax year is set in a fictional future. The corpus demonstrates the controls; it is not a record of any real parcel, closing or bill.",
+      "source": "proptax_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-proptax.svg",
+    "motion": "../assets/engine-proptax.svg",
+    "poster_alt": "Property Tax diagram: on the left a single parent parcel splits into a row of platted lots, each lot a small tile, one already shaded and labelled SOLD to show it has closed to a buyer while the others read HELD; a dotted line runs from the sold lot to a county tax bill still addressed to the developer, marked with a warning to show the roll kept billing the closed parcel; on the right three stacked regime cards, each with a different fiscal-year opening, instalment count and penalty rate, to show the calendar is data rather than code; and a footer strip reading 26 controls, 389 tests, read-only, SFS-E15-PPT.",
+    "caption": "The Property Tax engine tile states the two things that have to hold at once: the tax has to follow the parcel through each closing, and each jurisdiction's calendar is read as data rather than assumed, so a bill for a house somebody else now owns is caught before it is paid.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/property-tax-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/property-tax-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Property Tax (SFS-E15-PPT) datasheet -- twenty-six deterministic, read-only controls over a homebuilder's property tax cycle: is the roll complete, does the register carry one live parcel per platted lot, does each charge follow from its assessed value, do the instalments match the jurisdiction's own fiscal calendar and penalty arithmetic, did the tax follow the ownership through each closing, does the accrual stop at escrow and tie to the ledger, and does what was paid match what was owed. Regimes are data, not code; every amount is integer cents at zero tolerance; 389 tests over a clean baseline and twenty-seven planted-defect roll files, all fictional."
+  }
+}

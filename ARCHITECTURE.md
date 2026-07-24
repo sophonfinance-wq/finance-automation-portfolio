@@ -1,9 +1,10 @@
 # Platform Architecture
 
-This repository is a fourteen-system, AI-driven Finance & Tax automation platform — five deterministic
+This repository is a seventeen-system, AI-driven Finance & Tax automation platform — five deterministic
 calculation engines (month-end close, cash & debt reconciliation, the cash-management suite,
-partnership 1065 / §704(c), and cross-border surplus & ACB), two read-only control engines (the
-workbook validation engine and the accounts-payable control engine), the
+partnership 1065 / §704(c), and cross-border surplus & ACB), five read-only control engines (the
+workbook validation engine, the accounts-payable control engine, the property-tax control engine, the
+surety bond & collateral control engine, and the insurance cost-allocation control engine), the
 Knowledge Brain retrieval engine, an interactive finance operations atlas, and the Triangulate AI
 control framework — with an optional orchestration layer:
 

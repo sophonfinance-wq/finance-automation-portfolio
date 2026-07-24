@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **fourteen runnable systems, a
-71,191-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **seventeen runnable systems, a
+72,364-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
 
 ---
 
@@ -102,7 +102,10 @@ Each is now encoded as a control in the portfolio:
 | Intercompany reciprocity & consolidation — due-from/due-to reciprocity, ledger roll-forward, funding-protocol routing, guarantor liquidity | `intercompany-automation` | 310 |
 | Warranty reimbursement controls — finite coverage pool, quarter / policy-period / close-of-escrow boundaries | `warranty-reimbursement-automation` | 299 |
 | Revenue recognition on buyer upgrades — deferred revenue released on close of escrow, four-way schedule tie-out | `buyer-upgrade-automation` | 279 |
-| **Total** | **14 systems** | **71,191** |
+| Property tax controls — parcel completeness through platting and split, each jurisdiction's own statutory calendar and delinquency arithmetic, ownership traced through closing, and the accrual behind it (26 controls) | `property-tax-automation` | 389 |
+| Surety bond & collateral controls — bond-register continuity, cash-collateral recovery on release, premium stopped on released bonds, aggregate penal sum held to the indemnity limit (29 controls) | `surety-bond-automation` | 420 |
+| Insurance cost allocation — one master premium apportioned across every project's job cost to the residual cent, allocation basis tied to the data, builder's-risk term and value, and the carrier audit true-up returned to the deposit-bearers (24 controls) | `insurance-allocation-automation` | 364 |
+| **Total** | **17 systems** | **72,364** |
 
 ---
 
