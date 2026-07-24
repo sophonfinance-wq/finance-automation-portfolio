@@ -19,7 +19,7 @@ Twenty-six deterministic finance/tax engines + a self-healing loop layer, all on
 - Five engines carry a `loop.py` (observe → detect → remediate → re-verify → gate); each has
   its own gate policy and its verdict doubles as the exit code.
 - Tests run **per package** (like CI): `cd <package-dir> && python -m pytest -q`.
-  `SWEEP=1` unlocks the ~1.26M-case grids. Deps: `pip install -r requirements.txt` once.
+  `SWEEP=1` unlocks the ~1.55M-case grids. Deps: `pip install -r requirements.txt` once.
 - The marketing site is `docs/index.html` (GitHub Pages from `main` — merges go live).
 
 ## Use the skills — don't re-derive

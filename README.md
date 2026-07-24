@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (2,480 hand-written tests, expanded to 80,574 with invariant grids; runs in minutes)
+# run the curated engine suite (2,480 hand-written tests, expanded to 370,574 with invariant grids; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -62,7 +62,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
-**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (~70k, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.26M generated cases). A separate 51-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
+**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (~70k, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.55M generated cases). A separate 51-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
 
 **4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
 ```bash
@@ -165,17 +165,21 @@ demand:
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
 | **Hand-written** (gates CI) | `pytest -m "not site_tooling"` | **2,392** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 38 systems. Runs in minutes. |
-| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **80,574** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
-| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 80,574 curated engine total. |
-| **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.26M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
+| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **370,574** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 370,574 curated engine total. |
+| **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.55M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
 default run (and CI) for speed and generated at import — the files stay small. It's there for
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
-Test cases by system (hand-written + grid expansion): close **15,687** · partnership **8,605** · triangulate **8,320** ·
-recon **7,511** · tax-surplus **7,498** · knowledge-brain **7,011** · cash-management **5,290** · validation **4,814** ·
-atlas **2,952** (including a parametrized deny-list confidentiality linter across every shipped file) · accounts payable **2,223**.
+Test cases by system (hand-written + grid expansion): month-end close leads at **15,687**, and every
+engine added in the latest build cycle now carries a **10,000-case** bounded invariant grid over its
+money kernel on top of its behavior tests — e.g. equity waterfall **10,449** · depreciation **10,440** ·
+capital spending **10,424** · equity-method pickup **10,423** · accounts payable **12,223**. The earlier
+flagships remain partnership **8,605** · triangulate **8,320** · recon **7,511** · tax-surplus **7,498** ·
+knowledge-brain **7,011** · cash-management **5,290** · validation **4,814** · atlas **2,952** (including a
+parametrized deny-list confidentiality linter across every shipped file).
 
 ---
 
