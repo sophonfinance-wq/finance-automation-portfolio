@@ -1,0 +1,425 @@
+{
+  "num": 32,
+  "slug": "closing",
+  "part_no": "SFS-E32-COE",
+  "mnemonic": "COE",
+  "family": "Closing Controls",
+  "name": "Home Sale Closing & Settlement Tie-Out",
+  "tagline": "Did the home close, and does its closing package agree with itself?",
+  "plain_summary": "When a residential developer's home reaches close of escrow the accounting team assembles a package -- a settlement statement, a balanced closing journal entry, a revenue-recognition line, a loan release reconciled to the lender's statement, and a cost-of-sale relief -- and this engine proves, unit by unit, that the package agrees with itself. It is a tie-out check, not an underwriting one: what a home should have sold for, whether the proforma was right, whether the loan should have been made are questions a different engine owns. The engine reads the nine artifacts a closing file carries -- the unit register, the proforma assumptions, the settlement register, the closing journal-entry register, the revenue schedule, the loan-release register, the cost-of-sale schedule, the closing summary and the closing report -- and runs twenty-five deterministic controls over them. Is the file complete; is the unit register sound and does every closed home carry its full package; does each closing entry foot with a receivable derived rather than typed; does the settlement statement recompute -- total charges, closing costs and net to seller re-summed from the components; do the rate-derived fees strike at their proforma rates, and are an off-rate broker commission and an over-allowance concession flagged for a reviewer; was revenue recognised in the close-of-escrow month and the deferred upgrade reversed in full; does each loan release roll forward and tie to the lender's loan statement, with the bank remittance covering the scheduled release price; does the cost-of-sale margin recompute and the prepaid commission relief cap at the prepaid balance; and does the rollup -- the closed count, the total net to seller and every per-unit tie-out flag -- recompute from the units underneath it. It compares every figure with exact ==, treats the release-price gate as >=, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A close-of-escrow package looks like the most finished paper a developer produces: the home sold, the money moved, the entry balanced, the report footed. That is exactly why it drifts. None of the ways it goes wrong look wrong in a folder of settlement statements. An entry balances but its receivable was typed rather than plugged; a settlement total was keyed instead of summed; a rate-derived fee was struck a few hundred dollars off its proforma rate; revenue landed a month late; the internal loan release and the lender's statement disagree by a figure nobody tied; and the rollup states a closed count, a net-to-seller total and a per-unit tie-out flag that nobody recomputed from the settlements and entries beneath them. The engine rebuilds every derived figure from the base facts through the same settlement kernel that produced the data, compares with exact ==, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A figure keyed instead of derived stays invisible until someone recomputes the closing the developer already booked.",
+  "layers_intro": "Nine control families run in registry order over each closing file. The first proves the others had something to read: a control that passes because its artifact was absent reports assurance it never performed, so completeness is settled before anything is recomputed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the closing file carries every artifact the controls below read, exactly once.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a closing file missing any of the nine document types in model.DOC_TYPES -- the unit register, proforma assumptions, settlement register, closing journal-entry register, revenue schedule, loan-release register, cost-of-sale schedule, closing summary and closing report -- or carrying more than one of any. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence from reading as a held control: a rule that silently passes on missing evidence reports assurance it never performed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "unit",
+      "label": "Unit Register",
+      "plain": "Checks the unit register is sound and every closed home carries its complete closing package.",
+      "engineering": "Four controls. unit_unique_ids rejects a unit id that appears twice, because the id joins the register to every settlement, entry, loan release and summary row and a duplicate makes a closing artifact ambiguous about which home it belongs to. unit_status_valid FAILs a unit whose sale status is not one of unsold, sold or closed, since the status decides whether the home needs a closing package at all. unit_required_fields FAILs a closed home missing its close-of-escrow date, gross sales, deferred upgrade or prepaid balance -- the base facts every recompute measures against. unit_artifacts_complete FAILs a closed home that does not carry exactly one settlement, entry, revenue line, loan release, cost-of-sale entry and summary row, and owns the artifact-absent finding so the recompute controls skip a missing row rather than pass on it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "je",
+      "label": "Closing Journal Entry",
+      "plain": "Checks each closing entry foots and its receivable is the derived balancing plug, not a typed figure.",
+      "engineering": "Three controls. je_unit_exists FAILs a closing entry that names a unit the register does not carry. je_balances FAILs an entry whose total debits do not equal its total credits, compared with exact == on integer cents, because an entry that does not foot posts a number that ties to nothing. je_ar_plug_recomputes re-derives the Accounts Receivable line as total credits less the non-receivable debits and FAILs a receivable that was typed rather than plugged -- caught even when the entry happens to foot, and FAILs an entry that does not carry exactly one receivable line.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "ss",
+      "label": "Settlement Statement",
+      "plain": "Checks the settlement totals recompute from the charge components: total charges, closing costs and net to seller.",
+      "engineering": "Three controls. ss_total_charges_recompute re-sums the ten settlement charge components and FAILs a total that was keyed rather than summed. ss_total_closing_costs_recompute FAILs a closing-cost total that is not the settlement charges less the broker commission, since the commission is a selling cost and not a closing cost. ss_net_to_seller_recompute re-derives net to seller as gross sales less total settlement charges -- the figure the whole statement exists to produce -- and FAILs any drift. Each is compared with exact ==, and a figure that is not integer cents raises AMOUNT_INVALID contained to the one row it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "fee",
+      "label": "Rate-Derived Fees",
+      "plain": "Checks the rate-derived fees strike at their proforma rates, and flags an off-rate commission or an over-allowance concession.",
+      "engineering": "Four controls, two hard and two flags. fee_listing_sales_rederives FAILs a listing sales fee that is not the proforma rate applied to gross sales, and fee_warranty_reserve_rederives FAILs a warranty reserve that is not its proforma rate on gross, each re-derived with truncating basis-point arithmetic and compared with exact ==. fee_broker_commission_variance is a FLAG, not a failure: a broker commission booked off the proforma assumption is a negotiated business fact for a reviewer to confirm. fee_concessions_within_assumption is a threshold FLAG: concessions up to the assumed allowance are expected, but a concession above it eats into the proforma margin and is raised for review.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "rev",
+      "label": "Revenue Recognition",
+      "plain": "Checks revenue was recognised in the close-of-escrow month and the deferred upgrade was reversed in full.",
+      "engineering": "Two controls. rev_recognized_in_coe_month FAILs a revenue line whose recognition month is not the month of the home's close-of-escrow date, because residential sales revenue is earned only at close of escrow -- a date-gate, not a judgement. rev_deferred_upgrade_reversed FAILs a deferred-upgrade reversal that does not equal the home's deferred balance to the cent, since upgrade revenue is deferred until closing and then reversed in full into income.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "loan",
+      "label": "Loan Release Tie",
+      "plain": "Checks each loan release rolls forward, ties to the lender's statement, and covers the scheduled release price.",
+      "engineering": "Three controls. loan_ending_recomputes re-rolls the ending balance as beginning plus draws plus interest and fees, less bank remittance and paydowns, and FAILs any drift. loan_ties_lender_statement FAILs when the internal release schedule's ending balance and the lender's loan statement disagree -- a break here is coverage the developer thinks it released that the lender has not; the two are kept independent, so a defect that moves the stated ending and the lender figure together trips only the roll-forward. loan_release_price_covered is a threshold checked with exact >=: the bank remittance must be at least the unit's scheduled release price.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "cos",
+      "label": "Cost-of-Sale Relief",
+      "plain": "Checks the cost-of-sale margin recomputes and the prepaid commission relief is capped at the prepaid balance.",
+      "engineering": "Two controls. cos_margin_recompute re-derives revised project profit as projected profit plus carry costs and the margin as revised profit over projected net revenue in floored basis points, and FAILs either figure struck at anything else. cos_prepaid_commission_relief_cap re-derives the prepaid commission relieved as the minimum of commission earned and the prepaid balance and FAILs any relief above it, because a closing can relieve only the commission actually prepaid and relieving more draws the prepaid account negative.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Rollup Tie-Out",
+      "plain": "Checks the report's closed count, total net to seller and every per-unit tie-out flag recompute from the units beneath.",
+      "engineering": "Three controls. rpt_closed_count_ties FAILs a report closed-unit count that does not equal the closed units in the register, catching a count kept beside the register rather than derived from it. rpt_net_to_seller_total_ties re-derives the portfolio total from each closed home's gross price and settlement charges and FAILs any drift, so the headline figure ties to the evidence. rpt_unit_tied_recomputes is the control the engine exists for: it rebuilds each home's tie-out flag from its settlement, entry, revenue line, loan release and cost-of-sale entry and FAILs a summary flag that does not match the recomputed determination -- a flag not recomputed from the evidence is an assertion.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Closing Files",
+      "kind": "source",
+      "col": 0,
+      "row": 4,
+      "plain": "fictional close-of-escrow packages enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control -- twenty-seven files in total, one carrying each of the twenty-six planted defects. Only the units, the proforma assumptions and the settlement charge components are stated as base facts; every figure the engine later checks -- each settlement total, each closing entry, the revenue lines, the loan ending balances, the cost-of-sale relief, each home's tie-out flag and the report counts -- is re-derived through the same closing_engine.settlement kernel the controls recompute with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the closing file complete",
+      "engineering": "One control. FAILs a file missing any of the nine artifact types or carrying a duplicate, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "unit-control",
+      "label": "Unit Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and every closed home fully packaged",
+      "engineering": "Four controls: unique unit ids, a known sale status, the close-of-escrow base facts on every closed home, and exactly one of each closing artifact per closed home.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "je-control",
+      "label": "Closing Journal Entry",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does each closing entry foot with a derived receivable",
+      "engineering": "Three controls: every entry names a registered unit, total debits equal total credits, and the Accounts Receivable line equals the derived balancing plug rather than a typed figure.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "ss-control",
+      "label": "Settlement Statement",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the settlement statement recompute",
+      "engineering": "Three controls: total settlement charges re-summed from the components, total closing costs as charges less the broker commission, and net to seller as gross less charges, each compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "fee-control",
+      "label": "Rate-Derived Fees",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "do the fees strike at their proforma rates",
+      "engineering": "Four controls: the listing sales fee and warranty reserve re-derived at their proforma basis-point rates (hard), and a FLAG each for a broker commission off the proforma assumption and a concession above the assumed allowance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "rev-control",
+      "label": "Revenue Recognition",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "was revenue recognised in the close month",
+      "engineering": "Two controls: revenue recognised in the home's close-of-escrow month, and the deferred upgrade reversed in full to the unit's deferred balance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "loan-control",
+      "label": "Loan Release Tie",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the loan release roll forward and tie to the lender",
+      "engineering": "Three controls: the ending balance re-rolled from beginning plus activity, tied to the lender's loan statement with exact ==, and the bank remittance covering the scheduled release price with exact >=.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "cos-control",
+      "label": "Cost-of-Sale Relief",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the margin relief recompute",
+      "engineering": "Two controls: revised project profit and margin re-derived from the base facts, and the prepaid commission relief capped at the prepaid balance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Rollup Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the count, total and tie-out flags recompute from the units",
+      "engineering": "Three controls: the report's closed count ties the register, the total net to seller recomputes from the settlements, and every per-unit tie-out flag is rebuilt from its closing package.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers, Schedules & Proforma",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and proforma rates every rule resolves against",
+      "engineering": "The unit register carries each home's id, status, close-of-escrow date, gross sales, deferred upgrade and prepaid balance; the settlement register, closing journal-entry register, revenue schedule, loan-release register and cost-of-sale schedule carry the per-home derived figures; the proforma assumptions carry the basis-point rates the fees are measured against; and the closing summary and closing report carry the per-home tie-out flags and the rollup. Every settlement, entry, fee, revenue, loan, cost-of-sale and rollup control resolves against these through the shared closing_engine.settlement kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per closing file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/closing_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "closing files" },
+    { "from": "corpus", "to": "unit-control", "label": "closing files" },
+    { "from": "corpus", "to": "je-control", "label": "closing files" },
+    { "from": "corpus", "to": "ss-control", "label": "closing files" },
+    { "from": "corpus", "to": "fee-control", "label": "closing files" },
+    { "from": "corpus", "to": "rev-control", "label": "closing files" },
+    { "from": "corpus", "to": "loan-control", "label": "closing files" },
+    { "from": "corpus", "to": "cos-control", "label": "closing files" },
+    { "from": "corpus", "to": "rpt-control", "label": "closing files" },
+    { "from": "unit-control", "to": "registers", "label": "resolves" },
+    { "from": "je-control", "to": "registers", "label": "resolves" },
+    { "from": "ss-control", "to": "registers", "label": "resolves" },
+    { "from": "fee-control", "to": "registers", "label": "resolves" },
+    { "from": "rev-control", "to": "registers", "label": "resolves" },
+    { "from": "loan-control", "to": "registers", "label": "resolves" },
+    { "from": "cos-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "379",
+      "source": "python -m pytest --collect-only -q -o addopts= (closing-settlement-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "25",
+      "source": "len(closing_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every closing file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in closing_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Closing files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-six planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "9",
+      "source": "len(closing_engine.model.DOC_TYPES)",
+      "plain": "unit register, proforma, settlement, closing entry, revenue, loan release, cost-of-sale, summary, report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "closing_engine/tests boundary tests on the cent and the release-price threshold",
+      "plain": "a figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "When a residential developer's home reaches close of escrow the accounting team assembles a package: a settlement statement, a balanced journal entry, a revenue-recognition line, a loan release tied to the lender's statement, and a cost-of-sale relief. Every one of those is a spreadsheet assembled under deadline, and each goes wrong in ways nobody watches. The entry does not foot, or its Accounts Receivable plug was typed rather than derived. The settlement total settlement charges, total closing costs or net to seller was keyed instead of summed, or a rate-derived fee -- the listing sales fee, the warranty reserve -- was struck at the wrong rate. Revenue lands in the wrong month, when residential sales revenue is earned only at close of escrow. The internal loan release and the lender's loan statement disagree, or the bank remittance falls short of the scheduled release price. And the rollup states a closed count, a total net to seller or a per-unit tie-out flag that nobody recomputed from the settlements and entries underneath it. None of these are judgement calls. They are equalities, thresholds, date-gates and membership checks -- a total against its re-summed components, a receivable against the derived plug, a fee against its proforma rate, a recognition month against the close date, an ending balance against the lender statement with ==, a remittance against the release price with >= -- which a deterministic control settles better than a folder of spreadsheets inherited by whoever handles closings this quarter.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every closing file",
+      "narrative": "The CLI generates twenty-seven fictional closing files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-five controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (closing-settlement-automation/); closing_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The loan roll-forward and the lender tie are independent",
+      "narrative": "One defect file moves a home's stated loan ending balance and its lender-statement figure together, so the roll-forward from beginning plus activity no longer holds while the two ending figures still agree -- loan_ending_recomputes fails and loan_ties_lender_statement does not. A separate defect moves only the lender figure and trips loan_ties_lender_statement alone, proving the two controls catch different breaks.",
+      "source": "closing_engine/generate.py DEFECTS loan_ending_wrong / loan_does_not_tie"
+    },
+    {
+      "title": "The tie-out flag is recomputed, not read back",
+      "narrative": "A defect file flips a closed home's summary tie-out flag to false while its underlying settlement, entry, revenue line, loan release and cost-of-sale entry all still recompute. rpt_unit_tied_recomputes rebuilds the flag from that package and fails against the stated value, proving the summary is recomputed from the evidence beneath it rather than trusted as written.",
+      "source": "closing_engine/generate.py DEFECTS tied_flag_wrong -> rpt_unit_tied_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-five controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "closing_report.json, closing_report.md, samples/"
+    },
+    {
+      "cmd": "python -m closing_engine samples",
+      "operation": "analyze an existing folder of closing files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m closing_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest closing_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "379 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "379",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (closing-settlement-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "25",
+      "unit": "controls",
+      "source": "len(closing_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(closing_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "closing_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the closing packages they were given: every closed home carried its full package, each closing entry footed on a derived receivable, the settlement statement recomputed, the rate-derived fees struck at their proforma rates, revenue landed in the close month, each loan release rolled forward and tied to the lender's statement with the remittance covering the release price, the margin relief recomputed, and the rollup's count, total and per-unit tie-out flags rebuilt from the units beneath. It is not an opinion on whether the home should have sold for its price, whether the proforma was right, whether the loan should have been made, or whether a closing actually occurred and a remittance cleared.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean closing file into the documented sign-off and close review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human confirms each flag; a broker commission booked off the proforma rate and a concession above the assumed allowance both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the home or figure is not carried into the close until the failing control is cleared -- an entry that does not foot, a settlement line that does not recompute, a fee off its rate, revenue in the wrong month, a loan release that does not tie, or a rollup that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: closing files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a figure, and the release-price control is a genuine threshold checked with >=.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One settlement kernel: the controls and the generator share the primitives in closing_engine.settlement, so a determination cannot disagree with the data that produced it.",
+      "set_complete owns the missing-artifact finding and runs first, so a missing artifact fails completeness rather than letting the controls that read it pass unread.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a home is carried into the close and whether a broken figure is corrected at its source."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never books an entry, files a closing, moves money, contacts a lender, or writes to a source artifact. It reads the closing file and stops.",
+      "source": "closing-settlement-automation/README.md and closing_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the nine artifacts the closing record emits. It does not connect to a general ledger, an escrow system, a lender portal or the underlying settlement documents.",
+      "source": "closing_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is a tie-out check, not an underwriting one: it proves the paper agrees with itself, not that the home should have sold for its price or that the loan should have been made. That judgement is a different engine's and a reviewer's.",
+      "source": "closing_engine/engine.py module scope and README"
+    },
+    {
+      "statement": "It re-derives the fees at the proforma basis-point rates the file carries; it does not decide whether those assumed rates are the correct ones for the project.",
+      "source": "closing_engine/engine.py fee_ family and proforma_assumptions"
+    },
+    {
+      "statement": "It takes the closing and lender records at face value: it confirms the register, settlements and entries foot and reconcile, not that a closing actually occurred or a remittance cleared. All shipped data is fictional and the closing period is set in a fictional future.",
+      "source": "closing_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-closing.svg",
+    "motion": "../assets/engine-closing.svg",
+    "poster_alt": "Home Sale Closing & Settlement Tie-Out diagram: at the left the unit register lists closed homes at Brightwater Commons, each feeding a closing package; a central band of five artifact panels -- the settlement statement with total charges, closing costs and net to seller re-summed from the components, the balanced closing journal entry whose debits equal credits and whose Accounts Receivable line is the derived plug, the revenue line recognised in the close-of-escrow month, the loan release rolled forward and tied to the lender statement with the bank remittance covering the release price, and the cost-of-sale margin relief -- each re-derived from the base facts; on the right a rollup report whose closed count, total net to seller and per-unit tie-out flags recompute from the units beneath; and a footer strip reading 25 controls, 9 families, 379 tests, read-only, SFS-E32-COE.",
+    "caption": "The Home Sale Closing tile states the question that has to hold unit by unit: every closed home's settlement statement, balanced closing entry, revenue line, loan release and cost-of-sale relief recompute from the base facts and the proforma rates, and the rollup's count, total and tie-out flags are rebuilt from the units beneath rather than trusted as stated.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest closing_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/closing-settlement-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/closing-settlement-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Home Sale Closing & Settlement Tie-Out (SFS-E32-COE) datasheet -- twenty-five deterministic, read-only controls over a residential developer's close-of-escrow package: the unit register and each closed home's settlement statement, balanced closing entry, revenue line, loan release and cost-of-sale relief re-derived from the base facts and the proforma rates, with the closing entry footing on a receivable derived rather than typed, revenue recognised in the close month, each loan release tied to the lender's statement, and the rollup's closed count, net-to-seller total and per-unit tie-out flags all recomputed from the units beneath them. 379 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

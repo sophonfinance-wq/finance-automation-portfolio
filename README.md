@@ -6,7 +6,7 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-2%2C392%20hand--written%20%2B%20invariant%20grids-2ea44f)](#testing)
-[![Systems](https://img.shields.io/badge/systems-26%20runnable-6f42c1)](#the-twenty-six-systems)
+[![Systems](https://img.shields.io/badge/systems-38%20runnable-6f42c1)](#the-thirty-eight-systems)
 [![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (2,480 hand-written tests, expanded to 75,794 with invariant grids; runs in minutes)
+# run the curated engine suite (2,480 hand-written tests, expanded to 80,574 with invariant grids; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -105,7 +105,7 @@ Full flow in **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
 ---
 
-## The twenty-six systems
+## The thirty-eight systems
 
 Every system is self-contained, deterministic, and ships with a seeded fictional-data generator.
 
@@ -137,6 +137,18 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Gross-Receipts & Excise Tax](./gross-receipts-tax-automation/) | `grt_engine` | `python run.py` | multi-jurisdiction gross-receipts / excise tax: each worksheet's tax re-derived from the GL revenue pull times the in-force classification rate, tied to the filed number, with deductions, thresholds, rate-effective dates and a complete, timely, approved filing calendar |
 | [Filing Obligation Calendar](./filing-calendar-automation/) | `filing_engine` | `python run.py` | the fiscal-year filing calendar: every entity × jurisdiction obligation proved filed or validly extended before its statutory due date, fixed-amount vouchers re-derived, and the status register tied to filed evidence with nothing missing or orphaned |
 | [Energy-Efficient Home Credit](./energy-credit-automation/) | `energy_engine` | `python run.py` | the IRC §45L credit: every claimed dwelling unit gated on its close-of-escrow date and RESNET/HERS certification, multiplied by the dated statutory per-unit amount, rolled up per project / region / fiscal year with net-benefit, partner allocation and a full cross-artifact tie-out |
+| [Interest Accrual & Loan Amortization](./interest-accrual-automation/) | `interest_engine` | `python run.py` | each note's accrued interest re-derived from balance, rate and day-count, the amortization rolled forward, maturity, rate-step, prepayment and subordination gates enforced, and the reciprocal GL and interest journal tied back to the schedule |
+| [Financing Execution & Schedule Variance](./financing-execution-automation/) | `financing_engine` | `python run.py` | a developer's monthly upcoming-financings report: each milestone variance re-derived as Current − Prior, every Prior tied to last month's Current, the original baseline frozen, the playbook complete and each Gantt bar seated in its closing month |
+| [Wire & Transfer Release Control](./wire-release-automation/) | `wire_engine` | `python run.py` | every outbound wire, ACH and book transfer gated on two distinct authorized signers within their limits, an approved or callback-cleared beneficiary, a resolved routing number and a funded source account — before release |
+| [Payroll & Benefit Reconciliation](./payroll-benefit-automation/) | `benefit_engine` | `python run.py` | one pay period's benefit money: every 401(k), HSA and FSA deduction proved to reach the provider, the ledger and cash intact, the employer match and 402(g)/statutory limits recomputed, and each deposit checked against its DOL deadline |
+| [Non-Resident Withholding & 1042-S](./withholding-automation/) | `withholding_engine` | `python run.py` | every cross-border FDAP withholding rate recomputed from the payee's status, each treaty reduction gated on a valid W-8, and the tax withheld, the deposits and Form 1042 tied back to the 1042-S slips |
+| [Home Sale Closing & Settlement Tie-Out](./closing-settlement-automation/) | `closing_engine` | `python run.py` | each closed home's settlement, closing entry, revenue, loan release and cost-of-sale relief recomputed from base facts and proforma rates, the closing entry proved to balance, and the rollup tied to the units beneath |
+| [Entity Good-Standing](./good-standing-automation/) | `standing_engine` | `python run.py` | each entity proved in good standing in every state it's registered in — annual report on time, flat franchise tax paid, Secretary-of-State ACTIVE, registered agent and license current — with the rollup recomputed from the state records |
+| [Subcontract SOV & Change Orders](./sov-commitment-automation/) | `sov_engine` | `python run.py` | a subcontract commitment's schedule of values footed, only approved change orders moving the revised contract, every pay-application column re-derived with retention and tax, and the conditional lien release tied to the certified payment due |
+| [Equity-Method Pickup & Eliminations](./equity-pickup-automation/) | `pickup_engine` | `python run.py` | every equity-method pickup re-derived from ownership and investee result, the investment roll-forward and preferred-return accrual recomputed, each elimination paired to extinguish carrying value to zero, and the whole tied to the trial balance |
+| [Depreciation & Prepaid Amortization](./depreciation-register-automation/) | `depreciation_engine` | `python run.py` | every fixed-asset depreciation and prepaid amortization figure re-derived from cost, useful life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the posted recurring entry |
+| [Earnest-Money Deposit Trust](./deposit-trust-automation/) | `deposit_engine` | `python run.py` | each unit's pre-close earnest money tied three ways — the deposit ledger, the escrow agent's statement and the construction-loan paydowns — to zero variance, with cancellation splits and the reconciliation summary recomputed from the units beneath |
+| [Capital Spending Request Gate](./spending-gate-automation/) | `spending_engine` | `python run.py` | a developer's capital spending requests: dollar triggers fired only after approval, the five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied |
 
 **Triangulate** is the centerpiece: a framework for putting AI into financial work without letting a
 single model validate its own output. Its reviewer is a live Anthropic Claude integration
@@ -152,9 +164,9 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Hand-written** (gates CI) | `pytest -m "not site_tooling"` | **2,392** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 26 systems. Runs in minutes. |
-| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **75,794** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
-| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 75,794 curated engine total. |
+| **Hand-written** (gates CI) | `pytest -m "not site_tooling"` | **2,392** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 38 systems. Runs in minutes. |
+| ↳ expanded with invariant grids | *(same scoped `pytest` run)* | **80,574** | The hand-written tests parametrized over bounded integer domains (`itertools.product`), so each property is checked across many cases. |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 80,574 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.26M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the

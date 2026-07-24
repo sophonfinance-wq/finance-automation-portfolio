@@ -1,0 +1,372 @@
+{
+  "num": 35,
+  "slug": "pickup",
+  "part_no": "SFS-E35-EPU",
+  "mnemonic": "EPU",
+  "family": "Equity Method",
+  "name": "Equity-Method Pickup & Eliminations",
+  "tagline": "Does the pickup re-derive from ownership, and does the elimination extinguish the carrying value?",
+  "plain_summary": "A reporting group consolidates its subsidiaries and joint ventures one holding at a time, and every period three things must hold at once: each parent's equity pickup equals its ownership share of the sub's net income, the investment carrying value rolls forward as begin + contributions + pickup - distributions = end, and on consolidation every Investment account is extinguished against the sub's Equity-Parent account so each entity block nets to zero. Around those sit the feeding schedules -- a preferred-return accrual built on a day count, and a member allocation that must sum back to the income it splits and tie to the trial balance. This engine reads the eight artifacts the consolidation file carries -- the entity register, the holding register, the sub results, the investment roll-forward, the elimination schedule, the preferred-return schedule, the member allocation and the trial balance -- and runs twenty-five deterministic controls over them, in six families. Is the file complete. Does every roll-forward row foot, name a registered holding, cover every holding exactly once, and carry the ownership share of the sub's declared distributions. Does each pickup recompute as ownership x sub net income, do cost-method holdings book none, is ownership in bounds and never over-allocated, and does every holding resolve to registered entities and a result row. Does every elimination block self-balance, is every equity holding paired investment-to-equity, is the full carrying value extinguished, does every block name a real equity holding, and do the GL accounts follow the company-code link key. Do the preferred-return day counts, accruals, capital chain and period continuity re-derive from the schedule's own dates and rates. Do the member allocations foot and sum to exactly the sub's net income, is every member a holder, and do the investment, pickup, should-be and adjustment columns of the trial balance tie out. It compares every figure with exact ==, rebuilds every pickup and share through the shared kernel that produced the data with the residual cent to the final holder, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "An equity-method workpaper looks like the most mechanical page in the close: a percentage times an income, a four-line roll-forward, a pair of eliminations that cancel. That is exactly why it drifts. Three failures hide inside it and none of them look wrong on their own page. The pickup drifts from the ownership math -- somebody keys it, or carries last quarter's percentage, and the parent books a share its ownership does not produce, or routes a pickup through a holding carried at cost that should book none. The elimination goes stale -- the carrying value moves all period but the entry does not, leaving a residual on consolidation that is neither an asset nor equity, or a holding is never paired to the sub's equity at all and the same net assets survive twice. And the rollup drifts from the evidence -- the trial balance carries a should-be column nobody re-derives, member allocations stop summing to the income they split, and a preferred-return accrual compounds a day-count error forward period after period. The engine rebuilds every pickup, share, accrual and tie from the base facts through the same kernel that produced the data and compares with exact ==, proves an elimination extinguishes rather than merely balances, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A mis-keyed pickup, a stale elimination or a should-be nobody recomputed is invisible until consolidation stops netting to zero.",
+  "layers_intro": "Six control families run in registry order over each consolidation file. The first proves the others had something to read, because a control that passes on an absent artifact reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the consolidation file carries every artifact the controls below read, exactly once each.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "rf",
+      "label": "Investment Roll-Forward",
+      "plain": "Checks every investment roll-forward row foots, names a registered holding, covers every holding exactly once, and carries the ownership share of the sub's declared distributions.",
+      "engineering": "Four controls. rf_identity FAILs a row whose begin + contributions + pickup - distributions does not equal the stated end -- the closure identity of the whole workpaper. rf_row_has_holding FAILs a row naming a holding the register does not carry, a carrying value moving for an interest nobody declared owning. rf_coverage_complete FAILs a holding with zero or two roll-forward rows, since every holding carries exactly one or its carrying value cannot be tied. rf_distributions_rederive FAILs an equity holding whose distributions are not its ownership share of the distributions the sub declared, cash leaving the sub in a proportion nobody's ownership produces.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "epu",
+      "label": "Equity Pickup",
+      "plain": "Checks each pickup recomputes as ownership times the sub's net income, cost-method holdings book none, ownership stays in bounds, and every holding resolves.",
+      "engineering": "Four controls, and the reason the engine exists. epu_pickup_rederives rebuilds each equity holding's pickup from ownership x the sub's net income through the shared kernel -- floor division, residual cent to the final holder -- and FAILs any figure that does not match to the cent, because a pickup that is not recomputed is an assertion. epu_cost_no_pickup FAILs a cost-method holding that rolls any pickup or distribution through the investment, equity accounting wearing a cost label. epu_ownership_bounds FAILs ownership at or below zero, above 100.00%, or summed past the whole of a sub across its holders. epu_refs_resolve FAILs a holding whose parent, sub, sub result row or method does not resolve, the join table on which every later tie depends.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "elim",
+      "label": "Consolidation Eliminations",
+      "plain": "Checks every elimination block balances, pairs the investment to the sub's equity, extinguishes the full carrying value, names a real equity holding, and follows the account link key.",
+      "engineering": "Five controls. elim_block_balances FAILs a block whose debits do not equal its credits, a one-sided entry that moves the consolidated totals while claiming to cancel. elim_pairing_complete FAILs an equity holding with no block that both credits the Investment account and debits the sub's Equity-Parent account, leaving the same net assets standing twice. elim_extinguishes_investment FAILs a block that credits the Investment account for anything other than the carrying value the roll-forward ends at -- a balanced elimination can still be last period's. elim_refs_known FAILs an orphan block or one against a cost-method interest that consolidation never picks up line by line. elim_account_link_key re-derives Investment <parent>-1<sub>, pickup <parent>-3<sub> and Equity-Parent <sub>-29xx from the entity codes, because the pairing is only mechanically checkable while the convention holds.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "pref",
+      "label": "Preferred-Return Accrual",
+      "plain": "Checks the preferred-return day counts, accruals, capital chain and period continuity all re-derive from the schedule's own dates and rates.",
+      "engineering": "Four controls. pref_day_count FAILs a stated day count that is not its start and end dates counted inclusively, and dates that do not form a forward-running period. pref_accrual_rederives recomputes capital x rate x days/basis with the day count taken from the dates, not the stated count, so a misstated count cannot launder the accrual it multiplied; it FAILs any figure off by a cent, with one truncating division and no intermediate rounding. pref_capital_chains FAILs a row that does not open where the prior period ended or does not end at opening + contribution, so the return never compounds into capital. pref_periods_contiguous FAILs a handover that leaves an unaccrued gap or re-accrues a day already earned.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "alloc",
+      "label": "Member Allocation & Trial-Balance Tie-Out",
+      "plain": "Checks the member allocations foot and sum to exactly the sub's net income, every member is a holder, and the trial-balance columns tie out.",
+      "engineering": "Seven controls. alloc_foots FAILs an allocation whose stated total is not the sum of its member rows. alloc_ties_net_income FAILs a fully equity-held sub whose member allocations do not sum to exactly its net income, income belonging to nobody. alloc_member_is_holder FAILs an allocation to an entity that holds no equity interest in that sub. alloc_tb_investment_ties FAILs an investment account whose trial-balance balance is not the roll-forward ending value. alloc_tb_pickup_ties FAILs a pickup account whose balance is not the re-derived share of income as a credit, tied to the recomputed share rather than the stated one so a mis-keyed roll-forward cannot vouch for a mis-keyed ledger. alloc_tb_adjustment_math FAILs an adjustment that is not exactly should-be minus balance. alloc_tb_unposted_adjustment is a FLAG, not a failure: an adjustment that is right and simply unposted, marked REVIEW for a human to time.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Consolidation Files",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional equity-method consolidation files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus twenty-six planted-defect files -- at least one for every registered control -- twenty-seven files in total. Only the entities, the holdings, the sub results, the roll-forward opening facts and the preferred-return period facts are stated; each holding's pickup and distribution share, every roll-forward ending value, the elimination blocks, the member allocation, the accrual chain and the trial-balance balances are re-derived through the same pickup kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the consolidation file complete",
+      "engineering": "One control: FAILs a file missing any of the eight artifact types in model.DOC_TYPES or carrying a duplicate, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "rf-control",
+      "label": "Investment Roll-Forward",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "does every roll-forward foot, cover its holdings and share distributions",
+      "engineering": "Four controls: each row foots begin + contributions + pickup - distributions = end, names a registered holding, every holding carries exactly one row, and each equity holding's distributions are its ownership share of the sub's declared distributions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "epu-control",
+      "label": "Equity Pickup",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does the pickup re-derive from ownership x sub net income",
+      "engineering": "Four controls: each equity pickup recomputes through the shared kernel, cost-method holdings book none, ownership is positive and never over-allocated, and every holding resolves to registered entities, a result row and a known method.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "elim-control",
+      "label": "Consolidation Eliminations",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the elimination balance and extinguish the carrying value",
+      "engineering": "Five controls: every block self-balances, every equity holding is paired investment-to-equity, the credit to the Investment account equals the roll-forward ending value, every block names a real equity holding, and the GL accounts follow the company-code link key.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "pref-control",
+      "label": "Preferred-Return Accrual",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the accrual, day count, capital chain and periods re-derive",
+      "engineering": "Four controls: the stated day count equals the dates counted inclusively, the accrual recomputes as capital x rate x days/basis from the dates, the capital balance chains without the return compounding into it, and the accrual periods abut without gap or overlap.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "alloc-control",
+      "label": "Allocation & TB Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "do the allocations tie to net income and the trial balance tie out",
+      "engineering": "Seven controls: each allocation foots and a fully-held sub's allocations sum to exactly its net income, every member holds the sub, the investment and pickup accounts tie the re-derived figures, every adjustment is should-be minus balance, and an unposted-but-consistent adjustment is flagged for review.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers, Schedules & Trial Balance",
+      "kind": "control",
+      "col": 3,
+      "row": 0,
+      "plain": "the artifacts and dated rates every rule resolves against",
+      "engineering": "The entity register carries each entity's role and company code; the holding register carries ownership, method and the linked GL accounts; the sub results carry net income and declared distributions; the roll-forward, elimination schedule, preferred-return schedule, allocation summary and trial balance carry the derived figures. Every roll-forward, pickup, elimination, accrual, allocation and tie control resolves against these through the shared pickup kernel, so a determination cannot disagree with the data that produced it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per consolidation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "consolidation files" },
+    { "from": "set-control", "to": "rf-control", "label": "complete" },
+    { "from": "set-control", "to": "epu-control", "label": "complete" },
+    { "from": "set-control", "to": "elim-control", "label": "complete" },
+    { "from": "set-control", "to": "pref-control", "label": "complete" },
+    { "from": "set-control", "to": "alloc-control", "label": "complete" },
+    { "from": "rf-control", "to": "elim-control", "label": "carrying value" },
+    { "from": "rf-control", "to": "registers", "label": "resolves" },
+    { "from": "epu-control", "to": "registers", "label": "resolves" },
+    { "from": "elim-control", "to": "registers", "label": "resolves" },
+    { "from": "pref-control", "to": "registers", "label": "resolves" },
+    { "from": "alloc-control", "to": "registers", "label": "resolves" },
+    { "from": "elim-control", "to": "report", "label": "findings" },
+    { "from": "pref-control", "to": "report", "label": "findings" },
+    { "from": "alloc-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "423",
+      "source": "python -m pytest --collect-only -q -o addopts= (equity-pickup-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "25",
+      "source": "len(pickup_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every consolidation file"
+    },
+    {
+      "label": "Families",
+      "value": "6",
+      "source": "distinct rule-id prefixes in pickup_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Sample files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-six planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(pickup_engine.model.DOC_TYPES)",
+      "plain": "entity register, holding register, sub results, investment roll-forward, elimination schedule, preferred-return schedule, member allocation, trial balance"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "pickup_engine/tests boundary tests on the cent and the day count",
+      "plain": "a figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A reporting group carries its subsidiaries and joint ventures under the equity method, booking each interest once as an investment and then holding three things true at the same time every period: the equity pickup it books must equal its ownership share of each sub's net income, the investment carrying value must roll forward as begin + contributions + pickup - distributions = end, and on consolidation every Investment account must be extinguished against the sub's Equity-Parent account so each entity block nets to zero. Three failures hide inside that, and none of them look wrong on a footed page. The pickup drifts from the ownership percentage -- a share of income the percentage does not produce, or a pickup routed through a holding carried at cost that should book none. The elimination goes stale -- the carrying value moved all period while the entry did not, leaving a residual that is neither an asset nor equity, or a holding never paired to the sub's equity at all so the same net assets survive twice. And the rollup drifts from the evidence beneath it -- a should-be column nobody re-derives, member allocations that stop summing to the income they split, a preferred-return accrual that compounds a day-count error forward. None of these are judgment calls. They are equalities, membership tests and date arithmetic -- a pickup against ownership x net income with exact ==, a carrying value against the roll-forward it ends at, an accrual against capital x rate x days/basis -- which a deterministic control settles better than a spreadsheet inherited by whoever maintains the consolidation this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every consolidation file",
+      "narrative": "The CLI generates twenty-seven fictional consolidation files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-five controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (equity-pickup-automation/); pickup_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A balanced elimination can still be stale",
+      "narrative": "One defect file moves both sides of an elimination block down by the same amount, so the block still balances and elim_block_balances holds -- but it now credits last period's carrying value rather than the value the roll-forward ends at, and elim_extinguishes_investment fails. The two controls are independent by design: balancing is not extinguishing, and a residual survives on consolidation until the block ties to the ending carrying value.",
+      "source": "pickup_engine/generate.py DEFECTS elimination_understated -> elim_extinguishes_investment"
+    },
+    {
+      "title": "The pickup is recomputed, not read back",
+      "narrative": "A defect file adds to the booked pickup and absorbs the same amount into contributions, so the roll-forward identity still foots and rf_identity holds. epu_pickup_rederives rebuilds the pickup from ownership x the sub's net income through the shared kernel and fails, proving the pickup is recomputed from the base facts beneath it rather than trusted as stated -- and alloc_tb_pickup_ties then ties the ledger to that re-derived share, not the stated one.",
+      "source": "pickup_engine/generate.py DEFECTS pickup_not_rederived -> epu_pickup_rederives"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-five controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "epu_report.json, epu_report.md, samples/"
+    },
+    {
+      "cmd": "python -m pickup_engine samples",
+      "operation": "analyze an existing folder of consolidation files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m pickup_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest pickup_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "423 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "423",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (equity-pickup-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "25",
+      "unit": "controls",
+      "source": "len(pickup_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(pickup_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "pickup_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the figures they were given: every roll-forward foots, every equity pickup recomputes from ownership x the sub's net income, every cost-method holding books none, every elimination balances and extinguishes the full carrying value against the paired equity account, every preferred-return accrual re-derives from its own dates and rate, and every member allocation and trial-balance column ties to the re-derived figure. It is not an opinion on whether an investment is impaired, whether its fair value has moved, whether the ownership percentage or method election is the right one, or whether a contribution or distribution actually occurred.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean consolidation file into the documented sign-off and consolidation review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a trial-balance adjustment that is internally consistent but has not been posted lands here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried into consolidation until the failing control is cleared -- a pickup that does not recompute, an elimination that does not extinguish, an identity that does not foot, or a tie the trial balance does not hold"
+      }
+    ],
+    "guarantees": [
+      "Read-only: consolidation files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band, and a figure a cent off its re-derivation is reported as a break.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One pickup kernel: the controls and the generator share the arithmetic in pickup_engine.pickup, so a determination cannot disagree with the data that produced it -- floor division with the residual cent to the final holder, so a 50/50 split of an odd cent still sums back to the income it divides.",
+      "The pickup is recomputed, not read back: alloc_tb_pickup_ties compares the ledger to the re-derived share, so a mis-keyed roll-forward cannot vouch for a mis-keyed ledger.",
+      "The elimination must extinguish, not merely balance: a balanced block still crediting last period's carrying value fails elim_extinguishes_investment.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a figure is carried into consolidation and whether a derived adjustment is posted."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, books a pickup, moves an elimination, files a return or writes to a source artifact. It reads the consolidation file and stops.",
+      "source": "equity-pickup-automation/README.md and pickup_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts the consolidation file carries. It does not connect to a general ledger, a consolidation system or the underlying valuation workpaper.",
+      "source": "pickup_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It re-derives and ties the equity-method arithmetic -- pickup, roll-forward, eliminations, accrual and allocation. It deliberately does not opine on impairment or fair value, which are judgment calls owned by a valuation workpaper, not a re-foot.",
+      "source": "pickup_engine/engine.py scope note and equity-pickup-automation/README.md"
+    },
+    {
+      "statement": "It takes the sub results, ownership percentages, method elections and dated rates the file carries at face value; it does not decide whether an ownership percentage, a cost-versus-equity election or a preferred-return rate is the correct one for the period and entity.",
+      "source": "pickup_engine/engine.py epu_ and pref_ families"
+    },
+    {
+      "statement": "It confirms the schedules foot, re-derive and reconcile, not that a contribution or distribution actually occurred. All shipped data is fictional and the fiscal period is set in a fictional future.",
+      "source": "pickup_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-pickup.svg",
+    "motion": "../assets/engine-pickup.svg",
+    "poster_alt": "Equity-Method Pickup & Eliminations diagram: on the left a consolidation file feeds a structural-precondition gate; six control families run left to right -- the investment roll-forward (begin + contributions + pickup - distributions = end), the equity pickup re-derived as ownership x sub net income, the consolidation eliminations pairing each Investment account to the sub's Equity-Parent account for the full carrying value, the preferred-return day-count accrual, and the member allocation and trial-balance tie-out -- each resolving against the registers, schedules and trial balance, with every finding ending at a verdict-and-findings report; a footer strip reads 25 controls, 6 families, 423 tests, read-only, SFS-E35-EPU.",
+    "caption": "The Equity-Method Pickup & Eliminations engine tile states what has to hold every period: each pickup re-derives from ownership x the sub's net income, the investment carrying value rolls forward and is extinguished against the sub's equity for exactly its ending value, and the accrual, allocation and trial-balance columns all recompute from the base facts beneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest pickup_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/equity-pickup-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Equity-Method Pickup & Eliminations (SFS-E35-EPU) datasheet -- twenty-five deterministic, read-only controls over a reporting group's equity-method consolidation: every investment roll-forward re-footed as begin + contributions + pickup - distributions = end, every pickup re-derived as ownership x sub net income through a shared kernel, every Investment account extinguished against its sub's Equity-Parent account for exactly the carrying value, and the preferred-return accrual, member allocation and trial-balance columns all recomputed from the base facts beneath them. 423 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

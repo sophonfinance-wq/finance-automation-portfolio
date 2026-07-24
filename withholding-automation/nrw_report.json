@@ -1,0 +1,5508 @@
+{
+  "title": "Non-resident withholding & 1042-S control report",
+  "overall_verdict": "FAIL",
+  "file_count": 30,
+  "rule_count": 28,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "payee_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "payee_country_known",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "payee_ch3_status_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "payee_ch4_status_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "payee_lob_code_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rate_table_defined",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rate_within_bounds",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_income_code_known",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "pay_payee_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_status_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wh_us_payee_excluded",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wh_accrued_not_withheld",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wh_rate_recomputes",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "wh_tax_recomputes",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "exm_w8_present_for_treaty",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "exm_w8_not_expired",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "exm_w8_renewal_window",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "exm_portfolio_interest_eligible",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "exm_fatca_override",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "dep_total_ties_withheld",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "dep_1042_filed_on_time",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rec_slip_per_payee",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rec_gross_ties",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rec_withheld_ties",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rec_slip_count_ties_1042t",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rec_w8_watchlist_ties",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "accrued_withheld__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-06/tax_withheld_cents",
+          "message": "payment PMT-06 is accrued-only but shows 90,000.00 withheld; only a paid amount is subject to withholding"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "amount_not_integer__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "FAIL",
+          "location": "amount:payment[PMT-03].gross_cents",
+          "message": "AMOUNT_INVALID: payment[PMT-03].gross_cents must be integer cents, got 80000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "bad_ch3_status__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-03/chapter_3_status_code",
+          "message": "payee PAYEE-03 carries Chapter 3 status 'ZZ', which is not one of ('15', '16', 'US')"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "bad_ch4_status__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-03/chapter_4_status_code",
+          "message": "payee PAYEE-03 carries Chapter 4 status '88', which is not one of ('01', '09', '19', '22')"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "bad_lob_code__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-01/lob_code",
+          "message": "payee PAYEE-01 claims a treaty benefit but carries LOB code '99', which is not one of ('01', '02', '03', '04', '05')"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "bad_payment_status__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-06/payment_status",
+          "message": "payment PMT-06 carries status 'pending', which is not one of ('paid', 'accrued')"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "deposits_short__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "FAIL",
+          "location": "deposit_register:DEPOSITS-2029/deposits",
+          "message": "deposits total 520,000.00; tax withheld across reportable payments is 570,000.00 (difference -50,000.00)"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_payee_id__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-01",
+          "message": "payee id PAYEE-01 appears 2 times; a payment that names it cannot be attributed to one payee"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "fatca_override_ignored__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-04/rate_applied_bps",
+          "message": "payment PMT-04 applied 15.00%; recomputing from payee PAYEE-04's status gives 30.00%"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-04/tax_withheld_cents",
+          "message": "payment PMT-04 shows 180,000.00 withheld; 15.00% of 600,000.00 is 90,000.00"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-04/rate_applied_bps",
+          "message": "payment PMT-04 to non-participating FFI PAYEE-04 applied 15.00%; the FATCA override requires the statutory 30.00%"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "filed_late__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/filed_date",
+          "message": "Form 1042 was filed 2030-03-20, after its due date 2030-03-15; the return is late"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "gross_untied__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/total_gross_cents",
+          "message": "Form 1042 states total gross 5,000,000.00; the 1042-S slips sum to 4,900,000.00 (difference 100,000.00)"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "form_1042:-",
+          "message": "form_1042 is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "payment_missing_field__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-03",
+          "message": "payment PMT-03 is missing income_code"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-03/income_code",
+          "message": "payment PMT-03 carries income code None, which the income-code table does not define"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "portfolio_contingent__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-02/interest_subcharacter",
+          "message": "payment PMT-02 is coded portfolio interest but is contingent interest, which is ineligible for the portfolio-interest exemption"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "rate_applied_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-01/rate_applied_bps",
+          "message": "payment PMT-01 applied 10.00%; recomputing from payee PAYEE-01's status gives 15.00%"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-01/tax_withheld_cents",
+          "message": "payment PMT-01 shows 150,000.00 withheld; 10.00% of 1,000,000.00 is 100,000.00"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "rate_out_of_bounds__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "FAIL",
+          "location": "treaty_rate_table:TREATY-2029/rates/Marran/rent/rate_bps",
+          "message": "treaty rate for Marran/rent is 31.00%; it must be between 0.00% and the statutory 30.00%"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "rate_row_missing__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "FAIL",
+          "location": "treaty_rate_table:TREATY-2029/rates/Marran/dividend",
+          "message": "the treaty table has no row for Marran/dividend, which payment PMT-01 needs; its treaty rate cannot be looked up"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "slip_count_untied__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/transmitted_count",
+          "message": "Form 1042 states slip_count 4 and 1042-T transmitted_count 5; 4 1042-S slip(s) are on file"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "slip_missing__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "FAIL",
+          "location": "slip_register:SLIPS-2029/slips/PAYEE-03",
+          "message": "reportable payee PAYEE-03 has 0 1042-S slip(s); exactly one is filed per reportable payee"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/total_gross_cents",
+          "message": "Form 1042 states total gross 4,900,000.00; the 1042-S slips sum to 4,100,000.00 (difference 800,000.00)"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/total_withheld_cents",
+          "message": "Form 1042 states total tax 570,000.00; the 1042-S slips sum to 330,000.00 (difference 240,000.00)"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/transmitted_count",
+          "message": "Form 1042 states slip_count 4 and 1042-T transmitted_count 4; 3 1042-S slip(s) are on file"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "tax_withheld_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-03/tax_withheld_cents",
+          "message": "payment PMT-03 shows 241,000.00 withheld; 30.00% of 800,000.00 is 240,000.00"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "FAIL",
+          "location": "deposit_register:DEPOSITS-2029/deposits",
+          "message": "deposits total 570,000.00; tax withheld across reportable payments is 571,000.00 (difference -1,000.00)"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "treaty_without_w8__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-01/rate_applied_bps",
+          "message": "payment PMT-01 applied 15.00%; recomputing from payee PAYEE-01's status gives 30.00%"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-05/rate_applied_bps",
+          "message": "payment PMT-05 applied 0.00%; recomputing from payee PAYEE-01's status gives 30.00%"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-01/rate_applied_bps",
+          "message": "payment PMT-01 applied a treaty-reduced 15.00% but payee PAYEE-01 has no valid Form W-8 on file"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-05/rate_applied_bps",
+          "message": "payment PMT-05 applied a treaty-reduced 0.00% but payee PAYEE-01 has no valid Form W-8 on file"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "unknown_country__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-02/country",
+          "message": "payee PAYEE-02 resides in 'Ostreach', which the treaty rate table does not carry; no rate could be looked up for it"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "unknown_income_code__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-01/income_code",
+          "message": "payment PMT-01 carries income code '77', which the income-code table does not define"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "unknown_payment_payee__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-99/payee_id",
+          "message": "payment PMT-99 names payee 'PAYEE-999', which is not in the payee register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "us_payee_withheld__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENTS-2029/payments/PMT-07/tax_withheld_cents",
+          "message": "payment PMT-07 to US payee PAYEE-05 shows 120,000.00 withheld; a US person is not subject to Chapter 3 withholding"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "w8_expired__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-03/w8_expiration",
+          "message": "payee PAYEE-03 holds a W-8 expiring 2029-06-30, on or before the review date 2029-12-31; the treaty claim is unsupported"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "w8_renewal_due__Ardenne_Field_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "FLAG",
+          "location": "payee_register:PAYEES-2029/payees/PAYEE-04/w8_expiration",
+          "message": "payee PAYEE-04 holds a W-8 expiring 2030-02-09, in 40 day(s); inside the 60-day renewal window and due to be refreshed"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    },
+    {
+      "document": "watchlist_overstated__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total tax of 570,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "FLAG",
+          "location": "w8_watchlist:WATCHLIST-2029/entries/PAYEE-01",
+          "message": "the watchlist lists payee PAYEE-01 as due for W-8 renewal, but its W-8 is not inside the lead-time window as of 2029-12-31"
+        }
+      ]
+    },
+    {
+      "document": "withheld_untied__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 withholding artifacts are present"
+        },
+        {
+          "rule": "payee_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payee ids are unique"
+        },
+        {
+          "rule": "payee_country_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every foreign payee's country is in the rate table"
+        },
+        {
+          "rule": "payee_ch3_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 3 status"
+        },
+        {
+          "rule": "payee_ch4_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payees carry a known Chapter 4 status"
+        },
+        {
+          "rule": "payee_lob_code_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-claiming payee carries a known LOB code"
+        },
+        {
+          "rule": "rate_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 needed (country, income-type) rates are defined"
+        },
+        {
+          "rule": "rate_within_bounds",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 treaty rates are within bounds"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry their required fields"
+        },
+        {
+          "rule": "pay_income_code_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known income code"
+        },
+        {
+          "rule": "pay_payee_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a payee in the register"
+        },
+        {
+          "rule": "pay_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payments carry a known status"
+        },
+        {
+          "rule": "wh_us_payee_excluded",
+          "status": "PASS",
+          "location": "-",
+          "message": "no US payee is withheld on"
+        },
+        {
+          "rule": "wh_accrued_not_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "no accrued-only amount is withheld on"
+        },
+        {
+          "rule": "wh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 applied rates recompute from the evidence"
+        },
+        {
+          "rule": "wh_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 tax figures recompute from rate x gross"
+        },
+        {
+          "rule": "exm_w8_present_for_treaty",
+          "status": "PASS",
+          "location": "-",
+          "message": "every treaty-reduced rate is supported by a W-8"
+        },
+        {
+          "rule": "exm_w8_not_expired",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payee W-8 is unexpired at the review date"
+        },
+        {
+          "rule": "exm_w8_renewal_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee W-8 is inside the renewal window"
+        },
+        {
+          "rule": "exm_portfolio_interest_eligible",
+          "status": "PASS",
+          "location": "-",
+          "message": "every portfolio-interest coupon is eligible"
+        },
+        {
+          "rule": "exm_fatca_override",
+          "status": "PASS",
+          "location": "-",
+          "message": "every non-participating FFI is withheld at statutory"
+        },
+        {
+          "rule": "dep_total_ties_withheld",
+          "status": "PASS",
+          "location": "-",
+          "message": "deposits of 570,000.00 tie the tax withheld"
+        },
+        {
+          "rule": "dep_1042_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 was filed 2030-03-10, on or before 2030-03-15"
+        },
+        {
+          "rule": "rec_slip_per_payee",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 reportable payees have exactly one slip"
+        },
+        {
+          "rule": "rec_gross_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "Form 1042 total gross of 4,900,000.00 ties the slips"
+        },
+        {
+          "rule": "rec_withheld_ties",
+          "status": "FAIL",
+          "location": "form_1042:FORM1042-2029/total_withheld_cents",
+          "message": "Form 1042 states total tax 571,000.00; the 1042-S slips sum to 570,000.00 (difference 1,000.00)"
+        },
+        {
+          "rule": "rec_slip_count_ties_1042t",
+          "status": "PASS",
+          "location": "-",
+          "message": "the 1042-T count of 4 ties the 4 slips"
+        },
+        {
+          "rule": "rec_w8_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the W-8 renewal watchlist ties the payee evidence"
+        }
+      ]
+    }
+  ]
+}

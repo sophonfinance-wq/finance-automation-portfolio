@@ -1,0 +1,411 @@
+{
+  "num": 31,
+  "slug": "withholding",
+  "part_no": "SFS-E31-NRW",
+  "mnemonic": "NRW",
+  "family": "Cross-Border Withholding",
+  "name": "Non-Resident Withholding & 1042-S",
+  "tagline": "Does each cross-border rate recompute from the evidence, and does the 1042 tie to the slips?",
+  "plain_summary": "A US withholding agent that pays cross-border interest, dividends, royalties and rent to foreign recipients has to withhold Chapter 3 tax at the right rate, support every reduced rate with a valid Form W-8, deposit what it withheld, and reconcile the annual Form 1042 to the 1042-S slips it transmits -- and every one of those is a determination, not a number that can be typed and trusted. The rate applied to a payment is decided in a fixed order of precedence: the FATCA (Chapter 4) override on a non-participating FFI first, then the portfolio-interest exemption on non-contingent interest, then a treaty rate behind an unexpired W-8, then the statutory default. The tax withheld is that rate applied to the gross, the slips aggregate the reportable payments, the Form 1042 totals sum the slips, and the deposits tie the liability. This engine reads the eight artifacts a withholding record carries -- the payee register, the treaty rate table, the income-code table, the payment register, the deposit register, the 1042-S slip register, the W-8 renewal watchlist and the Form 1042 panel -- and runs twenty-eight deterministic controls over them. Is the file complete and the review date readable, are the payee ids unique and every foreign country in the rate table with a classified Chapter 3, Chapter 4 and LOB code, does the treaty table define and bound every rate a payment needs, is every payment well-formed and attributable to a payee, is the US payee excluded and the accrued coupon un-withheld, does every applied rate recompute from the payee's status through the shared kernel and every tax equal rate times gross, is each treaty reduction supported by an unexpired W-8 with the portfolio and FATCA boundaries held, do the deposits tie the tax withheld and was the return filed on time, and do the 1042 gross, tax and 1042-T count tie the slips with one slip per reportable payee. It compares every rate, tax and total with exact ==, treats the W-8 expiry gate as <= so a form lapsing on the review date is already unsupported, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A withholding determination is a snapshot of a payee's status on the day a payment went out, and it goes stale -- or was wrong to begin with -- in ways nobody watches. A treaty rate is applied while the W-8 that would support it is missing or expired past its three-year term; the paper shows a low rate and the support for it is not there. A US payee is withheld on when it should not be, an accrued coupon is treated as paid, a non-participating FFI is handed treaty relief the FATCA override bars it from, a contingent coupon is coded as exempt portfolio interest -- each one internally consistent, none of them wrong on their face. The deposits drift a cent from the liability, or the return is filed a week late. The Form 1042 total gross or total tax is stated on a number nobody rebuilt from the slips underneath it, and a reportable payee has no slip at all. The order of precedence is the whole of the rule and it does not commute: a payee who is both a treaty claimant and a non-participating FFI is withheld at the statutory rate, not the treaty rate, and only one traversal order gets that right. This engine rebuilds every rate through the one kernel that produced the data, gates every reduction on a valid W-8, ties the deposits and the 1042 to the slips with exact ==, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A rate reduced without support, a US payee withheld, a total a cent off the slips -- each is invisible until an examiner recomputes the withholding the agent already reported.",
+  "layers_intro": "Eight control families run in registry order over each withholding file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the withholding file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES -- the payee register, treaty rate table, income-code table, payment register, deposit register, slip register, W-8 watchlist and Form 1042 panel -- or carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. It also FAILs an unreadable as_of review date, since every W-8 expiry and renewal-window test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence from reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "payee",
+      "label": "Payee Register",
+      "plain": "Checks the payee register is sound: unique ids, every foreign residence country in the treaty table, and the Chapter 3, Chapter 4 and LOB codes classified.",
+      "engineering": "Five controls. payee_unique_ids rejects a payee id that appears twice, because the id joins the register to every payment and every slip and a duplicate makes a payment ambiguous about whom it paid. payee_country_known FAILs a foreign payee whose residence country the treaty table does not carry, since the country is the key into the rate lookup and a missing country has no rate to resolve; US persons are out of scope. payee_ch3_status_valid and payee_ch4_status_valid FAIL any payee whose Chapter 3 (recipient) or Chapter 4 (FATCA) status code is outside the known list, without which the withholding gate and the FATCA override could not be applied. payee_lob_code_valid FAILs a treaty-claiming payee carrying a limitation-on-benefits code outside the known Article XXIX-A set -- a benefit claimed on a code that cannot be tested.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "rate",
+      "label": "Treaty Rate Table",
+      "plain": "Checks the treaty table defines a rate for every (country, income-type) a payment needs and that every rate sits within statutory bounds.",
+      "engineering": "Two controls. rate_table_defined FAILs when a reportable payment needs a (country, income-type) rate the table carries no row for; without the row the engine knows a payment must be rated but not at what rate, so the treaty branch of the determination could not resolve. Payees whose country is itself unknown are left to payee_country_known. rate_within_bounds FAILs a treaty rate below 0.00% or above the statutory 30.00%, because a treaty rate can only reduce the statutory rate, never exceed it -- a table rate above the ceiling would make a reduced-rate determination read as an increase. A rate that is not integer basis points raises AMOUNT_INVALID contained to the one row it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "pay",
+      "label": "Payment Register",
+      "plain": "Checks every payment is well-formed, coded to a known income code, attributable to a payee in the register, and of a known status.",
+      "engineering": "Four controls. pay_required_fields proves each payment carries the descriptive fields the controls read -- payment id, payee id, income code, payment status and interest sub-character. pay_income_code_known FAILs a payment whose 1042-S income code the code table does not define, because the code maps the payment to an income type and tells the engine whether it is portfolio interest; an unknown code cannot be rated or slipped. pay_payee_exists FAILs a payment that names a payee the register does not carry. pay_status_valid FAILs a payment whose status is neither paid nor accrued, since the status decides whether the amount was actually paid -- and so subject to withholding -- and an unknown status cannot be gated on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "wh",
+      "label": "Withholding Gate & Recompute",
+      "plain": "Checks the US payee is excluded and the accrued coupon un-withheld, and that each applied rate and each tax withheld recompute from the evidence.",
+      "engineering": "Four controls. wh_us_payee_excluded FAILs a US payee that shows any tax withheld, because Chapter 3 reaches FDAP paid to a non-US person and a US person is not withheld on at all. wh_accrued_not_withheld FAILs an accrued-only amount that shows tax withheld, since only a paid amount is subject to withholding and taxing an accrual overstates the liability. wh_rate_recomputes is the control the engine exists for: it rebuilds each subject payment's applicable rate through the shared kernel -- FATCA override, then portfolio exemption, then treaty rate behind a valid W-8, then statutory default -- and FAILs a stated rate that does not equal the determination. wh_tax_recomputes FAILs a tax withheld that is not exactly rate applied to gross with truncating division, compared in integer cents with no tolerance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "exm",
+      "label": "Exemption, Validity & Expiry",
+      "plain": "Checks every treaty reduction rests on an unexpired W-8, flags a W-8 due for renewal, and holds the portfolio-interest and FATCA-override boundaries.",
+      "engineering": "Five controls. exm_w8_present_for_treaty FAILs a treaty-reduced rate -- one that is neither the portfolio exemption nor a FATCA override -- against a payee with no valid W-8 on file. exm_w8_not_expired FAILs a payee whose W-8 term ends on or before the review date (the gate is <=), because a lapsed form no longer supports the treaty claim resting on it. exm_w8_renewal_window is a FLAG, not a failure: it marks a payee whose still-valid W-8 expires inside the file's own lead-time window, a form to refresh before it lapses. exm_portfolio_interest_eligible FAILs a coupon coded portfolio interest whose sub-character is contingent, which the exemption is barred from. exm_fatca_override FAILs a non-participating FFI withheld at anything but the statutory rate, holding the Chapter 4 precedence the kernel encodes.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "dep",
+      "label": "Deposits & Filing",
+      "plain": "Checks the deposits tie the tax withheld across reportable payments and that Form 1042 was filed on or before its due date.",
+      "engineering": "Two controls. dep_total_ties_withheld FAILs when the deposit register total does not equal the tax withheld summed across every reportable payment, compared in integer cents with exact ==; every dollar withheld is a dollar owed and a deposit total that does not tie is an under- or over-deposit against the year's liability. dep_1042_filed_on_time FAILs a Form 1042 whose filed date falls after its due date, and FAILs when either date is unreadable; the gate is filed <= due, so filing on the due date itself is timely.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "rec",
+      "label": "Form 1042 Reconciliation",
+      "plain": "Checks one slip per reportable payee, the 1042 gross, tax and 1042-T count all tie the slips, and the W-8 watchlist ties the evidence.",
+      "engineering": "Five controls. rec_slip_per_payee FAILs a reportable payee with no slip or more than one, and a slip filed for a payee with no reportable payment -- exactly one 1042-S per non-US person paid reportable FDAP. rec_gross_ties and rec_withheld_ties FAIL when the Form 1042 total gross or total tax does not equal the sum of the 1042-S slips, compared with exact ==. rec_slip_count_ties_1042t FAILs when the stated slip count or the 1042-T transmitted count does not equal the number of slips on file. rec_w8_watchlist_ties is a FLAG: it rebuilds the renewal watchlist from the payee register and marks a stated entry that is not actually due, or a payee due that the watchlist omits.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Withholding Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional Chapter 3/4 withholding files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every named control, thirty files in total. Only the payees, the treaty table, the income-code table, the payment base facts (gross, income code, sub-character, status) and the deposits are stated; each payment's applied rate and tax withheld, the 1042-S slips, the Form 1042 totals and the W-8 renewal watchlist are re-derived through the same withholding kernel the engine later recomputes with, the rate through withholding_engine.withholding. So the relationships the engine tests are the same relationships that produced the data: a defect on a base fact re-derives the rollup and confines the break to one control, a defect on a stated determination edits that figure alone.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the withholding file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, or an unreadable as_of review date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "payee-control",
+      "label": "Payee Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and every status classified",
+      "engineering": "Five controls: unique payee ids, every foreign residence country in the treaty table, and known Chapter 3, Chapter 4 and limitation-on-benefits codes on the payees that need them.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "rate-control",
+      "label": "Treaty Rate Table",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does the table define and bound every rate a payment needs",
+      "engineering": "Two controls: the treaty table carries a row for every (country, income-type) a reportable payment needs, and every rate sits between 0.00% and the statutory 30.00%.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "pay-control",
+      "label": "Payment Register",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is every payment well-formed, coded and attributable",
+      "engineering": "Four controls: the required descriptive fields present, a known 1042-S income code, a payee that exists in the register, and a known paid-or-accrued status.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "wh-control",
+      "label": "Withholding Gate & Recompute",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does every rate and tax recompute from the evidence",
+      "engineering": "Four controls: the US payee excluded and the accrued coupon un-withheld, each applied rate rebuilt through the shared kernel, and each tax equal to rate times gross with truncating division.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "exm-control",
+      "label": "Exemption, Validity & Expiry",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is every reduction supported and the boundaries held",
+      "engineering": "Five controls: a valid W-8 behind every treaty reduction, an unexpired term at the review date, a renewal flag inside the lead-time window, portfolio interest only on non-contingent coupons, and the FATCA override forcing statutory.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "dep-control",
+      "label": "Deposits & Filing",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "do the deposits tie the liability and was the return timely",
+      "engineering": "Two controls: the deposit total equals the tax withheld across reportable payments in exact cents, and Form 1042 was filed on or before its due date.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "rec-control",
+      "label": "Form 1042 Reconciliation",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does the 1042 recompute from the slips it transmits",
+      "engineering": "Five controls: one slip per reportable payee, the 1042 gross and tax tied to the slips, the 1042-T transmitted count tied to the slips, and the W-8 watchlist tied to the payee evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers, Table & Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and shared determination every rule resolves against",
+      "engineering": "The payee register carries each payee's country, Chapter 3/4 status, LOB code and W-8; the treaty rate table carries the (country, income-type) rates; the income-code table maps each 1042-S code to an income type and portfolio flag; the payment register carries the base facts and the stated rate and tax; the deposit register, slip register, W-8 watchlist and Form 1042 panel carry the derived figures. Every rate, tax, exemption, deposit and reconciliation control resolves against these through the shared kernel in withholding_engine.withholding, so a determination cannot disagree with the data that produced it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per withholding file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/withholding_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "withholding files" },
+    { "from": "set-control", "to": "payee-control", "label": "complete" },
+    { "from": "set-control", "to": "rate-control", "label": "complete" },
+    { "from": "set-control", "to": "pay-control", "label": "complete" },
+    { "from": "set-control", "to": "wh-control", "label": "complete" },
+    { "from": "set-control", "to": "exm-control", "label": "complete" },
+    { "from": "set-control", "to": "dep-control", "label": "complete" },
+    { "from": "set-control", "to": "rec-control", "label": "complete" },
+    { "from": "payee-control", "to": "registers", "label": "resolves" },
+    { "from": "rate-control", "to": "registers", "label": "resolves" },
+    { "from": "pay-control", "to": "registers", "label": "resolves" },
+    { "from": "wh-control", "to": "registers", "label": "resolves" },
+    { "from": "exm-control", "to": "registers", "label": "resolves" },
+    { "from": "dep-control", "to": "registers", "label": "resolves" },
+    { "from": "rec-control", "to": "registers", "label": "resolves" },
+    { "from": "wh-control", "to": "dep-control", "label": "tax withheld" },
+    { "from": "wh-control", "to": "report", "label": "findings" },
+    { "from": "exm-control", "to": "report", "label": "findings" },
+    { "from": "dep-control", "to": "report", "label": "findings" },
+    { "from": "rec-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "410",
+      "source": "python -m pytest --collect-only -q -o addopts= (withholding-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "28",
+      "source": "len(withholding_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every withholding file"
+    },
+    {
+      "label": "Families",
+      "value": "8",
+      "source": "distinct rule-id prefixes in withholding_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Sample files",
+      "value": "30",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-nine planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(withholding_engine.model.DOC_TYPES)",
+      "plain": "payee register, treaty rate table, income-code table, payment register, deposit register, slip register, W-8 watchlist, Form 1042"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "withholding_engine/tests boundary tests on the cent, the basis point and the date threshold",
+      "plain": "a rate or total a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A US withholding agent that pays cross-border interest, dividends, royalties or rent to foreign recipients has to withhold Chapter 3 tax at the right rate, support every reduced rate with a valid Form W-8, deposit what it withheld, and reconcile the annual Form 1042 to the 1042-S slips it transmits. A withholding determination is a snapshot of a payee's status on the day a payment went out, and it goes stale -- or was wrong to begin with -- in ways nobody watches. Four failures hide inside a folder of withholding workpapers, and none of them look wrong. The rate is reduced without support: a treaty rate is applied while the W-8 behind it is missing or expired past its three-year term. The classification is off: a US payee is withheld on, an accrued-but-unpaid coupon is treated as paid, a non-participating FFI is given treaty relief the FATCA override bars it from, or a contingent coupon is coded as exempt portfolio interest. The deposit drifts from the liability, or the return is filed after its due date. And the return does not tie to the slips: the Form 1042 total gross or total tax is stated on a number nobody rebuilt from the 1042-S slips underneath it, or a reportable payee has no slip at all. None of these are judgment calls. They are equalities and comparisons -- an applied rate against the determination the kernel rebuilds with exact ==, a tax against rate times gross, a deposit and a 1042 total against the slips, a W-8 term against the review date with <= -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks the withholding this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every withholding file",
+      "narrative": "The CLI generates thirty fictional withholding files -- one clean baseline and one carrying each of the twenty-nine planted defects -- then runs all twenty-eight controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (withholding-automation/); withholding_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The order of precedence does not commute",
+      "narrative": "A payee is seeded as both a treaty claimant and a non-participating FFI. The FATCA override must win: the payment is withheld at the statutory 30%, not the treaty rate. One defect file hands that payee a treaty-reduced 15% and trips exm_fatca_override, while another removes the W-8 behind a genuine treaty reduction and trips exm_w8_present_for_treaty -- proving the two exemption branches catch different failures at the edge boundary the kernel encodes.",
+      "source": "withholding_engine/generate.py DEFECTS fatca_override_ignored / treaty_without_w8"
+    },
+    {
+      "title": "The rate is recomputed, not read back",
+      "narrative": "A defect file under-rates a treaty payee, leaving a stated rate that no longer matches the determination. wh_rate_recomputes rebuilds the rate from the payee's status through the shared kernel -- FATCA, then portfolio, then treaty behind a valid W-8, then statutory -- and fails, proving the rate is recomputed from the evidence rather than trusted as stated.",
+      "source": "withholding_engine/generate.py DEFECTS rate_applied_wrong -> wh_rate_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-eight controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "nrw_report.json, nrw_report.md, samples/"
+    },
+    {
+      "cmd": "python -m withholding_engine samples",
+      "operation": "analyze an existing folder of withholding files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m withholding_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest withholding_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "410 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "410",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (withholding-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "28",
+      "unit": "controls",
+      "source": "len(withholding_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "29",
+      "unit": "defect files",
+      "source": "len(withholding_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "withholding_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the withholding the workpapers state: every reportable payment's rate recomputes from the payee's status through the shared kernel, every tax equals rate times gross, every treaty reduction rests on an unexpired W-8, the US payee is excluded and the accrued coupon un-withheld, the deposits tie the tax withheld, and the Form 1042 gross, tax and 1042-T count tie the 1042-S slips. It is not an opinion on whether a payee's stated Chapter 3/4 status is genuinely correct, whether a W-8 is authentic, whether the treaty rate the table carries is the right one for the year, or whether a payment was actually made.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean withholding file into the documented sign-off and 1042 review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a W-8 due for renewal inside the lead-time window and a watchlist that does not tie the payee evidence both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the rate or total is not carried into the return until the failing control is cleared -- a reduction with no valid W-8, a US payee withheld, an accrued coupon withheld, a rate that does not recompute, or a deposit or 1042 total that does not tie"
+      }
+    ],
+    "guarantees": [
+      "Read-only: withholding files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents and basis points throughout, compared with exact ==; there is no tolerance band on a rate, a tax or a total, and a cent off the re-derivation is reported as a break.",
+      "A figure that should be integer cents or basis points but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One withholding kernel: the controls and the generator share the determination in withholding_engine.withholding, so a rate cannot disagree with the data that produced it.",
+      "The order of precedence is encoded once: FATCA override, then portfolio-interest exemption on non-contingent interest, then a treaty rate behind a valid W-8, then the statutory default -- so a non-participating FFI that also holds a treaty claim is withheld at statutory.",
+      "Every expiry and renewal test is measured to the as_of review date carried in the file, never the system clock, and the W-8 expiry gate is <= so a form lapsing on the review date is already unsupported.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a rate is carried into the return and whether a W-8 or deposit is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never files a return, remits a deposit, issues or requests a W-8, contacts a payee, or writes to a source artifact. It reads the withholding file and stops.",
+      "source": "withholding-automation/README.md and withholding_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts the withholding record emits. It does not connect to a payment system, a general ledger, the IRS, or the underlying Forms W-8.",
+      "source": "withholding_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves a rate clears the mechanical determination -- FATCA override, portfolio exemption, treaty behind a valid unexpired W-8, statutory default -- not that a payee's stated Chapter 3/4 status is genuinely correct or that a W-8 is authentic. That judgment is a reviewer's.",
+      "source": "withholding_engine/engine.py wh_ and exm_ families"
+    },
+    {
+      "statement": "It re-derives each rate at the treaty and statutory rates the file carries; it does not decide whether the treaty rate table or the statutory 30% default is the correct one for the year and taxpayer.",
+      "source": "withholding_engine/withholding.py STATUTORY_RATE_BPS and the rate_ / wh_ families"
+    },
+    {
+      "statement": "It takes the payment and deposit records at face value: it confirms the registers foot, tie and reconcile, not that a payment or deposit actually occurred. All shipped data is fictional and the reporting period is set in a fictional future.",
+      "source": "withholding_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-withholding.svg",
+    "motion": "../assets/engine-withholding.svg",
+    "poster_alt": "Non-Resident Withholding & 1042-S diagram: down the left a payee register card carrying a foreign country, Chapter 3/4 status and a Form W-8 tile; a determination panel in the centre showing the fixed order of precedence -- FATCA override, then portfolio-interest exemption, then a treaty rate behind a valid W-8, then the statutory 30% default -- with one payment stamped REDUCED, NO W-8 and one non-participating FFI stamped FATCA OVERRIDE; a payment register showing rate applied to gross footing to tax withheld, the deposits tied to that liability beneath it; on the right a Form 1042 panel whose total gross and total tax tie the sum of the 1042-S slips, one slip per reportable payee; and a footer strip reading 28 controls, 8 families, 410 tests, read-only, SFS-E31-NRW.",
+    "caption": "The Non-Resident Withholding & 1042-S engine tile states the question that has to hold payment by payment: every applied rate recomputed from the payee's status through one kernel in the order FATCA, portfolio, treaty behind a valid W-8, then statutory, with the tax, the deposits and the Form 1042 all tied to the 1042-S slips underneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest withholding_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/withholding-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/withholding-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Non-Resident Withholding & 1042-S (SFS-E31-NRW) datasheet -- twenty-eight deterministic, read-only controls over a US withholding agent's Chapter 3/4 FDAP record: every cross-border interest, dividend, royalty and rent payment rated from the payee's status through one kernel in the order FATCA override, portfolio-interest exemption, treaty rate behind a valid unexpired W-8, then the statutory 30% default, with each tax recomputed as rate times gross, the deposits tied to the liability, and the Form 1042 gross, tax and 1042-T count tied to the 1042-S slips it transmits. 410 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

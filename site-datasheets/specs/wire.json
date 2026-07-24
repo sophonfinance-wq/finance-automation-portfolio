@@ -1,0 +1,429 @@
+{
+  "num": 29,
+  "slug": "wire",
+  "part_no": "SFS-E29-WRL",
+  "mnemonic": "WRL",
+  "family": "Payment Release",
+  "name": "Wire & Transfer Release Control",
+  "tagline": "Did two different people release it, to an approved account it can fund?",
+  "plain_summary": "An operating entity moves money out one packet at a time -- a wire, an ACH or an internal book transfer -- and the wire room has to prove, packet by packet, that the payment is safe to release before it posts, because a wire is irreversible the moment it does. Two different people signed it and the secondary authorization is complete; each signer is on the funding account's register and the amount is within the authorizer's limit; the beneficiary matches an approved template, or a new or changed detail cleared a callback; the routing number passes its own checksum and resolves to the bank named on the form; the funding account exists and covers the amount; the packet is not a second copy of a payment already posted; and it moved through the three workflow stages in order. This engine reads the eight artifacts the release record carries -- the account register, the signer register, the bank directory, the beneficiary register, the wire register, the posted log, the release summary and the release report -- and runs twenty-three deterministic controls over them, grouped into nine families that each answer one question. Is the file complete and the release date legible; were two distinct signers present and the authorization complete and correctly ordered; is each signer authorized on the account and within the dollar limit; does the beneficiary triplet match an approved template or clear a callback; is the routing number well-formed and resolved to the named bank; does the funding account exist and cover the amount; are the packet ids unique and free of an already-posted duplicate; did the packet traverse the workflow stages in order; and does the release summary's releasable flag and the report's counts recompute from the evidence beneath them. It compares every amount and limit as integer cents with exact > and ==, recomputes each releasable determination through the same release kernel that produced the data, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A wire form looks complete the moment every field is filled: two names, an account number, a routing number, an amount, a bank. That is exactly why a bad one gets released. None of the ways a payment goes wrong look wrong in a folder of one-page forms. One person both initiated and authorized it, or the packet left the pending tray before the second signature and its date were ever filled in, and the segregation of duties the wire room exists to enforce was never actually enforced. The beneficiary triplet is one digit off the approved template, or a changed bank detail was released with no callback, or the routing number passes its check digit but names a bank it does not resolve to -- the form is complete and the money lands somewhere it should not. And the daily released-wire log calls a packet releasable, or counts a batch as clear, on a determination nobody recomputed from the signatures, limits and templates underneath it. The engine rebuilds every releasable flag from the signers, templates, routing directory and funding balances through the same kernel that produced the data, compares every amount and limit as integer cents with exact > and ==, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A payment released on one signature, to an unapproved account, or over a funded balance is invisible until someone recomputes the release the wire room already made.",
+  "layers_intro": "Nine control families run in registry order over each release-control file. The first proves the others had something to read and that the release date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the release-control file carries every artifact the controls below read, exactly once, and that the release date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a release-control file missing any of the eight document types in model.DOC_TYPES -- the account register, signer register, bank directory, beneficiary register, wire register, posted log, release summary and release report -- or carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. It also FAILs an unreadable as_of date, since the daily release log and the duplicate window are measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "sod",
+      "label": "Segregation & Dual Authorization",
+      "plain": "Checks two different people signed each packet and that the secondary authorization is complete and dated on or after initiation.",
+      "engineering": "Three controls. sod_two_distinct_signers FAILs a packet initiated and authorized by the same signer, which is the whole failure segregation of duties exists to prevent: nobody independent ever looked at the payment. sod_dual_auth_complete FAILs an Approved & Scheduled packet missing any of the two signer fields or the two date fields, since a packet cannot have cleared the dual-authorization gate without all four. sod_auth_not_before_init FAILs a packet authorized on a date before it was initiated, because an authorization that precedes the request means the dates were not recorded from the workflow and the audit trail the dual signature exists to leave cannot be trusted.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "sig",
+      "label": "Authorized Signer & Limit",
+      "plain": "Checks each packet's initiator and authorizer are on the funding account's signer register and the amount is within the authorizer's dollar limit.",
+      "engineering": "Three controls. sig_initiator_authorized FAILs a packet whose initiator is not on the funding account's signer register. sig_authorizer_authorized FAILs a packet whose authorizer is not on that register -- a real signer on another account does not authorize this one. sig_within_authority_limit FAILs a packet whose amount exceeds the authorizing signer's dollar limit on the account, compared with exact > so an amount a cent over the limit is an amount over the limit. A malformed limit or amount raises AMOUNT_INVALID contained to the one packet it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "ben",
+      "label": "Beneficiary Integrity & Callback",
+      "plain": "Checks each external wire pays a beneficiary on the approved whitelist, or an off-template detail that cleared a callback, and flags off-template payees for a second look.",
+      "engineering": "Four controls. ben_template_exists FAILs an on-template external wire that names a beneficiary template absent from the approved-beneficiary register. ben_triplet_matches_template FAILs an on-template wire whose (receiving ABA, beneficiary account, beneficiary name) triplet does not match the stored template, because the whitelist is keyed on the whole triplet and a differing account or name is a payment bound somewhere the entity never approved, even when the template id is real. ben_new_account_callback FAILs an off-template beneficiary released with no completed callback -- the control that stops a first-time or changed bank detail from being paid unverified. ben_off_template_review is a FLAG, not a failure: an off-template beneficiary that did clear callback is still the packet a reviewer should eyeball before the wire leaves. Internal book transfers carry no external beneficiary, so the gate does not apply to them.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "aba",
+      "label": "Routing & Bank Name",
+      "plain": "Checks each packet carries the routing shape its type requires, and that an external wire's routing number passes its checksum and resolves to the named bank.",
+      "engineering": "Three controls. aba_classification_fields FAILs a packet typed as neither a wire nor a book transfer, an external wire missing its receiving ABA or bank name, and an internal book transfer that carries routing detail it should not; the classification selects which routing controls apply, so a mis-shaped packet is mis-typed at the root. aba_check_digit_valid FAILs an external routing number that does not pass the ABA mod-10 checksum with the fixed 3-7-1 weight pattern. aba_resolves_to_bank_name FAILs a routing number that resolves, through the bank directory, to a different bank than the one printed on the form -- a valid check digit is not enough when the number and the name are two independent facts.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "fund",
+      "label": "Funding Existence & Sufficiency",
+      "plain": "Checks each packet draws on a known funding account and that the amount is within that account's available balance.",
+      "engineering": "Two controls. fund_account_exists FAILs a packet drawn on an account absent from the funding-account register, whose balance cannot be checked. fund_sufficient_balance FAILs a packet whose amount exceeds the funding account's available balance, compared with exact > so an amount a cent over the balance is an overdraft the moment it releases. Amounts and balances are read as integer cents through require_cents, so a figure that is not integer cents raises AMOUNT_INVALID contained to the row it was read on rather than being coerced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "dup",
+      "label": "Duplicate Payment",
+      "plain": "Checks packet ids are unique and that no not-yet-posted packet duplicates a payment already in the posted log.",
+      "engineering": "Two controls. dup_wire_ids_unique FAILs a packet id that appears twice in the wire register, since the id joins the register to the release summary and the posted log and a duplicate makes a posting ambiguous about which request it settled. dup_not_already_posted FAILs a not-yet-posted packet whose beneficiary account and amount match an already-posted payment within the duplicate window read from the file (defaulting to five days) -- the posted log is the record that stops a second copy of a payment already sent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "flow",
+      "label": "Workflow Completeness",
+      "plain": "Checks each packet sits in a known workflow stage, that posted packets carry their approval evidence, and that posted packets and the posted log tie both ways.",
+      "engineering": "Three controls. flow_stage_valid FAILs a packet sitting in a stage that is not one of pending secondary approval, approved and scheduled, or posted. flow_posted_has_approval FAILs a posted packet missing any of the two signer or two date fields -- a released wire with no evidence of a complete secondary approval. flow_posted_ref_ties FAILs a posted packet that references a posting absent from the posted log or one whose beneficiary or amount does not match, and every posting whose wire id maps to no packet in the register, closing the three-way reconciliation from Approved & Scheduled to the posted log to the register, checked both ways.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Release Rollup Recompute",
+      "plain": "Checks each packet's stated releasable flag recomputes from the evidence and that the report's releasable and blocked counts tie the summary.",
+      "engineering": "Two controls. rpt_release_flag_recomputes is the control the engine exists for: it rebuilds every packet's releasable determination from the signers, beneficiary templates, routing directory, funding balances and duplicate status through the shared wire_engine.release kernel the generator produced the data with, and FAILs any stated flag that does not match the recompute, because a determination that is not recomputed from the evidence is an assertion. rpt_report_count_ties FAILs a release report whose releasable and blocked counts do not equal the counts recomputed from the summary flags -- the classic count maintained beside the summary rather than derived from it, which drifts the first time a flag moves and nobody re-adds the column.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Release Files",
+      "kind": "source",
+      "col": 0,
+      "row": 4,
+      "plain": "fictional release-control files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-five files in total. Only the accounts, signers, banks, beneficiary templates, wire packets and posted log are stated as base facts; each packet's releasable determination and the release report's releasable and blocked counts are re-derived through the same wire_engine.release kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the release-control file complete and the release date legible",
+      "engineering": "One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, or an unreadable as_of date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "sod-control",
+      "label": "Segregation & Dual Authorization",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "did two different people sign it with a complete, ordered authorization",
+      "engineering": "Three controls: two distinct signers on initiation and authorization, both signer and date fields present on a scheduled packet, and the authorization dated on or after initiation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "sig-control",
+      "label": "Authorized Signer & Limit",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is each signer authorized on the account and within the dollar limit",
+      "engineering": "Three controls: the initiator and the authorizer are both on the funding account's signer register, and the amount is within the authorizer's dollar limit, checked with exact >.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "ben-control",
+      "label": "Beneficiary Integrity & Callback",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the beneficiary match an approved template or clear a callback",
+      "engineering": "Four controls: the cited template exists, the whole (ABA, account, name) triplet matches it, an off-template detail carries a completed callback, and any off-template payee is flagged for a second look.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "aba-control",
+      "label": "Routing & Bank Name",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "is the routing number well-formed and resolved to the named bank",
+      "engineering": "Three controls: each packet carries the routing shape its request type requires, an external routing number passes the ABA mod-10 checksum, and it resolves through the bank directory to the receiving-bank name printed on the form.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "fund-control",
+      "label": "Funding Existence & Sufficiency",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the funding account exist and cover the amount",
+      "engineering": "Two controls: every packet draws on an account in the funding-account register, and the amount is within that account's available balance, checked with exact >.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "dup-control",
+      "label": "Duplicate Payment",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "are the packet ids unique and free of an already-posted duplicate",
+      "engineering": "Two controls: no packet id appears twice in the wire register, and no not-yet-posted packet matches an already-posted payment on beneficiary and amount within the duplicate window.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "flow-control",
+      "label": "Workflow Completeness",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "did the packet traverse the workflow stages in order",
+      "engineering": "Three controls: every packet sits in a known stage, a posted packet carries its complete secondary-approval evidence, and posted packets and the posted log tie to each other both ways.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Release Rollup Recompute",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the releasable flag and the report counts recompute from the evidence",
+      "engineering": "Two controls: each packet's stated releasable flag recomputes from the release evidence through the shared kernel, and the report's releasable and blocked counts tie the summary flags.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers, Directory & Templates",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts every rule resolves against",
+      "engineering": "The account register carries each funding account's available balance; the signer register carries each authorized signer, keyed by account, with a dollar authority limit; the bank directory maps each routing number to a receiving-bank name; the beneficiary register carries one approved template per (ABA, account, name); the wire register carries each packet's signers, dates, routing, beneficiary, amount and stage; and the posted log carries one execution record per posted packet. Every segregation, signer, beneficiary, routing, funding, duplicate, workflow and rollup control resolves against these through the shared release kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per release-control file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/wire_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "release files" },
+    { "from": "set-control", "to": "sod-control", "label": "complete" },
+    { "from": "set-control", "to": "sig-control", "label": "complete" },
+    { "from": "set-control", "to": "ben-control", "label": "complete" },
+    { "from": "set-control", "to": "aba-control", "label": "complete" },
+    { "from": "set-control", "to": "fund-control", "label": "complete" },
+    { "from": "set-control", "to": "dup-control", "label": "complete" },
+    { "from": "set-control", "to": "flow-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "sod-control", "to": "registers", "label": "resolves" },
+    { "from": "sig-control", "to": "registers", "label": "resolves" },
+    { "from": "ben-control", "to": "registers", "label": "resolves" },
+    { "from": "aba-control", "to": "registers", "label": "resolves" },
+    { "from": "fund-control", "to": "registers", "label": "resolves" },
+    { "from": "dup-control", "to": "registers", "label": "resolves" },
+    { "from": "flow-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "fund-control", "to": "rpt-control", "label": "release facts" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "dup-control", "to": "report", "label": "findings" },
+    { "from": "flow-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "347",
+      "source": "python -m pytest --collect-only -q -o addopts= (wire-release-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "23",
+      "source": "len(wire_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every release-control file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in wire_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Release files",
+      "value": "25",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-four planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(wire_engine.model.DOC_TYPES)",
+      "plain": "account register, signer register, bank directory, beneficiary register, wire register, posted log, release summary, release report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "wire_engine/tests boundary tests on the cent, the authority limit and the funding balance",
+      "plain": "an amount a cent over a limit or balance is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "An operating entity releases outbound payments -- wires, ACH and internal book transfers -- and a wire is irreversible the moment it posts, so every packet has to clear a set of preventive controls before the wire room lets it leave. Two different people have to have signed it with a complete, correctly ordered authorization; each signer has to be on the funding account's register and the amount within the authorizer's limit; the beneficiary has to match an approved template or a new detail has to have cleared a callback; the routing number has to pass its checksum and resolve to the named bank; the funding account has to exist and cover the amount; the packet must not duplicate a payment already posted; and it has to have moved through the three workflow stages in order. Three failures hide inside that, and none of them look wrong on a filled-in form. The same person moves the money end to end, or the packet is released before the second signature is complete. The money goes to the wrong account -- an off-template beneficiary, a changed detail released without a callback, or a routing number that names a bank it does not resolve to. And the release log drifts from the evidence, calling a packet releasable on a determination nobody recomputed. None of these are judgment calls. They are equalities, thresholds, date gates, membership tests and re-derivations -- an amount against a limit with exact >, a triplet against a stored template, a stated flag against its recompute -- which a deterministic control settles better than a folder of one-page forms passed to whoever staffs the wire room this week.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every release-control file",
+      "narrative": "The CLI generates twenty-five fictional release-control files -- one clean baseline and one carrying each of the twenty-four planted defects -- then runs all twenty-three controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (wire-release-automation/); wire_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The authority limit and the funding balance are independent thresholds",
+      "narrative": "One defect file lifts a packet a single cent over the authorizing signer's dollar limit while leaving it well within the funding balance, so sig_within_authority_limit fails and fund_sufficient_balance does not; another drops an account's available balance below a scheduled wire drawn on it, so the funding check fails on its own. Each threshold is checked with exact > at its boundary, proving the two catch different failures.",
+      "source": "wire_engine/generate.py DEFECTS over_authority_limit / funding_shortfall"
+    },
+    {
+      "title": "The release determination is recomputed, not read back",
+      "narrative": "A defect file flips a packet's stated releasable flag to False and moves the release report's releasable and blocked counts along with it, so the summary and the report agree with each other and only a recompute can see the break. rpt_release_flag_recomputes rebuilds the flag from the signers, templates, routing and funding through the shared release kernel and fails, proving the summary is recomputed from the evidence beneath it rather than trusted as stated.",
+      "source": "wire_engine/generate.py DEFECTS release_flag_wrong -> rpt_release_flag_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-three controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "wire_report.json, wire_report.md, samples/"
+    },
+    {
+      "cmd": "python -m wire_engine samples",
+      "operation": "analyze an existing folder of release-control files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m wire_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest wire_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "347 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "347",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (wire-release-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "23",
+      "unit": "controls",
+      "source": "len(wire_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "24",
+      "unit": "defect files",
+      "source": "len(wire_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "wire_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the packets they were given: every packet named two distinct authorized signers with a complete, correctly ordered authorization, paid a beneficiary on an approved template or one that cleared a callback, carried a routing number that passed its checksum and resolved to the named bank, drew on a funding account that existed and covered the amount, did not duplicate an already-posted payment, moved through the workflow in order, and every releasable flag and report count recomputes from the evidence. It is not an opinion on whether the beneficiary is the party the entity truly meant to pay, whether a callback actually reached the counterparty, whether the funding balance on file is current, or whether the payment should be made at all.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean release-control file into the documented wire-room sign-off before release"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an off-template beneficiary that cleared its callback but is not on the whitelist lands here for a second look before the wire leaves"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the packet is not released until the failing control is cleared -- one signer on both roles, a beneficiary off template or without a callback, a routing checksum or bank-name mismatch, a funding shortfall, a duplicate, a skipped workflow stage, or a release flag that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: release-control files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact > and ==; there is no tolerance band on an amount or a limit, and a cent over is reported as a break.",
+      "An amount or limit that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One release kernel: the controls and the generator share wire_engine.release, so a releasable determination cannot disagree with the data that produced it.",
+      "Segregation of duties is checked as identity and completeness: two distinct signers, both signer and date fields present, and the authorization dated on or after initiation.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to release. It produces findings; a person in the wire room decides whether a packet is released and whether a beneficiary or a callback is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never releases a payment, initiates or authorizes a wire, places a callback, contacts a bank or a beneficiary, or writes to a source artifact. It reads the release-control file and stops.",
+      "source": "wire-release-automation/README.md and wire_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts the release record emits. It does not connect to a bank, a payment rail, a general ledger or a wire-transfer system, and it books no cash entry -- where the transfer lands in the ledger is a separate engine's question.",
+      "source": "wire_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves a packet clears the mechanical gates -- two distinct authorized signers, an approved or called-back beneficiary, a resolved routing number, a funded account -- not that the beneficiary is the party the entity truly meant to pay or that a callback actually reached the counterparty. That judgment is the wire room's.",
+      "source": "wire_engine/engine.py sod_, sig_, ben_ and aba_ families"
+    },
+    {
+      "statement": "It checks the amount against the authority limit and available balance the file carries; it does not decide whether that limit is the right one for the signer or whether the balance on file is current as of release.",
+      "source": "wire_engine/engine.py sig_within_authority_limit and fund_sufficient_balance"
+    },
+    {
+      "statement": "It takes the routing directory, beneficiary templates and posted log at face value: it confirms the packets reconcile against them, not that a bank-directory entry is real or a posting actually settled. All shipped data is fictional and the release period is set in a fictional future.",
+      "source": "wire_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-wire.svg",
+    "motion": "../assets/engine-wire.svg",
+    "poster_alt": "Wire & Transfer Release Control diagram: on the left a navy wire-packet card (W-1005) carrying two signers, a beneficiary and a funding account; an arrow into a release-gates panel listing the checks each packet must clear -- two distinct signers with a complete authorization, each signer authorized and the amount within limit, the beneficiary on an approved template or cleared by callback, the routing number passing its ABA checksum and resolving to the named bank, the funding account covering the amount -- with one line in red for a packet a cent over its authority limit and one in amber for an off-template beneficiary that cleared its callback; on the right a verdict card reading FAIL; and a footer strip reading 23 controls, 9 families, 347 tests, read-only, SFS-E29-WRL.",
+    "caption": "The Wire & Transfer Release Control tile states the question that has to hold packet by packet: two different people released it with a complete authorization, to a beneficiary on an approved template or one that cleared a callback, over a routing number that resolves to the named bank, from a funding account that covers the amount, free of a duplicate, with every releasable flag recomputed from the evidence beneath it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest wire_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/wire-release-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/wire-release-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Wire & Transfer Release Control (SFS-E29-WRL) datasheet -- twenty-three deterministic, read-only controls over an operating entity's outbound wire, ACH and book-transfer release: every packet proved segregated with two distinct authorized signers and a complete, correctly ordered authorization, paid to a beneficiary on an approved template or one that cleared a callback, over a routing number that passes its checksum and resolves to the named bank, drawn on a funding account that exists and covers the amount, free of an already-posted duplicate and moved through the three workflow stages in order, with every releasable flag and report count recomputed from the evidence through the shared release kernel. 347 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

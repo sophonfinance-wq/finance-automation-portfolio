@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payroll &amp; Benefit Reconciliation — Sophon Finance Systems</title>
+<meta name="description" content="Payroll &amp; Benefit Reconciliation (SFS-E30-PBR) datasheet -- twenty-nine deterministic, read-only controls over one pay period&#x27;s benefit reconciliation: every 401(k), HSA and FSA deduction proved to reach each provider, the ledger liability and cash in the same amount, the employer match recomputed from the plan formula capped at 401(a)(17), every employee inside the 402(g), HSA-tier, FSA and 415(c) ceilings, every participant deposit inside the DOL small-plan safe harbor, the journal entry balanced and cleared, and the report&#x27;s per-plan tie flags and exception watchlist recomputed from the evidence beneath them. 414 tests, seeded fictional data, a planted-defect file for every control.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:30px;height:30px;flex:none}
+.brand-word{font-weight:600;font-size:18px;letter-spacing:.2px;white-space:nowrap;line-height:1.15}
+.brand-word span{font-weight:300}
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}.brand-tag{font-size:8.5px;letter-spacing:.8px}}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.schem-wrap{overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px;overflow-wrap:anywhere}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}.schem-wrap svg.schem{width:auto;max-width:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+<main class="wrap">
+<section class="masthead">
+  <p class="kicker">ENGINE 30</p>
+  <p class="partline">SFS-E30-PBR &middot; PAYROLL CONTROLS &middot; REV 2026-07-24 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Payroll &amp; Benefit Reconciliation</strong></h1>
+  <p class="tag">Did every benefit dollar the register withheld reach the provider, the ledger and cash intact?</p>
+  <p class="intro">An employer runs one payroll a period, and that single register fans out to several benefit providers, to the general ledger and to cash -- and every dollar it withheld has to arrive intact at each destination. This engine reads the eight artifacts one pay-period reconciliation carries -- the employee register, the plan catalog, the deduction register, the provider upload file, the remittance schedule, the entity summary, the journal entry and the reconciliation report -- and runs twenty-nine deterministic controls over them in registry order. Is the file complete and the review date readable; are the employee ids unique, the entities known and the DOB, HSA tier and eligible-comp fields legible; are the plan codes unique and each plan of a known type; does every deduction name a real employee and plan, sit one per pair, and reach each of its plan&#x27;s providers per employee to the cent; does each plan&#x27;s register total tie every provider upload, the ledger liability credit and the settling cash transfer; do the per-entity subtotals recompute from the register and sum to the consolidated total; does the employer match recompute from the plan formula capped at 401(a)(17); is every employee inside the 402(g), HSA-tier, FSA and 415(c) ceilings, and who is approaching one; does the per-period HSA withholding recompute from the remaining room over the remaining periods; did participant money reach the provider inside the DOL small-plan seven-business-day safe harbor on or after the pay date; does the journal entry balance and every benefit clearing account zero out; and does the report&#x27;s stated tie determination and its statutory exception watchlist recompute from the evidence beneath them. It compares every tie-out with exact ==, treats the safe-harbor boundary as inclusive so a deposit on the seventh business day is still timely, and never writes to a source artifact.</p>
+  <p class="thesis">Payroll benefit money looks like the most mechanical number in the close: a deduction withheld, uploaded to a provider, accrued in the ledger and settled in cash, the same figure four times over. That is exactly why it drifts. None of the ways it goes wrong look wrong in a stack of provider upload files. A per-employee deduction reaches the recordkeeper but not the custodian, or a plan total ties to one provider and misses the other; the upload file still foots and the participant is short at one destination. The employer match is booked on compensation above the 401(a)(17) cap, or an employee crosses the 402(g), HSA-tier, FSA or 415(c) ceiling by a cent while every subtotal beneath it still foots. Participant money is deposited a day past the DOL safe harbor, a lapse visible only against the pay date and a business-day count. And the reconciliation report calls a plan tied on a determination nobody rebuilt from the register, the uploads, the ledger and the cash underneath it. The engine recomputes every hand-off, every match, every limit and every tie flag from the base facts through the same kernel that produced them and compares with exact ==, checks the safe-harbor boundary as genuinely inclusive, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A deferral a cent over the limit, a match on uncapped pay, or a deposit a day late is invisible until someone recomputes the money the payroll already moved.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 820" role="img" aria-label="Exploded functional block stack: Structural Precondition, Employee Register, Plan Catalog, Deduction Register &amp; Provider Hand-off, Plan-Level Tie-Out, Multi-Entity Rollup, Employer Match, Statutory Limits, Per-Period Withholding, Deposit Safe Harbor, Journal Entry, Rollup Recompute over seeded fictional data">
+  <g class="die-layer" data-layer="set"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Structural Precondition</text></g>
+  <g class="die-layer" data-layer="emp"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Employee Register</text></g>
+  <g class="die-layer" data-layer="pln"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Plan Catalog</text></g>
+  <g class="die-layer" data-layer="ded"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="11" fill="#161616">Deduction Register &amp; Provider Hand-off</text></g>
+  <g class="die-layer" data-layer="tie"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Plan-Level Tie-Out</text></g>
+  <g class="die-layer" data-layer="ent"><polygon points="80,320 400,320 360,342 40,342" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,342 360,342 360,388 40,388" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="369" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Multi-Entity Rollup</text></g>
+  <g class="die-layer" data-layer="mat"><polygon points="80,380 400,380 360,402 40,402" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,402 360,402 360,448 40,448" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="429" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Employer Match</text></g>
+  <g class="die-layer" data-layer="lim"><polygon points="80,440 400,440 360,462 40,462" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,462 360,462 360,508 40,508" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="489" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Statutory Limits</text></g>
+  <g class="die-layer" data-layer="whh"><polygon points="80,500 400,500 360,522 40,522" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,522 360,522 360,568 40,568" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="549" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Per-Period Withholding</text></g>
+  <g class="die-layer" data-layer="dol"><polygon points="80,560 400,560 360,582 40,582" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,582 360,582 360,628 40,628" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="609" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Deposit Safe Harbor</text></g>
+  <g class="die-layer" data-layer="je"><polygon points="80,620 400,620 360,642 40,642" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,642 360,642 360,688 40,688" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="669" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Journal Entry</text></g>
+  <g class="die-layer" data-layer="rpt"><polygon points="80,680 400,680 360,702 40,702" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,702 360,702 360,748 40,748" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="729" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Rollup Recompute</text></g>
+  <text x="40" y="810" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="set" data-plain="Checks the reconciliation file carries every artifact the controls below read, exactly once, and that the review date is legible." data-eng="One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable as_of review date, since every deposit-timing and catch-up gate is measured to the dates the file carries rather than the system clock. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Structural Precondition layer — open detail" aria-controls="die-panel" aria-expanded="false">Structural Precondition</button>
+    <button class="die-face" data-layer="emp" data-plain="Checks the employee register is sound: unique ids, a known employing entity, and a parseable DOB, HSA tier and eligible-comp field on every row." data-eng="Three controls. emp_unique_ids rejects an employee id that appears twice, because the id is what every deduction and every provider upload is attributed to, and a duplicate makes a deduction ambiguous about whom it belongs to. emp_entity_valid FAILs an employee typed to an entity outside ENT-NW / ENT-SW / ENT-TX, since payroll is partitioned by entity and an unknown one has no subtotal to roll into. emp_fields_valid FAILs a DOB that is not a readable date (the age-50 and age-55 catch-up gates cannot be measured), an HSA coverage tier outside self_only / family / none (the HSA limit cannot be selected), and an eligible-comp figure that is not integer cents." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Employee Register layer — open detail" aria-controls="die-panel" aria-expanded="false">Employee Register</button>
+    <button class="die-face" data-layer="pln" data-plain="Checks the plan catalog is sound: unique plan codes and every plan of a known type." data-eng="Two controls. pln_unique_codes rejects a plan code that appears twice, because the code keys every deduction, provider upload and journal line to its plan, and a duplicate makes the plan a deduction settles against ambiguous. pln_type_valid FAILs a plan typed outside deferral_pretax / employer_match / hsa / fsa_medical / fsa_dependent_care, because the plan type selects which controls apply and which statutory limit is tested, and an unknown type has no controls -- so a deduction to it checks nothing." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Plan Catalog layer — open detail" aria-controls="die-panel" aria-expanded="false">Plan Catalog</button>
+    <button class="die-face" data-layer="ded" data-plain="Checks every deduction references a real employee and plan, sits one per pair, and reaches each of the plan&#x27;s providers per employee." data-eng="Three controls. ded_refs_valid FAILs a deduction naming an employee not in the register or a plan not in the catalog, so a withholding cannot answer to nothing. ded_unique_pairs FAILs an (employee, plan) pair carrying two deduction rows, because one employee&#x27;s deduction to one plan is one figure and two rows double the withholding. ded_matches_provider is the per-employee hand-off: the amount withheld on the register must equal the amount uploaded to each of the plan&#x27;s providers to the cent -- a 401(k) deferral reaches both the recordkeeper and the custodian -- and a deduction with no matching upload never left the building." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Deduction Register &amp; Provider Hand-off layer — open detail" aria-controls="die-panel" aria-expanded="false">Deduction Register &amp; Provider Hand-off</button>
+    <button class="die-face" data-layer="tie" data-plain="Checks each plan&#x27;s register total ties every provider upload total, the ledger liability credit and the settling cash transfer." data-eng="Three controls. tie_provider_total FAILs a plan whose register total does not equal a provider&#x27;s upload total, catching a plan that ties to the recordkeeper but not the custodian, or an upload file carrying a row that answers to no deduction. tie_je_liability FAILs a journal-entry liability credit that does not equal the register total, which books a payable the payroll never created. tie_cash_transfer FAILs a settling cash transfer that does not equal the register total, or is missing entirely, which overfunds the provider or leaves the payable short. Each is compared with exact ==. A figure that is not integer cents raises AMOUNT_INVALID contained to the one row it was read on." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Plan-Level Tie-Out layer — open detail" aria-controls="die-panel" aria-expanded="false">Plan-Level Tie-Out</button>
+    <button class="die-face" data-layer="ent" data-plain="Checks the per-entity subtotals recompute from the register and sum to the consolidated total." data-eng="Two controls. ent_subtotal_recomputes FAILs a per-(entity, plan) subtotal that does not equal the sum of that entity&#x27;s own register deductions, or that is missing where the register carries value for it, catching an entity file built from something other than its register. ent_consolidated_ties FAILs a consolidated per-plan total that does not equal both the sum of the per-entity subtotals and the register total, so the entities always add up to the whole a single provider is funded for." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Multi-Entity Rollup layer — open detail" aria-controls="die-panel" aria-expanded="false">Multi-Entity Rollup</button>
+    <button class="die-face" data-layer="mat" data-plain="Checks the booked employer match recomputes from the formula and is limited to the 401(a)(17) compensation cap." data-eng="Two controls. mat_recomputes treats the match as a re-derivation, not a stored figure: the match rate applied to eligible compensation, capped at 401(a)(17), and a booked match that does not equal the recomputed one credited an amount the formula does not produce. mat_comp_cap FAILs a high earner whose booked match exceeds the rate applied to the cap itself, because compensation above the 401(a)(17) ceiling is ineligible for match. Both re-derive through derive_match and capped_match, the same helpers the generator used to strike the figure." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Employer Match layer — open detail" aria-controls="die-panel" aria-expanded="false">Employer Match</button>
+    <button class="die-face" data-layer="lim" data-plain="Checks every employee sits inside the 402(g), HSA-tier, FSA and 415(c) ceilings, and flags anyone approaching a limit." data-eng="Five controls. lim_402g_deferral FAILs a year-to-date deferral over the 402(g) limit, which includes the age-50 catch-up for anyone fifty by plan-year-end. lim_hsa_tier FAILs a year-to-date HSA over the tier limit, where the tier and the DOB together select self-only or family plus the age-55 catch-up. lim_fsa_cap FAILs a year-to-date FSA election over the plan cap. lim_415c_additions FAILs annual additions -- employee deferrals plus employer match -- over the 415(c) ceiling. Each is compared with exact &gt;, so a contribution a cent over is over. lim_deferral_watch is a FLAG, not a failure: it marks a deferral inside the file&#x27;s own watch band of the 402(g) limit -- still under, but on track to breach if the election is not trimmed for the periods that remain." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Statutory Limits layer — open detail" aria-controls="die-panel" aria-expanded="false">Statutory Limits</button>
+    <button class="die-face" data-layer="whh" data-plain="Checks the per-period HSA deduction recomputes from the remaining room and stays under the pro-rated ceiling." data-eng="Two controls. whh_per_period_recomputes FAILs a per-period HSA deduction that does not equal the remaining room -- the tier limit less the employer contribution less the prior year-to-date -- spread over the periods remaining; a deduction off the level base was not set from the room it is meant to consume. whh_not_over_max FAILs a per-period deduction above the largest pro-rated piece the remaining room allows, because even the true-up period cannot over-withhold and drive the account past its limit before year-end. Both re-derive through per_period_base and per_period_max." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Per-Period Withholding layer — open detail" aria-controls="die-panel" aria-expanded="false">Per-Period Withholding</button>
+    <button class="die-face" data-layer="dol" data-plain="Checks participant money reached the provider inside the DOL small-plan safe harbor, on or after the pay date." data-eng="Two controls. dol_safe_harbor FAILs employee 401(k) and HSA money deposited more than seven business days after the pay date; the boundary is inclusive, so a deposit exactly on the seventh business day is timely and the eighth is late, counted with business_days_between over the file&#x27;s own pay and remit dates. dol_remit_after_pay FAILs a remit date that precedes the pay date it settles, a date entered backwards that would make every business-day count meaningless, so it is caught before the safe-harbor test relies on it." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Deposit Safe Harbor layer — open detail" aria-controls="die-panel" aria-expanded="false">Deposit Safe Harbor</button>
+    <button class="die-face" data-layer="je" data-plain="Checks the pay-period journal entry balances and every benefit clearing account zeroes out after remittance." data-eng="Two controls. je_balances FAILs a journal entry whose total debits do not equal its total credits -- the entry must foot before anything downstream can trust it. je_clearing_zeroes FAILs a benefit clearing or payable account that does not net to zero after remittance: each plan&#x27;s liability account is credited when the deduction is accrued and debited when the money is remitted, so a non-zero net means a payable was booked and never relieved, or relieved and never booked." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Journal Entry layer — open detail" aria-controls="die-panel" aria-expanded="false">Journal Entry</button>
+    <button class="die-face" data-layer="rpt" data-plain="Checks the report&#x27;s stated tie determination and its statutory exception watchlist recompute from the evidence beneath them." data-eng="Two controls. rpt_tie_status_recomputes is the control the engine exists for: the reconciliation report calls a plan tied, and the engine rebuilds that determination from the register, every provider upload, the ledger liability credit and the settling cash transfer, and compares -- a tie flag not recomputed from the legs beneath it is an assertion, not a reconciliation. rpt_exception_watchlist_ties is a FLAG, not a failure: it rebuilds the statutory exception watchlist from the same limit re-derivations and FLAGs a watchlist that lists an exception the numbers do not support, or omits one they do." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" aria-label="Rollup Recompute layer — open detail" aria-controls="die-panel" aria-expanded="false">Rollup Recompute</button>
+  </div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Twelve control families run in registry order over each reconciliation file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">414<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">29<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent rules run over every reconciliation file</div></div>
+  <div class="cell"><div class="v">12<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Families</div><div class="p">groups of controls, each answering one question</div></div>
+  <div class="cell"><div class="v">31<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Sample files</div><div class="p">one clean baseline plus thirty planted-defect files</div></div>
+  <div class="cell"><div class="v">8<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Artifacts read</div><div class="p">employee register, plan catalog, deduction register, provider file, remittance schedule, entity summary, journal entry, reconciliation report</div></div>
+  <div class="cell"><div class="v">0<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Tolerance</div><div class="p">a tie-out a cent off the recomputation is a break, not a rounding band</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">An employer runs one payroll a period, and that single register fans out to several benefit providers, to the general ledger and to cash. A 401(k) deferral withheld on the register has to reach both the recordkeeper and the custodian; an HSA deduction has to reach the HSA administrator; an FSA election has to reach the FSA administrator; the employer match has to recompute from the plan formula; and every dollar has to land in the ledger as a balanced entry whose benefit payable clears to zero once the money is remitted. Four failures hide inside that, and none of them look wrong in a stack of provider upload files. The hand-off drifts: a per-employee deduction is not the amount that reached the provider, or a plan ties to the recordkeeper but not the custodian, or the cash transfer is a dollar off the liability it settles. The employer match is wrong: the booked figure does not recompute from the formula on eligible compensation, or it was computed on compensation above the 401(a)(17) cap. A statutory limit is breached: an employee is over the 402(g) deferral limit, the HSA tier limit, an FSA cap or the 415(c) additions ceiling, and the per-period withholding no longer recomputes from the room that remains. The deposit is late: participant money reached the provider outside the DOL small-plan seven-business-day safe harbor, or the rollup calls a plan tied on a determination nobody recomputed from the evidence underneath it. None of these are judgment calls. They are equalities and comparisons -- a register total against a provider upload with exact ==, a deferral against a limit with &gt;, a deposit against a pay date and a business-day count -- which a deterministic control settles better than a spreadsheet inherited by whoever reconciles benefits this period.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs every control over every reconciliation file<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI generates thirty-one fictional reconciliation files -- one clean baseline and one carrying each of the thirty planted defects -- then runs all twenty-nine controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.</p>
+  <p style="margin:10px 0"><b>The limit breach and the watch flag fire at different boundaries<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> The 402(g) ceiling and the review watch band are seeded independently. One defect file lifts an employee&#x27;s prior year-to-date deferral over the 402(g) limit and trips lim_402g_deferral as a FAIL, checked with exact &gt;; another lifts it into the file&#x27;s own watch band, still under the limit, and trips lim_deferral_watch as a REVIEW-only FLAG -- proving the ceiling is tested at its boundary and the review signal is independent of the breach.</p>
+  <p style="margin:10px 0"><b>The tie determination is recomputed, not read back<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> A defect file flips the reconciliation report&#x27;s stated tie flag for one plan to the opposite of the truth while leaving every leg intact. rpt_tie_status_recomputes rebuilds the determination from the register, every provider upload, the ledger liability credit and the cash transfer and fails on the contradiction, proving the tie flag is recomputed from the evidence beneath it rather than trusted as stated.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<div class="schem-wrap"><svg class="schem" width="950" height="758" viewBox="0 0 950 758" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Payroll &amp; Benefit Reconciliation engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,651 C235,651 235,81 270,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">reconciliation files</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="703" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="714" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="725" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,574" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="736" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,710 355,710 331,710 L379,710 C355,710 355,710 355,688" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="747" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="73" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,195 510,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,309 510,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,423 510,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,537 510,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,651 510,651" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,195 C595,195 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,423 C595,423 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,537 C595,537 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="415" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,651 C595,651 595,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="472" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,309 C715,309 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,537 C715,537 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="415" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,537 C475,537 475,651 510,651" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="492" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">tie determination</text></g>
+  <g class="schem-edge"><path d="M440,423 C595,423 595,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="461" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M440,537 C595,537 595,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="529" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="347" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="472" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,651 C715,651 715,537 750,537" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="586" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M835,346 C835,710 835,710 811,710 L859,710 C835,710 835,710 835,574" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="835" y="703" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-block" data-block="corpus"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded Reconciliation Files source on GitHub"><rect x="30" y="614" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="115" y="647">Seeded</tspan><tspan x="115" y="663">Reconciliation Files</tspan></text></a></g>
+  <g class="schem-block" data-block="set-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Structural Precondition source on GitHub"><rect x="270" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="77">Structural</tspan><tspan x="355" y="93">Precondition</tspan></text></a></g>
+  <g class="schem-block" data-block="emp-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Employee Register source on GitHub"><rect x="270" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Employee Register</text></a></g>
+  <g class="schem-block" data-block="pln-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Plan Catalog source on GitHub"><rect x="270" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Plan Catalog</text></a></g>
+  <g class="schem-block" data-block="ded-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Deduction Register &amp; Provider Hand-off source on GitHub"><rect x="270" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="419">Deduction Register</tspan><tspan x="355" y="435">&amp; Provider Hand-off</tspan></text></a></g>
+  <g class="schem-block" data-block="tie-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Plan-Level Tie-Out source on GitHub"><rect x="270" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Plan-Level Tie-Out</text></a></g>
+  <g class="schem-block" data-block="ent-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Multi-Entity Rollup source on GitHub"><rect x="270" y="614" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="655" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Multi-Entity Rollup</text></a></g>
+  <g class="schem-block" data-block="mat-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Employer Match source on GitHub"><rect x="510" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="85" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Employer Match</text></a></g>
+  <g class="schem-block" data-block="lim-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Statutory Limits source on GitHub"><rect x="510" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Statutory Limits</text></a></g>
+  <g class="schem-block" data-block="whh-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Per-Period Withholding source on GitHub"><rect x="510" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Per-Period Withholding</text></a></g>
+  <g class="schem-block" data-block="dol-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Deposit Safe Harbor source on GitHub"><rect x="510" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Deposit Safe Harbor</text></a></g>
+  <g class="schem-block" data-block="je-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Journal Entry source on GitHub"><rect x="510" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Journal Entry</text></a></g>
+  <g class="schem-block" data-block="rpt-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Rollup Recompute source on GitHub"><rect x="510" y="614" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="655" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Rollup Recompute</text></a></g>
+  <g class="schem-block" data-block="registers"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/model.py" target="_blank" rel="noopener" aria-label="Open Registers, Catalog &amp; Ledger source on GitHub"><rect x="750" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="835" y="305">Registers,</tspan><tspan x="835" y="321">Catalog &amp; Ledger</tspan></text></a></g>
+  <g class="schem-block" data-block="report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/report.py" target="_blank" rel="noopener" aria-label="Open Verdict and Findings source on GitHub"><rect x="750" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict and Findings</text></a></g>
+  <g class="schem-title"><line x1="30" y1="732" x2="920" y2="732" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="746" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E30-PBR &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-24</text></g>
+</svg></div><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Reconciliation Files.</b> fictional pay-period reconciliation files enter the control registry</li><li><b>Structural Precondition.</b> is the reconciliation file complete and the review date legible</li><li><b>Employee Register.</b> is the employee register sound and every employee attributable</li><li><b>Plan Catalog.</b> are the plan codes unique and each plan of a known type</li><li><b>Deduction Register &amp; Provider Hand-off.</b> does every deduction reference a real row and reach each provider</li><li><b>Plan-Level Tie-Out.</b> does the register total tie every provider, the ledger and cash</li><li><b>Multi-Entity Rollup.</b> do the entity subtotals recompute and sum to the consolidated total</li><li><b>Employer Match.</b> does the booked match recompute and stay under the comp cap</li><li><b>Statutory Limits.</b> is every employee inside the 402(g), HSA, FSA and 415(c) ceilings</li><li><b>Per-Period Withholding.</b> does the per-period HSA withholding recompute from the remaining room</li><li><b>Deposit Safe Harbor.</b> did participant money remit inside the safe harbor, on or after pay</li><li><b>Journal Entry.</b> does the journal entry balance and every clearing account zero out</li><li><b>Rollup Recompute.</b> does the report&#x27;s tie flag and watchlist recompute from the evidence</li><li><b>Registers, Catalog &amp; Ledger.</b> the artifacts every rule resolves against</li><li><b>Verdict and Findings.</b> every finding, with the reason it exists, ends at a person</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Reconciliation Files.</b> generate_corpus writes one clean baseline plus one planted-defect file for every registered control and one malformed-amount file, thirty-one files in total. Only the employees, the plan catalog, the register deductions and the pay/remit dates are stated; the employer match and the per-period HSA withholding are computed through the same reconcile kernel the engine recomputes with, and every rollup the engine later checks -- the provider uploads, the entity subtotals, the cash transfers, the journal entry, and the report&#x27;s tie flags and exception watchlist -- is rebuilt from those base facts through the same helpers the controls use, so the relationships the engine tests are the relationships that produced the data.</li><li><b>Structural Precondition.</b> One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, or an unreadable review date, so no downstream rule holds vacuously on absent evidence.</li><li><b>Employee Register.</b> Three controls: unique employee ids, every employee typed to a known employing entity, and a parseable DOB, known HSA tier and integer eligible comp on each row.</li><li><b>Plan Catalog.</b> Two controls: unique plan codes, and every plan carrying one of the known plan types that select which control and which statutory limit apply to it.</li><li><b>Deduction Register &amp; Provider Hand-off.</b> Three controls: every deduction names a known employee and plan, no employee/plan pair carries two rows, and each employee&#x27;s deduction reaches every one of its plan&#x27;s providers to the cent.</li><li><b>Plan-Level Tie-Out.</b> Three controls: each plan&#x27;s register total ties every provider upload total, the journal-entry liability credit and the settling cash transfer, each compared with exact ==.</li><li><b>Multi-Entity Rollup.</b> Two controls: each per-entity subtotal recomputes from that entity&#x27;s own register deductions, and each plan&#x27;s subtotals sum to the consolidated total and tie the register.</li><li><b>Employer Match.</b> Two controls: the booked employer match recomputes from the rate on eligible compensation, and an above-cap match is limited to the rate applied to the 401(a)(17) cap.</li><li><b>Statutory Limits.</b> Five controls: year-to-date deferral within 402(g), HSA within the tier limit, FSA within the cap, annual additions within 415(c), and a deferral inside the watch band flagged before it breaches.</li><li><b>Per-Period Withholding.</b> Two controls: the per-period HSA deduction recomputes as the remaining room over the periods remaining, and no period withholds more than the largest pro-rated piece.</li><li><b>Deposit Safe Harbor.</b> Two controls: participant money reached the provider within the seven-business-day safe harbor, boundary inclusive, and no remit date precedes the pay date it settles.</li><li><b>Journal Entry.</b> Two controls: the pay-period journal entry balances, and every benefit clearing account nets to zero after remittance.</li><li><b>Rollup Recompute.</b> Two controls: each plan&#x27;s stated tie determination recomputes from its register, provider, ledger and cash legs, and the statutory exception watchlist ties the re-derived exceptions.</li><li><b>Registers, Catalog &amp; Ledger.</b> The employee register carries each employee&#x27;s id, entity, DOB, HSA tier, eligible comp and prior year-to-date room; the plan catalog carries each plan&#x27;s type, providers, statutory limits and match formula; the deduction register carries one row per employee/plan withholding; and the provider file, remittance schedule, entity summary, journal entry and reconciliation report carry the uploads, cash transfers, subtotals, ledger lines and tie flags every tie-out, limit, match and reconciliation control resolves against through the shared reconcile kernel.</li><li><b>Verdict and Findings.</b> Findings roll up per reconciliation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>regenerate the seeded fictional corpus, run all twenty-nine controls, write both reports</td><td class="mono">per-file verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries a planted defect for every control by design</td><td>benefit_report.json, benefit_report.md, samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m benefit_engine samples</code><button class="copybtn" data-copy="python -m benefit_engine samples" aria-label="Copy command: python -m benefit_engine samples">copy</button></div></td><td>analyze an existing folder of reconciliation files without regenerating it</td><td class="mono">per-file verdicts and findings</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none unless --json or --md is passed</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m benefit_engine samples --generate --quiet</code><button class="copybtn" data-copy="python -m benefit_engine samples --generate --quiet" aria-label="Copy command: python -m benefit_engine samples --generate --quiet">copy</button></div></td><td>regenerate the corpus and print only the overall verdict</td><td class="mono">a single verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest benefit_engine/tests -q</code><button class="copybtn" data-copy="python -m pytest benefit_engine/tests -q" aria-label="Copy command: python -m pytest benefit_engine/tests -q">copy</button></div></td><td>run the full test suite for this engine</td><td class="mono">414 passed</td><td class="mono">0 when every test passes</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>414</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Registered controls<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>29</b> controls<br><span style="color:#6f6f6f;font-size:12.5px">counted from the registry, not from documentation</span></td></tr>
+  <tr><td>Planted defects<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>30</b> defect files<br><span style="color:#6f6f6f;font-size:12.5px">every registered control has at least one file that trips it</span></td></tr>
+  <tr><td>Control coverage<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>100</b> percent of controls with a planted defect<br><span style="color:#6f6f6f;font-size:12.5px">no control ships without a file demonstrating it firing</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a plan is signed off and whether a late deposit or a broken hand-off is chased.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings above PASS</td><td class="mono"><b>PASS</b></td><td>carry the mechanically clean reconciliation into the documented benefits sign-off</td></tr><tr><td>One or more FLAG, no FAIL</td><td class="mono"><b>REVIEW</b></td><td>a human resolves each flag; a deferral inside the 402(g) watch band and an exception watchlist that does not tie the evidence both land here</td></tr><tr><td>One or more FAIL</td><td class="mono"><b>FAIL</b></td><td>the plan or figure is not signed off until the failing control is cleared -- a hand-off that does not tie, a match that does not recompute, a limit breach, a late deposit, an unbalanced or unclearing entry, or a tie flag that does not recompute</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only: reconciliation files are parsed and never written back, so the engine cannot introduce the break it reports.</li><li style="list-style:disc;margin-left:18px">Integer cents throughout, compared with exact ==; there is no tolerance band on a tie-out, and a cent off the recomputation is reported as a break.</li><li style="list-style:disc;margin-left:18px">A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.</li><li style="list-style:disc;margin-left:18px">One reconcile kernel: the controls and the generator share the predicates in benefit_engine.reconcile, so a determination cannot disagree with the data that produced it.</li><li style="list-style:disc;margin-left:18px">The 401(k) ties to two destinations: the register must reach both the recordkeeper and the custodian, so a plan that reaches one and misses the other is not reconciled.</li><li style="list-style:disc;margin-left:18px">The deposit safe harbor is inclusive: a deposit on the seventh business day is timely and the eighth is late, measured against the file&#x27;s own pay date, never the system clock.</li><li style="list-style:disc;margin-left:18px">Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.</li><li style="list-style:disc;margin-left:18px">Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never runs payroll, moves money, funds a provider, files a return or writes to a source artifact. It reads the reconciliation file and stops.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>It reads the eight artifacts one pay-period reconciliation emits. It does not connect to a payroll system, a recordkeeper, a custodian, an HSA or FSA administrator, a bank or the general ledger.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>It proves the mechanical relationships hold -- the hand-offs tie, the match recomputes, the limits are met, the deposits are timely -- not that a provider actually received the money or that the underlying payroll was run correctly.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>It re-derives the match, the limits and the deposit timing from the rate, ceilings and safe-harbor window the file carries; it does not decide whether those parameters are the correct ones for the plan year and taxpayer.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li><li>It takes the register, provider and ledger records at face value: it confirms they foot and reconcile, not that a deduction was authorized. All shipped data is fictional and the pay period is set in a fictional future.<sup class="fn"><a id="fnref-18" href="#fn-18" aria-label="See substantiation 18">18</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">brand animation</span>
+<figure class="figwrap"><img src="../assets/engine-payroll.svg" data-video="../assets/engine-payroll.svg" alt="Payroll &amp; Benefit Reconciliation diagram: on the left a single payroll-register card for one employee&#x27;s plan deduction; arrows fan the same amount out to a recordkeeper and a custodian (a 401(k) reaches both), to the general-ledger liability accrual and to a settling cash transfer; a central tie-out panel checks the four amounts are equal to the cent, with one branch marked reached recordkeeper, missed custodian; a statutory-limit gate below tests the year-to-date deferral against the 402(g) ceiling and the deposit against the seven-business-day DOL safe harbor; on the right a reconciliation report whose per-plan tie flag is recomputed from the legs beneath it; and a footer strip reading 29 controls, 12 families, 414 tests, read-only, SFS-E30-PBR." loading="lazy"><figcaption>The Payroll &amp; Benefit Reconciliation engine tile states the question that has to hold plan by plan: every benefit dollar the register withheld reached each provider, the ledger and cash in the same amount, the employer match recomputed from its formula, every statutory limit held, every participant deposit landed inside the DOL safe harbor, and the report&#x27;s tie flags recompute from the evidence beneath them.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">python run.py</div><div class="runline">python -m pytest benefit_engine/tests -q</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/payroll-benefit-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+  </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (payroll-benefit-automation/)</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>len(benefit_engine.engine.REGISTRY)</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>distinct rule-id prefixes in benefit_engine.engine.REGISTRY</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>samples/*.json after python run.py</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>len(benefit_engine.model.DOC_TYPES)</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>benefit_engine/tests boundary tests on the cent and the safe-harbor business day</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python run.py (payroll-benefit-automation/); benefit_engine/tests planted-defect suite</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>benefit_engine/generate.py DEFECTS over_402g / deferral_watch</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>benefit_engine/generate.py DEFECTS tie_flag_wrong -&gt; rpt_tie_status_recomputes</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q -o addopts= (payroll-benefit-automation/)</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>len(benefit_engine.engine.REGISTRY)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>len(benefit_engine.generate.DEFECTS)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>benefit_engine/tests: every registered rule has a planted defect</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>payroll-benefit-automation/README.md and benefit_engine read-only / determinism tests</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>benefit_engine/model.py DOC_TYPES</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>benefit_engine/engine.py tie_ / mat_ / dol_ families</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>benefit_engine/engine.py mat_ / lim_ / dol_ families and reconcile</li>
+    <li id="fn-18"><a class="fnid" href="#fnref-18" aria-label="Back to reference 18">18</a>benefit_engine/generate.py</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
+</main>
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/payroll-benefit-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+<script>
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
+</script>
+</body>
+</html>

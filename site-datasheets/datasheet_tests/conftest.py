@@ -63,6 +63,18 @@ ROSTER: dict[str, dict] = {
     "grt":         {"num": 24, "part_no": "SFS-E24-GRT", "mnemonic": "GRT", "family": "Gross-Receipts Tax",      "name": "Gross-Receipts & Excise Tax", "engine_dir": "gross-receipts-tax-automation"},
     "filing":      {"num": 25, "part_no": "SFS-E25-DUE", "mnemonic": "DUE", "family": "Filing Compliance",       "name": "Filing Obligation Calendar",  "engine_dir": "filing-calendar-automation"},
     "energy":      {"num": 26, "part_no": "SFS-E26-EEH", "mnemonic": "EEH", "family": "Energy Tax Credit",       "name": "Energy-Efficient Home Credit", "engine_dir": "energy-credit-automation"},
+    "interest":    {"num": 27, "part_no": "SFS-E27-INT", "mnemonic": "INT", "family": "Debt Service",            "name": "Interest Accrual & Loan Amortization", "engine_dir": "interest-accrual-automation"},
+    "financing":   {"num": 28, "part_no": "SFS-E28-FEX", "mnemonic": "FEX", "family": "Financing Execution",     "name": "Financing Execution & Schedule Variance", "engine_dir": "financing-execution-automation"},
+    "wire":        {"num": 29, "part_no": "SFS-E29-WRL", "mnemonic": "WRL", "family": "Payment Release",         "name": "Wire & Transfer Release Control", "engine_dir": "wire-release-automation"},
+    "payroll":     {"num": 30, "part_no": "SFS-E30-PBR", "mnemonic": "PBR", "family": "Payroll Controls",        "name": "Payroll & Benefit Reconciliation", "engine_dir": "payroll-benefit-automation"},
+    "withholding": {"num": 31, "part_no": "SFS-E31-NRW", "mnemonic": "NRW", "family": "Cross-Border Withholding", "name": "Non-Resident Withholding & 1042-S", "engine_dir": "withholding-automation"},
+    "closing":     {"num": 32, "part_no": "SFS-E32-COE", "mnemonic": "COE", "family": "Closing Controls",        "name": "Home Sale Closing & Settlement Tie-Out", "engine_dir": "closing-settlement-automation"},
+    "standing":    {"num": 33, "part_no": "SFS-E33-GDS", "mnemonic": "GDS", "family": "Entity Compliance",       "name": "Entity Good-Standing", "engine_dir": "good-standing-automation"},
+    "sov":         {"num": 34, "part_no": "SFS-E34-SOV", "mnemonic": "SOV", "family": "Commitment Controls",     "name": "Subcontract SOV & Change Orders", "engine_dir": "sov-commitment-automation"},
+    "pickup":      {"num": 35, "part_no": "SFS-E35-EPU", "mnemonic": "EPU", "family": "Equity Method",           "name": "Equity-Method Pickup & Eliminations", "engine_dir": "equity-pickup-automation"},
+    "depreciation":{"num": 36, "part_no": "SFS-E36-DEP", "mnemonic": "DEP", "family": "Asset Register",          "name": "Depreciation & Prepaid Amortization", "engine_dir": "depreciation-register-automation"},
+    "deposit":     {"num": 37, "part_no": "SFS-E37-EMD", "mnemonic": "EMD", "family": "Deposit Trust",           "name": "Earnest-Money Deposit Trust", "engine_dir": "deposit-trust-automation"},
+    "spending":    {"num": 38, "part_no": "SFS-E38-SRG", "mnemonic": "SRG", "family": "Capital Authorization",   "name": "Capital Spending Request Gate", "engine_dir": "spending-gate-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"

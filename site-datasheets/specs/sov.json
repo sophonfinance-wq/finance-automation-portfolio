@@ -1,0 +1,465 @@
+{
+  "num": 34,
+  "slug": "sov",
+  "part_no": "SFS-E34-SOV",
+  "mnemonic": "SOV",
+  "family": "Commitment Controls",
+  "name": "Subcontract SOV & Change Orders",
+  "tagline": "Did the contract move only on approved paper, and does every billed figure re-derive from it?",
+  "plain_summary": "A residential developer buys construction through subcontract commitments -- a contract with a schedule of values (SOV) breaking the price into lines, change orders that amend it, and a monthly pay application that bills against it line by line -- and every column on that chain is derived from a column beneath it and typed by hand somewhere. This engine reads the six artifacts a commitment billing record carries -- the commitment register, the change-order log, the schedule of values, the pay-application register, the committed-cost roster and the lien-release register -- and runs twenty-nine deterministic controls over them. Is the billing file complete and one of each artifact, are the commitment ids unique and their terms readable, and does the committed-cost roster tie the register and every revised contract re-derive as original plus net approved change orders. Does every change order name a registered commitment, number sequentially as #-N, carry a known status, and is no commitment born from a change order or misnamed off the project-vendor-count pattern. Do the SOV lines foot exactly to each original contract, does every pay-app line re-derive as previously billed plus this period with its percent as floored basis points, do the headers foot, and is the current request exactly completed minus previously billed. Is every line billed within its scheduled value at exact <=, does the balance to finish re-derive, is retention the contract rate on the request, do the sales tax and the payment due including tax re-derive, does each app open at the prior app's close with the sequence numbered 1..N and periods that advance, do the roster Total columns foot, and does every conditional lien release tie the certified payment due exactly once. It compares every figure with exact ==, tests the billing cap with exact <=, counts only approved change orders as moving the contract, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A pay application is a page of derived columns, and none of the ways it goes wrong look wrong on the page. The contract drifts from its paper: a pending change order is counted as if approved, or a soft-cost credit is booked as a brand-new commitment instead of a #-N amendment, and the committed-cost roster no longer states what was actually signed. The billing chain breaks a line at a time: a completed-to-date that stops equalling previously billed plus this period, a line that quietly bills past its scheduled value, a month whose previously-billed no longer equals last month's total completed -- and the overbilling compounds under a header that still foots. And the money math is asserted rather than derived: retention that stops being the contract rate on the request, sales tax off the rate, a payment due that is not request minus retention plus tax, and a conditional release signed for an amount nobody recomputed. The engine rebuilds every derived figure from the base facts through the same billing kernel that produced the baseline and compares with exact ==, tests the per-line cap with exact <= because overbilling foots, counts only approved change orders as moving the contract, and ships a planted-defect file for every registered control. A line billed past its schedule, a contract moved on a pending order, or a release signed for the wrong amount stays invisible until someone recomputes the certificate the developer already paid on.",
+  "layers_intro": "Eleven control families run in registry order over each billing file. The first proves the others had something to read, because a control that passes on an absent artifact reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the billing file carries every artifact the controls below read, exactly one of each.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES -- commitment register, change-order log, schedule of values, pay-application register, committed-cost roster, lien-release register -- or carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "cmt",
+      "label": "Commitment Register & Roster",
+      "plain": "Checks the commitment register is sound and the committed-cost roster re-derives from it, with every revised contract equal to original plus net approved change orders.",
+      "engineering": "Four controls. cmt_ids_unique rejects a commitment id that appears twice, because that id joins the register to every change order, SOV line, pay app and release. cmt_required_fields proves each commitment carries its descriptive fields and that the three numeric terms -- original contract, retention rate and tax rate in integer basis points -- are readable bases for the re-derivations below. cmt_rollup_ties_register proves the committed-cost roster carries exactly the register, commitment for commitment, at the register's original amounts. cmt_revised_rederives recomputes each commitment's net change from the change-order log through the shared kernel, approved orders only, and holds both the stated net and the stated revised to original plus that net.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "co",
+      "label": "Change-Order Gate",
+      "plain": "Checks every change order names a registered commitment, numbers sequentially, carries a known status, and that no commitment was born from a change order or misnamed.",
+      "engineering": "Five controls enforcing the authorization and naming procedure. co_commitment_exists FAILs a change order against no registered commitment, an amendment to nothing. co_numbering_sequential FAILs change orders on a commitment that are not numbered #-1..#-N with no gap or repeat. co_status_valid FAILs an unknown status, because the status decides whether the amount moves the revised contract. co_not_split_to_new_commitment FAILs a commitment whose origin is anything but original, since a change order -- soft-cost included -- is applied to the original as #-N and never booked as a commitment of its own. co_commitment_id_format FAILs an id that does not compose from its own row's project code, vendor code and sequential count.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "sov",
+      "label": "Schedule of Values",
+      "plain": "Checks the SOV lines are unique and attributable, and that each commitment's lines foot exactly to its original contract amount.",
+      "engineering": "Two controls. sov_lines_wellformed FAILs an SOV line with no readable commitment and line number, a line on a commitment not in the register, or a duplicated (commitment, line number) pair that a pay-app line could not match to one scheduled value. sov_foots_to_original FAILs a commitment whose SOV lines do not sum with exact == to its original contract amount: the SOV is the contract price decomposed, so a schedule that foots past the contract has invented billable value and one that foots short has hidden some, and either way every per-line cap below is measured against the wrong denominator.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "line",
+      "label": "Pay-App Arithmetic",
+      "plain": "Checks every pay-app line and header re-derives: completed as previously billed plus this period, the percent from the money columns, the header footing, and the request as completed minus previously billed.",
+      "engineering": "Five controls. line_ref_valid FAILs a pay app on an unregistered commitment or a line not on that commitment's SOV, once. line_completed_rederives FAILs a completed-to-date that is not previously billed plus work this period, the column that carries a line's history forward. line_percent_rederives is a FLAG, not a failure: the stated percent is floored basis points of completed against scheduled, and a drift steers a reviewer's eye rather than the cash the hard equalities already hold. line_header_foots FAILs a header total that does not sum from its own lines. line_current_request_rederives FAILs a current request that is not completed to date minus previously billed, the one line on the certificate that moves money this period.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "cap",
+      "label": "Billing-to-Date Cap",
+      "plain": "Checks no line bills past its scheduled value, and that each line's balance to finish re-derives exactly.",
+      "engineering": "Two controls. cap_not_overbilled tests every line with exact <=: a line completed to the cent of its scheduled value is fully billed, and a cent past it is billing against value the contract never scheduled. The cap is tested per line, not per total, because overbilling hides perfectly inside an app whose header still foots. cap_balance_rederives FAILs a stated balance to finish that is not scheduled value minus completed to date, which misstates the cost to complete by exactly the drift in either direction.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "ret",
+      "label": "Retention",
+      "plain": "Checks each commitment's retention rate sits on the standard 5% / 10% menu, and that the retention held is the contract rate on the request.",
+      "engineering": "Two controls. ret_rate_known is a FLAG, not a failure: the arithmetic control holds the stated retention to whatever rate the contract carries, so a rate off the standard all-lines menu of 5% or 10% is not a broken figure but a contract term someone should read the contract to confirm. ret_rederives FAILs a stated retention that is not the contract rate on the current request, computed with truncating basis-point arithmetic through the shared kernel and compared with exact ==: retention held short is protection the developer does not have, and held long it is the subcontractor's cash in the wrong hands.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "tax",
+      "label": "Sales Tax & Payment Due",
+      "plain": "Checks the sales tax is the contract rate on the taxable request, and that the payment due including tax is request minus retention plus tax.",
+      "engineering": "Two controls. tax_rederives FAILs a taxable request that drifts from the current request -- these commitments bill fully-taxable construction, so the taxable base is the request itself -- and a sales-tax figure that is not the contract tax rate on that base, re-derived through the shared kernel with exact ==. tax_payment_due_rederives FAILs a payment due including tax that is not request minus retention plus sales tax: this is the certified figure the cheque is cut for and the conditional release is signed against, so it is recomputed from the three figures above it rather than read.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "roll",
+      "label": "Pay-App Roll-Forward",
+      "plain": "Checks each app opens at the prior app's close, the first at zero, and that the apps are numbered 1..N with periods that advance.",
+      "engineering": "Two controls that make many monthly certificates one continuous billing. roll_previously_ties_prior FAILs a pay app whose previously billed does not equal the prior app's total completed, and the first app that does not open at zero: a break here is a period whose opening balance was typed rather than carried, and every figure downstream inherits the drift. roll_apps_sequential FAILs an app sequence with a gap or repeat, an unreadable app number or period end, and a period that does not close after the prior app's -- any of which puts the chain in an order the roll-forward control would silently misread.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "port",
+      "label": "Portfolio Footing",
+      "plain": "Checks the committed-cost roster's Total columns foot to their rows, and that revised total equals original total plus changes total.",
+      "engineering": "Two controls on the numbers that leave the workbook. port_totals_foot FAILs any of the three Total columns -- original, net changes, revised -- that does not sum from the roster's commitment rows, the drift a Total maintained beside the rows takes on the first time a commitment moves. port_revised_identity FAILs a revised total that is not the original total plus the changes total: the three footers are three views of one portfolio, and if they disagree at least one column was footed from different rows than the others.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "lien",
+      "label": "Conditional Release Cross-Tie",
+      "plain": "Checks every pay app carries exactly one conditional release, signed for exactly the certified payment due including tax.",
+      "engineering": "Two controls carrying the one cross-artifact tie this engine keeps -- the arithmetic one. lien_release_per_app FAILs a pay app with no conditional release, a release attached to no pay app, a wrongly typed release, or two releases on one app, since any of those leaves the certified amount unmatched or ambiguous. lien_amount_ties FAILs a conditional release whose amount is not the pay app's certified payment due including tax: too few and the payment is exposed, too many and the subcontractor waived rights it was never paid for. Which lender draw funds an app and whether a waiver's statutory form is right stay with their own engines.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Billing Files",
+      "kind": "source",
+      "col": 0,
+      "row": 5,
+      "plain": "fictional subcontract billing files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, thirty files in total, for fictional developers on the fictional Brightwater Commons project in the State of Marran. Only the commitments, the change orders, the SOV lines and each pay app's work-this-period figures are stated; previously billed, completed, percents, balances, the header and request / retention / tax / payment-due chain, the committed-cost roster and the conditional releases are re-derived through the same billing kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the billing file complete, one of each artifact",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "cmt-control",
+      "label": "Commitment & Roster",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "are the commitments sound and the roster re-derived",
+      "engineering": "Four controls: unique commitment ids, the required terms present, the roster tying the register, and every revised contract equal to original plus net approved change orders.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "co-control",
+      "label": "Change-Order Gate",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does every change order clear the authorization and naming gate",
+      "engineering": "Five controls: a registered commitment named, sequential #-N numbering, a known status, no commitment born from a change order, and an id that composes from project, vendor and sequential count.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "sov-control",
+      "label": "Schedule of Values",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "do the SOV lines foot to the original contract",
+      "engineering": "Two controls: every SOV line unique and attributable to a registered commitment, and each commitment's lines footing with exact == to its original contract amount.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "line-control",
+      "label": "Pay-App Arithmetic",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does every pay-app line and header re-derive",
+      "engineering": "Five controls: valid line references, completed as D+E, the percent as floored basis points (a flag), the header footing to its lines, and the request as completed minus previously billed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "cap-control",
+      "label": "Billing-to-Date Cap",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "is every line within its scheduled value",
+      "engineering": "Two controls: no line billed past its scheduled value tested with exact <=, and a balance to finish that re-derives as scheduled minus completed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "ret-control",
+      "label": "Retention",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is retention the contract rate on the request",
+      "engineering": "Two controls: the rate on the standard 5% / 10% menu (a flag), and the retention held equal to the contract rate on the current request with truncating basis-point arithmetic.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "tax-control",
+      "label": "Tax & Payment Due",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the sales tax and payment due re-derive",
+      "engineering": "Two controls: sales tax as the contract rate on the taxable request (which equals the request), and payment due including tax as request minus retention plus tax.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "roll-control",
+      "label": "Pay-App Roll-Forward",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the billing sequence roll forward with no break",
+      "engineering": "Two controls: each app's previously billed equal to the prior app's total completed (the first at zero), and the app numbers 1..N with no gap or repeat and periods that advance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "port-control",
+      "label": "Portfolio Footing",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the roster Total columns foot",
+      "engineering": "Two controls: the three Total columns footing from the commitment rows, and the revised total equal to original total plus changes total.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "lien-control",
+      "label": "Conditional Release Tie",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "does the release tie the certified payment, exactly once",
+      "engineering": "Two controls: exactly one conditional release per pay app, and each release signed for the certified payment due including tax.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Artifacts & Billing Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 2,
+      "plain": "the six artifacts and shared kernel every rule resolves against",
+      "engineering": "The commitment register carries each commitment's id, vendor, project and vendor codes, origin, original contract and retention and tax rates; the change-order log carries each order's commitment, number, status and amount; the schedule of values carries the per-line scheduled values; the pay-application register carries each app's lines and header totals; the committed-cost roster carries the per-commitment revised amounts and the three Total columns; and the lien-release register carries the conditional release exchanged for each payment. Every commitment, change-order, SOV, line, cap, retention, tax, roll-forward, portfolio and lien control resolves against these through the shared billing kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per billing file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/sov_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "billing files" },
+    { "from": "corpus", "to": "cmt-control", "label": "billing files" },
+    { "from": "corpus", "to": "co-control", "label": "billing files" },
+    { "from": "corpus", "to": "sov-control", "label": "billing files" },
+    { "from": "corpus", "to": "line-control", "label": "billing files" },
+    { "from": "corpus", "to": "cap-control", "label": "billing files" },
+    { "from": "corpus", "to": "ret-control", "label": "billing files" },
+    { "from": "corpus", "to": "tax-control", "label": "billing files" },
+    { "from": "corpus", "to": "roll-control", "label": "billing files" },
+    { "from": "corpus", "to": "port-control", "label": "billing files" },
+    { "from": "corpus", "to": "lien-control", "label": "billing files" },
+    { "from": "cmt-control", "to": "registers", "label": "resolves" },
+    { "from": "co-control", "to": "registers", "label": "resolves" },
+    { "from": "sov-control", "to": "registers", "label": "resolves" },
+    { "from": "line-control", "to": "registers", "label": "resolves" },
+    { "from": "cap-control", "to": "registers", "label": "resolves" },
+    { "from": "ret-control", "to": "registers", "label": "resolves" },
+    { "from": "tax-control", "to": "registers", "label": "resolves" },
+    { "from": "roll-control", "to": "registers", "label": "resolves" },
+    { "from": "port-control", "to": "registers", "label": "resolves" },
+    { "from": "lien-control", "to": "registers", "label": "resolves" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "line-control", "to": "report", "label": "findings" },
+    { "from": "lien-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "412",
+      "source": "python -m pytest --collect-only -q -o addopts= (sov-commitment-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "29",
+      "source": "len(sov_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every billing file"
+    },
+    {
+      "label": "Families",
+      "value": "11",
+      "source": "distinct rule-id prefixes in sov_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Billing files",
+      "value": "30",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-nine planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(sov_engine.model.DOC_TYPES)",
+      "plain": "commitment register, change-order log, schedule of values, pay-application register, committed-cost roster, lien-release register"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "sov_engine/tests boundary tests on the cent and the <= billing cap",
+      "plain": "a figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A residential developer buys construction through subcontract commitments: a contract with a schedule of values breaking the price into lines, change orders that amend it, and a monthly pay application that bills against it line by line. Every column on that chain is derived from a column beneath it, and every one of them is typed by hand somewhere. Three failures hide inside that, and none of them look wrong on the page. The contract drifts from its paper: the revised commitment stops equalling original plus net approved change orders -- a pending order counted early, a soft-cost credit booked as a brand-new commitment instead of a #-N amendment -- and the committed-cost roster no longer states what was signed. The billing chain breaks a line at a time: a completed-to-date that stops equalling previously billed plus this period, a line that quietly bills past its scheduled value, a month whose previously billed no longer equals last month's total completed -- and the overbilling compounds under a header that still foots. The money math is asserted, not derived: retention off the contract rate, sales tax off the rate on the taxable request, a payment due that is not request minus retention plus tax, and a conditional release signed for an amount nobody recomputed. None of these are judgment calls. They are equalities and a cap -- a completed against previously billed plus this period with exact ==, a line completed against its scheduled value with exact <=, a revised contract against original plus net approved changes -- which a deterministic control settles better than a workbook inherited by whoever bills the job this month.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every billing file",
+      "narrative": "The CLI generates thirty fictional billing files -- one clean baseline and one carrying each of the twenty-nine planted defects, on the fictional Brightwater Commons project -- then runs all twenty-nine controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (sov-commitment-automation/); sov_engine/tests planted-defect suite"
+    },
+    {
+      "title": "Only an approved change order moves the contract, and the cap is per line",
+      "narrative": "One defect file counts the pending winter-protection order as if approved, and cmt_revised_rederives recomputes the net from the change-order log through the shared kernel -- approved orders only -- and fails. Another bills the electrical rough-in line to 90,000 against its scheduled value, and because the whole chain is re-derived, only cap_not_overbilled fires at exact <= while every footing figure stays consistent.",
+      "source": "sov_engine/generate.py DEFECTS net_changes_wrong -> cmt_revised_rederives; line_overbilled -> cap_not_overbilled"
+    },
+    {
+      "title": "The billing chain is recomputed, not read back",
+      "narrative": "A defect file re-types this period's work on a concrete line after the completed column was footed, so completed-to-date no longer equals previously billed plus this period. line_completed_rederives rebuilds the figure as D+E and fails, proving the pay app is recomputed from the base facts beneath it rather than trusted as stated.",
+      "source": "sov_engine/generate.py DEFECTS line_completed_wrong -> line_completed_rederives"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-nine controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "sov_report.json, sov_report.md, samples/"
+    },
+    {
+      "cmd": "python -m sov_engine samples",
+      "operation": "analyze an existing folder of billing files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m sov_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest sov_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "412 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "412",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (sov-commitment-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "29",
+      "unit": "controls",
+      "source": "len(sov_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "29",
+      "unit": "defect files",
+      "source": "len(sov_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "sov_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the billing file they were given: the commitment register and roster tie, every revised contract equals original plus net approved change orders, each SOV foots to its contract, every pay-app column re-derives from the base facts, no line bills past its scheduled value, retention and tax and payment due recompute at the contract rates, the billing sequence rolls forward with no break, the roster Total columns foot, and every conditional release ties the certified payment. It is not an opinion on whether the work was actually performed, whether a change order was properly authorized outside the log, which lender draw funds a pay app, or whether a lien waiver's statutory form is correct.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean billing file into the documented sign-off and payment review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a stated percent-complete that does not re-derive and a retention rate off the standard 5% / 10% menu both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not certified until the failing control is cleared -- a line billed past its schedule, a contract moved on a pending order, a broken roll-forward, a release that does not tie, or a figure that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: billing files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==, and the per-line billing cap tested with exact <=; there is no tolerance band, and a cent off the re-derivation is reported as a break.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One billing kernel: the controls and the generator share the formulas in sov_engine.billing, so a derived figure cannot disagree with the data that produced it.",
+      "Only approved change orders move the revised contract: a pending or void order re-priced any number of times moves nothing until it is approved.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a pay application is certified and whether a contract, a change order or a release is corrected."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never certifies a pay application, cuts a payment, approves a change order, signs a lien release, or writes to a source artifact. It reads the billing file and stops.",
+      "source": "sov-commitment-automation/README.md and sov_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the six artifacts the commitment billing record emits. It does not connect to a general ledger, a lender draw system, a job-cost report or the underlying contracts and waivers.",
+      "source": "sov_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the arithmetic chain re-derives -- the SOV foots, the columns recompute, the cap holds, the release ties -- not that the billed work was actually performed or that a change order was authorized outside the log it reads.",
+      "source": "sov_engine/engine.py line_, cap_ and co_ families"
+    },
+    {
+      "statement": "It keeps only the arithmetic cross-tie: the conditional release amount equals the certified payment due. Which lender draw funds a pay application and whether a lien waiver's statutory form is correct stay with their own engines.",
+      "source": "sov_engine/engine.py lien_ family and model.py scope note"
+    },
+    {
+      "statement": "It re-derives retention and tax at the contract rates the file carries; it does not decide whether those rates are correct, and it treats the standard 5% / 10% retention menu as a review flag rather than a hard failure. All shipped data is fictional and every billing period sits in a fictional future.",
+      "source": "sov_engine/generate.py and sov_engine/engine.py ret_ / tax_ families"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-sov.svg",
+    "motion": "../assets/engine-sov.svg",
+    "poster_alt": "Subcontract SOV & Change Orders diagram: on the left a commitment card with its original contract and a schedule-of-values panel footing to it; a change-order log in the centre showing an approved order moving the revised contract while a pending order moves nothing, with one soft-cost credit routed as a #-N amendment rather than a new commitment; a monthly pay-application panel whose completed-to-date re-derives as previously billed plus this period, one line stamped OVERBILLED past its scheduled value, then retention, sales tax and payment due including tax stacked beneath; and on the right a conditional lien release tied to the certified payment due, with a footer strip reading 29 controls, 11 families, 412 tests, read-only, SFS-E34-SOV.",
+    "caption": "The Subcontract SOV & Change Orders engine tile states the question that has to hold line by line: every schedule of values foots to its contract, the revised commitment moves only on approved change orders numbered as #-N, every pay-app column re-derives from the base facts, no line bills past its scheduled value, and the conditional release ties the certified payment due exactly once.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest sov_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/sov-commitment-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/sov-commitment-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Subcontract SOV & Change Orders (SFS-E34-SOV) datasheet -- twenty-nine deterministic, read-only controls over a residential developer's subcontract commitment billing: every schedule of values footed to its original contract, every revised commitment re-derived as original plus net approved change orders numbered as #-N, every pay-application column recomputed from the base facts, no line billed past its scheduled value at exact <=, retention and sales tax and payment due re-derived at the contract rates, the pay-app sequence rolled forward with no break, and every conditional lien release tied to the certified payment due. 412 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

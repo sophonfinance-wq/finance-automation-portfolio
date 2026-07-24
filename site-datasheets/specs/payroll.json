@@ -1,0 +1,487 @@
+{
+  "num": 30,
+  "slug": "payroll",
+  "part_no": "SFS-E30-PBR",
+  "mnemonic": "PBR",
+  "family": "Payroll Controls",
+  "name": "Payroll & Benefit Reconciliation",
+  "tagline": "Did every benefit dollar the register withheld reach the provider, the ledger and cash intact?",
+  "plain_summary": "An employer runs one payroll a period, and that single register fans out to several benefit providers, to the general ledger and to cash -- and every dollar it withheld has to arrive intact at each destination. This engine reads the eight artifacts one pay-period reconciliation carries -- the employee register, the plan catalog, the deduction register, the provider upload file, the remittance schedule, the entity summary, the journal entry and the reconciliation report -- and runs twenty-nine deterministic controls over them in registry order. Is the file complete and the review date readable; are the employee ids unique, the entities known and the DOB, HSA tier and eligible-comp fields legible; are the plan codes unique and each plan of a known type; does every deduction name a real employee and plan, sit one per pair, and reach each of its plan's providers per employee to the cent; does each plan's register total tie every provider upload, the ledger liability credit and the settling cash transfer; do the per-entity subtotals recompute from the register and sum to the consolidated total; does the employer match recompute from the plan formula capped at 401(a)(17); is every employee inside the 402(g), HSA-tier, FSA and 415(c) ceilings, and who is approaching one; does the per-period HSA withholding recompute from the remaining room over the remaining periods; did participant money reach the provider inside the DOL small-plan seven-business-day safe harbor on or after the pay date; does the journal entry balance and every benefit clearing account zero out; and does the report's stated tie determination and its statutory exception watchlist recompute from the evidence beneath them. It compares every tie-out with exact ==, treats the safe-harbor boundary as inclusive so a deposit on the seventh business day is still timely, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Payroll benefit money looks like the most mechanical number in the close: a deduction withheld, uploaded to a provider, accrued in the ledger and settled in cash, the same figure four times over. That is exactly why it drifts. None of the ways it goes wrong look wrong in a stack of provider upload files. A per-employee deduction reaches the recordkeeper but not the custodian, or a plan total ties to one provider and misses the other; the upload file still foots and the participant is short at one destination. The employer match is booked on compensation above the 401(a)(17) cap, or an employee crosses the 402(g), HSA-tier, FSA or 415(c) ceiling by a cent while every subtotal beneath it still foots. Participant money is deposited a day past the DOL safe harbor, a lapse visible only against the pay date and a business-day count. And the reconciliation report calls a plan tied on a determination nobody rebuilt from the register, the uploads, the ledger and the cash underneath it. The engine recomputes every hand-off, every match, every limit and every tie flag from the base facts through the same kernel that produced them and compares with exact ==, checks the safe-harbor boundary as genuinely inclusive, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A deferral a cent over the limit, a match on uncapped pay, or a deposit a day late is invisible until someone recomputes the money the payroll already moved.",
+  "layers_intro": "Twelve control families run in registry order over each reconciliation file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the reconciliation file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable as_of review date, since every deposit-timing and catch-up gate is measured to the dates the file carries rather than the system clock. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "emp",
+      "label": "Employee Register",
+      "plain": "Checks the employee register is sound: unique ids, a known employing entity, and a parseable DOB, HSA tier and eligible-comp field on every row.",
+      "engineering": "Three controls. emp_unique_ids rejects an employee id that appears twice, because the id is what every deduction and every provider upload is attributed to, and a duplicate makes a deduction ambiguous about whom it belongs to. emp_entity_valid FAILs an employee typed to an entity outside ENT-NW / ENT-SW / ENT-TX, since payroll is partitioned by entity and an unknown one has no subtotal to roll into. emp_fields_valid FAILs a DOB that is not a readable date (the age-50 and age-55 catch-up gates cannot be measured), an HSA coverage tier outside self_only / family / none (the HSA limit cannot be selected), and an eligible-comp figure that is not integer cents.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "pln",
+      "label": "Plan Catalog",
+      "plain": "Checks the plan catalog is sound: unique plan codes and every plan of a known type.",
+      "engineering": "Two controls. pln_unique_codes rejects a plan code that appears twice, because the code keys every deduction, provider upload and journal line to its plan, and a duplicate makes the plan a deduction settles against ambiguous. pln_type_valid FAILs a plan typed outside deferral_pretax / employer_match / hsa / fsa_medical / fsa_dependent_care, because the plan type selects which controls apply and which statutory limit is tested, and an unknown type has no controls -- so a deduction to it checks nothing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "ded",
+      "label": "Deduction Register & Provider Hand-off",
+      "plain": "Checks every deduction references a real employee and plan, sits one per pair, and reaches each of the plan's providers per employee.",
+      "engineering": "Three controls. ded_refs_valid FAILs a deduction naming an employee not in the register or a plan not in the catalog, so a withholding cannot answer to nothing. ded_unique_pairs FAILs an (employee, plan) pair carrying two deduction rows, because one employee's deduction to one plan is one figure and two rows double the withholding. ded_matches_provider is the per-employee hand-off: the amount withheld on the register must equal the amount uploaded to each of the plan's providers to the cent -- a 401(k) deferral reaches both the recordkeeper and the custodian -- and a deduction with no matching upload never left the building.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "tie",
+      "label": "Plan-Level Tie-Out",
+      "plain": "Checks each plan's register total ties every provider upload total, the ledger liability credit and the settling cash transfer.",
+      "engineering": "Three controls. tie_provider_total FAILs a plan whose register total does not equal a provider's upload total, catching a plan that ties to the recordkeeper but not the custodian, or an upload file carrying a row that answers to no deduction. tie_je_liability FAILs a journal-entry liability credit that does not equal the register total, which books a payable the payroll never created. tie_cash_transfer FAILs a settling cash transfer that does not equal the register total, or is missing entirely, which overfunds the provider or leaves the payable short. Each is compared with exact ==. A figure that is not integer cents raises AMOUNT_INVALID contained to the one row it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "ent",
+      "label": "Multi-Entity Rollup",
+      "plain": "Checks the per-entity subtotals recompute from the register and sum to the consolidated total.",
+      "engineering": "Two controls. ent_subtotal_recomputes FAILs a per-(entity, plan) subtotal that does not equal the sum of that entity's own register deductions, or that is missing where the register carries value for it, catching an entity file built from something other than its register. ent_consolidated_ties FAILs a consolidated per-plan total that does not equal both the sum of the per-entity subtotals and the register total, so the entities always add up to the whole a single provider is funded for.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "mat",
+      "label": "Employer Match",
+      "plain": "Checks the booked employer match recomputes from the formula and is limited to the 401(a)(17) compensation cap.",
+      "engineering": "Two controls. mat_recomputes treats the match as a re-derivation, not a stored figure: the match rate applied to eligible compensation, capped at 401(a)(17), and a booked match that does not equal the recomputed one credited an amount the formula does not produce. mat_comp_cap FAILs a high earner whose booked match exceeds the rate applied to the cap itself, because compensation above the 401(a)(17) ceiling is ineligible for match. Both re-derive through derive_match and capped_match, the same helpers the generator used to strike the figure.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "lim",
+      "label": "Statutory Limits",
+      "plain": "Checks every employee sits inside the 402(g), HSA-tier, FSA and 415(c) ceilings, and flags anyone approaching a limit.",
+      "engineering": "Five controls. lim_402g_deferral FAILs a year-to-date deferral over the 402(g) limit, which includes the age-50 catch-up for anyone fifty by plan-year-end. lim_hsa_tier FAILs a year-to-date HSA over the tier limit, where the tier and the DOB together select self-only or family plus the age-55 catch-up. lim_fsa_cap FAILs a year-to-date FSA election over the plan cap. lim_415c_additions FAILs annual additions -- employee deferrals plus employer match -- over the 415(c) ceiling. Each is compared with exact >, so a contribution a cent over is over. lim_deferral_watch is a FLAG, not a failure: it marks a deferral inside the file's own watch band of the 402(g) limit -- still under, but on track to breach if the election is not trimmed for the periods that remain.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "whh",
+      "label": "Per-Period Withholding",
+      "plain": "Checks the per-period HSA deduction recomputes from the remaining room and stays under the pro-rated ceiling.",
+      "engineering": "Two controls. whh_per_period_recomputes FAILs a per-period HSA deduction that does not equal the remaining room -- the tier limit less the employer contribution less the prior year-to-date -- spread over the periods remaining; a deduction off the level base was not set from the room it is meant to consume. whh_not_over_max FAILs a per-period deduction above the largest pro-rated piece the remaining room allows, because even the true-up period cannot over-withhold and drive the account past its limit before year-end. Both re-derive through per_period_base and per_period_max.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "dol",
+      "label": "Deposit Safe Harbor",
+      "plain": "Checks participant money reached the provider inside the DOL small-plan safe harbor, on or after the pay date.",
+      "engineering": "Two controls. dol_safe_harbor FAILs employee 401(k) and HSA money deposited more than seven business days after the pay date; the boundary is inclusive, so a deposit exactly on the seventh business day is timely and the eighth is late, counted with business_days_between over the file's own pay and remit dates. dol_remit_after_pay FAILs a remit date that precedes the pay date it settles, a date entered backwards that would make every business-day count meaningless, so it is caught before the safe-harbor test relies on it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "je",
+      "label": "Journal Entry",
+      "plain": "Checks the pay-period journal entry balances and every benefit clearing account zeroes out after remittance.",
+      "engineering": "Two controls. je_balances FAILs a journal entry whose total debits do not equal its total credits -- the entry must foot before anything downstream can trust it. je_clearing_zeroes FAILs a benefit clearing or payable account that does not net to zero after remittance: each plan's liability account is credited when the deduction is accrued and debited when the money is remitted, so a non-zero net means a payable was booked and never relieved, or relieved and never booked.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Rollup Recompute",
+      "plain": "Checks the report's stated tie determination and its statutory exception watchlist recompute from the evidence beneath them.",
+      "engineering": "Two controls. rpt_tie_status_recomputes is the control the engine exists for: the reconciliation report calls a plan tied, and the engine rebuilds that determination from the register, every provider upload, the ledger liability credit and the settling cash transfer, and compares -- a tie flag not recomputed from the legs beneath it is an assertion, not a reconciliation. rpt_exception_watchlist_ties is a FLAG, not a failure: it rebuilds the statutory exception watchlist from the same limit re-derivations and FLAGs a watchlist that lists an exception the numbers do not support, or omits one they do.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Reconciliation Files",
+      "kind": "source",
+      "col": 0,
+      "row": 5,
+      "plain": "fictional pay-period reconciliation files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control and one malformed-amount file, thirty-one files in total. Only the employees, the plan catalog, the register deductions and the pay/remit dates are stated; the employer match and the per-period HSA withholding are computed through the same reconcile kernel the engine recomputes with, and every rollup the engine later checks -- the provider uploads, the entity subtotals, the cash transfers, the journal entry, and the report's tie flags and exception watchlist -- is rebuilt from those base facts through the same helpers the controls use, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the reconciliation file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, or an unreadable review date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "emp-control",
+      "label": "Employee Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the employee register sound and every employee attributable",
+      "engineering": "Three controls: unique employee ids, every employee typed to a known employing entity, and a parseable DOB, known HSA tier and integer eligible comp on each row.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "pln-control",
+      "label": "Plan Catalog",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "are the plan codes unique and each plan of a known type",
+      "engineering": "Two controls: unique plan codes, and every plan carrying one of the known plan types that select which control and which statutory limit apply to it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "ded-control",
+      "label": "Deduction Register & Provider Hand-off",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does every deduction reference a real row and reach each provider",
+      "engineering": "Three controls: every deduction names a known employee and plan, no employee/plan pair carries two rows, and each employee's deduction reaches every one of its plan's providers to the cent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "tie-control",
+      "label": "Plan-Level Tie-Out",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does the register total tie every provider, the ledger and cash",
+      "engineering": "Three controls: each plan's register total ties every provider upload total, the journal-entry liability credit and the settling cash transfer, each compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "ent-control",
+      "label": "Multi-Entity Rollup",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "do the entity subtotals recompute and sum to the consolidated total",
+      "engineering": "Two controls: each per-entity subtotal recomputes from that entity's own register deductions, and each plan's subtotals sum to the consolidated total and tie the register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "mat-control",
+      "label": "Employer Match",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the booked match recompute and stay under the comp cap",
+      "engineering": "Two controls: the booked employer match recomputes from the rate on eligible compensation, and an above-cap match is limited to the rate applied to the 401(a)(17) cap.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "lim-control",
+      "label": "Statutory Limits",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is every employee inside the 402(g), HSA, FSA and 415(c) ceilings",
+      "engineering": "Five controls: year-to-date deferral within 402(g), HSA within the tier limit, FSA within the cap, annual additions within 415(c), and a deferral inside the watch band flagged before it breaches.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "whh-control",
+      "label": "Per-Period Withholding",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the per-period HSA withholding recompute from the remaining room",
+      "engineering": "Two controls: the per-period HSA deduction recomputes as the remaining room over the periods remaining, and no period withholds more than the largest pro-rated piece.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "dol-control",
+      "label": "Deposit Safe Harbor",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "did participant money remit inside the safe harbor, on or after pay",
+      "engineering": "Two controls: participant money reached the provider within the seven-business-day safe harbor, boundary inclusive, and no remit date precedes the pay date it settles.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "je-control",
+      "label": "Journal Entry",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "does the journal entry balance and every clearing account zero out",
+      "engineering": "Two controls: the pay-period journal entry balances, and every benefit clearing account nets to zero after remittance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Rollup Recompute",
+      "kind": "control",
+      "col": 2,
+      "row": 5,
+      "plain": "does the report's tie flag and watchlist recompute from the evidence",
+      "engineering": "Two controls: each plan's stated tie determination recomputes from its register, provider, ledger and cash legs, and the statutory exception watchlist ties the re-derived exceptions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers, Catalog & Ledger",
+      "kind": "control",
+      "col": 3,
+      "row": 2,
+      "plain": "the artifacts every rule resolves against",
+      "engineering": "The employee register carries each employee's id, entity, DOB, HSA tier, eligible comp and prior year-to-date room; the plan catalog carries each plan's type, providers, statutory limits and match formula; the deduction register carries one row per employee/plan withholding; and the provider file, remittance schedule, entity summary, journal entry and reconciliation report carry the uploads, cash transfers, subtotals, ledger lines and tie flags every tie-out, limit, match and reconciliation control resolves against through the shared reconcile kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per reconciliation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/benefit_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "reconciliation files" },
+    { "from": "set-control", "to": "emp-control", "label": "complete" },
+    { "from": "set-control", "to": "pln-control", "label": "complete" },
+    { "from": "set-control", "to": "ded-control", "label": "complete" },
+    { "from": "set-control", "to": "tie-control", "label": "complete" },
+    { "from": "set-control", "to": "ent-control", "label": "complete" },
+    { "from": "set-control", "to": "mat-control", "label": "complete" },
+    { "from": "set-control", "to": "lim-control", "label": "complete" },
+    { "from": "set-control", "to": "whh-control", "label": "complete" },
+    { "from": "set-control", "to": "dol-control", "label": "complete" },
+    { "from": "set-control", "to": "je-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "emp-control", "to": "registers", "label": "resolves" },
+    { "from": "pln-control", "to": "registers", "label": "resolves" },
+    { "from": "ded-control", "to": "registers", "label": "resolves" },
+    { "from": "tie-control", "to": "registers", "label": "resolves" },
+    { "from": "ent-control", "to": "registers", "label": "resolves" },
+    { "from": "mat-control", "to": "registers", "label": "resolves" },
+    { "from": "lim-control", "to": "registers", "label": "resolves" },
+    { "from": "whh-control", "to": "registers", "label": "resolves" },
+    { "from": "dol-control", "to": "registers", "label": "resolves" },
+    { "from": "je-control", "to": "registers", "label": "resolves" },
+    { "from": "tie-control", "to": "rpt-control", "label": "tie determination" },
+    { "from": "ded-control", "to": "report", "label": "findings" },
+    { "from": "tie-control", "to": "report", "label": "findings" },
+    { "from": "lim-control", "to": "report", "label": "findings" },
+    { "from": "dol-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "414",
+      "source": "python -m pytest --collect-only -q -o addopts= (payroll-benefit-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "29",
+      "source": "len(benefit_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every reconciliation file"
+    },
+    {
+      "label": "Families",
+      "value": "12",
+      "source": "distinct rule-id prefixes in benefit_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Sample files",
+      "value": "31",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus thirty planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(benefit_engine.model.DOC_TYPES)",
+      "plain": "employee register, plan catalog, deduction register, provider file, remittance schedule, entity summary, journal entry, reconciliation report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "benefit_engine/tests boundary tests on the cent and the safe-harbor business day",
+      "plain": "a tie-out a cent off the recomputation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "An employer runs one payroll a period, and that single register fans out to several benefit providers, to the general ledger and to cash. A 401(k) deferral withheld on the register has to reach both the recordkeeper and the custodian; an HSA deduction has to reach the HSA administrator; an FSA election has to reach the FSA administrator; the employer match has to recompute from the plan formula; and every dollar has to land in the ledger as a balanced entry whose benefit payable clears to zero once the money is remitted. Four failures hide inside that, and none of them look wrong in a stack of provider upload files. The hand-off drifts: a per-employee deduction is not the amount that reached the provider, or a plan ties to the recordkeeper but not the custodian, or the cash transfer is a dollar off the liability it settles. The employer match is wrong: the booked figure does not recompute from the formula on eligible compensation, or it was computed on compensation above the 401(a)(17) cap. A statutory limit is breached: an employee is over the 402(g) deferral limit, the HSA tier limit, an FSA cap or the 415(c) additions ceiling, and the per-period withholding no longer recomputes from the room that remains. The deposit is late: participant money reached the provider outside the DOL small-plan seven-business-day safe harbor, or the rollup calls a plan tied on a determination nobody recomputed from the evidence underneath it. None of these are judgment calls. They are equalities and comparisons -- a register total against a provider upload with exact ==, a deferral against a limit with >, a deposit against a pay date and a business-day count -- which a deterministic control settles better than a spreadsheet inherited by whoever reconciles benefits this period.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every reconciliation file",
+      "narrative": "The CLI generates thirty-one fictional reconciliation files -- one clean baseline and one carrying each of the thirty planted defects -- then runs all twenty-nine controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (payroll-benefit-automation/); benefit_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The limit breach and the watch flag fire at different boundaries",
+      "narrative": "The 402(g) ceiling and the review watch band are seeded independently. One defect file lifts an employee's prior year-to-date deferral over the 402(g) limit and trips lim_402g_deferral as a FAIL, checked with exact >; another lifts it into the file's own watch band, still under the limit, and trips lim_deferral_watch as a REVIEW-only FLAG -- proving the ceiling is tested at its boundary and the review signal is independent of the breach.",
+      "source": "benefit_engine/generate.py DEFECTS over_402g / deferral_watch"
+    },
+    {
+      "title": "The tie determination is recomputed, not read back",
+      "narrative": "A defect file flips the reconciliation report's stated tie flag for one plan to the opposite of the truth while leaving every leg intact. rpt_tie_status_recomputes rebuilds the determination from the register, every provider upload, the ledger liability credit and the cash transfer and fails on the contradiction, proving the tie flag is recomputed from the evidence beneath it rather than trusted as stated.",
+      "source": "benefit_engine/generate.py DEFECTS tie_flag_wrong -> rpt_tie_status_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-nine controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "benefit_report.json, benefit_report.md, samples/"
+    },
+    {
+      "cmd": "python -m benefit_engine samples",
+      "operation": "analyze an existing folder of reconciliation files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m benefit_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest benefit_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "414 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "414",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (payroll-benefit-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "29",
+      "unit": "controls",
+      "source": "len(benefit_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "30",
+      "unit": "defect files",
+      "source": "len(benefit_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "benefit_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the reconciliation they were given: every deduction reached each of its plan's providers, the ledger liability and cash in the same amount, the employer match recomputed from the formula, every employee sat inside the 402(g), HSA-tier, FSA and 415(c) ceilings, every participant deposit landed inside the DOL safe harbor, the journal entry balanced and cleared, and every stated tie flag recomputed from its legs. It is not an opinion on whether the plan formula, the statutory limits or the safe-harbor window carried in the file are the correct ones for the year, whether a provider actually received the money, or whether the underlying payroll was itself run correctly.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean reconciliation into the documented benefits sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a deferral inside the 402(g) watch band and an exception watchlist that does not tie the evidence both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the plan or figure is not signed off until the failing control is cleared -- a hand-off that does not tie, a match that does not recompute, a limit breach, a late deposit, an unbalanced or unclearing entry, or a tie flag that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: reconciliation files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a tie-out, and a cent off the recomputation is reported as a break.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One reconcile kernel: the controls and the generator share the predicates in benefit_engine.reconcile, so a determination cannot disagree with the data that produced it.",
+      "The 401(k) ties to two destinations: the register must reach both the recordkeeper and the custodian, so a plan that reaches one and misses the other is not reconciled.",
+      "The deposit safe harbor is inclusive: a deposit on the seventh business day is timely and the eighth is late, measured against the file's own pay date, never the system clock.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a plan is signed off and whether a late deposit or a broken hand-off is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never runs payroll, moves money, funds a provider, files a return or writes to a source artifact. It reads the reconciliation file and stops.",
+      "source": "payroll-benefit-automation/README.md and benefit_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts one pay-period reconciliation emits. It does not connect to a payroll system, a recordkeeper, a custodian, an HSA or FSA administrator, a bank or the general ledger.",
+      "source": "benefit_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the mechanical relationships hold -- the hand-offs tie, the match recomputes, the limits are met, the deposits are timely -- not that a provider actually received the money or that the underlying payroll was run correctly.",
+      "source": "benefit_engine/engine.py tie_ / mat_ / dol_ families"
+    },
+    {
+      "statement": "It re-derives the match, the limits and the deposit timing from the rate, ceilings and safe-harbor window the file carries; it does not decide whether those parameters are the correct ones for the plan year and taxpayer.",
+      "source": "benefit_engine/engine.py mat_ / lim_ / dol_ families and reconcile"
+    },
+    {
+      "statement": "It takes the register, provider and ledger records at face value: it confirms they foot and reconcile, not that a deduction was authorized. All shipped data is fictional and the pay period is set in a fictional future.",
+      "source": "benefit_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-payroll.svg",
+    "motion": "../assets/engine-payroll.svg",
+    "poster_alt": "Payroll & Benefit Reconciliation diagram: on the left a single payroll-register card for one employee's plan deduction; arrows fan the same amount out to a recordkeeper and a custodian (a 401(k) reaches both), to the general-ledger liability accrual and to a settling cash transfer; a central tie-out panel checks the four amounts are equal to the cent, with one branch marked reached recordkeeper, missed custodian; a statutory-limit gate below tests the year-to-date deferral against the 402(g) ceiling and the deposit against the seven-business-day DOL safe harbor; on the right a reconciliation report whose per-plan tie flag is recomputed from the legs beneath it; and a footer strip reading 29 controls, 12 families, 414 tests, read-only, SFS-E30-PBR.",
+    "caption": "The Payroll & Benefit Reconciliation engine tile states the question that has to hold plan by plan: every benefit dollar the register withheld reached each provider, the ledger and cash in the same amount, the employer match recomputed from its formula, every statutory limit held, every participant deposit landed inside the DOL safe harbor, and the report's tie flags recompute from the evidence beneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest benefit_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/payroll-benefit-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/payroll-benefit-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Payroll & Benefit Reconciliation (SFS-E30-PBR) datasheet -- twenty-nine deterministic, read-only controls over one pay period's benefit reconciliation: every 401(k), HSA and FSA deduction proved to reach each provider, the ledger liability and cash in the same amount, the employer match recomputed from the plan formula capped at 401(a)(17), every employee inside the 402(g), HSA-tier, FSA and 415(c) ceilings, every participant deposit inside the DOL small-plan safe harbor, the journal entry balanced and cleared, and the report's per-plan tie flags and exception watchlist recomputed from the evidence beneath them. 414 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

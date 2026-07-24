@@ -1,0 +1,4470 @@
+{
+  "title": "Home-sale closing & settlement tie-out report",
+  "overall_verdict": "FAIL",
+  "file_count": 27,
+  "rule_count": 25,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_status_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "unit_artifacts_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "je_unit_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "je_balances",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "je_ar_plug_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "ss_total_charges_recompute",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "ss_total_closing_costs_recompute",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "ss_net_to_seller_recompute",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "fee_listing_sales_rederives",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "fee_warranty_reserve_rederives",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "fee_broker_commission_variance",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "fee_concessions_within_assumption",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "rev_recognized_in_coe_month",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rev_deferred_upgrade_reversed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "loan_ending_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "loan_ties_lender_statement",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "loan_release_price_covered",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cos_margin_recompute",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cos_prepaid_commission_relief_cap",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_closed_count_ties",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_net_to_seller_total_ties",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "rpt_unit_tied_recomputes",
+      "severity": "FAIL",
+      "exceptions": 15
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 5,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "FAIL",
+          "location": "amount:settlement.broker_commission_cents",
+          "message": "AMOUNT_INVALID: settlement.broker_commission_cents must be integer cents, got 2880000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "FAIL",
+          "location": "amount:settlement.broker_commission_cents",
+          "message": "AMOUNT_INVALID: settlement.broker_commission_cents must be integer cents, got 2880000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "FAIL",
+          "location": "amount:settlement.broker_commission_cents",
+          "message": "AMOUNT_INVALID: settlement.broker_commission_cents must be integer cents, got 2880000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "FLAG",
+          "location": "amount:settlement.broker_commission_cents",
+          "message": "AMOUNT_INVALID: settlement.broker_commission_cents must be integer cents, got 2880000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "FAIL",
+          "location": "amount:settlement.broker_commission_cents",
+          "message": "AMOUNT_INVALID: settlement.broker_commission_cents must be integer cents, got 2880000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "amount:settlement.broker_commission_cents",
+          "message": "AMOUNT_INVALID: settlement.broker_commission_cents must be integer cents, got 2880000.5 -- amounts are integer cents and are never coerced"
+        }
+      ]
+    },
+    {
+      "document": "ar_plug_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "FAIL",
+          "location": "closing_je_register:CLOSING-JE-2029/entries/JE-U-102",
+          "message": "closing entry JE-U-102 for unit U-102 posts 669,000.00 debits against 659,000.00 credits; the entry does not foot (off 10,000.00)"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "FAIL",
+          "location": "closing_je_register:CLOSING-JE-2029/entries/JE-U-102/Accounts_Receivable",
+          "message": "closing entry JE-U-102 for unit U-102 states an Accounts Receivable of 610,800.00; the derived plug is 600,800.00 (off 10,000.00)"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-102/tied",
+          "message": "unit U-102 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "artifacts_incomplete__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "FAIL",
+          "location": "unit_register:UNITS-2029/units/U-102",
+          "message": "closed unit U-102 has 0 settlement rows; a complete package carries exactly one"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "FAIL",
+          "location": "closing_report:REPORT-2029/total_net_to_seller_cents",
+          "message": "the report states a total net to seller of 2,816,075.00; the settlements recompute 2,224,275.00 (off 591,800.00)"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-102/tied",
+          "message": "unit U-102 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "bad_unit_status__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "FAIL",
+          "location": "unit_register:UNITS-2029/units/U-105/status",
+          "message": "unit U-105 is status 'pending', which is not one of ('unsold', 'sold', 'closed')"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "broker_commission_varies__Halbrook_Residential",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "FLAG",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-103/broker_commission_cents",
+          "message": "unit U-103 books a broker commission of 28,600.00; the proforma assumption of 3.60% is 26,100.00 (variance 2,500.00) -- confirm the negotiated rate"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,813,575.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "closed_count_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "FAIL",
+          "location": "closing_report:REPORT-2029/closed_count",
+          "message": "the report states 3 closed unit(s); the register has 4"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "concessions_over_allowance__Ardenne_Field_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "FLAG",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-104/concessions_cents",
+          "message": "unit U-104 grants concessions of 5,400.00; the proforma allowance of 0.50% is 4,500.00 (over by 900.00) -- confirm the concession"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,814,275.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "cos_margin_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "FAIL",
+          "location": "cos_schedule:COS-2029/entries/U-101/revised_profit_cents",
+          "message": "unit U-101 states a revised project profit of 115,000.00; projected profit plus carry costs is 105,000.00 (off 10,000.00)"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-101/tied",
+          "message": "unit U-101 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "deferred_upgrade_wrong__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "FAIL",
+          "location": "revenue_schedule:REVREC-2029/entries/U-104/deferred_upgrade_reversed_cents",
+          "message": "unit U-104 reverses 20,500.00 of deferred upgrade revenue; the unit's deferred balance is 20,000.00 (off 500.00)"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-104/tied",
+          "message": "unit U-104 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_unit_id__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "FAIL",
+          "location": "unit_register:UNITS-2029/units/U-101",
+          "message": "unit id U-101 appears 2 times; a settlement that names it cannot be attributed to one home"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "FAIL",
+          "location": "closing_report:REPORT-2029/closed_count",
+          "message": "the report states 4 closed unit(s); the register has 5"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "FAIL",
+          "location": "closing_report:REPORT-2029/total_net_to_seller_cents",
+          "message": "the report states a total net to seller of 2,816,075.00; the settlements recompute 3,549,625.00 (off -733,550.00)"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "je_does_not_foot__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "FAIL",
+          "location": "closing_je_register:CLOSING-JE-2029/entries/JE-U-101",
+          "message": "closing entry JE-U-101 for unit U-101 posts 825,000.00 debits against 815,000.00 credits; the entry does not foot (off 10,000.00)"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "FAIL",
+          "location": "closing_je_register:CLOSING-JE-2029/entries/JE-U-101/Accounts_Receivable",
+          "message": "closing entry JE-U-101 for unit U-101 states an Accounts Receivable of 748,550.00; the derived plug is 738,550.00 (off 10,000.00)"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-101/tied",
+          "message": "unit U-101 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "je_unknown_unit__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "FAIL",
+          "location": "closing_je_register:CLOSING-JE-2029/entries/JE-U-999/unit_id",
+          "message": "closing entry JE-U-999 names unit 'U-999', which is not in the unit register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "listing_off_rate__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "FAIL",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-101/listing_sales_fee_cents",
+          "message": "unit U-101 states an LISTING sales fee of 5,000.00; 0.50% of gross is 4,000.00 (off 1,000.00)"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,815,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "loan_does_not_tie__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "FAIL",
+          "location": "loan_release_register:LOAN-2029/releases/U-102/lender_statement_ending_cents",
+          "message": "unit U-102 carries a loan ending balance of 508,000.00; the lender statement shows 518,000.00 (off -10,000.00)"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-102/tied",
+          "message": "unit U-102 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "loan_ending_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "FAIL",
+          "location": "loan_release_register:LOAN-2029/releases/U-101/ending_balance_cents",
+          "message": "unit U-101 states a loan ending balance of 518,000.00; the roll-forward gives 508,000.00 (off 10,000.00)"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-101/tied",
+          "message": "unit U-101 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "closing_report:-",
+          "message": "closing_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "net_to_seller_wrong__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "FAIL",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-103/net_to_seller_cents",
+          "message": "unit U-103 states net to seller of 672,675.00; gross less settlement charges is 662,675.00 (off 10,000.00)"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-103/tied",
+          "message": "unit U-103 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "net_total_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "FAIL",
+          "location": "closing_report:REPORT-2029/total_net_to_seller_cents",
+          "message": "the report states a total net to seller of 2,826,075.00; the settlements recompute 2,816,075.00 (off 10,000.00)"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "prepaid_relief_over_cap__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "FAIL",
+          "location": "cos_schedule:COS-2029/entries/U-102/prepaid_relieved_cents",
+          "message": "unit U-102 relieves 21,000.00 of prepaid commission; MIN(earned 23,400.00, prepaid 20,000.00) is 20,000.00 (off 1,000.00)"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-102/tied",
+          "message": "unit U-102 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "release_price_short__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "FAIL",
+          "location": "loan_release_register:LOAN-2029/releases/U-103/bank_remittance_cents",
+          "message": "unit U-103 remits 10,000.00 to the bank; the scheduled release price is 11,000.00 (short 1,000.00)"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    },
+    {
+      "document": "revenue_wrong_month__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "FAIL",
+          "location": "revenue_schedule:REVREC-2029/entries/U-103/recognized_month",
+          "message": "unit U-103 recognises revenue in '2029-03'; close of escrow is 2029-02-05, so it must land in '2029-02'"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-103/tied",
+          "message": "unit U-103 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "tied_flag_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-101/tied",
+          "message": "unit U-101 is summarised tied=False; recomputing from its closing package gives tied=True"
+        }
+      ]
+    },
+    {
+      "document": "total_charges_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "FAIL",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-101/total_settlement_charges_cents",
+          "message": "unit U-101 states total settlement charges of 76,450.00; the components sum to 66,450.00 (off 10,000.00)"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-101/tied",
+          "message": "unit U-101 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "total_closing_costs_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "FAIL",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-102/total_closing_costs_cents",
+          "message": "unit U-102 states total closing costs of 44,800.00; charges less broker commission is 34,800.00 (off 10,000.00)"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-102/tied",
+          "message": "unit U-102 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "unit_missing_field__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "FAIL",
+          "location": "unit_register:UNITS-2029/units/U-103",
+          "message": "closed unit U-103 is missing coe_date; its closing cannot be recomputed"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 warranty reserves re-derive"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,816,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "FAIL",
+          "location": "closing_summary:SUMMARY-2029/units/U-103/tied",
+          "message": "unit U-103 is summarised tied=True; recomputing from its closing package gives tied=False"
+        }
+      ]
+    },
+    {
+      "document": "warranty_off_rate__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 closing artifacts are present"
+        },
+        {
+          "rule": "unit_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unit ids are unique"
+        },
+        {
+          "rule": "unit_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 units carry a known status"
+        },
+        {
+          "rule": "unit_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units carry their base facts"
+        },
+        {
+          "rule": "unit_artifacts_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closed units have a complete package"
+        },
+        {
+          "rule": "je_unit_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every closing entry names a unit in the register"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing entries foot"
+        },
+        {
+          "rule": "je_ar_plug_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receivable plugs recompute"
+        },
+        {
+          "rule": "ss_total_charges_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 settlement totals recompute"
+        },
+        {
+          "rule": "ss_total_closing_costs_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 closing-cost totals recompute"
+        },
+        {
+          "rule": "ss_net_to_seller_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 net-to-seller figures recompute"
+        },
+        {
+          "rule": "fee_listing_sales_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 LISTING sales fees re-derive"
+        },
+        {
+          "rule": "fee_warranty_reserve_rederives",
+          "status": "FAIL",
+          "location": "settlement_register:SETTLEMENT-2029/settlements/U-102/warranty_reserve_cents",
+          "message": "unit U-102 states a warranty reserve of 7,500.00; 1.00% of gross is 6,500.00 (off 1,000.00)"
+        },
+        {
+          "rule": "fee_broker_commission_variance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 broker commissions match the proforma"
+        },
+        {
+          "rule": "fee_concessions_within_assumption",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 concessions are within the allowance"
+        },
+        {
+          "rule": "rev_recognized_in_coe_month",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 revenue lines land in the close month"
+        },
+        {
+          "rule": "rev_deferred_upgrade_reversed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferred-upgrade reversals tie"
+        },
+        {
+          "rule": "loan_ending_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan ending balances recompute"
+        },
+        {
+          "rule": "loan_ties_lender_statement",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 loan balances tie the lender statement"
+        },
+        {
+          "rule": "loan_release_price_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 remittances cover the release price"
+        },
+        {
+          "rule": "cos_margin_recompute",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margin figures recompute"
+        },
+        {
+          "rule": "cos_prepaid_commission_relief_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 prepaid-commission reliefs are capped"
+        },
+        {
+          "rule": "rpt_closed_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's closed count of 4 ties"
+        },
+        {
+          "rule": "rpt_net_to_seller_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report's total net to seller of 2,815,075.00 ties"
+        },
+        {
+          "rule": "rpt_unit_tied_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every unit tie-out flag recomputes from its package"
+        }
+      ]
+    }
+  ]
+}

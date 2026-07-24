@@ -1,0 +1,467 @@
+{
+  "num": 33,
+  "slug": "standing",
+  "part_no": "SFS-E33-GDS",
+  "mnemonic": "GDS",
+  "family": "Entity Compliance",
+  "name": "Entity Good-Standing",
+  "tagline": "Is each entity in good standing in every state it belongs to, and does that recompute?",
+  "plain_summary": "A closely-held real-estate family keeps its entities alive one (entity, state) registration at a time, and it has to prove, state by state, that each one clears every statutory gate at once -- the annual or biennial report filed on-or-before its due date and its fee met, the flat franchise tax paid in full and on time, the Secretary-of-State status ACTIVE, the registered agent of record the one under contract, and any required business licence current -- and then that every flag and count stacked on top of those records was recomputed, not typed. This engine reads the six artifacts the standing record carries -- the entity register, the jurisdiction matrix, the standing record register, the standing summary, the renewal watchlist and the compliance report -- and runs twenty-six deterministic controls over them across eleven families. Is the file complete and are the review date and filing year legible, is the entity register sound and every entity typed and status-valid, does every state an active entity belongs to have a matrix row and a record, is every record well-formed and attributable to a state the entity joined, does each report due date re-derive from the statute and was it filed on time with its fee met, is the franchise tax the flat statutory amount on its re-derived due date and paid on time, is the agent of record the contracted agent with fee paid, does an entity the register calls Active read ACTIVE at the Secretary of State, is any required business licence current, is every dissolved entity cancelled in every state it belonged to, and do each good-standing flag, the family counts and the renewal watchlist recompute from the state records beneath them. It re-derives every statutory due date rather than trusting it, compares every fee and franchise tax with exact >=, treats each timeliness gate as <= so a filing dated exactly on the due date is still on time, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A good-standing register looks like the safest list in the binder: one line per entity, each marked Active, each state accounted for. That is exactly why it drifts. None of the ways it goes wrong look wrong in a column of one-line entries. A report or a franchise tax slips a day past its statutory due date and the entity drifts toward administrative suspension while the register still shows it Active -- just late. The franchise tax is paid a dollar under the flat amount, or the agent named on the state's record is not the one under contract, so service of process lands where nobody is watching -- and the paper looks complete. And the rollup -- the good-standing flag, the family count, the renewal watchlist -- is stated on a determination nobody recomputed from the state records beneath it. The engine re-derives every statutory due date from the filing year and the jurisdiction's own statute, holds every fee and franchise tax to the flat amount with exact >=, rebuilds each good-standing flag from the matrix and the records through one shared kernel, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A lapsed filing, a short tax or a suspended status is invisible until the state serves a notice on an entity the register still calls Active.",
+  "layers_intro": "Eleven control families run in registry order over each standing file. The first proves the others had something to read and that the review date and filing year are legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the standing file carries every artifact the controls below read, exactly once, and that the review date and filing year are legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable as_of review date, since every currency and renewal test is measured to it, and a non-integer period_year, against which every statutory due date is re-derived. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "ent",
+      "label": "Entity Register",
+      "plain": "Checks the entity register is sound: unique ids, a known type and register status on each entity, and a declared, known jurisdiction set.",
+      "engineering": "Four controls. ent_unique_ids rejects an entity id that appears twice, because the id joins the register to every state record and to the summary, and a duplicate makes a record ambiguous about which entity it belongs to. ent_type_valid FAILs an entity typed as anything but llc, corporation or lp, since the type is half the key into the jurisdiction matrix and an unknown one has no row. ent_status_valid FAILs an unknown register status, the on/off switch that decides whether an entity owes live filings or must instead be fully cancelled. ent_jurisdictions_declared FAILs an entity that declares no known formation or qualified state -- its jurisdiction controls would pass on an empty requirement -- and an entity registered in a state outside the known set.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "jur",
+      "label": "Jurisdiction Obligations",
+      "plain": "Checks every state an active entity belongs to has a matrix row for its type and a standing record on file.",
+      "engineering": "Two controls. jur_matrix_defined FAILs a required (state, entity_type) with no jurisdiction-matrix row: without it the engine knows the entity is registered somewhere but not what report cadence, fee or franchise tax to hold it to, so the amount and date controls would silently skip it. jur_record_present FAILs a required jurisdiction with no standing record at all -- presence, not currency, which is the plainest failure, and lateness is a separate control's job.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "rec",
+      "label": "Standing Record Register",
+      "plain": "Checks every state record is well-formed, uniquely numbered, attributable to a real entity, and for a state that entity actually joined.",
+      "engineering": "Four controls. rec_required_fields FAILs a record missing any of record_id, entity_id, state, sos_file_number or sos_status. rec_file_number_unique FAILs an SOS file number that appears on two records, because a shared number means one state filing was copied onto two lines and the register can no longer prove they are distinct registrations. rec_entity_exists FAILs a record naming an entity absent from the register. rec_state_required FAILs a record for a state outside the entity's formation/qualified set -- a stray registration, evidence of an obligation nobody established the entity owes, which would silently pad the good-standing determination.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "fil",
+      "label": "Annual/Biennial Report",
+      "plain": "Checks each report's due date re-derives from the statute, the report was filed on time and its fee met, and flags any next report due inside the lead window.",
+      "engineering": "Four controls. fil_due_date_recomputes rebuilds the stated report due date from the filing year plus the jurisdiction's statutory month and day and FAILs a stated date that does not recompute -- a date nobody can defend the timeliness test against. fil_report_filed_on_time FAILs a report filed after its statutory due date; filed on the due date is on time, the gate is <=, and one day later is the first step toward administrative suspension. fil_report_fee_paid FAILs a filing fee short of the statutory fee, compared with exact >=. fil_renewal_lead_time is a FLAG, not a failure: it marks a record whose next report is due inside the file's own lead-time window, an entity still in good standing but with a filing to make before it lapses.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "tax",
+      "label": "Franchise Tax",
+      "plain": "Checks the franchise tax is the flat statutory amount, its due date re-derives, and it was paid on or before that date.",
+      "engineering": "Three controls. tax_amount_meets FAILs a franchise tax paid under the flat statutory amount, compared with exact >=: the state does not part-credit it, so a dollar short is an unpaid tax accruing penalty and interest until the entity is suspended. tax_due_date_recomputes rebuilds the stated franchise-tax due date from the filing year and the statutory month and day, and compares. tax_paid_on_time FAILs a franchise tax paid after its due date; paid on the date is on time, the gate is <=, and one day later carries the penalty the on-time payment avoids.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "agt",
+      "label": "Registered Agent",
+      "plain": "Checks, where a jurisdiction requires it, the agent of record is the contracted agent and its annual fee is paid.",
+      "engineering": "Two controls, run only where the matrix marks the jurisdiction requires_registered_agent. agt_matches_sos FAILs an agent of record on the state's record that is not the contracted agent, because a mismatch means the state will serve process on an agent the family no longer retains -- so a lawsuit or a suspension notice lands where nobody is watching and the first the entity hears of it is a default. agt_fee_current FAILs a required agent with no paid-fee date, because an unpaid agent resigns and an entity with no agent of record is one filing from administrative dissolution.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "sts",
+      "label": "SOS Status Tie-Out",
+      "plain": "Checks an entity the register calls Active reads ACTIVE on every Secretary-of-State record.",
+      "engineering": "One control. sts_sos_active FAILs a record whose Secretary-of-State status is anything but ACTIVE for an entity the register carries as active. The register is what the family believes; the SOS record is what the state says, and when the two disagree -- the register shows Active while the state shows the entity suspended -- the family is operating on a status that is no longer true.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "lic",
+      "label": "Business License",
+      "plain": "Checks, where a jurisdiction requires a city business license, it reads current and its renewal date is still ahead of the review date.",
+      "engineering": "One control, run only where the matrix marks requires_business_license. lic_current FAILs a licence that is not current, or whose renewal date has arrived on or before the as_of review date (the gate is due > as_of), because a licence whose renewal date has arrived is due, not current, and operating without it is its own violation regardless of state standing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "dis",
+      "label": "Dissolution Completeness",
+      "plain": "Checks every dissolved entity is cancelled in every state it ever belonged to.",
+      "engineering": "One control. dis_cancellation_complete walks every state a dissolved entity ever belonged to -- its formation state and every qualified state -- and FAILs a state with no record or with no filed certificate of cancellation. A wound-down entity that keeps a live registration in even one state it once qualified into keeps accruing that state's franchise tax and report obligations, a dormant liability that surfaces years later as a suspension and a bill, so the cancellation must be complete across every jurisdiction.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "roll",
+      "label": "Rollup Recompute",
+      "plain": "Checks each good-standing flag recomputes, the report counts tie the summary, and the renewal watchlist ties the evidence.",
+      "engineering": "Three controls. roll_standing_recomputes is the control the engine exists for: it rebuilds every entity's good-standing flag from the jurisdiction matrix and the state records through the shared kernel and FAILs a summary flag that does not recompute, because a determination that is not recomputed from the evidence is an assertion. roll_report_counts_tie FAILs a compliance report whose good / not-good counts do not tie the summary, catching a count maintained beside the summary rather than derived from it. roll_watchlist_ties is a FLAG: it rebuilds the renewal watchlist from the records and marks a watchlist that lists a filing not actually due, or omits one that is, so the filing chase is sent to the right place.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Standing Files",
+      "kind": "source",
+      "col": 0,
+      "row": 5,
+      "plain": "fictional standing files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-eight files in total. Only the entities, the jurisdiction matrix and the state records are stated -- and even each record's statutory due dates are computed from the matrix, so they cannot drift from the statute they claim to follow. Every rollup the engine later checks -- each entity's good-standing determination, the renewal watchlist and the family in-good-standing / not counts -- is re-derived through the same good-standing kernel the engine recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the standing file complete and the review date and filing year legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, an unreadable as_of review date, or a non-integer filing year, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "ent-control",
+      "label": "Entity Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the entity register sound and every entity typed and placed",
+      "engineering": "Four controls: unique entity ids, a known entity type and register status on each, and a declared, known formation/qualified jurisdiction set.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "jur-control",
+      "label": "Jurisdiction Obligations",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does every required jurisdiction have a matrix row and a record",
+      "engineering": "Two controls: every state an active entity belongs to has a jurisdiction-matrix row for its type and a standing record on file, so no obligation is skipped for want of a statute or a record.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "rec-control",
+      "label": "Standing Record Register",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is every record well-formed and attributable",
+      "engineering": "Four controls: the required descriptive fields present, a unique SOS file number, an entity that exists in the register, and a state the entity actually joined.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "fil-control",
+      "label": "Annual/Biennial Report",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does the report re-derive, file on time, meet its fee, and what renews",
+      "engineering": "Four controls: the stated report due date re-derives from the statute, the report was filed on-or-before it, the filing fee meets the statutory fee at exact >=, and a next report due inside the lead-time window is flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "tax-control",
+      "label": "Franchise Tax",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "is the franchise tax the statutory amount, dated and paid on time",
+      "engineering": "Three controls: the franchise tax paid meets the flat statutory amount at exact >=, its due date re-derives from the statute, and it was paid on-or-before that date.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "agt-control",
+      "label": "Registered Agent",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is the agent of record the contracted agent, with fee paid",
+      "engineering": "Two controls, run where the jurisdiction requires a registered agent: the agent of record on the state's record equals the contracted agent, and that agent's annual fee is paid.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "sts-control",
+      "label": "SOS Status Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does an entity the register calls Active read ACTIVE at the SOS",
+      "engineering": "One control: every active entity's state record reads Secretary-of-State status ACTIVE, so the internal register and the state record reconcile.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "lic-control",
+      "label": "Business License",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is any required business license current",
+      "engineering": "One control, run where the jurisdiction requires a city business license: the licence reads current and its renewal date is still ahead of the review date.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "dis-control",
+      "label": "Dissolution Completeness",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "is every dissolved entity cancelled everywhere it belonged",
+      "engineering": "One control: every state a dissolved entity ever belonged to carries a filed certificate of cancellation, so no wound-down entity keeps a live registration accruing obligations.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "roll-control",
+      "label": "Rollup Recompute",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "does the rollup recompute from the records it summarises",
+      "engineering": "Three controls: every entity good-standing flag recomputes from the matrix and the records, the report's good / not-good counts tie the summary, and the renewal watchlist ties the record evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Register, Matrix & Records",
+      "kind": "control",
+      "col": 3,
+      "row": 2,
+      "plain": "the artifacts and dated statute every rule resolves against",
+      "engineering": "The entity register carries each entity's id, type, register status and formation/qualified states; the jurisdiction matrix carries the per (state, entity_type) report cadence, flat report fee and franchise tax, the statutory due month and day, and the agent and licence requirements; the standing record register carries each per (entity, state) record's SOS status, report and franchise dates and paid amounts, agent, licence and cancellation; and the standing summary, renewal watchlist and compliance report carry the derived flags and counts. Every filing, tax, agent, status, licence, dissolution and rollup control resolves against these through the shared good-standing kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per standing file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/standing_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "standing files" },
+    { "from": "corpus", "to": "ent-control", "label": "standing files" },
+    { "from": "corpus", "to": "jur-control", "label": "standing files" },
+    { "from": "corpus", "to": "rec-control", "label": "standing files" },
+    { "from": "corpus", "to": "fil-control", "label": "standing files" },
+    { "from": "corpus", "to": "tax-control", "label": "standing files" },
+    { "from": "corpus", "to": "agt-control", "label": "standing files" },
+    { "from": "corpus", "to": "sts-control", "label": "standing files" },
+    { "from": "corpus", "to": "lic-control", "label": "standing files" },
+    { "from": "corpus", "to": "dis-control", "label": "standing files" },
+    { "from": "corpus", "to": "roll-control", "label": "standing files" },
+    { "from": "ent-control", "to": "registers", "label": "resolves" },
+    { "from": "jur-control", "to": "registers", "label": "resolves" },
+    { "from": "rec-control", "to": "registers", "label": "resolves" },
+    { "from": "fil-control", "to": "registers", "label": "resolves" },
+    { "from": "tax-control", "to": "registers", "label": "resolves" },
+    { "from": "agt-control", "to": "registers", "label": "resolves" },
+    { "from": "sts-control", "to": "registers", "label": "resolves" },
+    { "from": "lic-control", "to": "registers", "label": "resolves" },
+    { "from": "dis-control", "to": "registers", "label": "resolves" },
+    { "from": "roll-control", "to": "registers", "label": "resolves" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "sts-control", "to": "report", "label": "findings" },
+    { "from": "dis-control", "to": "report", "label": "findings" },
+    { "from": "roll-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "385",
+      "source": "python -m pytest --collect-only -q -o addopts= (good-standing-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "26",
+      "source": "len(standing_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every standing file"
+    },
+    {
+      "label": "Families",
+      "value": "11",
+      "source": "distinct rule-id prefixes in standing_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Standing files",
+      "value": "28",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-seven planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(standing_engine.model.DOC_TYPES)",
+      "plain": "entity register, jurisdiction matrix, standing record register, standing summary, renewal watchlist, compliance report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "standing_engine/tests boundary tests on the cent and the due date",
+      "plain": "a fee or tax a cent short of the statute is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A closely-held real-estate family forms one entity per project and qualifies it into each state it operates in, and it has to prove, entity by entity and state by state, that the paper on file actually keeps that entity alive: the annual or biennial report filed on-or-before its statutory due date and its fee met, the flat franchise tax paid in full and on time, the Secretary-of-State status ACTIVE, the registered agent of record the one under contract, and any required business licence current -- and that a wound-down entity has been cancelled in every state it ever touched. Three failures hide inside that, none of which look wrong in a register of one-line entries. A filing slips past its statutory due date, so the entity drifts toward administrative suspension while the internal register still shows it Active -- just late, and a suspended entity cannot sue, close a sale or borrow. The obligation is short or misdated -- a franchise tax a dollar under the flat statutory amount, a stated due date the statute does not re-derive, or an agent on the state's record who is not the agent under contract -- so the paper looks complete and the standing is not there. And the rollup calls an entity in good standing, or counts a family as clean, on a determination nobody recomputed from the state records underneath it. None of these are judgment calls. They are equalities and comparisons -- a filing date against a re-derived due date with <=, a franchise tax against the flat statutory amount with >=, a stated flag against its re-derivation -- which a deterministic control settles better than a register inherited by whoever tracks compliance this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every standing file",
+      "narrative": "The CLI generates twenty-eight fictional standing files -- one clean baseline and one carrying each of the twenty-seven planted defects -- then runs all twenty-six controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (good-standing-automation/); standing_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The paper controls and the protection controls are independent",
+      "narrative": "The good-standing determination is the conjunction of the substantive gates only -- report and franchise filed on time and in full, SOS ACTIVE, agent current, licence current -- each checked at its boundary with <= or >=. The data-integrity controls that guard the paper sit outside that conjunction, so one defect file misdates a report due date without touching the filing date: fil_due_date_recomputes fails while roll_standing_recomputes still holds, proving a paper break is reported without silently moving the determination.",
+      "source": "standing_engine/generate.py DEFECTS report_due_date_wrong; standing_engine/standing.py record_in_good_standing"
+    },
+    {
+      "title": "The determination is recomputed, not read back",
+      "narrative": "One defect file flips an entity's stated good-standing flag to false while its records still satisfy every obligation, and moves the family count with it so the two stay internally consistent. roll_standing_recomputes rebuilds the flag from the jurisdiction matrix and the state records through the shared kernel and fails, proving the standing summary is recomputed from the evidence beneath it rather than trusted as stated.",
+      "source": "standing_engine/generate.py DEFECTS standing_flag_wrong -> roll_standing_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-six controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "standing_report.json, standing_report.md, samples/"
+    },
+    {
+      "cmd": "python -m standing_engine samples",
+      "operation": "analyze an existing folder of standing files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m standing_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest standing_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "385 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "385",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (good-standing-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "26",
+      "unit": "controls",
+      "source": "len(standing_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "27",
+      "unit": "defect files",
+      "source": "len(standing_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "standing_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the records they were given: every active entity, in every state it belongs to, filed its annual or biennial report on-or-before the statutory due date and met the filing fee, paid the flat franchise tax in full and on time, reads ACTIVE at the Secretary of State, holds the registered agent it contracted with the fee paid, and carries any required business licence current -- and every dissolved entity is cancelled in every state it ever touched, with each stated due date, good-standing flag, count and watchlist entry recomputing from the jurisdiction matrix and the state records. It is not an opinion on whether the state's underlying filing actually posted, whether the statutory fee or franchise amount the matrix carries is the right one for the year, whether a certificate of cancellation is authentic, or whether an entity should have been formed or qualified in a given state at all.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean standing file into the documented compliance sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a filing due inside the renewal lead-time window and a watchlist that does not tie the evidence both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the entity is not certified in good standing until the failing control is cleared -- a lapsed filing, a short or late franchise tax, a suspended status, a mismatched agent, an incomplete dissolution, or a determination that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: standing files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, fees and taxes compared with exact >=; there is no tolerance band, and a cent short of the statutory amount is reported as a break.",
+      "A fee or tax that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One good-standing kernel: the controls and the generator share the predicate in standing_engine.standing, so a determination cannot disagree with the data that produced it.",
+      "Statutory due dates are re-derived from the filing year and the jurisdiction's statutory month and day, not trusted as stated, and each timeliness gate is on-or-before (<=) at the due date.",
+      "The good-standing determination is the conjunction of the substantive gates only; the paper-integrity controls can fail without moving it, so a misdated due date is reported without silently changing standing.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether an entity is certified in good standing and whether a lapsed filing, a short franchise tax or a mismatched agent is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never files a report, pays a franchise tax or an agent fee, requests or files a certificate of cancellation, contacts a Secretary of State or a registered agent, or writes to a source artifact. It reads the standing file and stops.",
+      "source": "good-standing-automation/README.md and standing_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the six artifacts the standing record emits. It does not connect to a Secretary-of-State system, a registered-agent provider, a franchise-tax authority or a general ledger.",
+      "source": "standing_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves a record clears the mechanical gates -- report filed on time and fee met, franchise tax paid in full and on time, SOS ACTIVE, agent and licence current -- not that the state's filing actually posted or that a certificate of cancellation is authentic. That confirmation is a filer's and a reviewer's.",
+      "source": "standing_engine/engine.py fil_, tax_, sts_, agt_, lic_ and dis_ families"
+    },
+    {
+      "statement": "It re-derives each due date and holds each fee and franchise tax to the flat statutory amount the jurisdiction matrix carries; it does not decide whether that fee or that amount is the correct one for the year and jurisdiction.",
+      "source": "standing_engine/engine.py fil_due_date_recomputes / tax_due_date_recomputes and the fil_ / tax_ amount families"
+    },
+    {
+      "statement": "It takes the register, matrix and records at face value: it confirms they foot, re-derive and reconcile, not that an entity should have been formed or qualified in a given state. All shipped data is fictional and the compliance period is set in a fictional future.",
+      "source": "standing_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-standing.svg",
+    "motion": "../assets/engine-standing.svg",
+    "poster_alt": "Entity Good-Standing diagram: down the left an entity register of fictional entities -- Northmoor, Halbrook and Stonecrest active, Ardenne dissolved -- fanning into per-state standing records across a jurisdiction matrix for the fictional states Marran, Kelder, Tolvane and Verrado; a centre panel of gates showing the annual report filed on-or-before its re-derived statutory due date, the flat franchise tax met and paid on time, the Secretary-of-State status ACTIVE, the agent of record matching the contract and any business licence current, with one record stamped SUSPENDED and one filing marked PAST DUE; a dissolved-entity strip requiring a filed certificate of cancellation in every state it belonged to; on the right a standing summary and compliance report whose good and not-good counts and renewal watchlist recompute from the records beneath them; and a footer strip reading 26 controls, 11 families, 385 tests, read-only, SFS-E33-GDS.",
+    "caption": "The Entity Good-Standing engine tile states the question that has to hold entity by entity and state by state: every active entity filed on time, paid the flat franchise tax in full, reads ACTIVE at the Secretary of State, holds its contracted agent and any required licence, and every dissolved entity is cancelled everywhere it belonged, with the standing summary, the family counts and the renewal watchlist all recomputed from the state records beneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest standing_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/good-standing-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/good-standing-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Entity Good-Standing (SFS-E33-GDS) datasheet -- twenty-six deterministic, read-only controls over a closely-held real-estate family's entity good-standing: every active entity proved, state by state, to have filed its annual or biennial report on-or-before a re-derived statutory due date and met the fee, paid the flat franchise tax in full and on time, read ACTIVE at the Secretary of State, held its contracted registered agent and any required business licence, with every dissolved entity cancelled in every state it belonged to and the standing summary, family counts and renewal watchlist all recomputed from the state records beneath them. 385 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

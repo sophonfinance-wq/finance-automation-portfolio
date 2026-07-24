@@ -1,0 +1,3844 @@
+{
+  "title": "Wire & transfer release-control report",
+  "overall_verdict": "FAIL",
+  "file_count": 25,
+  "rule_count": 23,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "sod_two_distinct_signers",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "sod_dual_auth_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "sod_auth_not_before_init",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "sig_initiator_authorized",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "sig_authorizer_authorized",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "sig_within_authority_limit",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "ben_template_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ben_triplet_matches_template",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "ben_new_account_callback",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ben_off_template_review",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "aba_classification_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aba_check_digit_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aba_resolves_to_bank_name",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "fund_account_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "fund_sufficient_balance",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "dup_wire_ids_unique",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "dup_not_already_posted",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "flow_stage_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "flow_posted_has_approval",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "flow_posted_ref_ties",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_release_flag_recomputes",
+      "severity": "FAIL",
+      "exceptions": 17
+    },
+    {
+      "rule": "rpt_report_count_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "account_missing__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1006/from_account",
+          "message": "packet W-1006 draws on account 'ACCT-999', which is not in the funding-account register; its balance cannot be checked"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1006/releasable",
+          "message": "packet W-1006 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "already_posted__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1008/beneficiary_account",
+          "message": "packet W-1008 matches an already-posted payment to the same beneficiary for the same amount inside the 5-day window; releasing it would pay twice"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "amount_not_integer__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "FAIL",
+          "location": "amount:wire[W-1001].amount_cents",
+          "message": "AMOUNT_INVALID: wire[W-1001].amount_cents must be integer cents, got 120000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "FAIL",
+          "location": "amount:wire[W-1001].amount_cents",
+          "message": "AMOUNT_INVALID: wire[W-1001].amount_cents must be integer cents, got 120000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "FAIL",
+          "location": "amount:wire[W-1001].amount_cents",
+          "message": "AMOUNT_INVALID: wire[W-1001].amount_cents must be integer cents, got 120000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "amount:wire[W-1001].amount_cents",
+          "message": "AMOUNT_INVALID: wire[W-1001].amount_cents must be integer cents, got 120000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "auth_before_init__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1004/authorized_date",
+          "message": "packet W-1004 is authorized 2030-03-08, before it was initiated 2030-03-09; the authorization cannot precede the request"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1004/releasable",
+          "message": "packet W-1004 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "authorizer_not_signer__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1002/authorized_by",
+          "message": "packet W-1002 was authorized by 'SGN-01', who is not on the authorized-signer register for account ACCT-200"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1002/releasable",
+          "message": "packet W-1002 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "bad_check_digit__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1007/beneficiary_account",
+          "message": "packet W-1007 beneficiary ('992000025', '8834200156', 'Westmere Holdings LLC') does not match the stored template ('992000024', '8834200156', 'Westmere Holdings LLC'); the payment is bound for an unapproved destination"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1007/receiving_aba",
+          "message": "packet W-1007 routing number '992000025' fails the ABA check-digit (mod-10, weights 3-7-1); it cannot be a valid routing number"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1007/receiving_bank_name",
+          "message": "packet W-1007 routing number 992000025 resolves to None in the bank directory, but the form names 'Vantage Trust'"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1007/releasable",
+          "message": "packet W-1007 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "bank_name_mismatch__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1002/receiving_bank_name",
+          "message": "packet W-1002 routing number 983000033 resolves to 'Kelder Union Bank' in the bank directory, but the form names 'Copperline Federal'"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1002/releasable",
+          "message": "packet W-1002 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "book_transfer_has_aba__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1003/receiving_aba",
+          "message": "book transfer W-1003 carries a receiving ABA/bank name; an internal transfer stays within the bank and names no routing detail"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1003/releasable",
+          "message": "packet W-1003 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_wire_id__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1002",
+          "message": "packet id W-1002 appears 2 times; a posting that settles it cannot be attributed to one request"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "funding_shortfall__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1004/amount_cents",
+          "message": "packet W-1004 is 1,000,000.00; account ACCT-200 has 900,000.00 available (short 100,000.00)"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1004/releasable",
+          "message": "packet W-1004 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "incomplete_dual_auth__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1002",
+          "message": "packet W-1002 is Approved & Scheduled but is missing authorized_date; it cannot have cleared the dual-authorization gate"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1002/releasable",
+          "message": "packet W-1002 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "initiator_not_signer__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1005/initiated_by",
+          "message": "packet W-1005 was initiated by 'SGN-03', who is not on the authorized-signer register for account ACCT-100"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1005/releasable",
+          "message": "packet W-1005 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "release_report:-",
+          "message": "release_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        }
+      ]
+    },
+    {
+      "document": "off_template_no_callback__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 2,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1005/callback_completed",
+          "message": "packet W-1005 pays an off-template beneficiary with no completed callback; a new or changed bank detail must be verified before release"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "FLAG",
+          "location": "wire_register:WIRES-2030/wires/W-1005/on_template",
+          "message": "packet W-1005 pays an off-template beneficiary; even with a callback on file it should be reviewed before the wire is released"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1005/releasable",
+          "message": "packet W-1005 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "off_template_with_callback__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "FLAG",
+          "location": "wire_register:WIRES-2030/wires/W-1004/on_template",
+          "message": "packet W-1004 pays an off-template beneficiary; even with a callback on file it should be reviewed before the wire is released"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "over_authority_limit__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1005/amount_cents",
+          "message": "packet W-1005 is 3,000,000.01; authorizer SGN-02 carries a 3,000,000.00 authority limit on account ACCT-100 (over by 0.01)"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1005/releasable",
+          "message": "packet W-1005 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "posted_no_approval__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1001",
+          "message": "posted packet W-1001 is missing authorized_date; it was released with no evidence of a complete secondary approval"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1001/releasable",
+          "message": "packet W-1001 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "posted_ref_broken__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1007/posted_ref",
+          "message": "posted packet W-1007 references posting 'P-9999', which is not in the posted log; the release cannot be tied to an execution"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "release_flag_wrong__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1005/releasable",
+          "message": "packet W-1005 is summarised releasable=False; recomputing from the release evidence gives releasable=True"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 6 / 1 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "report_count_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "FAIL",
+          "location": "release_report:REPORT-2030/releasable_count",
+          "message": "the report states 8 releasable / 0 blocked; the release summary recomputes 7 / 0"
+        }
+      ]
+    },
+    {
+      "document": "same_signer__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1005/authorized_by",
+          "message": "packet W-1005 was initiated and authorized by the same signer 'SGN-01'; segregation of duties requires two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1005/releasable",
+          "message": "packet W-1005 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "template_missing__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1004/template_id",
+          "message": "packet W-1004 claims template 'BEN-999', which is not in the approved-beneficiary register"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1004/releasable",
+          "message": "packet W-1004 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "triplet_mismatch__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1002/beneficiary_account",
+          "message": "packet W-1002 beneficiary ('983000033', '5560299999', 'Copperfield Yards Vendors LLC') does not match the stored template ('983000033', '5560294417', 'Copperfield Yards Vendors LLC'); the payment is bound for an unapproved destination"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets sit in a known workflow stage"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "FAIL",
+          "location": "release_summary:SUMMARY-2030/wires/W-1002/releasable",
+          "message": "packet W-1002 is summarised releasable=True; recomputing from the release evidence gives releasable=False"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    },
+    {
+      "document": "unknown_stage__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 release-control artifacts are present"
+        },
+        {
+          "rule": "sod_two_distinct_signers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry two distinct signers"
+        },
+        {
+          "rule": "sod_dual_auth_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 scheduled packets are fully authorized"
+        },
+        {
+          "rule": "sod_auth_not_before_init",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets are authorized on or after initiation"
+        },
+        {
+          "rule": "sig_initiator_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 initiators are authorized on their account"
+        },
+        {
+          "rule": "sig_authorizer_authorized",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 authorizers are authorized on their account"
+        },
+        {
+          "rule": "sig_within_authority_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the authorizer's limit"
+        },
+        {
+          "rule": "ben_template_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template wires name an existing template"
+        },
+        {
+          "rule": "ben_triplet_matches_template",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 on-template triplets match their template"
+        },
+        {
+          "rule": "ben_new_account_callback",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 off-template wires cleared a callback"
+        },
+        {
+          "rule": "ben_off_template_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external wires pay a whitelisted beneficiary"
+        },
+        {
+          "rule": "aba_classification_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets carry the routing shape their type requires"
+        },
+        {
+          "rule": "aba_check_digit_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 external routing numbers pass the checksum"
+        },
+        {
+          "rule": "aba_resolves_to_bank_name",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 routing numbers resolve to their named bank"
+        },
+        {
+          "rule": "fund_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packets draw on a known funding account"
+        },
+        {
+          "rule": "fund_sufficient_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 amounts are within the funding balance"
+        },
+        {
+          "rule": "dup_wire_ids_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 packet ids are unique"
+        },
+        {
+          "rule": "dup_not_already_posted",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unposted packets are free of a posted duplicate"
+        },
+        {
+          "rule": "flow_stage_valid",
+          "status": "FAIL",
+          "location": "wire_register:WIRES-2030/wires/W-1005/stage",
+          "message": "packet W-1005 is in stage 'draft', which is not one of ('pending_secondary_approval', 'approved_scheduled', 'posted'); its place in the release workflow is unknown"
+        },
+        {
+          "rule": "flow_posted_has_approval",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets carry secondary-approval evidence"
+        },
+        {
+          "rule": "flow_posted_ref_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 posted packets tie to the posted log both ways"
+        },
+        {
+          "rule": "rpt_release_flag_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every packet releasable flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 7 / 0 tie the summary"
+        }
+      ]
+    }
+  ]
+}

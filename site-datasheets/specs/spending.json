@@ -1,0 +1,442 @@
+{
+  "num": 38,
+  "slug": "spending",
+  "part_no": "SFS-E38-SRG",
+  "mnemonic": "SRG",
+  "family": "Capital Authorization",
+  "name": "Capital Spending Request Gate",
+  "tagline": "Was capital committed only after its gate, and does every standard re-derive?",
+  "plain_summary": "A developer commits capital to a project only through an ordered sequence of Investment Committee phase gates, and every Spending Request that opens a gate has to conform to a written set of underwriting standards -- dollar triggers that demand approval before the first spend, contingency floors, a standard growth assumption, prescribed fee formulas, a phase-indexed estimate basis and deliverable matrix, and a comparison basis that switches once feasibility is waived. This engine reads the nine artifacts the request record carries -- the project profile, the approval log, the spend ledger, the cost budget, the deliverable checklist, the bid schedule, the plan comparison, the gate summary and the event log -- and runs twenty-nine deterministic controls over them. Is the package complete and the review date legible, did the cumulative pursuit-cost, the first non-refundable-deposit and the cumulative refundable-deposit triggers each fire only after the Initial Commitment approval, were the five phase gates well-formed and entered in date order with no phase skipped and the current phase itself approved, does the stated gate summary recompute from the approvals and the checklist, is every prior-phase deliverable complete on the estimate basis the phase prescribes, do the hard and soft contingencies meet their regional floors to the cent with the construction-start site/vertical split footing, is the growth assumption the standard default or documented, do the CM Fee, the Development Fee, the total and every plan-comparison variance re-derive, is the comparison basis on the right side of the feasibility-waiver switch, did every interim-trigger event produce an interim request, and is the construction-start bid coverage at its threshold with a bindable GMP where the delivery model requires one. It compares every figure with exact == and tests every floor cross-multiplied in integer cents, holds the trigger breach against the approval date so approval on the breach date satisfies the gate and one day later does not, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A capital Spending Request looks like the most reviewed document a developer produces: a bound package with an approval log, a footed cost budget and a gate summary that says every phase cleared. That is exactly why it drifts. None of the ways it goes wrong look wrong in a bound package. Pursuit costs accumulate past their trigger, or a deposit goes non-refundable, before the Initial Commitment Request was ever approved -- and by the time the package is assembled the approval that is in it post-dates the spend it was supposed to authorize. A contingency sits a cent under the floor, a fee is stated a little off its formula, the growth assumption departs from the standard with no market support documented, the comparison still points at the template after feasibility was waived -- each figure plausible, none re-derived. And the gate summary calls every phase cleared on a determination nobody rebuilt from the approvals and the deliverable checklist underneath it. The engine re-derives the cumulative spend in date order to find the exact entry that crossed each trigger and holds it against the approval date, tests every floor cross-multiplied in integer cents so a contingency met to the cent passes and a cent under fails, rebuilds every phase's gate-cleared flag through the same standards kernel that produced the data, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. Capital committed before its gate, a standard drifted a cent off its formula, or a gate summary asserted rather than recomputed is invisible until someone rebuilds the request the committee already approved.",
+  "layers_intro": "Ten control families run in registry order over each request package. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the request package carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the nine document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable as_of review date, since every calendar test -- the trigger breach against the approval, the template refresh -- is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "trg",
+      "label": "Dollar Triggers",
+      "plain": "Checks each dollar trigger -- cumulative pursuit costs, the first non-refundable deposit and cumulative refundable deposits -- fired only after the Initial Commitment Request was approved.",
+      "engineering": "Three controls sharing one date-gate-on-a-running-total body. Each re-derives the cumulative spend of its category in date order and finds the exact entry that carried the running total to or past its threshold -- pursuit costs at 50,000.00, refundable deposits at 100,000.00, a non-refundable deposit at its first cent -- then holds that breach date against the Initial Commitment approval date. trg_ic_before_pursuit_spend, trg_ic_before_nonrefundable_deposit and trg_ic_before_refundable_deposits FAIL when the breach precedes the approval, or when no approval is on record. The gate is boundary-exact: an approval dated on the breach date satisfies the trigger, one day later does not, because no single invoice has to be large for the cumulative total to be past the gate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "seq",
+      "label": "Ordered Phase Gates",
+      "plain": "Checks the five phase gates are well-formed, entered in date order with no phase skipped, the current phase itself approved, and that the stated gate summary recomputes.",
+      "engineering": "Five controls. seq_phase_known FAILs an unknown current phase or a malformed approval row -- an unknown request type, an off-list phase, or an unreadable approval date that cannot be placed against any spend or event. seq_approvals_in_order FAILs an adjacent phase-approval pair dated out of order, since the ordering of the gates is the control and the dates are the evidence it was followed. seq_no_phase_skipped FAILs a phase before the current one with no approved Spending Request. seq_current_phase_approved FAILs a current phase entered without its own approval. seq_gate_summary_recomputes -- the control the engine exists for -- rebuilds every phase's gate-cleared flag from the approval log and the deliverable checklist through the shared standards kernel and FAILs any stated determination that does not match, because a gate summary that is not recomputed from the evidence is an assertion.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "del",
+      "label": "Deliverable Matrix & Estimate Basis",
+      "plain": "Checks the deliverable checklist is well-formed and unique, every prior-phase deliverable complete, the current phase's outstanding work flagged, and the estimate basis the one the phase prescribes.",
+      "engineering": "Five controls. del_items_known FAILs a checklist row naming a deliverable of no phase, or in a state that is neither complete nor outstanding, because paperwork that belongs to no phase can neither block a gate nor satisfy one. del_unique_rows FAILs a deliverable listed twice, since two rows can disagree about its state and the gate test becomes ambiguous. del_prior_phase_complete FAILs a deliverable required by a phase the project has already passed but not marked complete. del_current_phase_outstanding is a FLAG, not a failure: current-phase deliverables are due by the exit gate rather than the entry, so an outstanding one is work to chase before the next gate. del_estimate_basis_matches FAILs a budget standing on any basis other than the one the current phase prescribes, because the estimate basis must progress top-down to a bindable GMP as the gates advance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "cty",
+      "label": "Contingency Floors",
+      "plain": "Checks the hard and soft contingencies meet their regional floors to the cent, the construction-start site/vertical split foots, and the separate escalation reserve is in place where required.",
+      "engineering": "Four controls. cty_hard_floor FAILs a hard-cost contingency under its regional floor, compared cross-multiplied in integer cents (part times 10000 >= base times floor) so a contingency met to the cent passes and a cent under fails; in Marran at construction start the floor splits -- 10% on site work, 5% on vertical -- and each leg is tested on its own base. cty_soft_floor FAILs a soft contingency under the floor unless a documented justification is set, an adjustment the standards permit. cty_split_foots FAILs a site/vertical split that does not sum to the stated hard cost and contingency, so a shortfall cannot hide in the difference between the split and the whole. cty_escalation_reserved FAILs a Vanterre project with no separate escalation contingency, because the Vanterre hard floor is lower precisely because escalation is reserved apart.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "gro",
+      "label": "Growth Assumption",
+      "plain": "Checks the growth assumption is the standard 3/3 default, or a documented market-supported alternative.",
+      "engineering": "One control. gro_growth_default FAILs a revenue or cost growth assumption other than the standard 300 bps / 300 bps default unless the market-supported-growth flag is set, a documented alternative the standards permit. The default exists so that every project's underwriting is comparable, and the deviation is a membership fact rather than a judgment. A growth figure that is not integer basis points raises AMOUNT_INVALID, contained to the one field it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "fee",
+      "label": "Fee Formulas & Total",
+      "plain": "Checks the CM Fee, the Development Fee, the total-cost footing and every plan-comparison variance re-derive exactly.",
+      "engineering": "Four controls. fee_cm_rederives FAILs a stated CM Fee that is not exactly 1.5% of hard cost. fee_dev_rederives FAILs a Development Fee that is not exactly 3% of the total project cost less financing, where the total includes the fee itself and is solved as an integer fixed point of its own formula. fee_tpc_foots FAILs a total project cost that does not foot to its seven components. fee_variance_rederives FAILs a plan-comparison variance that is not the project figure minus the plan figure. Each is compared with exact ==; a figure that should be integer cents but is not raises AMOUNT_INVALID, contained to the one row it was read on rather than coerced into the number the engine is meant to audit.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "cal",
+      "label": "Comparison Basis & Template Calendar",
+      "plain": "Checks the comparison basis is on the right side of the feasibility-waiver switch, and that a template-basis comparison stands on the current refresh.",
+      "engineering": "Two controls. cal_basis_matches_waiver FAILs a comparison basis that does not match the feasibility-waiver status -- a pre-waiver request compares to the Business Plan template, a post-waiver request to the actual annual plan -- and FAILs a non-boolean waiver flag or a basis outside the known set, because a basis on the wrong side of the switch hides the variance the committee was meant to see. cal_template_current is a FLAG, not a failure: a template-basis comparison standing on a January or June refresh older than the one in force at the review date deserves a re-run rather than a hard stop, and it runs only when the template regime is correctly in effect, since a wrong basis is owned by cal_basis_matches_waiver.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "evt",
+      "label": "Interim-Request Events",
+      "plain": "Checks every logged event is a known interim trigger and links to an interim request that actually exists.",
+      "engineering": "Two controls. evt_type_known FAILs a logged event whose type is not one of the five enumerated interim-trigger events -- a financing closing, an additional commitment, a condo construction start, a material change or a project at risk -- because an unknown type is an event nobody can say required a request. evt_interim_request_filed FAILs an interim-trigger event that links to no interim request at all, or to an id that is not an interim approval in the approval log. The circumstances that force an out-of-cycle Spending Request are enumerated, so the control is pure membership: each event must name an interim approval that exists.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "bid",
+      "label": "Construction-Start Bid Coverage",
+      "plain": "Checks that at construction start at least 80% of hard cost (third-party GC) or 80% of line items (owner-GC) is competitively bid, and that an owner-GC project holds a bindable GMP.",
+      "engineering": "Two controls, in effect only once the project reaches construction start. bid_coverage_meets selects the test by GC model: a third-party GC must show competitively bid coverage for at least 80% of hard cost, an owner-GC project at least 80% of its cost line items. Both are compared cross-multiplied in integers, so exactly 80% passes and a hair under fails. bid_gmp_bindable FAILs an owner-GC project at construction start with no bindable GMP: the bid coverage proves the pricing is competitive, and the bindable GMP is what makes it enforceable rather than an estimate nobody is bound to.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Request Packages",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional capital Spending Request packages enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, thirty-one files in total. Only the profile, the approvals, the spend ledger, the cost stack, the checklist, the bid schedule and the comparison figures are stated as base facts; the CM and Development Fees and the footed total (the Development Fee solved as an integer fixed point of its own formula), the per-phase gate summary, and every plan-comparison variance are re-derived through the same standards kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the request package complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the nine artifact types or carrying a duplicate, and an unreadable as_of review date every calendar test is measured to, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "trg-control",
+      "label": "Dollar Triggers",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "did each dollar trigger fire only after the IC approval",
+      "engineering": "Three controls: the cumulative pursuit-cost, the first non-refundable-deposit and the cumulative refundable-deposit triggers, each re-derived in date order and held against the Initial Commitment approval date with an approval on the breach date treated as satisfied.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "seq-control",
+      "label": "Ordered Phase Gates",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "were the five gates entered in order and does the summary recompute",
+      "engineering": "Five controls: well-formed phase and approval rows, adjacent approvals in date order, no phase skipped, the current phase approved, and the stated gate summary rebuilt from the approvals and the checklist through the shared kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "del-control",
+      "label": "Deliverable Matrix & Estimate Basis",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is the checklist satisfied and the estimate basis right for the phase",
+      "engineering": "Five controls: known and unique checklist rows, every prior-phase deliverable complete, current-phase outstanding work flagged, and the estimate basis the one the current phase prescribes.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "cty-control",
+      "label": "Contingency Floors",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "do the contingencies meet their regional floors to the cent",
+      "engineering": "Four controls: the hard and soft contingencies at their regional floors cross-multiplied in integer cents, the construction-start site/vertical split footing to the totals, and the separate Vanterre escalation reserve in place.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "gro-control",
+      "label": "Growth Assumption",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is the growth assumption standard or documented",
+      "engineering": "One control: the revenue and cost growth assumptions are the standard 300 bps / 300 bps default, or a documented market-supported alternative the standards permit.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "fee-control",
+      "label": "Fee Formulas & Total",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the fees, the total and every variance re-derive",
+      "engineering": "Four controls: the CM Fee at 1.5% of hard cost, the Development Fee at 3% of total-less-financing, the total footing to its seven components, and every plan-comparison variance as project minus plan, each compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "cal-control",
+      "label": "Comparison Basis & Template Calendar",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is the comparison basis right for the waiver and the template current",
+      "engineering": "Two controls: the comparison basis matches the feasibility-waiver switch, and a template-basis comparison stands on the January/June refresh in force at the review date rather than a stale one.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "evt-control",
+      "label": "Interim-Request Events",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "did every interim-trigger event produce an interim request",
+      "engineering": "Two controls: every logged event carries a known interim-trigger type, and each links to an interim request that is actually an interim approval in the approval log.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "bid-control",
+      "label": "Construction-Start Bid Coverage",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "is bid coverage at 80% with a bindable GMP where required",
+      "engineering": "Two controls, in effect only at construction start: at least 80% of hard cost or of cost line items competitively bid by GC model, cross-multiplied in integers, and a bindable GMP held by an owner-GC project.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Profile, Log, Budget & Standards",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and policy constants every rule resolves against",
+      "engineering": "The project profile carries the region, GC model, current phase and growth assumptions; the approval log carries every phase and interim approval with its date; the spend ledger carries each dated, trigger-sensitive spend; the cost budget carries the cost stack, contingencies, fees and estimate basis; the deliverable checklist, bid schedule, plan comparison, gate summary and event log carry the derived determinations. Every trigger, sequence, deliverable, contingency, fee, calendar, event and bid control resolves against these through the shared standards kernel, which holds the trigger thresholds, the floors, the fee rates and the growth default once.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per request package: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable -- a change in the diff means a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/spending_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "request packages" },
+    { "from": "set-control", "to": "trg-control", "label": "complete" },
+    { "from": "set-control", "to": "seq-control", "label": "complete" },
+    { "from": "set-control", "to": "del-control", "label": "complete" },
+    { "from": "set-control", "to": "cty-control", "label": "complete" },
+    { "from": "set-control", "to": "gro-control", "label": "complete" },
+    { "from": "set-control", "to": "fee-control", "label": "complete" },
+    { "from": "set-control", "to": "cal-control", "label": "complete" },
+    { "from": "set-control", "to": "evt-control", "label": "complete" },
+    { "from": "set-control", "to": "bid-control", "label": "complete" },
+    { "from": "trg-control", "to": "registers", "label": "resolves" },
+    { "from": "seq-control", "to": "registers", "label": "resolves" },
+    { "from": "del-control", "to": "registers", "label": "resolves" },
+    { "from": "cty-control", "to": "registers", "label": "resolves" },
+    { "from": "gro-control", "to": "registers", "label": "resolves" },
+    { "from": "fee-control", "to": "registers", "label": "resolves" },
+    { "from": "cal-control", "to": "registers", "label": "resolves" },
+    { "from": "evt-control", "to": "registers", "label": "resolves" },
+    { "from": "bid-control", "to": "registers", "label": "resolves" },
+    { "from": "trg-control", "to": "report", "label": "findings" },
+    { "from": "seq-control", "to": "report", "label": "findings" },
+    { "from": "fee-control", "to": "report", "label": "findings" },
+    { "from": "cal-control", "to": "report", "label": "findings" },
+    { "from": "bid-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "424",
+      "source": "python -m pytest --collect-only -q -o addopts= (spending-gate-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "29",
+      "source": "len(spending_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every request package"
+    },
+    {
+      "label": "Families",
+      "value": "10",
+      "source": "distinct rule-id prefixes in spending_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Request packages",
+      "value": "31",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus thirty planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "9",
+      "source": "len(spending_engine.model.DOC_TYPES)",
+      "plain": "profile, approval log, spend ledger, cost budget, checklist, bid schedule, plan comparison, gate summary, event log"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "spending_engine/tests boundary tests on the cent and the trigger/approval date",
+      "plain": "a figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A developer commits capital to a project only through an ordered sequence of Investment Committee phase gates, and every Spending Request that opens a gate must conform to a written set of underwriting standards: dollar triggers that demand an approval before the first dollar is spent, contingency floors, a standard growth assumption, prescribed fee formulas, a phase-indexed estimate basis and deliverable matrix, and a comparison basis that switches once feasibility is waived. Whether the investment itself is worth making is genuine business judgment, and no control here opines on it. Three failures hide inside a bound package, and none of them look wrong. Pursuit costs accumulate past their trigger, or a deposit goes non-refundable, before the Initial Commitment Request was ever approved -- and by the time the package is assembled the approval that is in it post-dates the spend it was supposed to authorize. A contingency sits a cent under the floor, a fee is stated a little off its formula, the growth assumption departs from the standard with no market support documented, the comparison still points at the template after feasibility was waived -- each figure plausible, none re-derived. And the gate summary calls every phase cleared on a determination nobody rebuilt from the approvals and the deliverable checklist underneath it. None of these are judgment calls. They are date gates on a running total, equalities to the cent, floors cross-multiplied in integers, membership tests and re-derivations -- which a deterministic control settles better than a bound package inherited by whoever assembles the request this cycle.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every request package",
+      "narrative": "The CLI generates thirty-one fictional request packages -- one clean baseline and thirty carrying a single planted defect each -- then runs all twenty-nine controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (spending-gate-automation/); spending_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The trigger and the floor are boundary-exact",
+      "narrative": "The dollar trigger is a date gate on a running total and the contingency floor is a cross-multiplied equality. One defect file adds a pursuit invoice that pre-dates the Initial Commitment approval, carrying the cumulative total past the trigger on its own and tripping trg_ic_before_pursuit_spend; another drops the site contingency one cent under its construction-start floor and trips cty_hard_floor, while a contingency met to the cent passes -- proving each gate is settled at its boundary, not within a tolerance band.",
+      "source": "spending_engine/generate.py DEFECTS pursuit_spend_before_ic / hard_contingency_below_floor"
+    },
+    {
+      "title": "The gate summary is recomputed, not read back",
+      "narrative": "A defect file flips a stated gate-cleared flag in the summary without changing the approvals or the checklist beneath it. seq_gate_summary_recomputes rebuilds every phase's determination from the approval log and the deliverable checklist through the shared standards kernel and fails on the one that disagrees, proving the summary is recomputed from the evidence rather than trusted as stated.",
+      "source": "spending_engine/generate.py DEFECTS gate_summary_wrong -> seq_gate_summary_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-nine controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "srg_report.json, srg_report.md, samples/"
+    },
+    {
+      "cmd": "python -m spending_engine samples",
+      "operation": "analyze an existing folder of request packages without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m spending_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest spending_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "424 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "424",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (spending-gate-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "29",
+      "unit": "controls",
+      "source": "len(spending_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "30",
+      "unit": "defect files",
+      "source": "len(spending_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "spending_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the request package they were given: every dollar trigger fired only after the Initial Commitment approval, the five phase gates were entered in order with the current phase approved and the gate summary recomputing from the evidence, every prior-phase deliverable is complete on the estimate basis the phase prescribes, the contingencies meet their regional floors, the growth assumption is standard or documented, the comparison basis is right for the waiver status, every interim-trigger event links to an interim request, the bid coverage is at its threshold, and every fee, total and variance re-derives from the cost stack. It is not an opinion on whether the investment is worth making, whether a bid is genuinely competitive, whether a deliverable's content is adequate, or whether the underwriting standards themselves are the right ones for the developer or the market.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean request package into the documented Investment Committee sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a current-phase deliverable still outstanding and a plan-comparison template past its refresh both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure or gate is not carried into the commitment until the failing control is cleared -- capital committed before its trigger, a phase out of sequence, a contingency under the floor, a fee that does not re-derive, or a gate summary that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: request packages are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact == and floors tested cross-multiplied in integers; there is no tolerance band, and a cent under a floor is reported as a break.",
+      "A figure that should be integer cents or basis points but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One standards kernel: the controls and the generator share spending_engine.standards, so a determination cannot disagree with the data that produced it.",
+      "The dollar triggers and the contingency floors are boundary-exact: an approval dated on the breach date satisfies the trigger and a contingency met to the cent meets the floor, each one day or one cent short a failure.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether capital is committed and whether a phase gate is cleared."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never approves a Spending Request, commits capital, files an interim request, or writes to a source artifact. It reads the request package and stops.",
+      "source": "spending-gate-automation/README.md and spending_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the nine artifacts the request record emits. It does not connect to a general ledger, an accounts-payable system, a bid platform or the Investment Committee's minutes.",
+      "source": "spending_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the package conforms to the written underwriting standards -- triggers, floors, sequence, membership and re-derivations -- not that the investment is worth making or that a bid is genuinely competitive. That judgment is the Investment Committee's.",
+      "source": "spending_engine/engine.py module docstring and the README scope line"
+    },
+    {
+      "statement": "It re-derives every figure at the fictional policy constants the standards carry -- the trigger thresholds, the contingency floors, the fee rates and the growth default; it does not decide whether those standards are the correct ones for the developer or the market.",
+      "source": "spending_engine/standards.py"
+    },
+    {
+      "statement": "It takes the approval, spend and deliverable records at face value: it confirms the package foots, sequences and re-derives, not that a spend actually occurred or that a deliverable's content is adequate. All shipped data is fictional and the underwriting period is set in a fictional future.",
+      "source": "spending_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-spending.svg",
+    "motion": "../assets/engine-spending.svg",
+    "poster_alt": "Capital Spending Request Gate diagram: down the left the request package's base artifacts -- the spend ledger, the approval log and the cost budget; across the centre a spend ledger whose cumulative pursuit total crosses its 50,000.00 trigger held against the Initial Commitment approval date, one entry stamped BEFORE THE GATE, a contingency panel showing the hard floor met to the cent and one leg a cent under, and the CM and Development Fees re-derived from the cost stack; a phase-gate strip of the five ordered gates with the stated gate summary rebuilt from the approvals and the checklist; and on the right a verdict panel, with a footer strip reading 29 controls, 10 families, 424 tests, read-only, SFS-E38-SRG.",
+    "caption": "The Capital Spending Request Gate engine tile states the question that has to hold across a bound package: capital was committed only after its dollar trigger was approved, the five phase gates were entered in order with the summary recomputing, and every contingency floor, fee, total and variance re-derives from the cost stack rather than being trusted as stated.",
+    "crops": []
+  },
+  "quickstart": [
+    { "label": "Run the seeded demo", "command": "python run.py" },
+    { "label": "Run the tests", "command": "python -m pytest spending_engine/tests -q" }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/spending-gate-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/spending-gate-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Capital Spending Request Gate (SFS-E38-SRG) datasheet -- twenty-nine deterministic, read-only controls over a developer's capital Spending Request phase gates: the cumulative pursuit-cost, non-refundable and refundable-deposit triggers proved to have fired only after the Initial Commitment approval, the five Investment Committee gates entered in sequence with the gate summary recomputed from the approvals and the deliverable checklist, and the underwriting standards -- contingency floors, the growth default, the CM and Development Fee formulas, the total footing, the comparison basis and the construction-start bid coverage -- re-derived and tied to the cent. 424 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}
