@@ -1,6 +1,6 @@
 # Sophon Finance Systems — portfolio repo
 
-Seventeen deterministic finance/tax engines + a self-healing loop layer, all on fictional data
+Twenty-one deterministic finance/tax engines + a self-healing loop layer, all on fictional data
 (seeded where the engine declares it). One rule everywhere: **no material output rests on a single model's word.**
 
 ## Orient in 30 seconds
@@ -10,7 +10,9 @@ Seventeen deterministic finance/tax engines + a self-healing loop layer, all on 
   `ai-validation-framework/triangulate`, `knowledge-brain-engine/brain_engine`,
   `finance-atlas`, `cash-management/cash_engine`, `accounts-payable-automation/ap_engine`,
   `property-tax-automation/proptax_engine`, `surety-bond-automation/bond_engine`,
-  `insurance-allocation-automation/insurance_engine`.
+  `insurance-allocation-automation/insurance_engine`,
+  `coi-compliance-automation/coi_engine`, `expense-report-automation/expense_engine`,
+  `labor-charge-automation/labor_engine`, `lien-waiver-automation/lien_engine`.
 - Five engines carry a `loop.py` (observe → detect → remediate → re-verify → gate); each has
   its own gate policy and its verdict doubles as the exit code.
 - Tests run **per package** (like CI): `cd <package-dir> && python -m pytest -q`.

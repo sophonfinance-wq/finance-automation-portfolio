@@ -1,0 +1,409 @@
+{
+  "num": 19,
+  "slug": "expense",
+  "part_no": "SFS-E19-EXP",
+  "mnemonic": "EXP",
+  "family": "Expense Controls",
+  "name": "Expense & P-Card",
+  "tagline": "Every charge, a receipt",
+  "plain_summary": "A company does not reimburse a card statement on trust. It issues a purchasing card, the bank issues a statement, and the cardholder owes a matching expense report: one line per charge, each with a receipt on file, a business purpose, a valid general-ledger code and a real project, filed inside the submission window, under the per-charge limit, and approved by somebody other than the person who incurred it. This engine reads the six artifacts a statement cycle emits -- the cardholder register, the programme policy, the project register, the bank statements, the expense reports and the general-ledger positions -- and runs twenty-three deterministic controls over them. Does every charge on the statement reconcile to exactly one report line to the cent, does that line carry a receipt and a stated purpose, is it coded to a GL account the policy allows and a project that exists, is the charge under the limit and inside the window, and did a second person approve it. It re-derives the reconciliation from the statement rather than trusting the report's footed total, compares every amount as integer cents with exact equality, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failures here do not look wrong in a page of small numbers, which is exactly why a footed, receipted report carries them straight through. A charge with no report line does not fail a total -- the report total is simply lower than the bank's -- so it survives to whoever reconciles the statement line by line, if anyone does; it is a company expense nobody coded and nobody has a receipt for. A report can foot to a tidy round number and still be a penny off the statement it is meant to mirror, because summing to a clean total is not the same as tying to the bank. And the charge that should never have been on the card -- one cent over the limit, a bar tab in a disallowed category, a project code that does not exist, a report the cardholder signed off themselves -- walks past every check that only looks at whether the numbers add up. Footing is necessary and not sufficient. The engine re-derives the reconciliation where the penny actually lands, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Eight control families run in registry order over each cycle file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the cycle file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a cycle file missing any of the six document types in model.DOC_TYPES -- the cardholder register, the policy, the project register, the statement register, the expense-report register or the GL positions -- or carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. It also FAILs when as_of is not a readable date, since the submission window is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "card",
+      "label": "Cardholder Register",
+      "plain": "Checks every cardholder is fully described, with a unique id, a valid card last four and a known home entity.",
+      "engineering": "Four controls. card_required_fields proves every cardholder carries the id, name, card last four and home entity the rest of the engine joins on. card_id_unique rejects a repeated cardholder id, which makes a charge's ownership -- and its card last four -- ambiguous. card_last4_valid rejects a last four that is not exactly four digits, since anything else can never match a statement line and leaves the receipt trail unverifiable. card_home_entity_known rejects a home entity outside the recognised set, which would post the expense to a ledger nobody reconciles.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "stmt",
+      "label": "Statement",
+      "plain": "Checks the bank statement lines are complete, uniquely identified, integer cents, and tagged with the cardholder's own card.",
+      "engineering": "Four controls. stmt_required_fields proves each statement line carries the fields reconciliation reads -- line id, date, merchant, category, last four and amount. stmt_line_unique rejects a reused line id, the join a report line reconciles against, without which one bank charge is indistinguishable from another. stmt_amounts_integer proves every amount is integer cents and reports, never coerces, a figure that arrived as a float -- coercing it would make the engine the author of the number it is meant to audit. stmt_last4_matches_card proves each charge carries the last four of the cardholder whose statement it is on, so the receipt trail still proves whose card paid.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Report Lines",
+      "plain": "Checks every expense-report line carries its fields, a receipt on file and a stated business purpose.",
+      "engineering": "Three controls. rpt_required_fields proves each report header and line carry the fields the controls read -- report id, cardholder, statement id, submitted date and approver on the header; line id, statement line id, GL code, project code, purpose, receipt flag and amount on the line. rpt_receipt_on_file FAILs a line without a receipt, which is an unsupported disbursement of company money -- the receipt is the proof the charge happened at the amount claimed. rpt_purpose_present FAILs a blank business purpose, which passes the schema and fails the test: a charge no one can review for whether it was an appropriate use of the card.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "rec",
+      "label": "Reconciliation",
+      "plain": "Checks every charge reconciles to exactly one report line to the cent, with no orphan line, and the report and ledger totals tie.",
+      "engineering": "Four controls and the core of the engine. rec_every_charge_reported is the control the engine exists for: it matches every statement charge to exactly one report line and ties the amount to the cent, so an unreported charge (a company expense nobody coded and nobody has a receipt for), a charge claimed by two report lines, and a charge whose report line differs by a cent are all caught where a footed total hides them. rec_no_orphan_report_line rejects a reimbursement claimed for a charge the bank never made -- the mirror image of an unreported charge. rec_report_total_ties catches the whole report drifting from the bank. rec_gl_ties_reports proves the ledger's P-Card total equals the sum of the report lines, the posting where a reconciled report becomes a number somebody reports on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "cod",
+      "label": "Coding",
+      "plain": "Checks every line is coded to a valid GL account and a real project, and flags any disallowed merchant category.",
+      "engineering": "Three controls. cod_gl_valid FAILs a GL code not in the policy's valid set. cod_project_exists FAILs a project code not in the register, which would put the cost on a job that does not exist. cod_disallowed_category reads the disallowed set from the policy rather than inventing one and FLAGs a charge in a category the policy names -- a cash advance, a gambling charge, a bar tab -- for a reviewer to clear by hand: never routine, not necessarily fraud, so a review signal rather than a hard failure.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "pol",
+      "label": "Policy",
+      "plain": "Checks each report was filed within the window, every charge is under the per-charge limit, and approval came from a second person.",
+      "engineering": "Three controls. pol_submitted_within_window measures the days from statement date to submission and FLAGs a report filed past the window -- a review signal rather than a failure, since the charges may be legitimate but stale reports are how receipts go missing and how a disputed charge passes its chargeback deadline. pol_per_charge_limit FAILs any single charge over the per-charge limit, the card's own spending control, a break whether or not the expense itself was legitimate. pol_approver_distinct FAILs a report the cardholder approved themselves, which removes the second person the whole approval depends on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "dup",
+      "label": "Duplicate Detection",
+      "plain": "Checks no charge is a duplicate of another on the same card.",
+      "engineering": "One control. dup_no_duplicate_charge keys every charge on the four-way tuple of date, merchant, amount and card last four, and FAILs any collision -- the same amount at the same merchant on the same day on the same card, either a merchant double-post the company should dispute or a claim submitted twice. The four-way key is what separates a true duplicate from a legitimate repeat purchase.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Cycle Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional expense-and-card cycle files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus 23 planted-defect files, one for every registered control, 24 files in total. Only the cardholders, the policy, the projects and the charges are stated; each report line's amount and the general-ledger P-Card total are re-derived from those base facts, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the cycle file complete and the review date legible",
+      "engineering": "One control. FAILs a cycle file missing any of the six artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "card-control",
+      "label": "Cardholder Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every cardholder fully described and uniquely identified",
+      "engineering": "Four controls: required fields, a unique cardholder id, a card last four of exactly four digits, and a home entity the programme recognises.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "stmt-control",
+      "label": "Statement",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "are the statement lines complete, unique and integer cents",
+      "engineering": "Four controls: required fields on every line, unique line ids, integer-cent amounts reported and never coerced, and each charge tagged with its own cardholder's card last four.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Report Lines",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does every report line carry a receipt, a purpose and its fields",
+      "engineering": "Three controls: header and line fields present, a receipt on file for every line, and a non-blank business purpose that a blank value fails.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "rec-control",
+      "label": "Reconciliation",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does every charge reconcile to one report line, to the cent",
+      "engineering": "Four controls: every charge matched to exactly one report line and tied to the cent, no orphan report line, each cardholder's report total tying the statement, and the ledger P-Card total tying the sum of report lines.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "cod-control",
+      "label": "Coding",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is every line coded to a valid GL and a real project",
+      "engineering": "Three controls: a valid GL code from the policy set, a project in the register, and a FLAG on any charge in a policy-disallowed merchant category.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "pol-control",
+      "label": "Policy",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "filed in time, under the limit, approved by someone else",
+      "engineering": "Three controls: filed within the submission window (FLAG if late), every charge under the per-charge limit, and an approver who is not the cardholder.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "dup-control",
+      "label": "Duplicate Detection",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "is any charge a duplicate of another on the same card",
+      "engineering": "One control: every charge keyed on date, merchant, amount and card last four; a collision is a merchant double-post to dispute or a claim submitted twice.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Cardholder, Policy & Project Registers",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "the registers and policy every rule resolves against",
+      "engineering": "The cardholder register carries each cardholder's id, name, card last four and home entity. The policy carries the submission window, the per-charge limit, the disallowed categories and the valid GL set. The project register carries every codeable project and its budget. Cardholder, statement, reconciliation, coding and policy controls are all evaluated against these authorities.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per cycle file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/expense_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "cycle files" },
+    { "from": "set-control", "to": "card-control", "label": "complete" },
+    { "from": "set-control", "to": "stmt-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "set-control", "to": "rec-control", "label": "complete" },
+    { "from": "set-control", "to": "cod-control", "label": "complete" },
+    { "from": "set-control", "to": "pol-control", "label": "complete" },
+    { "from": "set-control", "to": "dup-control", "label": "complete" },
+    { "from": "card-control", "to": "registers", "label": "resolves" },
+    { "from": "cod-control", "to": "registers", "label": "resolves" },
+    { "from": "pol-control", "to": "registers", "label": "resolves" },
+    { "from": "stmt-control", "to": "rec-control", "label": "charges" },
+    { "from": "rpt-control", "to": "rec-control", "label": "report lines" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "card-control", "to": "report", "label": "findings" },
+    { "from": "stmt-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "rec-control", "to": "report", "label": "findings" },
+    { "from": "cod-control", "to": "report", "label": "findings" },
+    { "from": "pol-control", "to": "report", "label": "findings" },
+    { "from": "dup-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "346",
+      "source": "python -m pytest --collect-only -q -o addopts= (expense-report-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "23",
+      "source": "len(expense_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every cycle file"
+    },
+    {
+      "label": "Families",
+      "value": "8",
+      "source": "distinct rule-id prefixes in expense_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Cycle files",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus 23 planted-defect files, one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(expense_engine.model.DOC_TYPES)",
+      "plain": "cardholder register, policy, project register, statements, expense reports, GL positions"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "expense_engine/tests/test_control_semantics.py::test_each_charge_reconciles_to_the_cent",
+      "plain": "one cent off the statement is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A company issues a purchasing card, the bank issues a statement, and the cardholder owes a matching expense report -- one line per charge, each with a receipt on file, a business purpose, a valid general-ledger code and a real project, filed inside the submission window, under the per-charge limit, and approved by somebody other than the person who incurred it. Several failures hide inside that, and none of them look wrong in a page of small numbers. A statement line with no report line is a company expense nobody coded and nobody has a receipt for; it does not fail a total -- the report total is simply lower than the bank's -- so it surfaces only when the report is reconciled line by line against the statement. A report can foot to a tidy round number and still be a penny off the statement it is meant to mirror, because summing to a clean total is not the same as tying to the bank. And a charge that should never have been on the card -- one cent over the limit, in a disallowed merchant category, coded to a project that does not exist, or approved by the cardholder themselves -- is a control break a footed, receipted report will still carry straight through. None of these are judgment calls. They are equalities -- a charge against its report line, a report against the statement, an approver against the cardholder -- which a deterministic control settles better than a page of small numbers that already adds up.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every cycle file",
+      "narrative": "The CLI generates 24 fictional cycle files -- one clean baseline and one carrying each of the 23 planted defects -- then runs all 23 controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (expense-report-automation/); expense_engine/tests/test_planted_defects.py::test_defect_fires_its_intended_rule"
+    },
+    {
+      "title": "A cent on the wrong line still fails, a footed total does not save it",
+      "narrative": "A test moves one cent onto a report line so it no longer matches its statement charge. rec_every_charge_reported fires at exactly one cent either side of the amount, proving the reconciliation ties to the cent and that summing to a round number is necessary but not sufficient.",
+      "source": "expense_engine/tests/test_control_semantics.py::test_each_charge_reconciles_to_the_cent"
+    },
+    {
+      "title": "The per-charge limit is a hard edge, measured to the cent",
+      "narrative": "A test sets a charge one cent under, exactly at, and one cent over the per-charge limit. pol_per_charge_limit stays silent at and under the limit and FAILs one cent over -- a control break whether or not the expense itself was legitimate, and a boundary a footed report walks straight past.",
+      "source": "expense_engine/tests/test_control_semantics.py::test_per_charge_limit_is_a_hard_edge"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-three controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "expense_report.json, expense_report.md, samples/"
+    },
+    {
+      "cmd": "python -m expense_engine samples",
+      "operation": "analyze an existing folder of cycle files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m expense_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "346 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "346",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (expense-report-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "23",
+      "unit": "controls",
+      "source": "len(expense_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(expense_engine.generate.DEFECTS)",
+      "plain": "every registered control has a file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "expense_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the cycle they were given: every charge reconciles to one receipted, coded, approved report line to the cent, the report and ledger totals tie, and no charge is over the limit, duplicated, or self-approved. It is not an opinion on whether a stated business purpose is genuine, whether a charge was a reasonable use of company money, or whether the policy's limits and categories are the right ones.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean cycle into the documented reimbursement and posting review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a charge in a disallowed category and a report filed after the submission window both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the cycle does not go to reimbursement or posting until the failing control is cleared"
+      }
+    ],
+    "guarantees": [
+      "Read-only: cycle files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band on the reconciliation or the per-charge limit.",
+      "A value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a charge is reimbursed and posted."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never reimburses a charge, posts an entry, or writes to a source artifact. It reports and stops.",
+      "source": "expense-report-automation/README.md and expense_engine/tests/test_readonly_and_determinism.py::test_analysis_does_not_touch_the_source"
+    },
+    {
+      "statement": "It reads the six artifacts a statement cycle emits. It does not connect to a bank feed, a card-issuer portal, a receipt store or the general ledger.",
+      "source": "expense_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves a report line carries a receipt and a stated purpose, not whether the receipt is authentic or the purpose is genuine. Whether a charge was a reasonable use of company money is a reviewer's judgment.",
+      "source": "expense_engine/engine.py check_rpt_purpose_present"
+    },
+    {
+      "statement": "It flags a charge in a policy-disallowed category for a human rather than deciding it; a cash advance or a bar tab is never routine but not necessarily fraud, so the control raises it as a review signal and stops.",
+      "source": "expense_engine/engine.py check_cod_disallowed_category"
+    },
+    {
+      "statement": "All shipped data is fictional and the statement cycle is set in a fictional future. The corpus demonstrates the controls; it is not a record of any real company, cardholder, merchant, card number or charge.",
+      "source": "expense_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-expense.svg",
+    "motion": "../assets/engine-expense.svg",
+    "poster_alt": "Expense & P-Card diagram: at the top left a bank-statement column of small charge rows -- a date, a merchant, an amount -- each drawing a reconciliation line to exactly one expense-report line on the right that carries a receipt tick, a business purpose, a GL code and a project code, with every amount tying to the cent; one statement row draws to no report line at all, marked as an unreported charge, and one report line ties back to no statement row, marked as an orphan; below, a policy strip showing a per-charge limit with one charge sitting one cent over it flagged, a disallowed-category charge flagged for review, and an approval box where the approver name differs from the cardholder; along the bottom a footer strip reading 23 controls, 346 tests, read-only, SFS-E19-EXP.",
+    "caption": "The Expense & P-Card engine tile states the identity that has to hold: every charge on the bank statement reconciled to exactly one receipted, coded, approved report line to the cent, with the charge that never got reported, the penny off the statement, and the charge that should never have been on the card each surfaced where a footed total would hide it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/expense-report-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/expense-report-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Expense & P-Card (SFS-E19-EXP) datasheet -- twenty-three deterministic, read-only controls over a company purchasing-card statement cycle: every charge on the bank statement reconciled to exactly one report line to the cent, each line carrying a receipt, a stated purpose, a valid GL code and a real project, filed within the submission window, under the per-charge limit, and approved by a second person, with the report and ledger totals tied and duplicate charges caught. 346 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

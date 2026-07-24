@@ -1,0 +1,4482 @@
+{
+  "title": "Lien waiver coverage control report",
+  "overall_verdict": "FAIL",
+  "file_count": 27,
+  "rule_count": 25,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "party_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "party_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "party_tier_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "party_lower_tier_parent",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "party_project_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_sub_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_amount_positive",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "pay_dates_sensible",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wvr_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wvr_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wvr_type_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wvr_references_payment",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wvr_amount_ties_payment",
+      "severity": "FAIL",
+      "exceptions": 5
+    },
+    {
+      "rule": "cov_payment_covered",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cov_cleared_unconditional",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cov_stale_conditional",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "tier_party_has_waiver",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tier_waiver_covers",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tier_required_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "exp_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "exp_all_projects_present",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_waiver_counts_tie",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_covered_count_ties",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "FAIL",
+          "location": "amount:payment[PAY-3].amount_cents",
+          "message": "AMOUNT_INVALID: payment[PAY-3].amount_cents must be integer cents, got 8000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "FAIL",
+          "location": "amount:payment[PAY-3].amount_cents",
+          "message": "AMOUNT_INVALID: payment[PAY-3].amount_cents must be integer cents, got 8000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "FAIL",
+          "location": "amount:payment[PAY-3].amount_cents",
+          "message": "AMOUNT_INVALID: payment[PAY-3].amount_cents must be integer cents, got 8000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "cov_cleared_conditional_only__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-1/cleared",
+          "message": "payment PAY-1 cleared and is paid through 2031-01-31, but no unconditional waiver releases through that date; a conditional release does not survive the cheque clearing"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "cov_conditional_stale__Ardenne_Field_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "FLAG",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-6/paid_through_date",
+          "message": "payment PAY-6 is paid through 2030-11-01 and still uncleared 134 days later (band 60); its conditional waiver should have been upgraded by now"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "cov_payment_uncovered__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-2/paid_through_date",
+          "message": "payment PAY-2 is paid through 2031-02-28 but no waiver releases at least that far; the lien right is still live"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "exp_missing_project__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "FAIL",
+          "location": "exposure_summary:EXPOSURE-2031/projects/Copperfield Yards",
+          "message": "project Copperfield Yards carries payments but is absent from the exposure summary; its unwaived exposure is reported as nothing"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "exp_wrong_figure__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "FAIL",
+          "location": "exposure_summary:EXPOSURE-2031/projects/Brightwater Commons/unwaived_exposure_cents",
+          "message": "project Brightwater Commons reports 95,500.00 of unwaived exposure; payments not yet released unconditionally sum to 95,000.00 (difference 500.00)"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "waiver_log:-",
+          "message": "waiver_log is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        }
+      ]
+    },
+    {
+      "document": "party_bad_project__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "FAIL",
+          "location": "contract_register:CONTRACT-2031/subcontracts/SUB-200/project",
+          "message": "subcontract SUB-200 names project 'Elsewhere Point', which is not one of ('Brightwater Commons', 'Copperfield Yards', 'Alderpoint Terraces', 'Dunmore Flats')"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "party_bad_tier__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "FAIL",
+          "location": "contract_register:CONTRACT-2031/subcontracts/SUB-200/tier",
+          "message": "subcontract SUB-200 has tier 0; a tier is a whole number 1 or greater"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "party_duplicate_id__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "FAIL",
+          "location": "contract_register:CONTRACT-2031/subcontracts/SUB-100",
+          "message": "sub id SUB-100 appears 2 times; the joins to payments and waivers become ambiguous"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "party_missing_field__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "FAIL",
+          "location": "contract_register:CONTRACT-2031/subcontracts/SUB-200",
+          "message": "subcontract SUB-200 is missing name"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "party_orphan_lower_tier__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "FAIL",
+          "location": "contract_register:CONTRACT-2031/subcontracts/SUB-110/parent_sub",
+          "message": "subcontract SUB-110 is tier 2 but names parent 'SUB-909', which is not in the register; its release cannot be tied to a payment"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "pay_bad_paid_through__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-3/paid_through_date",
+          "message": "payment PAY-3 has paid-through date '2031-02-30', which is not a readable date"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "pay_missing_field__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-3",
+          "message": "payment PAY-3 is missing period"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "pay_negative_amount__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-1/amount_cents",
+          "message": "payment PAY-1 is -120,000.00; a progress payment must be a positive amount"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-C-PAY-1/amount_cents",
+          "message": "waiver WV-C-PAY-1 releases 120,000.00 against a payment of -120,000.00 (difference 240,000.00)"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-U-PAY-1/amount_cents",
+          "message": "waiver WV-U-PAY-1 releases 120,000.00 against a payment of -120,000.00 (difference 240,000.00)"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "pay_unknown_sub__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "FAIL",
+          "location": "payment_register:PAYMENT-2031/payments/PAY-4/sub_id",
+          "message": "payment PAY-4 pays sub 'SUB-909', which is not in the contract register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "rpt_wrong_count__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "FAIL",
+          "location": "waiver_log:WAIVERLOG-2031/waiver_count",
+          "message": "waiver_count in the waiver log is 10; the register holds 9"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "rpt_wrong_covered__Stonecrest_Communities",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "FLAG",
+          "location": "waiver_log:WAIVERLOG-2031/covered_payment_count",
+          "message": "covered_payment_count in the waiver log is 4; 3 payments carry an unconditional release"
+        }
+      ]
+    },
+    {
+      "document": "tier_no_waiver__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "FAIL",
+          "location": "lower_tier_register:LOWERTIER-2031/parties/LTP-1/waiver_through_date",
+          "message": "lower-tier party LTP-1 has no readable waiver-through date; it has not released, and its lien survives the payment it was funded from"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "tier_short_waiver__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "FAIL",
+          "location": "lower_tier_register:LOWERTIER-2031/parties/LTP-1/waiver_through_date",
+          "message": "lower-tier party LTP-1 releases through 2031-01-15 but its parent was paid through 2031-02-28; the gap is unwaived downstream work"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "tier_wrong_required__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "FAIL",
+          "location": "lower_tier_register:LOWERTIER-2031/parties/LTP-1/required_through_date",
+          "message": "lower-tier party LTP-1 records a required-through date of 2031-01-10; its parent SUB-100 was last paid through 2031-02-28"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "wvr_amount_mismatch__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-U-PAY-4/amount_cents",
+          "message": "waiver WV-U-PAY-4 releases 61,000.00 against a payment of 60,000.00 (difference 1,000.00)"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "wvr_bad_reference__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-C-PAY-1/payment_id",
+          "message": "waiver WV-C-PAY-1 references payment 'PAY-909', which is not in the payment register"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "wvr_bad_type__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-C-PAY-1/waiver_type",
+          "message": "waiver WV-C-PAY-1 is type 'partial', which is not one of ('conditional', 'unconditional')"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "wvr_duplicate_id__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers are fully described"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-C-PAY-1",
+          "message": "waiver id WV-C-PAY-1 appears 2 times; a waiver must be uniquely identifiable to be tracked"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    },
+    {
+      "document": "wvr_missing_field__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "party_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts are fully described"
+        },
+        {
+          "rule": "party_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 sub ids are unique"
+        },
+        {
+          "rule": "party_tier_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts carry a valid tier"
+        },
+        {
+          "rule": "party_lower_tier_parent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 lower-tier subcontracts sit under a real parent"
+        },
+        {
+          "rule": "party_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subcontracts name a known project"
+        },
+        {
+          "rule": "pay_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are fully described"
+        },
+        {
+          "rule": "pay_sub_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every payment names a sub in the register"
+        },
+        {
+          "rule": "pay_amount_positive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are positive"
+        },
+        {
+          "rule": "pay_dates_sensible",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 paid-through dates are sensible"
+        },
+        {
+          "rule": "wvr_required_fields",
+          "status": "FAIL",
+          "location": "waiver_register:WAIVER-2031/waivers/WV-C-PAY-1",
+          "message": "waiver WV-C-PAY-1 is missing through_date"
+        },
+        {
+          "rule": "wvr_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waiver ids are unique"
+        },
+        {
+          "rule": "wvr_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers carry a known type"
+        },
+        {
+          "rule": "wvr_references_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "every waiver references a real payment"
+        },
+        {
+          "rule": "wvr_amount_ties_payment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 waivers tie the payment they back"
+        },
+        {
+          "rule": "cov_payment_covered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 payments are covered to their paid-through date"
+        },
+        {
+          "rule": "cov_cleared_unconditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cleared payments are released unconditionally"
+        },
+        {
+          "rule": "cov_stale_conditional",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 conditional waivers are inside the upgrade window"
+        },
+        {
+          "rule": "tier_party_has_waiver",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier parties have released"
+        },
+        {
+          "rule": "tier_waiver_covers",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 lower-tier releases reach the parent's paid date"
+        },
+        {
+          "rule": "tier_required_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 required-through dates re-derive from the parent"
+        },
+        {
+          "rule": "exp_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 project exposures re-derive"
+        },
+        {
+          "rule": "exp_all_projects_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 paid projects appear in the summary"
+        },
+        {
+          "rule": "rpt_waiver_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the waiver log reconciles to 9 waivers"
+        },
+        {
+          "rule": "rpt_covered_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "3 unconditionally-released payments reconcile"
+        }
+      ]
+    }
+  ]
+}

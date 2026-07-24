@@ -55,8 +55,8 @@ Model of the business: there is no software to buy. After a short observation of
 Non-negotiables that define the product: independent verification checks every run; every computed figure ships with cited evidence traceable to source; and nothing files, posts, or finalizes without a human's sign-off. The client always keeps the judgment.
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
-- 17 public engines, all runnable and MIT-licensed.
-- 72,364 automated tests gate every change in CI.
+- 21 public engines, all runnable and MIT-licensed.
+- 73,805 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close alone runs 29 deterministic controls.
@@ -79,7 +79,11 @@ Non-negotiables that define the product: independent verification checks every r
 15. Property Tax — property tax across a portfolio of parcels: each assessment tied to its parcel, accruals spread to the right period, appeal deadlines and payment due dates tracked, every figure traced to the assessor's notice; 26 read-only controls that never pay or file. (page: engines/proptax.html)
 16. Surety Bond & Collateral — the surety program's bonds and the collateral posted behind them: each bond tied to its obligation, collateral released only when the bond is discharged, premiums accrued over the bond period, exposure held under the program limit; 29 read-only controls that never release or pledge. (page: engines/bond.html)
 17. Insurance Cost Allocation — insurance premiums allocated across entities and projects: each policy's cost spread by the driver it's rated on, prepaid balances amortized over the policy period, retro and audit adjustments tied to source, every allocation reconciled to the premium; 24 read-only controls that never post or bind. (page: engines/insurance.html)
-Beyond these seventeen, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
+18. Insurance Compliance — certificates of insurance tracked across vendors and subcontractors: each COI tied to the limits its contract requires, coverage gaps and expirations flagged before they lapse, endorsements verified against requirements, every exception traced to the certificate; 22 read-only controls that never bind or waive. (page: engines/coi.html)
+19. Expense & P-Card — expense reports and purchasing-card activity tested against policy: each charge matched to a receipt and the right account, out-of-policy and duplicate items flagged, approvals and limits enforced, every exception traced to source; 23 read-only controls that never reimburse or post. (page: engines/expense.html)
+20. Project Labor Charge — labor charged to construction projects proved against the ledger: each timecard tied to the job and cost code it hit, rates and burden re-derived, mischarged or out-of-period hours flagged, every figure traced to source; 26 read-only controls that never post or pay. (page: engines/labor.html)
+21. Lien Waiver Tracking — lien waivers tracked against every payment to subs and suppliers: each waiver matched to its progress or final payment, conditional and unconditional status verified, missing or stale waivers flagged before release, every exception traced to source; 25 read-only controls that never release or pay. (page: engines/lien.html)
+Beyond these twenty-one, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
 
 # How the engines stay trustworthy
 Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
@@ -87,7 +91,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 72,364 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 73,805 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

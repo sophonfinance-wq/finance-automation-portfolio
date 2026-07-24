@@ -1,0 +1,391 @@
+{
+  "num": 18,
+  "slug": "coi",
+  "part_no": "SFS-E18-COI",
+  "mnemonic": "COI",
+  "family": "Insurance Compliance",
+  "name": "Insurance Compliance",
+  "tagline": "Is the certificate still good?",
+  "plain_summary": "A residential developer requires every consultant, general contractor and subcontractor it hires to carry insurance per its contract, and it has to prove, party by party, that each one's certificate is on file, unexpired, and meets the required limits and endorsements for that party's type. A certificate of insurance is a one-page snapshot of coverage that was true the day the broker issued it, and it goes stale in ways nobody watches. This engine reads the six artifacts the compliance file carries -- the party register, the requirement matrix, the certificate register, the coverage summary, the renewal watchlist and the monthly compliance report -- and runs twenty-two deterministic controls over them. Is the party register sound and every requirement lookupable, is each certificate well-formed and attributable, does every required coverage have a governing certificate that is in force, adequate on both the per-occurrence and the aggregate limit, and carrying the additional-insured and waiver-of-subrogation endorsements the matrix demands, is there no uninsured day between a lapse and the renewal that followed it, and does the monthly rollup recompute from the certificates underneath it rather than being read back as an assertion. It selects the governing certificate as the one whose term reaches furthest forward -- the renewal, not the policy it replaced -- compares every limit with exact >=, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "This is the compliance half of the insurance story that the allocation engine explicitly declines to check: where a master premium lands on each project's job cost is one question, and whether a certificate is on file at all is another, and the allocation engine owns only the first. None of the failures here look wrong in a folder of one-page certificates. A policy expires and the renewal never arrives, so a party is uninsured on the developer's own job while its file still shows a certificate -- an expired one. A certificate is current but a cent short of the contract limit, or missing the additional-insured endorsement the contract demanded, so the paper looks complete and the protection is not there. And the monthly report calls a party compliant on a determination nobody recomputed from the certificates beneath it. The engine rebuilds every compliant flag from the requirement matrix and the governing certificates, walks each renewal succession for the single uninsured day, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A certificate that lapsed, or was accepted a limit short, is invisible until a claim lands on cover nobody actually had.",
+  "layers_intro": "Seven control families run in registry order over each compliance file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the compliance file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of is not a readable date, since every expiry and renewal test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "party",
+      "label": "Party Register",
+      "plain": "Checks the party register is sound and that every requirement a party carries can actually be looked up.",
+      "engineering": "Four controls. party_unique_ids rejects a party id that appears twice, because the id joins the register to every certificate and a duplicate makes a certificate ambiguous about whom it insures. party_type_valid proves each party carries a known type, which is the key into the requirement matrix. party_coverage_declared proves each party declares a non-empty, known contract-required coverage set, so no coverage control passes vacuously on an empty requirement. party_matrix_defined proves every coverage a party must carry has a matrix row for its type, without which the engine knows the line is required but not the limit or endorsement to hold it to.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "cert",
+      "label": "Certificate Register",
+      "plain": "Checks every certificate is well-formed, uniquely numbered, forward-dated and attributable to a party.",
+      "engineering": "Four controls. cert_required_fields proves each certificate carries the descriptive fields the controls read -- id, party, carrier, policy number, coverage line and both term dates. cert_policy_no_unique rejects a policy number shared across two certificates, which means one policy was photocopied onto two lines or two parties and the register can no longer prove they are distinct coverages. cert_term_runs_forward rejects an inverted term whose days-remaining figure is negative and whose coverage never existed. cert_party_exists proves every certificate names a party that is actually in the register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "cov",
+      "label": "Coverage & Limits",
+      "plain": "Checks each required coverage is present, of a known line, adequate on both limits, and free of any uninsured day between renewals.",
+      "engineering": "Five controls and the adequacy core. cov_coverage_type_valid proves each certificate attests a known coverage line, since an unknown one matches no requirement and satisfies nothing while looking like evidence. cov_required_present proves every coverage a party must carry has a certificate on file at all. cov_per_occurrence_meets and cov_aggregate_meets compare the governing certificate's limits against the matrix with exact >= -- a limit a cent short of the contract requirement is a limit short of the contract requirement, and a shortfall on the aggregate is coverage that runs out before the job does. cov_no_uninsured_gap walks each party-and-line succession and proves no uninsured day opened between a lapse and the renewal that followed it; both certificates look valid on their own and the gap exists only between them.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "end",
+      "label": "Endorsements",
+      "plain": "Checks the additional-insured and waiver-of-subrogation endorsements the matrix requires are actually on the governing certificate.",
+      "engineering": "Two controls. end_additional_insured_present proves that where the matrix requires it the governing certificate names the developer an additional insured -- without the endorsement the certificate proves the party is covered and the developer is not a beneficiary of the party's policy at all. end_waiver_of_subrogation_present proves the waiver is present where required -- without it the party's carrier can pay a loss and then recover it from the developer, unwinding the risk transfer the contract was written to make. Both read the governing certificate, the renewal in force, not the policy it replaced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "exp",
+      "label": "Expiry & Renewal",
+      "plain": "Checks the coverage is in force now, flags what is due to renew inside the lead window, and proves every party carries workers' comp.",
+      "engineering": "Three controls. exp_not_expired proves the governing certificate for each required coverage is unexpired at as_of; a certificate expired on or before the review date is not coverage, just a lapsed certificate still in the file. exp_renewal_lead_time is a FLAG, not a failure: it marks a governing certificate expiring inside the file's own renewal_lead_days window, still in force but due to be chased before it lapses. exp_workers_comp_present FAILs any party without an unexpired workers' compensation certificate, a statutory floor checked for every party in the register independent of what its own requirement list happens to say.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Compliance Report",
+      "plain": "Checks the monthly rollup recomputes from the certificates it summarises rather than being read back as an assertion.",
+      "engineering": "Three controls. rpt_party_compliant_recomputes is the control the engine exists for: the coverage summary is a determination, and a determination not recomputed from the evidence is an assertion, so the engine rebuilds every party's compliant flag from the requirement matrix and the governing certificates -- currency, limits and endorsements -- and compares it to the one on file. rpt_report_count_ties proves the monthly report's compliant and non-compliant counts tie the summary, because a count maintained beside the summary rather than derived from it drifts the first time a flag moves and nobody re-adds the column. rpt_watchlist_ties is a FLAG that proves the stated renewal watchlist is exactly the set of certificates actually due, so the renewal chase reaches the right place and no lapse is missed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Compliance Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional certificate-of-insurance compliance files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the parties, the requirement matrix and the certificates are stated; each party's compliant determination, the renewal watchlist and the portfolio compliant / non-compliant counts are derived through the same compliance kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the compliance file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "party-control",
+      "label": "Party Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and every requirement lookupable",
+      "engineering": "Four controls: unique party ids, a known party type, a non-empty known required-coverage set, and a requirement-matrix row for every coverage a party must carry.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "cert-control",
+      "label": "Certificate Register",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is every certificate well-formed and attributable",
+      "engineering": "Four controls: required descriptive fields present, unique policy numbers, forward-running terms, and a party in the register for every certificate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "cov-control",
+      "label": "Coverage & Limits",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is each required coverage present, adequate, and gap-free",
+      "engineering": "Five controls: a known coverage line, a certificate on file for every required coverage, the per-occurrence and aggregate limits met at the requirement with exact >=, and no uninsured day between successive renewals.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "end-control",
+      "label": "Endorsements",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "are the required endorsements on the governing certificate",
+      "engineering": "Two controls: the additional-insured and waiver-of-subrogation endorsements the matrix requires are present on the certificate in force, read on the renewal rather than the policy it replaced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "exp-control",
+      "label": "Expiry & Renewal",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is the coverage in force now, and what is due to renew",
+      "engineering": "Three controls: the governing certificate is unexpired at as_of, one expiring inside the lead window is flagged for chase, and every party carries unexpired workers' comp as a statutory floor.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Compliance Report",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the rollup recompute from the certificates",
+      "engineering": "Three controls: each party's compliant flag re-derives from the matrix and the governing certificates, the report counts tie the summary, and the renewal watchlist ties the evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers & Requirement Matrix",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "the register, matrix and certificates every rule resolves against",
+      "engineering": "The party register carries each party's id, type and contract-required coverage set; the requirement matrix carries the per-occurrence and aggregate limits and the endorsement flags keyed by party type and coverage line; the certificate register carries every certificate. Coverage, endorsement, expiry and rollup controls all resolve against these, and the governing certificate for a line is the one whose term reaches furthest forward -- the renewal, not the policy it replaced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per compliance file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/coi_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "compliance files" },
+    { "from": "set-control", "to": "party-control", "label": "complete" },
+    { "from": "set-control", "to": "cert-control", "label": "complete" },
+    { "from": "set-control", "to": "cov-control", "label": "complete" },
+    { "from": "set-control", "to": "end-control", "label": "complete" },
+    { "from": "set-control", "to": "exp-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "party-control", "to": "registers", "label": "resolves" },
+    { "from": "cert-control", "to": "registers", "label": "resolves" },
+    { "from": "cov-control", "to": "registers", "label": "resolves" },
+    { "from": "end-control", "to": "registers", "label": "resolves" },
+    { "from": "exp-control", "to": "registers", "label": "resolves" },
+    { "from": "cov-control", "to": "rpt-control", "label": "governing determination" },
+    { "from": "party-control", "to": "report", "label": "findings" },
+    { "from": "cert-control", "to": "report", "label": "findings" },
+    { "from": "cov-control", "to": "report", "label": "findings" },
+    { "from": "end-control", "to": "report", "label": "findings" },
+    { "from": "exp-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "340",
+      "source": "python -m pytest --collect-only -q -o addopts= (coi-compliance-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(coi_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every compliance file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in coi_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Compliance files",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-three planted-defect files, one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(coi_engine.model.DOC_TYPES)",
+      "plain": "party register, requirement matrix, certificate register, coverage summary, renewal watchlist, compliance report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "coi_engine/tests/test_control_semantics.py::test_per_occurrence_meets_at_the_cent",
+      "plain": "a limit a cent short of the requirement is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A residential developer requires every consultant, general contractor and subcontractor it hires to carry insurance per its contract, and it has to prove, party by party, that each one's certificate of insurance is on file, unexpired, and meets the required limits and endorsements for that party's type. A certificate is a one-page snapshot of coverage that was true the day the broker issued it, and three failures hide inside that, none of which look wrong in a folder of one-page certificates. A policy expires and the renewal certificate never arrives, so the party is uninsured on the developer's own job while its file still shows a certificate -- an expired one; and between two valid renewals the same gap can open for a single day, and an occurrence lands in it with nothing to respond. The certificate is current but the per-occurrence or aggregate limit is a cent below what the contract required for that party type, or the additional-insured and waiver-of-subrogation endorsements the contract demanded were never added -- the paper looks complete and the protection is not there. And the monthly report calls a party compliant, or counts a portfolio as clean, on a determination nobody recomputed from the certificates underneath it. None of these are judgment calls. They are equalities and comparisons -- a governing certificate against the review date, a limit against the requirement with exact >=, a stated flag against its re-derivation -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks certificates this year. This is the compliance half of the insurance story; a separate engine allocates the premium across projects and explicitly declines to check whether a certificate is on file at all.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every compliance file",
+      "narrative": "The CLI generates twenty-four fictional compliance files -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (coi-compliance-automation/); coi_engine/tests/test_planted_defects.py::test_defect_fires_its_intended_rule"
+    },
+    {
+      "title": "A limit a cent short of the contract is a shortfall, not a rounding band",
+      "narrative": "A boundary test sets a governing certificate's per-occurrence limit one cent below, exactly at, and one cent above the matrix requirement. cov_per_occurrence_meets fires only on the cent-short case and stays silent at the requirement and above, because the comparison is exact >= -- a limit a cent under the contract is a limit under the contract, invisible in a column of six-figure numbers until a claim tests it.",
+      "source": "coi_engine/tests/test_control_semantics.py::test_per_occurrence_meets_at_the_cent"
+    },
+    {
+      "title": "The determination is recomputed, not read back",
+      "narrative": "A test flips a party's stated compliant flag to contradict its certificates. rpt_party_compliant_recomputes rebuilds the flag from the requirement matrix and the governing certificates -- currency, limits and endorsements -- and fails because the stated determination no longer matches the evidence, proving the rollup is recomputed rather than trusted.",
+      "source": "coi_engine/tests/test_control_semantics.py::test_compliant_flag_must_recompute"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "coi_report.json, coi_report.md, samples/"
+    },
+    {
+      "cmd": "python -m coi_engine samples",
+      "operation": "analyze an existing folder of compliance files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m coi_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "340 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "340",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (coi-compliance-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(coi_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(coi_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "coi_engine/tests/test_planted_defects.py::test_every_registered_rule_has_a_planted_defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the certificates they were given: every required coverage has a governing certificate that is in force, adequate on both limits, and carrying the endorsements the matrix requires, no uninsured day opened between renewals, and the monthly rollup recomputes from the evidence. It is not an opinion on whether the requirement matrix asks for the right limits for a given risk, whether a certificate is genuine or the underlying policy truly in force, or whether a party's contract was correctly drafted.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean compliance file into the documented sign-off and renewal review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a governing certificate inside the renewal lead-time window and a watchlist that does not tie the evidence both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the party is not treated as compliant until the failing control is cleared -- an expired or short certificate, a missing endorsement, an uninsured gap, or a rollup that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: compliance files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact >=; there is no tolerance band on a limit, and a cent short of the contract requirement is reported as a shortfall.",
+      "A limit that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one certificate row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One compliance predicate: the controls and the generator share the kernel in coi_engine.compliance, so a determination cannot disagree with the data that produced it.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a party is treated as compliant and whether a renewal is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never issues a certificate, contacts a carrier or broker, chases a renewal, or writes to a source artifact. It reads the compliance file and stops.",
+      "source": "coi-compliance-automation/README.md and coi_engine/tests/test_readonly_and_determinism.py::test_analysis_does_not_touch_the_source"
+    },
+    {
+      "statement": "It reads the six artifacts the compliance process emits. It does not connect to a broker system, a carrier portal, a certificate-tracking platform or the underlying contracts.",
+      "source": "coi_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about whether the paper in the file satisfies the contract, not where an insurance cost lands: premium allocation across projects is a separate engine's job, and that engine explicitly declines to check a certificate.",
+      "source": "coi_engine/engine.py module docstring (Scope)"
+    },
+    {
+      "statement": "It proves a certificate meets the requirement matrix, not that the matrix asks for the right limits or endorsements for a given party's risk. That judgment is a reviewer's.",
+      "source": "coi_engine/engine.py check_rpt_party_compliant_recomputes"
+    },
+    {
+      "statement": "It takes the certificate at face value: it confirms the paper on file is current, adequate and endorsed, not that the certificate is genuine or the underlying policy truly in force. All shipped data is fictional and the compliance period is set in a fictional future.",
+      "source": "coi_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-coi.svg",
+    "motion": "../assets/engine-coi.svg",
+    "poster_alt": "Insurance Compliance diagram: down the left a stack of party cards -- a consultant, a general contractor and a subcontractor -- each linked to a row of one-page certificate tiles; a requirement-matrix panel in the centre lists the per-occurrence and aggregate limits and the additional-insured and waiver-of-subrogation flags each party type must meet; a governing certificate is highlighted as the renewal whose term reaches furthest forward, with a small timeline beneath two adjacent certificates showing the single uninsured day where one lapses before the next incepts; one certificate is stamped EXPIRED and one limit is marked a cent short of its requirement; on the right a monthly compliance report with compliant and non-compliant counts and a renewal watchlist; and a footer strip reading 22 controls, 340 tests, read-only, SFS-E18-COI.",
+    "caption": "The Insurance Compliance engine tile states the question that has to hold party by party: every required coverage proved by a governing certificate that is in force, adequate on both limits and carrying the endorsements the contract demands, with no uninsured day between renewals and a monthly rollup that recomputes from the certificates beneath it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/coi-compliance-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/coi-compliance-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Insurance Compliance (SFS-E18-COI) datasheet -- twenty-two deterministic, read-only controls over a residential developer's certificate-of-insurance compliance: the party register and its requirement matrix, every required coverage proved by a governing certificate that is in force, adequate on both the per-occurrence and aggregate limit and carrying the additional-insured and waiver-of-subrogation endorsements, no uninsured day between successive renewals, and a monthly rollup whose compliant flags, counts and renewal watchlist recompute from the certificates beneath them. The compliance half of the insurance story the allocation engine declines to check. 340 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

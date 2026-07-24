@@ -54,6 +54,10 @@ ROSTER: dict[str, dict] = {
     "proptax":     {"num": 15, "part_no": "SFS-E15-PPT", "mnemonic": "PPT", "family": "Property Tax Controls",   "name": "Property Tax",                "engine_dir": "property-tax-automation"},
     "bond":        {"num": 16, "part_no": "SFS-E16-BND", "mnemonic": "BND", "family": "Surety & Collateral",     "name": "Surety Bond & Collateral",    "engine_dir": "surety-bond-automation"},
     "insurance":   {"num": 17, "part_no": "SFS-E17-INS", "mnemonic": "INS", "family": "Insurance Allocation",    "name": "Insurance Cost Allocation",   "engine_dir": "insurance-allocation-automation"},
+    "coi":         {"num": 18, "part_no": "SFS-E18-COI", "mnemonic": "COI", "family": "Insurance Compliance",    "name": "Insurance Compliance",        "engine_dir": "coi-compliance-automation"},
+    "expense":     {"num": 19, "part_no": "SFS-E19-EXP", "mnemonic": "EXP", "family": "Expense Controls",        "name": "Expense & P-Card",            "engine_dir": "expense-report-automation"},
+    "labor":       {"num": 20, "part_no": "SFS-E20-LAB", "mnemonic": "LAB", "family": "Labor Allocation",        "name": "Project Labor Charge",        "engine_dir": "labor-charge-automation"},
+    "lien":        {"num": 21, "part_no": "SFS-E21-LWV", "mnemonic": "LWV", "family": "Lien Waivers",            "name": "Lien Waiver Tracking",        "engine_dir": "lien-waiver-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"
