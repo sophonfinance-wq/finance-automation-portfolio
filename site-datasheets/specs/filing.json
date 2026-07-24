@@ -1,0 +1,431 @@
+{
+  "num": 25,
+  "slug": "filing",
+  "part_no": "SFS-E25-DUE",
+  "mnemonic": "DUE",
+  "family": "Filing Compliance",
+  "name": "Filing Obligation Calendar",
+  "tagline": "Was every deadline met or validly deferred?",
+  "plain_summary": "A group of entities carries a filing obligation in every jurisdiction it touches -- a federal return, a state return, a fixed-amount annual voucher -- and someone has to prove, entity by entity and obligation by obligation, that each one was filed or validly extended before its statutory deadline, that each fixed-amount payment went out in the exact amount the statute prints on the voucher, and that the status register ties to the filed evidence with nothing missing and nothing orphaned. A filing calendar is a grid of dates that was correct the day someone typed it, and it drifts in ways nobody watches until a notice arrives. This engine reads the seven artifacts the calendar carries -- the entity roster, the statutory due-dates table, the obligation register, the evidence index, the prior-year register, the status summary and the due-soon watchlist -- and runs twenty-two deterministic controls over them. Is the calendar file complete and the review date legible, does every obligation carry a readable year-end that maps to the statutory table and store an original and extended due date that re-derive from it, do the extension flag and the extended date agree, is anything past its applicable deadline unfiled or filed after it, is each fixed-amount payment the exact statutory constant, does every filed row tie to a voucher and every voucher back to a row, is the roster complete and every obligation attributable and uniquely identified, does the internal workflow schedule run in order, does an entity marked final in the prior year stay dissolved, and does the status roll-up recompute from the register it summarises rather than being read back as an assertion. It re-derives every due date from the form and the year-end with whole-month arithmetic, treats a deadline as met at the date and not a day past it, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "This is the calendar half of the tax story, the half that is not about what the return says or what the tax is: preparing the return and computing the tax are separate jobs, and this engine takes the finished calendar and proves only that every obligation was met or validly deferred on time. None of the failures here look wrong in a grid of dates. A due date is typed a day off, or an extension offset is keyed to the wrong form, and the whole register chases a deadline that is not the statutory one. An obligation is neither filed nor extended, its deadline slides past the review date, and it sits in the register looking like every other open row until it is a late-filing penalty. A row is marked filed with a receipt number but no voucher was ever archived, or a voucher sits in the archive with no row that claims it, and the count of done no longer means what it says. The annual LLC tax is a statutory constant, and a voucher cut a cent off it is wrong on its face. And the status summary calls an obligation filed, or a portfolio clean, on a determination nobody recomputed from the register beneath it. The engine re-derives every deadline from the form and the year-end, rebuilds every status from the obligation's own dates, ties each filed row to its evidence and each piece of evidence to a row, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A deadline missed, or a voucher cut short, is invisible until the notice arrives.",
+  "layers_intro": "Nine control families run in registry order over each calendar file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the calendar file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of is not a readable date, since every due-date and overdue test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "due",
+      "label": "Due-Date Re-Derivation",
+      "plain": "Checks every obligation carries a readable year-end, maps to the statutory table, and stores original and extended due dates that re-derive from it.",
+      "engineering": "Four controls. due_year_end_valid proves each obligation carries a readable fiscal year-end, the key into the statutory table; without it no due date could be looked up. due_table_defined proves each live obligation's (form, year-end) has a row in the due-dates table, without which the engine knows an obligation exists but not what deadline to hold it to. due_original_matches re-derives the original deadline from the form and the year-end against the table and compares it to the stored value with exact equality -- the original is a function of the form and the year-end, and a stored value that does not equal the re-derived one is a typo the whole register keys its follow-up off. due_extended_matches proves a stored extended date equals the original advanced by the form's whole-month statutory offset, so a deferral applied to the wrong window is caught.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "ext",
+      "label": "Extension Gate & Overdue",
+      "plain": "Checks the extension flag and the extended date agree, flags nothing overdue or filed late, and marks what falls due inside the lead window.",
+      "engineering": "Four controls. ext_flag_valid proves the extension flag and the extended date never disagree -- an obligation marked extension-filed must carry the extended date it now runs to, and an extended date on a row that filed no extension has no basis. ext_applicable_overdue FAILs any obligation unfiled and unextended whose applicable deadline is on or before the review date, the applicable deadline being the extended date when an extension was filed and the original otherwise. ext_filed_on_time FAILs a return lodged after its applicable deadline, compared with exact <= -- filing at all is not the test, filing on time is. ext_due_soon is a FLAG, not a failure: it marks an unfiled obligation falling due inside the file's own due_lead_days window, still in time but due to be chased.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "pay",
+      "label": "Fixed-Amount Payment",
+      "plain": "Checks each fixed-amount voucher was cut in the exact statutory constant, to the cent.",
+      "engineering": "One control. pay_fixed_amount reads the statutory constant off the due-dates table row for the obligation's form -- the annual LLC tax is the archetype, a fixed dollar amount printed on the face of the voucher -- and compares the obligation's stated amount to it with exact equality. An amount a cent off the constant is wrong on its face, whatever else the row says. Amounts are integer cents throughout; a value that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on rather than being coerced into the number the engine is meant to audit.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "evd",
+      "label": "Evidence Tie-Out",
+      "plain": "Checks every filed row ties to a voucher, every extension to an acceptance, and every piece of evidence back to a register row.",
+      "engineering": "Three controls. evd_filed_has_evidence FAILs a row marked filed with no archived filed-return or payment voucher behind it -- the reviewer sees filed and there is nothing to support it. evd_extension_evidence FAILs an obligation marked extension-filed with no extension acceptance on file, because a deferral is only as good as the acceptance that granted it. evd_no_orphan_evidence FAILs a voucher or acceptance whose obligation is not in the register -- a piece of done that no row claims, so the completeness count cannot be trusted in either direction -- and gates every evidence kind to the known set.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "ros",
+      "label": "Roster Completeness",
+      "plain": "Checks every active entity carries a row, every row is attributable to a rostered entity, and every obligation id is unique.",
+      "engineering": "Three controls. ros_entity_has_row FAILs an active entity in the roster with no obligation row -- an entity whose filings nobody is tracking, invisible to every downstream control because it has no row to be checked. ros_row_entity_known FAILs an obligation that names an entity not in the roster. ros_unique_obligation_ids FAILs an obligation id that appears twice, because the id joins the register to the evidence and to the status summary, and a duplicate makes a voucher ambiguous about which obligation it proves and a status ambiguous about which row it reports.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "wfl",
+      "label": "Internal Workflow",
+      "plain": "Checks the internal prep-review-send schedule runs in order and before the deadline, and flags any step that slipped past its goal.",
+      "engineering": "Two controls. wfl_goal_monotonic FAILs a workflow whose goals do not run prep before review before sent-to-preparer with the last of them on or before the applicable due date -- a schedule that runs backwards is not a plan but a deadline nobody can meet, hidden as three tidy dates. wfl_actual_slippage is a FLAG, not a failure: it marks an internal prep, review or send step completed after its goal, the early warning that a statutory deadline is about to be missed, worth a human's eyes without being a hard stop.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "cnt",
+      "label": "Cross-Year Continuity",
+      "plain": "Checks an entity marked final in the prior fiscal year does not reappear this year carrying a live obligation.",
+      "engineering": "One control. cnt_final_not_recurring reads the prior-year register's list of entities marked FINAL and FAILs any that reappear this year with a live -- not n/a -- obligation. A final return dissolves an entity's filing obligation; if a dissolved entity carries a live obligation the next year, either the dissolution was wrong or the obligation is, and the calendar is chasing a filing for an entity that should no longer file.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Status Roll-Up",
+      "plain": "Checks the status summary recomputes from the register it summarises rather than being read back as an assertion.",
+      "engineering": "Three controls. rpt_status_recomputes is the control the engine exists for: the status summary is a determination, and a determination not recomputed from the register is an assertion, so the engine rebuilds every obligation's status -- filed, filed-late, overdue, open, not-applicable -- from its own register dates and compares it to the one on file. rpt_counts_tie proves the summary's overdue and filed counts tie the register, because a count maintained beside the register rather than derived from it drifts the first time a status moves and nobody re-adds the column. rpt_watchlist_ties is a FLAG that proves the stated due-soon watchlist is exactly the set of obligations actually due inside the lead window, so the follow-up reaches the right place and no deadline is missed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Calendar Files",
+      "kind": "source",
+      "col": 0,
+      "row": 4,
+      "plain": "fictional fiscal-year filing calendars enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the roster, the statutory due-dates table, the obligation base facts and the evidence are stated; each obligation's original and extended due date, its status, the portfolio overdue and filed counts and the due-soon watchlist are derived through the same due-date kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the calendar file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "due-control",
+      "label": "Due-Date Re-Derivation",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "does every due date re-derive from the form and the year-end",
+      "engineering": "Four controls: a readable year-end, a row in the statutory table for the (form, year-end), and stored original and extended due dates that re-derive from the table with the extended date the original advanced by the form's whole-month offset.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "ext-control",
+      "label": "Extension Gate & Overdue",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is the extension gate sound and is anything overdue or late",
+      "engineering": "Four controls: the extension flag and extended date agree, nothing is unfiled past its applicable deadline, no filed return was lodged after it, and an unfiled obligation inside the lead window is flagged for chase.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "pay-control",
+      "label": "Fixed-Amount Payment",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is each fixed-amount voucher the exact statutory constant",
+      "engineering": "One control: the obligation's stated amount equals the statutory fixed amount on the table row for its form, compared with exact equality in integer cents; a malformed amount is contained to its row as AMOUNT_INVALID rather than coerced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "evd-control",
+      "label": "Evidence Tie-Out",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does the register tie to the evidence and the evidence to the register",
+      "engineering": "Three controls: every filed row backed by a voucher, every extension backed by an acceptance, and every piece of evidence pointing at an obligation in the register with a known evidence kind.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "ros-control",
+      "label": "Roster Completeness",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is the roster complete and every obligation attributable",
+      "engineering": "Three controls: every active entity carries a row, every obligation names a rostered entity, and every obligation id is unique so a voucher or status attributes to exactly one obligation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "wfl-control",
+      "label": "Internal Workflow",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the internal schedule run in order and on track",
+      "engineering": "Two controls: the prep, review and sent goals run in order and land on or before the applicable deadline, and any actual step completed after its goal is flagged as slippage.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "cnt-control",
+      "label": "Cross-Year Continuity",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does a final entity stay final across the year boundary",
+      "engineering": "One control: an entity marked FINAL in the prior fiscal year carries no live obligation this year, resolving the prior-year register against the current obligation register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Status Roll-Up",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does the roll-up recompute from the register",
+      "engineering": "Three controls: each obligation's stated status re-derives from its register dates, the overdue and filed counts tie the register, and the due-soon watchlist ties the obligations actually due inside the lead window.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Register, Table & Evidence",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "the register, statutory table and evidence every rule resolves against",
+      "engineering": "The obligation register carries each obligation's entity, form, year-end, extension flag, stored original and extended due dates, filed date and amount; the statutory due-dates table carries the original offsets and whole-month extension offset and any fixed amount keyed by form and year-end; the evidence index carries every voucher and acceptance keyed to the obligation it proves; the roster and prior-year register carry the completeness and continuity baselines. Due, extension, payment, evidence, roster and roll-up controls all resolve against these, and every applicable deadline is derived through the shared kernel in filing_engine.duedates.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per calendar file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/filing_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "calendar files" },
+    { "from": "set-control", "to": "due-control", "label": "complete" },
+    { "from": "set-control", "to": "ext-control", "label": "complete" },
+    { "from": "set-control", "to": "pay-control", "label": "complete" },
+    { "from": "set-control", "to": "evd-control", "label": "complete" },
+    { "from": "set-control", "to": "ros-control", "label": "complete" },
+    { "from": "set-control", "to": "wfl-control", "label": "complete" },
+    { "from": "set-control", "to": "cnt-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "due-control", "to": "registers", "label": "resolves" },
+    { "from": "ext-control", "to": "registers", "label": "resolves" },
+    { "from": "pay-control", "to": "registers", "label": "resolves" },
+    { "from": "evd-control", "to": "registers", "label": "resolves" },
+    { "from": "ros-control", "to": "registers", "label": "resolves" },
+    { "from": "cnt-control", "to": "registers", "label": "resolves" },
+    { "from": "due-control", "to": "rpt-control", "label": "applicable deadline" },
+    { "from": "due-control", "to": "report", "label": "findings" },
+    { "from": "ext-control", "to": "report", "label": "findings" },
+    { "from": "pay-control", "to": "report", "label": "findings" },
+    { "from": "evd-control", "to": "report", "label": "findings" },
+    { "from": "ros-control", "to": "report", "label": "findings" },
+    { "from": "wfl-control", "to": "report", "label": "findings" },
+    { "from": "cnt-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "369",
+      "source": "python -m pytest --collect-only -q -o addopts= (filing-calendar-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(filing_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every calendar file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in filing_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Calendar files",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-three planted-defect files, one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(filing_engine.model.DOC_TYPES)",
+      "plain": "entity roster, due-dates table, obligation register, evidence index, prior-year register, status summary, due-soon watchlist"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "filing_engine/tests/test_control_semantics.py::test_fixed_amount_at_the_cent",
+      "plain": "a fixed amount a cent off the statutory constant is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A group of entities carries a filing obligation in every jurisdiction it touches, and someone has to prove, entity by entity and obligation by obligation, that each return or payment was filed or validly extended before its statutory deadline, that each fixed-amount voucher went out in the exact amount the statute prints, and that the status register ties to the filed evidence with nothing missing and nothing orphaned. A filing calendar is a matrix of dates that was correct the day someone typed it, and four failures hide inside that, none of which look wrong in a grid of dates. A due date is typed a day off, or an extension offset is keyed to the wrong form, and the whole register chases a deadline that is not the statutory one. An obligation is neither filed nor extended, its deadline slides past the review date, and it sits in the register looking like every other open row until it is a late-filing penalty; a return lodged a day after its applicable due date is late in exactly the same invisible way. A row is marked filed with a receipt number but no voucher was archived, or a voucher sits in the archive with no row that claims it, and the count of done no longer means what it says. The annual LLC tax is a statutory constant, and a voucher cut a cent off it is wrong on its face. None of these are judgment calls. They are equalities and comparisons -- a re-derived deadline against a stored one, a filed date against an applicable deadline with exact <=, a stated amount against the statutory constant, a stated status against its re-derivation -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks filings this year. This is the calendar half of the tax story; preparing the return and computing the tax are separate jobs, and this engine takes the finished calendar and checks only that every deadline was met or validly deferred on time.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every calendar file",
+      "narrative": "The CLI generates twenty-four fictional calendar files -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (filing-calendar-automation/); filing_engine/tests/test_planted_defects.py"
+    },
+    {
+      "title": "A deadline is met at the date, not a day past it",
+      "narrative": "A boundary test files a return one day before, exactly on, and one day after its applicable deadline. ext_filed_on_time fires only on the day-after case and stays silent at the deadline and before, because the comparison is exact <= -- a return filed on the applicable due date is on time and a day past it is late, and ext_applicable_overdue uses the same edge for an unfiled obligation whose deadline lands on the review date. There is no grace band.",
+      "source": "filing_engine/tests/test_control_semantics.py::test_filed_on_the_deadline"
+    },
+    {
+      "title": "The status is recomputed, not read back",
+      "narrative": "A test flips an obligation's stated status to contradict its register dates. rpt_status_recomputes rebuilds the status -- filed, filed-late, overdue, open or not-applicable -- from the obligation's own original and extended due dates and filed date, and fails because the stated determination no longer matches the register, proving the roll-up is recomputed rather than trusted.",
+      "source": "filing_engine/tests/test_control_semantics.py::test_status_must_recompute"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "filing_report.json, filing_report.md, samples/"
+    },
+    {
+      "cmd": "python -m filing_engine samples",
+      "operation": "analyze an existing folder of calendar files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m filing_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "369 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "369",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (filing-calendar-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(filing_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(filing_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "filing_engine/tests/test_planted_defects.py",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the calendar they were given: every obligation's due dates re-derive from the form and the year-end, nothing is overdue or filed late, each fixed-amount voucher is the statutory constant, every filed row ties to evidence and every piece of evidence to a row, the roster is complete, no final entity recurs, and the status roll-up recomputes from the register. It is not an opinion on whether the return is correct, whether the tax is right, whether the statutory table itself carries the right offsets, or whether a filed voucher is genuine.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean calendar into the documented sign-off and the next filing cycle"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an unfiled obligation inside the lead window, a slipped internal workflow step and a watchlist that does not tie the register all land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the obligation is not treated as met until the failing control is cleared -- a due date that does not re-derive, an overdue or late filing, a fixed amount off the constant, an evidence gap, a roster gap, a recurring final entity, or a roll-up that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: calendar files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Whole-month date arithmetic and exact comparison; a deadline is met at the date, not a day past it, and there is no grace band.",
+      "Integer cents throughout, compared with exact equality; a fixed amount a cent off the statutory constant is reported as a break, not absorbed into a tolerance.",
+      "An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One due-date predicate: the controls and the generator share the kernel in filing_engine.duedates, so a recomputed date or status cannot disagree with the data that produced it.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether an obligation is treated as met and whether a filing is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never prepares a return, computes a tax, files anything, moves a payment, or writes to a source artifact. It reads the calendar file and stops.",
+      "source": "filing-calendar-automation/README.md and filing_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the seven artifacts the calendar process emits. It does not connect to a tax-preparation system, a filing agency, a payment rail or the underlying returns.",
+      "source": "filing_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about whether the deadline was met or validly deferred, not what the return says or what the tax is: preparing the return and computing the tax are separate jobs.",
+      "source": "filing_engine/engine.py module docstring (Scope)"
+    },
+    {
+      "statement": "It proves a stored due date re-derives from the statutory table, not that the table itself carries the right offsets or fixed amounts for a given form. That judgment is a reviewer's.",
+      "source": "filing_engine/engine.py check_due_original_matches"
+    },
+    {
+      "statement": "It takes the evidence at face value: it confirms a voucher or acceptance is on file and ties to a row, not that the filing is genuine or the deadline truly satisfied at the agency. All shipped data is fictional and the fiscal year is set in a fictional future.",
+      "source": "filing_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-filing.svg",
+    "motion": "../assets/engine-filing.svg",
+    "poster_alt": "Filing Obligation Calendar diagram: down the left an entity card for a rostered filer linked to a row of obligation tiles -- a federal return, a state return and a fixed-amount annual voucher; a statutory due-dates panel in the centre shows each original deadline and its whole-month extension offset, with a stored due date re-derived and checked against the table; one obligation is stamped OVERDUE past its applicable deadline, one voucher is marked a cent short of the $800 statutory constant, and a filed row is shown tied to its archived evidence while an orphan voucher points at no row; on the right a status summary with overdue and filed counts and a due-soon watchlist recomputed from the register; and a footer strip reading 22 controls, 369 tests, read-only, SFS-E25-DUE.",
+    "caption": "The Filing Obligation Calendar engine tile states the question that has to hold obligation by obligation: every deadline re-derived from the form and the year-end, met or validly extended before it passed, each fixed-amount voucher cut in the exact statutory constant, every filed row tied to evidence and every voucher back to a row, and a status roll-up that recomputes from the register beneath it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/filing-calendar-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/filing-calendar-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Filing Obligation Calendar (SFS-E25-DUE) datasheet -- twenty-two deterministic, read-only controls over a fiscal-year filing calendar: the entity roster and its statutory due-dates table, every obligation's due dates re-derived from the form and the year-end, each return filed or validly extended before its applicable deadline with exact <= and no grace band, each fixed-amount voucher cut in the exact statutory constant, every filed row tied to evidence and every voucher back to a row, a complete roster with unique obligation ids, an internal workflow schedule that runs in order, a final entity that stays dissolved across the year boundary, and a status roll-up whose statuses, counts and due-soon watchlist recompute from the register beneath them. The calendar half of the tax story, not what the return says or what the tax is. 369 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

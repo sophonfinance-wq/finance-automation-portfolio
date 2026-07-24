@@ -55,8 +55,8 @@ Model of the business: there is no software to buy. After a short observation of
 Non-negotiables that define the product: independent verification checks every run; every computed figure ships with cited evidence traceable to source; and nothing files, posts, or finalizes without a human's sign-off. The client always keeps the judgment.
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
-- 21 public engines, all runnable and MIT-licensed.
-- 73,805 automated tests gate every change in CI.
+- 26 public engines, all runnable and MIT-licensed.
+- 75,794 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close alone runs 29 deterministic controls.
@@ -83,7 +83,12 @@ Non-negotiables that define the product: independent verification checks every r
 19. Expense & P-Card — expense reports and purchasing-card activity tested against policy: each charge matched to a receipt and the right account, out-of-policy and duplicate items flagged, approvals and limits enforced, every exception traced to source; 23 read-only controls that never reimburse or post. (page: engines/expense.html)
 20. Project Labor Charge — labor charged to construction projects proved against the ledger: each timecard tied to the job and cost code it hit, rates and burden re-derived, mischarged or out-of-period hours flagged, every figure traced to source; 26 read-only controls that never post or pay. (page: engines/labor.html)
 21. Lien Waiver Tracking — lien waivers tracked against every payment to subs and suppliers: each waiver matched to its progress or final payment, conditional and unconditional status verified, missing or stale waivers flagged before release, every exception traced to source; 25 read-only controls that never release or pay. (page: engines/lien.html)
-Beyond these twenty-one, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
+22. Equity Waterfall & JV Promote — re-derives a real-estate JV distribution waterfall from an executed operating agreement: capital-account roll-forwards, preferred-return accrual, hurdle-IRR tiers, and promote/carry splits, tying the computed IRR, multiple and promote back to the stated returns; 449 tests, integer-cent equality, never pays or files. (page: engines/waterfall.html)
+23. Project Proforma Integrity — every active development project's quarterly proforma re-derived from its base ledger and held to the workbook's tie-out registry: source-and-use balance, cost/budget equalities, interest-reserve adequacy, the profit-to-waterfall-to-distribution chain, margin/return re-derivation, variance, and reporting-calendar completeness; 381 tests, read-only. (page: engines/proforma.html)
+24. Gross-Receipts & Excise Tax — each jurisdiction's gross-receipts/excise tax (WA State B&O, city B&O, Hawaii GET) re-derived from the GL revenue pull times the classification rate in force for the period, tied to the filed worksheet, with deductions, thresholds, rate-effective dates and the filing calendar proved complete, timely and approved; 400 tests, read-only. (page: engines/grt.html)
+25. Filing Obligation Calendar — every entity × jurisdiction × return/payment obligation proved filed or validly extended before its statutory due date, each fixed-amount voucher paid in the exact statutory amount, and the status register tied to filed evidence with nothing missing or orphaned; 369 tests that never file or pay. (page: engines/filing.html)
+26. Energy-Efficient Home Credit — the IRC §45L homebuilder credit re-derived unit by unit from each dwelling's close-of-escrow date, its RESNET/HERS certification and the dated statutory per-unit amount, rolled up per project, region and fiscal year with net-benefit, partner-allocation and a full cross-artifact tie-out; 390 tests, read-only. (page: engines/energy.html)
+Beyond these twenty-six, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
 
 # How the engines stay trustworthy
 Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
@@ -91,7 +96,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 73,805 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 75,794 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

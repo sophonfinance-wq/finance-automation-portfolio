@@ -1,0 +1,500 @@
+{
+  "num": 22,
+  "slug": "waterfall",
+  "part_no": "SFS-E22-WFL",
+  "mnemonic": "WFL",
+  "family": "Equity Waterfall",
+  "name": "Equity Waterfall & JV Promote",
+  "tagline": "Does the schedule pay what the agreement promises?",
+  "plain_summary": "A real-estate joint venture pools an investor's and a developer's capital, accrues a preferred return on it month by month, then distributes the sale proceeds down a contractual waterfall whose tiers pay in a strict order and whose upper tiers split the upside on a promote. Every number in that chain is derived from the ones above it, so a single wrong figure -- a mis-compounded month of preferred return, a tier paid out of order, a pari-passu split struck off the wrong weights, a promote entered as though the hurdle were already cleared -- travels silently to the developer's carry and the investor's multiple, and none of it looks wrong in a spreadsheet. This engine reads the seven artifacts a distribution emits -- the deal terms, the member register, the capital ledger, the waterfall schedule, the dilution worksheet, the returns summary and the loan covenant -- and runs thirty deterministic controls over them in registry order. Is the deal file complete and the review month legible; is the member register sound and the venture a well-formed two sides; does each preferred-return balance recompute from the contribution history compounded monthly; does each capital account roll forward and zero out; do the tiers pay in the contractual order and split pari passu on the balances; is the hurdle boundary re-solved from the investor's contributions; do the promote splits sum to 100% and does the carry tie its upper-tier receipts; are the member and default loan rates sound and the loan repaid off the top before any distribution; does the capital-call dilution recompute by its own named method; is every distributed cent accounted for with no leakage and none paid beyond the proceeds available; and does the realized-returns table -- equity multiple, preferred return, profit split -- recompute from the waterfall beneath it rather than being read back as an assertion. It rebuilds every figure through the one shared arithmetic kernel that also produced the data, compares with exact integer-cent equality and no tolerance band, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A JV waterfall is a chain of dependent computations in which a wrong number early travels silently to the bottom line, and the three ways it goes wrong all look right in a folder of worksheets. The accrual drifts: the preferred return is meant to compound monthly on unreturned capital, and a single mis-set month, or simple interest where the agreement says compound, moves every downstream tier and the promote with it. The split leaks: a tier pays out of order, a pari-passu split is struck off the wrong weights, or the promote tier is entered as though the hurdle were already cleared, and the developer's carry is larger than the contract earns. The summary asserts: the realized-returns table reports an equity multiple, a preferred return and a profit split that nobody recomputed from the waterfall underneath it. The engine rebuilds every accrued balance, every tier allocation, every promote dollar and every reported return from the contribution history through the same kernel that generated the data, compares with exact integer-cent equality, ships a planted-defect deal file for every registered control, and states its benchmark as a command rather than a claim. It is a re-derivation engine, not a negotiation: it takes the executed agreement's mechanics as given and asks only whether the money the schedule pays is the money the agreement promises.",
+  "layers_intro": "Thirteen control families run in registry order over each deal file, following the dependency chain from the base facts to the reported return. The first proves the others had something to read and that the review month is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the deal file carries every artifact the controls below read, exactly once, and that the review month is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a deal file missing any of the seven document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of_period is not a readable non-negative month index, since every accrual and covenant window is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence from reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "mbr",
+      "label": "Member Register",
+      "plain": "Checks the member register is sound and the venture is a well-formed two sides that funded within commitment.",
+      "engineering": "Four controls. mbr_unique_ids rejects a member id that appears twice, because the id joins the register to every capital account, waterfall entry and return figure and a duplicate makes those attributions ambiguous. mbr_role_valid proves each member carries a known role -- investor or developer -- since the role is what tells the waterfall who takes the promote and who pays it. mbr_roles_complete proves the venture carries exactly one investor and exactly one developer, because the Section 3.3 promote has no well-defined split otherwise. mbr_commitment_honored proves no member funded more capital than it committed, the commitment being the ceiling the capital calls draw against.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "pref",
+      "label": "Preferred-Return Accrual",
+      "plain": "Checks the preferred-return rate is a real positive figure and each stated balance recomputes from the contributions compounded monthly.",
+      "engineering": "Two controls. pref_rate_valid FAILs a preferred-return rate that is not a positive basis-point figure, since a zero or absent rate would accrue no preferred return at all and silently collapse the first tier. pref_accrual_recomputes rebuilds each member's Investment Return Account from its contribution history -- compounded monthly on unreturned capital to the as_of month -- and FAILs a stated balance that does not rebuild to the cent, because a preferred balance nobody can re-derive is a balance nobody can stand behind.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "cap",
+      "label": "Capital-Account Roll-Forward",
+      "plain": "Checks each Contribution Account equals what was funded and every account rolls forward to zero once the waterfall has run.",
+      "engineering": "Two controls. cap_contribution_recomputes proves each member's stated Contribution Account equals the running sum of what it actually put in, because the return of capital in tier B is measured against that base and a wrong base pays back the wrong figure. cap_rollforward_zeroes recomputes the waterfall, subtracts each member's tier-A preferred receipts and tier-B capital receipts from its accrued balances, and FAILs any ending Investment Return or Contribution account that does not land at zero -- a non-zero ending balance is capital the schedule left unreturned while claiming a full distribution.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "wf",
+      "label": "Waterfall Tiers",
+      "plain": "Checks the tiers pay in the contractual order, the pari-passu tiers split on the balances, and every allocation recomputes.",
+      "engineering": "Three controls. wf_tier_order_valid FAILs a schedule whose entries name an unknown tier or pay a tier out of the strict Section 3.3 order -- preferred, capital, hurdle, promote -- a tier paid out of turn being one paid before the tier above it was satisfied. wf_pari_passu_split proves tiers A and B split in proportion to the members' preferred and contribution balances, since a split struck off any other weights favours one member before the promote even begins. wf_tier_allocation_recomputes is the control the engine exists for: the whole distribution -- who is paid, in which tier, how much -- is rebuilt from the contributions, accruals, hurdle and splits and compared entry by entry.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "hurdle",
+      "label": "Hurdle Boundary",
+      "plain": "Checks the hurdle rate sits above the preferred and the hurdle target re-solves from the investor's contributions.",
+      "engineering": "Two controls. hurdle_rate_valid FAILs a hurdle rate that does not sit strictly above the preferred rate, because a hurdle at or below the preferred would be cleared the moment the preferred tier was paid and collapse the promote structure. hurdle_boundary_recomputes rebuilds the hurdle target -- the point where the investor's cumulative receipts reach its contributions grown at the hurdle rate -- from the investor's contributions and FAILs a stated target that does not tie, since a moved boundary moves the promote with it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "promo",
+      "label": "Promote Split",
+      "plain": "Checks the hurdle and promote splits each allocate 100% and the developer's carry ties its upper-tier receipts.",
+      "engineering": "Two controls. promo_split_ratios_valid FAILs a hurdle or promote split whose investor and developer shares do not sum to 10,000 basis points, because a split that does not sum to 100% either creates or destroys a fraction of every dollar passing through it. promo_carry_recomputes proves the schedule's stated developer promote equals the developer's receipts summed across the hurdle and promote tiers, so a carry cannot be overstated on the face of the schedule.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "loan",
+      "label": "Member & Default Loans",
+      "plain": "Checks the default-loan rate sits above the member-loan rate and the member loan is repaid off the top before any distribution.",
+      "engineering": "Two controls. loan_rate_valid FAILs a default (deficit) loan rate that does not sit above the member-loan rate, because failing to fund is meant to cost more than lending and a lower default rate inverts that incentive. loan_repaid_before_distribution recomputes the member loan's principal-plus-interest -- compounded monthly, interest first then principal -- and FAILs a stated repayment that does not tie, or proceeds-after-loans that are not the gross proceeds net of that repayment, since the loan is repaid before the waterfall runs.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "dil",
+      "label": "Capital-Call Dilution",
+      "plain": "Checks the dilution worksheet names a known method, applies the statutory 200% penalty, and recomputes by that method.",
+      "engineering": "Three controls. dil_method_valid FAILs a worksheet naming a dilution method outside the three maintained partner-specific variants. dil_penalty_multiplier FAILs a dilution penalty that is not the statutory 200% (20,000 basis points) applied to a substitute contribution, that 2x being a fixed term rather than a free parameter. dil_recompute rebuilds the penalized substitute and the resulting diluted interest from the default event's inputs through the named formula variant and FAILs a stated figure that does not tie.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "dist",
+      "label": "Distribution Completeness",
+      "plain": "Checks every distributed cent ties out with no leakage and nothing is paid beyond the proceeds available after loans.",
+      "engineering": "Two controls. dist_no_leakage proves the schedule's entries sum to its stated total distributed, which must equal the proceeds left after the loans -- a residual either way being a cent created or lost between the pool and the members. dist_within_available FAILs a total distributed that exceeds the proceeds available after loans, since the waterfall can only ever pay out what the sale, net of the loans, brought in.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "ret",
+      "label": "Realized-Returns Tie-out",
+      "plain": "Checks each member's equity multiple, preferred return and profit split recompute from the waterfall rather than being asserted.",
+      "engineering": "Three controls. ret_multiple_recomputes rebuilds each member's equity multiple -- total distributions over total contributions -- from the recomputed distribution and FAILs a stated multiple that does not tie, so no headline return figure goes unreconciled. ret_preferred_ties proves each stated preferred return equals the member's tier-A receipts. ret_profit_split_ties proves each stated profit split equals the member's receipts in the upper hurdle and promote tiers, so a developer's carry cannot be overstated on the face of the returns table.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "cov",
+      "label": "Financing Covenants",
+      "plain": "Checks the loan-to-cost ratio is within the covenant maximum and flags a financing maturing inside its warning window.",
+      "engineering": "Two controls, secondary to the waterfall. cov_ltc_within_max re-derives the loan-to-cost ratio from the senior loan and total project cost and FAILs a ratio above the covenant maximum, a draw larger than the loan documents allow. cov_maturity_window is a FLAG, not a failure: it marks a financing maturing inside the file's own maturity_lead_periods window -- still current, but due to have a refinance or extension chased before it falls due.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "syn",
+      "label": "Syndicate",
+      "plain": "Checks the syndicate draw is the fixed ratio of the commitment and flags a quarterly investor report due inside its lead window.",
+      "engineering": "Two controls, secondary to the waterfall. syn_capital_call_ratio proves the stated fund-of-projects syndicate draw equals the fixed 33.5% (3,350 basis points) of the investor commitment and FAILs a draw that does not tie. syn_report_due is a FLAG: it marks a quarterly investor report due inside the file's report_lead_periods window -- not yet late, but an operational to-do to prepare.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Deal Files",
+      "kind": "source",
+      "col": 0,
+      "row": 6,
+      "plain": "fictional real-estate JV deal files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect deal file for every registered control, thirty-two files in total. Only the base facts -- the deal terms, the member register and each member's contributions -- are stated freely; the capital ledger, the waterfall schedule, the returns summary and the dilution and loan figures are all derived through the same waterfall kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the deal file complete and the review month legible",
+      "engineering": "One control. FAILs a deal file missing any of the seven artifact types or carrying a duplicate, and FAILs an unreadable as_of_period, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "mbr-control",
+      "label": "Member Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and the venture a well-formed two sides",
+      "engineering": "Four controls: unique member ids, a known role per member, exactly one investor and one developer, and no member funded beyond its commitment.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "pref-control",
+      "label": "Preferred-Return Accrual",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does the preferred return re-derive, compounded monthly",
+      "engineering": "Two controls: a positive preferred-return rate, and each stated Investment Return Account rebuilt from the contribution history compounded monthly to the as_of month.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "cap-control",
+      "label": "Capital-Account Roll-Forward",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does each capital account roll forward and zero out",
+      "engineering": "Two controls: each Contribution Account equals funded capital, and each ending account rolls to zero once tier-A and tier-B receipts are applied.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "wf-control",
+      "label": "Waterfall Tiers",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "do the tiers pay in order and split pari passu, and recompute",
+      "engineering": "Three controls: tiers in the contractual order, tiers A and B split on the account balances, and every tier/member allocation rebuilt from the base facts and compared entry by entry.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "hurdle-control",
+      "label": "Hurdle Boundary",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "is the hurdle above the preferred and re-solved from contributions",
+      "engineering": "Two controls: the hurdle rate sits strictly above the preferred, and the hurdle target re-solves from the investor's contributions grown at the hurdle rate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "promo-control",
+      "label": "Promote Split",
+      "kind": "control",
+      "col": 1,
+      "row": 6,
+      "plain": "do the promote splits sum, and does the carry tie",
+      "engineering": "Two controls: the hurdle and promote splits each allocate 100%, and the stated developer promote equals its receipts across the hurdle and promote tiers.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "loan-control",
+      "label": "Member & Default Loans",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is the loan sound and repaid off the top before distribution",
+      "engineering": "Two controls: the default-loan rate sits above the member-loan rate, and the member loan's principal-plus-interest is repaid before the waterfall runs, with proceeds-after-loans net of it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "dil-control",
+      "label": "Capital-Call Dilution",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the dilution recompute by its own named method",
+      "engineering": "Three controls: a known dilution method, the statutory 200% penalty on the substitute contribution, and the penalized substitute and diluted interest rebuilt through the named formula variant.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "dist-control",
+      "label": "Distribution Completeness",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does every distributed cent tie out with no leakage",
+      "engineering": "Two controls: the entries sum to the total distributed which equals the proceeds after loans, and the total distributed never exceeds the proceeds available.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "ret-control",
+      "label": "Realized-Returns Tie-out",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does the returns summary recompute from the waterfall",
+      "engineering": "Three controls: each member's equity multiple, preferred return and profit split rebuilt from the recomputed waterfall and compared to the reported figure.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "cov-control",
+      "label": "Financing Covenants",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "is loan-to-cost within the covenant, and what is maturing",
+      "engineering": "Two controls, secondary: the re-derived loan-to-cost is within the covenant maximum, and a financing maturing inside its warning window is flagged for a refinance or extension chase.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "syn-control",
+      "label": "Syndicate",
+      "kind": "control",
+      "col": 2,
+      "row": 5,
+      "plain": "does the syndicate draw re-derive, and what report is due",
+      "engineering": "Two controls, secondary: the syndicate draw is the fixed 33.5% of the commitment, and a quarterly investor report due inside its lead window is flagged to prepare.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/engine.py"
+    },
+    {
+      "id": "kernel",
+      "label": "Waterfall Kernel & Artifacts",
+      "kind": "control",
+      "col": 2,
+      "row": 6,
+      "plain": "the shared arithmetic and the seven artifacts every rule resolves against",
+      "engineering": "The deal terms carry the rates, tier splits, hurdle and dilution penalty; the member register carries each member's role, commitment and funded contributions; the capital ledger, waterfall schedule, dilution worksheet, returns summary and loan covenant carry the derived figures. The accrual, roll-forward, hurdle, waterfall, loan and dilution controls all resolve against these through one shared kernel in waterfall.py that the generator also imports, so a figure the engine recomputes cannot disagree with the arithmetic that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/waterfall.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 6,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per deal file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/waterfall_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "deal files" },
+    { "from": "set-control", "to": "mbr-control", "label": "complete" },
+    { "from": "set-control", "to": "pref-control", "label": "complete" },
+    { "from": "set-control", "to": "cap-control", "label": "complete" },
+    { "from": "set-control", "to": "wf-control", "label": "complete" },
+    { "from": "set-control", "to": "hurdle-control", "label": "complete" },
+    { "from": "set-control", "to": "promo-control", "label": "complete" },
+    { "from": "set-control", "to": "loan-control", "label": "complete" },
+    { "from": "set-control", "to": "dil-control", "label": "complete" },
+    { "from": "set-control", "to": "dist-control", "label": "complete" },
+    { "from": "set-control", "to": "ret-control", "label": "complete" },
+    { "from": "set-control", "to": "cov-control", "label": "complete" },
+    { "from": "set-control", "to": "syn-control", "label": "complete" },
+    { "from": "pref-control", "to": "kernel", "label": "recomputes" },
+    { "from": "cap-control", "to": "kernel", "label": "recomputes" },
+    { "from": "wf-control", "to": "kernel", "label": "recomputes" },
+    { "from": "hurdle-control", "to": "kernel", "label": "recomputes" },
+    { "from": "promo-control", "to": "kernel", "label": "recomputes" },
+    { "from": "loan-control", "to": "kernel", "label": "recomputes" },
+    { "from": "dil-control", "to": "kernel", "label": "recomputes" },
+    { "from": "dist-control", "to": "kernel", "label": "recomputes" },
+    { "from": "ret-control", "to": "kernel", "label": "recomputes" },
+    { "from": "mbr-control", "to": "report", "label": "findings" },
+    { "from": "cov-control", "to": "report", "label": "findings" },
+    { "from": "syn-control", "to": "report", "label": "findings" },
+    { "from": "kernel", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "449",
+      "source": "python -m pytest --collect-only -q -o addopts= (equity-waterfall-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "30",
+      "source": "len(waterfall_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every deal file"
+    },
+    {
+      "label": "Families",
+      "value": "13",
+      "source": "distinct rule-id prefixes in waterfall_engine.engine.REGISTRY",
+      "plain": "groups of controls, each following one link in the chain"
+    },
+    {
+      "label": "Deal files",
+      "value": "32",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus thirty-one planted-defect files, one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(waterfall_engine.model.DOC_TYPES)",
+      "plain": "deal terms, member register, capital ledger, waterfall schedule, dilution worksheet, returns summary, loan covenant"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "waterfall_engine/tests comparing recomputed figures with exact integer-cent equality",
+      "plain": "a figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A real-estate joint venture pools an investor's and a developer's capital, accrues a preferred return on it month by month, then distributes the sale proceeds down a contractual waterfall whose tiers pay in a strict order and whose upper tiers split the upside between the two on a promote. Every one of those numbers is derived from the ones above it, so a wrong figure early travels silently to the developer's carry and the investor's multiple, and three failures hide inside that, none of which look wrong in a folder of worksheets. The accrual drifts: the preferred return is meant to compound monthly on unreturned capital, and a single mis-set month, or simple interest where the agreement says compound, moves every downstream tier and the promote with it. The split leaks: a tier pays out of order, a pari-passu split is struck off the wrong weights, or the promote tier is entered as though the hurdle were already cleared, and the developer's carry is larger than the contract earns. The summary asserts: the realized-returns table reports an equity multiple, a preferred return and a profit split that nobody recomputed from the waterfall underneath it. None of these are judgment calls. They are equalities and comparisons -- an accrued balance against its re-derivation, a tier allocation against the base facts, a stated return against the recomputed distribution -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks the deal this year. This is a re-derivation engine, not a negotiation: it takes the executed agreement's mechanics as given and asks only whether the money the schedule pays is the money the agreement promises.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every deal file",
+      "narrative": "The CLI generates thirty-two fictional deal files -- one clean baseline and one carrying each of the thirty-one planted defects -- then runs all thirty controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (equity-waterfall-automation/); waterfall_engine/tests/test_planted_defects.py"
+    },
+    {
+      "title": "A preferred-return balance that does not recompute is a break, not a rounding band",
+      "narrative": "A control rebuilds each member's Investment Return Account from its contribution history compounded monthly on unreturned capital, and pref_accrual_recomputes FAILs a stated balance that differs from the re-derivation by even a cent, because the comparison is exact integer-cent equality -- a preferred balance a cent off the accrual is a balance nobody can stand behind, and it moves every tier below it.",
+      "source": "waterfall_engine/tests/test_control_semantics.py"
+    },
+    {
+      "title": "The realized return is recomputed, not read back",
+      "narrative": "A test flips a member's stated profit split to contradict its promote receipts. ret_profit_split_ties rebuilds the split from the recomputed waterfall's upper hurdle and promote tiers and FAILs because the stated figure no longer matches the evidence, proving the returns summary is recomputed rather than trusted.",
+      "source": "waterfall_engine/tests/test_control_semantics.py"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all thirty controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "waterfall_report.json, waterfall_report.md, samples/"
+    },
+    {
+      "cmd": "python -m waterfall_engine samples",
+      "operation": "analyze an existing folder of deal files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m waterfall_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest",
+      "operation": "run the full test suite for this engine",
+      "output": "449 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "449",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (equity-waterfall-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "30",
+      "unit": "controls",
+      "source": "len(waterfall_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "31",
+      "unit": "defect files",
+      "source": "len(waterfall_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "waterfall_engine/tests/test_planted_defects.py",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the deal file they were given: every preferred-return balance, capital account, tier allocation, hurdle boundary, promote split, loan repayment, dilution figure and reported return recomputes from the contribution history to the cent, every distributed cent ties out with no leakage, and nothing was paid beyond the proceeds available. It is not an opinion on whether the deal's terms are wise, whether the executed agreement was correctly drafted, or whether the reported sale proceeds are genuine. It takes the agreement's mechanics as given and checks the arithmetic against them.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean deal file into the documented distribution sign-off and investor reporting"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a financing maturing inside its warning window and a syndicate report due inside its lead time both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the distribution is not treated as sound until the failing control is cleared -- a drifted accrual, a tier out of order, a leaked split, an overstated promote, a mis-recomputed dilution, or a returns table that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: deal files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact equality; there is no tolerance band on a distributed figure, and a cent off the re-derivation is reported as a break.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One waterfall kernel: the controls and the generator share the arithmetic in waterfall_engine.waterfall, so a recomputed figure cannot disagree with the data that produced it.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Time is an explicit as_of_period month index carried in the file, never the system clock, so every accrual and covenant window is measured against a stated review point.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a distribution is treated as sound and whether the schedule is paid."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never pays a distribution, funds a capital call, files an investor report, or writes to a source artifact. It reads the deal file and stops.",
+      "source": "equity-waterfall-automation/README.md and waterfall_engine/tests/test_readonly_and_determinism.py"
+    },
+    {
+      "statement": "It reads the seven artifacts a distribution emits. It does not connect to an accounting system, a fund-administration platform, a bank, or the executed operating agreement itself.",
+      "source": "waterfall_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It re-derives whether the schedule pays what the agreement's stated mechanics promise, not whether those mechanics are wise: the preferred rate, tier order, hurdle, promote split and dilution penalty are taken as given, and whether they are the right terms for a given deal is a reviewer's judgment.",
+      "source": "waterfall_engine/model.py module docstring (Scope)"
+    },
+    {
+      "statement": "It takes the base facts at face value: it confirms the derived figures recompute from the stated contributions and proceeds, not that the contributions were truly funded or the sale proceeds genuine.",
+      "source": "waterfall_engine/generate.py"
+    },
+    {
+      "statement": "The financing-covenant and syndicate families are secondary: they capture loan-to-cost, maturity, the syndicate draw and reporting cadence, not a full credit review. All shipped data is fictional and the reporting period is set in a fictional future.",
+      "source": "waterfall_engine/engine.py (cov_ and syn_ families)"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-waterfall.svg",
+    "motion": "../assets/engine-waterfall.svg",
+    "poster_alt": "Equity Waterfall & JV Promote diagram: down the left an investor capital card and a developer capital card feed a preferred-return accrual compounding monthly; a central four-tier ladder shows the Section 3.3 order -- A preferred return and B return of capital split pari passu to zero, then C the hurdle split 70/30 to the investor until a 16% IRR is cleared, then D the promote split 50/50 -- with the developer's carry drawn off the two upper tiers; one tier is marked as paid a cent short of its re-derivation and one as entered out of order; on the right a realized-returns panel lists each member's equity multiple, preferred return and profit split recomputed from the waterfall beneath it; and a footer strip reading 30 controls, 449 tests, read-only, SFS-E22-WFL.",
+    "caption": "The Equity Waterfall engine tile states the question that has to hold tier by tier: every preferred-return balance, capital account, tier allocation, hurdle boundary and promote dollar re-derived from the contribution history through one shared kernel, every distributed cent tied out with no leakage, and a realized-returns table that recomputes rather than asserts.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-waterfall-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/equity-waterfall-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Equity Waterfall & JV Promote (SFS-E22-WFL) datasheet -- thirty deterministic, read-only controls over a real-estate joint-venture distribution waterfall: the member register, the preferred-return accrual compounded monthly, the capital-account roll-forward to zero, the Section 3.3 tier sequencing and pari-passu splits, the hurdle boundary re-solved from the investor's contributions, the promote/carry split, the member and default loans, the capital-call dilution, distribution completeness with no leakage, and a realized-returns summary whose equity multiple, preferred return and profit split recompute from the waterfall beneath them. A re-derivation engine that takes the executed agreement's mechanics as given and asks whether the schedule pays what they promise. 449 tests, seeded fictional data, a planted-defect deal file for every control."
+  }
+}

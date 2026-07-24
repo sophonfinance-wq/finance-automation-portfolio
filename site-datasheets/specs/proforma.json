@@ -1,0 +1,431 @@
+{
+  "num": 23,
+  "slug": "proforma",
+  "part_no": "SFS-E23-QPR",
+  "mnemonic": "QPR",
+  "family": "Proforma Integrity",
+  "name": "Project Proforma Integrity",
+  "tagline": "Does the workbook still tie to itself?",
+  "plain_summary": "A real-estate developer reports every active project each quarter with a proforma workbook -- a grid of formatted numbers that was internally consistent the day a formula last recalculated, and that drifts the moment a cell is overtyped or a tab is rolled forward without its precedents. The error-check tab keeps showing zeros because the zeros themselves were typed. This engine reads the six artifacts a reporting cycle emits -- the project register, the per-project base ledger, the stated tie-out summary, the reporting calendar, the filing register and the cycle report -- and runs twenty-six deterministic controls over them. Do the sources and uses total and balance, does hard plus soft equal total project cost and the dev-cost budget equal the unlevered cost, is the interest reserve adequate and the equity funded before construction, does net profit re-derive from revenue and cost, does the owner-repayment waterfall tie to net profit and do the sponsor and investor splits sum to the whole, do the margins and per-NSF costs re-derive, is each variance a real current-minus-prior subtraction, and did every active project file a QPR on or before its region's due date with the cycle count derived from the filings rather than kept beside them. It recomputes every stated summary figure from the base ledger through the same kernel that produced the data, compares every tie-out with exact integer-cent equality, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A quarterly proforma proves nothing by showing a zero on its error-check tab, because the zero is a cell like any other and can be typed over the break it was meant to catch. None of the failures here look wrong in a grid of formatted numbers. Total sources drift a cent from total uses and the source-and-use error line still reads zero; the dev-cost budget stops matching the proforma's unlevered cost; net profit no longer equals revenue minus cost, yet the waterfall distributes against it as though it did; the sponsor and investor splits stop summing to the whole and a cent leaks out of the distribution; a margin is quoted off a stale cost, a variance column is typed rather than subtracted, and a project's QPR misses its cycle or lands a day after the region's due date while the cycle count -- maintained beside the filings -- still says the deck is complete. The engine rebuilds every stated figure from the base ledger through the same derivation kernel that produced the data, compares each tie-out to the cent, walks the calendar due-date gate, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A tie-out that was overtyped, or a filing that landed late, is invisible until a distribution is cut against a number that never closed.",
+  "layers_intro": "Nine control families run in registry order over each proforma file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the proforma file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs when as_of is not a readable date, since every filing due-date gate is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "src",
+      "label": "Sources & Uses",
+      "plain": "Checks each source and use total ties its own lines, and that total sources balance total uses.",
+      "engineering": "Three controls. src_sources_total_ties and src_uses_total_ties prove each project's stated total sources and total uses equal the sum of their line items, so a total maintained beside the lines rather than derived from them cannot drift unnoticed. src_source_use_balance recomputes total sources and total uses from the ledger's own lines and proves they are equal -- the source-and-use error line is zero because it re-derives to zero, not because a zero was typed into the error-check tab. All three compare with exact integer-cent equality, so a single cent of imbalance is reported as a break.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "cost",
+      "label": "Cost-Budget Tie-outs",
+      "plain": "Checks the cost budgets tie: hard plus soft equals total project cost, the dev-cost budget equals the unlevered cost, and the contingency rolls up.",
+      "engineering": "Three controls. cost_hard_soft_total proves stated total project cost equals hard cost plus soft cost. cost_unlevered_ties_devbudget recomputes the proforma's unlevered cost -- hard plus soft less financing interest -- and proves the separately-carried dev-cost budget equals it, so the unlevered-cost error line is zero by re-derivation. cost_contingency_rollup proves the stated contingency total equals the sum of its category lines. Each is compared with exact ==, and a malformed amount surfaces as an AMOUNT_INVALID finding contained to the one row it was read on rather than coerced into the number the engine is meant to audit.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "int",
+      "label": "Interest Reserve & Equity Funding",
+      "plain": "Checks the interest reserve covers the budgeted interest and that equity is funded before construction draws.",
+      "engineering": "Two controls. int_reserve_adequate proves the budgeted interest cost does not exceed the interest reserve, compared with exact <= -- a reserve a cent under the interest it must fund is a reserve that runs dry before the loan is repaid. int_equity_funded_before_construction is a boolean gate: equity funded first is the condition the construction loan was sized against, so a project that fails it is levered before its equity is in. Both read the base ledger directly.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "prof",
+      "label": "Profit Derivation",
+      "plain": "Checks net profit and unlevered profit re-derive from revenue and cost rather than being read back.",
+      "engineering": "Two controls. prof_net_profit_derivation proves stated net profit equals net revenue less total project cost, recomputed from the base ledger. prof_unlevered_profit_derivation proves stated unlevered profit equals net revenue less unlevered cost; the levered and unlevered figures differ by exactly the financing interest, so recomputing the unlevered figure proves the two tabs were not typed to the same number by mistake. Both compare with exact integer-cent equality.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "wfl",
+      "label": "Owner-Repayment Waterfall",
+      "plain": "Checks the waterfall, budgeted and distributed profits all tie net profit, the sponsor share re-derives from the equity split, and the splits sum to the whole with no leakage.",
+      "engineering": "Five controls. wfl_waterfall_ties_net, wfl_budgeted_ties_net and wfl_distributed_ties_net each prove their stated profit figure equals net profit re-derived from the ledger -- the waterfall closes on the whole, the budget tab ties the derivation, and distributions do not exceed profit. wfl_sponsor_share_derivation rebuilds the sponsor's share with the same largest-remainder split the generator used, so the odd cent lands where the split put it rather than becoming a spurious break. wfl_split_completeness proves the sponsor and investor shares sum back to net profit, so a cent cannot leak out of the distribution unnoticed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "mgn",
+      "label": "Margins & Per-NSF",
+      "plain": "Checks margin on cost, margin on revenue and per-net-square-foot cost each re-derive from the base ledger.",
+      "engineering": "Three controls. mgn_margin_on_cost proves stated margin on cost equals net profit over total project cost, in basis points. mgn_margin_on_revenue proves stated margin on revenue equals net profit over net revenue, in basis points. mgn_cost_per_nsf proves stated cost per net square foot equals total project cost over the area count. Each recomputes the ratio from the ledger and compares exactly, so a metric quoted off a stale cost is caught even when the cost it was built from has since moved.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "var",
+      "label": "Variance",
+      "plain": "Checks each financial variance is a real current-minus-prior subtraction, each schedule variance re-derives from the dates, and flags any profit swing beyond the materiality band.",
+      "engineering": "Three controls. var_metric_delta proves each stated variance equals the current value minus the prior value for every tracked metric; a variance column that was typed rather than subtracted is invisible until the subtraction is redone. var_schedule_days proves each milestone schedule variance equals the current date less the baseline date, in days. var_materiality_flag is a FLAG, not a failure: it marks a period-over-period net-profit swing beyond the file's own materiality band -- the swing is real and correctly derived, but a move this large between quarters is a reviewer's call.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Reporting Completeness & Calendar",
+      "plain": "Checks every active project filed a QPR on time, each region filed its deck of deliverables, and the cycle count recomputes from the filings.",
+      "engineering": "Four controls. rpt_project_qpr_filed proves every active project in the register produced a QPR this cycle. rpt_qpr_due_date_gate proves each QPR was filed on or before its region's due date, measured to as_of's calendar. rpt_regional_deliverables_present proves every region with active projects filed each of its regional deliverables -- the market update, the apartment report and the acquisition/QPR summary. rpt_cycle_count_ties proves the cycle report's filed-QPR count recomputes from the filing register rather than being maintained beside it, because a count kept beside the filings drifts the first time a project is added or dropped and nobody re-adds the column.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Proforma Files",
+      "kind": "source",
+      "col": 0,
+      "row": 4,
+      "plain": "fictional quarterly proforma files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-eight files in total. Only each project's base ledger is stated -- source and use lines, hard and soft cost, interest, revenue, area, equity split, prior-period figures and milestone dates; every stated summary figure and the cycle count are derived through the same kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the proforma file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "src-control",
+      "label": "Sources & Uses",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "do the source and use totals tie their lines and balance",
+      "engineering": "Three controls: stated total sources and total uses each equal the sum of their lines, and total sources balance total uses with the source-and-use error re-derived to zero rather than trusted.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "cost-control",
+      "label": "Cost-Budget Tie-outs",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "do the cost budgets tie hard+soft, unlevered and contingency",
+      "engineering": "Three controls: total project cost equals hard plus soft, the dev-cost budget equals the recomputed unlevered cost, and the stated contingency total equals the sum of its lines.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "int-control",
+      "label": "Interest Reserve & Equity",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is the reserve adequate and equity funded first",
+      "engineering": "Two controls: the budgeted interest does not exceed the interest reserve, and equity is funded before construction draws begin -- the condition the loan was sized against.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "prof-control",
+      "label": "Profit Derivation",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does the profit chain re-derive from revenue and cost",
+      "engineering": "Two controls: net profit equals net revenue less total project cost, and unlevered profit equals net revenue less unlevered cost -- the two differing by exactly the financing interest.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "wfl-control",
+      "label": "Owner-Repayment Waterfall",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the waterfall tie net profit and the splits sum to the whole",
+      "engineering": "Five controls: the waterfall, budgeted and distributed profits each tie net profit, the sponsor share re-derives from the equity split with the largest-remainder rule, and the sponsor and investor shares sum back to net profit with no leakage.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "mgn-control",
+      "label": "Margins & Per-NSF",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the margins and per-NSF cost re-derive",
+      "engineering": "Three controls: margin on cost, margin on revenue and cost per net square foot each recompute from the base ledger and compare exactly, so a metric quoted off a stale cost is caught.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "var-control",
+      "label": "Variance",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is each variance a real subtraction and any swing material",
+      "engineering": "Three controls: each financial variance is current minus prior, each milestone schedule variance is current date less baseline in days, and a net-profit swing beyond the materiality band is flagged for a reviewer.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Reporting Completeness & Calendar",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "is every project filed, on time, complete, and does the count tie",
+      "engineering": "Four controls: every active project filed a QPR, each was filed on or before its region's due date, each region filed its full deck of deliverables, and the cycle count recomputes from the filing register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/engine.py"
+    },
+    {
+      "id": "ledger",
+      "label": "Base Ledger & Summary Tabs",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "the base ledger and stated tie-out figures every rule recomputes against",
+      "engineering": "The base ledger carries each project's raw source and use lines, hard and soft cost, interest, reserve, revenue, area, equity split, prior-period figures and milestone dates; the tie-out summary carries every stated figure the engine recomputes -- totals, profits, margins, per-NSF cost, the waterfall and split profits and the variances. The source-and-use, cost, profit, waterfall, margin and variance controls all resolve against these, recomputing each stated figure through the same kernel that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per proforma file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/proforma_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "proforma files" },
+    { "from": "set-control", "to": "src-control", "label": "complete" },
+    { "from": "set-control", "to": "cost-control", "label": "complete" },
+    { "from": "set-control", "to": "int-control", "label": "complete" },
+    { "from": "set-control", "to": "prof-control", "label": "complete" },
+    { "from": "set-control", "to": "wfl-control", "label": "complete" },
+    { "from": "set-control", "to": "mgn-control", "label": "complete" },
+    { "from": "set-control", "to": "var-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "src-control", "to": "ledger", "label": "resolves" },
+    { "from": "cost-control", "to": "ledger", "label": "resolves" },
+    { "from": "int-control", "to": "ledger", "label": "resolves" },
+    { "from": "prof-control", "to": "ledger", "label": "resolves" },
+    { "from": "mgn-control", "to": "ledger", "label": "resolves" },
+    { "from": "var-control", "to": "ledger", "label": "resolves" },
+    { "from": "prof-control", "to": "wfl-control", "label": "net profit" },
+    { "from": "wfl-control", "to": "ledger", "label": "resolves" },
+    { "from": "src-control", "to": "report", "label": "findings" },
+    { "from": "cost-control", "to": "report", "label": "findings" },
+    { "from": "int-control", "to": "report", "label": "findings" },
+    { "from": "prof-control", "to": "report", "label": "findings" },
+    { "from": "wfl-control", "to": "report", "label": "findings" },
+    { "from": "mgn-control", "to": "report", "label": "findings" },
+    { "from": "var-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "ledger", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "381",
+      "source": "python -m pytest --collect-only -q -o addopts= (proforma-integrity-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "26",
+      "source": "len(proforma_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every proforma file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in proforma_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Proforma files",
+      "value": "28",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-seven planted-defect files, one per control"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(proforma_engine.model.DOC_TYPES)",
+      "plain": "project register, base ledger, tie-out summary, reporting calendar, filing register, cycle report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "proforma_engine/tests/test_control_semantics.py boundary cases at the cent",
+      "plain": "a tie-out a cent off the requirement is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A real-estate developer reports every active project each quarter, and the reporting deck is built on a proforma workbook per project -- a grid of formatted numbers that was internally consistent the day a formula last recalculated, and that drifts silently when cells are overtyped or tabs are rolled forward without their precedents. The workbook carries its own error-check tab, but the zeros on it are cells like any other and can be typed over the break they were meant to catch. Three families of drift hide inside a clean-looking workbook, none of which look wrong in a grid of formatted numbers. The balances stop balancing: total sources drift a cent from total uses, hard plus soft stops equalling total project cost, the dev-cost budget no longer matches the proforma's unlevered cost. The profit chain stops tying: net profit no longer equals revenue minus cost, the waterfall's distributed profit stops matching the budgeted profit, the sponsor and investor splits stop summing to the whole -- the distribution looks funded and the arithmetic underneath it does not close. And the report drifts from the evidence: a margin is quoted off a stale cost, a variance column is typed rather than subtracted, a project's QPR misses its cycle or lands after its region's due date, and the cycle count is maintained beside the filings rather than derived from them. None of these are judgment calls. They are equalities and comparisons -- a stated total against the sum of its lines, a limit against a reserve with exact <=, a stated figure against its re-derivation from the base ledger, a filed date against a due date -- which a deterministic control settles better than an error-check tab whose zeros were typed. This engine is about integrity, not valuation: it does not underwrite a rent or a cap rate or decide whether a project should be built, only whether the workbook still ties to itself and whether every deliverable made its cycle on time.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every proforma file",
+      "narrative": "The CLI generates twenty-eight fictional proforma files -- one clean baseline and one carrying each of the twenty-seven planted defects -- then runs all twenty-six controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (proforma-integrity-automation/); proforma_engine/tests/test_planted_defects.py"
+    },
+    {
+      "title": "A source-and-use error of a single cent is a break, not a rounding band",
+      "narrative": "A boundary defect appends an unfunded use line so that uses exceed sources by one cent, and re-derives the file so the stated totals still tie their own lines -- leaving only the balance broken. src_source_use_balance recomputes total sources and total uses from the ledger and fails on the single cent, because the source-and-use error is re-derived rather than read off an error-check tab whose zero was typed.",
+      "source": "proforma_engine/generate.py _source_use_imbalance; proforma_engine/tests/test_control_semantics.py"
+    },
+    {
+      "title": "The materiality swing is real, re-derived, and a reviewer's call",
+      "narrative": "A defect raises a project's revenue so net profit swings far beyond the file's materiality band against prior, then re-derives the file so every tie-out stays intact. var_materiality_flag raises a FLAG rather than a FAIL: the swing is correctly derived and the arithmetic closes, but a move this large between quarters wants a human's eyes, so the file rolls up to REVIEW rather than FAIL.",
+      "source": "proforma_engine/generate.py _profit_swing_material; proforma_engine/tests/test_control_semantics.py"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-six controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "proforma_report.json, proforma_report.md, samples/"
+    },
+    {
+      "cmd": "python -m proforma_engine samples",
+      "operation": "analyze an existing folder of proforma files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m proforma_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest proforma_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "381 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "381",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (proforma-integrity-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "26",
+      "unit": "controls",
+      "source": "len(proforma_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "27",
+      "unit": "defect files",
+      "source": "len(proforma_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "proforma_engine/tests/test_planted_defects.py",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the proforma they were given: every total ties its lines and sources balance uses, the cost budgets and the unlevered cost tie, the interest reserve covers the interest and equity is funded first, the profit chain and the owner-repayment waterfall re-derive and the splits sum to the whole, the margins and per-NSF costs re-derive, every variance is a real subtraction, and every deliverable made its cycle on time with the count derived from the filings. It is not an opinion on whether a rent or a cap rate was underwritten correctly, whether the project should be built, or whether the base ledger's raw costs and revenues are themselves right.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean proforma into the documented reporting sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a period-over-period net-profit swing beyond the materiality band lands here -- real, re-derived, and worth a reviewer's eyes"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the proforma is not treated as tying out until the failing control is cleared -- a broken balance or tie-out, an inadequate reserve, a leaking split, a mistyped variance, or a missing or late filing"
+      }
+    ],
+    "guarantees": [
+      "Read-only: proforma files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a tie-out, and a cent off the requirement is reported as a break.",
+      "An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one ledger row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One derivation kernel: the controls and the generator share the arithmetic in proforma_engine.proforma, so a stated figure cannot disagree with the logic that produced it.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a proforma is treated as tying out and whether a late or missing filing is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never edits a proforma, recalculates a workbook, files a deliverable, or writes to a source artifact. It reads the proforma file and stops.",
+      "source": "proforma-integrity-automation/README.md and proforma_engine/tests (read-only / determinism proofs)"
+    },
+    {
+      "statement": "It reads the six artifacts a reporting cycle emits. It does not connect to the spreadsheet the proforma lives in, a document-management system, or the underwriting model behind the ledger.",
+      "source": "proforma_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about whether the workbook still ties to itself, not whether the project is a good investment: underwriting a rent or a cap rate is a different job the engine explicitly declines.",
+      "source": "proforma_engine/engine.py module docstring (Scope)"
+    },
+    {
+      "statement": "It proves each stated figure re-derives from the base ledger, not that the base ledger's own raw costs, revenues and dates are correct. That judgment is a reviewer's.",
+      "source": "proforma_engine/model.py module docstring (Scope: integrity, not valuation)"
+    },
+    {
+      "statement": "It takes the filing register at face value: it confirms a QPR is recorded as filed on or before the due date, not that the filed document itself is complete or correct. All shipped data is fictional and the reporting period is set in a fictional future.",
+      "source": "proforma_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-proforma.svg",
+    "motion": "../assets/engine-proforma.svg",
+    "poster_alt": "Project Proforma Integrity diagram: on the left a base-ledger card for a fictional development project -- source and use lines, hard and soft cost, interest, revenue and area; a central tie-out panel lists the registry checks with green ticks against a balanced source-and-use line, a dev-cost budget tied to the unlevered cost, a profit chain and owner-repayment waterfall that close on the whole, and margins that re-derive, with one line marked in red where total uses exceed total sources by a single cent; a small calendar strip on the right shows each region's QPR due date with one filing landing a day late; and a footer strip reading 26 controls, 9 families, 381 tests, read-only, SFS-E23-QPR.",
+    "caption": "The Project Proforma Integrity engine tile states the question that has to hold project by project: every stated figure on the summary tabs re-derived from the base ledger through the same kernel that produced it, every balance and tie-out met to the cent, the owner-repayment waterfall closing on the whole with no leaking split, and every deliverable filed on or before its region's due date.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest proforma_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/proforma-integrity-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/proforma-integrity-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Project Proforma Integrity (SFS-E23-QPR) datasheet -- twenty-six deterministic, read-only controls over a real-estate developer's quarterly project-proforma reporting: the source-and-use balance, the cost-budget and unlevered-cost tie-outs, interest-reserve adequacy and equity funded before construction, the profit chain and owner-repayment waterfall re-derived with the splits summing to the whole, the margins and per-NSF costs, the current-vs-prior variances, and the reporting-calendar completeness and due-date gate. Every stated figure recomputed from the base ledger through the same kernel that produced it, every tie-out met to the cent. Integrity, not valuation. 381 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}
