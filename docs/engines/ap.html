@@ -147,7 +147,7 @@ footer a{color:var(--blue);text-decoration:none}
 </div></section>
 <section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
 <div class="strip">
-  <div class="cell"><div class="v">2,223<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">12,223<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
   <div class="cell"><div class="v">30<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent payables controls, run in registry order</div></div>
   <div class="cell"><div class="v">6<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Families</div><div class="p">groups the controls fall into, from structural to commitment hygiene</div></div>
   <div class="cell"><div class="v">30<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Planted defects</div><div class="p">one deliberate fault per control, so none can silently stop working</div></div>
@@ -197,12 +197,12 @@ footer a{color:var(--blue);text-decoration:none}
   <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>generate the seeded fictional corpus, run all thirty controls, write both artifacts</td><td class="mono">per-document-set verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries one planted defect per control</td><td>ap_report.md, ap_report.json, samples/</td></tr>
   <tr><td class="mono"><div class="copyrow"><code>python -m ap_engine ./samples</code><button class="copybtn" data-copy="python -m ap_engine ./samples" aria-label="Copy command: python -m ap_engine ./samples">copy</button></div></td><td>analyze an existing folder of document sets, read-only</td><td class="mono">per-document-set verdicts and findings</td><td class="mono">0 PASS, 1 REVIEW, 2 FAIL, 3 usage or IO error</td><td>none</td></tr>
   <tr><td class="mono"><div class="copyrow"><code>python -m ap_engine ./samples --quiet</code><button class="copybtn" data-copy="python -m ap_engine ./samples --quiet" aria-label="Copy command: python -m ap_engine ./samples --quiet">copy</button></div></td><td>print only the overall verdict line</td><td class="mono">a single overall verdict line</td><td class="mono">0 PASS, 1 REVIEW, 2 FAIL, 3 usage or IO error</td><td>none</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the curated suite exactly as CI does</td><td class="mono">2,223 passed</td><td class="mono">0</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the curated suite exactly as CI does</td><td class="mono">12,223 passed</td><td class="mono">0</td><td>none</td></tr>
 </tbody></table></section>
 <section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
 <table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
 <tbody>
-  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>2,223</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>12,223</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
   <tr><td>Curated invariant grid<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>1,977</b> parametrized cases<br><span style="color:#6f6f6f;font-size:12.5px">bounded arithmetic and verdict identities, asserted exactly over integers</span></td></tr>
   <tr><td>Planted-defect cases<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>152</b> cases<br><span style="color:#6f6f6f;font-size:12.5px">every control against its own defect and against a clean baseline</span></td></tr>
   <tr><td>Opt-in property sweep<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>99,223</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">the exhaustive grid, gated behind SWEEP=1 so it never slows CI</span></td></tr>
@@ -227,7 +227,7 @@ footer a{color:var(--blue);text-decoration:none}
   </div>
 </div>
 <div class="subst"><span class="zone-k">Substantiation</span><ul>
-    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (accounts-payable-automation/); 2,223 tests collected on 2026-07-21 and pinned in site-datasheets/counts.json</li>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (accounts-payable-automation/); 12,223 tests collected on 2026-07-21 and pinned in site-datasheets/counts.json</li>
     <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>accounts-payable-automation/ap_engine/engine.py REGISTRY; mirrored in the rule-registry table of accounts-payable-automation/README.md</li>
     <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>accounts-payable-automation/ap_engine/engine.py RULE_FAMILIES</li>
     <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>accounts-payable-automation/ap_engine/generate.py DEFECTS; test_checks_coverage.py asserts the defect set equals the registry</li>
