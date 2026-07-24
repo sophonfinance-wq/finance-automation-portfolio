@@ -1,0 +1,431 @@
+{
+  "num": 27,
+  "slug": "interest",
+  "part_no": "SFS-E27-INT",
+  "mnemonic": "INT",
+  "family": "Debt Service",
+  "name": "Interest Accrual & Loan Amortization",
+  "tagline": "Does the interest a note reports equal the interest its own terms produce?",
+  "plain_summary": "A lender carries a portfolio of promissory notes, and every period somebody accrues interest on each one, rolls its balance forward, and posts a journal entry that is supposed to tie to both sides. This engine proves, note by note, that the interest a schedule reports is the interest its own terms produce. It reads the seven artifacts a debt-service record carries -- the note register, the roll-forward schedule, the interest journal, the trial balance, the interest summary, the maturity watchlist and the debt-service report -- and runs twenty-eight deterministic controls over them. Is the loan file complete and the review date legible, are the note ids unique and each note's rate, day-count and principal well-formed with two distinct sides, does every schedule row carry its key fields and tie its day count to its own span, does each period's accrued interest re-derive from beginning balance times rate times days over the day-count year, does every ending balance rebuild from beginning plus advance plus accrued minus payment and continue as the next period's beginning, does the schedule open at the note's principal, does each period accrue at the stated or stepped default rate, does accrual stop at maturity, is a prepayment-barred note left alone and a subordinate kept behind its senior, no payment beyond the balance owed and a payoff settled to zero, do the reciprocal receivable and payable and the interest income and expense each tie the schedule, does the journal prove to zero and tie the accrual and cover every note, and do the settled counts and the maturity watchlist recompute from the schedule beneath them. It rebuilds every figure through one shared accrual kernel, compares with exact ==, measures every maturity and gate test to the as_of review date rather than the system clock, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "An amortization schedule is the most trusted column on the debt-service worksheet: a beginning balance, a rate, an accrual, an ending, repeated down the page. That is exactly why it drifts. None of the ways it goes wrong look wrong in a column of balances. A period accrues at the wrong rate, on the wrong balance, or over the wrong day count, and the booked interest is off by an amount too small to notice against a six-figure balance -- until it compounds. One period's ending is not the next period's beginning, an advance is added but never lands, a payment relieves more than was owed, or the payoff leaves a residual cent instead of settling to zero. A gate is missed -- interest keeps accruing past maturity, the default rate never steps after an event of default, a note barred from prepayment is paid down early, a subordinated note is paid ahead of the senior it sits behind. And the two sides quietly stop reconciling -- the receivable and the payable drift apart, interest income no longer equals interest expense, the monthly journal no longer ties the accrual it was meant to record. The engine rebuilds every accrual and every balance from the note's own terms through one shared kernel and compares with exact ==, enforces each gate as a date or a threshold rather than a judgement, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A cent of drift is invisible until someone recomputes the interest the note already booked.",
+  "layers_intro": "Nine control families run in registry order over each loan file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the loan file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable as_of review date, since every maturity and gate test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "note",
+      "label": "Note Register",
+      "plain": "Checks the note register is sound: unique ids, the required term and GL-account fields present, well-formed rate/day-count/principal, and two distinct sides.",
+      "engineering": "Four controls. note_unique_ids rejects a note id that appears twice, because the id joins the register to every schedule row, GL account and summary line, and a duplicate makes a row ambiguous about which note it rolls forward. note_required_fields proves each note carries the fields the controls read -- id, lender, borrower, maturity date and the four GL account references. note_terms_valid proves the terms are economically well-formed: a positive principal, a non-negative stated rate, a default rate at or above the stated rate (it steps up, never down), and a day-count denominator the kernel re-derives against -- 365 for actual/365 or 360 for 30/360. note_entities_distinct FAILs a note whose lender and borrower are the same entity, which would have no reciprocal side to tie out.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "acc",
+      "label": "Accrual Re-Derivation",
+      "plain": "Checks every schedule row carries its key fields, its day count ties its own span, and its accrued interest re-derives from the note terms.",
+      "engineering": "Three controls, and the reason the engine exists. acc_row_fields_present proves each schedule row carries its note id, both period dates, the day count and the rate, without which a row cannot be attributed, ordered or day-counted and the controls below would skip it and pass vacuously. acc_day_count_ties FAILs a row whose stated day count is not the span between its own two dates, because the accrual re-derives against that same day count and a stretched span accrues more than the period earned while the accrual still re-derives. acc_interest_rederives rebuilds every period's interest through the shared kernel -- beginning balance times the basis-point rate times days, over the day-count year, truncated to the cent -- and compares with exact ==. A cent of drift here is a cent the note over- or under-charged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "rf",
+      "label": "Roll-Forward",
+      "plain": "Checks every row names a real note, each ending balance rebuilds, each ending is the next beginning, and the schedule opens at the principal.",
+      "engineering": "Four controls. rf_row_note_exists FAILs a schedule row naming a note the register does not carry, an orphan the accrual cannot resolve. rf_ending_balance_rederives rebuilds each ending from beginning + advance + accrued - payment with exact ==, catching an advance that never landed, a payment that never posted, or a keying error that every later balance inherits. rf_continuity proves each period's ending balance is the next period's beginning, so a balance cannot be quietly reset between two periods and carry the error forward untraced. rf_opening_ties_principal proves each note's earliest period opens at the principal the register states, or the whole roll-forward is built on a number the note never advanced.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "gate",
+      "label": "Rate, Maturity & Prepayment Gates",
+      "plain": "Checks each period accrues at the right rate, accrual stops at maturity, a prepayment-barred note is left alone, and what is due to mature soon.",
+      "engineering": "Four controls, each a date or a threshold rather than a judgement. gate_rate_step FAILs a period accruing at any rate other than the one its terms dictate: the stated rate before an event of default and the default rate on and after it, stepped on the event date. gate_maturity_stop FAILs any interest booked on a period that begins on or after the maturity date, since accrual stops at maturity. gate_no_prepayment FAILs a payment that reduces principal -- a payment above the period's accrued interest -- before maturity on a note that bars prepayment; interest service is allowed, principal reduction ahead of maturity is the prohibited act. gate_maturity_approaching is a FLAG, not a failure: it marks an unsettled note maturing inside the file's own lead-time window, still current but due to be refinanced or repaid before it comes due.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "wf",
+      "label": "Payment Waterfall & Subordination",
+      "plain": "Checks no payment exceeds the balance owed, a payoff settles to zero, and a subordinate is not paid down while its senior is unrepaid.",
+      "engineering": "Three controls. wf_payment_within_balance FAILs a payment larger than the balance owed in its period -- beginning plus advance plus accrued -- money leaving against a debt that was not there and driving the ending balance negative. wf_final_settles_zero FAILs a note marked payoff_expected whose final period does not close to exactly zero: a residual cent has under-relieved the note, a negative has over-paid it. wf_subordination_order FAILs a subordinated note that reduces its own principal while the senior it sits behind is unrepaid; interest may still be serviced, but principal ahead of the senior is what the waterfall forbids.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "recip",
+      "label": "Reciprocal Reconciliation",
+      "plain": "Checks each note's receivable equals its payable and its interest income equals its expense, and both tie the schedule.",
+      "engineering": "Two controls, each tying the two sides of one debt. recip_nr_np_equal FAILs when a note's receivable balance, its payable balance and its schedule ending balance are not one number -- the lender's asset and the borrower's liability are the same debt seen from two sides, and when they drift one side has recorded a payment or advance the other has not. recip_income_expense_equal FAILs when a note's interest income, its interest expense and its re-derived accrued total are not one number; interest the lender books as income is interest the borrower books as expense is the interest the schedule accrued, and any of the three out of step is a break in the reciprocal posting.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "gl",
+      "label": "Journal & Trial-Balance",
+      "plain": "Checks the interest journal balances and ties the accrual, every note's GL accounts appear on the trial balance, and every account maps back to a note.",
+      "engineering": "Four controls. gl_journal_balances proves the interest journal is self-proving -- total debits equal total credits -- because an entry that does not balance was never a journal entry, only a note to post one. gl_journal_ties_accrual proves the interest the journal books equals the interest re-derived across every note's schedule, so the entry records a number the schedules support. gl_note_on_tb FAILs a note whose receivable, payable, income or expense account is not on the trial balance, since the reciprocal control would have nothing to read. gl_tb_complete FAILs a trial-balance account no note claims -- an orphan balance with no schedule behind it, exactly what a completeness sweep exists to catch.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Rollup Recompute",
+      "plain": "Checks each note's settled flag and accrued total recompute, the portfolio counts tie the summary, and the maturity watchlist ties the evidence.",
+      "engineering": "Three controls. rpt_note_settled_recomputes rebuilds each note's settled flag from its final ending balance and its accrued total from every row, and FAILs a summary that states either differently, because a determination that is not recomputed from the schedule is an assertion. rpt_report_count_ties FAILs a debt-service report whose settled and outstanding counts are not the counts the summary recomputes -- a count maintained beside the summary rather than derived from it drifts the first time a note settles and nobody re-adds the column. rpt_watchlist_ties is a FLAG, not a failure: it rebuilds the maturity watchlist from the note terms and schedule and marks any note the stated watchlist adds that is not actually due, or omits that is, so the refinancing chase reaches the right notes.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Loan Files",
+      "kind": "source",
+      "col": 0,
+      "row": 4,
+      "plain": "fictional loan files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every named control, thirty files in total. Only each note's terms and the schedule events -- the period dates, advances and payment intent -- are stated; every accrual and ending balance, each note's settled flag and accrued total, the reciprocal trial balance, the interest journal, the maturity watchlist and the portfolio counts are re-derived through the same accrual kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the loan file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate, or an unreadable as_of review date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "note-control",
+      "label": "Note Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and each note's terms well-formed",
+      "engineering": "Four controls: unique note ids, the required term and GL-account fields present, a well-formed rate / day-count / principal, and a lender and borrower that are two distinct entities.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "acc-control",
+      "label": "Accrual Re-Derivation",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does each period's interest re-derive from the terms",
+      "engineering": "Three controls: every row carries its key fields, its day count ties its own span, and its accrued interest rebuilds as beginning times rate times days over the day-count year, truncated to the cent and compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "rf-control",
+      "label": "Roll-Forward",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the balance roll forward, begin to end",
+      "engineering": "Four controls: every row names a real note, each ending rebuilds from beginning + advance + accrued - payment, each ending is the next beginning, and the first period opens at the note's principal.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "gate-control",
+      "label": "Rate, Maturity & Prepayment Gates",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "do the rate, maturity and prepayment gates hold",
+      "engineering": "Four controls: each period accrues at the stated or stepped default rate, no interest accrues on or after maturity, a prepayment-barred note is not paid down early, and an unsettled note maturing inside the lead-time window is flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "wf-control",
+      "label": "Payment Waterfall & Subordination",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the payment waterfall and subordination order hold",
+      "engineering": "Three controls: no payment exceeds the balance owed in its period, a payoff-expected note settles to exactly zero, and a subordinate does not reduce principal while its senior is unrepaid.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "recip-control",
+      "label": "Reciprocal Reconciliation",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the two sides of each note reconcile",
+      "engineering": "Two controls: the note's receivable equals its payable equals its schedule ending, and its interest income equals its expense equals its re-derived accrual.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "gl-control",
+      "label": "Journal & Trial-Balance",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the journal balance, tie the accrual, and cover every note",
+      "engineering": "Four controls: the interest journal proves to zero, its booked interest ties the re-derived accrual, every note's GL accounts appear on the trial balance, and every trial-balance account maps back to a note.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Rollup Recompute",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the rollups recompute from the schedule",
+      "engineering": "Three controls: each note's settled flag and accrued total recompute from its schedule, the portfolio settled / outstanding counts tie the summary, and the maturity watchlist ties the note evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Register, Schedule & Trial Balance",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the seven artifacts and the accrual kernel every rule resolves against",
+      "engineering": "The note register carries each note's id, sides, principal, rate, day-count, maturity, default-event, prepayment and subordination terms and its four GL account references; the roll-forward schedule carries each period's begin / advance / accrued / pay / end row; the trial balance carries the reciprocal receivable, payable, income and expense balances; and the interest summary, maturity watchlist, interest journal and debt-service report carry the derived determinations and counts. Every accrual, roll-forward, gate, waterfall, reciprocal, journal and rollup control resolves against these through the shared accrual kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per loan file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/interest_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "loan files" },
+    { "from": "set-control", "to": "note-control", "label": "complete" },
+    { "from": "set-control", "to": "acc-control", "label": "complete" },
+    { "from": "set-control", "to": "rf-control", "label": "complete" },
+    { "from": "set-control", "to": "gate-control", "label": "complete" },
+    { "from": "set-control", "to": "wf-control", "label": "complete" },
+    { "from": "set-control", "to": "recip-control", "label": "complete" },
+    { "from": "set-control", "to": "gl-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "note-control", "to": "registers", "label": "resolves" },
+    { "from": "acc-control", "to": "registers", "label": "resolves" },
+    { "from": "rf-control", "to": "registers", "label": "resolves" },
+    { "from": "gate-control", "to": "registers", "label": "resolves" },
+    { "from": "wf-control", "to": "registers", "label": "resolves" },
+    { "from": "recip-control", "to": "registers", "label": "resolves" },
+    { "from": "gl-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "acc-control", "to": "gl-control", "label": "accrued total" },
+    { "from": "acc-control", "to": "report", "label": "findings" },
+    { "from": "gate-control", "to": "report", "label": "findings" },
+    { "from": "wf-control", "to": "report", "label": "findings" },
+    { "from": "recip-control", "to": "report", "label": "findings" },
+    { "from": "gl-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "402",
+      "source": "python -m pytest --collect-only -q -o addopts= (interest-accrual-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "28",
+      "source": "len(interest_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every loan file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in interest_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Loan files",
+      "value": "30",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-nine planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(interest_engine.model.DOC_TYPES)",
+      "plain": "note register, roll-forward schedule, interest journal, trial balance, interest summary, maturity watchlist, debt-service report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "interest_engine/tests boundary tests on the cent and the maturity / rate-step date",
+      "plain": "a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A lender carries notes receivable and interest income; the reciprocal borrower carries notes payable and interest expense; and every period somebody accrues interest, rolls the balance forward, and posts a journal entry that is supposed to tie to both sides. The question is narrower and entirely arithmetic: rebuild each note's accrual from its stated rate and day-count, roll the balance forward row by row, and prove the schedule, the reciprocal GL and the journal all agree. Four failures hide inside that, and none of them look wrong in a column of numbers. The accrual drifts from the terms -- a period accrues at the wrong rate, on the wrong balance, or over the wrong day count, and the booked interest is off by an amount too small to notice against a six-figure balance until it compounds. The roll-forward breaks -- one period's ending is not the next period's beginning, an advance is added but never lands, a payment relieves more than was owed, the payoff leaves a residual cent instead of settling to zero. A gate is missed -- interest keeps accruing past maturity, the default rate never steps after an event of default, a note barred from prepayment is paid down early, a subordinated note is paid ahead of the senior it sits behind. And the two sides stop reconciling -- the receivable and the payable drift apart, interest income no longer equals interest expense, the monthly journal no longer ties the accrual it was meant to record. None of these are judgment calls. They are equalities and date gates -- an accrual against beginning times rate times days with exact ==, an ending against its re-derivation, a period start against a maturity date, a payment against the period's accrued interest -- which a deterministic control settles better than a schedule inherited by whoever tracks the portfolio this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every loan file",
+      "narrative": "The CLI generates thirty fictional loan files -- one clean baseline and one carrying each of the twenty-nine planted defects -- then runs all twenty-eight controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (interest-accrual-automation/); interest_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The day-count and the accrual are independent controls",
+      "narrative": "A schedule can accrue interest that re-derives perfectly and still be wrong, because it re-derives against the very day count that is wrong. One defect file stretches a period's end date without touching its stated day count: acc_interest_rederives still passes -- the accrual matches the stated day count -- while acc_day_count_ties fails, because the stated day count no longer equals the span between the period's own two dates. The two controls catch different failures at the same boundary.",
+      "source": "interest_engine/generate.py DEFECTS day_count_mismatch / accrual_wrong"
+    },
+    {
+      "title": "The accrual is recomputed, not read back",
+      "narrative": "A defect file adds ten dollars to one period's stated accrued figure without changing the note's rate, balance or day count. acc_interest_rederives rebuilds the interest from beginning times rate times days through the shared kernel and fails on the cent, proving the accrued figure is recomputed from the terms beneath it rather than trusted as stated.",
+      "source": "interest_engine/generate.py DEFECTS accrual_wrong -> acc_interest_rederives"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-eight controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "interest_report.json, interest_report.md, samples/"
+    },
+    {
+      "cmd": "python -m interest_engine samples",
+      "operation": "analyze an existing folder of loan files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m interest_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest interest_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "402 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "402",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (interest-accrual-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "28",
+      "unit": "controls",
+      "source": "len(interest_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "29",
+      "unit": "defect files",
+      "source": "len(interest_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "interest_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the notes they were given: every period accrued at the rate its terms dictate over a day count that ties its span, every balance rolled forward begin to end and opened at the note's principal, the maturity, rate-step, prepayment and subordination gates held, and every figure -- each accrual, each ending balance, the reciprocal receivable / payable and income / expense, the journal, the counts and the watchlist -- recomputes from the note terms and the schedule. It is not an opinion on whether the stated rate or day-count convention is the right one for the note, whether an event of default genuinely occurred, whether a closing or advance actually happened, or whether the note is collectible.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean loan file into the documented sign-off and debt-service review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a note maturing inside the lead-time window and a maturity watchlist that does not tie the evidence both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the note or figure is not carried into the close until the failing control is cleared -- an accrual that does not re-derive, a broken roll-forward, a missed gate, a reciprocity break, or a rollup that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: loan files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on an accrual or a balance, and a cent off the re-derivation is reported as a break.",
+      "A balance or accrual figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One accrual kernel: the controls and the generator share the arithmetic in interest_engine.accrual, so a re-derivation cannot disagree with the data that produced it.",
+      "Every maturity, rate-step and gate test is measured to the as_of review date carried in the file, never the system clock, so the same file yields the same findings on any day.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a note is carried into the close and whether a maturing note is refinanced or repaid."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, books an accrual, files a debt-service report, contacts a lender or borrower, or writes to a source artifact. It reads the loan file and stops.",
+      "source": "interest-accrual-automation/README.md and interest_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the debt-service record emits. It does not connect to a loan-servicing system, a general ledger, a bank or the underlying note agreements.",
+      "source": "interest_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It re-derives each accrual at the stated rate, day-count and terms the note carries; it does not decide whether that rate, that day-count convention or that maturity is the correct one for the note, or whether an event of default genuinely occurred.",
+      "source": "interest_engine/engine.py note_ and gate_ families"
+    },
+    {
+      "statement": "It proves the schedule ties out -- the accrual re-derives, the balance rolls forward, the gates hold and the two sides reconcile -- not that a closing or advance actually occurred or that the note is collectible. That judgment is a credit officer's and a reviewer's.",
+      "source": "interest_engine/engine.py rf_ and recip_ families"
+    },
+    {
+      "statement": "It takes the note terms and schedule events at face value and recomputes everything above them. All shipped data is fictional and the accrual period is set in a fictional future.",
+      "source": "interest_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-interest.svg",
+    "motion": "../assets/engine-interest.svg",
+    "poster_alt": "Interest Accrual & Loan Amortization diagram: down the left a stack of promissory-note cards, each carrying a principal, a basis-point rate, a day-count and a maturity date; a roll-forward panel across the centre showing one period's beginning balance plus advance plus accrued interest minus payment footing to an ending balance that becomes the next period's beginning, with the accrued interest re-derived as balance times rate times days over the day-count year; gate markers for accrual stopping at maturity, the default rate stepping on the event date, and a prepayment bar; on the right a trial balance tying the reciprocal receivable and payable and the interest income and expense, an interest journal proving to zero, and a maturity watchlist; and a footer strip reading 28 controls, 9 families, 402 tests, read-only, SFS-E27-INT.",
+    "caption": "The Interest Accrual & Loan Amortization engine tile states the question that has to hold note by note: every period accrues the interest its own rate, day-count and balance produce, the balance rolls forward begin to end, the maturity, rate-step, prepayment and subordination gates hold, and the reciprocal receivable / payable, interest income / expense and monthly journal all tie to the schedule beneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest interest_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-accrual-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/interest-accrual-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Interest Accrual & Loan Amortization (SFS-E27-INT) datasheet -- twenty-eight deterministic, read-only controls over a lender's debt-service record: every note's accrued interest re-derived from its stated rate, day-count and balance through one accrual kernel and compared with exact ==, its balance rolled forward begin to end and opened at principal, its maturity, rate-step, prepayment and subordination gates enforced against the as_of review date, and its reciprocal receivable / payable, interest income / expense, monthly journal and portfolio counts all recomputed from the schedule beneath them. 402 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

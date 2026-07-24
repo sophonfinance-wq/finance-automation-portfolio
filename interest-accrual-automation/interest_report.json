@@ -1,0 +1,5514 @@
+{
+  "title": "Interest accrual & loan amortization control report",
+  "overall_verdict": "FAIL",
+  "file_count": 30,
+  "rule_count": 28,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "note_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "note_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "note_terms_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "note_entities_distinct",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "acc_row_fields_present",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "acc_day_count_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "acc_interest_rederives",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "rf_row_note_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rf_ending_balance_rederives",
+      "severity": "FAIL",
+      "exceptions": 7
+    },
+    {
+      "rule": "rf_continuity",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rf_opening_ties_principal",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "gate_rate_step",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "gate_maturity_stop",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "gate_no_prepayment",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "gate_maturity_approaching",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "wf_payment_within_balance",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "wf_final_settles_zero",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wf_subordination_order",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "recip_nr_np_equal",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "recip_income_expense_equal",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "gl_journal_balances",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "gl_journal_ties_accrual",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "gl_note_on_tb",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "gl_tb_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_note_settled_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_report_count_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_watchlist_ties",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "accrual_past_maturity__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/accrued_cents",
+          "message": "row 1 (NR-1401) accrues 11,890.41 on a period beginning 2029-07-01, on or after maturity 2029-06-15; accrual should have stopped"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "accrual_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 5,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/accrued_cents",
+          "message": "row 1 (NR-1401) books 11,900.41 accrued on 2,000,000.00 at 700 bps for 31 day(s); re-deriving gives 11,890.41 (off 10.00)"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/ending_cents",
+          "message": "row 1 (NR-1401) ends 2,000,000.00; 2,000,000.00 + 0.00 + 11,900.41 - 11,890.41 = 2,000,010.00 (off -10.00)"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/accounts/9-201-4401/balance_cents",
+          "message": "note NR-1401 books interest income 23,397.25 and expense 23,397.25 against 23,407.25 accrued; the reciprocal interest does not tie"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "FAIL",
+          "location": "interest_journal:JE-2029/lines",
+          "message": "the interest journal books 107,343.93 of interest; the schedules accrue 107,353.93 (off -10.00)"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "FAIL",
+          "location": "interest_summary:SUMMARY-2029/notes/NR-1401/accrued_total_cents",
+          "message": "note NR-1401 is summarised at 23,397.25 accrued; recomputing from its schedule gives 23,407.25"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "amount_not_integer__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "FAIL",
+          "location": "amount:row[NR-1401/2029-07-01].beginning_cents",
+          "message": "AMOUNT_INVALID: row[NR-1401/2029-07-01].beginning_cents must be integer cents, got 200000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "amount:row[0].beginning_cents",
+          "message": "AMOUNT_INVALID: row[0].beginning_cents must be integer cents, got 200000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "FAIL",
+          "location": "amount:row[NR-1401].beginning_cents",
+          "message": "AMOUNT_INVALID: row[NR-1401].beginning_cents must be integer cents, got 200000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "FAIL",
+          "location": "amount:row[0].beginning_cents",
+          "message": "AMOUNT_INVALID: row[0].beginning_cents must be integer cents, got 200000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "bad_day_count__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "FAIL",
+          "location": "note_register:NOTES-2029/notes/NR-1402/day_count_denom",
+          "message": "note NR-1402 states day-count denominator 364, not one of (360, 365); its accrual year is undefined"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "continuity_break__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/accrued_cents",
+          "message": "row 1 (NR-1401) books 11,890.41 accrued on 2,000,005.00 at 700 bps for 31 day(s); re-deriving gives 11,890.44 (off -0.03)"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/ending_cents",
+          "message": "row 1 (NR-1401) ends 2,000,000.00; 2,000,005.00 + 0.00 + 11,890.41 - 11,890.41 = 2,000,005.00 (off -5.00)"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/NR-1401/2029-08-01/beginning_cents",
+          "message": "note NR-1401 ends period 2029-07-01 at 2,000,000.00 but opens 2029-08-01 at 2,000,005.00; the roll-forward is broken"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "day_count_mismatch__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/days",
+          "message": "row 1 (NR-1401) states 31 day(s) but 2029-07-01..2029-08-10 spans 40; the accrual day count does not tie the period"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_note_id__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "FAIL",
+          "location": "note_register:NOTES-2029/notes/NR-1401",
+          "message": "note id NR-1401 appears 2 times; a schedule row that names it cannot be attributed to one note"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "early_prepayment__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/4/ending_cents",
+          "message": "row 4 (NR-1403) ends 1,000,000.00; 1,000,000.00 + 0.00 + 6,575.34 - 56,575.34 = 950,000.00 (off 50,000.00)"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/4/payment_cents",
+          "message": "note NR-1403 bars prepayment, yet row 4 pays 56,575.34 against 6,575.34 accrued on 2029-07-01, before maturity 2029-09-01; 50,000.00 reduces principal"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "ending_wrong__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/0/ending_cents",
+          "message": "row 0 (NR-1401) ends 2,000,005.00; 2,000,000.00 + 0.00 + 11,506.84 - 11,506.84 = 2,000,000.00 (off 5.00)"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/NR-1401/2029-08-01/beginning_cents",
+          "message": "note NR-1401 ends period 2029-07-01 at 2,000,005.00 but opens 2029-08-01 at 2,000,000.00; the roll-forward is broken"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "income_expense_break__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/accounts/9-301-4402/balance_cents",
+          "message": "note NR-1402 books interest income 22,560.42 and expense 12,560.42 against 12,560.42 accrued; the reciprocal interest does not tie"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "journal_off_accrual__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 117,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "FAIL",
+          "location": "interest_journal:JE-2029/lines",
+          "message": "the interest journal books 117,343.93 of interest; the schedules accrue 107,343.93 (off 10,000.00)"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "journal_unbalanced__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "FAIL",
+          "location": "interest_journal:JE-2029/lines",
+          "message": "the interest journal debits 107,343.93 and credits 117,343.93; it is out of balance by -10,000.00"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "maturity_approaching__Halbrook_Residential",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "FLAG",
+          "location": "note_register:NOTES-2029/notes/NR-1401/maturity_date",
+          "message": "note NR-1401 matures 2029-11-15, in 45 day(s); inside the 60-day window and due to be refinanced or repaid"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "missing_document__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "debt_service_report:-",
+          "message": "debt_service_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "note_missing_field__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "FAIL",
+          "location": "note_register:NOTES-2029/notes/NR-1404",
+          "message": "note NR-1404 is missing lender_entity"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "note_off_tb__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/accounts/9-501-1402",
+          "message": "note NR-1404 maps np_account to 9-501-1402, which is not on the trial balance; the note cannot be tied out"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "opening_mismatch__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/NR-1402/opening/beginning_cents",
+          "message": "note NR-1402 opens its schedule at 1,500,000.00; the register states principal 1,499,990.00"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "orphan_row__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/14/note_id",
+          "message": "schedule row 14 names note 'NR-9999', which is not in the note register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "orphan_tb_account__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/accounts/8-808-8888",
+          "message": "trial-balance account 8-808-8888 is claimed by no note; it is an orphan balance with no schedule behind it"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "overpayment__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/ending_cents",
+          "message": "row 1 (NR-1401) ends 2,000,000.00; 2,000,000.00 + 0.00 + 11,890.41 - 10,011,890.41 = -8,000,000.00 (off 10,000,000.00)"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/1/payment_cents",
+          "message": "row 1 (NR-1401) pays 10,011,890.41 against 2,011,890.41 owed (2,000,000.00 + 0.00 + 11,890.41); 8,000,000.00 overpays the balance"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "payoff_residual__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/NR-1403/final/ending_cents",
+          "message": "note NR-1403 is scheduled to pay off, yet its final period ends at 5,000.00 instead of settling to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 0 / 5 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "rate_step_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/10/accrued_cents",
+          "message": "row 10 (NR-1405) books 6,904.10 accrued on 1,200,000.00 at 1200 bps for 30 day(s); re-deriving gives 11,835.61 (off -4,931.51)"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/10/rate_bps",
+          "message": "row 10 (NR-1405) starting 2029-06-01 accrues at 1200 bps; the note's terms call for 700 bps (default rate stepped in 2029-08-01)"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "receivable_break__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/accounts/9-201-1402/balance_cents",
+          "message": "note NR-1401 carries receivable 2,000,000.00 and payable 2,010,000.00 against a schedule balance of 2,000,000.00; the two sides do not reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "report_count_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "FAIL",
+          "location": "debt_service_report:REPORT-2029/settled_count",
+          "message": "the report states 2 settled / 4 outstanding; the interest summary recomputes 1 / 4"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "row_missing_field__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/0",
+          "message": "schedule row 0 (NR-1401) is missing or malformed: days"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "same_entity__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "FAIL",
+          "location": "note_register:NOTES-2029/notes/NR-1403/borrower_entity",
+          "message": "note NR-1403 names 'Halbrook Residential' as both lender and borrower; a note has two sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "settled_flag_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "FAIL",
+          "location": "interest_summary:SUMMARY-2029/notes/NR-1403/settled",
+          "message": "note NR-1403 is summarised settled=False; recomputing from its schedule gives settled=True"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 0 / 5 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "subordination_breach__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/10/ending_cents",
+          "message": "row 10 (NR-1405) ends 1,200,000.00; 1,200,000.00 + 0.00 + 6,904.10 - 56,904.10 = 1,150,000.00 (off 50,000.00)"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "FAIL",
+          "location": "rollforward_schedule:ROLLFWD-2029/rows/NR-1405/2029-07-01/payment_cents",
+          "message": "note NR-1405 is subordinated to NR-1401, which is not repaid, yet it pays 56,904.10 against 6,904.10 accrued on 2029-07-01; 50,000.00 reduces principal ahead of the senior"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the maturity watchlist ties the note evidence"
+        }
+      ]
+    },
+    {
+      "document": "watchlist_overstated__Halbrook_Residential",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 loan-file artifacts are present"
+        },
+        {
+          "rule": "note_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 note ids are unique"
+        },
+        {
+          "rule": "note_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry their required term fields"
+        },
+        {
+          "rule": "note_terms_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes carry well-formed terms"
+        },
+        {
+          "rule": "note_entities_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes have distinct sides"
+        },
+        {
+          "rule": "acc_row_fields_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 schedule rows carry their key fields"
+        },
+        {
+          "rule": "acc_day_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows' day counts tie their period span"
+        },
+        {
+          "rule": "acc_interest_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 accruals re-derive from the note terms"
+        },
+        {
+          "rule": "rf_row_note_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every schedule row names a note in the register"
+        },
+        {
+          "rule": "rf_ending_balance_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 ending balances re-derive"
+        },
+        {
+          "rule": "rf_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 period handovers are continuous"
+        },
+        {
+          "rule": "rf_opening_ties_principal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes open at their principal"
+        },
+        {
+          "rule": "gate_rate_step",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 rows accrue at the correct rate"
+        },
+        {
+          "rule": "gate_maturity_stop",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 0 post-maturity rows accrue nothing"
+        },
+        {
+          "rule": "gate_no_prepayment",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 pre-maturity payments service interest only"
+        },
+        {
+          "rule": "gate_maturity_approaching",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 unsettled notes mature outside the lead-time window"
+        },
+        {
+          "rule": "wf_payment_within_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 14 payments are within the balance owed"
+        },
+        {
+          "rule": "wf_final_settles_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 payoff notes settle to zero"
+        },
+        {
+          "rule": "wf_subordination_order",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 subordinate payments respect the senior's priority"
+        },
+        {
+          "rule": "recip_nr_np_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' two sides reconcile"
+        },
+        {
+          "rule": "recip_income_expense_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 notes' income and expense tie the accrual"
+        },
+        {
+          "rule": "gl_journal_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the interest journal balances at 107,343.93"
+        },
+        {
+          "rule": "gl_journal_ties_accrual",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal's 107,343.93 ties the accrued interest"
+        },
+        {
+          "rule": "gl_note_on_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 note GL accounts are on the trial balance"
+        },
+        {
+          "rule": "gl_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 20 trial-balance accounts map to a note"
+        },
+        {
+          "rule": "rpt_note_settled_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every note's settled flag and accrued total recompute from its schedule"
+        },
+        {
+          "rule": "rpt_report_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report counts of 1 / 4 tie the summary"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "FLAG",
+          "location": "maturity_watchlist:WATCHLIST-2029/entries/NR-1402",
+          "message": "the watchlist lists note NR-1402 as maturing soon, but it is not inside the lead-time window as of 2029-10-01"
+        }
+      ]
+    }
+  ]
+}

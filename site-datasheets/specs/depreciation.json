@@ -1,0 +1,471 @@
+{
+  "num": 36,
+  "slug": "depreciation",
+  "part_no": "SFS-E36-DEP",
+  "mnemonic": "DEP",
+  "family": "Asset Register",
+  "name": "Depreciation & Prepaid Amortization",
+  "tagline": "Does every derived figure re-derive from cost, life and window, and do the totals tie?",
+  "plain_summary": "An entity closes a month with a fixed-asset register and a prepaid schedule full of tiny derived numbers -- a monthly charge per asset, a months-used count, an accumulated balance, a net book value, a per-item amortization waterfall -- and every one of them was once a formula somebody could have overtyped. This engine proves, row by row, that each stated figure was recomputed from the base facts rather than typed, and that the register totals tie the accounts and the entry that post them. The monthly charge is cost over life in integer cents; accumulated depreciation is that base times months-used, capped at cost; net book value is cost less accumulated; every prepaid figure is the additions spread across the stated amortization window. This engine reads the eight artifacts a month-end fixed-asset and prepaid close emits -- the fixed-asset register, the useful-life class table, the capitalization policy and its expense log, the prepaid register, the disposal register, the accumulated-depreciation and prepaid roll-forwards, the GL control balances and the posted monthly recurring journal entry -- and runs thirty deterministic controls over them. Is the close file complete and the close month readable, does every expense item sit on the correct side of the capitalization threshold and every capitalized asset meet it, is every asset's class in the life table and its life the class's (or its lease term) and everything straight-line, does the monthly charge re-derive as cost over life and the close-month expense match the schedule, is the end-of-depreciation month in-service plus life with everything past it fully accumulated at zero net book value and nothing depreciating before service, is months-used capped at the life and the accumulated balance and net book value re-derived, do the accumulated and prepaid roll-forwards close on themselves and foot the registers they summarise, does every prepaid waterfall figure re-derive from its window with the first booked month taking the catch-up, is every disposed asset off the register and each write-off exactly the net book value removed, and do the cost, accumulated-depreciation and prepaid control accounts and the posted recurring journal entry each tie the register footings. It compares every figure with exact ==, gates the threshold with exact >=, measures every date to the close month the file carries rather than a clock, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A depreciation register is the safest-looking schedule in the ledger: a column of small charges, each a fraction of a cost, footing to a total that has tied for years. That is exactly why it drifts. None of the ways it goes wrong look wrong in a register that still foots. A useful life is keyed off the class table, a monthly charge is overtyped, an asset keeps depreciating a month past its end date or starts a month before it enters service, and every downstream month inherits the error while the column still adds up. Accumulated depreciation is a running balance -- opening plus the month's charge less what a disposal removed -- and a balance maintained by hand drifts the first time a row is edited and nobody re-adds the column; prepaid balances break the same way. And the register total quietly stops tying: the register says one number, the GL control account says another, and the recurring entry posts a third, each plausible alone. The engine rebuilds every derived figure from cost, life, convention and the stated amortization window through one schedule kernel and compares with exact ==, closes both roll-forwards and foots them to their registers, ties the register totals to the GL control accounts and the posted recurring entry, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A life keyed wrong, a balance re-typed, or a total that stopped tying is invisible until someone re-derives the register the books already posted.",
+  "layers_intro": "Eleven control families run in registry order over each close file. The first proves the others had something to read and that the close month is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the close file carries every artifact the controls below read, exactly once, and that the close month is a legible YYYY-MM.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable close month, since every derivation and every in-service / end-of-depreciation date gate is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "cap",
+      "label": "Capitalization Gate",
+      "plain": "Checks every expense-log item sits on the correct side of the capitalization threshold, and no capitalized asset on the register falls below it.",
+      "engineering": "Two controls. cap_threshold_gate is a hard predicate in both directions: an item at or above the threshold and not category-excluded must be capitalized, and an item below it -- or excluded outright, like annual software -- must be expensed; a sub-threshold item capitalized clutters the register for years, and a qualifying item expensed understates assets in one quiet line. cap_register_meets_threshold reads the capitalized side of the same gate: no asset on the register was set up below the threshold. The gate is exact >=.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "life",
+      "label": "Useful-Life Class Mapping",
+      "plain": "Checks every asset's class is in the life table, its life is the class's (or its lease term), and the method is straight-line.",
+      "engineering": "Three controls. life_class_known FAILs an asset carrying a class the useful-life table does not define, since the class is the key into the table and an unknown one has no life to look up. life_matches_class FAILs a register life that differs from the lookup: a fixed-life class (computers, software, furniture, automobiles) prescribes one life for every asset in it, while leasehold improvements depreciate over the asset's own stated lease term. life_method_straight_line FAILs any asset or class row stating a method other than straight-line, because a figure derived any other way cannot be re-derived by this engine's convention.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "sl",
+      "label": "Straight-Line Re-derivation",
+      "plain": "Checks each asset's monthly charge is cost over life and its close-month expense is exactly the schedule's charge.",
+      "engineering": "Two controls. sl_monthly_dep_rederives FAILs a monthly charge that is not cost // life in integer cents -- the seed of every other derived column and the cell most often overtyped. sl_expense_rederives FAILs a close-month charge that is not the schedule's charge for that month: zero before service, zero after the schedule completes, the base charge in between, and the base plus the rounding remainder in the final month, so the schedule sums back to cost exactly and no penny drifts. This is the figure the recurring entry posts, so it is re-derived per asset rather than trusted in total.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "date",
+      "label": "In-Service & End-Date Gates",
+      "plain": "Checks the end-of-depreciation month is in-service plus life, an asset past it carries full accumulation at zero net book value, and nothing depreciates before service.",
+      "engineering": "Three controls that partition the assets by lifecycle stage so exactly one owns each row. date_end_depr_rederives FAILs a stated end-of-depreciation month that is not in-service plus life, the date gate every later close reads to stop the charge. date_fully_depreciated_zero FAILs an asset past its end month whose accumulated is not cost, whose month charge is not zero, or whose net book value is not zero. date_not_in_service_yet FAILs an asset not yet in service whose months-used, accumulated or expense is non-zero or whose net book value is not the full cost -- depreciation invented ahead of the asset.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "nbv",
+      "label": "Net Book Value",
+      "plain": "Checks months-used is elapsed months capped at the life, the in-life accumulated balance re-derives, and net book value equals cost less accumulated inside [0, cost].",
+      "engineering": "Three controls. nbv_months_used_cap FAILs a months-used count that is not min(elapsed, life) -- the multiplier under the accumulated balance, which past the life keeps depreciating a finished asset. nbv_accum_rederives reads exactly the in-life assets, whose date gates are held elsewhere, and FAILs an accumulated balance that is not the base charge times months-used, capped at cost. nbv_floor FAILs a row where net book value is not cost less accumulated or where accumulated falls outside [0, cost]; the identity is universal and the cap is the floor that keeps net book value from going negative.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "roll",
+      "label": "Balance Roll-Forwards",
+      "plain": "Checks the accumulated-depreciation and prepaid roll-forwards close on themselves and foot the registers they summarise.",
+      "engineering": "Three controls. roll_accum_identity FAILs an accumulated-depreciation roll-forward where opening plus the month's depreciation less what disposals removed does not equal closing -- the identity that makes accumulated depreciation a balance rather than a re-footed column. roll_closing_ties_register FAILs when the roll-forward's closing balance or monthly charge does not foot the asset register it summarises. roll_prepaid_rollforward FAILs a prepaid roll-forward that does not close (opening plus additions less amortization equals closing) or whose opening, amortization and closing do not foot the prepaid register's beginning balances, monthly charges and ending balances.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "pre",
+      "label": "Prepaid Amortization Waterfall",
+      "plain": "Checks every prepaid window is usable and the monthly charge, the close-month expense (catch-up included) and both balances re-derive, with a watch on windows about to end.",
+      "engineering": "Five controls. pre_window_valid FAILs a window that does not parse, does not run forward, or books from a month outside itself -- the frame every figure hangs on. pre_monthly_amort_rederives FAILs a monthly amortization that is not additions // periods over the window. pre_expense_rederives FAILs a close-month charge that is not the waterfall's charge, date-gated to the window, with the first booked month absorbing the catch-up for the periods the item sat unbooked and the final period the rounding remainder. pre_ending_balance_rederives FAILs beginning or ending balances that do not re-derive as additions less cumulative booked amortization. pre_window_ending_watch is a FLAG, not a failure: it marks a window ending inside the file's own look-ahead, where the underlying term needs a renewal decision.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "disp",
+      "label": "Disposal Roll-Off",
+      "plain": "Checks every disposed asset is off the register, each write-off is exactly the net book value removed, and a stale fully depreciated asset is flagged for disposal review.",
+      "engineering": "Three controls. disp_not_on_register FAILs a disposed asset still sitting on the fixed-asset register, where its cost is counted twice and its depreciation keeps running after the asset is gone. disp_gain_loss_rederives FAILs a disposal write-off that is not cost less accumulated at disposal, or accumulation beyond cost on the way out. disp_fully_depreciated_watch is a FLAG, not a failure: it marks an asset carried more than the disposal-review band past its end month -- arithmetically clean, but almost certainly gone from the building. The band comes from the file's own figures, never a clock.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "gl",
+      "label": "GL Control-Account Tie-Out",
+      "plain": "Checks the cost, accumulated-depreciation and prepaid control accounts each foot to the register they summarise.",
+      "engineering": "Three controls. gl_cost_ties FAILs when the fixed-asset cost control account does not equal the register's cost footing; gl_accum_ties FAILs when the accumulated-depreciation control account does not equal the register's accumulated footing; gl_prepaid_ties FAILs when the prepaid control account does not equal the prepaid register's ending balances. Each is the subledger of a control account, and a balance that differs is an asset or a prepaid booked to one and not the other. A missing account fails outright; balances are compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "je",
+      "label": "Recurring-JE Tie-Out",
+      "plain": "Checks the posted monthly recurring entry's depreciation and amortization lines each equal the register totals.",
+      "engineering": "Two controls. je_depreciation_ties FAILs when the posted depreciation line does not equal the asset register's total monthly charge; je_prepaid_amort_ties FAILs when the posted amortization line does not equal the prepaid register's monthly total. The recurring entry is the only way the register's arithmetic reaches the GL, and it is posted from the schedule, so the schedule total is the only defensible amount; a posted line that differs is a month of expense the books took on a number nobody derived. A missing line fails outright; amounts are compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Close Files",
+      "kind": "source",
+      "col": 0,
+      "row": 5,
+      "plain": "fictional month-end close files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, thirty-two files in total. Only the base facts are stated -- each asset's cost, class, method, in-service month and life, each prepaid item's additions and amortization window, the policy threshold and the disposal facts -- and every derived column the engine later re-checks (the monthly charge, months used, accumulated depreciation, the close-month expense, net book value, the end-of-depreciation month, the prepaid waterfall figures, both roll-forwards, the GL control balances and the recurring entry) is computed through the same schedule kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the close file complete and the close month legible",
+      "engineering": "One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, or an unreadable close month, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "cap-control",
+      "label": "Capitalization Gate",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every item on the correct side of the threshold",
+      "engineering": "Two controls: every expense-log item sits on the correct side of the capitalization threshold in both directions, and no capitalized asset on the register falls below it, gated with exact >=.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "life-control",
+      "label": "Useful-Life Class Mapping",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is every life and method the class table's",
+      "engineering": "Three controls: every asset's class is in the life table, its life is the class's fixed life or its own lease term, and every asset and class row states the straight-line method.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "sl-control",
+      "label": "Straight-Line Re-derivation",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does every charge re-derive from cost and life",
+      "engineering": "Two controls: the monthly charge is cost over life in integer cents, and the close-month expense is the schedule's charge, with the final month absorbing the remainder so the schedule sums to cost exactly.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "date-control",
+      "label": "In-Service & End-Date Gates",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "do the service and end-date gates hold",
+      "engineering": "Three controls that partition assets by lifecycle stage: the end month is in-service plus life, an asset past it is fully accumulated at zero net book value, and an asset before service carries no depreciation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "nbv-control",
+      "label": "Net Book Value",
+      "kind": "control",
+      "col": 1,
+      "row": 5,
+      "plain": "does the accumulated balance and NBV re-derive",
+      "engineering": "Three controls: months-used is elapsed capped at the life, the in-life accumulated balance re-derives as base times months-used capped at cost, and net book value equals cost less accumulated inside [0, cost].",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "roll-control",
+      "label": "Balance Roll-Forwards",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "do the roll-forwards close and foot the registers",
+      "engineering": "Three controls: the accumulated-depreciation roll-forward closes on itself, its closing and charge foot the asset register, and the prepaid roll-forward closes and foots the prepaid register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "pre-control",
+      "label": "Prepaid Amortization Waterfall",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does every prepaid waterfall figure re-derive",
+      "engineering": "Five controls: the window is usable, the monthly charge and the close-month expense (catch-up included) and both balances re-derive from the window, and a window about to end is flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "disp-control",
+      "label": "Disposal Roll-Off",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "are disposals rolled off, written off, and watched",
+      "engineering": "Three controls: no disposed asset is still on the register, each write-off is exactly the net book value removed, and an asset stale past its end month is flagged for disposal review.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "gl-control",
+      "label": "GL Control-Account Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the control accounts foot the registers",
+      "engineering": "Three controls: the cost, accumulated-depreciation and prepaid control accounts each equal the register footing they summarise, compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "je-control",
+      "label": "Recurring-JE Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "does the posted entry equal the register totals",
+      "engineering": "Two controls: the posted depreciation line equals the register's total monthly charge, and the posted amortization line equals the prepaid register's monthly total, each posted from the schedule.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers, Table & Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and shared kernel every rule resolves against",
+      "engineering": "The fixed-asset register carries each asset's cost, class, method, in-service month, life and its derived charge, months-used, accumulated, end month and net book value; the useful-life table carries the life and method per class; the capitalization policy carries the threshold, the excluded categories and the expense log; the prepaid register carries the amortization waterfall; the disposal register carries the write-offs; the roll-forward schedule carries both balance identities; and the GL control balances and the recurring entry carry the amounts the registers must tie to. Every derivation, date, roll-up and tie-out control resolves against these through the shared schedule kernel, so a stated figure cannot disagree with the arithmetic that produced it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per close file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/depreciation_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "close files" },
+    { "from": "set-control", "to": "cap-control", "label": "complete" },
+    { "from": "set-control", "to": "life-control", "label": "complete" },
+    { "from": "set-control", "to": "sl-control", "label": "complete" },
+    { "from": "set-control", "to": "date-control", "label": "complete" },
+    { "from": "set-control", "to": "nbv-control", "label": "complete" },
+    { "from": "set-control", "to": "roll-control", "label": "complete" },
+    { "from": "set-control", "to": "pre-control", "label": "complete" },
+    { "from": "set-control", "to": "disp-control", "label": "complete" },
+    { "from": "set-control", "to": "gl-control", "label": "complete" },
+    { "from": "set-control", "to": "je-control", "label": "complete" },
+    { "from": "cap-control", "to": "registers", "label": "resolves" },
+    { "from": "life-control", "to": "registers", "label": "resolves" },
+    { "from": "sl-control", "to": "registers", "label": "resolves" },
+    { "from": "date-control", "to": "registers", "label": "resolves" },
+    { "from": "nbv-control", "to": "registers", "label": "resolves" },
+    { "from": "roll-control", "to": "registers", "label": "resolves" },
+    { "from": "pre-control", "to": "registers", "label": "resolves" },
+    { "from": "disp-control", "to": "registers", "label": "resolves" },
+    { "from": "gl-control", "to": "registers", "label": "resolves" },
+    { "from": "je-control", "to": "registers", "label": "resolves" },
+    { "from": "sl-control", "to": "je-control", "label": "register total" },
+    { "from": "roll-control", "to": "report", "label": "findings" },
+    { "from": "pre-control", "to": "report", "label": "findings" },
+    { "from": "disp-control", "to": "report", "label": "findings" },
+    { "from": "gl-control", "to": "report", "label": "findings" },
+    { "from": "je-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "440",
+      "source": "python -m pytest --collect-only -q -o addopts= (depreciation-register-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "30",
+      "source": "len(depreciation_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every close file"
+    },
+    {
+      "label": "Families",
+      "value": "11",
+      "source": "distinct rule-id prefixes in depreciation_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Close files",
+      "value": "32",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus thirty-one planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(depreciation_engine.model.DOC_TYPES)",
+      "plain": "asset register, life table, capitalization policy, prepaid register, disposal register, roll-forward, GL balances, recurring entry"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "depreciation_engine/tests boundary tests on the cent, the month and the threshold",
+      "plain": "a figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "An entity closes a month with a fixed-asset register and a prepaid schedule full of tiny derived numbers -- a monthly charge per asset, a months-used count, an accumulated balance, a net book value, a per-item amortization waterfall -- and every one of them was once a formula somebody could have overtyped. Three failures hide inside that, and none of them look wrong in a register that still foots. The derivation drifts: a useful life is keyed off the class table, a monthly charge is overtyped, an asset keeps depreciating past its end date or starts before it enters service, and every downstream month inherits the error while the column still adds up. The roll-forward breaks: accumulated depreciation is a running balance -- opening plus the month's charge less what a disposal removed equals closing -- and a balance maintained by hand drifts the first time a row is edited and nobody re-adds the column, and prepaid balances break the same way. The totals stop tying: the register says one number, the GL control account says another, and the recurring entry posts a third, each plausible alone. None of these are judgment calls. They are equalities -- a monthly charge against cost over life with exact ==, a life against the class table, an accumulated balance against its re-derivation, a control-account balance against the register footing -- which a deterministic control settles better than a spreadsheet inherited by whoever maintains the register this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every close file",
+      "narrative": "The CLI generates thirty-two fictional close files -- one clean baseline and one carrying each of the thirty-one planted defects -- then runs all thirty controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (depreciation-register-automation/); depreciation_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The lifecycle gates are genuinely independent",
+      "narrative": "The date and net-book-value controls partition the assets by stage, so a break at one boundary trips exactly one control. One defect file leaves net book value on an asset that finished its schedule and trips date_fully_depreciated_zero; another books accumulated depreciation on an asset not yet in service and trips date_not_in_service_yet -- each row re-derived so the cost-less-accumulated identity still holds, and the in-life accumulated control skips both, proving the gates own different failures.",
+      "source": "depreciation_engine/generate.py DEFECTS fully_depreciated_still_carrying / depreciation_before_service"
+    },
+    {
+      "title": "The roll-forward is recomputed, not read back",
+      "narrative": "A defect file shifts the accumulated roll-forward's opening and closing together, so it still closes on itself while drifting off the register it summarises. roll_closing_ties_register rebuilds the footing from the asset register's stated columns and fails, proving the roll-forward is recomputed from the register beneath it rather than trusted because its own identity holds.",
+      "source": "depreciation_engine/generate.py DEFECTS rollforward_untied_to_register -> roll_closing_ties_register"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all thirty controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "dep_report.json, dep_report.md, samples/"
+    },
+    {
+      "cmd": "python -m depreciation_engine samples",
+      "operation": "analyze an existing folder of close files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m depreciation_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest depreciation_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "440 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "440",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (depreciation-register-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "30",
+      "unit": "controls",
+      "source": "len(depreciation_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "31",
+      "unit": "defect files",
+      "source": "len(depreciation_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "depreciation_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the figures they were given: every derived number -- the monthly charge, months used, accumulated depreciation, net book value, the end-of-depreciation month and every prepaid waterfall figure -- recomputes from cost, life, convention and the stated amortization window; both roll-forwards close and foot their registers; and the register totals tie the GL control accounts and the posted recurring entry. It is not an opinion on whether an asset's stated cost is complete, whether the asset physically exists, whether the class or the life policy is the correct one for these books, or whether a disposal or a purchase actually occurred.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean close file into the documented review and sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an asset sitting fully depreciated past the disposal-review band and a prepaid window about to end both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried until the failing control is cleared -- a charge that does not re-derive, a life off the class table, a roll-forward that does not close, or a total that does not tie the GL or the recurring entry"
+      }
+    ],
+    "guarantees": [
+      "Read-only: close files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==, and the threshold gated with exact >=; there is no tolerance band, and a cent off the re-derivation is reported as a break.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One schedule kernel: the controls and the generator share depreciation_engine.schedule, so a stated figure cannot disagree with the arithmetic that produced it.",
+      "The final month of every schedule absorbs the rounding remainder, so the monthly charges sum back to cost exactly and no penny drifts.",
+      "The first booked month takes the catch-up for a prepaid set up after its window opened, and the clean baseline itself carries one so the catch-up path is exercised by data that passes.",
+      "The date and net-book-value gates partition the assets by lifecycle stage, so exactly one control owns each row and a single break trips a single control.",
+      "Every derivation and date gate is measured to the close month the file carries, and both watch bands come from the file's own figures, never the system clock.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a figure is carried into the close and whether an asset is chased for disposal or a prepaid term for renewal."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, closes a period, disposes an asset, renews a prepaid term, or writes to a source artifact. It reads the close file and stops.",
+      "source": "depreciation-register-automation/README.md and depreciation_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts the close emits. It does not connect to a general ledger system, a fixed-asset subledger application, an invoice feed or the underlying contracts and leases.",
+      "source": "depreciation_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It owns the fixed-asset and prepaid subledgers, not their neighbours: the JE-posting cadence of the close, debt and loan amortization, and the prepaid-insurance entity allocation each belong to a separate engine.",
+      "source": "depreciation_engine/engine.py and model.py scope notes"
+    },
+    {
+      "statement": "It re-derives at the cost, life, class life and amortization window the file carries; it does not decide whether that cost is complete, whether the life or capitalization policy is the correct one, or whether the asset physically exists.",
+      "source": "depreciation_engine/engine.py life_ and cap_ families"
+    },
+    {
+      "statement": "It takes the disposal and capitalization records at face value: it confirms the register foots, re-derives and ties, not that a disposal or a purchase actually occurred. All shipped data is fictional and the close month is set in a fictional future.",
+      "source": "depreciation_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-depreciation.svg",
+    "motion": "../assets/engine-depreciation.svg",
+    "poster_alt": "Depreciation & Prepaid Amortization diagram: on the left a base-facts card (cost, class, in-service month, life) feeding a schedule kernel; a centre fixed-asset register panel whose monthly charge, accumulated depreciation and net book value are re-derived from that kernel, one row stamped OFF-CONVENTION where a life was keyed against the class table; a prepaid amortization waterfall beneath it with the first booked month taking the catch-up; the accumulated and prepaid roll-forwards closing on themselves; and on the right the GL control accounts 1610, 1611 and 1420 and the posted recurring entry tying the register footings, with one balance stamped VARIANCE; a footer strip reading 30 controls, 11 families, 440 tests, read-only, SFS-E36-DEP.",
+    "caption": "The Depreciation & Prepaid Amortization engine tile states the question that has to hold row by row: every monthly charge, accumulated balance, net book value and prepaid waterfall figure recomputed from cost, life, convention and the stated window, both roll-forwards closed and footed to their registers, and the register totals tied to the GL control accounts and the posted recurring entry.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest depreciation_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/depreciation-register-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/depreciation-register-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Depreciation & Prepaid Amortization (SFS-E36-DEP) datasheet -- thirty deterministic, read-only controls over an entity's fixed-asset register and prepaid amortization schedule: every straight-line charge re-derived from cost, life and convention, every prepaid waterfall figure re-derived from its stated window, the accumulated-depreciation and prepaid balances rolled forward and footed to their registers, and the register totals tied to the GL control accounts and the posted monthly recurring journal entry. 440 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

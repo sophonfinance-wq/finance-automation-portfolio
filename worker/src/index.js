@@ -55,8 +55,8 @@ Model of the business: there is no software to buy. After a short observation of
 Non-negotiables that define the product: independent verification checks every run; every computed figure ships with cited evidence traceable to source; and nothing files, posts, or finalizes without a human's sign-off. The client always keeps the judgment.
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
-- 26 public engines, all runnable and MIT-licensed.
-- 75,794 automated tests gate every change in CI.
+- 38 public engines, all runnable and MIT-licensed.
+- 80,574 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close alone runs 29 deterministic controls.
@@ -88,7 +88,19 @@ Non-negotiables that define the product: independent verification checks every r
 24. Gross-Receipts & Excise Tax — each jurisdiction's gross-receipts/excise tax (WA State B&O, city B&O, Hawaii GET) re-derived from the GL revenue pull times the classification rate in force for the period, tied to the filed worksheet, with deductions, thresholds, rate-effective dates and the filing calendar proved complete, timely and approved; 400 tests, read-only. (page: engines/grt.html)
 25. Filing Obligation Calendar — every entity × jurisdiction × return/payment obligation proved filed or validly extended before its statutory due date, each fixed-amount voucher paid in the exact statutory amount, and the status register tied to filed evidence with nothing missing or orphaned; 369 tests that never file or pay. (page: engines/filing.html)
 26. Energy-Efficient Home Credit — the IRC §45L homebuilder credit re-derived unit by unit from each dwelling's close-of-escrow date, its RESNET/HERS certification and the dated statutory per-unit amount, rolled up per project, region and fiscal year with net-benefit, partner-allocation and a full cross-artifact tie-out; 390 tests, read-only. (page: engines/energy.html)
-Beyond these twenty-six, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
+27. Interest Accrual & Loan Amortization — every note's accrued interest re-derived as balance times rate times days, its balance rolled forward, the maturity, rate-step, prepayment and subordination gates enforced, and the reciprocal receivable, payable and interest journal tied to the schedule; 402 tests, read-only. (page: engines/interest.html)
+28. Financing Execution & Schedule Variance — a developer's monthly upcoming-financings report re-derived milestone by milestone: each variance as Current minus Prior, each Prior tied to the prior month's Current, the original baseline held frozen, and the closing playbook proved complete; 337 tests, read-only. (page: engines/financing.html)
+29. Wire & Transfer Release Control — every outbound wire, ACH and book transfer gated on two distinct authorized signers within limit, an approved or callback-cleared beneficiary, a routing number that resolves to the named bank, and a funded source account before release; 347 tests that never release or pay. (page: engines/wire.html)
+30. Payroll & Benefit Reconciliation — every 401(k), HSA and FSA deduction from a pay period proved to reach the recordkeeper, custodian, ledger liability and cash to the cent, the employer match and statutory limits recomputed, and each deposit timely; 414 tests, read-only. (page: engines/payroll.html)
+31. Non-Resident Withholding & 1042-S — every cross-border FDAP withholding rate recomputed from the payee's status, each treaty reduction gated on a valid W-8, and the deposits and Form 1042 tied to the 1042-S slips; 410 tests that never file or remit. (page: engines/withholding.html)
+32. Home Sale Closing & Settlement Tie-Out — each closed home's settlement statement, closing entry, revenue, loan release and cost-of-sale relief recomputed from base facts and proforma rates, and the rollup tied to the units beneath; 379 tests, read-only. (page: engines/closing.html)
+33. Entity Good-Standing — each entity proved in good standing in every registered state: annual report on time, flat franchise tax paid, Secretary-of-State ACTIVE, agent and license current, with the rollup recomputed from the records; 385 tests that never file or renew. (page: engines/standing.html)
+34. Subcontract SOV & Change Orders — a subcontract's schedule of values footed, only approved change orders moving the revised contract, every pay-application column, retention and tax re-derived, and the conditional release tied to the certified payment; 412 tests that never pay or release. (page: engines/sov.html)
+35. Equity-Method Pickup & Eliminations — every equity-method pickup re-derived as ownership times investee result, the investment roll-forward and accrual recomputed, each elimination paired to net to zero, and the whole tied to the trial balance; 423 tests, read-only. (page: engines/pickup.html)
+36. Depreciation & Prepaid Amortization — every fixed-asset depreciation and prepaid amortization figure re-derived from cost, life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the recurring entry; 440 tests, read-only. (page: engines/depreciation.html)
+37. Earnest-Money Deposit Trust — each unit's pre-close earnest money tied three ways to zero variance across the deposit ledger, the escrow agent's statement and the loan paydowns, with cancellation splits and the reconciliation recomputed; 407 tests that never move or release. (page: engines/deposit.html)
+38. Capital Spending Request Gate — every capital request's dollar triggers proved to fire only after approval, its five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied; 424 tests that never approve or commit. (page: engines/spending.html)
+Beyond these thirty-eight, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
 
 # How the engines stay trustworthy
 Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
@@ -96,7 +108,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 75,794 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 80,574 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

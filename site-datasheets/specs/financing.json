@@ -1,0 +1,408 @@
+{
+  "num": 28,
+  "slug": "financing",
+  "part_no": "SFS-E28-FEX",
+  "mnemonic": "FEX",
+  "family": "Financing Execution",
+  "name": "Financing Execution & Schedule Variance",
+  "tagline": "Does each variance re-derive, and does the report tie to the month before it?",
+  "plain_summary": "A capital-markets team publishes a monthly \"Upcoming Financings\" report, and it drifts in ways nobody watches. Each active financing is a workstream -- typed as debt marketing, equity syndication or an extension/refinancing -- carrying an Original | Prior | Current | Variance block of milestone dates, a summary Gantt, and a rollup of the active count, the overdue count and the total capital in flight. This engine reads the seven artifacts that report emits -- the workstream register, the milestone schedule, last month's prior schedule, the playbook catalog, the master tracker, the Gantt summary and the monthly financing report -- and runs twenty-one deterministic controls over them. Is the report complete and the report date readable, are the workstream ids unique, typed and statused, does every milestone name a workstream in the register, does every financing type carry its standard playbook and every active workstream carry each playbook milestone, does the report tie both ways to the master portfolio, are the milestone dates readable, does each variance re-derive as Current minus Prior in whole days, does each Gantt bar sit in its target-closing month, does this month's Prior date equal last month's Current, is the Original baseline frozen across months, is the report date the period-end, does each overdue flag match the date gate of ACTIVE and Current before the report date, are the milestone sequence numbers unique and their current dates non-decreasing, and do the active count, the overdue count and the financing total each recompute from the workstreams they summarise. It compares every variance and every count with exact ==, treats the overdue gate as a strict less-than so a milestone due on the report date is not yet overdue, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "An \"Upcoming Financings\" report looks like the safest document a deal team circulates: a grid of dates with a Variance column, a Gantt, and three summary numbers. That is exactly why it drifts. None of the ways it goes wrong look wrong in a spreadsheet. A Current date is hand-edited and the Variance beside it is left behind, so the report says a milestone slipped by a number that no longer matches its own dates. This month's Prior column is quietly overwritten and no longer equals last month's Current, or the Original baseline is re-based, and the report reads current while its history no longer ties. A live workstream is missing one of its financing type's standard milestones, or a project on the master tracker has no workstream in the report at all. And the rollup -- the active count, the overdue list, the total capital in flight -- is stated on a figure nobody recomputed from the workstreams underneath it, while the Gantt draws a bar in a month that is not the month the deal is set to close. The engine rebuilds every variance, every overdue flag, every Gantt month and every rollup count from the base milestone dates and the workstream register through one shared kernel, compares with exact ==, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A slipped milestone re-based into looking on-plan is invisible until someone walks the Prior column back to the month before it.",
+  "layers_intro": "Eight control families run in registry order over each financing report. The first proves the others had something to read and that the report date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the financing report carries every artifact the controls below read, exactly once, and that the report date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a report missing any of the seven document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable report_date, since every overdue and period-end test is measured to it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "mem",
+      "label": "Register, Playbook & Portfolio",
+      "plain": "Checks the workstream register is sound, every financing type carries its standard playbook, and the report ties both ways to the master portfolio.",
+      "engineering": "Eight controls. mem_workstream_ids_unique rejects a workstream id that appears twice, because the id joins the register to every milestone, the Gantt and the tracker, and a duplicate makes a milestone ambiguous about which financing it belongs to. mem_workstream_type_valid and mem_workstream_status_valid prove each workstream carries a known financing type (debt, equity or extension) and a known status (ACTIVE or CLOSED) -- the keys the playbook lookup and the overdue gate depend on. mem_milestone_workstream_exists proves every milestone names a workstream in the register. mem_playbook_defined proves every financing type in use has a playbook in the catalog, and mem_playbook_complete proves every active workstream carries each milestone its playbook names, because the missing step is exactly the one nobody is tracking. mem_portfolio_present and mem_workstream_in_tracker tie the report to the master tracker both ways: every active portfolio project appears as a workstream, and every reported workstream is a project on the tracker.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "var",
+      "label": "Variance & Gantt Re-Derivation",
+      "plain": "Checks the milestone dates are readable, each variance re-derives as Current minus Prior, and each Gantt bar sits in its closing month.",
+      "engineering": "Three controls. var_dates_wellformed FAILs a milestone whose Original, Prior or Current date is unreadable and owns that finding, so every variance, roll-forward, baseline and ordering test can defer to it. var_recomputes FAILs a milestone whose stated Variance is not exactly Current minus Prior in whole calendar days, compared with exact == -- a variance one day off its own dates is a number the deal team reads and trusts while it silently lies. var_gantt_month_recomputes FAILs a summary Gantt bar drawn in any month other than the month of its target closing, so a bar cannot tell a reviewer the deal closes when it does not.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "roll",
+      "label": "Month-Over-Month Roll-Forward",
+      "plain": "Checks this month's Prior date is a verbatim carry of last month's Current date, per milestone.",
+      "engineering": "One control. roll_prior_ties_current FAILs a milestone whose Prior date does not equal the Current date carried for it in last month's prior schedule, and FAILs a milestone with no prior-schedule row at all. The Prior column is meant to be a verbatim carry of last month's Current; when it does not tie, the month-over-month chain is broken and every variance measured against it is measured off a date that was never reported.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "base",
+      "label": "Frozen Baseline",
+      "plain": "Checks each milestone's Original date is unchanged from the baseline last month carried.",
+      "engineering": "One control. base_original_immutable FAILs a milestone whose Original date differs from the Original the prior schedule froze. The Original column is the baseline the whole slippage story is measured against; a mutated Original quietly re-bases the deal so a slipped milestone reads as on-plan. It defers the unreadable-date case to var_dates_wellformed and the missing prior row to roll_prior_ties_current.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "date",
+      "label": "Report Date & Overdue Gate",
+      "plain": "Checks the report date is the period-end, and that each overdue flag matches the date gate.",
+      "engineering": "Two controls. date_report_is_period_end FAILs a report whose date is not the last calendar day of the report period month, since the report is a period-end snapshot and a mid-month date measures every overdue milestone against the wrong line. date_overdue_flag is a FLAG, not a failure: it marks a milestone whose stated overdue flag does not match the recomputed gate of ACTIVE and Current before the report date -- an overdue milestone is a live signal for the deal team, so a stale flag is worth a human's eyes, not a hard stop. The gate is a strict less-than, so a milestone due exactly on the report date is not yet overdue and a closed workstream is never overdue.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "ord",
+      "label": "Sequencing",
+      "plain": "Checks each workstream's milestone sequence numbers are unique and its current dates do not run backwards.",
+      "engineering": "Two controls. ord_sequence_unique FAILs a workstream carrying two milestones at the same sequence number, which makes their order ambiguous and leaves the ordering check below unable to say which milestone comes first. ord_current_nondecreasing FAILs a later-sequence milestone dated before its predecessor -- a schedule with a step happening before the step it follows, which no real timeline does.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Rollup Tie-Out",
+      "plain": "Checks the active count, the overdue count and the financing total each recompute from the workstreams they summarise.",
+      "engineering": "Three controls. rpt_active_count_ties FAILs a report whose stated active-financing count is not the number of ACTIVE workstreams in the register. rpt_overdue_count_ties FAILs a stated overdue-milestone count that is not the number the date gate recomputes against the report date. rpt_financing_total_ties FAILs a stated financing total that is not the exact sum of every ACTIVE workstream's financing amount, compared with exact == on integer cents. A count or amount that should be an integer but is not raises AMOUNT_INVALID contained to the one field it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Financing Reports",
+      "kind": "source",
+      "col": 0,
+      "row": 1,
+      "plain": "fictional \"Upcoming Financings\" reports enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-three files in total. Only the workstreams, the milestone dates, the playbooks and the master tracker are stated; each milestone's variance and overdue flag, every Gantt month, and the portfolio's active, overdue and financing-total counts are re-derived through the same schedule kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the financing report complete and the report date legible",
+      "engineering": "One control. FAILs a report missing any of the seven artifact types or carrying a duplicate, or an unreadable report_date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "mem-control",
+      "label": "Register & Portfolio",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound, the playbook complete and the portfolio covered",
+      "engineering": "Eight controls: unique, typed and statused workstream ids; every milestone attributable; every financing type's playbook defined and, for active workstreams, complete; and the report tied both ways to the master tracker.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "var-control",
+      "label": "Variance & Gantt",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "do the variance and the Gantt month re-derive from the dates",
+      "engineering": "Three controls: the Original, Prior and Current dates are readable, each stated Variance equals Current minus Prior in whole days, and each Gantt bar sits in the month of its target closing, all compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "roll-control",
+      "label": "Roll-Forward",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does this month's Prior tie last month's Current",
+      "engineering": "One control: each milestone's Prior date is a verbatim carry of the Current date last month's prior schedule froze, so the month-over-month chain cannot be quietly broken.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "base-control",
+      "label": "Frozen Baseline",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is the Original baseline frozen across months",
+      "engineering": "One control: each milestone's Original date is unchanged from the baseline the prior schedule carried, so a slipped milestone cannot be re-based into looking on-plan.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "date-control",
+      "label": "Report-Date Gate",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is the report date the period-end and each overdue flag true",
+      "engineering": "Two controls: the report date is the last calendar day of the period month, and each stated overdue flag matches the recomputed gate of ACTIVE and Current before the report date -- the flag a REVIEW signal, checked with a strict less-than at the boundary.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "ord-control",
+      "label": "Sequencing",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "are the milestones sequenced and non-decreasing",
+      "engineering": "Two controls: no two milestones in a workstream share a sequence number, and a later-sequence milestone is never dated before its predecessor.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Rollup Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "do the rollup counts and the financing total recompute",
+      "engineering": "Three controls: the active-financing count ties the ACTIVE workstreams, the overdue count ties the recomputed date gate, and the financing total ties the exact sum of active financing amounts in integer cents.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Register, Schedule & Tracker",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and dates every rule resolves against",
+      "engineering": "The workstream register carries each financing's id, type, status, target closing, partner and amount; the milestone schedule carries the Original | Prior | Current | Variance block per milestone; the prior schedule carries last month's Original and Current; the playbook catalog carries the standard milestone set per financing type; the master tracker carries the portfolio of record; and the Gantt summary and monthly report carry the derived months and rollup counts. Every variance, roll-forward, baseline, ordering, date and rollup control resolves against these through the shared schedule kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per financing report: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/financing_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "financing reports" },
+    { "from": "set-control", "to": "mem-control", "label": "complete" },
+    { "from": "set-control", "to": "var-control", "label": "complete" },
+    { "from": "set-control", "to": "roll-control", "label": "complete" },
+    { "from": "set-control", "to": "base-control", "label": "complete" },
+    { "from": "set-control", "to": "date-control", "label": "complete" },
+    { "from": "set-control", "to": "ord-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "mem-control", "to": "registers", "label": "resolves" },
+    { "from": "var-control", "to": "registers", "label": "resolves" },
+    { "from": "roll-control", "to": "registers", "label": "resolves" },
+    { "from": "base-control", "to": "registers", "label": "resolves" },
+    { "from": "date-control", "to": "registers", "label": "resolves" },
+    { "from": "ord-control", "to": "registers", "label": "resolves" },
+    { "from": "var-control", "to": "rpt-control", "label": "schedule" },
+    { "from": "mem-control", "to": "report", "label": "findings" },
+    { "from": "date-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "337",
+      "source": "python -m pytest --collect-only -q -o addopts= (financing-execution-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "21",
+      "source": "len(financing_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every financing report"
+    },
+    {
+      "label": "Families",
+      "value": "8",
+      "source": "distinct rule-id prefixes in financing_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Sample files",
+      "value": "23",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-two planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(financing_engine.model.DOC_TYPES)",
+      "plain": "workstream register, milestone schedule, prior schedule, playbook catalog, master tracker, Gantt summary, financing report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "financing_engine/tests boundary tests on the day and the cent",
+      "plain": "a variance a day off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A capital-markets team publishes a monthly \"Upcoming Financings\" report: every active financing is a workstream, typed as debt marketing, equity syndication or an extension/refinancing, and each carries an Original | Prior | Current | Variance block of milestone dates plus a summary Gantt and a rollup of the active count, the overdue count and the total capital in flight. It is a snapshot of a pipeline that moves every month, and it drifts in ways nobody watches. Four failures hide inside that, and none of them look wrong in a spreadsheet. The variance stops reconciling: a hand-edited Current date leaves the Variance beside it behind, so the report says a milestone slipped by a number that no longer matches its own dates. The month-over-month chain breaks: this month's Prior column no longer equals last month's Current, or the Original baseline is quietly overwritten, and the report reads current while its history no longer ties. The playbook or the portfolio has a hole: a live workstream is missing one of its financing type's standard milestones, or a project on the master tracker has no workstream in the report at all. And the rollup drifts from the schedule: the active count, the overdue list or the financing total is stated on a figure nobody recomputed from the workstreams underneath it, while the Gantt places a bar in a month that is not the month the deal is set to close. None of these are judgment calls. They are equalities and comparisons -- a stated Variance against Current minus Prior with exact ==, a Prior date against last month's Current, a financing total against the sum of the active workstreams, an overdue flag against a date gate with a strict less-than -- which a deterministic control settles better than a spreadsheet inherited by whoever keeps the pipeline this month.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every financing report",
+      "narrative": "The CLI generates twenty-three fictional financing reports -- one clean baseline and one carrying each of the twenty-two planted defects -- then runs all twenty-one controls over each. The clean report returns PASS with no flags; every defect report returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (financing-execution-automation/); financing_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The controls are independent and boundary-exact",
+      "narrative": "One defect file pulls a later-sequence milestone back to its predecessor's date while re-deriving the variance, so only ord_current_nondecreasing fires and var_recomputes still holds. Another moves the report date one day before period-end, tripping date_report_is_period_end while every overdue count stays untouched, because the gate is a strict less-than that no current date has yet crossed. Each break is confined to the control it was built for.",
+      "source": "financing_engine/generate.py DEFECTS out_of_order_milestone / wrong_report_date"
+    },
+    {
+      "title": "The variance is recomputed, not read back",
+      "narrative": "A defect file bumps one milestone's stated Variance by a single day without moving its dates, so the report claims a slippage its own Prior and Current no longer support. var_recomputes rebuilds the variance as Current minus Prior in whole days and fails, proving the number is recomputed from the milestone's dates rather than trusted as stated.",
+      "source": "financing_engine/generate.py DEFECTS variance_wrong -> var_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-one controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "financing_report.json, financing_report.md, samples/"
+    },
+    {
+      "cmd": "python -m financing_engine samples",
+      "operation": "analyze an existing folder of financing reports without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m financing_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest financing_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "337 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "337",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (financing-execution-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "21",
+      "unit": "controls",
+      "source": "len(financing_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "22",
+      "unit": "defect files",
+      "source": "len(financing_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "financing_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the report they were given: every workstream id is unique, typed and statused, every milestone is attributable and its dates readable, every active workstream carries its full playbook, the report ties both ways to the master portfolio, every variance re-derives as Current minus Prior, this month's Prior ties last month's Current, the Original baseline is unchanged, each Gantt bar sits in its closing month, the milestones are sequenced and non-decreasing, the report date is the period-end, and the active count, overdue count and financing total all recompute from the workstreams beneath them. It is not an opinion on whether a milestone date is the right target, whether a financing will actually close, whether a wire cleared or a note accrued, or whether the underlying deal is sound.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean financing report into the documented review and circulation"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a milestone whose stated overdue flag does not match the recomputed date gate lands here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the report is not circulated until the failing control is cleared -- a variance that does not re-derive, a broken roll-forward, a mutated baseline, a missing playbook milestone, an out-of-order milestone, a wrong report date, or a rollup count that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: financing reports are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a financing amount or a count, and a cent or a day off the re-derivation is reported as a break.",
+      "A count or amount that should be an integer but is not produces an AMOUNT_INVALID finding contained to the one field it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One schedule kernel: the controls and the generator share the kernel in financing_engine.schedule, so a re-derived variance, overdue flag or Gantt month cannot disagree with the data that produced it.",
+      "The overdue gate is boundary-exact: a milestone whose current date lands exactly on the report date is due today, not yet overdue, and a closed workstream is never overdue.",
+      "Every overdue and period-end test is measured to the report_date carried in the file, never the system clock, so the run is deterministic and byte-stable with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether the report is circulated and whether a milestone, a baseline or a rollup figure is corrected."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never books an entry, releases a wire, accrues a note, settles cash, files a report, or writes to a source artifact. It reads the financing report and stops.",
+      "source": "financing-execution-automation/README.md and financing_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the monthly report emits. It does not connect to a loan system, a treasury workstation, a general ledger or the underlying deal documents.",
+      "source": "financing_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the report reconciles to itself and to the month before it -- variances re-derive, the roll-forward ties, the baseline is frozen, the playbook is complete -- not that any milestone date is the right target or that a financing will actually close. That judgment is the deal team's.",
+      "source": "financing_engine/engine.py var_, roll_, base_ and mem_ families"
+    },
+    {
+      "statement": "It re-derives each overdue flag and period-end date against the report_date the file carries; it does not decide whether that report date, or the target closing dates beneath it, are the correct ones for the pipeline.",
+      "source": "financing_engine/engine.py date_ family and the schedule kernel"
+    },
+    {
+      "statement": "It takes the milestone dates, statuses and amounts at face value: it confirms the register, schedule and rollup foot and reconcile, not that a milestone was actually met. All shipped data is fictional and the report period is set in a fictional future.",
+      "source": "financing_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-financing.svg",
+    "motion": "../assets/engine-financing.svg",
+    "poster_alt": "Financing Execution & Schedule Variance diagram: down the left a stack of workstream cards, each typed debt, equity or extension and carrying an Original, Prior, Current and Variance block of milestone dates; a central panel re-deriving each variance as Current minus Prior in whole days, tying this month's Prior to last month's Current, holding the Original baseline frozen, confirming each active workstream carries its full standard playbook, and tying the report both ways to the master tracker; a summary Gantt placing each bar in its target-closing month; on the right a monthly rollup whose active count, overdue count and financing total each recompute from the workstreams beneath them, with one milestone flagged overdue for review; and a footer strip reading 21 controls, 8 families, 337 tests, read-only, SFS-E28-FEX.",
+    "caption": "The Financing Execution & Schedule Variance engine tile states the question that has to hold month after month: every milestone variance re-derives from its own dates, this month's Prior ties last month's Current, the Original baseline stays frozen, each active workstream carries its full playbook, and the active count, overdue count and financing total all recompute from the workstreams underneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest financing_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/financing-execution-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/financing-execution-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Financing Execution & Schedule Variance (SFS-E28-FEX) datasheet -- twenty-one deterministic, read-only controls over a developer's monthly \"Upcoming Financings\" report: the workstream register proved sound and tied both ways to the master portfolio, each financing type's milestone playbook complete, every variance re-derived as Current minus Prior in whole days, this month's Prior tied to last month's Current, the Original baseline frozen, each Gantt bar placed in its target-closing month, the report date gated to the period-end with a boundary-exact overdue check, and the active count, overdue count and financing total all recomputed from the workstreams beneath them. 337 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

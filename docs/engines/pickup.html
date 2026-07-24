@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equity-Method Pickup &amp; Eliminations — Sophon Finance Systems</title>
+<meta name="description" content="Equity-Method Pickup &amp; Eliminations (SFS-E35-EPU) datasheet -- twenty-five deterministic, read-only controls over a reporting group&#x27;s equity-method consolidation: every investment roll-forward re-footed as begin + contributions + pickup - distributions = end, every pickup re-derived as ownership x sub net income through a shared kernel, every Investment account extinguished against its sub&#x27;s Equity-Parent account for exactly the carrying value, and the preferred-return accrual, member allocation and trial-balance columns all recomputed from the base facts beneath them. 423 tests, seeded fictional data, a planted-defect file for every control.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:30px;height:30px;flex:none}
+.brand-word{font-weight:600;font-size:18px;letter-spacing:.2px;white-space:nowrap;line-height:1.15}
+.brand-word span{font-weight:300}
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}.brand-tag{font-size:8.5px;letter-spacing:.8px}}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.schem-wrap{overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px;overflow-wrap:anywhere}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}.schem-wrap svg.schem{width:auto;max-width:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+<main class="wrap">
+<section class="masthead">
+  <p class="kicker">ENGINE 35</p>
+  <p class="partline">SFS-E35-EPU &middot; EQUITY METHOD &middot; REV 2026-07-24 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>Equity-Method Pickup &amp; Eliminations</strong></h1>
+  <p class="tag">Does the pickup re-derive from ownership, and does the elimination extinguish the carrying value?</p>
+  <p class="intro">A reporting group consolidates its subsidiaries and joint ventures one holding at a time, and every period three things must hold at once: each parent&#x27;s equity pickup equals its ownership share of the sub&#x27;s net income, the investment carrying value rolls forward as begin + contributions + pickup - distributions = end, and on consolidation every Investment account is extinguished against the sub&#x27;s Equity-Parent account so each entity block nets to zero. Around those sit the feeding schedules -- a preferred-return accrual built on a day count, and a member allocation that must sum back to the income it splits and tie to the trial balance. This engine reads the eight artifacts the consolidation file carries -- the entity register, the holding register, the sub results, the investment roll-forward, the elimination schedule, the preferred-return schedule, the member allocation and the trial balance -- and runs twenty-five deterministic controls over them, in six families. Is the file complete. Does every roll-forward row foot, name a registered holding, cover every holding exactly once, and carry the ownership share of the sub&#x27;s declared distributions. Does each pickup recompute as ownership x sub net income, do cost-method holdings book none, is ownership in bounds and never over-allocated, and does every holding resolve to registered entities and a result row. Does every elimination block self-balance, is every equity holding paired investment-to-equity, is the full carrying value extinguished, does every block name a real equity holding, and do the GL accounts follow the company-code link key. Do the preferred-return day counts, accruals, capital chain and period continuity re-derive from the schedule&#x27;s own dates and rates. Do the member allocations foot and sum to exactly the sub&#x27;s net income, is every member a holder, and do the investment, pickup, should-be and adjustment columns of the trial balance tie out. It compares every figure with exact ==, rebuilds every pickup and share through the shared kernel that produced the data with the residual cent to the final holder, and never writes to a source artifact.</p>
+  <p class="thesis">An equity-method workpaper looks like the most mechanical page in the close: a percentage times an income, a four-line roll-forward, a pair of eliminations that cancel. That is exactly why it drifts. Three failures hide inside it and none of them look wrong on their own page. The pickup drifts from the ownership math -- somebody keys it, or carries last quarter&#x27;s percentage, and the parent books a share its ownership does not produce, or routes a pickup through a holding carried at cost that should book none. The elimination goes stale -- the carrying value moves all period but the entry does not, leaving a residual on consolidation that is neither an asset nor equity, or a holding is never paired to the sub&#x27;s equity at all and the same net assets survive twice. And the rollup drifts from the evidence -- the trial balance carries a should-be column nobody re-derives, member allocations stop summing to the income they split, and a preferred-return accrual compounds a day-count error forward period after period. The engine rebuilds every pickup, share, accrual and tie from the base facts through the same kernel that produced the data and compares with exact ==, proves an elimination extinguishes rather than merely balances, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A mis-keyed pickup, a stale elimination or a should-be nobody recomputed is invisible until consolidation stops netting to zero.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 460" role="img" aria-label="Exploded functional block stack: Structural Precondition, Investment Roll-Forward, Equity Pickup, Consolidation Eliminations, Preferred-Return Accrual, Member Allocation &amp; Trial-Balance Tie-Out over seeded fictional data">
+  <g class="die-layer" data-layer="set"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Structural Precondition</text></g>
+  <g class="die-layer" data-layer="rf"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Investment Roll-Forward</text></g>
+  <g class="die-layer" data-layer="epu"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Equity Pickup</text></g>
+  <g class="die-layer" data-layer="elim"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Consolidation Eliminations</text></g>
+  <g class="die-layer" data-layer="pref"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Preferred-Return Accrual</text></g>
+  <g class="die-layer" data-layer="alloc"><polygon points="80,320 400,320 360,342 40,342" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,342 360,342 360,388 40,388" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="369" font-family="IBM Plex Mono,monospace" font-size="11" fill="#161616">Member Allocation &amp; Trial-Balance Tie-Out</text></g>
+  <text x="40" y="450" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="set" data-plain="Checks the consolidation file carries every artifact the controls below read, exactly once each." data-eng="One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" aria-label="Structural Precondition layer — open detail" aria-controls="die-panel" aria-expanded="false">Structural Precondition</button>
+    <button class="die-face" data-layer="rf" data-plain="Checks every investment roll-forward row foots, names a registered holding, covers every holding exactly once, and carries the ownership share of the sub&#x27;s declared distributions." data-eng="Four controls. rf_identity FAILs a row whose begin + contributions + pickup - distributions does not equal the stated end -- the closure identity of the whole workpaper. rf_row_has_holding FAILs a row naming a holding the register does not carry, a carrying value moving for an interest nobody declared owning. rf_coverage_complete FAILs a holding with zero or two roll-forward rows, since every holding carries exactly one or its carrying value cannot be tied. rf_distributions_rederive FAILs an equity holding whose distributions are not its ownership share of the distributions the sub declared, cash leaving the sub in a proportion nobody&#x27;s ownership produces." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" aria-label="Investment Roll-Forward layer — open detail" aria-controls="die-panel" aria-expanded="false">Investment Roll-Forward</button>
+    <button class="die-face" data-layer="epu" data-plain="Checks each pickup recomputes as ownership times the sub&#x27;s net income, cost-method holdings book none, ownership stays in bounds, and every holding resolves." data-eng="Four controls, and the reason the engine exists. epu_pickup_rederives rebuilds each equity holding&#x27;s pickup from ownership x the sub&#x27;s net income through the shared kernel -- floor division, residual cent to the final holder -- and FAILs any figure that does not match to the cent, because a pickup that is not recomputed is an assertion. epu_cost_no_pickup FAILs a cost-method holding that rolls any pickup or distribution through the investment, equity accounting wearing a cost label. epu_ownership_bounds FAILs ownership at or below zero, above 100.00%, or summed past the whole of a sub across its holders. epu_refs_resolve FAILs a holding whose parent, sub, sub result row or method does not resolve, the join table on which every later tie depends." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" aria-label="Equity Pickup layer — open detail" aria-controls="die-panel" aria-expanded="false">Equity Pickup</button>
+    <button class="die-face" data-layer="elim" data-plain="Checks every elimination block balances, pairs the investment to the sub&#x27;s equity, extinguishes the full carrying value, names a real equity holding, and follows the account link key." data-eng="Five controls. elim_block_balances FAILs a block whose debits do not equal its credits, a one-sided entry that moves the consolidated totals while claiming to cancel. elim_pairing_complete FAILs an equity holding with no block that both credits the Investment account and debits the sub&#x27;s Equity-Parent account, leaving the same net assets standing twice. elim_extinguishes_investment FAILs a block that credits the Investment account for anything other than the carrying value the roll-forward ends at -- a balanced elimination can still be last period&#x27;s. elim_refs_known FAILs an orphan block or one against a cost-method interest that consolidation never picks up line by line. elim_account_link_key re-derives Investment &lt;parent&gt;-1&lt;sub&gt;, pickup &lt;parent&gt;-3&lt;sub&gt; and Equity-Parent &lt;sub&gt;-29xx from the entity codes, because the pairing is only mechanically checkable while the convention holds." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" aria-label="Consolidation Eliminations layer — open detail" aria-controls="die-panel" aria-expanded="false">Consolidation Eliminations</button>
+    <button class="die-face" data-layer="pref" data-plain="Checks the preferred-return day counts, accruals, capital chain and period continuity all re-derive from the schedule&#x27;s own dates and rates." data-eng="Four controls. pref_day_count FAILs a stated day count that is not its start and end dates counted inclusively, and dates that do not form a forward-running period. pref_accrual_rederives recomputes capital x rate x days/basis with the day count taken from the dates, not the stated count, so a misstated count cannot launder the accrual it multiplied; it FAILs any figure off by a cent, with one truncating division and no intermediate rounding. pref_capital_chains FAILs a row that does not open where the prior period ended or does not end at opening + contribution, so the return never compounds into capital. pref_periods_contiguous FAILs a handover that leaves an unaccrued gap or re-accrues a day already earned." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" aria-label="Preferred-Return Accrual layer — open detail" aria-controls="die-panel" aria-expanded="false">Preferred-Return Accrual</button>
+    <button class="die-face" data-layer="alloc" data-plain="Checks the member allocations foot and sum to exactly the sub&#x27;s net income, every member is a holder, and the trial-balance columns tie out." data-eng="Seven controls. alloc_foots FAILs an allocation whose stated total is not the sum of its member rows. alloc_ties_net_income FAILs a fully equity-held sub whose member allocations do not sum to exactly its net income, income belonging to nobody. alloc_member_is_holder FAILs an allocation to an entity that holds no equity interest in that sub. alloc_tb_investment_ties FAILs an investment account whose trial-balance balance is not the roll-forward ending value. alloc_tb_pickup_ties FAILs a pickup account whose balance is not the re-derived share of income as a credit, tied to the recomputed share rather than the stated one so a mis-keyed roll-forward cannot vouch for a mis-keyed ledger. alloc_tb_adjustment_math FAILs an adjustment that is not exactly should-be minus balance. alloc_tb_unposted_adjustment is a FLAG, not a failure: an adjustment that is right and simply unposted, marked REVIEW for a human to time." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" aria-label="Member Allocation &amp; Trial-Balance Tie-Out layer — open detail" aria-controls="die-panel" aria-expanded="false">Member Allocation &amp; Trial-Balance Tie-Out</button>
+  </div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Six control families run in registry order over each consolidation file. The first proves the others had something to read, because a control that passes on an absent artifact reports assurance it never performed.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">423<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">25<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent rules run over every consolidation file</div></div>
+  <div class="cell"><div class="v">6<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Families</div><div class="p">groups of controls, each answering one question</div></div>
+  <div class="cell"><div class="v">27<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Sample files</div><div class="p">one clean baseline plus twenty-six planted-defect files</div></div>
+  <div class="cell"><div class="v">8<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Artifacts read</div><div class="p">entity register, holding register, sub results, investment roll-forward, elimination schedule, preferred-return schedule, member allocation, trial balance</div></div>
+  <div class="cell"><div class="v">0<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Tolerance</div><div class="p">a figure a cent off the re-derivation is a break, not a rounding band</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">A reporting group carries its subsidiaries and joint ventures under the equity method, booking each interest once as an investment and then holding three things true at the same time every period: the equity pickup it books must equal its ownership share of each sub&#x27;s net income, the investment carrying value must roll forward as begin + contributions + pickup - distributions = end, and on consolidation every Investment account must be extinguished against the sub&#x27;s Equity-Parent account so each entity block nets to zero. Three failures hide inside that, and none of them look wrong on a footed page. The pickup drifts from the ownership percentage -- a share of income the percentage does not produce, or a pickup routed through a holding carried at cost that should book none. The elimination goes stale -- the carrying value moved all period while the entry did not, leaving a residual that is neither an asset nor equity, or a holding never paired to the sub&#x27;s equity at all so the same net assets survive twice. And the rollup drifts from the evidence beneath it -- a should-be column nobody re-derives, member allocations that stop summing to the income they split, a preferred-return accrual that compounds a day-count error forward. None of these are judgment calls. They are equalities, membership tests and date arithmetic -- a pickup against ownership x net income with exact ==, a carrying value against the roll-forward it ends at, an accrual against capital x rate x days/basis -- which a deterministic control settles better than a spreadsheet inherited by whoever maintains the consolidation this year.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs every control over every consolidation file<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI generates twenty-seven fictional consolidation files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-five controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.</p>
+  <p style="margin:10px 0"><b>A balanced elimination can still be stale<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> One defect file moves both sides of an elimination block down by the same amount, so the block still balances and elim_block_balances holds -- but it now credits last period&#x27;s carrying value rather than the value the roll-forward ends at, and elim_extinguishes_investment fails. The two controls are independent by design: balancing is not extinguishing, and a residual survives on consolidation until the block ties to the ending carrying value.</p>
+  <p style="margin:10px 0"><b>The pickup is recomputed, not read back<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> A defect file adds to the booked pickup and absorbs the same amount into contributions, so the roll-forward identity still foots and rf_identity holds. epu_pickup_rederives rebuilds the pickup from ownership x the sub&#x27;s net income through the shared kernel and fails, proving the pickup is recomputed from the base facts beneath it rather than trusted as stated -- and alloc_tb_pickup_ties then ties the ledger to that re-derived share, not the stated one.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<div class="schem-wrap"><svg class="schem" width="950" height="416" viewBox="0 0 950 416" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the Equity-Method Pickup &amp; Eliminations engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,309 C235,309 235,81 270,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">consolidation files</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,368 355,368 331,368 L379,368 C355,368 355,368 355,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="361" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,368 355,368 331,368 L379,368 C355,368 355,368 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="372" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="73" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,195 510,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,309 510,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,195 C475,195 475,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">carrying value</text></g>
+  <g class="schem-edge"><path d="M440,195 C595,195 595,81 750,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,81 750,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,81 750,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="73" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,81 750,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,309 C715,309 715,81 750,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="176" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,309 C715,309 715,309 750,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M835,118 C835,368 835,368 811,368 L859,368 C835,368 835,368 835,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="835" y="361" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-block" data-block="corpus"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded Consolidation Files source on GitHub"><rect x="30" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="115" y="305">Seeded</tspan><tspan x="115" y="321">Consolidation Files</tspan></text></a></g>
+  <g class="schem-block" data-block="set-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Structural Precondition source on GitHub"><rect x="270" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="77">Structural</tspan><tspan x="355" y="93">Precondition</tspan></text></a></g>
+  <g class="schem-block" data-block="rf-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Investment Roll-Forward source on GitHub"><rect x="270" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="191">Investment</tspan><tspan x="355" y="207">Roll-Forward</tspan></text></a></g>
+  <g class="schem-block" data-block="epu-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Equity Pickup source on GitHub"><rect x="270" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Equity Pickup</text></a></g>
+  <g class="schem-block" data-block="elim-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Consolidation Eliminations source on GitHub"><rect x="510" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="595" y="77">Consolidation</tspan><tspan x="595" y="93">Eliminations</tspan></text></a></g>
+  <g class="schem-block" data-block="pref-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Preferred-Return Accrual source on GitHub"><rect x="510" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="595" y="191">Preferred-Return</tspan><tspan x="595" y="207">Accrual</tspan></text></a></g>
+  <g class="schem-block" data-block="alloc-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Allocation &amp; TB Tie-Out source on GitHub"><rect x="510" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="595" y="305">Allocation</tspan><tspan x="595" y="321">&amp; TB Tie-Out</tspan></text></a></g>
+  <g class="schem-block" data-block="registers"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/model.py" target="_blank" rel="noopener" aria-label="Open Registers, Schedules &amp; Trial Balance source on GitHub"><rect x="750" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="835" y="77">Registers, Schedules</tspan><tspan x="835" y="93">&amp; Trial Balance</tspan></text></a></g>
+  <g class="schem-block" data-block="report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/pickup_engine/report.py" target="_blank" rel="noopener" aria-label="Open Verdict and Findings source on GitHub"><rect x="750" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict and Findings</text></a></g>
+  <g class="schem-title"><line x1="30" y1="390" x2="920" y2="390" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="404" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E35-EPU &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-24</text></g>
+</svg></div><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Consolidation Files.</b> fictional equity-method consolidation files enter the control registry</li><li><b>Structural Precondition.</b> is the consolidation file complete</li><li><b>Investment Roll-Forward.</b> does every roll-forward foot, cover its holdings and share distributions</li><li><b>Equity Pickup.</b> does the pickup re-derive from ownership x sub net income</li><li><b>Consolidation Eliminations.</b> does the elimination balance and extinguish the carrying value</li><li><b>Preferred-Return Accrual.</b> do the accrual, day count, capital chain and periods re-derive</li><li><b>Allocation &amp; TB Tie-Out.</b> do the allocations tie to net income and the trial balance tie out</li><li><b>Registers, Schedules &amp; Trial Balance.</b> the artifacts and dated rates every rule resolves against</li><li><b>Verdict and Findings.</b> every finding, with the reason it exists, ends at a person</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Consolidation Files.</b> generate_corpus writes one clean baseline plus twenty-six planted-defect files -- at least one for every registered control -- twenty-seven files in total. Only the entities, the holdings, the sub results, the roll-forward opening facts and the preferred-return period facts are stated; each holding&#x27;s pickup and distribution share, every roll-forward ending value, the elimination blocks, the member allocation, the accrual chain and the trial-balance balances are re-derived through the same pickup kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.</li><li><b>Structural Precondition.</b> One control: FAILs a file missing any of the eight artifact types in model.DOC_TYPES or carrying a duplicate, so no downstream rule holds vacuously on absent evidence.</li><li><b>Investment Roll-Forward.</b> Four controls: each row foots begin + contributions + pickup - distributions = end, names a registered holding, every holding carries exactly one row, and each equity holding&#x27;s distributions are its ownership share of the sub&#x27;s declared distributions.</li><li><b>Equity Pickup.</b> Four controls: each equity pickup recomputes through the shared kernel, cost-method holdings book none, ownership is positive and never over-allocated, and every holding resolves to registered entities, a result row and a known method.</li><li><b>Consolidation Eliminations.</b> Five controls: every block self-balances, every equity holding is paired investment-to-equity, the credit to the Investment account equals the roll-forward ending value, every block names a real equity holding, and the GL accounts follow the company-code link key.</li><li><b>Preferred-Return Accrual.</b> Four controls: the stated day count equals the dates counted inclusively, the accrual recomputes as capital x rate x days/basis from the dates, the capital balance chains without the return compounding into it, and the accrual periods abut without gap or overlap.</li><li><b>Allocation &amp; TB Tie-Out.</b> Seven controls: each allocation foots and a fully-held sub&#x27;s allocations sum to exactly its net income, every member holds the sub, the investment and pickup accounts tie the re-derived figures, every adjustment is should-be minus balance, and an unposted-but-consistent adjustment is flagged for review.</li><li><b>Registers, Schedules &amp; Trial Balance.</b> The entity register carries each entity&#x27;s role and company code; the holding register carries ownership, method and the linked GL accounts; the sub results carry net income and declared distributions; the roll-forward, elimination schedule, preferred-return schedule, allocation summary and trial balance carry the derived figures. Every roll-forward, pickup, elimination, accrual, allocation and tie control resolves against these through the shared pickup kernel, so a determination cannot disagree with the data that produced it.</li><li><b>Verdict and Findings.</b> Findings roll up per consolidation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>regenerate the seeded fictional corpus, run all twenty-five controls, write both reports</td><td class="mono">per-file verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries a planted defect for every control by design</td><td>epu_report.json, epu_report.md, samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pickup_engine samples</code><button class="copybtn" data-copy="python -m pickup_engine samples" aria-label="Copy command: python -m pickup_engine samples">copy</button></div></td><td>analyze an existing folder of consolidation files without regenerating it</td><td class="mono">per-file verdicts and findings</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none unless --json or --md is passed</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pickup_engine samples --generate --quiet</code><button class="copybtn" data-copy="python -m pickup_engine samples --generate --quiet" aria-label="Copy command: python -m pickup_engine samples --generate --quiet">copy</button></div></td><td>regenerate the corpus and print only the overall verdict</td><td class="mono">a single verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest pickup_engine/tests -q</code><button class="copybtn" data-copy="python -m pytest pickup_engine/tests -q" aria-label="Copy command: python -m pytest pickup_engine/tests -q">copy</button></div></td><td>run the full test suite for this engine</td><td class="mono">423 passed</td><td class="mono">0 when every test passes</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>423</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Registered controls<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>25</b> controls<br><span style="color:#6f6f6f;font-size:12.5px">counted from the registry, not from documentation</span></td></tr>
+  <tr><td>Planted defects<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>26</b> defect files<br><span style="color:#6f6f6f;font-size:12.5px">every registered control has at least one file that trips it</span></td></tr>
+  <tr><td>Control coverage<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>100</b> percent of controls with a planted defect<br><span style="color:#6f6f6f;font-size:12.5px">no control ships without a file demonstrating it firing</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a figure is carried into consolidation and whether a derived adjustment is posted.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings above PASS</td><td class="mono"><b>PASS</b></td><td>carry the mechanically clean consolidation file into the documented sign-off and consolidation review</td></tr><tr><td>One or more FLAG, no FAIL</td><td class="mono"><b>REVIEW</b></td><td>a human resolves each flag; a trial-balance adjustment that is internally consistent but has not been posted lands here</td></tr><tr><td>One or more FAIL</td><td class="mono"><b>FAIL</b></td><td>the figure is not carried into consolidation until the failing control is cleared -- a pickup that does not recompute, an elimination that does not extinguish, an identity that does not foot, or a tie the trial balance does not hold</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only: consolidation files are parsed and never written back, so the engine cannot introduce the break it reports.</li><li style="list-style:disc;margin-left:18px">Integer cents throughout, compared with exact ==; there is no tolerance band, and a figure a cent off its re-derivation is reported as a break.</li><li style="list-style:disc;margin-left:18px">A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.</li><li style="list-style:disc;margin-left:18px">One pickup kernel: the controls and the generator share the arithmetic in pickup_engine.pickup, so a determination cannot disagree with the data that produced it -- floor division with the residual cent to the final holder, so a 50/50 split of an odd cent still sums back to the income it divides.</li><li style="list-style:disc;margin-left:18px">The pickup is recomputed, not read back: alloc_tb_pickup_ties compares the ledger to the re-derived share, so a mis-keyed roll-forward cannot vouch for a mis-keyed ledger.</li><li style="list-style:disc;margin-left:18px">The elimination must extinguish, not merely balance: a balanced block still crediting last period&#x27;s carrying value fails elim_extinguishes_investment.</li><li style="list-style:disc;margin-left:18px">Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.</li><li style="list-style:disc;margin-left:18px">Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never posts a journal entry, books a pickup, moves an elimination, files a return or writes to a source artifact. It reads the consolidation file and stops.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>It reads the eight artifacts the consolidation file carries. It does not connect to a general ledger, a consolidation system or the underlying valuation workpaper.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>It re-derives and ties the equity-method arithmetic -- pickup, roll-forward, eliminations, accrual and allocation. It deliberately does not opine on impairment or fair value, which are judgment calls owned by a valuation workpaper, not a re-foot.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>It takes the sub results, ownership percentages, method elections and dated rates the file carries at face value; it does not decide whether an ownership percentage, a cost-versus-equity election or a preferred-return rate is the correct one for the period and entity.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li><li>It confirms the schedules foot, re-derive and reconcile, not that a contribution or distribution actually occurred. All shipped data is fictional and the fiscal period is set in a fictional future.<sup class="fn"><a id="fnref-18" href="#fn-18" aria-label="See substantiation 18">18</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">brand animation</span>
+<figure class="figwrap"><img src="../assets/engine-pickup.svg" data-video="../assets/engine-pickup.svg" alt="Equity-Method Pickup &amp; Eliminations diagram: on the left a consolidation file feeds a structural-precondition gate; six control families run left to right -- the investment roll-forward (begin + contributions + pickup - distributions = end), the equity pickup re-derived as ownership x sub net income, the consolidation eliminations pairing each Investment account to the sub&#x27;s Equity-Parent account for the full carrying value, the preferred-return day-count accrual, and the member allocation and trial-balance tie-out -- each resolving against the registers, schedules and trial balance, with every finding ending at a verdict-and-findings report; a footer strip reads 25 controls, 6 families, 423 tests, read-only, SFS-E35-EPU." loading="lazy"><figcaption>The Equity-Method Pickup &amp; Eliminations engine tile states what has to hold every period: each pickup re-derives from ownership x the sub&#x27;s net income, the investment carrying value rolls forward and is extinguished against the sub&#x27;s equity for exactly its ending value, and the accrual, allocation and trial-balance columns all recompute from the base facts beneath them.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">python run.py</div><div class="runline">python -m pytest pickup_engine/tests -q</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/equity-pickup-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/equity-pickup-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+  </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (equity-pickup-automation/)</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>len(pickup_engine.engine.REGISTRY)</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>distinct rule-id prefixes in pickup_engine.engine.REGISTRY</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>samples/*.json after python run.py</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>len(pickup_engine.model.DOC_TYPES)</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>pickup_engine/tests boundary tests on the cent and the day count</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python run.py (equity-pickup-automation/); pickup_engine/tests planted-defect suite</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>pickup_engine/generate.py DEFECTS elimination_understated -&gt; elim_extinguishes_investment</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>pickup_engine/generate.py DEFECTS pickup_not_rederived -&gt; epu_pickup_rederives</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q -o addopts= (equity-pickup-automation/)</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>len(pickup_engine.engine.REGISTRY)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>len(pickup_engine.generate.DEFECTS)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>pickup_engine/tests: every registered rule has a planted defect</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>equity-pickup-automation/README.md and pickup_engine read-only / determinism tests</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>pickup_engine/model.py DOC_TYPES</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>pickup_engine/engine.py scope note and equity-pickup-automation/README.md</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>pickup_engine/engine.py epu_ and pref_ families</li>
+    <li id="fn-18"><a class="fnid" href="#fnref-18" aria-label="Back to reference 18">18</a>pickup_engine/generate.py</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
+</main>
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/equity-pickup-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+<script>
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
+</script>
+</body>
+</html>

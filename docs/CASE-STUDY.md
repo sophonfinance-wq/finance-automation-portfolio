@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **twenty-six runnable systems, a
-75,794-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **thirty-eight runnable systems, a
+80,574-test curated suite (plus an opt-in ~1.26M-case property sweep), CI.**
 
 ---
 
@@ -114,7 +114,19 @@ Each is now encoded as a control in the portfolio:
 | Gross-receipts & excise tax — each jurisdiction's tax re-derived from the GL revenue pull times the in-force classification rate, tied to the filed worksheet, with deductions, thresholds, rate-effective dates and filing-calendar completeness | `gross-receipts-tax-automation` | 400 |
 | Filing obligation calendar — every entity × jurisdiction obligation proved filed or validly extended before its statutory due date, fixed-amount vouchers re-derived, and the status register tied to filed evidence with nothing missing or orphaned | `filing-calendar-automation` | 369 |
 | Energy-efficient home credit (§45L) — every claimed dwelling unit gated on close-of-escrow date and RESNET/HERS certification, multiplied by the dated statutory per-unit amount, rolled up per project/region/fiscal year with net-benefit and partner allocation and a full cross-artifact tie-out | `energy-credit-automation` | 390 |
-| **Total** | **26 systems** | **75,794** |
+| Interest accrual & loan amortization — each note's accrued interest re-derived as balance × rate × days, the balance rolled forward period to period, the maturity, rate-step, prepayment and subordination gates enforced, and the reciprocal receivable, payable and interest journal tied to the schedule | `interest-accrual-automation` | 402 |
+| Financing execution & schedule variance — a monthly upcoming-financings report re-derived milestone by milestone: each variance as Current − Prior, each Prior tied to last month's Current, the original baseline held frozen, the playbook complete and every Gantt bar in its closing month | `financing-execution-automation` | 337 |
+| Wire & transfer release control — every outbound wire, ACH and book transfer gated on two distinct authorized signers within limit, an approved-template or callback-cleared beneficiary, a routing number resolving to the named bank, and a funded source account before release | `wire-release-automation` | 347 |
+| Payroll & benefit reconciliation — every 401(k), HSA and FSA deduction from a pay period proved to reach the recordkeeper, custodian, ledger liability and cash to the cent, the employer match and statutory limits recomputed, and each deposit timely under the DOL safe harbor | `payroll-benefit-automation` | 414 |
+| Non-resident withholding & 1042-S — every cross-border FDAP withholding rate recomputed from the payee's FATCA status, portfolio exemption and a treaty reduction gated on a valid W-8, with the tax, the deposits and Form 1042 tied to the 1042-S slips | `withholding-automation` | 410 |
+| Home sale closing & settlement tie-out — each closed home's settlement statement, closing entry, revenue, loan release and cost-of-sale relief recomputed from base facts and proforma rates, and the rollup's closed count and net-to-seller total tied to the units beneath | `closing-settlement-automation` | 379 |
+| Entity good-standing — each entity proved in good standing in every registered state: annual report filed on time, flat franchise tax paid, Secretary-of-State status ACTIVE, registered agent and license current, with the compliance rollup rebuilt from the records | `good-standing-automation` | 385 |
+| Subcontract SOV & change orders — a subcontract commitment's schedule of values footed, only approved change orders moving the revised contract, every pay-application column, retention and tax re-derived, the commitment rolled forward, and the conditional release tied to the certified payment | `sov-commitment-automation` | 412 |
+| Equity-method pickup & eliminations — every equity-method pickup re-derived as ownership × investee result, the investment roll-forward and preferred-return accrual recomputed, each intercompany elimination paired to net to zero, and the whole tied to the trial balance | `equity-pickup-automation` | 423 |
+| Depreciation & prepaid amortization — every fixed-asset depreciation and prepaid amortization figure re-derived from cost, life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the posted recurring entry | `depreciation-register-automation` | 440 |
+| Earnest-money deposit trust — each unit's pre-close earnest money tied three ways to zero variance across the deposit ledger, the escrow agent's statement and the construction-loan paydowns, cancellations split between forfeited and refunded, and the reconciliation recomputed | `deposit-trust-automation` | 407 |
+| Capital spending request gate — every capital request's dollar triggers proved to fire only after approval, its five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied across the package's artifacts | `spending-gate-automation` | 424 |
+| **Total** | **38 systems** | **80,574** |
 
 ---
 

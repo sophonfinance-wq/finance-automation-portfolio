@@ -1,0 +1,450 @@
+{
+  "num": 37,
+  "slug": "deposit",
+  "part_no": "SFS-E37-EMD",
+  "mnemonic": "EMD",
+  "family": "Deposit Trust",
+  "name": "Earnest-Money Deposit Trust",
+  "tagline": "Do the ledger, the escrow agent and the loan describe the same money, to the cent?",
+  "plain_summary": "A residential developer holds each for-sale buyer's earnest money in trust before the unit closes, and it has to prove, unit by unit, that three independent records describe the same money to the cent -- the internal deposit ledger, the escrow agent's open-escrow statement, and the construction-loan paydown register the earnest money is swept into as principal. This engine reads the seven artifacts the deposit record carries -- the deposit ledger, the escrow agent's statement, the loan paydown register, the cancellation register, the segregated trust-account balances, the sales matrix and the reconciliation summary -- and runs twenty-seven deterministic controls over them across ten families. Is the file complete and the ledger cut-off date readable, are the deposit ids unique and every row's fields present, does each row's cash split exactly into an upgrade deposit plus earnest money over non-negative components, do the ledger, the agent and the loan tie three ways per unit at zero variance and complete in both directions, does every swept deposit carry exactly one paydown and every queued deposit none, does each cancellation join a cancelled deposit and split into a retained fee plus a refund that sums to the earnest money, is the earlier sweep reversed once and the fee booked to forfeiture income, is every deposit in one known posting bucket and no closed unit still on the agent's open statement, do the segregated upgrade bank and forfeiture income recompute from the evidence, does each net sale price recompute as price plus a non-positive concession booked against revenue, and do the summary's per-unit variances, exception flags, total variance and bucket totals recompute from the deposits underneath them. It compares every figure with exact ==, holds zero as the only passing value on every reconciliation leg, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A pre-close deposit trust looks like the easiest reconciliation on the books: three records of the same buyer money, each footed and internally consistent. That is exactly why it drifts. None of the ways it breaks look wrong on any single page. The escrow agent holds a deposit the ledger never booked, or the books carry pre-close money the agent no longer holds -- each side balances, and only the per-unit tie-out sees the gap. A deposit marked posted has no paydown behind it, one still queued was already swept so the next posting run applies the same money twice, or a cancelled buyer's earlier paydown was never reversed and the loan stays paid down with money that was refunded. And the reconciliation summary -- the variance column, the exception flags, the posting-bucket totals, the trust balances -- is stated on numbers nobody recomputed from the deposits beneath them. The engine rebuilds every determination from the ledger, the agent's record and the loan register through one shared reconciliation kernel and compares with exact ==, holds zero as the only passing variance because a cent is a cent, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. A deposit the agent holds and the books never booked, or a sweep applied twice, is invisible until someone re-derives the money the three records are supposed to share.",
+  "layers_intro": "Ten control families run in registry order over each deposit file. The first proves the others had something to read and that the ledger cut-off date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the deposit file carries every artifact the controls below read, exactly once, and that the ledger cut-off date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES, or carrying more than one of any, because a control that silently passes on an absent input is worse than no control -- it reports assurance it never performed. It also FAILs an unreadable as_of ledger cut-off date, since the whole reconciliation is drawn at that cut-off. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence from reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "led",
+      "label": "Deposit Ledger",
+      "plain": "Checks the deposit ledger is sound: unique deposit ids, and every row carrying the fields the reconciliation reads.",
+      "engineering": "Two controls. led_unique_ids rejects a deposit id that appears twice, because the id joins the ledger to every paydown and every cancellation row -- a duplicate makes a principal payment ambiguous about which receipt it applied and would double every recomputed sum. led_required_fields proves each row carries its deposit id, unit, buyer, receipt date, status and state, plus the cash amount, upgrade and earnest-money figures, since a deposit with no provenance is a cash movement no control can attribute and a row with no amounts is not a deposit at all.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "seg",
+      "label": "Segregation Identity",
+      "plain": "Checks every row's cash amount splits exactly into an upgrade deposit plus earnest money, over non-negative components.",
+      "engineering": "Two controls. seg_amount_splits FAILs a deposit whose stated cash amount is not exactly its upgrade component plus its earnest-money component -- the amount is the cash that moved and the two components are the GL streams it must be carried in, so a split that does not sum has invented or lost money between the bank and the books. seg_components_nonnegative FAILs a negative upgrade or earnest-money component, because a negative piece can make any split sum while shifting money between the two deposit streams, so the identity is only meaningful over non-negative pieces.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "tie",
+      "label": "Three-Way Reconciliation",
+      "plain": "Checks the deposit ledger, the escrow agent's record and the loan paydowns describe the same money, per unit, at zero variance and complete in both directions.",
+      "engineering": "Four controls, and the reason the engine exists. tie_agent_variance_zero recomputes the earnest money the agent should hold for each unit and FAILs any nonzero agent-minus-books variance -- a positive variance is buyer money the agent holds that the books never captured, a negative one a release the books claim the agent never recorded; zero is the only passing value, with no tolerance band. tie_agent_completeness FAILs a unit on the agent's statement with no deposit on the ledger at all, the classic completeness gap. tie_ledger_completeness FAILs a unit the ledger holds in pre-close escrow that the agent's statement does not list, an over-release visible only across the two records. tie_loan_leg_zero nets the paydown register per unit against the ledger's swept earnest money and FAILs any difference, deferring a structurally broken sweep to the swp_ and cxl_ controls so one defect fires exactly one control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "swp",
+      "label": "Sweep Register",
+      "plain": "Checks the loan paydown register matches the ledger's own posting-status column: every swept deposit has one paydown, every paydown a receipt behind it, and every queued deposit none.",
+      "engineering": "Three controls. swp_posted_has_paydown FAILs a swept deposit that does not carry exactly one principal paydown -- none is a status the loan never saw, two is the same money applied twice. swp_paydown_has_deposit FAILs a movement that names no ledger deposit, is of a kind other than paydown or reversal, or names a different unit than its deposit, since an orphan principal payment is loan money moving with no receipt behind it. swp_need_to_post_not_swept FAILs a deposit still marked need-to-post that already carries a paydown, the inverse drift where the next posting run would sweep the same money a second time.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "cxl",
+      "label": "Cancellation Split",
+      "plain": "Checks every cancellation joins a cancelled deposit, splits exactly into a retained fee plus a refund, reverses any earlier sweep, and books the fee to forfeiture income.",
+      "engineering": "Four controls. cxl_row_joins FAILs a cancellation row naming a deposit not on the ledger or not cancelled, and a cancelled deposit without exactly one row, so cancellations and cancelled deposits pair one-to-one. cxl_split_sums FAILs a retained termination fee plus refund that does not sum exactly to the cancelled deposit's earnest money -- every cent is retained as forfeiture income or refunded, and a split that does not sum has created or destroyed deposit money. cxl_reversal_matches_sweep FAILs a swept-then-cancelled deposit whose earlier paydown is not reversed exactly once at exactly its amount, and any never-swept or active deposit that carries a reversal at all. cxl_fee_account FAILs a fee booked anywhere but the forfeitures income account, above all a construction cost code, where it would understate revenue and cost by the same amount and leave the margin looking right.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "sts",
+      "label": "Status and Scope",
+      "plain": "Checks every deposit sits in exactly one known posting bucket and lifecycle state, and flags a closed or cancelled unit still on the agent's open-escrow statement.",
+      "engineering": "Two controls. sts_valid_bucket FAILs a deposit whose posting status is not one of need-to-post, already-posted or unit-closed, or whose state is not active or cancelled -- an unclassifiable row cannot be placed on any side of the reconciliation, so the kernel excludes it and reports it here rather than letting it silently shift an expected sum. sts_closed_excluded_from_agent is a FLAG, not a failure: it marks a unit whose deposits have all closed or cancelled yet that still shows on the agent's open statement -- money is not misstated, but the escrow is stale and belongs to the close-of-escrow handoff.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "bnk",
+      "label": "Segregated Trust Balances",
+      "plain": "Checks the segregated upgrade-deposit bank balance and the forfeiture income to date recompute from the ledger and the cancellation register.",
+      "engineering": "Two controls. bnk_upgrade_bank_ties FAILs a stated upgrade-deposit bank balance that is not exactly the upgrade portion of every active, unclosed deposit -- the bank is a trust of buyer money, so a shortfall is buyer money spent early and an excess is cash no buyer can be charged for. bnk_forfeiture_income_ties FAILs a stated forfeiture-income balance that is not exactly the sum of the retained termination fees, a figure that drifts the first time a cancellation is booked and nobody re-adds the column.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "net",
+      "label": "Concession Netting",
+      "plain": "Checks each net sale price recomputes as sales price plus a non-positive concession, booked against revenue and never a construction cost.",
+      "engineering": "Three controls. net_sale_recomputes FAILs a stated net sale price that is not exactly its sales price plus its concession, the figure revenue recognition and the deposit percentage are measured against. net_concession_sign FAILs a positive concession, because a concession reduces revenue and is stored as a non-positive amount, so a positive one would raise the net sale price while still passing the recompute identity. net_concession_account FAILs a concession booked anywhere but the concessions revenue account, since routing it to job cost overstates revenue and construction cost by the same amount and leaves the margin right and both lines wrong.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Reconciliation Summary",
+      "plain": "Checks the summary's per-unit variances, exception flags, total variance and posting-bucket totals recompute from the evidence.",
+      "engineering": "Four controls. rpt_unit_variance_recomputes rebuilds every unit's variance through the shared kernel and FAILs a stated variance that does not match, a unit the evidence does not name, or a unit the evidence names that the summary omits. rpt_exception_flags_tie is a FLAG: the flag column is the reviewer's work queue, and a flag that contradicts the recomputed variance sends the follow-up to the wrong unit or hides the one that needed it. rpt_total_variance_ties FAILs a total variance that does not foot the recomputed unit variances. rpt_bucket_totals_tie FAILs any of the three posting-bucket totals -- need-to-post, already-posted, unit-closed -- that does not recompute from the ledger, since a bucket total that is off posts too much or too little to the loan.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Deposit Files",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional pre-close deposit files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-nine files in total. Only the deposit ledger, the escrow agent's statement, the loan register, the cancellation register and the sales prices are stated; each unit's variance and exception flag, the total variance, the posting-bucket totals, the segregated trust balances and each net sale price are re-derived through the same reconciliation kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the deposit file complete and the ledger cut-off date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate, or an unreadable as_of ledger cut-off date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "led-control",
+      "label": "Deposit Ledger",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "are the deposit ids unique and every row's fields present",
+      "engineering": "Two controls: no deposit id appears twice, and every ledger row carries the identity, date, status and amount fields the reconciliation reads.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "seg-control",
+      "label": "Segregation Identity",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does each cash amount split into upgrade plus earnest money",
+      "engineering": "Two controls: the cash amount equals its upgrade plus earnest-money split, over non-negative components so the identity cannot be faked by moving money between the two streams.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "tie-control",
+      "label": "Three-Way Reconciliation",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "do the ledger, the agent and the loan tie three ways per unit",
+      "engineering": "Four controls: the agent's earnest money ties the ledger at zero variance, every agent unit is on the books and every booked pre-close unit on the agent's statement, and the net loan paydown equals the swept earnest money per unit.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "swp-control",
+      "label": "Sweep Register",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does the sweep match the ledger's own status column",
+      "engineering": "Three controls: every swept deposit carries exactly one paydown, every movement joins a coherent ledger deposit, and no deposit still queued need-to-post already carries a paydown.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "cxl-control",
+      "label": "Cancellation Split",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does every cancellation split, book and reverse correctly",
+      "engineering": "Four controls: each cancellation joins a cancelled deposit one-to-one, the fee plus refund sums to the earnest money, the earlier sweep is reversed once and exactly, and the fee lands in forfeiture income.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "sts-control",
+      "label": "Status and Scope",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is every deposit in one known bucket and only pre-close units on the agent",
+      "engineering": "Two controls: every deposit sits in exactly one known posting bucket and lifecycle state, and a closed or cancelled unit still on the agent's open statement is flagged as stale escrow.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "bnk-control",
+      "label": "Segregated Trust Balances",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "do the upgrade bank and forfeiture income recompute",
+      "engineering": "Two controls: the segregated upgrade-deposit bank balance ties the upgrade portion of every active, unclosed deposit, and forfeiture income to date ties the sum of the retained termination fees.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "net-control",
+      "label": "Concession Netting",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does each net sale recompute from price plus a non-positive concession",
+      "engineering": "Three controls: the net sale price equals sales price plus concession, the concession is stored non-positive, and it is booked against revenue rather than a construction cost code.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Reconciliation Summary",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "do the summary's variances, flags and totals recompute from the evidence",
+      "engineering": "Four controls: each unit variance recomputes through the shared kernel, each exception flag ties its variance, the total variance foots the unit rows, and the three posting-bucket totals recompute from the ledger.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Artifacts and Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 2,
+      "plain": "the seven artifacts and the shared kernel every rule resolves against",
+      "engineering": "The deposit ledger carries each deposit's id, unit, buyer, receipt date, upgrade and earnest-money split, posting status and lifecycle state; the escrow agent's statement carries the earnest money held per open unit; the loan paydown register carries the principal paydowns and reversals; the cancellation register carries each forfeiture split; the trust-account balances carry the segregated upgrade bank and forfeiture income; the sales matrix carries the net-sale line; and the reconciliation summary carries the stated variances, flags and totals. Every tie-out, sweep, cancellation, trust-balance and rollup control resolves against these through the shared reconciliation kernel in deposit_engine.reconcile.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 4,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per deposit file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/deposit_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "deposit files" },
+    { "from": "set-control", "to": "led-control", "label": "complete" },
+    { "from": "set-control", "to": "seg-control", "label": "complete" },
+    { "from": "set-control", "to": "tie-control", "label": "complete" },
+    { "from": "set-control", "to": "swp-control", "label": "complete" },
+    { "from": "set-control", "to": "cxl-control", "label": "complete" },
+    { "from": "set-control", "to": "sts-control", "label": "complete" },
+    { "from": "set-control", "to": "bnk-control", "label": "complete" },
+    { "from": "set-control", "to": "net-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "led-control", "to": "registers", "label": "resolves" },
+    { "from": "seg-control", "to": "registers", "label": "resolves" },
+    { "from": "tie-control", "to": "registers", "label": "resolves" },
+    { "from": "swp-control", "to": "registers", "label": "resolves" },
+    { "from": "cxl-control", "to": "registers", "label": "resolves" },
+    { "from": "sts-control", "to": "registers", "label": "resolves" },
+    { "from": "bnk-control", "to": "registers", "label": "resolves" },
+    { "from": "net-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "swp-control", "to": "cxl-control", "label": "reversal" },
+    { "from": "tie-control", "to": "report", "label": "findings" },
+    { "from": "swp-control", "to": "report", "label": "findings" },
+    { "from": "cxl-control", "to": "report", "label": "findings" },
+    { "from": "bnk-control", "to": "report", "label": "findings" },
+    { "from": "net-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "407",
+      "source": "python -m pytest --collect-only -q -o addopts= (deposit-trust-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "27",
+      "source": "len(deposit_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every deposit file"
+    },
+    {
+      "label": "Families",
+      "value": "10",
+      "source": "distinct rule-id prefixes in deposit_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Deposit files",
+      "value": "29",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-eight planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(deposit_engine.model.DOC_TYPES)",
+      "plain": "deposit ledger, escrow agent statement, loan paydown register, cancellation register, trust balances, sales matrix, reconciliation summary"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "deposit_engine/tests boundary tests on the cent",
+      "plain": "a variance a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A residential developer receipts each for-sale buyer's earnest money into escrow before the unit closes, splits it from any separate upgrade deposit, and sweeps the earnest money to the construction loan as a principal paydown; if the buyer cancels, the deposit decomposes into a retained termination fee, a refund, and a reversal of that earlier paydown. The trust is proved by three independent records agreeing, unit by unit, to the cent: the internal deposit ledger, the escrow agent's open-escrow statement, and the loan paydown register. Three failures hide inside that, none of which look wrong on any single page. The agent's record and the books disagree -- a deposit the agent holds that the ledger never booked, or pre-close money the ledger carries that the agent no longer holds -- each side internally consistent, the break visible only across them. The sweep drifts from the ledger's own status column -- a posted deposit with no paydown, a queued deposit already swept, a cancelled buyer's paydown never reversed. And the rollup -- the summary's variances, exception flags, bucket totals and trust balances -- is stated on numbers nobody recomputed from the deposits underneath them. None of these are judgment calls. They are equalities and comparisons -- an agent balance against the earnest money the ledger supports, a stated total against its re-derivation, a split against the deposit it decomposes -- which a deterministic control settles better than a spreadsheet inherited by whoever tracks the trust this quarter.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every deposit file",
+      "narrative": "The CLI generates twenty-nine fictional deposit files -- one clean baseline and one carrying each of the twenty-eight planted defects -- then runs all twenty-seven controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (deposit-trust-automation/); deposit_engine/tests planted-defect suite"
+    },
+    {
+      "title": "One defect trips exactly one control, and zero has no tolerance band",
+      "narrative": "Variance is agent-minus-books in integer cents and the only passing value is zero, so a one-cent break is a break. The controls are scoped so a single defect fires one control: a missing sweep trips swp_posted_has_paydown while tie_loan_leg_zero defers the same unit to it, and a paydown a thousand short of its receipt trips tie_loan_leg_zero alone -- each break landing on the control that owns it rather than cascading across the tie-out.",
+      "source": "deposit_engine/generate.py DEFECTS sweep_missing / paydown_leg_short; deposit_engine/tests boundary tests on the cent"
+    },
+    {
+      "title": "The summary is recomputed, not read back",
+      "narrative": "A defect edits a unit's stated variance in the reconciliation summary without touching the ledger or the agent's record beneath it. rpt_unit_variance_recomputes rebuilds the variance through the shared kernel and fails, proving the summary is re-derived from the deposits underneath it rather than trusted as stated.",
+      "source": "deposit_engine/generate.py DEFECTS summary_variance_wrong -> rpt_unit_variance_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-seven controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "emd_report.json, emd_report.md, samples/"
+    },
+    {
+      "cmd": "python -m deposit_engine samples",
+      "operation": "analyze an existing folder of deposit files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m deposit_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest deposit_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "407 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "407",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (deposit-trust-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "27",
+      "unit": "controls",
+      "source": "len(deposit_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "28",
+      "unit": "defect files",
+      "source": "len(deposit_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "deposit_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the deposits they were given: the file was complete, every deposit id unique and every row's fields present, each cash amount split into non-negative upgrade and earnest-money components, the ledger, the agent and the loan tied three ways at zero variance, every sweep and reversal matched the ledger's status column, every cancellation split and booked correctly, and every rolled-up figure -- unit variance, exception flag, total variance, posting-bucket total, upgrade bank, forfeiture income and net sale price -- recomputed from the evidence beneath it. It is not an opinion on whether a closing actually occurred, whether the escrow agent's own balance is right, whether a cancellation was properly authorised, or whether the accounts a fee or concession is booked to are the correct ones for this developer.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean deposit file into the documented sign-off and reconciliation review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a closed or cancelled unit still on the agent's open-escrow statement and an exception flag that does not tie its recomputed variance both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the deposit or figure is not carried into the trust reconciliation until the failing control is cleared -- a nonzero three-way variance, a missing or premature sweep, a forfeiture split that does not sum, or a rollup that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: deposit files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on any reconciliation leg, and a variance of one cent is reported as a variance.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One reconciliation kernel: the controls and the generator share deposit_engine.reconcile, so a stated determination cannot disagree with the logic that produced it.",
+      "Controls are scoped to own their breaks: a structurally broken sweep is left to the swp_ and cxl_ controls and an unclassifiable row to sts_valid_bucket, so one defect fires one control instead of cascading across the tie-out.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a deposit is carried into the trust reconciliation and whether a completeness gap or over-release is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never receipts a deposit, posts a sweep, books a cancellation, moves money, or writes to a source artifact. It reads the deposit file and stops.",
+      "source": "deposit-trust-automation/README.md and deposit_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the deposit record emits. It does not connect to the escrow agent's system, the construction lender, the trust bank or the general ledger.",
+      "source": "deposit_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the three records tie to the cent; it does not prove the escrow agent's own balance is correct, that a closing actually occurred, or that a cancellation was properly authorised. That judgment is a reviewer's.",
+      "source": "deposit_engine/engine.py tie_ and cxl_ families"
+    },
+    {
+      "statement": "It confirms a fee lands in forfeiture income and a concession against revenue; it does not decide whether those account codes are the correct ones for this developer's chart of accounts.",
+      "source": "deposit_engine/engine.py cxl_fee_account and net_concession_account"
+    },
+    {
+      "statement": "It takes the deposit ledger, the agent's statement and the loan register at face value: it reconciles what they state, not whether the underlying cash actually moved. All shipped data is fictional and the reporting period is set in a fictional future.",
+      "source": "deposit_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-deposit.svg",
+    "motion": "../assets/engine-deposit.svg",
+    "poster_alt": "Earnest-Money Deposit Trust diagram: down the left the seven deposit artifacts -- deposit ledger, escrow agent statement, loan paydown register, cancellation register, trust-account balances, sales matrix and reconciliation summary; in the centre a per-unit three-way tie-out where the ledger's earnest money, the escrow agent's recorded balance and the net loan paydown meet at a zero-variance node, with one unit stamped COMPLETENESS GAP where the agent holds money the books never booked and one stamped SWEEP DRIFT where a posted deposit has no paydown behind it; a cancellation panel splitting a walked-away buyer's earnest money into a retained fee booked to forfeiture income plus a refund, with the earlier paydown reversed; and on the right a reconciliation summary whose unit variances, exception flags, total variance and posting-bucket totals recompute from the evidence; a footer strip reads 27 controls, 10 families, 407 tests, read-only, SFS-E37-EMD.",
+    "caption": "The Earnest-Money Deposit Trust engine tile states the question that has to hold unit by unit: the deposit ledger, the escrow agent's record and the construction-loan paydown register describe the same buyer money to the cent, every sweep and cancellation matches the ledger's status column, and the reconciliation summary and trust balances are recomputed from the deposits underneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest deposit_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/deposit-trust-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/deposit-trust-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Earnest-Money Deposit Trust (SFS-E37-EMD) datasheet -- twenty-seven deterministic, read-only controls over a residential developer's pre-close earnest-money trust: the internal deposit ledger, the escrow agent's open-escrow statement and the construction-loan paydown register tied three ways per unit at zero variance, with the segregation identity, the sweep register, the cancellation and forfeiture split, the trust balances, concession netting and the reconciliation summary all recomputed from the deposits beneath them through one shared kernel. 407 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}
