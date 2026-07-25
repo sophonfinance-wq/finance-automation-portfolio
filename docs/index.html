@@ -282,8 +282,12 @@
 
   /* ============ FLAGSHIP ENGINES ============ */
   .flag { border:1px solid var(--border); background:#fff; margin-top:28px; }
+  /* Padding is sized to the label, not to the digit stream behind it. At 42px
+     vertical the strip stood 119px tall around 34px of content — 71% empty — and
+     taller still on a phone where the three parts wrap. The stream's rows are
+     placed in percentages, so they simply sit closer together in a shorter box. */
   .flag-head { position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
-    padding:42px 28px; border-bottom:1px solid var(--border); }
+    padding:22px 28px; border-bottom:1px solid var(--border); }
   .flag-head > .flag-id, .flag-head > .flag-tag, .flag-head > .flag-more { position:relative; z-index:2; }
   .flag-head .flag-id h3, .flag-head .flag-num, .flag-head .flag-tag { text-shadow:0 1px 14px rgba(255,255,255,.95), 0 1px 2px rgba(255,255,255,.8); }
   /* Engine-header data stream. Replaces the old background film: faint mono digits
@@ -395,17 +399,18 @@
     pointer-events:none; opacity:0; transform:translate3d(-150%,0,0); will-change:transform;
     background:linear-gradient(102deg, rgba(15,98,254,0) 0%, rgba(15,98,254,.07) 40%,
       rgba(255,255,255,.58) 50%, rgba(15,98,254,.07) 60%, rgba(15,98,254,0) 100%); }
-  .tile-vis.tv-static.tv-live::after { animation:tvScan 5.6s cubic-bezier(.45,.05,.5,.95) var(--tvd,.4s) infinite; }
+  /* One pass, then done — the tile is a still again and stays that way. Never
+     repeats and never re-runs when the tile comes back on screen. */
+  .tile-vis.tv-static.tv-live::after { animation:tvScan 1.9s cubic-bezier(.45,.05,.5,.95) var(--tvd,.2s) 1 forwards; }
   /* four offsets, so a row of tiles that scrolls into view together doesn't
      sweep in lockstep */
-  .fleet .tile:nth-child(4n+2) .tile-vis.tv-static { --tvd:1.2s; }
-  .fleet .tile:nth-child(4n+3) .tile-vis.tv-static { --tvd:2.1s; }
-  .fleet .tile:nth-child(4n+4) .tile-vis.tv-static { --tvd:3.2s; }
+  .fleet .tile:nth-child(4n+2) .tile-vis.tv-static { --tvd:.34s; }
+  .fleet .tile:nth-child(4n+3) .tile-vis.tv-static { --tvd:.48s; }
+  .fleet .tile:nth-child(4n+4) .tile-vis.tv-static { --tvd:.62s; }
   @keyframes tvScan {
     0%   { opacity:0; transform:translate3d(-150%,0,0); }
-    5%   { opacity:1; }
-    31%  { opacity:1; }
-    36%  { opacity:0; transform:translate3d(272%,0,0); }
+    12%  { opacity:1; }
+    82%  { opacity:1; }
     100% { opacity:0; transform:translate3d(272%,0,0); } }
 
   /* ============ SELF-HEALING ============ */
@@ -695,6 +700,9 @@
     .hero-ctas .cta-label-desktop { display:none; }
     .hero-ctas .cta-label-mobile { display:inline; }
     .flag-head, .flag-col, .flag-foot { padding-left:20px; padding-right:20px; }
+    /* the three parts stack here, so the gaps already separate them — the block
+       padding only needs to hold the strip off the rule above and below */
+    .flag-head { padding-top:18px; padding-bottom:18px; gap:9px; }
     .flag-foot .gate { margin-left:0; }
     .founder { flex-direction:column; } .founder-photo { width:100%; } .founder-photo img { height:auto; min-height:0; aspect-ratio:3/2; object-position:center 18%; }
   }
@@ -2932,10 +2940,44 @@
     }, { threshold: 0.05 }).observe(hero);
   }
 
-  // motion enhancement: labeled diagrams upgrade to silent looping video.
+  // motion enhancement: labeled diagrams upgrade to video, play their one pass,
+  // and stop. A diagram states an identity, so it has an end state; looping it
+  // re-drew a settled figure every few seconds, and scrolling back to a tile
+  // restarted a drawing the visitor had already watched finish.
   // Reduced-motion and no-JS users keep the static images (early return above).
   function playLoop(v) { if (v && v.paused && v.dataset.ended !== '1') { var p = v.play(); if (p && p.catch) p.catch(function () {}); } }
   function playAll() { document.querySelectorAll('video').forEach(playLoop); }
+
+  // Where a film settles is a property of the film, not something to hard-code:
+  // the draw-in cuts end on the finished diagram, while the ambient ones drift
+  // and end mid-move (measured: the recon film ends 9.8 mean-channel-levels away
+  // from its own still, the AP film 0.4). So ask the frame. On the last frame,
+  // compare it to the poster — the settled composition by definition — and if it
+  // doesn't match, rewind to frame 0 and hold that instead. A re-cut film needs
+  // no code change, and a tainted canvas just falls through to the last frame.
+  function settleFilm(v) {
+    v.dataset.ended = '1';
+    var W = 80, H = 45, g;
+    try {
+      var c = document.createElement('canvas'); c.width = W; c.height = H;
+      g = c.getContext('2d', { willReadFrequently: true });
+      g.drawImage(v, 0, 0, W, H);
+      var last = g.getImageData(0, 0, W, H).data;
+      var still = new Image();
+      still.onload = function () {
+        try {
+          g.clearRect(0, 0, W, H); g.drawImage(still, 0, 0, W, H);
+          var s = g.getImageData(0, 0, W, H).data, sum = 0, n = 0, i;
+          for (i = 0; i < s.length; i += 4) {
+            sum += Math.abs(s[i] - last[i]) + Math.abs(s[i + 1] - last[i + 1]) + Math.abs(s[i + 2] - last[i + 2]);
+            n += 3;
+          }
+          if (sum / n > 3) v.currentTime = 0;
+        } catch (e) {}
+      };
+      still.src = v.poster;
+    } catch (e) {}
+  }
 
   document.querySelectorAll('img[data-video]').forEach(function (img) {
     var vio = new IntersectionObserver(function (entries) {
@@ -2948,9 +2990,9 @@
         var msrc = img.getAttribute('data-video') || '';
         if (!/\.(mp4|webm|ogv)$/i.test(msrc)) return;
         var v = document.createElement('video');
-        v.muted = true; v.defaultMuted = true; v.loop = true; v.autoplay = true; v.playsInline = true;
+        v.muted = true; v.defaultMuted = true; v.autoplay = true; v.playsInline = true;
         v.setAttribute('muted', ''); v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
-        v.setAttribute('autoplay', ''); v.setAttribute('loop', ''); v.setAttribute('preload', 'auto');
+        v.setAttribute('autoplay', ''); v.setAttribute('preload', 'auto');
         if ('disableRemotePlayback' in v) v.disableRemotePlayback = true;
         v.poster = img.currentSrc || img.src;
         v.src = img.getAttribute('data-video');
@@ -2961,13 +3003,20 @@
         playLoop(v);
         v.addEventListener('loadeddata', function () { playLoop(v); });
         v.addEventListener('canplay', function () { playLoop(v); });
-        // Keep it playing whenever it is on screen. Re-attempting play() on every
-        // re-entry is what actually starts muted loops on mobile — each scroll into
-        // view is a fresh chance after the browser's autoplay gate, and it pauses
-        // off-screen loops to save battery/data.
-        new IntersectionObserver(function (es) {
-          es.forEach(function (x) { if (x.isIntersecting) playLoop(v); else if (!v.paused) v.pause(); });
-        }, { threshold: 0.01 }).observe(v);
+        v.addEventListener('ended', function () { settleFilm(v); });
+        // Re-attempting play() on every re-entry is what actually starts muted
+        // playback on mobile — each scroll into view is a fresh chance after the
+        // browser's autoplay gate. A pass interrupted by scrolling away therefore
+        // resumes where it stopped; it never restarts, and once settled playLoop
+        // is a no-op, so the finished diagram just stays put.
+        var eio = new IntersectionObserver(function (es) {
+          es.forEach(function (x) {
+            if (x.isIntersecting) playLoop(v);
+            else if (!v.paused) v.pause();
+            if (v.dataset.ended === '1') eio.unobserve(v);
+          });
+        }, { threshold: 0.01 });
+        eio.observe(v);
       });
     }, { rootMargin: '200px' });
     vio.observe(img);
@@ -2975,7 +3024,9 @@
 
   // The tiles with no film asset animate themselves — see .tv-static in the
   // stylesheet. Same test as the upgrade above, so a tile is never both: it
-  // either plays a film or runs the scan. Armed on entry, disarmed on exit.
+  // either plays a film or runs the scan. Armed once, on first sight, and then
+  // left alone: the class is never removed, because removing and re-adding it
+  // would restart the sweep every time the tile scrolled back into view.
   var statics = [].slice.call(document.querySelectorAll('#engines .tile-vis')).filter(function (vis) {
     var img = vis.querySelector('img[data-video]');
     var msrc = img ? img.getAttribute('data-video') : '';
@@ -2983,7 +3034,11 @@
   });
   if (statics.length) {
     var tvio = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) { e.target.classList.toggle('tv-live', e.isIntersecting); });
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('tv-live');
+        tvio.unobserve(e.target);
+      });
     }, { threshold: 0, rootMargin: '60px 0px' });
     statics.forEach(function (vis) { vis.classList.add('tv-static'); tvio.observe(vis); });
   }
