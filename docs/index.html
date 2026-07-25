@@ -628,6 +628,18 @@
     .stat:nth-child(3) { border-left:none; padding-left:0; }
     .stat { padding:22px 22px 20px; }
   }
+  /* The full nav measures about 860px with the brand and the CTA, so between the
+     old 820px collapse point and roughly 900px it ran off the right edge and gave
+     the page a horizontal scrollbar. Collapse it to the menu button a little
+     earlier; everything else keeps its own breakpoints. */
+  @media (max-width:900px) {
+    .nav-links { position:fixed; top:60px; right:0; left:0; flex-direction:column; align-items:stretch;
+      background:#fff; border-bottom:1px solid var(--border); padding:8px 24px 18px; display:none; }
+    .nav-links.open { display:flex; }
+    .nav-links a:not(.btn) { padding:14px 4px; font-size:15px; border-bottom:1px solid var(--border); }
+    .nav-links .btn { margin:14px 0 0; }
+    .nav-toggle { display:inline-flex; }
+  }
   @media (max-width:820px) {
     .nav-links { position:fixed; top:60px; right:0; left:0; flex-direction:column; align-items:stretch;
       background:#fff; border-bottom:1px solid var(--border); padding:8px 24px 18px; display:none; }
