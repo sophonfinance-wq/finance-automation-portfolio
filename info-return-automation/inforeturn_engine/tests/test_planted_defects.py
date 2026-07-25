@@ -91,6 +91,22 @@ def test_no_defect_targets_an_unregistered_rule() -> None:
         )
 
 
+def test_flag_only_defects_roll_up_to_review(
+    by_defect: dict[str, DocumentReport]
+) -> None:
+    """A review signal is not a failure, and the verdict has to say so.
+
+    Both FLAG-severity controls ship a defect that fires nothing else, so the
+    REVIEW rung of the verdict ladder is exercised rather than merely declared.
+    Without this the ladder's middle rung is untested: flipping the FLAG branch
+    of :meth:`DocumentReport.verdict` to FAIL leaves the rest of the suite green.
+    """
+    for name in ("near_threshold_payee", "watchlist_overstated"):
+        assert by_defect[name].verdict is Verdict.REVIEW, (
+            f"{name} rolled up to {by_defect[name].verdict.value}, not REVIEW"
+        )
+
+
 def test_amount_invalid_is_reported_not_coerced(
     by_defect: dict[str, DocumentReport]
 ) -> None:

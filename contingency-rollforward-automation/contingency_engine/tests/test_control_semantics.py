@@ -54,6 +54,7 @@ from contingency_engine.model import (
     Status,
 )
 from contingency_engine.money import apply_rate
+from contingency_engine.rollforward import within_watch_band
 
 
 # --------------------------------------------------------------------------- #
@@ -248,6 +249,35 @@ def test_an_inadequate_bucket_is_not_also_watched() -> None:
     row = _bucket(payload, "PRJ-402", BUCKET_PROJECT)
     row["projected_use_cents"] = row["current_balance_cents"] + 1
     assert not _fired(check_adq_headroom_watch(_ctx(payload)))
+
+
+def test_zero_headroom_is_still_watched() -> None:
+    """A projection that exactly exhausts the balance is adequate, and watched.
+
+    Adequate means the balance covers the projection, so projection == balance is
+    the adequate *side* of the line: the hard control does not own it, which means
+    the watch band must. Loosening the guard from ``>`` to ``>=`` would silently
+    drop the thinnest possible bucket off the watchlist, and every other test in
+    this suite would still pass.
+    """
+    payload = _payload()
+    row = _bucket(payload, "PRJ-402", BUCKET_PROJECT)
+    row["projected_use_cents"] = row["current_balance_cents"]
+    fired = _fired(check_adq_headroom_watch(_ctx(payload)))
+    assert fired
+    assert fired[0].status is Status.FLAG
+
+
+def test_an_exhausted_bucket_is_never_watched() -> None:
+    """A bucket with nothing left has no balance for a share of it to describe.
+
+    Tested on the kernel directly because the band is a share of the remaining
+    balance: at zero the share is zero, so a naive comparison would call every
+    exhausted bucket thin. Relaxing the guard from ``<= 0`` to ``< 0`` flips this
+    to True and nothing else in the suite notices.
+    """
+    assert within_watch_band(0, 0, WATCH_THRESHOLD_BPS) is False
+    assert within_watch_band(-1, 0, WATCH_THRESHOLD_BPS) is False
 
 
 def test_watch_band_is_clean_on_the_baseline() -> None:

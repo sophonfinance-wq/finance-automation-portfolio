@@ -14,4 +14,6 @@ description: "Draft LinkedIn posts for Sophon Finance Systems in the founder's v
 - Claims must be true to the repo: cite real test counts, real demo output, "fictional data, run it yourself".
 
 ## Cadence content on file
-`references/post-series.md` (in this skill's folder) holds the ready-to-paste series: launch + one post per engine. Already published: the self-healing launch post (with the tie-out diagram) and "One loop architecture. Five gate policies." (with the gate-policy table). Continue the series from there, rewriting each into the voice above before delivering.
+`references/post-series.md` (in this skill's folder) holds the ready-to-paste series: launch + one post per engine. Already published: the self-healing launch post (with the tie-out diagram) and "One loop architecture. Five gate policies." (with the gate-policy table).
+
+**Posts 2-6 predate these voice rules** (em-dashes, Title-Case hashtags) — rewrite them into the voice above before delivering. **Posts 7-15 (engines 39-47) are already in this voice and lint clean** — deliver them as-is; each carries its GitHub first comment beside it. Continue numbering from 16.

@@ -261,6 +261,13 @@ footer a{color:var(--blue);text-decoration:none}
       // The preference can change after the observer was registered.
       if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
       io.unobserve(img);
+      // Only upgrade to <video> when data-video is genuinely a video. A spec whose
+      // media.motion falls back to its poster would otherwise give a <video> with an
+      // SVG src that no browser can decode -- and .motion-media>img{display:none}
+      // hides the working image, leaving a control bar over a diagram that can never
+      // play. Belt and braces: the generator also stops emitting the attribute.
+      var msrc=img.getAttribute('data-video')||'';
+      if(!/\.(mp4|webm|ogv)$/i.test(msrc))return;
       var v=document.createElement('video');
       var media=document.createElement('span');
       media.className='motion-media';

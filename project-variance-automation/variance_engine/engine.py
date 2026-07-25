@@ -1623,9 +1623,7 @@ def check_mst_slippage_lead_time(ctx: Context) -> list[Finding]:
         return []
     tolerance = ctx.slippage_tolerance_days
     out: list[Finding] = []
-    checked = 0
     for entry in recompute_slippage_watchlist(ctx, as_of, tolerance):
-        checked += 1
         out.append(
             Finding(
                 rule,

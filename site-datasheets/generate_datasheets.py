@@ -216,13 +216,21 @@ def see_it_run_html(spec: dict) -> str:
     # back to the modest claim, so reusing the synthesized brand animation can never
     # silently advertise a capture that doesn't exist.
     run_label = _esc(m.get("run_label", "brand animation"))
+    # media.motion is a required field, so an engine with no real capture declares its
+    # poster as its motion. That is honest in the spec but must NOT reach the page: the
+    # motion script would build a <video> whose src is an SVG, which no browser can
+    # decode -- and because the wrapper CSS hides the static <img>, the reader would get
+    # a video control bar painted over a diagram that can never play. Emit data-video
+    # only when there is genuinely something else to play.
+    has_motion = m.get("motion") and m["motion"] != m["poster"]
+    motion_attr = f' data-video="{_esc(m["motion"])}"' if has_motion else ""
     return (
         f'<section><h2>See it run</h2><span class="zone-k">{run_label}</span>\n'
-        '<figure class="figwrap"><img src="{}" data-video="{}" '
+        '<figure class="figwrap"><img src="{}"{} '
         'alt="{}" loading="lazy">'
         '<figcaption>{}</figcaption></figure>'
         '{}</section>'
-    ).format(_esc(m["poster"]), _esc(m["motion"]), _esc(m["poster_alt"]),
+    ).format(_esc(m["poster"]), motion_attr, _esc(m["poster_alt"]),
              _esc(m["caption"]), crops_html)
 
 

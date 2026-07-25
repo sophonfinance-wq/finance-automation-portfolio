@@ -66,7 +66,12 @@ from variance_engine.model import (
     Context,
     Status,
 )
-from variance_engine.variance import margin_on_cost_bps
+from variance_engine.variance import (
+    cost_to_complete_cents,
+    margin_on_cost_bps,
+    net_project_revenue_cents,
+    variance,
+)
 
 #: The milestone the corpus places exactly on the slippage tolerance.
 AT_TOLERANCE_MILESTONE = "MS-3043"
@@ -148,6 +153,20 @@ def test_cost_to_complete_follows_a_moved_cost_to_date(
     assert bool(_fired(check_bud_cost_to_complete_foots(_ctx(payload)))) is should_fail
 
 
+def test_cost_to_complete_is_the_budget_less_the_cost_to_date() -> None:
+    """The identity itself, longhand, so a reversed subtraction cannot pass.
+
+    Every other test in this section perturbs the generator's own figure by a cent and
+    asserts the control fires. That is not enough on its own: the generator and the
+    controls share one kernel, so reversing the subtraction inside it writes the
+    reversed figure into the corpus *as well*, the control still agrees with the data,
+    and the whole suite stays green. Pinning the identity to constants is what kills
+    that mutation.
+    """
+    assert cost_to_complete_cents(1_800_000_000, 1_100_000_000) == 700_000_000
+    assert cost_to_complete_cents(1_100_000_000, 1_800_000_000) == -700_000_000
+
+
 # --------------------------------------------------------------------------- #
 # eco_ -- the current-period economics re-derive from their own inputs
 # --------------------------------------------------------------------------- #
@@ -156,6 +175,12 @@ def test_net_revenue_foots_to_the_cent(delta: int, should_fail: bool) -> None:
     payload = _payload()
     _econ(payload, DOC_CURRENT_ECONOMICS, "PRJ-301")["net_project_revenue_cents"] += delta
     assert bool(_fired(check_eco_net_revenue_foots(_ctx(payload)))) is should_fail
+
+
+def test_net_revenue_is_gross_less_the_deductions() -> None:
+    """Longhand, for the same reason: a reversed kernel writes a reversed corpus."""
+    assert net_project_revenue_cents(5_000_000_000, 300_000_000) == 4_700_000_000
+    assert net_project_revenue_cents(300_000_000, 5_000_000_000) == -4_700_000_000
 
 
 @pytest.mark.parametrize("delta, should_fail", [(-1, True), (0, False), (1, True)])
@@ -257,6 +282,12 @@ def test_plan_variance_is_the_difference_of_the_columns_beside_it(
     assert bool(_fired(check_var_plan_column_ties(_ctx(payload)))) is should_fail
 
 
+def test_a_variance_is_the_current_figure_less_the_one_it_measures_to() -> None:
+    """The sign convention, longhand: + is above the column being measured to."""
+    assert variance(1_200, 1_000) == 200
+    assert variance(1_000, 1_200) == -200
+
+
 @pytest.mark.parametrize("delta, should_fail", [(-1, True), (0, False), (1, True)])
 def test_a_basis_point_variance_foots_like_a_cent_one(
     delta: int, should_fail: bool
@@ -338,12 +369,32 @@ def test_a_project_measured_against_another_baseline_schedule_is_reported() -> N
     assert "PRJ-303" in fired[0].message
 
 
-def test_the_schedule_block_names_the_frozen_version() -> None:
+def test_the_schedule_block_measures_to_the_frozen_version() -> None:
+    """The milestone block has to show it measured against a frozen schedule.
+
+    Two reachable branches, neither of which a constant-equals-itself assertion
+    reaches: repointing the block at another schedule version invalidates every
+    baseline variance beneath it at once, and dropping the version entirely leaves
+    the block unable to demonstrate it measured against anything frozen.
+    """
     payload = _payload()
     assert (
         _doc(payload, DOC_MILESTONE_SCHEDULE)["baseline_schedule_version"]
         == SCHEDULE_VERSION
     )
+    assert not _fired(check_mst_baseline_variance_foots(_ctx(payload)))
+
+    repointed = _payload()
+    _doc(repointed, DOC_MILESTONE_SCHEDULE)["baseline_schedule_version"] = "SCH-2029-R1"
+    fired = _fired(check_mst_baseline_variance_foots(_ctx(repointed)))
+    assert fired, "repointing the frozen schedule version fired nothing"
+    assert all("baseline schedule" in f.message for f in fired)
+
+    dropped = _payload()
+    del _doc(dropped, DOC_MILESTONE_SCHEDULE)["baseline_schedule_version"]
+    fired = _fired(check_mst_baseline_variance_foots(_ctx(dropped)))
+    assert len(fired) == 1
+    assert "names no baseline schedule version" in fired[0].message
 
 
 # --------------------------------------------------------------------------- #

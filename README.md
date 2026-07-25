@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (31,875 tests plus bounded invariant grids = 463,852 cases; runs in minutes)
+# run the curated engine suite (31,883 tests plus bounded invariant grids = 463,860 cases; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -62,7 +62,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
-**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (463,852 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.65M generated cases). A separate 51-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
+**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (463,860 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.65M generated cases). A separate 54-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
 
 **4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
 ```bash
@@ -114,7 +114,7 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Month-End Close](./monthly-close-automation/) | `close_engine` | `python -m close_engine --period 2026-03` | recurring JEs, schedule-to-GL tie-outs, debit/credit controls, a ten-control sentinel layer (completeness calendar, interco mirroring, shadow recompute, period lock — fault-injection proven via `--demo-guardrails`), refusal to post out-of-tie entries |
 | [Cash & Debt Reconciliation](./cash-reconciliation/) | `recon_engine` | `python -m recon_engine` | GL-to-bank/lender matching, materiality classification, evidence log generation |
 | [Cash Management](./cash-management/) | `cash_engine` | `python -m cash_engine --demo` | five cash-manager controls — bank-rec bridge (bank ± DIT/outstanding = GL), outstanding/void/stale checks, wire dual-approval (segregation of duties), register running-balance continuity, concentration sweep tie-out — all read-only, human-gated |
-| [Accounts Payable](./accounts-payable-automation/) | `ap_engine` | `python run.py` | posting integrity, payment release gates, duty segregation, information reporting — 29 read-only controls |
+| [Accounts Payable](./accounts-payable-automation/) | `ap_engine` | `python run.py` | posting integrity, payment release gates, duty segregation, information reporting — 30 read-only controls |
 | [Warranty Reimbursement](./warranty-reimbursement-automation/) | `warranty_engine` | `python run.py` | the warranty claim programme: a coverage limit re-derived from construction cost, cumulative claims held inside a finite pool, and every claim tested against its quarter, the policy period and close of escrow — 22 read-only controls |
 | [Buyer Upgrades](./buyer-upgrade-automation/) | `upgrade_engine` | `python run.py` | the upgrade programme: deferred revenue released only on close of escrow, the closing entry balanced, sales tax held as a liability, and four schedules tied to one number — 20 read-only controls |
 | [Project Draw](./project-draw-automation/) | `draw_engine` | `python run.py` | the construction loan draw: the reconciliation identity at zero tolerance, the lender's form tied to its working papers and the trial balance, contingency held to the percent complete of its own cost class, cutoff, supporting documentation — 34 read-only controls |
@@ -173,9 +173,9 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **31,875** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 47 systems. This is the curated total less the bounded invariant grids below (`5,812` distinct test functions before parametrization). Runs in minutes. |
-| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **463,852** | Adds `431,977` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
-| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **51** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 463,852 curated engine total. |
+| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **31,883** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 47 systems. This is the curated total less the bounded invariant grids below (`5,812` distinct test functions before parametrization). Runs in minutes. |
+| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **463,860** | Adds `431,977` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **54** | Generator, schema, freshness, accessibility, and page-budget guards. Excluded from the 463,860 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.65M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the

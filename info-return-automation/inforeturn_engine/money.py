@@ -1,17 +1,17 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the information return issuance engine.
+============================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. A box amount that
+tolerates a penny against the payment lines beneath it reports a figure the ledger
+does not support, and the payee reconciles a statement against it. Backup
+withholding is struck with truncating basis-point arithmetic for the same reason:
+so the reported figure and the derived one can be compared exactly.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:
