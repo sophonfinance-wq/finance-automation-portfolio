@@ -1,0 +1,2980 @@
+{
+  "title": "Outstanding check aging and escheatment control report",
+  "overall_verdict": "FAIL",
+  "file_count": 22,
+  "rule_count": 20,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "acct_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "acct_jurisdiction_declared",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_number_unique_per_account",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_account_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_type_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_date_not_future",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_cleared_pairing",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "chk_cleared_ties_issued",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "void_disposition_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "void_not_outstanding",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "void_nets_to_zero",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "age_outstanding_set_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "age_bucket_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "age_stale_dated_flagged",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "esc_set_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "esc_jurisdiction_assigned",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_outstanding_total_ties",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_bucket_totals_tie",
+      "severity": "FLAG",
+      "exceptions": 2
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 16,
+        "FAIL": 3,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "FAIL",
+          "location": "amount:check[BNK-100/CHK-4104].check_amount_cents",
+          "message": "AMOUNT_INVALID: check[BNK-100/CHK-4104].check_amount_cents must be integer cents, got 560000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "FAIL",
+          "location": "amount:check[BNK-100/CHK-4104].check_amount_cents",
+          "message": "AMOUNT_INVALID: check[BNK-100/CHK-4104].check_amount_cents must be integer cents, got 560000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "FAIL",
+          "location": "amount:check[BNK-100/CHK-4104].check_amount_cents",
+          "message": "AMOUNT_INVALID: check[BNK-100/CHK-4104].check_amount_cents must be integer cents, got 560000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "FLAG",
+          "location": "amount:check[BNK-100/CHK-4104].check_amount_cents",
+          "message": "AMOUNT_INVALID: check[BNK-100/CHK-4104].check_amount_cents must be integer cents, got 560000.5 -- amounts are integer cents and are never coerced"
+        }
+      ]
+    },
+    {
+      "document": "bad_check_type__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-100/CHK-4103/check_type",
+          "message": "check BNK-100/CHK-4103 is typed 'wire', which is not one of ('manual', 'system')"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "bad_void_disposition__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "FAIL",
+          "location": "void_register:VOIDS-2029/entries/BNK-100/CHK-4109/disposition",
+          "message": "void entry BNK-100/CHK-4109 is dispositioned 'reissued', which is not one of ('voided', 'zero_dollar', 'stop_payment')"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "bank_rec_total_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "FAIL",
+          "location": "bank_reconciliation:BANKREC-2029/outstanding_checks_cents",
+          "message": "the reconciliation states 22,336.40 across 10 outstanding check(s); the register re-derives 21,336.40 across 10 (difference 1,000.00)"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "bucket_total_overstated__Halbrook_Residential_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "FLAG",
+          "location": "bank_reconciliation:BANKREC-2029/bucket_totals/31-60/amount_cents",
+          "message": "the 31-60 band states 2,200.25 across 1 item(s); the register re-derives 2,150.25 across 1"
+        }
+      ]
+    },
+    {
+      "document": "check_dated_after_as_of__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-100/CHK-4110/check_date",
+          "message": "check BNK-100/CHK-4110 is dated 2029-10-15, after the as-of date 2029-09-30; its age would be negative"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "check_missing_field__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-100/CHK-4105",
+          "message": "check BNK-100/CHK-4105 is missing payee"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "cleared_amount_differs__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-100/CHK-4102/cleared_amount_cents",
+          "message": "check BNK-100/CHK-4102 was issued for 3,275.50 and cleared for 3,275.49; the 0.01 difference is an obligation that appears on no schedule"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "cleared_without_date__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-100/CHK-4101/cleared_date",
+          "message": "check BNK-100/CHK-4101 carries a cleared amount of 12,450.00 and no cleared date; the two halves of the clearing must arrive together or the outstanding test is ambiguous"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_account_id__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "FAIL",
+          "location": "bank_account_register:ACCOUNTS-2029/accounts/BNK-100",
+          "message": "bank account BNK-100 appears 2 times; a check drawn on it cannot be attributed to one account series"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_check_number__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-100/CHK-4110",
+          "message": "check number CHK-4110 appears 2 times in bank account BNK-100; the register cannot say which row is the obligation"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "escheatment_row_missing__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "FAIL",
+          "location": "escheatment_schedule:ESCHEAT-2029/items/BNK-100/CHK-4111",
+          "message": "check BNK-100/CHK-4111 at 2,380.00 is 1349 day(s) old, past the 1095-day dormancy period, but is absent from the escheatment schedule"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "follow_up_not_flagged__Halbrook_Residential_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "FLAG",
+          "location": "outstanding_schedule:OUTSTANDING-2029/items/BNK-100/CHK-4107/follow_up_required",
+          "message": "check BNK-100/CHK-4107 is 228 day(s) old against a 180-day stale-dating threshold, so follow_up_required re-derives as True; the schedule states False"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 17,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "bank_reconciliation:-",
+          "message": "bank_reconciliation is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        }
+      ]
+    },
+    {
+      "document": "missing_jurisdiction__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "FAIL",
+          "location": "bank_account_register:ACCOUNTS-2029/accounts/BNK-200/escheat_jurisdiction",
+          "message": "bank account BNK-200 declares no escheat jurisdiction; a dormant item drawn on it has nowhere to report"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "outstanding_row_missing__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "FAIL",
+          "location": "outstanding_schedule:OUTSTANDING-2029/items/BNK-100/CHK-4105",
+          "message": "check BNK-100/CHK-4105 at 2,150.25 has not cleared and is not withdrawn, but is absent from the outstanding schedule"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "unknown_account_check__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "FAIL",
+          "location": "check_register:CHECKS-2029/checks/BNK-900/CHK-4301/account_id",
+          "message": "check CHK-4301 is drawn on account 'BNK-900', which is not in the bank account register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 19 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "void_listed_outstanding__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "FAIL",
+          "location": "outstanding_schedule:OUTSTANDING-2029/items/BNK-100/CHK-4109",
+          "message": "check BNK-100/CHK-4109 is on the outstanding schedule but the void register records it as withdrawn; a cancelled promise is not an outstanding obligation"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "void_not_netted__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "FAIL",
+          "location": "void_register:VOIDS-2029/entries/BNK-200/CHK-4107/void_amount_cents",
+          "message": "check BNK-200/CHK-4107 was issued for 7,300.00 and the stop_payment reverses -7,000.00, netting to 300.00 rather than zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "wrong_aging_bucket__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "FAIL",
+          "location": "outstanding_schedule:OUTSTANDING-2029/items/BNK-100/CHK-4106/aging_bucket",
+          "message": "check BNK-100/CHK-4106 is bucketed '61-90' on the schedule; 94 day(s) falls in the 91-180 band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 escheatment items name their account's declared jurisdiction"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    },
+    {
+      "document": "wrong_escheat_jurisdiction__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 outstanding-check artifacts are present"
+        },
+        {
+          "rule": "acct_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank account ids are unique"
+        },
+        {
+          "rule": "acct_jurisdiction_declared",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 bank accounts declare an escheat jurisdiction"
+        },
+        {
+          "rule": "chk_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows carry their required fields"
+        },
+        {
+          "rule": "chk_number_unique_per_account",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check numbers are unique within their bank account"
+        },
+        {
+          "rule": "chk_account_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every check is drawn on an account in the register"
+        },
+        {
+          "rule": "chk_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 checks carry a known check type"
+        },
+        {
+          "rule": "chk_date_not_future",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check dates are on or before the as-of date"
+        },
+        {
+          "rule": "chk_cleared_pairing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 check rows pair their cleared amount and cleared date"
+        },
+        {
+          "rule": "chk_cleared_ties_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cleared checks cleared for the amount they were issued for"
+        },
+        {
+          "rule": "void_disposition_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 void entries are classified and name a real check"
+        },
+        {
+          "rule": "void_not_outstanding",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of the 3 withdrawn checks appears on the outstanding schedule"
+        },
+        {
+          "rule": "void_nets_to_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 voids net their check to zero"
+        },
+        {
+          "rule": "age_outstanding_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding schedule re-derives exactly, 10 item(s)"
+        },
+        {
+          "rule": "age_bucket_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 outstanding items re-derive their age and aging band"
+        },
+        {
+          "rule": "age_stale_dated_flagged",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 follow-up markers agree with the 180-day stale-dating threshold"
+        },
+        {
+          "rule": "esc_set_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the escheatment schedule re-derives exactly, 3 item(s) past the 1095-day dormancy period"
+        },
+        {
+          "rule": "esc_jurisdiction_assigned",
+          "status": "FAIL",
+          "location": "escheatment_schedule:ESCHEAT-2029/items/BNK-200/CHK-4103/escheat_jurisdiction",
+          "message": "check BNK-200/CHK-4103 is scheduled to escheat to 'State of Marran'; bank account BNK-200 reports unclaimed property to 'City of Kelder'"
+        },
+        {
+          "rule": "rpt_outstanding_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the outstanding-checks line of 21,336.40 across 10 item(s) ties the register"
+        },
+        {
+          "rule": "rpt_bucket_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 aging bands tie the re-derived outstanding set"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,376 @@
+{
+  "num": 46,
+  "slug": "contingency",
+  "part_no": "SFS-E46-CTG",
+  "mnemonic": "CTG",
+  "family": "Contingency Controls",
+  "name": "Contingency Rollforward & Adequacy",
+  "tagline": "Is the contingency still adequate, or does it just still say so?",
+  "plain_summary": "Every active development project carries two contingency buckets -- construction contingency and project contingency -- and every period the status block for each one is restated by hand: the prior balance, the amount allocated this period, the amount allocated to date, the balance remaining, the projected potential use, and a word that says whether what is left is adequate. Beside the block sits the draw detail the allocated figure is meant to summarise, the project budget that funded the bucket in the first place, and a portfolio rollup that adds every block together for the report that goes upstairs. This engine reads the six artifacts that record emits -- the project register, the budget register, the allocation register, the contingency block, the exposure watchlist and the portfolio rollup -- and runs twenty-two deterministic controls over them. Is the period file complete and the reporting period readable, are the project ids unique, is every status one the block understands and does every project carry a budget, is every draw complete, uniquely identified, on a declared project, in a known bucket, inside the period and positive, is the block complete, do both rollforwards re-derive from the period before them, does the allocated total foot to the draw detail beneath it, does each bucket reconcile to the budget line that funded it, is anything overdrawn, is the projection non-negative, does the adequacy call rebuild from the two amounts that define it, what sits inside the watch band, and do the portfolio rollup, the inadequate count and the exposure watchlist tie back to the blocks. Every figure is compared with exact == in integer cents, every draw is tested against the reporting period the file carries rather than the system clock, and no source artifact is ever written.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Adequate is a comparison, not a label -- and it is stored as a label. The word gets carried forward from a period in which it was true while the projected potential use climbs past the balance behind it, and the block keeps saying adequate because nobody re-struck the comparison that made it so. Underneath that, the rollforward stops rolling: prior balance less allocated this period is the balance remaining, until somebody types over the current figure for a single project, and from then on the block is a mixture of rolled and typed balances that no longer follows from the period before it and survives every period after. And the allocated total stops matching the draws -- it is maintained beside the draw detail rather than footed from it, so a draw never reaches the total, or a single draw is written for more than the balance it draws against and the bucket goes overdrawn in a column nobody re-added. None of the three looks wrong on a printed tab: six numbers and a word, restated every period, for every active project. The engine recomputes both rollforwards from the prior period and the draws booked against them, foots the allocated total to its own line items, walks each draw against what earlier draws left rather than against the opening balance, reconciles every bucket to the budget that funded it, rebuilds the adequacy word from the two amounts underneath it, and foots the portfolio rollup back to the blocks -- all with exact == in integer cents, through the same rollforward kernel that produced the data, with a planted-defect file for every registered control.",
+  "layers_intro": "Six control families run in registry order over each period file. The first proves the others had something to read and that the reporting period is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the period file carries every artifact the controls below read, exactly once, and that the reporting period is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES -- project register, budget register, allocation register, contingency block, exposure watchlist, portfolio rollup -- and FAILs a file carrying more than one of any, because a period file holds exactly one of each. It also FAILs an unreadable reporting period, since every draw is tested against that stated period and never against the system clock. Every downstream rule returns nothing when the artifact it reads is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "prj",
+      "label": "Project Register",
+      "plain": "Checks the project ids are unique, every status is one the block understands, and every project carries a budget.",
+      "engineering": "Three controls. prj_unique_ids FAILs a project id that appears twice: the id is how a draw, a contingency bucket and a budget line all find their project, and a duplicate makes all three ambiguous at once. prj_status_valid FAILs a status outside active, suspended and closed, because the status is what determines whether a project owes a contingency block at all -- an unknown status is a project that is neither reconciled nor excluded, and it falls between the two. prj_budget_defined FAILs a project with no budget behind it, since the budget is what funded the bucket and the reconciliation control below has nothing to compare against without it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "alc",
+      "label": "Allocation Register",
+      "plain": "Checks every draw against the contingency is complete, uniquely identified, on a declared project, in a known bucket, inside the period and a positive amount.",
+      "engineering": "Six controls. alc_required_fields FAILs a draw missing its allocation id, project, bucket or date. alc_unique_ids FAILs a duplicated allocation id, which would double-count a release in the period total. alc_project_exists FAILs a draw against a project the register does not declare, and alc_bucket_valid FAILs a bucket outside construction and project -- both would otherwise leave the release outside every total that sums it. alc_within_period FAILs a draw dated outside the reporting period the file carries, inclusive at both ends: a draw on the last day of the period belongs to it and one the day after belongs to the next. alc_amount_positive FAILs a zero or negative draw, because a draw is a release out of the bucket; a return of unspent contingency belongs booked as a budget movement where the register can prove what it reversed, not as a negative release inside the period total.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "ctg",
+      "label": "Rollforward and Reconciliation",
+      "plain": "Checks the block is complete, both rollforwards re-derive, the allocated total foots to the draw detail, each bucket reconciles to the budget that funded it, and nothing is overdrawn.",
+      "engineering": "Six controls, and the arithmetic heart of the engine. ctg_block_complete FAILs a bucket missing any of the six figures the block states. ctg_current_rolls_forward rebuilds the balance remaining as the prior balance less the amount allocated this period and compares with exact ==; ctg_to_date_rolls_forward rebuilds the allocated-to-date from the prior to-date and this period's releases. Both directions matter: a period that rolls forward correctly but reports the wrong to-date total has a bucket whose history no longer adds up, and the discrepancy compounds every period after. ctg_allocated_ties_line_items sums the draws and compares to the stated allocated total, so the summary figure cannot drift from the detail it summarises. ctg_budget_reconciles proves the balance remaining plus the allocated to date against the contingency line the project budget funded -- a bucket that rolls forward internally but no longer reconciles to what was funded has been topped up or raided outside the register. ctg_no_overdraw walks each draw against what earlier draws left rather than against the opening balance, which is the direction that catches a bucket drawn past empty by one large release while the period total still looks reasonable; a draw exactly equal to the balance in front of it spends the bucket to zero and is allowed, and a cent more is an overdraw.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "adq",
+      "label": "Adequacy Determination",
+      "plain": "Checks the projection is non-negative, the adequacy call rebuilds from the two amounts that define it, and flags a bucket whose headroom has thinned into the watch band.",
+      "engineering": "Three controls. adq_projection_nonnegative FAILs a negative projected potential use -- zero is admissible, since a bucket with nothing left to spend against is a real state, but a negative projection is not a small one. adq_flag_recomputes is the control the engine exists for: adequate means the balance remaining covers the projected potential use, so the engine strikes that comparison itself and checks the stated word against it. A bucket that exactly covers its projection is adequate and a cent short is not, so a label carried forward from a period in which it was true cannot survive the period in which it stopped being true. An unrecognised adequacy word never recomputes and is reported as such rather than guessed at. adq_headroom_watch is a FLAG, not a failure: it marks a bucket whose remaining balance still covers the projection but sits inside the file's own watch band -- arithmetically correct and thinning, which is a conversation rather than an error. A bucket already inadequate is not also watched, because the hard failure owns it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Portfolio Rollup",
+      "plain": "Checks the portfolio rollup foots to the blocks, and the inadequate count and exposure watchlist tie to what the blocks actually say.",
+      "engineering": "Three controls. rpt_portfolio_foots re-sums the allocated-this-period, current-balance and projected-use totals across every bucket and FAILs any that does not tie; these are the figures that reach the report upstairs, and a total maintained beside the blocks rather than derived from them drifts the first period a project is added. rpt_inadequate_count_ties recounts the inadequate buckets from the recomputed adequacy calls rather than from the stated words, so a rollup cannot agree with a block that is itself wrong. rpt_watchlist_ties is a FLAG: it rebuilds the exposure watchlist from the blocks and the file's own watch band and reports a disagreement in either direction -- a bucket on the watchlist the block does not put inside the band, or one inside the band that never reached the list.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Period Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional periodic contingency status files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the projects, the budgets, the prior-period balances, the individual draws and the projections are stated; both rollforwards, the allocated totals, the adequacy call on every bucket and the portfolio rollup are re-derived through the same rollforward kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data. One project takes two draws against the same bucket, which is what makes the overdraw walk testable: a second draw can be sized to fit the opening balance and not what the first one left.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the period file complete and the period legible",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate of one, and FAILs an unreadable reporting period, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "prj-control",
+      "label": "Project Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every project uniquely identified, typed and funded",
+      "engineering": "Three controls: project ids are unique, every status is one of active, suspended or closed, and every project carries the budget the reconciliation control compares against.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "alc-control",
+      "label": "Allocation Register",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is every draw well-formed, attributable, in period and positive",
+      "engineering": "Six controls: the required fields are present, allocation ids are unique, every draw names a declared project and a known bucket, every date falls inside the reporting period inclusive at both ends, and every amount is a positive release.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "ctg-control",
+      "label": "Rollforward and Reconciliation",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the block roll forward, foot to its draws and reconcile to its budget",
+      "engineering": "Six controls: the block is complete, both the balance-remaining and allocated-to-date rollforwards re-derive with exact ==, the allocated total foots to the draw detail, each bucket reconciles to the budget line that funded it, and no single draw exceeds what earlier draws left it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "adq-control",
+      "label": "Adequacy Determination",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the adequacy word rebuild from the two amounts underneath it",
+      "engineering": "Three controls: the projection is non-negative, the stated adequacy word is checked against the comparison of balance remaining and projected use, and a bucket still covered but thinning into the file's own watch band is flagged for a conversation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Portfolio Rollup",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the rollup recompute from the blocks it summarises",
+      "engineering": "Three controls: the three portfolio totals are re-summed across every bucket, the inadequate count is recounted from the recomputed adequacy calls rather than the stated words, and the exposure watchlist is rebuilt and reported in both directions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Budget, Block & Registers",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and amounts every rule resolves against",
+      "engineering": "The project register carries each project's id, name, jurisdiction and status; the budget register carries the contingency line funded for each project and bucket; the allocation register carries every draw with its project, bucket, date and amount; the contingency block carries the six stated figures and the adequacy word for each project and bucket; the exposure watchlist carries the buckets the file says are thin; and the file itself carries the reporting period and the watch-band threshold in basis points. Every rollforward, reconciliation, adequacy and rollup control resolves against these through the shared rollforward kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per period file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/contingency_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "period files" },
+    { "from": "corpus", "to": "prj-control", "label": "period files" },
+    { "from": "corpus", "to": "alc-control", "label": "period files" },
+    { "from": "corpus", "to": "ctg-control", "label": "period files" },
+    { "from": "corpus", "to": "adq-control", "label": "period files" },
+    { "from": "corpus", "to": "rpt-control", "label": "period files" },
+    { "from": "set-control", "to": "registers", "label": "resolves" },
+    { "from": "prj-control", "to": "registers", "label": "resolves" },
+    { "from": "alc-control", "to": "registers", "label": "resolves" },
+    { "from": "ctg-control", "to": "registers", "label": "resolves" },
+    { "from": "adq-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "alc-control", "to": "ctg-control", "label": "draw detail" },
+    { "from": "ctg-control", "to": "adq-control", "label": "balance remaining" },
+    { "from": "adq-control", "to": "report", "label": "findings" },
+    { "from": "ctg-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,365",
+      "source": "python -m pytest --collect-only -q -o addopts= (contingency-rollforward-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(contingency_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every period file"
+    },
+    {
+      "label": "Families",
+      "value": "6",
+      "source": "distinct rule-id prefixes in contingency_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Period files",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-three planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(contingency_engine.model.DOC_TYPES)",
+      "plain": "project register, budget register, allocation register, contingency block, exposure watchlist, portfolio rollup"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "contingency_engine/tests boundary tests on the cent and the day",
+      "plain": "a rollforward a cent off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "Every active development project carries two contingency buckets, and every period the status block for each is restated by hand: six numbers and a word. The prior balance, the amount allocated this period, the amount allocated to date, the balance remaining, the projected potential use, and whether what is left is adequate. The same three failures recur every period. First, the rollforward stops rolling: prior balance less allocated this period is the balance remaining, until somebody types over the current figure for one project, and from then on the block is a mixture of rolled and typed balances that no longer follows from the period before it -- and it survives every period after. Second, the allocated total stops matching the draws: it is maintained beside the draw detail rather than footed from it, so a draw never reaches the total, or a single draw is written for more than the balance it draws against and the bucket goes overdrawn in a column nobody re-added. Third, the adequacy word goes stale: adequate is a comparison, not a label, and it gets carried forward from a period in which it was true while the projected potential use climbs past the balance behind it. None of these are judgment calls -- whether the projection is a sound estimate is a judgment no engine makes, and this engine does not attempt it. They are equalities and comparisons: a stated balance against a subtraction, a period total against the sum of its line items, a bucket against the budget that funded it, a draw against what earlier draws left, a word against the comparison of two amounts, and a rollup against a re-summation. A deterministic control settles those better than a block restated by hand every period for every active project.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every period file",
+      "narrative": "The CLI generates twenty-four fictional period files -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (contingency-rollforward-automation/); contingency_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A stale adequacy word is caught by re-striking the comparison",
+      "narrative": "A defect file leaves a bucket's adequacy word reading adequate while raising the projected potential use past the balance remaining, and changes nothing else -- the rollforward still foots and the draw detail still ties. adq_flag_recomputes strikes the comparison itself, finds the balance no longer covers the projection, and reports the word against the two amounts that contradict it.",
+      "source": "contingency_engine/generate.py DEFECTS -> adq_flag_recomputes"
+    },
+    {
+      "title": "The overdraw walk measures against what earlier draws left",
+      "narrative": "One project takes two draws against the same construction bucket. A boundary test sizes the second to fit the opening balance but not what the first one left, so the period total still looks reasonable and only the walk catches it. ctg_no_overdraw reports the second draw by id against the balance actually in front of it, and a draw exactly equal to that balance spends the bucket to zero and is allowed.",
+      "source": "contingency_engine/tests test_overdraw_is_measured_against_what_earlier_draws_left"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "contingency_report.json, contingency_report.md, samples/"
+    },
+    {
+      "cmd": "python -m contingency_engine samples",
+      "operation": "analyze an existing folder of period files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m contingency_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest contingency_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10365 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,365",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (contingency-rollforward-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(contingency_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(contingency_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "contingency_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the period file they were given: every project is uniquely identified, statused and funded, every draw is well-formed, attributable, inside the period and positive, both rollforwards re-derive from the period before them, the allocated total foots to the draw detail, every bucket reconciles to the budget that funded it, no draw exceeds what earlier draws left, the adequacy word rebuilds from the balance remaining and the projected use, and the portfolio rollup, inadequate count and exposure watchlist all tie back to the blocks. It is not an opinion on whether the projected potential use is a sound estimate, whether the contingency was sized correctly at the outset, whether a particular draw should have been approved, or whether the project will finish inside it.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean contingency block into the documented project review and sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a bucket still covered but thinning into the file's own watch band and an exposure watchlist that disagrees with the blocks both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried into the portfolio rollup until the failing control is cleared -- a rollforward that does not re-derive, an allocated total that does not foot to its draws, a bucket that no longer reconciles to its budget, an overdrawn bucket, or an adequacy word the two amounts underneath it contradict"
+      }
+    ],
+    "guarantees": [
+      "Read-only: period files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a derived figure, and a cent off the re-derivation is reported as a break.",
+      "One rollforward kernel: the controls and the generator share the arithmetic in contingency_engine.rollforward, so a balance cannot disagree with the data that produced it.",
+      "Adequacy is recomputed from the balance remaining and the projected use rather than read as a word, so a label carried forward from a period in which it was true cannot survive the period in which it stopped being true.",
+      "The overdraw test walks each draw against what earlier draws left rather than against the opening balance, which is the direction that catches a bucket drawn past empty while the period total still looks reasonable.",
+      "The inadequate count in the rollup is recounted from the recomputed adequacy calls, not from the stated words, so a rollup cannot agree with a block that is itself wrong.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Every draw is tested against the reporting period the file carries, never against the system clock, so a run in a later period returns the same findings.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a contingency is topped up, a draw is reversed and a rollup is sent."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, approves a draw, tops up a contingency or writes to a source artifact. It reads the period file and stops.",
+      "source": "contingency-rollforward-automation/README.md and contingency_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the six artifacts the periodic contingency record emits. It does not connect to a general ledger, a job-cost system, a change-order log, or the construction contracts the draws were released against.",
+      "source": "contingency_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the block is arithmetically true and internally reconciled, not that the projected potential use is a sound estimate. Nothing here forecasts, and whether the remaining contingency will in fact be enough is a judgment no engine makes.",
+      "source": "contingency-rollforward-automation/README.md scope statement"
+    },
+    {
+      "statement": "It tests each draw against the reporting period and the balance in front of it; it does not decide whether that draw should have been approved, or whether the cost it funded belonged in contingency rather than in the base budget.",
+      "source": "contingency_engine/engine.py alc_within_period and ctg_no_overdraw"
+    },
+    {
+      "statement": "It takes the stated projections and budgets at face value, confirming only that the block foots to them and reconciles to what was funded. All shipped data is fictional -- the developers, projects, budgets, draw numbers, balances, projections and reporting dates are invented, and the reporting period is set in a fictional future.",
+      "source": "contingency_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-contingency.svg",
+    "motion": "../assets/engine-contingency.svg",
+    "poster_alt": "Contingency Rollforward and Adequacy diagram: on the left a dark contingency-block card for a project's construction bucket showing prior balance, allocated this period, allocated to date, balance remaining, projected potential use and the adequacy word; a centre panel listing the rollforward checks -- balance remaining as prior less allocated this period, allocated to date as prior to-date plus this period's releases, the allocated total footed to the draw detail beneath it, the bucket reconciled to the contingency line the budget funded, each draw walked against what earlier draws left, and the adequacy word rebuilt from balance remaining against projected use -- with one red line for a bucket whose stated adequacy the two amounts contradict and one amber line for a bucket still covered but thinning into the watch band; a FAIL verdict panel on the right; a lower chain reading allocation register foots to allocated this period which foots to the portfolio rollup; and a footer strip reading 22 controls, 6 families, 10,365 tests, read-only, SFS-E46-CTG.",
+    "caption": "The Contingency Rollforward and Adequacy engine tile states the question that has to hold every period: both rollforwards recomputed from the period before them, the allocated total footed to the draws beneath it, every bucket reconciled to the budget that funded it, and the word adequate rebuilt from the two amounts that define it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest contingency_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/contingency-rollforward-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/contingency-rollforward-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Contingency Rollforward & Adequacy (SFS-E46-CTG) datasheet -- twenty-two deterministic, read-only controls over a developer's periodic contingency status block: construction and project contingency rolled forward from the prior balance through the draws allocated against them with exact == in integer cents, the allocated total footed to its own draw detail, every bucket reconciled to the budget line that funded it, each draw walked against what earlier draws left, and the word adequate rebuilt from the balance remaining and the projected potential use rather than read as a label. 10,365 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

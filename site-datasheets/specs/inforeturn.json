@@ -1,0 +1,433 @@
+{
+  "num": 47,
+  "slug": "inforeturn",
+  "part_no": "SFS-E47-IRN",
+  "mnemonic": "IRN",
+  "family": "Information Returns",
+  "name": "Information Return Issuance",
+  "tagline": "Was a form issued exactly where one was owed, and does every box foot?",
+  "plain_summary": "Once a year the group rebuilds a population it never maintained: every payee it paid something reportable to, reassembled entity by entity -- interest to lenders and affiliates, non-employee compensation to vendors, card and third-party settlement. A box catalog carries a threshold per box. A ledger extract carries every payment line. A form register carries what was actually issued, with the payer's taxpayer number, the payee's, the box amount and any backup withholding. A transmittal per entity accompanies the forms and an annual rollup adds the transmittals together. This engine reads the eight artifacts that record emits -- the entity register, the payee register, the box catalog, the ledger extract, the form register, the transmittal register, the threshold watchlist and the issuance report -- and runs twenty-two deterministic controls over them. Is the reporting file complete and the year readable, are the payer entity ids unique and every payer identified, are the payee ids unique, is every payee type known and is every taxpayer number on file readable, is every catalogued box a known return series defined once with a usable threshold, is every payment line attributable, non-negative integer cents and inside the reporting year, is every form complete, correctly attributed to its payer, unduplicated and footed to the ledger beneath it, is a form issued exactly where one is owed and never where one is not, what sits just under a threshold, does backup withholding recompute at the statutory rate in both directions, and do the transmittals, the annual rollup and the watchlist foot the forms. Every box is compared with exact == in integer cents, withholding is applied with truncating basis-point arithmetic, every payment line is tested against the reporting year the file carries rather than the system clock, and no source artifact is ever written.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A payee who should have been reported and was not leaves nothing behind to notice. The payments posted, the invoices closed, and the omission exists only in a population nobody re-ran -- because the ledger was never organised around who has to receive a form. That is the failure the annual cycle is most exposed to, and its exact complement is the one usually left unbuilt: a form issued where none was owed is not harmless excess, it reports a payee who was not reportable and leaves that payee reconciling a statement against a return that should never have been filed. Between them sits the threshold, met at the cent, and a second obligation that overrides it entirely -- where a box attracts backup withholding and the payee has no taxpayer number on file, tax is withheld and withheld tax is reported however small the payment was. Then the arithmetic: a box amount re-keyed from a summary rather than footed from the entity's own payment lines, and a transmittal whose count or total is maintained beside the register rather than struck from it, so the one page the authority reads first disagrees with the forms behind it. The engine defines the issuance predicate exactly once and has both the generator and the controls import it, so a form cannot disagree with the logic that produced it. It foots every box to its payment lines, recomputes withholding in both directions, tests completeness and excess as complements, and ships a planted-defect file for every registered control -- with a real row sitting on the threshold to the cent and another owed a form only because withholding attached.",
+  "layers_intro": "Nine control families run in registry order over each reporting file. The first proves the others had something to read and that the reporting year is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the reporting file carries every artifact the controls below read, exactly once, and that the reporting year is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES -- entity register, payee register, box catalog, ledger extract, form register, transmittal register, threshold watchlist, issuance report -- and FAILs a file carrying more than one of any, because a reporting file holds exactly one of each. It also FAILs an unreadable reporting year, since every payment line is placed in a year against that stated figure and never against the system clock. Every downstream rule returns nothing when the artifact it reads is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "ent",
+      "label": "Payer Entity Register",
+      "plain": "Checks the payer entity ids are unique and every filing entity is identified.",
+      "engineering": "Two controls. ent_unique_ids FAILs an entity id that appears twice: each entity files information returns in its own name, and the id is how a payment line, a form and a transmittal all find their payer. ent_payer_identity FAILs an entity whose taxpayer number is absent or not well-formed -- a return filed in the name of an entity that cannot be identified is a return the authority cannot match, and every form issued under that entity inherits the defect.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "pye",
+      "label": "Payee Population",
+      "plain": "Checks the payee ids are unique, every payee type is known, and every taxpayer number on file is readable.",
+      "engineering": "Three controls. pye_unique_ids FAILs a duplicated payee id, which would split or double one payee's year total. pye_type_valid FAILs a type outside lender, affiliate, vendor and settlement entity, since the type is what determines which box series a payment belongs in. pye_tin_wellformed FAILs a taxpayer number that was captured and cannot be read -- and deliberately does not fail a payee with no number at all. A payee with no number is not an exception here: that is precisely the condition backup withholding exists for, and bwh_rate_recomputes owns it. What is an exception is an unreadable number, because it counts as on file, suppresses the withholding that should have been taken, and prints on the form unusable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "box",
+      "label": "Box Catalog",
+      "plain": "Checks every catalogued box names a known return series with a usable threshold, and that each box is defined once.",
+      "engineering": "Two controls. box_catalog_defined FAILs a row catalogued under a return series the engine does not know, and FAILs a threshold that is not a non-negative integer-cent figure -- the threshold is what decides whether a payee is reported at all, so a row without a usable one cannot be applied to anything. box_catalog_unique FAILs a box defined twice: a duplicate makes the threshold ambiguous, and every issuance decision below turns on which of the two rows was read.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "led",
+      "label": "Ledger Extract",
+      "plain": "Checks every payment line is attributable, a non-negative integer-cent amount, and inside the reporting year.",
+      "engineering": "Three controls. led_rows_attributable FAILs a line naming an entity, payee or box the registers do not declare -- an unattributable payment is a payment outside every total that sums it, including the box amount a form would have reported. led_amounts_valid FAILs a negative amount: a return reports what was paid in the year and a box cannot report a negative figure, so a reversal belongs netted against the payment it reverses at source, where the ledger can prove which payment that was, rather than carried into the population as a line of its own. Zero is admissible. led_payment_in_year FAILs a line dated outside the reporting year, inclusive of both endpoints -- a payment made on the last day of the year belongs to that year's population and one made the day after belongs to the next year's; a line outside it is either reported in the wrong year or double-counted in two, and both are invisible once the totals are struck.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "frm",
+      "label": "Form Register",
+      "plain": "Checks every form is complete, attributed to the right payer, unduplicated, and footed to the payment lines beneath it.",
+      "engineering": "Four controls. frm_required_fields FAILs a form missing its id, entity, payee, series, box, issue date or either taxpayer number. frm_payer_identity FAILs a form whose payer name or number disagrees with the entity register it was filed under. frm_no_duplicates FAILs two forms for the same entity, payee, series and box -- a payee issued the same box twice is a payee reporting twice the income they received. frm_box_ties_ledger is the arithmetic control of this family: it re-sums the entity's own payment lines for that payee and box and compares to the stated box amount with exact == in integer cents. This is the figure that was re-keyed from a summary rather than footed from the detail, and once the form is out the payee reconciles against a number the ledger does not support.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "thr",
+      "label": "Threshold and Issuance",
+      "plain": "Checks a form is issued exactly where one is owed, never where one is not, and flags a payee sitting just under a threshold.",
+      "engineering": "Three controls, and two of them are exact complements. thr_required_form_issued FAILs a payee/box total that obliges a return with no form on the register -- completeness, and the failure the annual cycle is most exposed to, because nothing in the ledger notices. thr_no_unrequired_form FAILs the reverse: a form issued where nothing was owed is not harmless excess, it reports a payee who was not reportable and leaves them reconciling a statement against a return that should never have been filed. Both resolve through one predicate, so they cannot disagree. The threshold is met at the cent -- a year total of exactly the threshold is reportable and a cent under it is not -- and a second obligation overrides the threshold entirely: where the box attracts backup withholding and the payee has no taxpayer number on file, tax is withheld and withheld tax is reported however small the payment was. thr_near_threshold_review is a FLAG, not a failure: it marks a payee inside the file's own review band below a threshold, where no form is owed today and one late invoice posting to the year tips it over. The band is half-open, so a total exactly the band-width short is inside it and a total that has reached the threshold owes a form and is not a near miss at all.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "bwh",
+      "label": "Backup Withholding",
+      "plain": "Checks backup withholding on every form recomputes at the statutory rate, in both directions.",
+      "engineering": "One control, and it runs both ways from a single re-derivation. Where the box attracts withholding and the payee has no taxpayer number on file, the statutory rate is applied to the reported amount with truncating basis-point arithmetic and the form has to carry the result -- the tax is the group's own liability whether or not it was taken. Where a number is on file, the correct figure is exactly zero, and withholding taken anyway is the payee's money held without cause. bwh_rate_recomputes compares the stated figure to the derived one with exact ==, so both failures surface from the same computation rather than from two rules that could drift apart. A negative amount withholds nothing: a reversal is not a payment to withhold against.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Transmittals and Rollup",
+      "plain": "Checks each entity's transmittal foots its forms, the annual rollup foots the transmittals, and the watchlist ties the population.",
+      "engineering": "Three controls. rpt_transmittal_foots recounts each entity's form count and re-sums its reported and withheld totals from the forms it accompanies -- the transmittal is the one page the authority reads before the forms behind it, and a count maintained beside the register rather than struck from it drifts the first time a form is added. rpt_annual_rollup_ties does the same for the group-level issuance report across every form in the file. rpt_watchlist_ties is a FLAG: it rebuilds the threshold watchlist from the population and the file's own review band and reports a disagreement in either direction -- a payee on the watchlist the population does not put inside the band, or one inside the band that never reached the list.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Reporting Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional annual information-return files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the entities, the payees, the box catalog and the individual payment lines are stated; every box amount, every issuance decision, all backup withholding, both transmittal totals and the annual rollup are re-derived through the same issuance kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data. The corpus deliberately puts real rows on the edges that matter: one entity pays a payee exactly the non-employee threshold to the cent, one payee with no taxpayer number is paid far under a threshold and is owed a form only because withholding attached, and one payee is paid well under its threshold and owes nothing and raises no flag.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the reporting file complete and the year legible",
+      "engineering": "One control. FAILs a file missing any of the eight artifact types or carrying a duplicate of one, and FAILs an unreadable reporting year, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "ent-control",
+      "label": "Payer Entity Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every filing entity unique and identified",
+      "engineering": "Two controls: entity ids are unique, and every entity carries a well-formed taxpayer number, since a return filed in the name of an unidentifiable entity cannot be matched.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "pye-control",
+      "label": "Payee Population",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is every payee unique, typed and readable",
+      "engineering": "Three controls: payee ids are unique, every type is one of lender, affiliate, vendor or settlement entity, and every taxpayer number on file is well-formed -- a payee with no number at all belongs to the withholding control instead.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "box-control",
+      "label": "Box Catalog",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is every box a known series with one usable threshold",
+      "engineering": "Two controls: every catalogued row names a known return series and a non-negative integer-cent threshold, and no box is defined twice -- a duplicate makes the threshold every issuance decision turns on ambiguous.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "led-control",
+      "label": "Ledger Extract",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is every payment line attributable, valid and in year",
+      "engineering": "Three controls: every line names a declared entity, payee and box, every amount is non-negative integer cents, and every date falls inside the reporting year inclusive of both endpoints.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "frm-control",
+      "label": "Form Register",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is every form well-formed, attributed, unique and footed",
+      "engineering": "Four controls: the required fields are present, the payer on the form is the payer on the register, no payee is issued the same box twice, and every box amount re-sums the entity's own payment lines for that payee and box with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "thr-control",
+      "label": "Threshold and Issuance",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is a form issued exactly where one is owed",
+      "engineering": "Three controls: a payee/box total that obliges a return has a form, no form is issued where none is owed, and a payee inside the file's own review band below a threshold is flagged. All three resolve through the single issuance predicate, so completeness and excess cannot disagree.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "bwh-control",
+      "label": "Backup Withholding",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does the statutory rate recompute in both directions",
+      "engineering": "One control: where the box withholds and no taxpayer number is on file, the statutory rate applied to the reported amount with truncating basis-point arithmetic; where a number is on file, exactly zero. Both failures surface from the same re-derivation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Transmittals and Rollup",
+      "kind": "control",
+      "col": 3,
+      "row": 0,
+      "plain": "do the transmittals and the annual rollup foot the forms",
+      "engineering": "Three controls: each entity's transmittal count and totals are re-struck from the forms it accompanies, the annual issuance report is re-struck across every form, and the threshold watchlist is rebuilt and reported in both directions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Catalog, Ledger & Registers",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and thresholds every rule resolves against",
+      "engineering": "The entity register carries each filing entity's id, name and payer taxpayer number; the payee register carries each payee's id, name, type and taxpayer number where one is on file; the box catalog carries each box's return series, label, threshold in cents and whether it attracts backup withholding; the ledger extract carries every payment line with its entity, payee, series, box, amount and paid date; the form register carries every issued form with both taxpayer numbers, the box amount and the withholding; the transmittal register carries each entity's form count and totals; and the file itself carries the reporting year, the statutory withholding rate in basis points and the review band in cents. Every issuance, withholding and tie-out control resolves against these through the shared issuance kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per reporting file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/inforeturn_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "reporting files" },
+    { "from": "corpus", "to": "ent-control", "label": "reporting files" },
+    { "from": "corpus", "to": "pye-control", "label": "reporting files" },
+    { "from": "corpus", "to": "box-control", "label": "reporting files" },
+    { "from": "corpus", "to": "led-control", "label": "reporting files" },
+    { "from": "corpus", "to": "frm-control", "label": "reporting files" },
+    { "from": "corpus", "to": "thr-control", "label": "reporting files" },
+    { "from": "corpus", "to": "bwh-control", "label": "reporting files" },
+    { "from": "corpus", "to": "rpt-control", "label": "reporting files" },
+    { "from": "set-control", "to": "registers", "label": "resolves" },
+    { "from": "ent-control", "to": "registers", "label": "resolves" },
+    { "from": "pye-control", "to": "registers", "label": "resolves" },
+    { "from": "box-control", "to": "registers", "label": "resolves" },
+    { "from": "led-control", "to": "registers", "label": "resolves" },
+    { "from": "frm-control", "to": "registers", "label": "resolves" },
+    { "from": "led-control", "to": "frm-control", "label": "payment lines" },
+    { "from": "box-control", "to": "thr-control", "label": "thresholds" },
+    { "from": "pye-control", "to": "bwh-control", "label": "taxpayer numbers" },
+    { "from": "thr-control", "to": "report", "label": "findings" },
+    { "from": "bwh-control", "to": "report", "label": "findings" },
+    { "from": "frm-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,381",
+      "source": "python -m pytest --collect-only -q -o addopts= (info-return-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(inforeturn_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every reporting file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in inforeturn_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Reporting files",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-three planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(inforeturn_engine.model.DOC_TYPES)",
+      "plain": "entity register, payee register, box catalog, ledger extract, form register, transmittal register, threshold watchlist, issuance report"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "inforeturn_engine/tests boundary tests on the cent, the day and the taxpayer-number digit",
+      "plain": "a box amount a cent off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "Once a year the group reassembles, entity by entity, the payees it paid something reportable to -- interest to lenders and affiliates, non-employee compensation to vendors, card and third-party settlement -- applies the box threshold, issues a form, and reconciles each box back to the payment lines it came from. Three failures hide inside that, and none of them look wrong in a ledger that was never organised around who has to receive a form. First, the population has a hole in it: a payee clears a threshold in one entity and is never cut a form, and nothing in the ledger notices, because the payments posted and the invoices closed and the omission exists only in a population nobody re-ran; the same hole appears in reverse when a payee has no taxpayer number on file and nothing is withheld against it. Second, a box amount stops being footed: the figure on the form is re-keyed from a summary rather than added from the entity's own payment lines, so the form goes out reporting an amount the ledger does not support and the payee reconciles against it. Third, the transmittal stops tying the forms: the count or the total is maintained beside the register rather than struck from it, so the one page the authority reads first disagrees with the forms behind it. Approving and releasing a disbursement is a separate engine's question, and that engine explicitly declines to ask whether what it released was reportable. This is that question, asked once a year over the whole population, and none of it is a judgment call. It is a threshold met at the cent, a shape test on an identifier, a sum against its line items, a rate applied at the statutory figure, and a count against a recount -- which a deterministic control settles better than a spreadsheet rebuilt each January.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every reporting file",
+      "narrative": "The CLI generates twenty-four fictional reporting files -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (info-return-automation/); inforeturn_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The threshold is met at the cent, and a cent under it is not",
+      "narrative": "The clean corpus has one entity paying a payee exactly the non-employee threshold, and a form is issued for it -- met at the cent is met. A boundary test takes one cent off that payment and the form on the register stops being owed, so thr_no_unrequired_form reports it by form id. The two controls are exact complements resolved through one predicate, so completeness and excess cannot disagree about the same row.",
+      "source": "inforeturn_engine/tests test_a_total_exactly_on_the_threshold_owes_a_form and test_a_cent_under_the_threshold_owes_nothing"
+    },
+    {
+      "title": "Withheld tax obliges a form the threshold would not have",
+      "narrative": "One payee with no taxpayer number on file is paid far under the box threshold, and a form is still owed, because the box attracts backup withholding and withheld tax is reported however small the payment was. A boundary test puts a number on file for that payee and the same form stops being owed, which is what proves the override is doing the work rather than the threshold.",
+      "source": "inforeturn_engine/tests test_withholding_attaches_below_the_threshold and test_giving_the_withheld_payee_a_number_makes_its_form_unrequired"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "inforeturn_report.json, inforeturn_report.md, samples/"
+    },
+    {
+      "cmd": "python -m inforeturn_engine samples",
+      "operation": "analyze an existing folder of reporting files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m inforeturn_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest inforeturn_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10381 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,381",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (info-return-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(inforeturn_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(inforeturn_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "inforeturn_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the reporting file they were given: every filing entity is unique and identified, every payee is unique and typed with a readable number where one is on file, every catalogued box is a known series defined once with a usable threshold, every payment line is attributable and inside the reporting year, every form is complete and attributed and footed to the payment lines beneath it, a form exists exactly where the threshold or the withholding override obliges one and nowhere else, backup withholding recomputes at the statutory rate in both directions, and the transmittals and annual rollup foot the forms. It is not an opinion on whether a payment should have been made, whether a payee's classification is correct in law, whether a taxpayer number is genuinely that payee's, or whether the threshold in the catalog is the threshold the statute provides for.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean population into the documented information-return review and sign-off before the forms go out"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a payee sitting inside the review band below a threshold and a watchlist that disagrees with the population both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "no form is issued and no transmittal filed until the failing control is cleared -- a payee owed a form who has none, a form owed to nobody, a box that does not foot to its payment lines, withholding that does not recompute, or a transmittal that does not tie"
+      }
+    ],
+    "guarantees": [
+      "Read-only: reporting files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a box amount, and a cent off the re-derivation is reported as a break.",
+      "One issuance predicate: the controls and the generator share the kernel in inforeturn_engine.issuance, so a form cannot disagree with the logic that produced it, and completeness and excess cannot disagree about the same row.",
+      "The box threshold is met at the cent -- a year total of exactly the threshold is reportable and a cent under it is not -- and the corpus puts a real row on that edge.",
+      "Withheld tax obliges a form the threshold would not have: where a box attracts backup withholding and no taxpayer number is on file, a form is owed however small the payment was.",
+      "Backup withholding is applied with truncating basis-point arithmetic, so the reported figure can be compared to the derived one with exact ==; a negative amount withholds nothing.",
+      "A payee with no taxpayer number is a withholding case, not a data-quality exception; an unreadable number is the exception, because it counts as on file and suppresses the withholding that should have been taken.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Every payment line is tested against the reporting year the file carries, never against the system clock, so a run in a later year returns the same findings.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a form is issued, a transmittal is filed and withholding is remitted."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never issues a form, files a transmittal, remits withholding or writes to a source artifact. It reads the reporting file and stops.",
+      "source": "info-return-automation/README.md and inforeturn_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts the annual issuance record emits. It does not connect to a general ledger, an accounts-payable system, a payment rail, or any tax authority's filing channel.",
+      "source": "inforeturn_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It does not ask whether a payment should have been made or approved. Releasing a disbursement is a separate engine's question, and that engine explicitly declines to ask whether what it released was reportable; this engine is that second question and nothing more.",
+      "source": "info-return-automation/README.md scope statement"
+    },
+    {
+      "statement": "It tests a taxpayer number for shape only. A well-formed number is not a verified one and the engine makes no claim that it is -- but a number that cannot be parsed is one that was never captured, and every downstream treatment turns on whether it is there.",
+      "source": "inforeturn_engine/issuance.py tin_well_formed"
+    },
+    {
+      "statement": "It applies the thresholds and the withholding rate the file's own box catalog carries; it does not decide whether those are the figures the statute provides for, nor whether a payee's type is the correct classification in law. All shipped data is fictional -- the groups, entities, payees, taxpayer numbers, box catalog, payments and issue dates are invented, the taxpayer-number format is deliberately unlike any real identifier, and the reporting year is set in a fictional future.",
+      "source": "inforeturn_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-inforeturn.svg",
+    "motion": "../assets/engine-inforeturn.svg",
+    "poster_alt": "Information Return Issuance diagram: on the left a dark form card for a non-employee compensation return showing the payer entity and taxpayer number, the payee and its number, the box code, the box amount and the backup withholding; a centre panel listing the issuance checks -- the box amount footed to the entity's own payment lines for that payee and box, a form issued exactly where the threshold or the withholding override obliges one, no form issued where none is owed, backup withholding recomputed at the statutory rate in both directions, and each transmittal recounted from the forms it accompanies -- with one red line for a payee who cleared a threshold and was never cut a form and one amber line for a payee sitting inside the review band just under a threshold; a FAIL verdict panel on the right; a lower chain reading ledger extract foots to box amount which foots to the transmittal and then the annual rollup; and a footer strip reading 22 controls, 9 families, 10,381 tests, read-only, SFS-E47-IRN.",
+    "caption": "The Information Return Issuance engine tile states the question the annual cycle turns on: every box footed back to the payment lines it came from, a form issued exactly where one is owed and nowhere else, withheld tax reported however small the payment was, and every transmittal recounted from the forms behind it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest inforeturn_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/info-return-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/info-return-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Information Return Issuance (SFS-E47-IRN) datasheet -- twenty-two deterministic, read-only controls over a group's annual information-return run: every payee population reassembled entity by entity, every box amount footed back to the entity's own payment lines with exact == in integer cents, a form proved to exist exactly where the box threshold or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions with truncating basis-point arithmetic, and every transmittal and the annual rollup recounted from the forms behind them. 10,381 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

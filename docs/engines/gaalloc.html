@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>G&amp;A Expense Allocation — Sophon Finance Systems</title>
+<meta name="description" content="G&amp;A Expense Allocation (SFS-E43-GAA) datasheet -- twenty-two deterministic, read-only controls over a holding entity&#x27;s recurring monthly G&amp;A allocation workbook: the month calendar and every tab stamped to its own month end, the recipient lookup with the holding entity excluded from its own allocation, whole driver counts covering every recipient-month, a cost pool that adds to its shared-overhead, corporate-G&amp;A and metered-postage components, shares that sum to exactly 10,000 basis points and re-derive from the drivers by largest remainder, allocated amounts that tie the pool to the cent and re-derive as pool times share, a generated journal entry that balances, ties the re-derived allocation and nets to zero at consolidation, a postage split reconciled to the physical meter, and a year-to-date rollup recomputed from the tabs beneath it. 10,404 tests, seeded fictional data, a planted-defect file for every control.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:30px;height:30px;flex:none}
+.brand-word{font-weight:600;font-size:18px;letter-spacing:.2px;white-space:nowrap;line-height:1.15}
+.brand-word span{font-weight:300}
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}.brand-tag{font-size:8.5px;letter-spacing:.8px}}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.schem-wrap{overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px;overflow-wrap:anywhere}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}.schem-wrap svg.schem{width:auto;max-width:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+<main class="wrap">
+<section class="masthead">
+  <p class="kicker">ENGINE 43</p>
+  <p class="partline">SFS-E43-GAA &middot; COST ALLOCATION &middot; REV 2026-07-24 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>G&amp;A Expense Allocation</strong></h1>
+  <p class="tag">Did the whole pool leave the holding entity, and land where the drivers say?</p>
+  <p class="intro">A management or holding entity carries the group&#x27;s shared cost -- corporate G&amp;A, shared overhead, the postage meter -- and none of it belongs to it. Every month a recurring workbook turns a column of driver counts into a column of percentages, multiplies them by that month&#x27;s cost pool, and generates the journal entry that pushes the cost out to the operating entities and projects that consumed it. The workbook is copied forward every month, which is exactly why it drifts. This engine reads the eight artifacts that workbook emits -- the month calendar, the recipient lookup, the driver tab, the cost-pool ledger, the allocation schedule, the allocation journal, the postage log and the year-to-date rollup -- and runs twenty-two deterministic controls over them. Is the file complete, does the year run month by month with every tab present and stamped to its own month end, is the recipient lookup sound and does it exclude the holding entity that cannot allocate to itself, is the driver tab whole and does it cover every recipient in every month, does the cost pool add to its components and did it step month over month, do the shares sum to exactly 10000 basis points and re-derive from the drivers, do the allocated amounts tie the pool and re-derive as pool times share, does the generated entry balance, tie the re-derived allocation and net to zero at consolidation, does the postage split reconcile to the physical meter, and does the year-to-date rollup recompute from the tabs beneath it. It compares every figure with exact ==, splits by largest remainder so the residual cent lands in exactly one place, measures every accounting date against the period stamped in the file rather than the system clock, and never writes to a source artifact.</p>
+  <p class="thesis">A G&amp;A allocation is the least-audited schedule in a group&#x27;s close, because it looks like the safest: a column of percentages, a cost pool, and a formula between them. That is exactly why it drifts. None of the ways it goes wrong look wrong on the face of the tab. The share column sums to 99.97% and quietly leaves cost behind in the holding entity, every month, for as long as the workbook is copied forward. Two shares are moved against each other, the column still sums to 100.00%, and the split is no longer the one the drivers support. Two recipients&#x27; amounts are transposed, the column still ties the pool to the cent, and the cost has landed on the wrong books. The entry balances and no longer matches the schedule it was posted from, because a debit was retyped and the credit was moved with it. An entity is charged and relieved inside one entry, so both sides inflate and nothing actually moves. A month is never rolled, or is rolled and stamped to the date of the month it was copied from, so real cost posts into the wrong period. The engine rebuilds every share from the driver counts, every amount from the share and the pool, and the entry from both, through the same kernel that produced the data, and compares with exact ==. It ties the postage component to the physical meter, the only figure in the workbook with a counter behind it. It ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 640" role="img" aria-label="Exploded functional block stack: Structural Precondition, Period Continuity, Recipient Lookup, Driver Tab, Cost Pool, Allocation Re-Derivation, Allocation Journal Entry, Postage Meter, Year-to-Date Rollup over seeded fictional data">
+  <g class="die-layer" data-layer="set"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Structural Precondition</text></g>
+  <g class="die-layer" data-layer="per"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Period Continuity</text></g>
+  <g class="die-layer" data-layer="rcp"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Recipient Lookup</text></g>
+  <g class="die-layer" data-layer="drv"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Driver Tab</text></g>
+  <g class="die-layer" data-layer="pol"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Cost Pool</text></g>
+  <g class="die-layer" data-layer="alc"><polygon points="80,320 400,320 360,342 40,342" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,342 360,342 360,388 40,388" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="369" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Allocation Re-Derivation</text></g>
+  <g class="die-layer" data-layer="je"><polygon points="80,380 400,380 360,402 40,402" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,402 360,402 360,448 40,448" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="429" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Allocation Journal Entry</text></g>
+  <g class="die-layer" data-layer="pst"><polygon points="80,440 400,440 360,462 40,462" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,462 360,462 360,508 40,508" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="489" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Postage Meter</text></g>
+  <g class="die-layer" data-layer="rpt"><polygon points="80,500 400,500 360,522 40,522" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,522 360,522 360,568 40,568" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="549" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Year-to-Date Rollup</text></g>
+  <text x="40" y="630" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="set" data-plain="Checks the allocation file carries every artifact the controls below read, exactly once, and that the opening month and the holding entity are named." data-eng="One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES -- period calendar, recipient lookup, driver tab, cost-pool ledger, allocation schedule, allocation journal, postage log, year-to-date rollup -- and FAILs a file carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. It also FAILs a first_period that is not a readable YYYY-MM month, without which the year the workbook covers cannot be established, and FAILs a file that does not name the holding entity, since every credit line and every recipient exclusion is measured against it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Structural Precondition layer — open detail" aria-controls="die-panel" aria-expanded="false">Structural Precondition</button>
+    <button class="die-face" data-layer="per" data-plain="Checks the year runs month by month and every month tab is complete and stamped to its own month end." data-eng="Two controls. per_months_consecutive FAILs a period label that is not a readable YYYY-MM month, a month that appears on two tabs and would be allocated twice, a gap in the sequence -- a workbook copied forward loses a tab the way a chain loses a link, and the month it skipped was never pushed out -- and a calendar whose opening month is not the one the file states it opens on. per_tab_continuity FAILs a period stamped to anything other than the last day of the month it allocates, because a tab rolled forward but dated to the month it was copied from posts real cost into the wrong accounting period; it FAILs a period that does not carry exactly one cost pool, one journal entry and one meter reading, or that carries no driver rows or no allocation rows at all; it FAILs a journal entry whose accounting date disagrees with the calendar&#x27;s; and it FAILs any artifact carrying rows for a month the calendar does not have." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Period Continuity layer — open detail" aria-controls="die-panel" aria-expanded="false">Period Continuity</button>
+    <button class="die-face" data-layer="rcp" data-plain="Checks the lookup tab is sound and that the holding entity is not listed as a recipient of its own allocation." data-eng="Three controls. rcp_unique_ids FAILs a recipient id that appears twice, because the id is what joins the lookup tab to the driver counts, the allocation rows and the journal lines, and a duplicate makes a driver count ambiguous about whose share it sets. rcp_rows_wellformed FAILs a recipient missing its id, name or GL account -- the account is the debit side of every line generated for it -- and FAILs a kind that is not operating_entity or project, because the allocation policy has no rule for anything else. rcp_holding_not_recipient FAILs a lookup tab that lists the holding entity among its own recipients: the entry would allocate a slice of the pool straight back to the books it exists to relieve, so the same cost is both charged and credited and that share of the group&#x27;s overhead never leaves. The holding entity is excluded from every downstream derivation, so this control owns the finding once rather than having it surface as arithmetic noise below." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Recipient Lookup layer — open detail" aria-controls="die-panel" aria-expanded="false">Recipient Lookup</button>
+    <button class="die-face" data-layer="drv" data-plain="Checks the driver counts are whole and non-negative and that every recipient has exactly one count in every month." data-eng="Two controls. drv_counts_whole FAILs a driver count that is not a whole number, since a fractional count is a typed-over formula; FAILs a negative count, which is a reversal entered into a basis column and would push a negative share onto a recipient, taking cost off it rather than putting it on; and FAILs a month whose counts total zero, which is a month with no basis on which its pool could be shared out at all. drv_coverage_complete FAILs a recipient with anything other than exactly one driver row in a month -- none is not a zero share but a basis that was never captured, and everyone else&#x27;s share silently absorbs the slice, while two rows count the same basis twice -- and FAILs a driver row naming an id that is not an allocation recipient, because the basis it adds belongs to nobody." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Driver Tab layer — open detail" aria-controls="die-panel" aria-expanded="false">Driver Tab</button>
+    <button class="die-face" data-layer="pol" data-plain="Checks each month&#x27;s pool adds up from its components, and flags a pool that steps month over month beyond the file&#x27;s band." data-eng="Two controls. pol_components_sum FAILs a period whose shared overhead, corporate G&amp;A and postage components do not add to exactly the stated pool total. The total is the figure the allocation multiplies against and the components are what a reviewer reads to understand it; when they stop agreeing, the review is being done on one number and the entry on another. pol_month_over_month_variance is a FLAG, not a failure: it marks a pool that steps from the prior month by more than the file&#x27;s own variance band -- 500 basis points when the file does not carry one -- with the movement computed as an absolute proportion of the prior pool and floored, so a step is never overstated by a rounding artifact. A recurring workbook is copied forward precisely because the figures are stable, so a step outside the band is either a real change in the group&#x27;s cost base or a component typed into the wrong month, and a person says which." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Cost Pool layer — open detail" aria-controls="die-panel" aria-expanded="false">Cost Pool</button>
+    <button class="die-face" data-layer="alc" data-plain="Checks the shares sum to 100.00%, re-derive from the drivers, and that the amounts tie the pool and re-derive from the shares." data-eng="Five controls, and the reason the engine exists. alc_recipient_coverage is the family&#x27;s own precondition: it FAILs a month with anything other than exactly one allocation row per recipient, or a row for an id that is not a recipient, so a lost row is named once here rather than reported three more times downstream as arithmetic that does not foot. alc_shares_sum_to_full FAILs a share column that does not sum to exactly 10000 basis points; a column at 9997 bps does not round to a hundred percent, it pushes out 99.97% of the pool and leaves the rest sitting in the holding entity every month the workbook is copied forward. alc_shares_rederive rebuilds every share from the driver counts by the largest-remainder method and FAILs any share that does not match to the basis point, which catches two shares moved against each other so the column still sums to 100.00%. alc_amounts_tie_pool FAILs a month whose allocated column does not sum to exactly the pool it divides -- no tolerance band, because the residual cent belongs to exactly one recipient and the largest-remainder split is how it gets there. alc_amounts_rederive rebuilds every amount as pool times driver share through the same kernel that produced it and FAILs a recipient allocated anything else, which catches two amounts transposed between recipients while the column still ties the pool to the cent." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Allocation Re-Derivation layer — open detail" aria-controls="die-panel" aria-expanded="false">Allocation Re-Derivation</button>
+    <button class="die-face" data-layer="je" data-plain="Checks the generated entry balances, ties the re-derived allocation, and nets to zero across the group." data-eng="Three controls. je_balanced FAILs a period entry whose debits do not equal its credits exactly -- the first thing anyone assumes about a generated entry and the last thing anyone re-checks -- because an entry generated from a formula column that lost a row still looks like an entry, and a ledger that accepts it carries the difference as unexplained suspense. je_ties_allocation rebuilds the allocation from the drivers and the pool and FAILs a recipient whose net position in the entry is not that figure, reading the entry net of any credit on the same recipient so a line pair that appears to correct itself is not mistaken for the right answer; it also FAILs a line posted to an entity that is neither an allocation recipient nor the holding entity, since that amount leaves the group the allocation is defined over. je_consolidation_nets_zero FAILs a year whose group debits and credits do not net to exactly zero -- the allocation moves cost inside the group and must not create any -- and FAILs any entity both charged and relieved inside one entry, a gross-up pair that nets to nothing at that entity while inflating both sides of the entry, so cost appears to have moved when it has not." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Allocation Journal Entry layer — open detail" aria-controls="die-panel" aria-expanded="false">Allocation Journal Entry</button>
+    <button class="die-face" data-layer="pst" data-plain="Checks the meter rolls forward month to month and that the postage split and the pool&#x27;s postage line both reconcile to it." data-eng="Three controls, and the only place the workbook is tied to something physical. pst_meter_rolls_forward FAILs a month whose closing reading is below its opening, because a cumulative counter cannot run backwards and the period&#x27;s spend cannot then be taken as the difference; and it FAILs a month whose opening reading is not exactly the prior month&#x27;s close, which means the meter was reset, re-keyed or read out of order. pst_allocations_tie_meter_delta FAILs a per-code split that does not sum to exactly the month&#x27;s meter delta, and FAILs a code that is not one of the three the policy recognises -- first class, certified and parcel, weighted 6000, 2500 and 1500 basis points and split by largest remainder so the metered period is exhausted exactly. pst_pool_component_ties FAILs a pool whose postage component is not that same meter delta: the meter is the evidence and the pool line is the assertion built on it, and when they part company the group allocates postage it never bought, or buys postage it never allocates." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Postage Meter layer — open detail" aria-controls="die-panel" aria-expanded="false">Postage Meter</button>
+    <button class="die-face" data-layer="rpt" data-plain="Checks the year-to-date figures the close package reads recompute from the month tabs beneath them." data-eng="One control. rpt_rollup_ties rebuilds the period count, the recipient count, the pool total and the allocated total from the tabs beneath them and FAILs any stated figure that does not match. The rollup is the number that leaves the workbook -- it goes into the close package and onto the management report -- and a rollup maintained beside the tabs rather than derived from them drifts the first time a month is restated and nobody re-adds the column. The allocated total is compared only when every month re-derived: reporting a shortfall that is really an upstream driver or pool gap would name the wrong control and send a reviewer to the wrong tab." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" aria-label="Year-to-Date Rollup layer — open detail" aria-controls="die-panel" aria-expanded="false">Year-to-Date Rollup</button>
+  </div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Nine control families run in registry order over each allocation file. The first proves the others had something to read, because a control that passes on absent evidence reports assurance it never performed.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">10,404<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">22<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent rules run over every allocation file</div></div>
+  <div class="cell"><div class="v">9<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Families</div><div class="p">groups of controls, each answering one question</div></div>
+  <div class="cell"><div class="v">24<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Allocation files</div><div class="p">one clean baseline plus twenty-three planted-defect files</div></div>
+  <div class="cell"><div class="v">8<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Artifacts read</div><div class="p">period calendar, recipient lookup, driver tab, cost-pool ledger, allocation schedule, allocation journal, postage log, year-to-date rollup</div></div>
+  <div class="cell"><div class="v">0<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Tolerance</div><div class="p">an allocation a cent off the pool is a break, not a rounding band</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">A management or holding entity carries corporate G&amp;A, shared overhead and the postage meter for a group of operating entities and projects, and none of that cost belongs to it. Every month a recurring workbook -- one tab per month, a driver tab and a lookup tab behind it, a stamped accounting date per period -- turns a column of driver counts into a column of percentages, multiplies them by the month&#x27;s cost pool, and generates the allocation journal entry. The workbook is copied forward every month, which is precisely why it drifts. Four failures hide inside that, and none of them look wrong on the face of the tab. The share column sums to 99.97% and quietly leaves cost behind in the holding entity, or sums past 100.00% and over-relieves it, every month for the rest of the year. The allocated column was rounded recipient by recipient rather than by a largest-remainder split, or was left stale, and no longer ties the pool it divided -- or ties it exactly while two recipients&#x27; amounts sit transposed, so the cost landed on the wrong books. The generated entry balances and no longer matches the schedule it was posted from, because a debit was retyped and the credit was moved with it, or an entity was charged and relieved inside the same entry so both sides inflated and nothing actually moved. And a month was never rolled, or was rolled and stamped to the date of the month it was copied from, so a period is absent from the year or posts real cost into the wrong accounting period. None of these are judgment calls. They are equalities -- a share column against 10000 basis points, an allocated column against the pool, an amount against pool times share, a net debit against the re-derived allocation, a postage line against a physical meter reading, an accounting date against the last day of its own month -- which a deterministic control settles better than a spreadsheet inherited by whoever runs the close this year.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs every control over every allocation file<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI generates twenty-four fictional allocation files -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.</p>
+  <p style="margin:10px 0"><b>A share column that still sums to exactly 100.00%<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> One defect file moves two shares in the opening month against each other by twenty-five basis points. The column still sums to 10000 bps, so the sum control holds and nothing on the tab looks wrong. alc_shares_rederive rebuilds both shares from the driver counts by largest remainder and fails them, proving the share column is a derivation the engine recomputes rather than a constant it reads back.</p>
+  <p style="margin:10px 0"><b>An entry that balances and does not tie the schedule<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> Another defect file reduces one recipient&#x27;s debit and moves the holding entity&#x27;s credit with it, so the March entry balances to the cent. je_balanced holds. je_ties_allocation rebuilds the allocation from the drivers and the pool, reads the entry net of any offsetting credit on the same recipient, and fails the line -- the schedule and the entry posted from it had parted company.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<div class="schem-wrap"><svg class="schem" width="950" height="644" viewBox="0 0 950 644" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the G&amp;A Expense Allocation engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,309 C235,309 235,81 270,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">allocation files</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,596 355,596 331,596 L379,596 C355,596 355,596 355,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="589" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,596 355,596 331,596 L379,596 C355,596 355,596 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="600" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,596 355,596 331,596 L379,596 C355,596 355,596 355,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="611" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M355,118 C355,596 355,596 331,596 L379,596 C355,596 355,596 355,574" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="622" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="73" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,195 510,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,309 510,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,81 C475,81 475,423 510,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">complete</text></g>
+  <g class="schem-edge"><path d="M440,195 C595,195 595,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,423 C595,423 595,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M440,537 C595,537 595,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="130" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="187" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,309 C715,309 715,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">resolves</text></g>
+  <g class="schem-edge"><path d="M595,118 C595,596 595,596 571,596 L619,596 C595,596 595,596 595,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="589" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">allocated amounts</text></g>
+  <g class="schem-edge"><path d="M595,346 C595,596 595,596 571,596 L379,596 C355,596 355,596 355,574" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="589" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">meter delta</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="347" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="233" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="290" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,423 C715,423 715,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="415" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,596 835,596 811,596 L859,596 C835,596 835,596 835,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="835" y="589" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-block" data-block="corpus"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded Allocation Files source on GitHub"><rect x="30" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="115" y="305">Seeded</tspan><tspan x="115" y="321">Allocation Files</tspan></text></a></g>
+  <g class="schem-block" data-block="set-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Structural Precondition source on GitHub"><rect x="270" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="77">Structural</tspan><tspan x="355" y="93">Precondition</tspan></text></a></g>
+  <g class="schem-block" data-block="per-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Period Continuity source on GitHub"><rect x="270" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Period Continuity</text></a></g>
+  <g class="schem-block" data-block="rcp-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Recipient Lookup source on GitHub"><rect x="270" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Recipient Lookup</text></a></g>
+  <g class="schem-block" data-block="drv-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Driver Tab source on GitHub"><rect x="270" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Driver Tab</text></a></g>
+  <g class="schem-block" data-block="pol-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Cost Pool source on GitHub"><rect x="270" y="500" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="541" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Cost Pool</text></a></g>
+  <g class="schem-block" data-block="alc-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Allocation Re-Derivation source on GitHub"><rect x="510" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="595" y="77">Allocation</tspan><tspan x="595" y="93">Re-Derivation</tspan></text></a></g>
+  <g class="schem-block" data-block="je-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Allocation Journal Entry source on GitHub"><rect x="510" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="595" y="191">Allocation</tspan><tspan x="595" y="207">Journal Entry</tspan></text></a></g>
+  <g class="schem-block" data-block="pst-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Postage Meter source on GitHub"><rect x="510" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Postage Meter</text></a></g>
+  <g class="schem-block" data-block="rpt-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Year-to-Date Rollup source on GitHub"><rect x="510" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Year-to-Date Rollup</text></a></g>
+  <g class="schem-block" data-block="registers"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/model.py" target="_blank" rel="noopener" aria-label="Open Tabs, Lookups &amp; Kernel source on GitHub"><rect x="750" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Tabs, Lookups &amp; Kernel</text></a></g>
+  <g class="schem-block" data-block="report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/report.py" target="_blank" rel="noopener" aria-label="Open Verdict and Findings source on GitHub"><rect x="750" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict and Findings</text></a></g>
+  <g class="schem-title"><line x1="30" y1="618" x2="920" y2="618" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="632" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E43-GAA &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-24</text></g>
+</svg></div><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Allocation Files.</b> fictional G&amp;A allocation workbooks enter the control registry</li><li><b>Structural Precondition.</b> is the allocation file complete and the year and holding entity named</li><li><b>Period Continuity.</b> does the year run month by month, each tab complete and stamped</li><li><b>Recipient Lookup.</b> is the lookup sound and the holding entity excluded</li><li><b>Driver Tab.</b> is the basis whole and complete for every recipient-month</li><li><b>Cost Pool.</b> does the pool add up, and did it step</li><li><b>Allocation Re-Derivation.</b> do the shares and the amounts re-derive and tie the pool</li><li><b>Allocation Journal Entry.</b> does the entry balance, tie the schedule and net to zero</li><li><b>Postage Meter.</b> does the postage reconcile to the physical counter</li><li><b>Year-to-Date Rollup.</b> does the reported rollup recompute from the tabs</li><li><b>Tabs, Lookups &amp; Kernel.</b> the artifacts and the one kernel every rule resolves against</li><li><b>Verdict and Findings.</b> every finding, with the reason it exists, ends at a person</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Allocation Files.</b> generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the month calendar, the recipient lookup, the driver counts, the two discretionary pool components and the postage meter readings are stated as base facts; every share, every allocated amount, the per-code postage split, the pool&#x27;s postage component and total, the journal entry and the year-to-date rollup are recomputed through the same allocation kernel the engine later re-derives with, so the relationships the engine tests are the relationships that produced the data.</li><li><b>Structural Precondition.</b> One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, an unreadable opening month, or no named holding entity, so no downstream rule holds vacuously on absent evidence.</li><li><b>Period Continuity.</b> Two controls: the calendar runs consecutive readable months from the stated opening period with no gap and no repeat, and every month carries one pool, one entry, one meter reading, driver and allocation rows, and an accounting date that is the last day of the month it allocates.</li><li><b>Recipient Lookup.</b> Three controls: unique recipient ids, every row carrying an id, a name, a known kind and a GL account, and the holding entity absent from the list of recipients it is allocating to.</li><li><b>Driver Tab.</b> Two controls: driver counts are whole and non-negative with a non-zero total in every month, and every recipient carries exactly one count in every month with no count belonging to a non-recipient.</li><li><b>Cost Pool.</b> Two controls: the shared overhead, corporate G&amp;A and postage components add to exactly the stated pool total, and a month-over-month step beyond the file&#x27;s variance band is flagged for a person rather than failed.</li><li><b>Allocation Re-Derivation.</b> Five controls: one allocation row per recipient-month, shares summing to exactly 10000 basis points, every share rebuilt from the driver counts, the allocated column tying the pool to the cent, and every amount rebuilt as pool times share by largest remainder.</li><li><b>Allocation Journal Entry.</b> Three controls: debits equal credits in every period entry, each recipient&#x27;s net position equals its re-derived allocation with no line posted outside the group, and the year nets to zero at consolidation with no entity both charged and relieved inside one entry.</li><li><b>Postage Meter.</b> Three controls: the meter reads forward inside each month and opens where the prior month closed, the per-code split sums to exactly the meter delta on codes the policy recognises, and the pool&#x27;s postage component equals that same delta.</li><li><b>Year-to-Date Rollup.</b> One control: the period count, the recipient count, the pool total and the allocated total stated on the rollup are rebuilt from the month tabs, with the allocated total compared only when every month re-derived.</li><li><b>Tabs, Lookups &amp; Kernel.</b> The period calendar carries each month and its stamped accounting date; the recipient lookup carries each operating entity and project, its kind and its GL account, with the holding entity excluded; the driver tab carries one count per recipient-month; the cost-pool ledger carries the three components and the total; the allocation schedule carries the share in basis points and the allocated amount; the journal carries the generated entry; the postage log carries the meter readings and the per-code split; and the rollup carries the year-to-date figures. Every continuity, share, amount, entry, postage and rollup control resolves against these through the shared allocation kernel, so a finding cannot disagree with the data that produced it.</li><li><b>Verdict and Findings.</b> Findings roll up per allocation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>regenerate the seeded fictional corpus, run all twenty-two controls, write both reports</td><td class="mono">per-file verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries a planted defect for every control by design</td><td>gaalloc_report.json, gaalloc_report.md, samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m gaalloc_engine samples</code><button class="copybtn" data-copy="python -m gaalloc_engine samples" aria-label="Copy command: python -m gaalloc_engine samples">copy</button></div></td><td>analyze an existing folder of allocation files without regenerating it</td><td class="mono">per-file verdicts and findings</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none unless --json or --md is passed</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m gaalloc_engine samples --generate --quiet</code><button class="copybtn" data-copy="python -m gaalloc_engine samples --generate --quiet" aria-label="Copy command: python -m gaalloc_engine samples --generate --quiet">copy</button></div></td><td>regenerate the corpus and print only the overall verdict</td><td class="mono">a single verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest gaalloc_engine/tests -q</code><button class="copybtn" data-copy="python -m pytest gaalloc_engine/tests -q" aria-label="Copy command: python -m pytest gaalloc_engine/tests -q">copy</button></div></td><td>run the full test suite for this engine</td><td class="mono">10404 passed</td><td class="mono">0 when every test passes</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>10,404</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Registered controls<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>22</b> controls<br><span style="color:#6f6f6f;font-size:12.5px">counted from the registry, not from documentation</span></td></tr>
+  <tr><td>Planted defects<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>23</b> defect files<br><span style="color:#6f6f6f;font-size:12.5px">every registered control has at least one file that trips it</span></td></tr>
+  <tr><td>Control coverage<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>100</b> percent of controls with a planted defect<br><span style="color:#6f6f6f;font-size:12.5px">no control ships without a file demonstrating it firing</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine has no write path and therefore no autonomy to gate. It re-derives the allocation journal entry and compares it; it does not post it. A person decides whether a month is carried into the close and whether a pool step is a real change in the cost base.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings above PASS</td><td class="mono"><b>PASS</b></td><td>carry the mechanically clean allocation into the documented close review and sign-off</td></tr><tr><td>One or more FLAG, no FAIL</td><td class="mono"><b>REVIEW</b></td><td>a human resolves each flag; a cost pool that stepped month over month beyond the file&#x27;s variance band lands here, and a person says whether the group&#x27;s cost base changed or a component was typed into the wrong month</td></tr><tr><td>One or more FAIL</td><td class="mono"><b>FAIL</b></td><td>the month is not carried into the close until the failing control is cleared -- a missing or misstamped tab, a share column off 100.00%, an amount that does not re-derive, an entry that does not balance or does not tie the schedule, or a postage line the meter does not support</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only: allocation files are parsed and never written back, and nothing is posted, filed or paid, so the engine cannot introduce the break it reports.</li><li style="list-style:disc;margin-left:18px">Integer cents and whole basis points throughout, compared with exact ==; there is no tolerance band on an allocation, and a cent off the pool is reported as a break.</li><li style="list-style:disc;margin-left:18px">An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.</li><li style="list-style:disc;margin-left:18px">One allocation kernel: the controls and the generator share gaalloc_engine.allocation, so a finding cannot disagree with the data that produced it.</li><li style="list-style:disc;margin-left:18px">Largest remainder everywhere it matters: driver shares sum to exactly 10000 basis points and allocated amounts sum to exactly the pool, so the residual cent lands in exactly one deterministic place rather than being rounded away recipient by recipient.</li><li style="list-style:disc;margin-left:18px">Every accounting-date test is made against the period stamped in the file, never the system clock, so the same file returns the same findings in any month it is run.</li><li style="list-style:disc;margin-left:18px">Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.</li><li style="list-style:disc;margin-left:18px">Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread, and each family&#x27;s precondition owns its own gap so a lost row is named once rather than reported three times downstream.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never posts an entry, files a return, pays a supplier, or writes to a source artifact. It re-derives the allocation and compares it, then stops.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>It reads the eight artifacts the allocation workbook emits. It does not connect to a general ledger, an accounts-payable system, a payroll feed or the postage meter itself.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>It is about where a shared cost lands, not whether it should have been incurred, and not whether the driver the policy names -- headcount-equivalents, units, doors -- is the right basis for the group. It checks that the basis was applied, not that it was chosen well.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>The month-over-month variance band is a review signal read from the file itself, defaulting to 500 basis points; it is not a materiality judgment, and a pool step inside the band is not asserted to be correct.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li><li>It takes the driver counts and the meter readings at face value: it confirms the workbook derives from them and reconciles, not that the counts were captured correctly or the meter was read honestly. All shipped data is fictional and the fiscal year is set in a fictional future.<sup class="fn"><a id="fnref-18" href="#fn-18" aria-label="See substantiation 18">18</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">brand animation</span>
+<figure class="figwrap"><img src="../assets/engine-gaalloc.svg" data-video="../assets/engine-gaalloc.svg" alt="G&amp;A Expense Allocation diagram: on the left a dark card for the holding entity&#x27;s monthly cost pool of $286,881.40, built from shared overhead, corporate G&amp;A and metered postage; an arrow labelled split on drivers into a centre panel headed pool times driver share, listing the controls that held -- shares summing to exactly 10,000 basis points, every share re-derived from the driver counts, the allocated column tying the pool to the cent, the entry balancing and netting to zero at consolidation -- and beneath them one red line for two recipients&#x27; amounts transposed while the column still ties, and one amber line for a pool that stepped 13.94% against a 5.00% band; on the right a FAIL verdict panel; along the bottom the six fictional recipients with their April driver counts and re-derived shares, ENT-201 at 31.43% through PRJ-302 at 5.72%, summing to 100.00%; and a footer strip reading 22 controls, 9 families, 10,404 tests, read-only, SFS-E43-GAA." loading="lazy"><figcaption>The G&amp;A Expense Allocation engine tile states the identity that has to hold every month: the driver counts set the shares, the shares and the pool set the amounts, the amounts set the entry, and every one of those figures is recomputed from the tab beneath it rather than read back.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">python run.py</div><div class="runline">python -m pytest gaalloc_engine/tests -q</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ga-allocation-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+  </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (ga-allocation-automation/)</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>len(gaalloc_engine.engine.REGISTRY)</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>distinct rule-id prefixes in gaalloc_engine.engine.REGISTRY</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>samples/*.json after python run.py</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>len(gaalloc_engine.model.DOC_TYPES)</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>gaalloc_engine/tests boundary tests on the cent and the basis point</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python run.py (ga-allocation-automation/); gaalloc_engine/tests planted-defect suite</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>gaalloc_engine/generate.py DEFECTS share_drift -&gt; alc_shares_rederive</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>gaalloc_engine/generate.py DEFECTS journal_off_schedule -&gt; je_ties_allocation</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q -o addopts= (ga-allocation-automation/)</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>len(gaalloc_engine.engine.REGISTRY)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>len(gaalloc_engine.generate.DEFECTS)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>gaalloc_engine/tests: every registered rule has a planted defect</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>ga-allocation-automation/README.md and gaalloc_engine read-only / determinism tests</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>gaalloc_engine/model.py DOC_TYPES</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>gaalloc_engine/engine.py module docstring and the drv_ family</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>gaalloc_engine/model.py DEFAULT_VARIANCE_FLAG_BPS and engine.py pol_month_over_month_variance</li>
+    <li id="fn-18"><a class="fnid" href="#fnref-18" aria-label="Back to reference 18">18</a>gaalloc_engine/generate.py</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
+</main>
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ga-allocation-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+<script>
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
+</script>
+</body>
+</html>

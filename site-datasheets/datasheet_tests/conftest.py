@@ -75,6 +75,15 @@ ROSTER: dict[str, dict] = {
     "depreciation":{"num": 36, "part_no": "SFS-E36-DEP", "mnemonic": "DEP", "family": "Asset Register",          "name": "Depreciation & Prepaid Amortization", "engine_dir": "depreciation-register-automation"},
     "deposit":     {"num": 37, "part_no": "SFS-E37-EMD", "mnemonic": "EMD", "family": "Deposit Trust",           "name": "Earnest-Money Deposit Trust", "engine_dir": "deposit-trust-automation"},
     "spending":    {"num": 38, "part_no": "SFS-E38-SRG", "mnemonic": "SRG", "family": "Capital Authorization",   "name": "Capital Spending Request Gate", "engine_dir": "spending-gate-automation"},
+    "capitalize":    {"num": 39, "part_no": "SFS-E39-CAP", "mnemonic": "CAP", "family": "Cost Capitalization", "name": "Section 263A Interest Capitalization", "engine_dir": "interest-capitalization-automation"},
+    "franchise":     {"num": 40, "part_no": "SFS-E40-TXF", "mnemonic": "TXF", "family": "Franchise Tax", "name": "Franchise Tax Combined Apportionment", "engine_dir": "franchise-tax-automation"},
+    "sizing":        {"num": 41, "part_no": "SFS-E41-DTS", "mnemonic": "DTS", "family": "Debt Sizing", "name": "Debt Term-Sheet Sizing & Loan Terms", "engine_dir": "debt-sizing-automation"},
+    "unitsales":     {"num": 42, "part_no": "SFS-E42-USM", "mnemonic": "USM", "family": "Sales Administration", "name": "Unit Sales & Commission Tie-Out", "engine_dir": "unit-sales-automation"},
+    "gaalloc":       {"num": 43, "part_no": "SFS-E43-GAA", "mnemonic": "GAA", "family": "Cost Allocation", "name": "G&A Expense Allocation", "engine_dir": "ga-allocation-automation"},
+    "checkage":      {"num": 44, "part_no": "SFS-E44-OCA", "mnemonic": "OCA", "family": "Disbursement Controls", "name": "Outstanding Check Aging & Escheatment", "engine_dir": "check-aging-automation"},
+    "variance":      {"num": 45, "part_no": "SFS-E45-PVR", "mnemonic": "PVR", "family": "Project Reporting", "name": "Project Variance & Business-Plan Compare", "engine_dir": "project-variance-automation"},
+    "contingency":   {"num": 46, "part_no": "SFS-E46-CTG", "mnemonic": "CTG", "family": "Contingency Controls", "name": "Contingency Rollforward & Adequacy", "engine_dir": "contingency-rollforward-automation"},
+    "inforeturn":    {"num": 47, "part_no": "SFS-E47-IRN", "mnemonic": "IRN", "family": "Information Returns", "name": "Information Return Issuance", "engine_dir": "info-return-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"
