@@ -382,6 +382,32 @@
   .tile.hot a { font-size:14px; font-weight:500; color:var(--blue); text-decoration:none; margin-top:14px; display:inline-flex; align-items:center; gap:8px; }
   .tile.hot a:hover { text-decoration:underline; }
 
+  /* Static schematics: 11 of the 44 engine tiles upgrade to a silent film; the
+     other 33 have no film asset, so the tile carries the motion itself — a slow
+     read-head crosses the diagram, the same "this is being inspected" gesture the
+     engines describe. Purely additive: the band is an overlay at opacity 0, so a
+     tile with no JS, no observer, or reduced motion is exactly the static image
+     it is today. .tv-static / .tv-live are set by the observer, which arms the
+     scan only while the tile is on screen — nothing animates out of view. */
+  .tile-vis.tv-static { position:relative; overflow:hidden; }
+  .tile-vis.tv-static::after {
+    content:""; position:absolute; top:0; bottom:0; left:0; width:62%; z-index:2;
+    pointer-events:none; opacity:0; transform:translate3d(-150%,0,0); will-change:transform;
+    background:linear-gradient(102deg, rgba(15,98,254,0) 0%, rgba(15,98,254,.07) 40%,
+      rgba(255,255,255,.58) 50%, rgba(15,98,254,.07) 60%, rgba(15,98,254,0) 100%); }
+  .tile-vis.tv-static.tv-live::after { animation:tvScan 5.6s cubic-bezier(.45,.05,.5,.95) var(--tvd,.4s) infinite; }
+  /* four offsets, so a row of tiles that scrolls into view together doesn't
+     sweep in lockstep */
+  .fleet .tile:nth-child(4n+2) .tile-vis.tv-static { --tvd:1.2s; }
+  .fleet .tile:nth-child(4n+3) .tile-vis.tv-static { --tvd:2.1s; }
+  .fleet .tile:nth-child(4n+4) .tile-vis.tv-static { --tvd:3.2s; }
+  @keyframes tvScan {
+    0%   { opacity:0; transform:translate3d(-150%,0,0); }
+    5%   { opacity:1; }
+    31%  { opacity:1; }
+    36%  { opacity:0; transform:translate3d(272%,0,0); }
+    100% { opacity:0; transform:translate3d(272%,0,0); } }
+
   /* ============ SELF-HEALING ============ */
   /* ============ SELF-HEALING FLOW ============ */
   .flow { margin:34px 0 24px; }
@@ -2946,6 +2972,21 @@
     }, { rootMargin: '200px' });
     vio.observe(img);
   });
+
+  // The tiles with no film asset animate themselves — see .tv-static in the
+  // stylesheet. Same test as the upgrade above, so a tile is never both: it
+  // either plays a film or runs the scan. Armed on entry, disarmed on exit.
+  var statics = [].slice.call(document.querySelectorAll('#engines .tile-vis')).filter(function (vis) {
+    var img = vis.querySelector('img[data-video]');
+    var msrc = img ? img.getAttribute('data-video') : '';
+    return !/\.(mp4|webm|ogv)$/i.test(msrc || '');
+  });
+  if (statics.length) {
+    var tvio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle('tv-live', e.isIntersecting); });
+    }, { threshold: 0, rootMargin: '60px 0px' });
+    statics.forEach(function (vis) { vis.classList.add('tv-static'); tvio.observe(vis); });
+  }
 
   // mobile resilience: some phones (iOS Low Power Mode, data saver) gate the first
   // muted autoplay until any interaction. Retry ALL videos on every early gesture —
