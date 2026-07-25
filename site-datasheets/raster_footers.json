@@ -1,33 +1,49 @@
 {
-  "_why": "Raster tile footers bake their figures into pixels, so no test can read them. Each entry records the figures verified by eye against the artwork, plus the bytes they were verified in. If counts.json moves, the figure check fails and the tile must be re-rendered; if the tile is re-rendered, the hash check fails until someone re-reads the footer and re-pins it.",
+  "_why": "These four tiles bake their footer figures into pixels, in both the .webp poster and the .mp4 animation, so no test can read them. Each entry records the figures verified by eye against the artwork, plus digests of the exact files they were verified in. If counts.json moves, the figure check fails and the artwork must be re-rendered; if either file changes, its digest check fails until someone re-reads the footer and re-pins it. The animation needs its own digest because the poster shows only frame 0 -- the wrong figure hid in the motion long after the poster was fixed.",
   "tiles": {
     "draw": {
-      "asset": "engine-draw.webp",
+      "poster": "engine-draw.webp",
+      "motion": "engine-draw-motion.mp4",
       "controls": 34,
       "tests": 10392,
       "part_no": "SFS-E11-DRW",
-      "sha256": "c4c60f5412311bd69fb23eb12da17592e6e6df6c8684fc7b5e4a370915b3674a"
+      "sha256": {
+        "poster": "c4c60f5412311bd69fb23eb12da17592e6e6df6c8684fc7b5e4a370915b3674a",
+        "motion": "6a48c0e99b2e27ede8ee5fe697d740f005b52eef5fc4664ebb3f456eb068c660"
+      }
     },
     "upgrade": {
-      "asset": "engine-upgrade.webp",
+      "poster": "engine-upgrade.webp",
+      "motion": "engine-upgrade-motion.mp4",
       "controls": 20,
       "tests": 10279,
       "part_no": "SFS-E12-BUP",
-      "sha256": "03cbc5c814caf93c5ba7c03d1c91aada016f1f20f442ee2c68d34d1d0ea40c6a"
+      "sha256": {
+        "poster": "03cbc5c814caf93c5ba7c03d1c91aada016f1f20f442ee2c68d34d1d0ea40c6a",
+        "motion": "d49ff2507bb9559fffa57d0ddbf0a433cd2a28635caa4f9aac6552d00409d993"
+      }
     },
     "warranty": {
-      "asset": "engine-warranty.webp",
+      "poster": "engine-warranty.webp",
+      "motion": "engine-warranty-motion.mp4",
       "controls": 22,
       "tests": 10299,
       "part_no": "SFS-E13-WRC",
-      "sha256": "7bbb311fd184b5061a67e25d82e664802dbbaf589f2e0a2092ac7d5c071e544f"
+      "sha256": {
+        "poster": "7bbb311fd184b5061a67e25d82e664802dbbaf589f2e0a2092ac7d5c071e544f",
+        "motion": "8113b2b55c20ec030063d51ac0aa29e1b9a9ff7c95d73c535970ea4467c9586b"
+      }
     },
     "intercompany": {
-      "asset": "engine-intercompany.webp",
+      "poster": "engine-intercompany.webp",
+      "motion": "engine-intercompany-motion.mp4",
       "controls": 23,
       "tests": 10310,
       "part_no": "SFS-E14-ICO",
-      "sha256": "ca9340146da1db8ada168401abb2623fd1f96797aec2ee73c440d6bcd6c7ff50"
+      "sha256": {
+        "poster": "9e8845fb1374c3f7dcbd890e8c897fc266cfc63dc54ccd1c54d0137a8863f2b7",
+        "motion": "0d2222d8a5a072aa92282f763758078c13523678ebfb9439a0d48021e15b506a"
+      }
     }
   }
 }
