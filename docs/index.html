@@ -354,8 +354,11 @@
      Do not lower these values without re-measuring. */
   section.has-film > .filmbg::after { background:linear-gradient(180deg, rgba(255,255,255,.93) 0%, rgba(255,255,255,.90) 22%, rgba(255,255,255,.90) 78%, rgba(255,255,255,.93) 100%); }
   @media (prefers-reduced-motion:reduce){ section.has-film > .filmbg video { display:none; } section.alt.has-film { background:var(--bg-alt); } }
-  .flag-vis { background:#fff; }
-  .flag-vis img, .flag-vis video { display:block; width:100%; max-width:920px; height:auto; margin:0 auto; }
+  /* --vis-max is shared with the flow layer further down: the artwork is capped
+     and centred inside a wider figure, and the layer must take the exact same box
+     or every anchor lands off the drawing. Change the cap here only. */
+  .flag-vis { background:#fff; --vis-max:920px; }
+  .flag-vis img, .flag-vis video { display:block; width:100%; max-width:var(--vis-max); height:auto; margin:0 auto; }
   .flag-body { display:grid; grid-template-columns:1fr 1.1fr 1fr; }
   .flag-col { padding:24px 28px; }
   .flag-col + .flag-col { border-left:1px solid var(--border); }
@@ -386,32 +389,31 @@
   .tile.hot a { font-size:14px; font-weight:500; color:var(--blue); text-decoration:none; margin-top:14px; display:inline-flex; align-items:center; gap:8px; }
   .tile.hot a:hover { text-decoration:underline; }
 
-  /* Static schematics: 11 of the 44 engine tiles upgrade to a silent film; the
-     other 33 have no film asset, so the tile carries the motion itself — a slow
-     read-head crosses the diagram, the same "this is being inspected" gesture the
-     engines describe. Purely additive: the band is an overlay at opacity 0, so a
-     tile with no JS, no observer, or reduced motion is exactly the static image
-     it is today. .tv-static / .tv-live are set by the observer, which arms the
-     scan only while the tile is on screen — nothing animates out of view. */
-  .tile-vis.tv-static { position:relative; overflow:hidden; }
-  .tile-vis.tv-static::after {
-    content:""; position:absolute; top:0; bottom:0; left:0; width:62%; z-index:2;
-    pointer-events:none; opacity:0; transform:translate3d(-150%,0,0); will-change:transform;
-    background:linear-gradient(102deg, rgba(15,98,254,0) 0%, rgba(15,98,254,.07) 40%,
-      rgba(255,255,255,.58) 50%, rgba(15,98,254,.07) 60%, rgba(15,98,254,0) 100%); }
-  /* One pass, then done — the tile is a still again and stays that way. Never
-     repeats and never re-runs when the tile comes back on screen. */
-  .tile-vis.tv-static.tv-live::after { animation:tvScan 1.9s cubic-bezier(.45,.05,.5,.95) var(--tvd,.2s) 1 forwards; }
-  /* four offsets, so a row of tiles that scrolls into view together doesn't
-     sweep in lockstep */
-  .fleet .tile:nth-child(4n+2) .tile-vis.tv-static { --tvd:.34s; }
-  .fleet .tile:nth-child(4n+3) .tile-vis.tv-static { --tvd:.48s; }
-  .fleet .tile:nth-child(4n+4) .tile-vis.tv-static { --tvd:.62s; }
-  @keyframes tvScan {
-    0%   { opacity:0; transform:translate3d(-150%,0,0); }
-    12%  { opacity:1; }
-    82%  { opacity:1; }
-    100% { opacity:0; transform:translate3d(272%,0,0); } }
+  /* Both diagram hosts anchor the flow layer below. */
+  .tile-vis, .flag-vis { position:relative; }
+
+  /* ============ DIAGRAM FLOW ============ */
+  /* What the engine does, stated as motion on the diagram itself: a signal runs
+     from each input into the engine and out to each result it produces, and the
+     stations it passes light as it arrives. The artwork itself never moves — a
+     render that drifts or orbits fights the labels pinned to it. One pass on
+     first sight, then the layer removes itself and the tile is the still again.
+     Anchors are held in JS in percent, read off each render, so they hold at
+     every width. Styling only here; the sequence is timed in script. */
+  .dgm { position:absolute; inset:0; z-index:3; pointer-events:none; }
+  /* take the artwork's box, not the figure's — see --vis-max above */
+  .flag-vis .dgm { max-width:var(--vis-max); margin-inline:auto; }
+  .dgm svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+  .dgm path { fill:none; vector-effect:non-scaling-stroke; stroke-linecap:round; }
+  .dgm .dgm-guide { stroke:rgba(15,98,254,.22); stroke-width:1.1; stroke-dasharray:2.4 3.6; opacity:0; }
+  .dgm .dgm-bead { stroke:var(--blue); stroke-width:2.6; opacity:0; }
+  .dgm i, .dgm b { position:absolute; border-radius:50%; opacity:0; }
+  .dgm i { width:8px; height:8px; margin:-4px 0 0 -4px; background:var(--blue);
+    box-shadow:0 0 7px 1px rgba(15,98,254,.5); }
+  .dgm b { width:10px; height:10px; margin:-5px 0 0 -5px; background:var(--red, #da1e28);
+    box-shadow:0 0 8px 1px rgba(218,30,40,.45); }
+  @media (prefers-reduced-motion:reduce){ .dgm { display:none !important; } }
+
 
   /* ============ SELF-HEALING ============ */
   /* ============ SELF-HEALING FLOW ============ */
@@ -2977,6 +2979,9 @@
       };
       still.src = v.poster;
     } catch (e) {}
+    // the film has had its say; now the diagram states its flow
+    var host = v.parentNode;
+    if (host && host.__dgmFire) host.__dgmFire();
   }
 
   document.querySelectorAll('img[data-video]').forEach(function (img) {
@@ -3022,25 +3027,141 @@
     vio.observe(img);
   });
 
-  // The tiles with no film asset animate themselves — see .tv-static in the
-  // stylesheet. Same test as the upgrade above, so a tile is never both: it
-  // either plays a film or runs the scan. Armed once, on first sight, and then
-  // left alone: the class is never removed, because removing and re-adding it
-  // would restart the sweep every time the tile scrolled back into view.
-  var statics = [].slice.call(document.querySelectorAll('#engines .tile-vis')).filter(function (vis) {
-    var img = vis.querySelector('img[data-video]');
-    var msrc = img ? img.getAttribute('data-video') : '';
-    return !/\.(mp4|webm|ogv)$/i.test(msrc || '');
-  });
-  if (statics.length) {
-    var tvio = new IntersectionObserver(function (entries) {
+  // ---- diagram flow -------------------------------------------------------
+  // Anchors in percent of the artwork, read off each render: in[] -> hub -> out[],
+  // plus the stations that light as the signal reaches them and, where the diagram
+  // shows one, the item the engine refuses. Percent, so they hold at every width.
+  // Engines 15+ are one repeated composition — stack in at the left, machine in
+  // the middle, tray out at the right — so they share one entry instead of 33
+  // near-identical copies.
+  var DGM_MACHINE = { in: [[11, 44]], hub: [48, 50], out: [[89, 51]], lamps: [[19, 45], [48, 49], [78, 49]] };
+  var DGM = {
+    'engine-close': { in: [[27, 22], [23, 48], [27, 68]], hub: [50, 45],
+      out: [[69, 30], [74, 45], [72, 60]], lamps: [[44, 52], [57, 52], [56, 62]], reject: [59, 64] },
+    'engine-recon': { in: [[15, 45], [33, 27]], hub: [43, 47],
+      out: [[62, 35], [64, 55], [76, 66]], lamps: [[43, 47], [76, 66]], reject: [28, 55] },
+    'engine-1065': { in: [[25, 25], [16, 48], [24, 68]], hub: [49, 45],
+      out: [[72, 22], [74, 45], [70, 68], [90, 70]], lamps: [[49, 45], [64, 40]] },
+    'tile-surplus': { in: [[22, 35]], hub: [49, 47], out: [[75, 52]], lamps: [[49, 47], [64, 40], [78, 55]] }
+  };
+  var SVGNS = 'http://www.w3.org/2000/svg';
+
+  // The still may already have been swapped for its film by the time this runs,
+  // so read the key off whichever of the two is in the host.
+  function dgmParts(host) {
+    var img = host.querySelector('img'), vid = host.querySelector('video');
+    return {
+      img: img, vid: vid,
+      still: img ? img.getAttribute('src') : (vid ? vid.getAttribute('poster') : ''),
+      film: img ? (img.getAttribute('data-video') || '') : (vid ? (vid.currentSrc || vid.src || '') : '')
+    };
+  }
+  function dgmSpecFor(host) {
+    var p = dgmParts(host);
+    var m = /([^\/]+)\.(?:webp|png|jpe?g)(?:[?#]|$)/i.exec(p.still || '');
+    if (m && DGM[m[1]]) return DGM[m[1]];
+    if (host.matches('#engines .tile-vis') && !/\.(mp4|webm|ogv)$/i.test(p.film)) return DGM_MACHINE;
+    return null;
+  }
+
+  function dgmLayer(host, spec) {
+    var wrap = document.createElement('span');
+    wrap.className = 'dgm'; wrap.setAttribute('aria-hidden', 'true');
+    var svg = document.createElementNS(SVGNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 100 100');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    var segs = [];
+    function seg(a, b, bow) {
+      var d = 'M' + a[0] + ' ' + a[1] + 'Q' + ((a[0] + b[0]) / 2) + ' ' + ((a[1] + b[1]) / 2 + bow) + ' ' + b[0] + ' ' + b[1];
+      var guide = document.createElementNS(SVGNS, 'path'), bead = document.createElementNS(SVGNS, 'path');
+      guide.setAttribute('d', d); guide.setAttribute('class', 'dgm-guide');
+      bead.setAttribute('d', d); bead.setAttribute('class', 'dgm-bead');
+      svg.appendChild(guide); svg.appendChild(bead);
+      segs.push({ g: guide, b: bead });
+    }
+    var nIn = spec.in.length;
+    spec.in.forEach(function (p, i) { seg(p, spec.hub, (i - (nIn - 1) / 2) * 4); });
+    spec.out.forEach(function (p, i) { seg(spec.hub, p, (i - (spec.out.length - 1) / 2) * 4); });
+    wrap.appendChild(svg);
+    var lamps = (spec.lamps || []).map(function (p) {
+      var el = document.createElement('i');
+      el.style.left = p[0] + '%'; el.style.top = p[1] + '%';
+      wrap.appendChild(el); return el;
+    });
+    var rej = null;
+    if (spec.reject) {
+      rej = document.createElement('b');
+      rej.style.left = spec.reject[0] + '%'; rej.style.top = spec.reject[1] + '%';
+      wrap.appendChild(rej);
+    }
+    host.appendChild(wrap);
+    return { wrap: wrap, segs: segs, lamps: lamps, rej: rej, nIn: nIn };
+  }
+
+  // Inputs travel in, the engine and its controls light, results leave, and
+  // anything refused flashes last. Then the layer deletes itself, so what is
+  // left is the still — nothing to repeat and nothing to re-run.
+  function dgmRun(o) {
+    if (!o.wrap.animate) { o.wrap.parentNode && o.wrap.parentNode.removeChild(o.wrap); return; }
+    var EASE = 'cubic-bezier(.45,.05,.5,.95)', last = 0;
+    o.segs.forEach(function (s, i) {
+      var inbound = i < o.nIn, idx = inbound ? i : i - o.nIn;
+      var delay = inbound ? 90 * idx : 1080 + 130 * idx;
+      var dur = inbound ? 900 : 980;
+      var L = 7, P = s.b.getTotalLength() || 60;
+      s.b.style.strokeDasharray = L + ' ' + P;
+      s.g.animate([{ opacity: 0 }, { opacity: 1, offset: .16 }, { opacity: 1, offset: .74 }, { opacity: 0 }],
+        { duration: dur + 820, delay: Math.max(0, delay - 120), fill: 'both' });
+      s.b.animate([
+        { strokeDashoffset: L + P, opacity: 0 },
+        { strokeDashoffset: L + P * .9, opacity: 1, offset: .1 },
+        { strokeDashoffset: L + P * .1, opacity: 1, offset: .9 },
+        { strokeDashoffset: L, opacity: 0 }
+      ], { duration: dur, delay: delay, easing: EASE, fill: 'both' });
+      last = Math.max(last, delay + dur);
+    });
+    o.lamps.forEach(function (el, i) {
+      var d = 700 + 190 * i;
+      el.animate([{ opacity: 0, transform: 'scale(.5)' }, { opacity: 1, transform: 'scale(1)', offset: .35 },
+        { opacity: 0, transform: 'scale(.85)' }], { duration: 620, delay: d, iterations: 3, fill: 'both' });
+      last = Math.max(last, d + 1860);
+    });
+    if (o.rej) {
+      o.rej.animate([{ opacity: 0, transform: 'scale(.5)' }, { opacity: 1, transform: 'scale(1)', offset: .3 },
+        { opacity: 0, transform: 'scale(.9)' }], { duration: 700, delay: Math.max(0, last - 600), iterations: 2, fill: 'both' });
+      last += 900;
+    }
+    setTimeout(function () { if (o.wrap.parentNode) o.wrap.parentNode.removeChild(o.wrap); }, last + 450);
+  }
+
+  // Armed once per diagram, on first sight. A tile with a film waits for the film
+  // to settle so the two never play over each other; the timeout is the backstop
+  // for a film the browser refused to start.
+  function dgmArm(host) {
+    var spec = dgmSpecFor(host);
+    if (!spec) return;
+    var p = dgmParts(host);
+    var hasFilm = !!p.vid || /\.(mp4|webm|ogv)$/i.test(p.film);
+    var fired = false;
+    function fire() { if (fired) return; fired = true; dgmRun(dgmLayer(host, spec)); }
+    if (hasFilm) {
+      host.__dgmFire = fire;          // settleFilm calls this the moment the film lands
+      setTimeout(fire, 9000);         // backstop: a film the browser refused to start
+    } else {
+      fire();
+    }
+  }
+
+  var dgmHosts = [].slice.call(document.querySelectorAll('#engines .tile-vis, .flag-vis'));
+  if (dgmHosts.length) {
+    var dio = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (!e.isIntersecting) return;
-        e.target.classList.add('tv-live');
-        tvio.unobserve(e.target);
+        dio.unobserve(e.target);
+        dgmArm(e.target);
       });
-    }, { threshold: 0, rootMargin: '60px 0px' });
-    statics.forEach(function (vis) { vis.classList.add('tv-static'); tvio.observe(vis); });
+    }, { threshold: 0, rootMargin: '40px 0px' });
+    dgmHosts.forEach(function (h) { dio.observe(h); });
   }
 
   // mobile resilience: some phones (iOS Low Power Mode, data saver) gate the first
