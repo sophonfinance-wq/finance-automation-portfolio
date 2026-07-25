@@ -1,0 +1,98 @@
+# Engine-tile motion
+
+Animates an engine tile from **its own poster**, so the artwork that moves is the
+artwork already shipped. Each clip is a Higgsfield `kling3_0` image-to-video job
+recorded in `manifest.json` with its prompt, attempt count and measured verdict.
+
+The previous motion batch (`1af78d9`) recorded its recipe only in a commit
+message and committed no tooling, so this pipeline had to be rebuilt from
+scratch. It lives here so the next batch starts from evidence.
+
+## Running it
+
+Needs the authenticated `higgsfield` CLI on PATH, plus `numpy`,
+`opencv-python-headless` and `imageio-ffmpeg` (which bundles a static ffmpeg —
+this Mac has no Homebrew):
+
+```bash
+uv venv --python ~/.local/bin/python3.12 .venv-motion
+uv pip install --python .venv-motion/bin/python numpy opencv-python-headless imageio-ffmpeg
+```
+
+```bash
+python site-datasheets/motion/batch.py prompts <slug>      # inspect, costs nothing
+python site-datasheets/motion/batch.py submit  <slug>...   # ~12.5 credits per clip
+python site-datasheets/motion/batch.py poll                # download completed jobs
+python site-datasheets/motion/batch.py verify              # run the gates
+python site-datasheets/motion/batch.py install <slug>...   # refit, install, wire, regenerate
+python site-datasheets/motion/retry.py <slug>...           # re-roll with a harder camera lock
+python site-datasheets/motion/write_manifest.py            # rebuild this manifest from results
+```
+
+`install` wires only what passed; a failing tile keeps its static poster.
+
+## The gates, and why they are shaped the way they are
+
+Each gate here exists because a simpler version of it gave a confidently wrong
+answer during the 2026-07-25 batch.
+
+**Rotation** — `verify_motion.py`, `<= 0.30 deg`. Measured by composing
+consecutive-pair rigid fits. Matching every frame back to frame 0 collapses its
+inliers and reads a clean 12.43 deg that flips to -13.35; neighbour fits sit
+under the noise floor.
+
+**Measure rotation on the SOURCE render, never the shipped file.** The
+accumulation is resolution-dependent. One clip reads 0.178 deg at 1920x1080 and
+1.771 deg after a *lossless* downscale to 1280x720, while the shipped crf-30 file
+reads 1.478 — lower than lossless. A pure resize cannot introduce rotation, so
+that spread is tracking noise on smaller features, not motion. Re-gating the
+delivered 720p file will make a good batch look broken.
+
+**Footer text** — `check_footer_text.py`, NCC `>= 0.90` on controls / tests /
+read-only. The control and test counts are burnt into the pixels and pinned in
+`raster_footers.json`, and the page cites them in prose, so they must survive.
+Absolute pixel difference cannot do this job: H.264 softening alone moves thin
+antialiased ink 15-20 levels with nothing moving, and a shadow crossing the strip
+reads the same as a redraw. NCC is invariant to brightness and contrast, and each
+frame is compared to the clip's *own* frame 0 so the codec cancels out.
+
+`part_no` is advisory with a `0.55` floor. It sits at the longest lever arm from
+frame centre, so the residual rotation the first gate already permits displaces it
+more than any other label. The loose floor still catches what the check is for —
+the label being occluded or re-lettered, which is what ruled out `sizing`.
+
+**Handoff** — frame 0 vs poster, `< 8/255`. The `<video>` replaces the poster in
+place, so a mismatch shows up as a pop. All shipped clips land at 3.7-4.3.
+
+**Aspect** — the clip must match its poster's aspect. These tiles are true 16:9
+(1600x900); the older tiles at 1.791 needed refitting in `1af78d9`.
+
+## Prompting
+
+Lead with the lock and name the rigid parts. The difference between attempt 1 and
+attempt 2 on `checkage` — 1.75 deg of drift versus 0.20 — was naming the body,
+the surface, the horizon line and the caption strip explicitly and forbidding
+tilt, skew and re-lettering of the strip by name. `batch.py` derives the
+mechanism sentence from each tile's own `poster_alt`, trimmed: the alts are
+written for screen readers, and feeding all 600 chars of one in invites the
+generator to redraw the machinery instead of animating it.
+
+Where a tile keeps letting a sheet cross the caption strip, add the
+"nothing crosses the strip" clause — see `attempt 4` in `manifest.json`.
+
+## Warping is not a fallback
+
+`stabilize.py` cancels residual drift by warping each frame back. It worked in
+`1af78d9` at 2.9 deg. It does **not** rescue the failures seen here: these are 3D
+perspective drifts, so cancelling the in-plane component leaves the caption strip
+still tilted, and at ~2 deg the edge replication smears the strip badly enough
+that text NCC goes *negative*. Cropping to hide the smear rescales the clip
+against its own poster, which reintroduces the handoff pop. Re-roll instead.
+
+## Not animated
+
+`gaalloc`, `pickup` and `sizing` keep static posters after four attempts each —
+each one either would not hold the camera or disturbed a burnt-in label. For them
+`media.motion` still equals `media.poster`, which is this repo's way of spelling
+"no motion exists", so the generator emits no `data-video`. Their `run_label` is
+set to `engine tile` so the page does not promise motion it does not have.
