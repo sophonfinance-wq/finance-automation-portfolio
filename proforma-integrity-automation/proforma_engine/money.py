@@ -1,17 +1,18 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the project proforma integrity engine.
+===========================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. Sources equal
+uses or the proforma does not balance, and net profit equals revenue less cost
+or the workbook states a figure it cannot support. Every number downstream --
+the waterfall, the margin, the per-NSF, the variance against prior -- is
+arithmetic on those identities, so a penny of tolerance at the top is a
+tolerance the whole workbook inherits.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:

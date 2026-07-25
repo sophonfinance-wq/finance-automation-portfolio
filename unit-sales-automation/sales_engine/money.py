@@ -1,17 +1,18 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the unit sales & commission tie-out engine.
+================================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. A commission
+split that tolerates a penny against the total it divides pays a named agent an
+amount the Matrix never authorized, and net proceeds that tolerate a penny no
+longer follow from the price above them. The split is struck by largest
+remainder, so the residual cent lands on exactly one agent instead of being
+rounded into existence.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:

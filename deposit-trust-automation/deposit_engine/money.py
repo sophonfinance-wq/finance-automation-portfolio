@@ -1,17 +1,18 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the earnest-money deposit trust engine.
+============================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. Three records --
+the books, the escrow agent's and the loan paydown register -- either describe
+the same money to the cent or they describe different money, and a penny of
+tolerance is how a real break hides. A cancellation is the sharpest case: the
+retained fee, the refund and the reversal have to decompose the deposit exactly,
+because what is left over is a buyer's cash held in trust.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:

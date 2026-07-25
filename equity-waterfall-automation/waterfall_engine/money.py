@@ -1,17 +1,18 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the equity waterfall engine.
+=================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. A waterfall is a
+chain of dependent computations, so a penny absorbed in the preferred-return
+accrual does not stop there -- it travels down the tiers and can change who
+clears a hurdle. Whatever a tier does not distribute is what the next tier has
+to work with, and the last dollar of a promote split belongs to exactly one
+partner.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:
