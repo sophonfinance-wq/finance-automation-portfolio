@@ -19,7 +19,7 @@ loaded it into a queryable knowledge base so prior decisions could be cited word
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
 without becoming the weakest link. This portfolio is that proof: **forty-seven runnable systems, a
-463,852-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
+463,860-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
 
 ---
 
@@ -91,7 +91,7 @@ Each is now encoded as a control in the portfolio:
 | Cross-border foreign-affiliate tax (T1134, surplus pools, ACB, repatriation waterfall) | `tax-surplus-engine` | 7,498 |
 | Partnership tax — Form 1065 / K-1 assembly + §704(c) built-in gain (ceiling rule) | `partnership-1065-automation` | 8,605 |
 | Multi-entity month-end close (recurring JEs, tie-outs, allocations) | `monthly-close-automation` | 15,687 |
-| Self-healing control loops — engines detect drift, re-derive it from source, re-verify, and escalate only what they cannot certify (human-gated on tax-surplus; autonomous with quarantine on close) | `surplus_engine.loop` + `close_engine.loop` | 23 |
+| Self-healing control loops — engines detect drift, re-derive it from source, re-verify, and escalate only what they cannot certify (human-gated on tax-surplus; autonomous with quarantine on close) | `surplus_engine.loop` + `close_engine.loop` | *(23, counted in tax-surplus and close above)* |
 | Reconciliation & materiality (GL-to-bank/lender, evidence logs) | `cash-reconciliation` | 7,511 |
 | Cash-manager controls (bank-rec bridge, outstanding/void checks, wire dual-approval, register continuity, concentration sweep) | `cash-management` | 5,290 |
 | Automated, read-only verification (formula/lineage/tie-out checks) | `audit-automation` | 4,814 |
@@ -132,10 +132,10 @@ Each is now encoded as a control in the portfolio:
 | Unit sales and commission tie-out &mdash; every derived matrix column re-derived from price and plan size, total commission struck on the actual sales price with the agent splits summing back to it to the cent, each sold unit reconciled one-for-one to the closings tab, and the offer-to-sold-to-closing date sequence enforced | `unit-sales-automation` | 10,355 |
 | G&A expense allocation &mdash; a holding entity's monthly overhead pool apportioned on driver counts with the shares footing to exactly 100% and the allocated dollars to exactly the pool, the residual cent placed deterministically, the allocation entry balanced and netting to zero at consolidation, and the postage allocation reconciled to the meter delta | `ga-allocation-automation` | 10,404 |
 | Outstanding check aging and escheatment &mdash; the outstanding population re-derived from cleared amounts and dates rather than the stated column, each item aged to the as-of date, the total tied to the bank reconciliation's outstanding-checks line, voided and stop-paid items proved excluded, and stale-dating separated from the dormancy threshold that drives escheatment | `check-aging-automation` | 10,361 |
-| Project variance and business-plan compare &mdash; Cost to Complete struck as the remainder of the budget, net revenue, profit and margin on cost re-derived from their own inputs, every variance column re-footed as the difference of the two columns beside it in cents and basis points alike, both comparative columns proved to foot inside themselves, the plan column proved against the frozen approved version, and each milestone variance re-derived under the plus-is-ahead convention | `project-variance-automation` | 10,407 |
-| Contingency rollforward and adequacy &mdash; construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use | `contingency-rollforward-automation` | 10,365 |
-| Information return issuance &mdash; the annual payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms | `info-return-automation` | 10,381 |
-| **Total** | **47 systems** | **463,852** |
+| Project variance and business-plan compare &mdash; Cost to Complete struck as the remainder of the budget, net revenue, profit and margin on cost re-derived from their own inputs, every variance column re-footed as the difference of the two columns beside it in cents and basis points alike, both comparative columns proved to foot inside themselves, the plan column proved against the frozen approved version, and each milestone variance re-derived under the plus-is-ahead convention | `project-variance-automation` | 10,411 |
+| Contingency rollforward and adequacy &mdash; construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use | `contingency-rollforward-automation` | 10,368 |
+| Information return issuance &mdash; the annual payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms | `info-return-automation` | 10,382 |
+| **Total** | **47 systems** | **463,860** |
 
 ---
 

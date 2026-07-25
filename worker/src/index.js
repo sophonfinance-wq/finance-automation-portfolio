@@ -55,14 +55,14 @@ Model of the business: there is no software to buy. After a short observation of
 Non-negotiables that define the product: independent verification checks every run; every computed figure ships with cited evidence traceable to source; and nothing files, posts, or finalizes without a human's sign-off. The client always keeps the judgment.
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
-- 44 public engines, all runnable and MIT-licensed.
-- 463,852 automated tests gate every change in CI.
+- 47 public engines, all runnable and MIT-licensed.
+- 463,860 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
-- The month-end close alone runs 29 deterministic controls.
+- The month-end close runs a ten-control sentinel (C1-C10) over a 29-control close library.
 
 # The engines (each has a deep-dive page on the site)
-1. Month-End Close — drafts the recurring close under 29 deterministic controls: balanced journal entries tied to the GL, a close checklist, and a close package. Refuses to post any entry that doesn't tie. (page: engines/close.html)
+1. Month-End Close — drafts the recurring close under a ten-control sentinel backed by a 29-control close library: balanced journal entries tied to the GL, a close checklist, and a close package. Refuses to post any entry that doesn't tie. (page: engines/close.html)
 2. Cash & Debt Reconciliation — matches the FULL population of accounts (never a sample) against bank and lender records, classifies every exception by materiality, and traces cash out of closed or migrated accounts, with an evidence log behind each figure. (page: engines/recon.html)
 3. Partnership Tax / Form 1065 — drafts Form 1065 and a K-1 per partner, tied to the ledger, capital accounts rolled, with an evidence binder; the client's CPA reviews and files. Nothing files itself. (page: engines/tax.html)
 4. Validation Engine — read-only review of a workbook's formula integrity and lineage, returning PASS/REVIEW/FAIL verdicts, with a byte-identical guarantee that it never modifies the file. (page: engines/validation.html)
@@ -106,9 +106,9 @@ Non-negotiables that define the product: independent verification checks every r
 42. Unit Sales & Commission Tie-Out — a for-sale housing project's weekly sales matrix: every derived column re-derived from the prices, the agent splits summed back to the commission the matrix authorised, and each sold unit reconciled one-for-one to the closings tab; 10,355 tests, read-only. (page: engines/unitsales.html)
 43. G&A Expense Allocation — a holding entity's monthly G&A pushed out on driver counts: shares footing to exactly 100%, allocated dollars footing to exactly the pool to the cent, and the allocation journal entry balanced and netting to zero at consolidation; 10,404 tests, read-only. (page: engines/gaalloc.html)
 44. Outstanding Check Aging & Escheatment — the outstanding-check population re-derived from the register rather than the stated column, aged to the as-of date, tied to the bank reconciliation, with stale-dated follow-ups separated from the items past dormancy that have to be escheated; 10,361 tests, read-only. (page: engines/checkage.html)
-45. Project Variance & Business-Plan Compare — a developer's periodic project report re-footed column by column: Cost to Complete struck as the remainder of the budget, every variance re-derived as the difference of the two columns beside it, both comparatives proved to foot inside themselves, and the plan column proved against the frozen approved version; 10,407 tests, read-only. (page: engines/variance.html)
-46. Contingency Rollforward & Adequacy — construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget that funded it, and the word "adequate" rebuilt from the balance remaining against the projected use rather than read as a label; 10,365 tests, read-only. (page: engines/contingency.html)
-47. Information Return Issuance — the annual payee population reassembled entity by entity: every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold or the backup-withholding override obliges one and nowhere else, and every transmittal recounted from the forms behind it; 10,381 tests, read-only. (page: engines/inforeturn.html)
+45. Project Variance & Business-Plan Compare — a developer's periodic project report re-footed column by column: Cost to Complete struck as the remainder of the budget, every variance re-derived as the difference of the two columns beside it, both comparatives proved to foot inside themselves, and the plan column proved against the frozen approved version; 10,411 tests, read-only. (page: engines/variance.html)
+46. Contingency Rollforward & Adequacy — construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget that funded it, and the word "adequate" rebuilt from the balance remaining against the projected use rather than read as a label; 10,368 tests, read-only. (page: engines/contingency.html)
+47. Information Return Issuance — the annual payee population reassembled entity by entity: every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold or the backup-withholding override obliges one and nowhere else, and every transmittal recounted from the forms behind it; 10,382 tests, read-only. (page: engines/inforeturn.html)
 Beyond these forty-seven, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
 
 # How the engines stay trustworthy
@@ -117,7 +117,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 463,852 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 463,860 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

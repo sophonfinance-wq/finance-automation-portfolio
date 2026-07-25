@@ -1,17 +1,24 @@
 # Platform Architecture
 
-This repository is a forty-seven-system, AI-driven Finance & Tax automation platform — five deterministic
-calculation engines (month-end close, cash & debt reconciliation, the cash-management suite,
-partnership 1065 / §704(c), and cross-border surplus & ACB), fourteen read-only control engines (the
-workbook validation engine, the accounts-payable control engine, the property-tax control engine, the
-surety bond & collateral control engine, the insurance cost-allocation control engine, the
-insurance-compliance control engine, the expense & P-card control engine, the project-labor-charge
-control engine, the lien-waiver-tracking control engine, the equity-waterfall & JV-promote control
-engine, the project-proforma integrity control engine, the gross-receipts & excise-tax control engine,
-the filing-obligation calendar control engine, and the energy-efficient-home-credit (§45L) control
-engine), the Knowledge Brain retrieval engine,
-an interactive finance operations atlas, and the Triangulate AI
-control framework — with an optional orchestration layer:
+This repository is a forty-seven-system, AI-driven Finance & Tax automation platform. The forty-seven
+decompose exactly as **5 + 39 + 1 + 1 + 1**:
+
+- **five deterministic calculation engines** — month-end close, cash & debt reconciliation, the
+  cash-management suite, partnership 1065 / §704(c), and cross-border surplus & ACB;
+- **thirty-nine read-only control engines** — each one reads a record a finance team already produces,
+  re-derives every figure on it from the base facts, and reports exceptions without ever writing back.
+  They span payables, draws, insurance, tax compliance, debt, payroll, closings, asset registers and
+  project reporting (the workbook validation engine and the accounts-payable control engine are the
+  originals; the newest are project variance, contingency rollforward and information-return issuance);
+- **the Knowledge Brain** retrieval engine;
+- **an interactive finance operations atlas**;
+- **the Triangulate AI control framework**.
+
+The canonical roster — number, part number, mnemonic, family, display name and engine directory for
+every one of the forty-seven — lives in `site-datasheets/datasheet_tests/conftest.py` and is
+test-gated, so this prose is a summary of that authority rather than a second copy of it.
+
+Above all of it sits an optional orchestration layer:
 
 1. seeded fictional data generators
 2. calculation engines

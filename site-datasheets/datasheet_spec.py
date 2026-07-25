@@ -176,6 +176,17 @@ def validate_spec(spec: dict) -> list[str]:
         for field in ("poster", "motion", "poster_alt", "caption"):
             if not isinstance(media.get(field), str) or not media[field].strip():
                 problems.append(f"media missing {field}")
+        # media.motion is required, so an engine with no real capture declares its own
+        # poster here. That is the honest way to say "no motion" -- but any OTHER value
+        # has to be a decodable video, because the page turns it into a <video> src. A
+        # bare non-empty-string rule is what let 33 specs carry a poster path that the
+        # browser could not decode.
+        motion = media.get("motion")
+        if isinstance(motion, str) and motion.strip():
+            if motion != media.get("poster") and not motion.endswith((".mp4", ".webm")):
+                problems.append(
+                    "media.motion must be a .mp4/.webm capture or equal media.poster"
+                )
         if "crops" not in media:
             problems.append("media missing crops")
         crops = media.get("crops", [])
