@@ -9,7 +9,9 @@ page but never the artwork the spec points at.
 
 Scope note: this can only cover vector tiles. The four raster `.webp` diagrams
 (draw, upgrade, warranty, intercompany) carry the same figure in pixels and cannot
-be parsed, so they need a line in the release checklist instead.
+be parsed -- and all four turned out to carry the same 10,000-short defect. They are
+gated instead by `test_raster_footers.py`, which pins each footer's figures to the
+bytes they were read from.
 """
 from __future__ import annotations
 
