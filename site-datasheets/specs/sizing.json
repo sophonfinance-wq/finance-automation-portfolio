@@ -1,0 +1,396 @@
+{
+  "num": 41,
+  "slug": "sizing",
+  "part_no": "SFS-E41-DTS",
+  "mnemonic": "DTS",
+  "family": "Debt Sizing",
+  "name": "Debt Term-Sheet Sizing & Loan Terms",
+  "tagline": "Is the loan sized within the advance rate, and does every other term re-derive?",
+  "plain_summary": "A borrower runs several projects through legal at once, and each period a new dated workbook lays the deals out side by side -- max loan amount, max loan-to-cost, the index-plus-spread rate build-up over a floor, the letter-of-credit and overdraft facilities, the origination / commitment / unused / admin fees, the term and its extension options, the recourse. A term sheet is a one-page summary re-keyed from a longer credit memo, and it drifts in ways nobody re-foots. This engine reads the seven artifacts that workbook emits -- the deal register, the rate build-up, the fee schedule, the rate summary, the fee summary, the expiry watchlist and the portfolio rollup -- and runs twenty-one deterministic controls over them. Is the sizing file complete and the pricing date readable, are the deal ids unique and the loan type, index and recourse each on their allowed list with a cost basis and advance rate declared, is the max loan within max loan-to-cost times the cost basis, is the drawn balance within the commitment, does the stated maturity reconcile to base term plus every extension option, does each deal carry exactly one rate build-up and does its all-in rate recompute as the greater of index-plus-spread and the floor, is every fee line well-typed and struck on a known base against a deal in the register with an amount that recomputes from that base and rate, is every term sheet still live at the pricing date and which are due to expire inside the lead-time window, and do the rollup's deal count, total commitment and total fees foot the deals while the expiry watchlist ties the term sheets actually due. It compares every figure with exact ==, caps the loan with exact <=, measures every expiry against the pricing date the file carries rather than the system clock, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A term sheet is the tidiest page in the credit file: four deals side by side, a rate build-up under each, a fee schedule beneath that, and a rollup at the foot. That is exactly why it drifts. None of the ways it goes wrong look wrong in a tidy grid. The stated max loan creeps a cent or a million above max loan-to-cost times the cost basis, and the over-advance rides in the workbook while the cap sits in a cell nobody recomputed. A build-up figure is re-keyed rather than re-derived -- the all-in rate typed as index plus spread when the floor actually governs, or a fee struck on the commitment where it should have been struck on the undrawn balance -- so the number is arithmetically wrong against a rate that is entirely right. And the rollup is maintained beside the side-by-side rather than footed from it, so the total commitment, the total fees and the count of active deals drift the first time a deal moves and nobody re-adds the column. This engine rebuilds each of those figures from the base terms through the same kernel that produced them, compares with exact == and caps with exact <=, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. It is the sizing tie-out, run before anything closes: whether a draw is actually advanced against a budget line is a funding question a separate engine owns, and that engine explicitly declines to re-foot a term sheet.",
+  "layers_intro": "Seven control families run in registry order over each sizing file. The first proves the others had something to read and that the pricing date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the sizing file carries every artifact the controls below read, exactly once, and that the pricing date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES -- the deal register, the rate build-up, the fee schedule, the rate summary, the fee summary, the expiry watchlist and the term-sheet rollup -- and FAILs a file carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. It also FAILs an unreadable as_of pricing date, since every term-sheet expiry test is measured to it and never to the system clock. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "deal",
+      "label": "Deal Register",
+      "plain": "Checks the deal register is sound: unique ids, the enumerated terms on their allowed lists, and a cost basis and advance rate declared.",
+      "engineering": "Five controls. deal_unique_ids FAILs a deal id that appears twice, because the id is what joins the register to the build-up, the fee lines and every rollup -- a duplicate double-counts the deal in the portfolio total and makes a fee ambiguous about which deal it prices. deal_loan_type_valid, deal_index_valid and deal_recourse_valid each FAIL a governing field that is off its allowed list: an unlisted loan type is a product the sizing rhythm does not recognise and would be sorted and totalled as something it is not, an unlisted index describes a build-up nobody can source or reprice, and an unlisted recourse structure is a term the credit approval never granted riding on the term sheet. deal_basis_declared FAILs a deal with no positive cost basis or no positive max loan-to-cost, because those are the two inputs the over-advance control divides against; without them it would have nothing to hold the loan to and would pass vacuously.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "size",
+      "label": "Sizing Constraints",
+      "plain": "Checks the loan is within the advance rate, the draw is within the commitment, and the maturity reconciles to base term plus extensions.",
+      "engineering": "Three controls. size_ltc_not_exceeded is the over-advance control: it recomputes max loan-to-cost times the cost basis with truncating basis-point math and compares with exact <=, so a loan one cent above the cap is a loan over the advance rate and the plainest sizing failure there is. Deals with no declared basis are left to deal_basis_declared rather than quietly skipped. size_drawn_within_commitment FAILs a drawn balance above the committed max loan amount, which is either a re-keyed balance or a facility advancing past its own ceiling, and which would drive the undrawn base every unused fee is struck on negative underneath it. size_maturity_reconciles FAILs a stated maturity that is not exactly base term plus the sum of the extension options; the maturity a term sheet states is the fully-extended one, so an option counts whether or not it has been exercised, and a mismatch is a term re-keyed without re-adding the extensions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "rate",
+      "label": "Rate Build-Up",
+      "plain": "Checks every deal has exactly one rate build-up and that its all-in rate recomputes as the greater of index-plus-spread and the floor.",
+      "engineering": "Two controls. rate_buildup_present FAILs a deal with no build-up row -- the engine would know the deal carries an all-in rate but not the index, spread and floor it was struck from, so the recompute control would silently skip it -- and FAILs a deal carrying more than one, because the recompute could not know which row governs. rate_all_in_recomputes rebuilds the rate as max(index + spread, floor) through the shared kernel and compares it to the figure on file at the basis point: a rate typed as index-plus-spread where the floor actually governs, or the other way round, is caught. The floor governs at a basis point -- a build-up equal to the floor takes the build-up, and a build-up one basis point under takes the floor -- so the max is exercised at its boundary rather than assumed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "fee",
+      "label": "Fee Schedule",
+      "plain": "Checks every fee line is well-typed, struck on a known base, attributable to a deal, and that its amount recomputes from that base and rate.",
+      "engineering": "Four controls. fee_type_valid FAILs a line typed off the allowed list of origination, commitment, unused and admin. fee_base_type_valid FAILs a line struck on a base that is not commitment, drawn, undrawn or facility, because an unknown base cannot be priced and a line carrying one satisfies nothing while still looking like a fee. fee_deal_exists FAILs a line naming a deal the register does not carry, which is a fee attributed to nothing. fee_amount_recomputes re-derives each amount as the truncating basis-point product of its rate and its correct base -- undrawn being commitment less drawn -- and compares with exact ==, so a fee struck on the wrong base or copied across from another line is caught even though the rate itself is right. Lines that could not be priced are skipped by the amount control rather than mispriced, and the two controls that own that gap report it instead.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "exp",
+      "label": "Term-Sheet Currency",
+      "plain": "Checks every term sheet is still live at the pricing date, and flags the ones due to expire inside the lead-time window.",
+      "engineering": "Two controls, split by severity because a lapsed commitment and a closing commitment are different problems. exp_termsheet_not_expired FAILs a deal whose term sheet expired on or before the file's as_of pricing date; expiry is <=, so a term sheet lapsing exactly on the pricing date has already lapsed and can no longer be relied on to close, while the workbook still shows its terms. exp_termsheet_lead_time is a FLAG, not a failure: it marks a term sheet expiring inside the file's own commitment_lead_days window, which is a live commitment that needs to close before it lapses. That window is the half-open span from the day after the pricing date through the lead day inclusive, so an already-lapsed sheet is expired rather than expiring, and one ending exactly on the lead day is still inside the window.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Portfolio Rollup",
+      "plain": "Checks the rollup's deal count, total commitment and total fees foot the deals, and that the expiry watchlist ties the term sheets actually due.",
+      "engineering": "Four controls. rpt_deal_count_ties FAILs a stated active-deal count that is not the count the register carries. rpt_commitment_total_ties FAILs a total commitment that is not the sum of every deal's max loan amount. rpt_fee_total_ties FAILs a total fees figure that is not the sum of every priceable fee line, footed over exactly the set of lines the per-line control checks, so the total and the detail cannot disagree about scope. rpt_expiry_watchlist_ties is a FLAG rather than a failure: the watchlist is an operational to-do, so it is rebuilt from the deals and compared entry by entry, naming both a deal listed as expiring whose term sheet is not inside the window and a deal inside the window that was left off. Either one sends the close chase to the wrong deal, and the second is how a commitment lapses unnoticed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Sizing Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional term-sheet workbooks enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus twenty-two planted-defect files, twenty-three in total -- at least one file for every registered control, with a malformed-amount file added on the over-advance rule to exercise the integer-cents guard. Only the deals, the rate build-ups and the fee lines are stated as base facts; each deal's all-in rate, each fee line's amount, the expiry watchlist and the portfolio count and totals are re-derived through the same term-sheet kernel the engine later recomputes with, so the relationships the engine tests are the same relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the sizing file complete and the pricing date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate, and FAILs an unreadable as_of pricing date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "deal-control",
+      "label": "Deal Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the register sound and every governing term on its list",
+      "engineering": "Five controls: unique deal ids, a known loan type, a known reference index, a known recourse structure, and a positive cost basis and max loan-to-cost for the advance-rate control to size against.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "size-control",
+      "label": "Sizing Constraints",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is the loan within the advance rate and the maturity reconciled",
+      "engineering": "Three controls: max loan <= max loan-to-cost times cost basis recomputed with truncating basis-point math, drawn balance within the commitment, and stated maturity equal to base term plus every extension option.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "rate-control",
+      "label": "Rate Build-Up",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the all-in rate recompute from index, spread and floor",
+      "engineering": "Two controls: exactly one build-up row per deal, and the stated all-in rate equal to max(index + spread, floor) rebuilt through the shared kernel and compared at the basis point.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "fee-control",
+      "label": "Fee Schedule",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "is every fee struck on its correct base and does it recompute",
+      "engineering": "Four controls: a known fee type, a known base of commitment / drawn / undrawn / facility, a deal in the register to attribute the line to, and an amount equal to the truncating basis-point product of the rate and that base.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "exp-control",
+      "label": "Term-Sheet Currency",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is the term sheet still live and what is due to expire",
+      "engineering": "Two controls: a FAIL for a term sheet lapsed on or before the pricing date, and a FLAG for one expiring inside the file's own lead-time window, which is still live but has to close before it lapses.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Portfolio Rollup",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the rollup foot the deals and tie the watchlist",
+      "engineering": "Four controls: the active-deal count ties the register, the total commitment foots the deals' max loan amounts, the total fees foots the priceable fee lines, and the expiry watchlist is rebuilt from the deals and tied entry by entry.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Register, Schedule & Rollup",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and the pricing date every rule resolves against",
+      "engineering": "The deal register carries each deal's id, project, loan type, index name, recourse, cost basis, max loan-to-cost, max loan amount, drawn balance, facility limit, base term, extension options, stated maturity and term-sheet expiration; the rate build-up carries the index, spread and floor behind each all-in rate; the fee schedule carries each line's type, base and rate; the rate summary, fee summary, expiry watchlist and term-sheet rollup carry the derived figures the controls re-derive; and the file itself carries the as_of pricing date and the commitment lead-time window. Every sizing, rate, fee, expiry and rollup control resolves against these through the shared term-sheet kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per sizing file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/sizing_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "sizing files" },
+    { "from": "corpus", "to": "deal-control", "label": "sizing files" },
+    { "from": "corpus", "to": "size-control", "label": "sizing files" },
+    { "from": "corpus", "to": "rate-control", "label": "sizing files" },
+    { "from": "corpus", "to": "fee-control", "label": "sizing files" },
+    { "from": "corpus", "to": "exp-control", "label": "sizing files" },
+    { "from": "corpus", "to": "rpt-control", "label": "sizing files" },
+    { "from": "set-control", "to": "registers", "label": "artifact set" },
+    { "from": "deal-control", "to": "registers", "label": "resolves" },
+    { "from": "size-control", "to": "registers", "label": "resolves" },
+    { "from": "rate-control", "to": "registers", "label": "resolves" },
+    { "from": "fee-control", "to": "registers", "label": "resolves" },
+    { "from": "exp-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "deal-control", "to": "report", "label": "findings" },
+    { "from": "size-control", "to": "report", "label": "findings" },
+    { "from": "rate-control", "to": "report", "label": "findings" },
+    { "from": "fee-control", "to": "report", "label": "findings" },
+    { "from": "exp-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,338",
+      "source": "python -m pytest --collect-only -q -o addopts= (debt-sizing-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "21",
+      "source": "len(sizing_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every sizing file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in sizing_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Sizing files",
+      "value": "23",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-two planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(sizing_engine.model.DOC_TYPES)",
+      "plain": "deal register, rate build-up, fee schedule, rate summary, fee summary, expiry watchlist, term-sheet rollup"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "sizing_engine/tests boundary tests on the cent, the basis point, the month and the expiry date",
+      "plain": "a figure a cent or a basis point off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A borrower runs several projects through legal at once, and each period a new dated workbook is produced from one template as the deals move toward close. It lays the deals out side by side -- max loan amount, max loan-to-cost, the index-plus-spread rate build-up over a floor, the letter-of-credit and overdraft facilities, the origination / commitment / unused / admin fees, the term and its extension options, the recourse -- and the question is narrow and entirely arithmetic: do the numbers on the term sheet reconcile to the terms the term sheet states? A term sheet is a one-page summary re-keyed from a longer credit memo, and three failures hide inside it, none of which look wrong in a tidy grid. The loan is sized over the advance rate: the stated max loan creeps a cent or a million above max loan-to-cost times the cost basis, and the over-advance rides in the workbook while the cap sits in a cell nobody recomputed. A build-up figure is re-keyed rather than re-derived: the all-in rate typed as index plus spread when the floor actually governs, or a fee struck on the commitment where it should have been struck on the undrawn balance, so the amount is wrong against a rate that is right. And the rollup drifts from the deals: the total commitment, the total fees or the count of active deals is maintained beside the side-by-side rather than footed from it, and it drifts the first time a deal moves and nobody re-adds the column. None of these are judgment calls. They are equalities and comparisons -- a loan against a recomputed cap with exact <=, an all-in rate against max(index + spread, floor), a fee against the truncating basis-point product of its rate and its correct base, a stated total against its re-derivation -- which a deterministic control settles better than a template inherited by whoever maintains the workbook this period.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every sizing file",
+      "narrative": "The CLI generates twenty-three fictional sizing files -- one clean baseline and one carrying each of the twenty-two planted defects -- then runs all twenty-one controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (debt-sizing-automation/); sizing_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The advance-rate cap is met at the cent",
+      "narrative": "Deal DL-203 is seeded sized exactly at its advance-rate cap, so the cap is proved to be met rather than merely cleared. One defect file re-sizes DL-204 to one cent above max loan-to-cost times its cost basis and re-derives the rollup, so the only control that sees it is size_ltc_not_exceeded -- the over-advance is one cent, the finding is unambiguous, and nothing else in the file moves.",
+      "source": "sizing_engine/generate.py DEALS DL-203 and DEFECTS loan_over_advance -> size_ltc_not_exceeded"
+    },
+    {
+      "title": "The floor is exercised, not assumed",
+      "narrative": "Deal DL-202's build-up lands below its floor -- index plus spread is 600 basis points against a 700 basis-point floor -- so the max in the all-in rate genuinely governs on the clean baseline. A defect file then contradicts DL-201's stated all-in rate without touching its build-up, and rate_all_in_recomputes rebuilds the rate from index, spread and floor and fails, proving the rate is recomputed rather than read back.",
+      "source": "sizing_engine/generate.py BUILDUPS DL-202 and DEFECTS all_in_wrong -> rate_all_in_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-one controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "sizing_report.json, sizing_report.md, samples/"
+    },
+    {
+      "cmd": "python -m sizing_engine samples",
+      "operation": "analyze an existing folder of sizing files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m sizing_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest sizing_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10338 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,338",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (debt-sizing-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "21",
+      "unit": "controls",
+      "source": "len(sizing_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "22",
+      "unit": "defect files",
+      "source": "len(sizing_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "sizing_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the terms they were given: the file is complete and the pricing date readable, every deal id is unique with its loan type, index and recourse on the allowed list, every loan is within max loan-to-cost times its cost basis, every draw is within its commitment, every stated maturity reconciles to base term plus extensions, every all-in rate rebuilds as the greater of index-plus-spread and the floor, every fee amount rebuilds from its rate on its correct base, every term sheet is still live at the pricing date, and the portfolio count, total commitment, total fees and expiry watchlist all foot and tie to the deals. It is not an opinion on whether the advance rate, the spread, the floor or the fee rates negotiated are commercially appropriate, whether the cost basis is genuine, whether credit approved these terms, or whether the deal should close.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean sizing file into the documented credit and legal review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a term sheet expiring inside the lead-time window and an expiry watchlist that does not tie the deals both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the deal or figure is not carried forward until the failing control is cleared -- an over-advance, a draw past its commitment, a maturity that does not reconcile, a rate or fee that does not recompute, a term off its allowed list, a lapsed term sheet, or a rollup total that does not foot"
+      }
+    ],
+    "guarantees": [
+      "Read-only: sizing files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "The engine is the sizing tie-out, not the funding decision; it moves no money and advances no draw against a budget line.",
+      "Integer cents and integer basis points throughout, compared with exact ==; there is no tolerance band, and a figure a cent or a basis point off the re-derivation is reported as a break.",
+      "The advance-rate cap is recomputed with truncating basis-point math and compared with exact <=, so a loan one cent above the cap fails and a loan sized exactly at the cap passes.",
+      "A figure that should be integer cents or integer basis points but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One term-sheet kernel: the controls and the generator share the re-derivation in sizing_engine.terms, so a determination cannot disagree with the data that produced it.",
+      "Every expiry test is measured against the as_of pricing date carried in the file, never the system clock, so the same file returns the same verdict on any day.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a deal is re-sized, whether a rate or fee is corrected, and whether a term sheet is chased before it lapses."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never sizes a loan, negotiates a term, advances a draw, moves a dollar, or writes to a source artifact. It reads the sizing file and stops.",
+      "source": "debt-sizing-automation/README.md and sizing_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the term-sheet workbook emits. It does not connect to a lender, a rate provider, a loan servicing system or a general ledger, and whether a draw is actually funded against a budget line is a separate engine's scope.",
+      "source": "sizing_engine/model.py DOC_TYPES and the scope note in sizing_engine/engine.py"
+    },
+    {
+      "statement": "It proves the term sheet's arithmetic reconciles to the terms the term sheet states -- not that those terms are commercially appropriate, that credit approved them, or that the deal should close. That judgment is a credit officer's and a reviewer's.",
+      "source": "sizing_engine/engine.py REGISTRY"
+    },
+    {
+      "statement": "It takes the index, spread, floor, cost basis and fee rates on file at face value and re-derives from them; it does not source or verify a reference rate, and every index name in the corpus is invented rather than a published benchmark.",
+      "source": "sizing_engine/terms.py and sizing_engine/model.py INDEX_NAMES"
+    },
+    {
+      "statement": "It confirms the register, the schedules and the rollup foot and tie, not that a deal, a project or a cost basis exists. All shipped data is fictional and the workbook period is set in a fictional future.",
+      "source": "sizing_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-sizing.svg",
+    "motion": "../assets/engine-sizing.svg",
+    "poster_alt": "Debt Term-Sheet Sizing & Loan Terms diagram: on the left a dark deal card for DL-203 Ridgeline Terraces showing its loan type and recourse; a centre panel headed max loan-to-cost times cost basis listing the per-deal tie-outs that hold -- the max loan at or under the recomputed cap, the drawn balance within the commitment, the stated maturity equal to base term plus extensions, the all-in rate equal to the greater of index-plus-spread and the floor, and every fee equal to its rate on its correct base -- with one red line for a loan sized one cent over the advance-rate cap and one amber line for a term sheet expiring inside the 45-day lead-time window; on the right a FAIL verdict panel noting the rollup foots while one loan is over-advanced; and a footer strip reading 21 controls, 7 families, 10,338 tests, read-only, SFS-E41-DTS.",
+    "caption": "The Debt Term-Sheet Sizing engine tile states the question that has to hold deal by deal: the loan sized within max loan-to-cost times its cost basis, the draw within the commitment, the maturity reconciled to term plus extensions, and the all-in rate, every fee amount and the portfolio rollup all recomputed from the base terms rather than read back.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest sizing_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/debt-sizing-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/debt-sizing-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Debt Term-Sheet Sizing & Loan Terms (SFS-E41-DTS) datasheet -- twenty-one deterministic, read-only controls over a borrower's term-sheet workbook: each deal's max loan held to max loan-to-cost times its cost basis with exact <=, the draw held within the commitment, the stated maturity reconciled to base term plus extension options, the all-in rate rebuilt as the greater of index-plus-spread and the floor, every fee re-derived as the truncating basis-point product of its rate and its correct base, every term sheet tested against the pricing date the file carries, and the portfolio deal count, total commitment, total fees and expiry watchlist all footed from the deals beneath them. 10,338 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

@@ -1,0 +1,395 @@
+{
+  "num": 45,
+  "slug": "variance",
+  "part_no": "SFS-E45-PVR",
+  "mnemonic": "PVR",
+  "family": "Project Reporting",
+  "name": "Project Variance & Business-Plan Compare",
+  "tagline": "Does the variance column still equal the two columns beside it?",
+  "plain_summary": "On a fixed periodic calendar every development project's proforma is re-issued as a project report, and that report has to prove itself column by column. Dedicated tabs restate six metrics -- gross revenue, net project revenue, total project expense, project profit, margin on cost and project IRR -- in three columns: what it is this period, what it was last period, and what the approved Business Plan said. A budget-variance tab breaks each cost line into Total Budget, Cost to Date and Cost to Complete. A milestone block reports each schedule date Current vs Prior vs Variance against a baseline frozen at the version the project was approved under, with + meaning ahead. This engine reads the nine artifacts that record emits -- the project register, the budget-variance tab, the current-period and prior-period economics, the Business Plan baseline, the variance summary, the milestone schedule, the slippage watchlist and the report rollup -- and runs twenty-two deterministic controls over them. Is the report complete and the period readable, are the project ids unique, is every project type known and does every project carry both comparatives, is every cost line complete, in a known category and on a declared project, is Cost to Complete the remainder of the budget, do net revenue, the expense tie to the budget, profit and margin on cost re-derive from their own inputs, do the Prior and Business Plan columns foot inside themselves, do both variance columns re-foot as the difference of the two columns beside them, is the plan column the frozen approved plan, is every milestone complete, does the prior variance carry the + = ahead sign, does the baseline variance re-foot against the frozen schedule, what has slipped past tolerance, and does the rollup foot across all projects. Every figure is compared with exact == in integer cents and integer basis points, margin truncates toward zero so a loss and a profit of the same magnitude round the same way, every milestone is measured to the reporting period the file carries rather than the system clock, and no source artifact is ever written.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A variance column is the most-read number on the page and the one nobody re-foots. It is a formula until somebody types over one cell, and from that moment it no longer equals the difference of the two columns it sits between -- and nothing about the grid looks wrong. Cost to Complete quietly stops being the remainder: it is maintained beside the budget rather than struck as Total Budget less Cost to Date, so spending climbs, the remainder does not move, and an overrun rides in a column nobody re-added. And the Business Plan column gets re-based to a revision nobody approved, which is the hardest of the three to see because it makes every plan variance smaller at once: nothing looks wrong, everything looks better. Underneath those sits a subtler failure the current-period controls would never catch -- a comparative column that does not foot inside itself. The Prior and Business Plan columns each carry their own gross revenue, deductions and expense, so each has its own net revenue, profit and margin that must re-derive from them; a variance measured against a column that never footed is measuring nothing. The engine rebuilds every derived figure -- every Cost to Complete, net revenue, profit, margin, both variance columns on all six metrics, every milestone variance in days and the whole rollup -- through the same restatement kernel that produced the data, compares with exact == in integer cents and basis points, holds the schedule sign convention in both directions, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each project report. The first proves the others had something to read and that the reporting period is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the project report carries every artifact the controls below read, exactly once, and that the reporting period is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a report missing any of the nine document types in model.DOC_TYPES -- project register, budget-variance tab, current-period economics, prior-period economics, Business Plan baseline, variance summary, milestone schedule, slippage watchlist, report rollup -- and FAILs a report carrying more than one of any, because a project report holds exactly one of each. It also FAILs an unreadable reporting period or as_of date, since every milestone and slippage test is measured to that stated date and never to the system clock. Every downstream rule returns nothing when the artifact it reads is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "prj",
+      "label": "Project Register",
+      "plain": "Checks the project ids are unique, every project type is one the report understands, and every project carries both of its comparatives.",
+      "engineering": "Three controls. prj_unique_ids FAILs a project id that appears twice: the id is how every cost line, economics row, variance row and milestone finds its project, and a duplicate makes all four ambiguous at once. prj_type_valid FAILs a project type outside for-sale residential, rental residential, mixed use and land development, because the type is what determines which metrics are meaningful on the row. prj_comparatives_present FAILs a project that appears in the current period but not in the prior period or the Business Plan baseline -- a project with no comparative is a project whose variance columns have nothing behind them, and the variance controls below would otherwise skip it silently and leave the report carrying two untested columns.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "bud",
+      "label": "Budget Variance Tab",
+      "plain": "Checks every cost line is complete, in a known category, on a declared project, and that Cost to Complete is the remainder of the budget.",
+      "engineering": "Four controls. bud_line_required_fields FAILs a line missing its line id, project id or cost category. bud_category_valid FAILs a category outside land, hard cost, soft cost, financing cost and contingency, since the category is what groups the line into the expense total above it. bud_project_exists FAILs a line naming a project the register does not declare, which would otherwise leave that spend outside every rollup that sums it. bud_cost_to_complete_foots is the control this family exists for: Cost to Complete has exactly one definition -- Total Budget less Cost to Date -- and it is re-struck and compared with exact == in integer cents. A column maintained beside the budget rather than derived from it is an overrun that has not been reported yet, and it is invisible on a tab where all three columns are simply printed side by side.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "eco",
+      "label": "Current-Period Economics",
+      "plain": "Checks net revenue, the expense tie to the budget, project profit and margin on cost all re-derive from their own inputs.",
+      "engineering": "Four controls. eco_net_revenue_foots rebuilds gross revenue less revenue deductions and compares with exact ==. eco_expense_foots_budget ties the stated total project expense to the sum of the project's own cost-line budgets, which is the one control that joins the economics tabs to the budget tab beneath them. eco_profit_foots rebuilds net project revenue less total project expense, deliberately from the stated net revenue rather than a re-derived one -- whether that net revenue is itself right belongs to eco_net_revenue_foots, and a profit control that silently re-derived its own net revenue would report the same break twice and leave the reader unable to tell which column moved. eco_margin_on_cost_recomputes rebuilds profit over total project expense in truncating integer basis points from the very inputs the profit came from; margin on cost is the headline the report is read for and the figure most often carried across from the prior period's workbook. Truncation is toward zero rather than floored so a loss and a profit of the same magnitude round the same way, and a zero or negative expense returns no margin at all rather than inventing a denominator.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "var",
+      "label": "Comparative and Variance Columns",
+      "plain": "Checks the Prior and Business Plan columns foot inside themselves, both variance columns re-foot, and the plan column is still the frozen approved plan.",
+      "engineering": "Four controls. var_comparative_columns_foot is the one that is easy to leave out: the Prior and Business Plan columns each carry their own gross revenue, deductions and expense, so each has its own net revenue, profit and margin that must re-derive from them exactly as the current column's do. A variance measured against a column that does not foot inside itself is measuring nothing, and no current-period control would ever notice. var_prior_column_ties and var_plan_column_ties rebuild each variance cell as the current figure less the column it is measured to and compare with exact ==; the same subtraction serves integer cents and integer basis points, so the margin row re-foots by the same rule as the revenue row. var_plan_version_frozen proves the variance summary's stated plan basis against the version on the Business Plan baseline document and against the version each project was approved under -- re-basing the plan makes every plan variance smaller at once, which is why it is checked as an identity rather than trusted as a label.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "mst",
+      "label": "Milestone Schedule",
+      "plain": "Checks every milestone is complete, the prior variance carries the + = ahead sign, the baseline variance re-foots against the frozen schedule, and flags what has slipped past tolerance.",
+      "engineering": "Four controls. mst_required_fields FAILs a milestone missing its id, project, name or any of its three dates, and owns the unreadable-date finding so the arithmetic controls skip rather than guess. mst_variance_sign_convention holds that a schedule variance is + when the project is ahead, so it is prior date less current date and never the other way round; a flipped sign turns two weeks of slippage into two weeks of progress on the page a committee reads. mst_baseline_variance_foots re-strikes the baseline variance as baseline date less current date, and separately proves the schedule block's frozen version against the version each project was approved under -- the baseline variance is the one figure that measures cumulative slippage rather than movement since last period, and it is only as frozen as the version behind it. mst_slippage_lead_time is a FLAG, not a failure: it marks a milestone behind the frozen baseline past the file's own slippage_tolerance_days. Behind by exactly the tolerance is at it and not yet on the watchlist. Only milestones still ahead of the report date are raised, because a date already passed is history and the chase is for the ones in front of the team.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Report Rollup",
+      "plain": "Checks the rollup foots across every project and the slippage watchlist ties to the schedule behind it.",
+      "engineering": "Two controls. rpt_rollup_foots recounts the project count and re-sums gross revenue, net project revenue, total project expense and project profit across every current-period row, and FAILs any total that does not tie; these are the figures that reach a committee pack, and a total maintained beside the projects rather than derived from them drifts the first period a project is added or a figure moves. rpt_slippage_watchlist_ties is a FLAG: it rebuilds the watchlist from the schedule and the file's own tolerance and reports a disagreement in either direction -- a milestone on the watchlist the schedule does not put past tolerance, or one past tolerance that never reached the list. The watchlist reads no amounts on purpose, so a malformed figure elsewhere cannot cost the report its slippage picture.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Project Reports",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional periodic project reports enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the projects, the cost-line budgets and spend, the base revenue and expense figures, the plan baseline and the schedule dates are stated; every Cost to Complete, net revenue, profit, margin, both variance columns on all six metrics, every milestone variance in days and the whole rollup are re-derived through the same restatement kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data. The corpus deliberately puts a real row on each edge that matters: one milestone is behind the frozen baseline by exactly the tolerance, and two are ahead by exactly the same span in the other direction.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the project report complete and the period legible",
+      "engineering": "One control. FAILs a report missing any of the nine artifact types or carrying a duplicate of one, and FAILs an unreadable reporting period, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "prj-control",
+      "label": "Project Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every project uniquely identified, typed and comparable",
+      "engineering": "Three controls: project ids are unique, every project type is one of the four the report understands, and every current-period project carries both a prior-period and a Business Plan comparative.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "bud-control",
+      "label": "Budget Variance Tab",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is Cost to Complete the remainder of the budget",
+      "engineering": "Four controls: every cost line is complete, in a known category and on a declared project, and Cost to Complete is struck as Total Budget less Cost to Date with exact == in integer cents.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "eco-control",
+      "label": "Current-Period Economics",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "do this period's economics re-derive from their own inputs",
+      "engineering": "Four controls: net revenue is gross less deductions, the expense ties to the sum of the project's cost-line budgets, profit is net revenue less expense, and margin on cost is profit over expense in truncating integer basis points.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "var-control",
+      "label": "Comparative and Variance Columns",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does every variance equal the two columns beside it",
+      "engineering": "Four controls: the Prior and Business Plan columns foot inside themselves, both variance columns re-foot as current less comparison in cents and basis points alike, and the plan basis is proved against the frozen approved version.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "mst-control",
+      "label": "Milestone Schedule",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the schedule carry the right sign and the frozen baseline",
+      "engineering": "Four controls: every milestone is complete, the prior variance is prior less current under the + = ahead convention, the baseline variance re-foots against the frozen schedule version, and a forthcoming milestone behind the baseline past the file's own tolerance is flagged.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Report Rollup",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the rollup recompute from the projects it summarises",
+      "engineering": "Two controls: the project count and all four portfolio totals are re-summed across the current-period rows, and the slippage watchlist is rebuilt from the schedule and reported in both directions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Proforma, Plan & Schedule",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and versions every rule resolves against",
+      "engineering": "The project register carries each project's id, name, type, jurisdiction, plan version and baseline schedule version; the budget-variance tab carries each cost line's category, Total Budget, Cost to Date and Cost to Complete; the current-period and prior-period economics each carry the six metrics and the inputs beneath them; the Business Plan baseline carries the frozen approved figures and the version that approved them; the variance summary carries all six metrics in three columns with two variance columns and the basis it measured against; the milestone schedule carries each date Current, Prior and Baseline with both variances and the frozen schedule version; and the file itself carries the reporting period, the prior period and the slippage tolerance in days. Every budget, economics, variance, milestone and rollup control resolves against these through the shared restatement kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per project report: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/variance_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "project reports" },
+    { "from": "corpus", "to": "prj-control", "label": "project reports" },
+    { "from": "corpus", "to": "bud-control", "label": "project reports" },
+    { "from": "corpus", "to": "eco-control", "label": "project reports" },
+    { "from": "corpus", "to": "var-control", "label": "project reports" },
+    { "from": "corpus", "to": "mst-control", "label": "project reports" },
+    { "from": "corpus", "to": "rpt-control", "label": "project reports" },
+    { "from": "set-control", "to": "registers", "label": "resolves" },
+    { "from": "prj-control", "to": "registers", "label": "resolves" },
+    { "from": "bud-control", "to": "registers", "label": "resolves" },
+    { "from": "eco-control", "to": "registers", "label": "resolves" },
+    { "from": "var-control", "to": "registers", "label": "resolves" },
+    { "from": "mst-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "bud-control", "to": "eco-control", "label": "cost-line budgets" },
+    { "from": "eco-control", "to": "var-control", "label": "current column" },
+    { "from": "var-control", "to": "report", "label": "findings" },
+    { "from": "mst-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,407",
+      "source": "python -m pytest --collect-only -q -o addopts= (project-variance-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(variance_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every project report"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in variance_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Project reports",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-three planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "9",
+      "source": "len(variance_engine.model.DOC_TYPES)",
+      "plain": "project register, budget variance, current and prior economics, plan baseline, variance summary, milestone schedule, slippage watchlist, report rollup"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "variance_engine/tests boundary tests on the cent, the basis point and the day",
+      "plain": "a variance a cent off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "On a fixed periodic calendar every development project's proforma is re-issued as a project report, and the same three failures recur in each re-issue. Dedicated tabs restate the current period against the prior period and against the approved Business Plan baseline -- gross revenue, net project revenue, total project expense, project profit, margin on cost and project IRR -- while a budget-variance tab breaks each cost line into Total Budget, Cost to Date and Cost to Complete, and a milestone block reports each schedule date Current vs Prior vs Variance against a frozen baseline, + meaning ahead. First, a variance column stops deriving: it is a formula until somebody types over one cell, and from then on it no longer equals the difference of the two columns it sits between -- and it is the single most-read number on the page. Second, Cost to Complete stops being the remainder: maintained beside the budget rather than struck as Total Budget less Cost to Date, so spending climbs, the remainder does not move, and an overrun rides in a column nobody re-added. Third, the Business Plan column is quietly re-based to a revision nobody approved, which makes every plan variance smaller at once -- nothing looks wrong, everything looks better. Beneath those sits a fourth that the current-period controls cannot see: a comparative column that does not foot inside itself, so the variance is measured against a column that never added up. None of these are judgment calls. They are equalities -- a stated figure against its re-derivation with exact == in integer cents and integer basis points, a variance cell against the difference of two cells, a Cost to Complete against a subtraction, a date variance against a day count with a declared sign, a rollup against a re-summation -- which a deterministic control settles better than a workbook re-issued by whoever prepares the pack this period.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every project report",
+      "narrative": "The CLI generates twenty-four fictional project reports -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean report returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (project-variance-automation/); variance_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A re-based plan column is caught as an identity, not trusted as a label",
+      "narrative": "A defect file points the variance summary's plan basis at a revision nobody approved and leaves every figure on the page internally orderly. var_plan_version_frozen proves the stated basis against the version on the Business Plan baseline document and against the version each project was approved under, and reports the re-basing rather than the many smaller plan variances it produced.",
+      "source": "variance_engine/generate.py DEFECTS plan_version_rebased -> var_plan_version_frozen"
+    },
+    {
+      "title": "A milestone behind by exactly the tolerance is at it, not past it",
+      "narrative": "The clean corpus carries a forthcoming milestone behind its frozen baseline by exactly the file's own slippage tolerance, and mst_slippage_lead_time deliberately does not flag it -- behind by exactly the tolerance is at the tolerance. One day further behind and the same milestone reaches the watchlist. A separate defect file slips a milestone past the band to prove the flag fires.",
+      "source": "variance_engine/tests test_slippage_tolerance_edge; generate.py DEFECTS milestone_slipped -> mst_slippage_lead_time"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-report verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "variance_report.json, variance_report.md, samples/"
+    },
+    {
+      "cmd": "python -m variance_engine samples",
+      "operation": "analyze an existing folder of project reports without regenerating it",
+      "output": "per-report verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m variance_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest variance_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10407 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,407",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (project-variance-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(variance_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(variance_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "variance_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the project report they were given: every project is uniquely identified, typed and carries both comparatives, every cost line is complete and its Cost to Complete is the remainder of its budget, net revenue, the expense tie to the budget, profit and margin on cost each recompute from their own inputs, the Prior and Business Plan columns foot inside themselves, both variance columns equal the difference of the two columns beside them, the plan basis is the frozen approved version, every milestone variance re-derives with the declared sign against a frozen schedule, and the rollup recomputes across all projects. It is not an opinion on whether the proforma is a good proforma, whether a budget was the right budget, whether a schedule is achievable, whether a margin is acceptable, or whether the project should proceed.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean project report into the documented development review and sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a forthcoming milestone behind the frozen baseline past tolerance and a slippage watchlist that disagrees with the schedule both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried into the committee pack until the failing control is cleared -- a variance that does not re-foot, a Cost to Complete that is not the remainder, a comparative column that does not foot inside itself, a re-based plan basis, a milestone variance with the wrong sign, or a rollup total that does not tie"
+      }
+    ],
+    "guarantees": [
+      "Read-only: project reports are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents and integer basis points throughout, compared with exact ==; there is no tolerance band on a derived figure, and a cent off the re-derivation is reported as a break.",
+      "One restatement kernel: the controls and the generator share the arithmetic in variance_engine.variance, so a variance cannot disagree with the data that produced it.",
+      "The schedule sign convention is stated exactly once -- + is ahead, so a variance is the comparison date less the current date -- because a definition living in two places eventually disagrees with itself.",
+      "Margin on cost truncates toward zero rather than flooring, so a loss and a profit of the same magnitude round the same way; a zero or negative expense yields no margin rather than an invented denominator.",
+      "Project profit is struck on the stated net revenue, not a re-derived one, so a single break is reported once against the column that moved rather than twice.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Every milestone and slippage test is measured to the reporting period the file carries, never to the system clock, so a run in a later period returns the same findings.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a project report is re-issued, a budget is re-forecast and a pack is sent."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, re-forecasts a budget, revises a schedule or writes to a source artifact. It reads the project report and stops.",
+      "source": "project-variance-automation/README.md and variance_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the nine artifacts the periodic project report emits. It does not connect to a general ledger, a job-cost system, a scheduling tool, or the underlying construction contracts.",
+      "source": "variance_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the report foots to the figures underneath it, not that the proforma behind those figures is a sound proforma. Underwriting a development is a judgment no engine makes.",
+      "source": "project-variance-automation/README.md scope statement"
+    },
+    {
+      "statement": "It re-derives every variance against the comparatives and the plan version the file itself carries; it does not decide whether that Business Plan revision is the one that should be in force, only that the report measures against the version it declares and that every project was approved under it.",
+      "source": "variance_engine/engine.py var_plan_version_frozen"
+    },
+    {
+      "statement": "It takes the milestone dates at face value: it confirms the variances re-derive with the declared sign against a frozen baseline, not that a date is achievable or that work actually reached a milestone. All shipped data is fictional -- the developers, projects, jurisdictions, cost lines, plan versions, revenues, expenses and milestone dates are invented, and the reporting period is set in a fictional future.",
+      "source": "variance_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-variance.svg",
+    "motion": "../assets/engine-variance.svg",
+    "poster_alt": "Project Variance and Business-Plan Compare diagram: on the left a dark project-report card for a for-sale residential project showing six metrics in three columns -- Current, Prior and Business Plan -- with two variance columns beside them; a centre panel listing the restatement checks -- Cost to Complete as Total Budget less Cost to Date, net project revenue as gross less deductions, project profit as net revenue less expense, margin on cost as profit over expense in truncating basis points, each variance column as the difference of the two columns beside it, and each milestone variance as the comparison date less the current date under the convention that + is ahead -- with one red line for a variance column that no longer foots and one amber line for a forthcoming milestone behind the frozen baseline past tolerance; a FAIL verdict panel on the right; a lower chain reading budget variance tab foots to total project expense which foots to the report rollup; and a footer strip reading 22 controls, 7 families, 10,407 tests, read-only, SFS-E45-PVR.",
+    "caption": "The Project Variance and Business-Plan Compare engine tile states the question that has to hold column by column: every derived figure recomputed from its own inputs, every variance equal to the difference of the two columns beside it, every comparative column footing inside itself, and the plan column still the plan that was approved.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest variance_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/project-variance-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/project-variance-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Project Variance & Business-Plan Compare (SFS-E45-PVR) datasheet -- twenty-two deterministic, read-only controls over a developer's periodic project report: every Cost to Complete struck as the remainder of its budget, net revenue, profit and margin on cost re-derived in integer cents and truncating basis points from their own inputs, the Prior and Business Plan columns proved to foot inside themselves, both variance columns re-footed as the difference of the two columns beside them, the plan basis proved against the frozen approved version, every milestone variance re-derived with the + = ahead convention against a frozen schedule, and the portfolio rollup recomputed across all projects. 10,407 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

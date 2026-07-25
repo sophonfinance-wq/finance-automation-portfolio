@@ -30,7 +30,7 @@ product.
 
 ## Accuracy and confidentiality (non-negotiable)
 
-- Every claim is true and demonstrable. Current facts: **thirty-eight runnable systems, an 370,574-test curated suite (plus an opt-in ~1.55M-case property/invariant sweep), fully
+- Every claim is true and demonstrable. Current facts: **forty-seven runnable systems, a 463,852-test curated suite (plus an opt-in ~1.65M-case property/invariant sweep), fully
   fictional data (seeded where the engine declares it), MIT-licensed, CI-backed.** (Verified via `pytest --collect-only -m "not site_tooling"` 2026-07-24.) A separate **51-test `site_tooling` suite** validates the generated public datasheets and is excluded from the curated engine total. Keep numbers current with the repository.
 - The Knowledge Brain **generates** an apply-ready, cited remediation prompt and a change-log; a
   downstream AI or operator applies the changes. Never state or imply that the engine itself applies
@@ -52,7 +52,12 @@ product.
   Financing Execution & Schedule Variance, Wire & Transfer Release Control, Payroll & Benefit Reconciliation,
   Non-Resident Withholding & 1042-S, Home Sale Closing & Settlement Tie-Out, Entity Good-Standing,
   Subcontract SOV & Change Orders, Equity-Method Pickup & Eliminations, Depreciation & Prepaid Amortization,
-  Earnest-Money Deposit Trust, Capital Spending Request Gate.
+  Earnest-Money Deposit Trust, Capital Spending Request Gate,
+  Section 263A Interest Capitalization, Franchise Tax Combined Apportionment,
+  Debt Term-Sheet Sizing & Loan Terms, Unit Sales & Commission Tie-Out,
+  G&A Expense Allocation, Outstanding Check Aging & Escheatment,
+  Project Variance & Business-Plan Compare, Contingency Rollforward & Adequacy,
+  Information Return Issuance.
 - Write provider names plainly: "Anthropic Claude," and "ChatGPT" without a version number.
 
 ## Design

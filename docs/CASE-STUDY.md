@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **thirty-eight runnable systems, a
-370,574-test curated suite (plus an opt-in ~1.55M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **forty-seven runnable systems, a
+463,852-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
 
 ---
 
@@ -126,7 +126,16 @@ Each is now encoded as a control in the portfolio:
 | Depreciation & prepaid amortization — every fixed-asset depreciation and prepaid amortization figure re-derived from cost, life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the posted recurring entry | `depreciation-register-automation` | 10,440 |
 | Earnest-money deposit trust — each unit's pre-close earnest money tied three ways to zero variance across the deposit ledger, the escrow agent's statement and the construction-loan paydowns, cancellations split between forfeited and refunded, and the reconciliation recomputed | `deposit-trust-automation` | 10,407 |
 | Capital spending request gate — every capital request's dollar triggers proved to fire only after approval, its five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied across the package's artifacts | `spending-gate-automation` | 10,424 |
-| **Total** | **38 systems** | **370,574** |
+| Section 263A interest capitalization &mdash; each project's avoided-cost capitalized interest re-derived from accumulated production expenditures at the period rate, the quarterly grid footed to annual totals, completeness enforced against the entity trial balance, and the year-over-year comparison tied to the prior filing | `interest-capitalization-automation` | 10,323 |
+| Franchise tax combined apportionment &mdash; the combined-group roster reconciled as prior-year members plus additions less removals, group revenue tied to the consolidated tax trial balance, the single receipts factor recomputed and bounded, and the margin tax re-derived as margin times apportionment times rate | `franchise-tax-automation` | 10,344 |
+| Debt term-sheet sizing and loan terms &mdash; each deal's maximum loan held to the recomputed advance-rate cap, the all-in rate re-derived as the greater of index plus spread or the floor, every fee struck on its correct base, maturity proved to equal base term plus exercised extensions, and the portfolio rollup footed | `debt-sizing-automation` | 10,338 |
+| Unit sales and commission tie-out &mdash; every derived matrix column re-derived from price and plan size, total commission struck on the actual sales price with the agent splits summing back to it to the cent, each sold unit reconciled one-for-one to the closings tab, and the offer-to-sold-to-closing date sequence enforced | `unit-sales-automation` | 10,355 |
+| G&A expense allocation &mdash; a holding entity's monthly overhead pool apportioned on driver counts with the shares footing to exactly 100% and the allocated dollars to exactly the pool, the residual cent placed deterministically, the allocation entry balanced and netting to zero at consolidation, and the postage allocation reconciled to the meter delta | `ga-allocation-automation` | 10,404 |
+| Outstanding check aging and escheatment &mdash; the outstanding population re-derived from cleared amounts and dates rather than the stated column, each item aged to the as-of date, the total tied to the bank reconciliation's outstanding-checks line, voided and stop-paid items proved excluded, and stale-dating separated from the dormancy threshold that drives escheatment | `check-aging-automation` | 10,361 |
+| Project variance and business-plan compare &mdash; Cost to Complete struck as the remainder of the budget, net revenue, profit and margin on cost re-derived from their own inputs, every variance column re-footed as the difference of the two columns beside it in cents and basis points alike, both comparative columns proved to foot inside themselves, the plan column proved against the frozen approved version, and each milestone variance re-derived under the plus-is-ahead convention | `project-variance-automation` | 10,407 |
+| Contingency rollforward and adequacy &mdash; construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use | `contingency-rollforward-automation` | 10,365 |
+| Information return issuance &mdash; the annual payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms | `info-return-automation` | 10,381 |
+| **Total** | **47 systems** | **463,852** |
 
 ---
 

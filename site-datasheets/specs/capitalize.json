@@ -1,0 +1,372 @@
+{
+  "num": 39,
+  "slug": "capitalize",
+  "part_no": "SFS-E39-CAP",
+  "mnemonic": "CAP",
+  "family": "Cost Capitalization",
+  "name": "Section 263A Interest Capitalization",
+  "tagline": "Does the interest each project capitalized re-derive from the expenditures and the rate?",
+  "plain_summary": "A developer that builds designated property with borrowed money cannot deduct all of the interest it pays. Under the avoided-cost method of IRC §263A(f), the interest production could have avoided -- the period rate applied to the accumulated production expenditures tied up in a project -- is capitalized into that property's basis, and only the remainder is deducted. The annual schedule lays every active project across a grid of calendar quarter-ends, pulls each project's interest expense by quarter, and computes that split, and it is rebuilt every fiscal year. This engine reads the five tabs the schedule emits -- the entity trial balance, the project status roster, the project data tab carrying the accumulated production expenditures and the period rate, the interest-by-year tab carrying interest, capitalized and deducted by quarter, and the year-over-year comparison -- and runs nineteen deterministic controls over them. Is the file complete over a readable quarter grid, are the project keys unique, named and in a known status, does every project carrying an interest balance on the trial balance reach the schedule, are the expenditures present for every quarter, non-negative and non-decreasing, is each capitalization rate a valid basis-point rate and is one rate applied across the whole period, does each quarter's capitalized interest re-derive as that rate applied to that quarter's accumulated expenditures, does the split close without leakage, does it stay within the interest actually incurred, do the quarterly columns foot to the stated annual totals, has a project placed in service stopped capitalizing, does the comparison tie the schedule's annual capitalized figure and roll the prior year's balance forward, and do the schedule's total capitalized and project count recompute from the projects they summarise. Every tie is compared with exact ==, amounts are integer cents that are never coerced into the figure the engine is meant to audit, and no source artifact is ever written.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "An interest-capitalization schedule is the most reviewable-looking workpaper a developer keeps: four columns, one row per project, a grid of quarters that foots. That is exactly why it drifts. None of the ways it goes wrong look wrong in a grid of quarters. A quarter is edited and the annual total beside it is not re-added, so the row stops footing while the schedule still looks complete. The interest a project incurred no longer equals its capitalized portion plus its deducted portion, so a slice of interest is capitalized nowhere and deducted nowhere -- it has simply left the schedule. A construction project carrying an interest balance on the trial balance never reaches the roster, so its interest is deducted in full, none is capitalized, and nothing in the workbook notices. And the capitalized column itself -- the number that goes into basis and stays there for the life of the asset -- is typed rather than recomputed, or one project is rolled at a rate the others were not, or the comparison never carries last year's balance forward. The engine rebuilds every capitalized figure from the accumulated production expenditures and the period rate through the same kernel that produced the data, compares with exact ==, proves the roster against the trial balance rather than against itself, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim. Interest capitalized into basis on a figure nobody re-derived is a misstatement that compounds every year the asset is held.",
+  "layers_intro": "Six control families run in registry order over each capitalization file. The first proves the others had something to read -- every tab present and a legible quarter grid -- because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the capitalization file carries all five tabs, exactly once, over a readable quarter grid.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the five document types in model.DOC_TYPES -- trial balance, project status, project data, interest by year, comparison -- and FAILs a file carrying more than one of any, because the tabs join on a single project key and two of a tab makes that join ambiguous. It also FAILs an empty quarter_ends grid, since every data_ and cap_ control iterates it and an absent grid would leave them nothing to foot across, and FAILs an as_of that is not a readable date, since the completion review is measured to it. Every downstream rule returns nothing when its tab is absent, so this precondition is what stops absence from reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "prj",
+      "label": "Project Roster and Completeness",
+      "plain": "Checks the roster is sound -- unique keys, a name, a known status -- and that every trial-balance project reaches the schedule.",
+      "engineering": "Four controls. prj_unique_keys FAILs a (company_no, job_no) key that appears twice on the roster, because that key is what joins a project to its data, interest and comparison rows and a duplicate makes a quarter of interest ambiguous about which project it belongs to. prj_name_present FAILs a keyed row with no project name -- a project nobody reading the workbook can identify. prj_status_valid FAILs a status outside active / complete / on_hold, because the status is what the completion review keys on. prj_tb_complete is the completeness control and reads in the direction that matters: the trial balance is the authoritative population, so every project carrying an interest balance there is proved onto the roster, not the reverse. A construction project on the trial balance but absent from the schedule has all of its interest deducted and none capitalized, and nothing else in the workbook notices.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "data",
+      "label": "Expenditures and Rate",
+      "plain": "Checks the accumulated production expenditures exist for every quarter, never go negative or fall, and that each rate is a valid basis-point rate.",
+      "engineering": "Four controls, all of them guarding the two inputs the capitalized figure is derived from. data_project_coverage FAILs a roster project with no project-data row, no interest-by-year row, no comparison row, or a quarter missing from either grid -- an absent quarter is a quarter the re-derivation would skip and pass vacuously on. data_ape_nonneg FAILs a negative accumulated balance: accumulated expenditures are a running total of cost incurred, and a negative balance would drive negative interest straight into basis. data_ape_nondecreasing FAILs a quarter-end balance below the quarter before it, sorted by date, because the accumulation adds up within the year and does not unwind -- every quarterly figure past the break is computed on the wrong base. data_rate_valid FAILs a capitalization rate that is missing, non-integer, or outside 0..10000 basis points, and the controls that apply the rate defer the malformed case here rather than each re-reporting it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "cap",
+      "label": "Capitalized / Deducted Split",
+      "plain": "Checks each quarter's capitalized interest re-derives, the split closes, it never exceeds the interest incurred, the annuals foot, and capitalization stopped at completion.",
+      "engineering": "Six controls, the reason the engine exists. cap_rate_consistent FAILs a project rolled at a rate the rest of the schedule was not: the avoided-cost rate is a single applicable rate for the entity's non-traced debt in the period, so the period rate is taken as the one most projects share, ties broken on the smaller rate for stability, and the minority are named. cap_rederives rebuilds every quarter's capitalized interest through the shared kernel -- the period rate applied to that quarter's accumulated production expenditures with truncating division -- and FAILs any stated figure that is not exactly it, because the capitalized column is a derivation and an un-recomputed capitalized figure is an assertion. cap_no_leakage FAILs a quarter where capitalized plus deducted does not equal the interest incurred; there is no third destination for a cent of interest. cap_within_interest holds the other edge and FAILs a quarter that capitalizes more than it incurred, which drives a negative deduction and overstates basis. cap_annual_total_foots re-sums all three columns across the grid and FAILs an annual interest, capitalized or deducted total that does not equal its quarters. cap_ceased_on_completion is a FLAG, not a failure: a project in status complete that still shows current-year capitalized interest needs a human to confirm the in-service date, which is not a footing error the engine can adjudicate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "cmp",
+      "label": "Year-over-Year Comparison",
+      "plain": "Checks the comparison's current-year figure ties the schedule and its ending balance rolls the prior year forward.",
+      "engineering": "Two controls. cmp_current_ties_schedule FAILs a comparison row whose current-year capitalized figure is not exactly the annual capitalized the interest-by-year tab already foots to -- the same number carried in two places drifts the first time the schedule moves and the comparison is not refreshed. cmp_prior_year_ties FAILs an ending capitalized balance that is not the prior-year balance plus the current year's capitalized interest, computed through the shared kernel. A capitalized balance is cumulative basis: it does not restart each year, and an ending balance that does not equal prior plus current has lost or double-counted a year of basis that stays in the asset for its whole life.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Schedule Rollups",
+      "plain": "Checks the schedule's total capitalized and its stated project count recompute from the projects they summarise.",
+      "engineering": "Two controls on the two figures a reviewer reads first. rpt_total_capitalized_ties re-sums every project's annual capitalized and FAILs a stated portfolio total that is not exactly that sum -- this is the figure that reaches the return workpaper, and maintained beside the schedule rather than summed from it, it drifts the first time a project's annual moves. rpt_project_count_ties counts the distinct roster keys and FAILs a stated project count that does not equal it, catching the completeness figure that stops matching the moment a project is added or dropped and the count is not changed. A count or a total that is not integer raises AMOUNT_INVALID contained to the field it was read on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Capitalization Files",
+      "kind": "source",
+      "col": 0,
+      "row": 1,
+      "plain": "fictional FY2029 interest-capitalization files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-one files in total, across four invented development projects on a four-quarter grid. Only the roster, the trial balance, the accumulated production expenditures, the period rate, the quarterly interest expense and each project's prior-year capitalized balance are stated as base facts; every quarter's capitalized and deducted interest, the annual totals, the comparison's current-year and ending balances and the schedule rollups are re-derived through the same capitalization kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the file complete over a readable quarter grid",
+      "engineering": "One control. FAILs a file missing any of the five tabs or carrying a duplicate, an empty quarter grid, or an unreadable as_of date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "prj-control",
+      "label": "Project Roster",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the roster sound and complete against the trial balance",
+      "engineering": "Four controls: the (company_no, job_no) key is unique, each project carries a name, each status is one of active / complete / on_hold, and every project carrying an interest balance on the entity trial balance appears on the schedule.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "data-control",
+      "label": "Expenditures and Rate",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "are the two inputs to the derivation well-formed for every quarter",
+      "engineering": "Four controls: every roster project is covered across the data, interest and comparison tabs for every quarter in the grid, the accumulated production expenditures are non-negative, they do not fall quarter over quarter, and each capitalization rate is an integer basis-point rate in 0..10000.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "cap-control",
+      "label": "Capitalized / Deducted Split",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the split re-derive, close, stay within the interest and foot",
+      "engineering": "Six controls: one rate across the period, each quarter's capitalized interest recomputed as that rate on the quarter's accumulated expenditures, capitalized plus deducted equal to the interest incurred, capitalized never above it, the annual columns footing their quarters, and a placed-in-service project still capitalizing raised as a FLAG.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "cmp-control",
+      "label": "Year-over-Year Comparison",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the comparison tie the schedule and roll the prior year forward",
+      "engineering": "Two controls: the comparison's current-year capitalized equals the annual capitalized the schedule foots to, and the ending capitalized balance equals the prior-year balance plus the current year, so cumulative basis is neither lost nor double-counted.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Schedule Rollups",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "do the portfolio total and project count recompute from the projects",
+      "engineering": "Two controls: the schedule's total capitalized is re-summed from the project annuals, and its stated project count is counted from the distinct roster keys.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Tabs, Grid and Rate",
+      "kind": "control",
+      "col": 3,
+      "row": 0,
+      "plain": "the five tabs and the quarter grid every rule resolves against",
+      "engineering": "The trial balance carries the authoritative population of projects holding an interest balance; the project status roster carries each project's key, name and status; the project data tab carries the accumulated production expenditures at each quarter-end and the period capitalization rate in basis points; the interest-by-year tab carries interest, capitalized and deducted by quarter plus the three annual totals, the portfolio total capitalized and the project count; and the comparison tab carries the prior-year, current-year and ending capitalized balances. The file itself carries the quarter-end grid and the as_of date. Every roster, expenditure, split, comparison and rollup control resolves against these through the shared capitalization kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per capitalization file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Both the JSON and markdown reports carry no timestamps and no absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/capitalize_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "cap files" },
+    { "from": "corpus", "to": "prj-control", "label": "roster" },
+    { "from": "corpus", "to": "data-control", "label": "quarters" },
+    { "from": "corpus", "to": "cap-control", "label": "interest by quarter" },
+    { "from": "corpus", "to": "cmp-control", "label": "prior year" },
+    { "from": "corpus", "to": "rpt-control", "label": "rollups" },
+    { "from": "set-control", "to": "registers", "label": "resolves" },
+    { "from": "prj-control", "to": "registers", "label": "resolves" },
+    { "from": "data-control", "to": "registers", "label": "resolves" },
+    { "from": "cap-control", "to": "registers", "label": "resolves" },
+    { "from": "cmp-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "cap-control", "to": "report", "label": "findings" },
+    { "from": "cmp-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,323",
+      "source": "python -m pytest --collect-only -q -o addopts= (interest-capitalization-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "19",
+      "source": "len(capitalize_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every capitalization file"
+    },
+    {
+      "label": "Families",
+      "value": "6",
+      "source": "distinct rule-id prefixes in capitalize_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Capitalization files",
+      "value": "21",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "5",
+      "source": "len(capitalize_engine.model.DOC_TYPES)",
+      "plain": "trial balance, project status, project data, interest by year, comparison"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "capitalize_engine/tests boundary tests on the cent and the quarter grid",
+      "plain": "a capitalized figure a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A real-estate developer that builds designated property with borrowed money may not deduct all of the interest it pays. Under the avoided-cost method of IRC §263A(f), the interest production could have avoided -- the period rate applied to the accumulated production expenditures tied up in a project -- must be capitalized into that property's basis rather than deducted in the year paid, and the rest is deducted. The annual schedule lays every active project across a grid of calendar quarter-ends, pulls each project's interest expense by quarter, and computes that split. It is rebuilt every fiscal year, and it goes stale in ways nobody watches. Four failures hide inside it, none of which look wrong in a grid of quarters. A row stops footing: a quarter column is edited and the annual total beside it is not re-added, so the interest, capitalized and deducted columns no longer cross-foot while the schedule still looks complete. The split leaks: the interest a project incurred no longer equals its capitalized portion plus its deducted portion, so a slice of interest is neither capitalized into basis nor deducted -- it has left the schedule. A project is missing: a construction project carrying an interest balance on the entity trial balance never reaches the roster, so its interest is deducted in full and none is capitalized. And the capitalized figure is asserted rather than derived: it is typed in instead of recomputed as accumulated production expenditures times the period rate rolled by quarter, or one project is rolled at a rate the others were not, or the comparison never carries the prior year's capitalized balance forward. None of these are judgment calls. They are equalities -- a stated capitalized figure against the rate applied to the expenditures, capitalized plus deducted against the interest incurred, an annual against its quarters, an ending balance against prior plus current -- which a deterministic control settles better than a workbook inherited by whoever rebuilds the schedule this year, and the consequence of missing one stays in basis for the life of the asset.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every capitalization file",
+      "narrative": "The CLI generates twenty-one fictional FY2029 capitalization files -- one clean baseline and one carrying each of the twenty planted defects -- then runs all nineteen controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (interest-capitalization-automation/); capitalize_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The capitalized column is recomputed, not read back",
+      "narrative": "One defect file raises a project's fourth-quarter accumulated production expenditures without re-deriving the schedule beneath it. Every column still foots, the split still closes, and the annual totals still add -- but cap_rederives rebuilds that quarter's capitalized interest as the period rate applied to the new expenditure balance, finds it is not the figure stated, and fails, proving the capitalized column is derived from the expenditures rather than trusted as written.",
+      "source": "capitalize_engine/generate.py DEFECTS capitalized_misderived -> cap_rederives"
+    },
+    {
+      "title": "Completeness is proved against the trial balance, not against the schedule",
+      "narrative": "Another defect file adds a project to the entity trial balance that was never added to the roster. Nothing inside the schedule is inconsistent -- every project on it foots, ties and re-derives -- and prj_tb_complete still fails, because the trial balance is the authoritative population and a construction project absent from the schedule has all of its interest deducted and none capitalized.",
+      "source": "capitalize_engine/generate.py DEFECTS tb_project_missing -> prj_tb_complete"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all nineteen controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "capitalize_report.json, capitalize_report.md, samples/"
+    },
+    {
+      "cmd": "python -m capitalize_engine samples",
+      "operation": "analyze an existing folder of capitalization files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m capitalize_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest capitalize_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10323 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,323",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (interest-capitalization-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "19",
+      "unit": "controls",
+      "source": "len(capitalize_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "20",
+      "unit": "defect files",
+      "source": "len(capitalize_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "capitalize_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the schedule they were given: the file carries all five tabs over a legible quarter grid, every trial-balance project reaches the roster, the accumulated expenditures are present, non-negative and non-decreasing for every quarter, one valid rate is applied across the period, each quarter's capitalized interest recomputes from the expenditures and that rate, the split closes to the interest incurred without exceeding it, the annual columns foot their quarters, the comparison ties the schedule and rolls the prior year forward, and the portfolio total and project count re-sum from the projects beneath them. It is not an opinion on whether the rate in the file is the correct avoided-cost rate for the entity, whether the debt was properly traced or the property is designated, whether the accumulated expenditures or the interest expense are themselves correct, or when a project was actually placed in service.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean schedule into the documented workpaper review and sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a project placed in service that is still capitalizing interest lands here, because the in-service date is a judgment the engine cannot adjudicate"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried into basis or the return workpaper until the failing control is cleared -- a capitalized figure that does not re-derive, a split that leaks, a row that does not foot, a project missing from the schedule, or a comparison that does not roll forward"
+      }
+    ],
+    "guarantees": [
+      "Read-only: capitalization files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a capitalized, deducted or annual figure, and a cent off the re-derivation is reported as a break.",
+      "An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One capitalization kernel: the controls and the generator share the arithmetic in capitalize_engine.capitalize, so a re-derived figure cannot disagree with the data that produced it.",
+      "The rate is applied with truncating division exactly once, in the kernel, so a derived capitalized figure compares to the reported figure with exact == rather than through two rounding conventions.",
+      "Completeness is proved in the authoritative direction: the trial balance is the population, and the roster is tested against it rather than against itself.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing tab or quarter fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a capitalized figure is carried into basis and whether an in-service date or a missing project is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts an entry, files a return, adjusts basis, or writes to a source artifact. It reads the capitalization file and stops.",
+      "source": "interest-capitalization-automation/README.md and capitalize_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the five tabs the annual schedule emits. It does not connect to a general ledger, a job-cost system, loan documents or a fixed-asset register.",
+      "source": "capitalize_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It re-derives the capitalized interest at the basis-point rate the file carries and proves one rate is applied across the period; it does not decide whether that rate is the correct avoided-cost rate for the entity, whether the debt is properly traced, or whether the property is designated property at all.",
+      "source": "capitalize_engine/engine.py data_rate_valid and cap_rate_consistent"
+    },
+    {
+      "statement": "It flags a project placed in service that is still capitalizing interest as a matter for review; it does not determine the in-service date or decide when the capitalization period ended.",
+      "source": "capitalize_engine/engine.py cap_ceased_on_completion"
+    },
+    {
+      "statement": "It takes the accumulated production expenditures and the quarterly interest expense at face value: it confirms they are well-formed and that everything derived from them ties, not that the underlying cost or interest is correct. All shipped data is fictional -- the developers, the projects, the company and job numbers, the expenditures, the interest and the rate are invented, and the fiscal year is set in a fictional future.",
+      "source": "capitalize_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-capitalize.svg",
+    "motion": "../assets/engine-capitalize.svg",
+    "poster_alt": "Section 263A Interest Capitalization diagram: on the left an entity trial balance feeding a project roster of four fictional development projects, with one trial-balance project shown missing from the schedule; across the centre a four-quarter FY2029 grid showing each quarter's accumulated production expenditures rolled at the 1.50% period rate to a capitalized figure, the deducted remainder beside it, and the identity interest = capitalized + deducted marked as closing exactly; beneath it the annual columns footing to their quarters; on the right a year-over-year comparison rolling the prior-year capitalized balance forward to an ending balance and a schedule rollup re-summing the portfolio total capitalized and the project count; and a footer strip reading 19 controls, 6 families, 10,323 tests, read-only, SFS-E39-CAP.",
+    "caption": "The Section 263A Interest Capitalization engine tile states the identity that has to hold quarter by quarter: every capitalized figure re-derived as the period rate on that quarter's accumulated production expenditures, the split closing exactly to the interest incurred, the annual totals footing their quarters, and the comparison and rollups recomputed from the projects beneath them.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest capitalize_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/interest-capitalization-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/interest-capitalization-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Section 263A Interest Capitalization (SFS-E39-CAP) datasheet -- nineteen deterministic, read-only controls over a developer's avoided-cost IRC §263A(f) interest-capitalization schedule: every project on the entity trial balance proved onto the roster, the accumulated production expenditures non-negative and non-decreasing across the quarter grid, one valid basis-point rate applied across the period, each quarter's capitalized interest re-derived as that rate on those expenditures, the split closing exactly to the interest incurred without exceeding it, the annual columns footing their quarters, and the year-over-year comparison and schedule rollups recomputed from the projects beneath them. 10,323 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

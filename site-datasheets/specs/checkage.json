@@ -1,0 +1,395 @@
+{
+  "num": 44,
+  "slug": "checkage",
+  "part_no": "SFS-E44-OCA",
+  "mnemonic": "OCA",
+  "family": "Disbursement Controls",
+  "name": "Outstanding Check Aging & Escheatment",
+  "tagline": "Of everything issued, what has never cleared, and how old is it now?",
+  "plain_summary": "A check register is a list of promises the bank has not yet been asked to keep. This engine starts after the check has left the building -- whether the payment was approved, coded and released is somebody else's control -- and asks the narrower question: of everything issued, what has never cleared, how old is it against the file's own as-of date, and what has to happen to it now. It reads the six artifacts an outstanding-check process emits -- the bank account register, the check register, the void register, the stated outstanding schedule, the stated escheatment schedule and the bank reconciliation -- and runs twenty deterministic controls over them in registry order. Is the aging file complete and the as-of date readable, are the bank account ids unique and does each declare the escheat jurisdiction it reports to, is every check row complete, uniquely numbered within its own account, drawn on a real account, typed, dated on or before the as-of date, paired on its clearing and cleared for exactly the amount it was issued for, are the withdrawn checks classified, off the outstanding schedule and netted to zero, does the outstanding set re-derive from the register key by key and amount by amount, do each item's age and aging band re-derive from its check date, is every stale-dated item marked for follow-up, is the escheatment schedule exactly the items past the dormancy period and each addressed to its own account's jurisdiction, and does the bank reconciliation's outstanding-checks line tie the re-derived evidence rather than the stated schedule. Every amount is integer cents compared with exact ==, every age is measured to the as_of date the file carries rather than the system clock, and no source artifact is ever written back.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Nothing in an outstanding-check register looks wrong, and three things go wrong in it anyway. The outstanding schedule is a filtered view of the register -- nothing cleared, no cleared date, not withdrawn -- and the moment somebody maintains it beside the register instead of deriving it from the register, it drifts: a check that cleared last month stays on it, a check issued this month never reaches it, and the bank reconciliation ties to the drift rather than to the evidence. A withdrawn check keeps living: a voided, zero-dollar or stop-payment item still occupies a row, and if the void never nets the amount to zero, or the item is still counted as outstanding, a cancelled promise sits on the reconciliation and ages -- far enough, eventually, to be handed to a state that was never owed it. And the clock runs where nobody hears it: past the stale-dating threshold the bank may refuse the item and a human has to chase, re-issue or re-void it; past the dormancy period it stops being the entity's money at all and becomes unclaimed property owed to the escheat jurisdiction of the account it was drawn on. The register looks identical the day before and the day after. This engine rebuilds the outstanding set, its ages, its bands, its follow-up markers and the escheatment schedule from the register through one shared aging kernel, ties the reconciliation to that re-derivation rather than to the stated schedule, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each aging file. The first proves the others had something to read and that the as-of date is legible, because every age, stale-dating and dormancy test is measured to it and a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the aging file carries every artifact the controls below read, exactly once, and that the as-of date is a readable date.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES -- bank account register, check register, void register, outstanding schedule, escheatment schedule, bank reconciliation -- and FAILs a file carrying more than one of any, because an aging file holds exactly one of each. It also FAILs an unreadable as_of date, since every age, aging band, stale-dating marker and dormancy test in the registry is measured to it and to nothing else. Every downstream rule returns nothing when the artifact it reads is absent, so this precondition is what stops absence from reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "acct",
+      "label": "Bank Account Register",
+      "plain": "Checks the disbursement accounts are uniquely identified and each declares the escheat jurisdiction it reports unclaimed property to.",
+      "engineering": "Two controls. acct_unique_ids FAILs a bank account id that appears twice, because the account id is half of every check's identity and the key to its escheat jurisdiction -- a duplicate makes a check number ambiguous about which number series it belongs to and a dormant item ambiguous about which jurisdiction it reports to. acct_jurisdiction_declared FAILs an account that declares no escheat jurisdiction: unclaimed property reports to a jurisdiction, not to a company, so a dormant item drawn on such an account would sit on a schedule addressed to nobody. The escheatment family then defers to this control for that gap rather than reporting it twice.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "chk",
+      "label": "Check Register",
+      "plain": "Checks every check row is complete, uniquely numbered inside its own account, drawn on a real account, typed, not future-dated, and reconciled issued-against-cleared.",
+      "engineering": "Seven controls, the widest family in the registry. chk_required_fields proves each row carries check number, account id, check date, check type and payee. chk_number_unique_per_account is scoped to the account on purpose -- two disbursement accounts legitimately run their own overlapping series, and both baseline accounts open at the same number, so a control keyed on the number alone would call an honest register duplicated; inside one account a repeat means one physical check recorded twice or two cut on one number. chk_account_exists FAILs a check drawn on an account the register does not carry. chk_type_valid FAILs an unknown check type, because manual and system are the two ways a check leaves the building and manual checks skip the disbursement run and age unnoticed. chk_date_not_future FAILs a check dated after the as-of date, which would produce a negative age and land an item that cannot yet exist in the youngest aging band. chk_cleared_pairing FAILs a row carrying a cleared amount without a cleared date or the reverse -- the outstanding test reads both halves, so that one shape is what makes it ambiguous. chk_cleared_ties_issued is the issued-against-cleared reconciliation: a cleared check that cleared for anything other than the amount it was issued for is an altered item or a partial presentment, and the difference is a real obligation that appears on no schedule at all.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "void",
+      "label": "Withdrawn Checks",
+      "plain": "Checks the voided, zero-dollar and stop-payment items are classified, off the outstanding schedule, and netted to zero.",
+      "engineering": "Three controls. void_disposition_valid FAILs an entry dispositioned anything other than voided, zero_dollar or stop_payment, and separately FAILs an entry naming no check in the register -- such an entry withdraws nothing while still suppressing that key from the outstanding set, which is how a live obligation disappears. void_not_outstanding FAILs a withdrawn check that still appears on the outstanding schedule: a cancelled promise is not an obligation, and leaving it there does not merely overstate the reconciliation, it ages the item, so a check that was never owed can walk the full dormancy period and be escheated to a state. void_nets_to_zero FAILs a void whose reversal plus the issued amount is not exactly zero -- a void short by a cent has not voided the check, and the unreversed residue is carried by nothing because the void already removed the item from the outstanding set.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "age",
+      "label": "Outstanding Set & Aging",
+      "plain": "Checks the outstanding schedule is exactly what the register re-derives, and that every age, aging band and follow-up marker re-derives from the check date.",
+      "engineering": "Three controls, and the reason the engine exists. age_outstanding_set_recomputes rebuilds the outstanding set from the check register through the shared aging kernel -- nothing cleared, no cleared date, not withdrawn -- and compares it to the stated schedule on account, check number and amount, reporting both directions: an item the schedule carries that the register does not re-derive, and an item that has not cleared and is not withdrawn but is absent from the schedule. age_bucket_recomputes FAILs a stated age that is not the as-of date less the check date, and a stated band that is not the lookup on that age; a band typed one step younger is how an item slides quietly out of the follow-up population without its age ever changing. age_stale_dated_flagged is a FLAG rather than a failure: it fires when the follow-up marker disagrees with the file's own stale-dating threshold in either direction, because the item is still a real obligation and what it needs is a person to chase the payee, re-issue or re-void it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "esc",
+      "label": "Escheatment",
+      "plain": "Checks the escheatment schedule is exactly the outstanding items past the dormancy period, each reported to the jurisdiction its own account declares.",
+      "engineering": "Two controls. esc_set_recomputes re-derives the escheatable population from the outstanding set and compares it on account, check number, amount and age. An item missing from the schedule is unclaimed property still sitting on the books; an item on it that has not run the full period is money about to be handed to a state early. The threshold is crossed strictly -- an item sitting exactly on the dormancy day has not passed it -- on the same convention as the stale-dating test. esc_jurisdiction_assigned FAILs an item scheduled to escheat to any jurisdiction other than the one its own account declares, because a misfiled item is simultaneously an over-remittance to a jurisdiction owed nothing and an unfiled liability to the one that is owed. Accounts declaring no jurisdiction are left to acct_jurisdiction_declared rather than reported twice.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Bank Reconciliation Tie-Out",
+      "plain": "Checks the reconciliation's outstanding-checks line and its aging subtotals tie the re-derived evidence rather than the stated schedule.",
+      "engineering": "Two controls. rpt_outstanding_total_ties FAILs when the reconciliation's outstanding-checks amount or its outstanding count does not equal the total and count of the set re-derived from the check register. Tying that line to the stated schedule would prove only that two documents agree; a schedule and a reconciliation that drifted together would still tie, so this control deliberately reaches past both to the register. rpt_bucket_totals_tie is a FLAG rather than a failure, because the aging profile is how the outstanding population is triaged and not how the bank balance is proved: it fires on a band whose count or amount does not match the re-derivation, a band the reconciliation omits entirely, and a band label that is not one of the six the schedule is aged into. Every band is emitted even when empty, so a band that empties out reads as a zero rather than as an absence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Aging Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional outstanding-check aging files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-two files in total, at a fictional-future as-of date. Only the bank accounts, the check register and the void register are stated as base facts; the outstanding schedule with its ages, aging bands and follow-up markers, the escheatment schedule and the reconciliation's outstanding line and aging subtotals are all re-derived through the same aging kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the aging file complete and the as-of date readable",
+      "engineering": "One control. FAILs a file missing any of the six artifact types or carrying a duplicate, and FAILs an unreadable as_of date, so no downstream rule holds vacuously on absent evidence and no age is measured to nothing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "acct-control",
+      "label": "Bank Account Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "are the accounts uniquely identified and jurisdictioned",
+      "engineering": "Two controls: no bank account id appears twice, and every account declares the escheat jurisdiction its unclaimed property reports to.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "chk-control",
+      "label": "Check Register",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is every check row well-formed, attributable and reconciled",
+      "engineering": "Seven controls: the required fields present, the number unique within its own account, the account real, the type known, the date on or before the as-of date, the cleared amount and cleared date paired, and a cleared check cleared for exactly the amount it was issued for.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "void-control",
+      "label": "Withdrawn Checks",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "are the withdrawn checks really withdrawn",
+      "engineering": "Three controls: every entry carries a known disposition and names a real check, no withdrawn check appears on the outstanding schedule, and every reversal nets its check to exactly zero.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "age-control",
+      "label": "Outstanding Set & Aging",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the outstanding set re-derive from the register",
+      "engineering": "Three controls: the schedule is exactly the set the register re-derives, every age and aging band recomputes from the check date to the as-of date, and every follow-up marker agrees with the file's stale-dating threshold.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "esc-control",
+      "label": "Escheatment",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "is the escheatment schedule exactly the dormant items",
+      "engineering": "Two controls: the schedule is exactly the outstanding items strictly past the dormancy period, re-derived on key, amount and age, and each names the jurisdiction its own account declares.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Bank Reconciliation Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the reconciliation tie the re-derived evidence",
+      "engineering": "Two controls: the outstanding-checks line and count tie the set re-derived from the register rather than the stated schedule, and the six aging subtotals tie the re-derived bands.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Registers & Aging Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and predicates every rule resolves against",
+      "engineering": "The bank account register carries each disbursement account and its escheat jurisdiction; the check register carries the number, account, date, type, payee, amount issued, amount cleared and cleared date of every check; the void register carries the withdrawn promises and their reversals; and the outstanding schedule, escheatment schedule and bank reconciliation carry the derived population, its aging profile and the line that leaves the department. Every re-derivation resolves against these through one shared kernel: outstanding means a cleared amount of exactly zero and no cleared date and no void entry, age is whole days from the check date to the file's as_of, the band is a lookup on that age, and stale-dated and dormant are both strictly past their thresholds.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per aging file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps and no absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/checkage_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "aging files" },
+    { "from": "corpus", "to": "acct-control", "label": "aging files" },
+    { "from": "corpus", "to": "chk-control", "label": "aging files" },
+    { "from": "corpus", "to": "void-control", "label": "aging files" },
+    { "from": "corpus", "to": "age-control", "label": "aging files" },
+    { "from": "corpus", "to": "esc-control", "label": "aging files" },
+    { "from": "corpus", "to": "rpt-control", "label": "aging files" },
+    { "from": "set-control", "to": "registers", "label": "resolves" },
+    { "from": "acct-control", "to": "registers", "label": "resolves" },
+    { "from": "chk-control", "to": "registers", "label": "resolves" },
+    { "from": "void-control", "to": "registers", "label": "resolves" },
+    { "from": "age-control", "to": "registers", "label": "resolves" },
+    { "from": "esc-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "chk-control", "to": "age-control", "label": "register rows" },
+    { "from": "age-control", "to": "esc-control", "label": "outstanding set" },
+    { "from": "void-control", "to": "report", "label": "findings" },
+    { "from": "esc-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,361",
+      "source": "python -m pytest --collect-only -q -o addopts= (check-aging-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "20",
+      "source": "len(checkage_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every aging file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in checkage_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Aging files",
+      "value": "22",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-one planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(checkage_engine.model.DOC_TYPES)",
+      "plain": "bank account register, check register, void register, outstanding schedule, escheatment schedule, bank reconciliation"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "checkage_engine/tests boundary tests on the cent and on the stale-dating and dormancy days",
+      "plain": "an outstanding total a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A check register is a list of promises the bank has not yet been asked to keep. Each row carries a check number, a check date, a check type, a payee, the amount issued, the amount cleared and the date it cleared; beside it sit the withdrawn promises -- voided, zero-dollar and stop-payment checks. Whether the payment should have been made at all is somebody else's control. This one starts once the check has left the building. Three failures hide in that register and none of them look wrong in it. The outstanding schedule is a filtered view -- nothing cleared, no cleared date, not withdrawn -- and the moment it is maintained beside the register rather than derived from it, it drifts, and the bank reconciliation's outstanding-checks line ties to the drift instead of to the evidence. A withdrawn check keeps living: still counted as outstanding, or with a void that never nets the amount to zero, so a cancelled obligation sits on the reconciliation and ages. And the clock runs. Past the stale-dating threshold the bank may refuse the item and a person has to chase the payee, re-issue or re-void it; past the dormancy period it is no longer the entity's money at all but unclaimed property owed to the escheat jurisdiction of the account it was drawn on -- and the register looks exactly the same the day before and the day after. None of these are judgment calls. They are set comparisons and date arithmetic -- an outstanding set rebuilt from the register and compared key by key, a void reversal that must net to zero with exact ==, an age that is whole days from the check date to the file's own as-of date, and two thresholds crossed strictly -- which a deterministic control settles better than a schedule inherited by whoever maintains it this quarter.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every aging file",
+      "narrative": "The CLI generates twenty-two fictional aging files -- one clean baseline and one carrying each of the twenty-one planted defects -- then runs all twenty controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (check-aging-automation/); checkage_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The outstanding set is re-derived, not read back",
+      "narrative": "One defect file simply deletes a row from the stated outstanding schedule -- a check that has not cleared and was never withdrawn. Nothing in the schedule itself is inconsistent. age_outstanding_set_recomputes rebuilds the set from the check register through the shared aging kernel, finds the item missing, and fails; rpt_outstanding_total_ties independently reports the reconciliation against the same re-derivation rather than against the schedule that lost the row.",
+      "source": "checkage_engine/generate.py DEFECTS outstanding_row_missing -> age_outstanding_set_recomputes"
+    },
+    {
+      "title": "A withdrawn check put back on the schedule would have aged into an escheatment",
+      "narrative": "Another defect file returns a stop-payment check to the outstanding schedule with an otherwise correct age and aging band, so every arithmetic control still holds. void_not_outstanding is the only rule that sees it, and it is the rule that matters: a cancelled promise left on the schedule keeps aging, and far enough out it would be remitted to a jurisdiction as unclaimed property that was never owed.",
+      "source": "checkage_engine/generate.py DEFECTS void_listed_outstanding -> void_not_outstanding"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "checkage_report.json, checkage_report.md, samples/"
+    },
+    {
+      "cmd": "python -m checkage_engine samples",
+      "operation": "analyze an existing folder of aging files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m checkage_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest checkage_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10361 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,361",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (check-aging-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "20",
+      "unit": "controls",
+      "source": "len(checkage_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "21",
+      "unit": "defect files",
+      "source": "len(checkage_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "checkage_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the aging file they were given: the six artifacts are present, the accounts are unique and jurisdictioned, every check row is well-formed and reconciled issued-against-cleared, the withdrawn checks are classified and netted to zero and off the schedule, the outstanding set and every age, band and follow-up marker re-derive from the register at the file's own as-of date, the escheatment schedule is exactly the items past dormancy addressed to their accounts' jurisdictions, and the bank reconciliation ties that re-derivation. It is not an opinion on whether the payment should have been made, whether the payee is owed the money, whether the stale-dating threshold or dormancy period carried in the file is the right one for that jurisdiction and property type, or whether an unclaimed-property filing was actually made.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean aging file into the documented outstanding-check review and bank reconciliation sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a person resolves each flag; a stale-dating follow-up marker that disagrees with the item's age and an aging subtotal that does not tie the re-derived band both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the item or figure is not carried into the reconciliation or the unclaimed-property filing until the failing control is cleared -- an outstanding set that does not recompute, a void still on the schedule or short of netting to zero, an escheatment schedule that does not tie, or a misdirected jurisdiction"
+      }
+    ],
+    "guarantees": [
+      "Read-only: aging files are parsed and never written back, and the engine never voids, re-issues, stops a payment, escheats or pays anything.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on an outstanding total, a void reversal or a bucket subtotal.",
+      "An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the figure the engine is meant to audit.",
+      "One aging kernel: the controls and the generator share the predicates in checkage_engine.aging, so a schedule cannot disagree with the data that produced it.",
+      "Every age, stale-dating and dormancy test is measured to the as_of date carried in the file, never to the system clock, so no finding changes because a day passed on the build machine.",
+      "A check's identity is its number within the account it was drawn on, because two disbursement accounts legitimately run overlapping number series.",
+      "Both thresholds are crossed strictly: an item sitting exactly on the stale-dating day or the dormancy day has not passed it.",
+      "The bank reconciliation is tied to the set re-derived from the check register, not to the stated outstanding schedule, so a schedule and a reconciliation that drifted together still break.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a check is chased, re-issued, re-voided or reported as unclaimed property."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never voids, re-issues, stops a payment, escheats, pays, files an unclaimed-property report, or writes to a source artifact. It reads, re-derives and reports.",
+      "source": "check-aging-automation/README.md and checkage_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the six artifacts the outstanding-check process emits. It does not connect to a bank, a positive-pay file, a disbursement system, a general ledger or a state unclaimed-property portal.",
+      "source": "checkage_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is the back half of the disbursement story: whether the payment was authorised, coded and released is outside its scope, and it does not opine on whether the payee is owed the money.",
+      "source": "checkage_engine/engine.py module scope and the chk_ family"
+    },
+    {
+      "statement": "It applies the stale-dating threshold and dormancy period the file itself carries, defaulting to 180 and 1095 days; it does not decide which threshold or which dormancy period the property type and jurisdiction actually require, nor whether the declared escheat jurisdiction is the correct one.",
+      "source": "checkage_engine/model.py DEFAULT_STALE_DATED_DAYS, DEFAULT_DORMANCY_DAYS and the esc_ family"
+    },
+    {
+      "statement": "It takes the register at face value: it confirms the outstanding set, the aging and the reconciliation re-derive, not that a check was physically issued or that a clearing actually occurred. All shipped data is fictional -- the entities, bank accounts, payees, check numbers, amounts, dates and escheat jurisdictions are invented and the as-of date is set in a fictional future.",
+      "source": "checkage_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-checkage.svg",
+    "motion": "../assets/engine-checkage.svg",
+    "poster_alt": "Outstanding Check Aging & Escheatment diagram: on the left a check register panel listing issued checks with their cleared amounts and cleared dates, beside a void register of voided, zero-dollar and stop-payment items; a centre panel re-deriving the outstanding set through the shared aging kernel -- nothing cleared, no cleared date, not withdrawn -- and aging each item to the as-of date across the six bands from 0-30 to 366+, with one item marked past the 180-day stale-dating threshold for follow-up and one marked past the 1,095-day dormancy period as unclaimed property; on the right an escheatment schedule addressed to the account's declared jurisdiction and a bank reconciliation whose outstanding-checks line is tied to the re-derived set rather than to the stated schedule; and a footer strip reading 20 controls, 7 families, 10,361 tests, read-only, SFS-E44-OCA.",
+    "caption": "The Outstanding Check Aging & Escheatment engine tile states the question that has to hold row by row: of everything issued, what has never cleared, how old it is against the file's own as-of date, and whether it is now a follow-up, an unclaimed-property filing, or a cancelled promise that should never have been on the schedule at all.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest checkage_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/check-aging-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/check-aging-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Outstanding Check Aging & Escheatment (SFS-E44-OCA) datasheet -- twenty deterministic, read-only controls over an entity's disbursement bank accounts: the outstanding set rebuilt from the check register through one shared aging kernel (nothing cleared, no cleared date, not withdrawn), every age, aging band and stale-dating marker re-derived to the file's own as-of date, the withdrawn checks classified, off the schedule and netted to zero with exact ==, the escheatment schedule proven to be exactly the items strictly past the dormancy period and addressed to each account's declared jurisdiction, and the bank reconciliation's outstanding-checks line tied to that re-derivation rather than to the stated schedule. 10,361 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

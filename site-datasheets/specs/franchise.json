@@ -1,0 +1,392 @@
+{
+  "num": 40,
+  "slug": "franchise",
+  "part_no": "SFS-E40-TXF",
+  "mnemonic": "TXF",
+  "family": "Franchise Tax",
+  "name": "Franchise Tax Combined Apportionment",
+  "tagline": "Is the tax on the combined return the tax the workpapers re-derive?",
+  "plain_summary": "A group of affiliated development companies files one combined franchise (margin) tax return each fiscal year in the fictional State of Marran, and three things have to happen together for that return to be defensible. The affiliate roster is redrawn -- last year's members, plus the affiliates that joined, minus the ones that left -- and every affiliate not included this year has to be enumerated with a reason rather than quietly dropped. Consolidated group revenue is taken from the tax trial-balance workpaper, reduced by the group's elected deduction to a taxable margin, and apportioned to Marran by a single receipts factor, in-state receipts over everywhere receipts. And the tax is a derived figure: margin times apportionment times rate, in that order. This engine reads the seven artifacts the combined return carries -- the affiliate register and address tab, the combined-group continuity workpaper, the consolidated trial balance, the single-factor receipts workpaper, the margin worksheet, the tax summary and the return rollup -- and runs twenty-one deterministic controls over them. Is the file complete and the review date readable, are the affiliate ids unique and each affiliate addressed, registered and carrying a known status, which registrations renew inside the file's own lead-time window, does the roster rebuild from the prior year plus additions less removals, is every member registered and every removal reconciled against the excluded list, is each trial-balance line well-formed, uniquely numbered and attributed to a current member, do the receipts rows hold in-state as a subset of everywhere, do the stated totals sum the rows, does the apportionment factor recompute and stay inside [0.00%, 100.00%], does group revenue tie the trial balance, do the margin, the apportioned margin and the tax re-derive, does the summarised tax recompute end to end from the workpapers, and does the return total tie the summary and the roster. Every cent is compared with exact ==, every factor and rate is truncating integer basis-point arithmetic, and no source artifact is ever written back.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A combined franchise return is the rare tax number that is fully derivable and almost never re-derived. Nothing on its face looks wrong when it goes wrong. An affiliate falls off the roster between filings and the return still foots -- it simply taxes a smaller group than the one that earned the revenue, and no line on the return says so. A revenue line is attributed to an affiliate that is not a current member, or carries an id another line already used, and the consolidated base is quietly over- or under-stated. The receipts factor is struck against a denominator that no longer sums the rows beneath it, so the apportioned margin is a share the receipts do not support, and the error is invisible because the factor itself is a clean-looking percentage. Then the margin, the apportioned margin, the tax, the summary and the return total are each carried forward from the figure above them rather than recomputed from the base facts underneath. The engine rebuilds the roster from the prior list and this year's changes, sums revenue from the trial-balance lines, recomputes the factor from the receipts rows rather than the stated totals, and takes the whole tax through the same margin kernel the data was derived with, comparing with exact ==. It ships a planted-defect file for every registered control and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each combined-return file. The first proves the others had something to read, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the combined-return file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES -- affiliate register, combined-group workpaper, consolidated trial balance, receipts factor, margin worksheet, tax summary and return rollup -- and FAILs a file carrying more than one of any, because the combined return holds exactly one of each. It also FAILs an unreadable as_of date, since the registration-renewal window is measured to it and never to the system clock. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence from reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "aff",
+      "label": "Affiliate Register",
+      "plain": "Checks the affiliate ids are unique and every affiliate is addressed, registered and carrying a known status, and flags registrations due to renew.",
+      "engineering": "Four controls. aff_unique_ids FAILs an affiliate id that appears twice, because that id is what joins the register to the roster, the trial balance and the receipts workpaper -- a duplicate makes a revenue line ambiguous about which affiliate earned it. aff_address_valid FAILs an affiliate missing any of street, city, state, postal code or registration id: the address tab is the return's proof that each member is an addressed, registered taxpayer, and a member the state cannot place cannot be admitted. aff_status_valid FAILs a status outside the active / inactive vocabulary, since standing is what membership rests on. aff_registration_renewal is a FLAG, not a failure: it marks a registration renewing after the as_of date and inside the file's own lead_days window, so the renewal is lodged before it lapses. It is the one REVIEW-severity control in the registry.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "grp",
+      "label": "Combined-Group Roster",
+      "plain": "Checks the roster rebuilds from the prior year plus additions less removals, that every member is registered, and that every removal is reconciled.",
+      "engineering": "Three controls. grp_roster_continuity rebuilds the current member list as last year's members union this year's additions, less this year's removals, sorted and de-duplicated, and FAILs a stated roster that is not exactly that -- a roster edited outside the prior-plus-changes discipline is how an affiliate slips into or vanishes from the combined base. A removal always wins over an addition of the same id. grp_members_registered FAILs a combined member with no entry on the affiliate register, since it would be a taxpayer with no address and no registration to be admitted on. grp_excluded_reconciled FAILs a removed affiliate that is not enumerated on the not-included-this-year list, one that is enumerated with no stated reason, and one that is on the excluded list and a current member at the same time.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "tb",
+      "label": "Consolidated Trial Balance",
+      "plain": "Checks every consolidated revenue line is well-formed, uniquely numbered, and attributed to a current combined member.",
+      "engineering": "Three controls. tb_required_fields FAILs a line missing its line id, affiliate id, account or revenue figure -- the fields every later control reads. tb_line_unique FAILs a line id that appears twice, because a shared id means one revenue figure was counted onto two lines and the workpaper can no longer prove the consolidated base is not double-counting a dollar. tb_member_known FAILs a line attributed to an affiliate that is not on the current roster: that is revenue pulled into the consolidated base from outside the group, or a stray line nobody mapped. The three are separate so a malformed line, a duplicated line and a misattributed line each name their own break.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "apt",
+      "label": "Receipts Apportionment",
+      "plain": "Checks the receipts rows are sound, the stated totals sum the rows, and both the receipts factor and the worksheet factor recompute.",
+      "engineering": "Four controls. apt_receipts_sound FAILs a row whose in-state receipts exceed its everywhere receipts, since in-state is a subset of everywhere, and requires both figures to be integer cents -- a missing everywhere figure is a denominator that never existed. apt_totals_tie_receipts FAILs stated in-state or everywhere totals that do not sum the rows beneath them, because the factor is struck against those two totals and is wrong before the division happens. apt_factor_recomputes FAILs a stated factor_bps that is not in-state over everywhere floored to a basis point, and separately FAILs a factor outside [0.00%, 100.00%]. apt_worksheet_factor_recomputes FAILs when the margin worksheet applied a factor other than the one the receipts workpaper recomputes, which is a margin apportioned by a share the receipts do not support.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "mgn",
+      "label": "Margin and Tax Derivation",
+      "plain": "Checks group revenue ties the trial balance and that the margin, the apportioned margin and the tax each re-derive.",
+      "engineering": "Four controls, one per link in the chain. mgn_revenue_ties_tb is the base-completeness control: the worksheet's group revenue must be the sum of the consolidated trial-balance lines, and a dropped line is a revenue base short of the workpaper with the tax short behind it. mgn_margin_recomputes FAILs a taxable margin that is not revenue less the elected deduction clamped at zero -- an election larger than revenue leaves a zero margin, never a negative tax. mgn_apportioned_recomputes re-derives the apportioned margin against the factor recomputed from the receipts, deliberately not the worksheet's stated factor, in truncating basis-point arithmetic. mgn_tax_recomputes FAILs a tax that is not the apportioned margin at the margin-tax rate, and owns the unreadable-rate finding. Each is compared to the cent with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Return Rollup",
+      "plain": "Checks the summarised tax recomputes end to end from the workpapers and that the return total ties the summary and the roster.",
+      "engineering": "Two controls. rpt_summary_recomputes is the control the engine exists for: a tax summary is a determination, and a determination that is not recomputed is an assertion. It rebuilds the whole tax from base facts -- revenue summed from the trial-balance lines, the elected deduction and rate read from the worksheet, the factor recomputed from the receipts rows rather than their stated totals, then margin, apportioned margin and tax through the shared kernel -- and compares to the summarised figure. It stands down when the rate is unreadable, because mgn_tax_recomputes owns that. rpt_report_totals_tie FAILs a return whose total tax due is not the summary's tax, or whose stated combined-member count is not the length of the roster, catching a total maintained beside the summary rather than derived from it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Return Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional combined-return files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every named control, twenty-three files in total. Only the affiliate register, the roster's prior-year members and this year's additions and removals, the consolidated trial-balance revenue lines, the receipts rows and the group's elected deduction and rate are stated as base facts; the current member list, the receipts totals and apportionment factor, group revenue, the taxable margin, the apportioned margin, the tax, the tax summary and the return totals are all re-derived through the same margin kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the combined-return file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate of one, and FAILs an unreadable as_of date, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "aff-control",
+      "label": "Affiliate Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every affiliate unique, addressed, registered and in standing",
+      "engineering": "Four controls: unique affiliate ids, a complete address and registration id on every row, a status inside the active / inactive vocabulary, and a FLAG on any registration renewing inside the file's own lead-time window measured to the as_of date.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "grp-control",
+      "label": "Combined-Group Roster",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does the roster rebuild and is every exclusion reconciled",
+      "engineering": "Three controls: the stated member list equals the prior year plus additions less removals, every member is an affiliate on the register, and every removal is enumerated on the excluded list with a reason and is not also a current member.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "tb-control",
+      "label": "Consolidated Trial Balance",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is every revenue line well-formed, unique and attributable",
+      "engineering": "Three controls: each line carries its id, affiliate, account and revenue figure; no line id repeats; and every line is attributed to a current combined member rather than to an affiliate outside the group.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "apt-control",
+      "label": "Receipts Apportionment",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the single receipts factor recompute and stay bounded",
+      "engineering": "Four controls: in-state receipts never exceed everywhere receipts on a row, the stated totals sum those rows, the factor is in-state over everywhere floored to a basis point and bounded to [0.00%, 100.00%], and the margin worksheet applied that same recomputed factor.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "mgn-control",
+      "label": "Margin and Tax Derivation",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does revenue tie the trial balance and the tax re-derive",
+      "engineering": "Four controls: group revenue sums the consolidated trial-balance lines, the taxable margin is revenue less the elected deduction clamped at zero, the apportioned margin is that margin at the recomputed receipts factor, and the tax is the apportioned margin at the margin-tax rate, each in truncating basis-point arithmetic compared with exact ==.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Return Rollup",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the determination recompute from the workpapers it summarises",
+      "engineering": "Two controls: the summarised tax is rebuilt end to end from the base facts -- trial-balance revenue, the elected deduction, the recomputed receipts factor and the rate -- and compared to the stated figure; and the return's total tax due and combined-member count tie the summary and the roster.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Workpapers & Margin Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and the one computation every rule resolves against",
+      "engineering": "The affiliate register carries each affiliate's address, registration id, status and renewal date; the combined-group workpaper carries prior-year members, additions, removals, the current member list and the excluded rows; the consolidated trial balance carries the revenue lines by affiliate; the receipts workpaper carries in-state and everywhere receipts by affiliate with the totals and the factor; the margin worksheet carries group revenue, the elected deduction, the taxable margin, the applied factor, the apportioned margin, the rate and the tax; and the tax summary and return rollup carry the determination and the filed total. Every roster, tie-out, apportionment and re-derivation control resolves against these through the shared margin kernel, so a recomputed tax cannot disagree with the arithmetic that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per combined-return file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/franchise_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "return files" },
+    { "from": "corpus", "to": "aff-control", "label": "return files" },
+    { "from": "corpus", "to": "grp-control", "label": "return files" },
+    { "from": "corpus", "to": "tb-control", "label": "return files" },
+    { "from": "corpus", "to": "apt-control", "label": "return files" },
+    { "from": "corpus", "to": "mgn-control", "label": "return files" },
+    { "from": "corpus", "to": "rpt-control", "label": "return files" },
+    { "from": "aff-control", "to": "registers", "label": "resolves" },
+    { "from": "grp-control", "to": "registers", "label": "resolves" },
+    { "from": "tb-control", "to": "registers", "label": "resolves" },
+    { "from": "apt-control", "to": "registers", "label": "resolves" },
+    { "from": "mgn-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "mgn-control", "to": "rpt-control", "label": "recomputed tax" },
+    { "from": "set-control", "to": "report", "label": "findings" },
+    { "from": "apt-control", "to": "report", "label": "findings" },
+    { "from": "mgn-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,344",
+      "source": "python -m pytest --collect-only -q -o addopts= (franchise-tax-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "21",
+      "source": "len(franchise_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every combined-return file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in franchise_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Return files",
+      "value": "23",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-two planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(franchise_engine.model.DOC_TYPES)",
+      "plain": "affiliate register, combined-group workpaper, consolidated trial balance, receipts factor, margin worksheet, tax summary, return rollup"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "franchise_engine/tests boundary tests on the cent and the basis point",
+      "plain": "a tax a cent off the re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A group of affiliated development companies files one combined franchise (margin) tax return each fiscal year in the fictional State of Marran. The return is not one entity's; it is the whole group's, apportioned to Marran by a single receipts factor, and preparing it means three things happen together. The combined group is redrawn -- last year's members, plus the affiliates that joined, minus the ones that left -- and every affiliate not included this year has to be enumerated with a reason, because an affiliate that quietly falls off the roster is revenue that leaves the combined base with nobody noticing. The margin is apportioned -- consolidated group revenue from the tax trial balance, reduced by the group's elected deduction, scaled by in-state receipts over everywhere receipts -- so a factor struck against a denominator that does not sum its rows is a tax computed on numbers nobody reconciled. And the tax itself is derived: margin times apportionment times rate, in that order, each step a place a figure can be carried forward instead of recomputed. None of the failures look wrong on the return. A member with no registration, a revenue line attributed outside the group, a line id used twice, a base that does not tie the trial balance, a margin that does not re-derive from the deduction, a summary that does not recompute from the workpapers -- each foots on its own face. They are also not judgment calls. They are set equalities and integer comparisons -- a roster against prior plus additions less removals, a total against the sum of its rows, a factor against in-state over everywhere floored to a basis point, a tax against the apportioned margin at the rate with exact == -- which a deterministic control settles better than a workbook inherited by whoever prepares the return this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every combined-return file",
+      "narrative": "The CLI generates twenty-three fictional combined-return files -- one clean baseline and one carrying each of the twenty-two planted defects -- then runs all twenty-one controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (franchise-tax-automation/); franchise_engine/tests planted-defect suite"
+    },
+    {
+      "title": "An affiliate leaves the group and the roster still rebuilds",
+      "narrative": "In the baseline, AFF-04 is removed from the combined group and AFF-05 joins, so the stated roster must equal the prior four members plus the addition less the removal. One defect file adds a stray prior-year member without touching the stated list, and grp_roster_continuity fails with both the stated roster and the rebuilt one; another empties the excluded list, and grp_excluded_reconciled fails because the removal is no longer enumerated with a reason.",
+      "source": "franchise_engine/generate.py DEFECTS roster_discontinuity / excluded_unreconciled"
+    },
+    {
+      "title": "The determination is recomputed, not read back",
+      "narrative": "A defect file moves the summarised tax by one cent and moves the return total with it, so the rollup is internally consistent and only a recomputation can see the break. rpt_summary_recomputes rebuilds the tax from the trial-balance revenue, the elected deduction, the factor recomputed from the receipts rows and the rate, and fails against the stated figure -- proving the summary is derived from the workpapers rather than trusted as filed.",
+      "source": "franchise_engine/generate.py DEFECTS summary_recompute_break -> rpt_summary_recomputes"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-one controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "franchise_report.json, franchise_report.md, samples/"
+    },
+    {
+      "cmd": "python -m franchise_engine samples",
+      "operation": "analyze an existing folder of combined-return files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m franchise_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest franchise_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10344 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,344",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (franchise-tax-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "21",
+      "unit": "controls",
+      "source": "len(franchise_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "22",
+      "unit": "defect files",
+      "source": "len(franchise_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "franchise_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the workpapers they were given: the file is complete, every affiliate is uniquely identified, addressed, registered and in a known standing, the roster rebuilds from the prior year and every exclusion is reconciled, every consolidated revenue line is well-formed and attributed to a current member, the receipts totals sum their rows and the apportionment factor recomputes inside its bound, and the margin, the apportioned margin, the tax, the summary and the return total all re-derive from the base facts beneath them. It is not an opinion on whether the group is correctly drawn under the state's combination rules, whether the elected deduction is the right election, whether the margin-tax rate applied is the right rate for the year, or whether the receipts were sourced to the right state.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean combined-return file into the documented sign-off and filing review"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an affiliate registration renewing inside the file's lead-time window lands here, current but due to be lodged"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried onto the return until the failing control is cleared -- a roster that does not rebuild, an unreconciled exclusion, a member with no registration, a base that does not tie the trial balance, a factor or a tax that does not recompute"
+      }
+    ],
+    "guarantees": [
+      "Read-only: combined-return files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a tax figure, and a cent off the re-derivation is reported as a break.",
+      "A money field that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One margin kernel: the controls and the generator share the kernel in franchise_engine.franchise, so a re-derived tax cannot disagree with the data that produced it.",
+      "The apportionment factor is recomputed from the receipts rows and floored to a basis point, bounded to [0.00%, 100.00%]; flooring can only understate the share the state may tax, never overstate it.",
+      "Every registration-renewal test is measured to the as_of date carried in the file, never to the system clock, so the same file yields the same flags on any day.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a figure is carried onto the combined return and whether a registration or an exclusion is chased."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never files a return, remits a tax, amends a workpaper, contacts a revenue authority, or writes to a source artifact. It reads the combined-return file and stops.",
+      "source": "franchise-tax-automation/README.md and franchise_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the combined return emits. It does not connect to a general ledger, a consolidation system, a registration registry or a filing portal.",
+      "source": "franchise_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the roster rebuilds from the prior year plus additions less removals and that every exclusion is reconciled; it does not decide whether the group is correctly drawn under the state's combination and nexus rules. That judgment is a preparer's and a reviewer's.",
+      "source": "franchise_engine/engine.py grp_ family"
+    },
+    {
+      "statement": "It re-derives the tax at the elected deduction and the margin-tax rate the file carries, and apportions at the receipts factor those receipts produce; it does not decide whether that election, that rate, or the sourcing of a receipt to the filing state is correct.",
+      "source": "franchise_engine/engine.py apt_ and mgn_ families"
+    },
+    {
+      "statement": "It takes the trial balance and receipts records at face value: it confirms they foot, tie and re-derive, not that the revenue was earned or the receipts sourced as stated. All shipped data is fictional -- the combined group, the affiliates, the State of Marran and City of Kelder, the addresses and registrations are invented, and the fiscal year is set in a fictional future.",
+      "source": "franchise_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-franchise.svg",
+    "motion": "../assets/engine-franchise.svg",
+    "poster_alt": "Franchise Tax Combined Apportionment diagram: on the left the combined-group roster rebuilt as prior-year members plus additions less removals, with the removed affiliate carried onto an enumerated excluded list; in the centre the consolidated trial-balance revenue lines summing to group revenue, the elected deduction reducing it to a taxable margin, and the single receipts factor struck as in-state over everywhere receipts and bounded to [0.00%, 100.00%]; on the right the apportioned margin taken at the margin-tax rate to the franchise tax, tied to the tax summary and the return total over the combined-member count; and a footer strip reading 21 controls, 7 families, 10,344 tests, read-only, SFS-E40-TXF.",
+    "caption": "The Franchise Tax Combined Apportionment engine tile states the chain that has to hold end to end: the roster rebuilds from the prior year, group revenue ties the consolidated trial balance, the single receipts factor recomputes inside its bound, and the margin, the apportioned margin, the tax and the return total are each re-derived from the workpapers rather than carried forward.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest franchise_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/franchise-tax-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/franchise-tax-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Franchise Tax Combined Apportionment (SFS-E40-TXF) datasheet -- twenty-one deterministic, read-only controls over a combined-group franchise (margin) tax return: the affiliate roster rebuilt as prior-year members plus additions less removals with every exclusion enumerated and reconciled, each member addressed and registered, consolidated group revenue tied to the tax trial balance, the single receipts apportionment factor recomputed as in-state over everywhere and bounded to [0.00%, 100.00%], and the taxable margin, apportioned margin, tax, summary and return total all re-derived through one margin kernel with exact ==. 10,344 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

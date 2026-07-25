@@ -1,0 +1,393 @@
+{
+  "num": 42,
+  "slug": "unitsales",
+  "part_no": "SFS-E42-USM",
+  "mnemonic": "USM",
+  "family": "Sales Administration",
+  "name": "Unit Sales & Commission Tie-Out",
+  "tagline": "Does the Matrix still tie to the tabs that feed it?",
+  "plain_summary": "A residential for-sale project is administered out of one workbook, instantiated from the same template on every project, and that workbook has to prove itself row by row. The Matrix tab carries every unit -- plan, plan square footage, list price, sales price, concession, revenue per square foot, closing costs and total selling commission. The Sold/Close tab logs the offer date, the actual date sold, the closing date and whether proof of closing came back. The Commission Log splits each unit's total commission across the named selling agents who earned it. This engine reads the seven artifacts that record emits -- the plan register, the Matrix, the commission schedule, the Sold/Close log, the agent register, the Commission Log and the sales rollup -- and runs twenty-one deterministic controls over them. Is the file complete and the review date readable, are the plan codes unique and every plan area a positive whole count, is every Matrix row complete, uniquely identified, on a declared plan and in a known status, does revenue per square foot re-derive as the sales price over the plan area, does net proceeds re-derive as price less concession less closing costs, does the concession sit inside the price it discounts, was the discount to list inside the sales office's own band, is the unit's sale channel priced on the commission schedule, does the total commission re-derive as the channel rate on the sales price, do the Commission-Log splits sum to exactly the total the Matrix authorised, is every payee in the agent register, do the sold units reconcile one-to-one to the Sold/Close tab in offer-sale-closing order with proof on file, and do the rollup's sold count, revenue totals and commission total recompute from the Matrix beneath them. Every derived figure is compared with exact == in integer cents, truncation is the contract in both directions so a floored derivation can be compared to a stated figure without a tolerance band, every closing test is measured to the review date the file carries rather than the system clock, and no source artifact is ever written.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The Matrix foots, which is exactly why nobody re-adds it. A derived column is a formula until somebody types over one cell of it for one unit, and from that moment the column is a mixture of computed and typed figures that no longer follows from the prices beside it -- and the mixture is invisible on a printed tab. The Commission Log keeps paying a total the Matrix no longer authorises: a split edited after the fact, or an agent added without reducing another, pays an amount no row approved, and because one template is instantiated on every project the same cent recurs on every unit it produced. And the tabs quietly stop reconciling -- a unit marked sold that never reaches the Sold/Close tab, a closing logged with the sale date before the offer that produced it, a rollup that leaves the sales office carrying a count the Matrix does not support. None of those look wrong on the tab. The engine rebuilds every derived figure -- revenue per square foot, net proceeds, total commission, each agent's split in cents and all three rollup totals -- from the base prices through the same tie-out kernel that produced the data, compares with exact == in integer cents, reconciles the Sold/Close tab in both directions, ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Seven control families run in registry order over each sales file. The first proves the others had something to read and that the review date is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the sales file carries every artifact the controls below read, exactly once, and that the review date is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES -- plan register, unit Matrix, commission schedule, Sold/Close log, agent register, Commission Log, sales rollup -- and FAILs a file carrying more than one of any, because a sales file holds exactly one of each. It also FAILs an unreadable as_of, since every closing and proof test is measured to that stated review date and never to the system clock. Every downstream rule returns nothing when the artifact it reads is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "plan",
+      "label": "Plan Register",
+      "plain": "Checks the plan codes are unique and every plan carries a positive whole square footage.",
+      "engineering": "Two controls. plan_unique_codes FAILs a plan code that appears twice: the plan code is how a Matrix row finds its square footage, a duplicate makes that area ambiguous, and revenue per square foot is only as sound as the denominator it divided by. plan_sqft_positive FAILs a plan whose area is zero, negative or not a whole count -- a zero area is not a small plan, it is a denominator, and the revenue-per-square-foot column above it is meaningless until it is fixed. Membership and soundness are deliberately separated: a declared plan carrying a broken area is still declared, so the units naming it are not also reported as pointing at a plan that does not exist. That break belongs to this family, not to the Matrix rows above it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "unit",
+      "label": "Matrix Rows",
+      "plain": "Checks every Matrix row is complete, uniquely identified, on a declared plan and in a known status.",
+      "engineering": "Four controls. unit_required_fields FAILs a row missing unit id, building, plan code, sale channel or status -- the descriptive fields every other control reads. unit_unique_ids FAILs a unit id that appears twice, because the id is what joins the Matrix to the Sold/Close tab and to the Commission Log: a duplicate makes a closing ambiguous about which unit closed and a split ambiguous about which row authorised it. unit_plan_defined FAILs a row naming a plan the register does not declare, which would otherwise leave the revenue-per-square-foot control skipping that row and the Matrix carrying an untested column. unit_status_valid FAILs a status outside available, reserved and sold, since status is what obliges a unit to appear on the Sold/Close tab and what puts it into the rollup -- an unknown status is a unit that is neither counted nor reconciled, and it disappears between the two.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "price",
+      "label": "Price Re-Derivation",
+      "plain": "Checks revenue per square foot and net proceeds re-derive from the prices beside them, the concession sits inside the price, and the discount to list stayed in the approved band.",
+      "engineering": "Four controls. price_rev_per_sqft_recomputes rebuilds the sales price over the plan area with flooring division and compares with exact ==; this is the column the sales office reports to the market and an appraiser reads back, and it is a formula until one cell of it is typed over. price_concession_within_price FAILs a negative concession -- a charge to the buyer entered in the discount column -- and a concession above the sales price, which is a unit conveyed for a negative number; the band is inclusive at both ends, so a concession exactly equal to the price is admissible and the cent past it is not. price_net_proceeds_recomputes rebuilds sales price less concession less closing costs and compares with exact ==, deliberately unbounded below, because a unit that closes for less than it costs to close is a real outcome and clamping it at zero would hide the one row worth reading. price_discount_to_list is a FLAG, not a failure: it marks a sold unit discounted past the file's own max_discount_bps -- the price was struck and the sale is real, but the discount sat outside the sales office's own authority and wants a signature behind it. The discount is floored, so the band never flags a unit on a rounding artifact, and it is inclusive at the band.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "comm",
+      "label": "Commission and Split",
+      "plain": "Checks the sale channel is priced on the schedule, the total commission re-derives, the Commission Log splits it exactly, and every payee is registered.",
+      "engineering": "Four controls. comm_rate_defined FAILs a unit sold through a channel the commission schedule does not price -- without the rate the engine knows a commission was booked but not what rate should have produced it, and the re-derivation below would silently skip the row. comm_total_recomputes applies the channel rate to the sales price with truncating basis-point arithmetic and compares with exact ==; the Matrix commission column is what the Commission Log divides, so a commission that does not re-derive misstates every split beneath it. comm_splits_tie is the control the engine exists for: the log is what names an agent and an amount, the Matrix row is what authorised the total, and the two are compared in integer cents with exact == -- a cent of drift is a cent paid to nobody or a cent paid twice, and it recurs on every unit the template produced. It also FAILs a Commission-Log row on a unit the Matrix does not carry, since no row authorised that total. comm_agent_known FAILs a split paid to an id nobody registered -- a commission with no payee behind it, which ties to the Matrix total perfectly while doing so.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "close",
+      "label": "Sold/Close Reconciliation",
+      "plain": "Checks sold units reconcile one-to-one to the Sold/Close tab, the dates run offer, sale, closing, and proof of closing is on file once it is due.",
+      "engineering": "Three controls. close_sold_reconciles runs both directions, because both directions happen: a unit marked sold with no closing row is revenue the Matrix claims and the tab cannot evidence, and a closing row for a unit the Matrix does not call sold is a settled sale nobody counted -- the second is the harder one to notice and it is the one that leaves a closing out of the period. close_date_order FAILs an unreadable offer, sale or closing date, and FAILs a sequence that does not run offer <= sale <= closing; same-day is admissible at both steps, and whichever of the three dates is wrong is the one the revenue cut-off used. close_proof_received is a FLAG, not a failure: the sale closed and what is missing is the evidence of it. Proof falls due the moment the closing date arrives, measured against the file's own as_of, so a unit closing after the review date is not yet late and a unit closing exactly on it already owes its proof.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Rollup Tie-Out",
+      "plain": "Checks the rollup's sold count, revenue totals and commission total recompute from the Matrix they summarise.",
+      "engineering": "Three controls. rpt_sold_count_ties FAILs a stated sold-unit count that is not the Matrix recount; the number that reaches an investor letter is a count, and a count maintained beside the Matrix rather than derived from it drifts the first time a unit status moves and nobody re-adds the column. It reads no amounts on purpose, so a malformed cent somewhere else cannot cost the file its count. rpt_revenue_ties sums sales price and net proceeds over the sold rows of the Matrix and FAILs either total that does not tie -- two totals in one control because they are the same summation over the same rows, and a rollup that agreed on one and not the other would still be a rollup nobody re-added. rpt_commission_ties sums the Matrix commission column over every unit rather than only the sold ones, because an unsold unit carries no commission and a rollup that quietly skipped rows would hide the one that does.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Sales Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional for-sale sales files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-three files in total. Only the plans, the commission schedule, the unit base prices, the Sold/Close dates and the agent split weights are stated; revenue per square foot, net proceeds, total commission, each agent's split in cents and the three rollup totals are re-derived through the same tie-out kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data. A defect that moves a base fact re-derives the Matrix and keeps the break confined to one control; a defect that targets a derived figure edits that cell alone.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the sales file complete and the review date legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate of one, and FAILs an unreadable as_of, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "plan-control",
+      "label": "Plan Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is every plan code unique and every plan area real",
+      "engineering": "Two controls: no plan code appears twice, and every plan carries a positive whole square footage -- the denominator revenue per square foot divides by.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "unit-control",
+      "label": "Matrix Rows",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is every Matrix row well-formed, unique and typed",
+      "engineering": "Four controls: the required descriptive fields are present, unit ids are unique, every row names a declared plan, and every status is one of available, reserved or sold.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "price-control",
+      "label": "Price Re-Derivation",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the price arithmetic on the row re-derive",
+      "engineering": "Four controls: revenue per square foot is the sales price over the plan area floored, net proceeds is price less concession less closing costs, the concession sits inside the price it discounts, and a sold unit discounted past the file's own band is flagged for a signature.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "comm-control",
+      "label": "Commission and Split",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the commission re-derive and does the log split it exactly",
+      "engineering": "Four controls: the sale channel is priced on the schedule, the total commission is the channel rate on the sales price with truncating basis-point arithmetic, the Commission-Log splits sum to that total with exact ==, and every payee is in the agent register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "close-control",
+      "label": "Sold/Close Reconciliation",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "do the sold units and the closings reconcile both ways",
+      "engineering": "Three controls: every unit marked sold has a closing row and every closing row names a unit the Matrix marks sold, the offer, sale and closing dates run forward, and a closing whose date has arrived carries its proof of closing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Rollup Tie-Out",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the rollup recompute from the Matrix it summarises",
+      "engineering": "Three controls: the sold-unit count is recounted from the Matrix, the sales price and net proceeds totals are summed over the sold rows, and the commission total is summed over the whole commission column.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Matrix, Schedule & Registers",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and rates every rule resolves against",
+      "engineering": "The plan register carries each plan's code, name and square footage; the Matrix carries each unit's plan, sale channel, status, list price, sales price, concession, closing costs and the three derived columns; the commission schedule carries the basis-point rate per sale channel; the Sold/Close log carries the offer, sale and closing dates and the received-proof flag; the agent register names every payee a split can reach; the Commission Log carries each split's basis-point weight and its cents; and the file itself carries the review date and the approved discount band. Every price, commission, closing and rollup control resolves against these through the shared tie-out kernel.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per sales file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/sales_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "sales files" },
+    { "from": "corpus", "to": "plan-control", "label": "sales files" },
+    { "from": "corpus", "to": "unit-control", "label": "sales files" },
+    { "from": "corpus", "to": "price-control", "label": "sales files" },
+    { "from": "corpus", "to": "comm-control", "label": "sales files" },
+    { "from": "corpus", "to": "close-control", "label": "sales files" },
+    { "from": "corpus", "to": "rpt-control", "label": "sales files" },
+    { "from": "set-control", "to": "registers", "label": "resolves" },
+    { "from": "plan-control", "to": "registers", "label": "resolves" },
+    { "from": "unit-control", "to": "registers", "label": "resolves" },
+    { "from": "price-control", "to": "registers", "label": "resolves" },
+    { "from": "comm-control", "to": "registers", "label": "resolves" },
+    { "from": "close-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "price-control", "to": "comm-control", "label": "sales price" },
+    { "from": "comm-control", "to": "report", "label": "findings" },
+    { "from": "close-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,355",
+      "source": "python -m pytest --collect-only -q -o addopts= (unit-sales-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "21",
+      "source": "len(sales_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every sales file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in sales_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Sales files",
+      "value": "23",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-two planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(sales_engine.model.DOC_TYPES)",
+      "plain": "plan register, Matrix, commission schedule, Sold/Close log, agent register, Commission Log, sales rollup"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "sales_engine/tests boundary tests on the cent, the basis point and the day",
+      "plain": "a derived figure a cent off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A residential for-sale project -- condo or townhome -- is administered out of one workbook, instantiated from the same template on every project, and the same three failures recur in each instantiation. The Matrix tab carries every unit: plan, plan square footage, list price, sales price, concession, revenue per square foot, closing costs and total selling commission. The Sold/Close tab logs the offer date, the actual date sold, the closing date and whether proof of closing came back. The Commission Log splits each unit's total commission across the named selling agents who earned it. First, a derived column stops deriving: revenue per square foot, net proceeds and total commission are formulas until somebody types over one of them for a single unit, and from then on the column is a mixture of computed and typed figures that no longer follows from the prices beside it -- and the mixture is invisible on a printed tab. Second, the commission splits stop adding up: the log pays named agents, the sum of the splits on a unit is meant to be the total the Matrix authorised, and a split edited after the fact or an agent added without reducing another leaves the log paying an amount no row ever approved. Third, the tabs stop reconciling: a unit is marked sold and never reaches the Sold/Close tab, a closing is logged with the sale date before the offer date, or the rollup that leaves the sales office states a count and a revenue total the Matrix does not support. None of these are judgment calls. They are equalities and comparisons -- a stated figure against its re-derivation with exact == in integer cents, a set of splits against the total it divides, a set of sold ids against a set of closing ids in both directions, three dates against each other with <= -- which a deterministic control settles better than a workbook inherited by whoever administers sales this quarter.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every sales file",
+      "narrative": "The CLI generates twenty-three fictional sales files -- one clean baseline and one carrying each of the twenty-two planted defects -- then runs all twenty-one controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (unit-sales-automation/); sales_engine/tests planted-defect suite"
+    },
+    {
+      "title": "The splits are compared against the row that authorised them",
+      "narrative": "A defect file shortens one agent's split on UNIT-105 by a hundred dollars and leaves every other figure untouched, so the Commission Log still looks internally orderly and the Matrix still foots. comm_splits_tie sums the three logged splits on the unit, compares them in integer cents with exact == to the total commission the Matrix row authorised, and reports the shortfall against the row that approved it.",
+      "source": "sales_engine/generate.py DEFECTS agent_split_short -> comm_splits_tie"
+    },
+    {
+      "title": "The Sold/Close reconciliation runs both ways",
+      "narrative": "One defect file deletes the closing row for UNIT-104 while the Matrix still marks it sold, and close_sold_reconciles reports revenue the Matrix claims that the tab cannot evidence. The same control tests the other direction on every file -- a closing row for a unit the Matrix does not call sold -- which is the harder break to notice and the one that leaves a settled sale out of the period.",
+      "source": "sales_engine/generate.py DEFECTS close_row_missing -> close_sold_reconciles"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-one controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "sales_report.json, sales_report.md, samples/"
+    },
+    {
+      "cmd": "python -m sales_engine samples",
+      "operation": "analyze an existing folder of sales files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m sales_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest sales_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10355 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,355",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (unit-sales-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "21",
+      "unit": "controls",
+      "source": "len(sales_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "22",
+      "unit": "defect files",
+      "source": "len(sales_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "sales_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the workbook they were given: every plan area is a real denominator, every Matrix row is complete and uniquely identified, revenue per square foot, net proceeds and total commission each recompute from the prices beside them, the Commission-Log splits sum to exactly the total the Matrix authorised and every payee is registered, the sold units and the closing rows reconcile one-to-one in offer-sale-closing order with proof on file, and the rollup's count and totals recompute from the Matrix. It is not an opinion on whether a price was the right price, whether a discount should have been granted, whether an agent earned the split the weights gave them, whether a sale actually occurred, or where the proceeds land in the general ledger.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean sales file into the documented sales-administration review and sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a sold unit discounted past the approved band and a due closing whose proof has not come back both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the figure is not carried into the rollup or the commission run until the failing control is cleared -- a derived column that does not recompute, a split that does not tie, an unreconciled closing, a date sequence that runs backwards, or a rollup total that does not foot"
+      }
+    ],
+    "guarantees": [
+      "Read-only: sales files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a derived figure, and a cent off the re-derivation is reported as a break.",
+      "One tie-out kernel: the controls and the generator share the arithmetic in sales_engine.tieout, so a derived column cannot disagree with the data that produced it.",
+      "Truncation is the contract in both directions -- revenue per square foot floors and the commission rate is applied with truncating basis-point arithmetic -- so a derived figure can be compared to the stated figure with exact ==.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Every closing and proof test is measured to the review date the file carries, never to the system clock, so a run in a later month returns the same findings.",
+      "Commission splits are allocated by the largest-remainder method, so the residual cent lands on one named agent rather than disappearing into the rounding.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether a commission is released, a closing is chased and a rollup is sent."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts a journal entry, releases a commission payment, files a closing statement or writes to a source artifact. It reads the sales file and stops.",
+      "source": "unit-sales-automation/README.md and sales_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the sales-administration record emits. It does not connect to a general ledger, an escrow or title system, a payroll or commission-payment run, or the underlying purchase contracts.",
+      "source": "sales_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It proves the Matrix is internally true, not that a price was the right price or that a discount past the approved band should have been granted. Whether a struck price is commercially sound is a judgment the flag routes to a person.",
+      "source": "sales_engine/engine.py price_discount_to_list"
+    },
+    {
+      "statement": "It re-derives every commission at the basis-point rate the file's own commission schedule carries for the unit's sale channel; it does not decide whether that rate, that channel or that split weight is the one the agent's agreement provides for.",
+      "source": "sales_engine/engine.py comm_rate_defined and comm_total_recomputes"
+    },
+    {
+      "statement": "It takes the Sold/Close records at face value: it confirms the tabs reconcile and the dates run forward, not that a sale or a settlement actually occurred. All shipped data is fictional -- the developers, projects, plans, unit numbers, selling agents, prices and closing dates are invented, and the sales period is set in a fictional future.",
+      "source": "sales_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-unitsales.svg",
+    "motion": "../assets/engine-unitsales.svg",
+    "poster_alt": "Unit Sales and Commission Tie-Out diagram: on the left a dark Matrix-row card for a sold unit on plan PL-C3 sold through the co-broke channel; a centre panel listing the row tie-out -- revenue per square foot as the sales price over the plan area floored, net proceeds as price less concession less closing costs, total commission as the channel basis-point rate on the sales price, the Commission-Log splits summing to that total with exact ==, and the sold units reconciling both ways to the Sold/Close tab -- with one red line for a split short of the total the Matrix authorised and one amber line for a due closing whose proof is not on file; a FAIL verdict panel on the right; a lower chain reading Commission Log ties to the Matrix commission column which sums to the sales rollup; and a footer strip reading 21 controls, 7 families, 10,355 tests, read-only, SFS-E42-USM.",
+    "caption": "The Unit Sales and Commission Tie-Out engine tile states the question that has to hold row by row: every derived column on the Matrix recomputed from the prices beside it, every Commission-Log split summing to the total that row authorised, every sold unit reconciled both ways to the Sold/Close tab, and the rollup recomputed from the Matrix beneath it.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest sales_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/unit-sales-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/unit-sales-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Unit Sales & Commission Tie-Out (SFS-E42-USM) datasheet -- twenty-one deterministic, read-only controls over a for-sale housing project's sales-administration workbook: the plan register and Matrix proved sound row by row, revenue per square foot, net proceeds and total commission re-derived in integer cents from the prices and the channel basis-point rate beside them, the Commission-Log splits tied with exact == to the total the Matrix authorised and every payee registered, the sold units reconciled both ways to the Sold/Close tab in offer-sale-closing order with proof measured to the file's own review date, and the rollup's count, revenue and commission totals recomputed from the Matrix. 10,355 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

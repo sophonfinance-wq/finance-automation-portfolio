@@ -1,0 +1,431 @@
+{
+  "num": 43,
+  "slug": "gaalloc",
+  "part_no": "SFS-E43-GAA",
+  "mnemonic": "GAA",
+  "family": "Cost Allocation",
+  "name": "G&A Expense Allocation",
+  "tagline": "Did the whole pool leave the holding entity, and land where the drivers say?",
+  "plain_summary": "A management or holding entity carries the group's shared cost -- corporate G&A, shared overhead, the postage meter -- and none of it belongs to it. Every month a recurring workbook turns a column of driver counts into a column of percentages, multiplies them by that month's cost pool, and generates the journal entry that pushes the cost out to the operating entities and projects that consumed it. The workbook is copied forward every month, which is exactly why it drifts. This engine reads the eight artifacts that workbook emits -- the month calendar, the recipient lookup, the driver tab, the cost-pool ledger, the allocation schedule, the allocation journal, the postage log and the year-to-date rollup -- and runs twenty-two deterministic controls over them. Is the file complete, does the year run month by month with every tab present and stamped to its own month end, is the recipient lookup sound and does it exclude the holding entity that cannot allocate to itself, is the driver tab whole and does it cover every recipient in every month, does the cost pool add to its components and did it step month over month, do the shares sum to exactly 10000 basis points and re-derive from the drivers, do the allocated amounts tie the pool and re-derive as pool times share, does the generated entry balance, tie the re-derived allocation and net to zero at consolidation, does the postage split reconcile to the physical meter, and does the year-to-date rollup recompute from the tabs beneath it. It compares every figure with exact ==, splits by largest remainder so the residual cent lands in exactly one place, measures every accounting date against the period stamped in the file rather than the system clock, and never writes to a source artifact.",
+  "rev": "2026-07-24",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A G&A allocation is the least-audited schedule in a group's close, because it looks like the safest: a column of percentages, a cost pool, and a formula between them. That is exactly why it drifts. None of the ways it goes wrong look wrong on the face of the tab. The share column sums to 99.97% and quietly leaves cost behind in the holding entity, every month, for as long as the workbook is copied forward. Two shares are moved against each other, the column still sums to 100.00%, and the split is no longer the one the drivers support. Two recipients' amounts are transposed, the column still ties the pool to the cent, and the cost has landed on the wrong books. The entry balances and no longer matches the schedule it was posted from, because a debit was retyped and the credit was moved with it. An entity is charged and relieved inside one entry, so both sides inflate and nothing actually moves. A month is never rolled, or is rolled and stamped to the date of the month it was copied from, so real cost posts into the wrong period. The engine rebuilds every share from the driver counts, every amount from the share and the pool, and the entry from both, through the same kernel that produced the data, and compares with exact ==. It ties the postage component to the physical meter, the only figure in the workbook with a counter behind it. It ships a planted-defect file for every registered control, and states its benchmark as a command rather than a claim.",
+  "layers_intro": "Nine control families run in registry order over each allocation file. The first proves the others had something to read, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the allocation file carries every artifact the controls below read, exactly once, and that the opening month and the holding entity are named.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the eight document types in model.DOC_TYPES -- period calendar, recipient lookup, driver tab, cost-pool ledger, allocation schedule, allocation journal, postage log, year-to-date rollup -- and FAILs a file carrying more than one of any, because a control that silently passes on an absent input is worse than no control: it reports assurance it never performed. It also FAILs a first_period that is not a readable YYYY-MM month, without which the year the workbook covers cannot be established, and FAILs a file that does not name the holding entity, since every credit line and every recipient exclusion is measured against it. Every downstream rule returns nothing when its artifact is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "per",
+      "label": "Period Continuity",
+      "plain": "Checks the year runs month by month and every month tab is complete and stamped to its own month end.",
+      "engineering": "Two controls. per_months_consecutive FAILs a period label that is not a readable YYYY-MM month, a month that appears on two tabs and would be allocated twice, a gap in the sequence -- a workbook copied forward loses a tab the way a chain loses a link, and the month it skipped was never pushed out -- and a calendar whose opening month is not the one the file states it opens on. per_tab_continuity FAILs a period stamped to anything other than the last day of the month it allocates, because a tab rolled forward but dated to the month it was copied from posts real cost into the wrong accounting period; it FAILs a period that does not carry exactly one cost pool, one journal entry and one meter reading, or that carries no driver rows or no allocation rows at all; it FAILs a journal entry whose accounting date disagrees with the calendar's; and it FAILs any artifact carrying rows for a month the calendar does not have.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "rcp",
+      "label": "Recipient Lookup",
+      "plain": "Checks the lookup tab is sound and that the holding entity is not listed as a recipient of its own allocation.",
+      "engineering": "Three controls. rcp_unique_ids FAILs a recipient id that appears twice, because the id is what joins the lookup tab to the driver counts, the allocation rows and the journal lines, and a duplicate makes a driver count ambiguous about whose share it sets. rcp_rows_wellformed FAILs a recipient missing its id, name or GL account -- the account is the debit side of every line generated for it -- and FAILs a kind that is not operating_entity or project, because the allocation policy has no rule for anything else. rcp_holding_not_recipient FAILs a lookup tab that lists the holding entity among its own recipients: the entry would allocate a slice of the pool straight back to the books it exists to relieve, so the same cost is both charged and credited and that share of the group's overhead never leaves. The holding entity is excluded from every downstream derivation, so this control owns the finding once rather than having it surface as arithmetic noise below.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "drv",
+      "label": "Driver Tab",
+      "plain": "Checks the driver counts are whole and non-negative and that every recipient has exactly one count in every month.",
+      "engineering": "Two controls. drv_counts_whole FAILs a driver count that is not a whole number, since a fractional count is a typed-over formula; FAILs a negative count, which is a reversal entered into a basis column and would push a negative share onto a recipient, taking cost off it rather than putting it on; and FAILs a month whose counts total zero, which is a month with no basis on which its pool could be shared out at all. drv_coverage_complete FAILs a recipient with anything other than exactly one driver row in a month -- none is not a zero share but a basis that was never captured, and everyone else's share silently absorbs the slice, while two rows count the same basis twice -- and FAILs a driver row naming an id that is not an allocation recipient, because the basis it adds belongs to nobody.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "pol",
+      "label": "Cost Pool",
+      "plain": "Checks each month's pool adds up from its components, and flags a pool that steps month over month beyond the file's band.",
+      "engineering": "Two controls. pol_components_sum FAILs a period whose shared overhead, corporate G&A and postage components do not add to exactly the stated pool total. The total is the figure the allocation multiplies against and the components are what a reviewer reads to understand it; when they stop agreeing, the review is being done on one number and the entry on another. pol_month_over_month_variance is a FLAG, not a failure: it marks a pool that steps from the prior month by more than the file's own variance band -- 500 basis points when the file does not carry one -- with the movement computed as an absolute proportion of the prior pool and floored, so a step is never overstated by a rounding artifact. A recurring workbook is copied forward precisely because the figures are stable, so a step outside the band is either a real change in the group's cost base or a component typed into the wrong month, and a person says which.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "alc",
+      "label": "Allocation Re-Derivation",
+      "plain": "Checks the shares sum to 100.00%, re-derive from the drivers, and that the amounts tie the pool and re-derive from the shares.",
+      "engineering": "Five controls, and the reason the engine exists. alc_recipient_coverage is the family's own precondition: it FAILs a month with anything other than exactly one allocation row per recipient, or a row for an id that is not a recipient, so a lost row is named once here rather than reported three more times downstream as arithmetic that does not foot. alc_shares_sum_to_full FAILs a share column that does not sum to exactly 10000 basis points; a column at 9997 bps does not round to a hundred percent, it pushes out 99.97% of the pool and leaves the rest sitting in the holding entity every month the workbook is copied forward. alc_shares_rederive rebuilds every share from the driver counts by the largest-remainder method and FAILs any share that does not match to the basis point, which catches two shares moved against each other so the column still sums to 100.00%. alc_amounts_tie_pool FAILs a month whose allocated column does not sum to exactly the pool it divides -- no tolerance band, because the residual cent belongs to exactly one recipient and the largest-remainder split is how it gets there. alc_amounts_rederive rebuilds every amount as pool times driver share through the same kernel that produced it and FAILs a recipient allocated anything else, which catches two amounts transposed between recipients while the column still ties the pool to the cent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "je",
+      "label": "Allocation Journal Entry",
+      "plain": "Checks the generated entry balances, ties the re-derived allocation, and nets to zero across the group.",
+      "engineering": "Three controls. je_balanced FAILs a period entry whose debits do not equal its credits exactly -- the first thing anyone assumes about a generated entry and the last thing anyone re-checks -- because an entry generated from a formula column that lost a row still looks like an entry, and a ledger that accepts it carries the difference as unexplained suspense. je_ties_allocation rebuilds the allocation from the drivers and the pool and FAILs a recipient whose net position in the entry is not that figure, reading the entry net of any credit on the same recipient so a line pair that appears to correct itself is not mistaken for the right answer; it also FAILs a line posted to an entity that is neither an allocation recipient nor the holding entity, since that amount leaves the group the allocation is defined over. je_consolidation_nets_zero FAILs a year whose group debits and credits do not net to exactly zero -- the allocation moves cost inside the group and must not create any -- and FAILs any entity both charged and relieved inside one entry, a gross-up pair that nets to nothing at that entity while inflating both sides of the entry, so cost appears to have moved when it has not.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "pst",
+      "label": "Postage Meter",
+      "plain": "Checks the meter rolls forward month to month and that the postage split and the pool's postage line both reconcile to it.",
+      "engineering": "Three controls, and the only place the workbook is tied to something physical. pst_meter_rolls_forward FAILs a month whose closing reading is below its opening, because a cumulative counter cannot run backwards and the period's spend cannot then be taken as the difference; and it FAILs a month whose opening reading is not exactly the prior month's close, which means the meter was reset, re-keyed or read out of order. pst_allocations_tie_meter_delta FAILs a per-code split that does not sum to exactly the month's meter delta, and FAILs a code that is not one of the three the policy recognises -- first class, certified and parcel, weighted 6000, 2500 and 1500 basis points and split by largest remainder so the metered period is exhausted exactly. pst_pool_component_ties FAILs a pool whose postage component is not that same meter delta: the meter is the evidence and the pool line is the assertion built on it, and when they part company the group allocates postage it never bought, or buys postage it never allocates.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "rpt",
+      "label": "Year-to-Date Rollup",
+      "plain": "Checks the year-to-date figures the close package reads recompute from the month tabs beneath them.",
+      "engineering": "One control. rpt_rollup_ties rebuilds the period count, the recipient count, the pool total and the allocated total from the tabs beneath them and FAILs any stated figure that does not match. The rollup is the number that leaves the workbook -- it goes into the close package and onto the management report -- and a rollup maintained beside the tabs rather than derived from them drifts the first time a month is restated and nobody re-adds the column. The allocated total is compared only when every month re-derived: reporting a shortfall that is really an upstream driver or pool gap would name the wrong control and send a reviewer to the wrong tab.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Allocation Files",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional G&A allocation workbooks enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-four files in total. Only the month calendar, the recipient lookup, the driver counts, the two discretionary pool components and the postage meter readings are stated as base facts; every share, every allocated amount, the per-code postage split, the pool's postage component and total, the journal entry and the year-to-date rollup are recomputed through the same allocation kernel the engine later re-derives with, so the relationships the engine tests are the relationships that produced the data.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the allocation file complete and the year and holding entity named",
+      "engineering": "One control. FAILs a file missing any of the eight artifact types or carrying a duplicate, an unreadable opening month, or no named holding entity, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "per-control",
+      "label": "Period Continuity",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "does the year run month by month, each tab complete and stamped",
+      "engineering": "Two controls: the calendar runs consecutive readable months from the stated opening period with no gap and no repeat, and every month carries one pool, one entry, one meter reading, driver and allocation rows, and an accounting date that is the last day of the month it allocates.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "rcp-control",
+      "label": "Recipient Lookup",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "is the lookup sound and the holding entity excluded",
+      "engineering": "Three controls: unique recipient ids, every row carrying an id, a name, a known kind and a GL account, and the holding entity absent from the list of recipients it is allocating to.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "drv-control",
+      "label": "Driver Tab",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "is the basis whole and complete for every recipient-month",
+      "engineering": "Two controls: driver counts are whole and non-negative with a non-zero total in every month, and every recipient carries exactly one count in every month with no count belonging to a non-recipient.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "pol-control",
+      "label": "Cost Pool",
+      "kind": "control",
+      "col": 1,
+      "row": 4,
+      "plain": "does the pool add up, and did it step",
+      "engineering": "Two controls: the shared overhead, corporate G&A and postage components add to exactly the stated pool total, and a month-over-month step beyond the file's variance band is flagged for a person rather than failed.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "alc-control",
+      "label": "Allocation Re-Derivation",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "do the shares and the amounts re-derive and tie the pool",
+      "engineering": "Five controls: one allocation row per recipient-month, shares summing to exactly 10000 basis points, every share rebuilt from the driver counts, the allocated column tying the pool to the cent, and every amount rebuilt as pool times share by largest remainder.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "je-control",
+      "label": "Allocation Journal Entry",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the entry balance, tie the schedule and net to zero",
+      "engineering": "Three controls: debits equal credits in every period entry, each recipient's net position equals its re-derived allocation with no line posted outside the group, and the year nets to zero at consolidation with no entity both charged and relieved inside one entry.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "pst-control",
+      "label": "Postage Meter",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "does the postage reconcile to the physical counter",
+      "engineering": "Three controls: the meter reads forward inside each month and opens where the prior month closed, the per-code split sums to exactly the meter delta on codes the policy recognises, and the pool's postage component equals that same delta.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "rpt-control",
+      "label": "Year-to-Date Rollup",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "does the reported rollup recompute from the tabs",
+      "engineering": "One control: the period count, the recipient count, the pool total and the allocated total stated on the rollup are rebuilt from the month tabs, with the allocated total compared only when every month re-derived.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/engine.py"
+    },
+    {
+      "id": "registers",
+      "label": "Tabs, Lookups & Kernel",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and the one kernel every rule resolves against",
+      "engineering": "The period calendar carries each month and its stamped accounting date; the recipient lookup carries each operating entity and project, its kind and its GL account, with the holding entity excluded; the driver tab carries one count per recipient-month; the cost-pool ledger carries the three components and the total; the allocation schedule carries the share in basis points and the allocated amount; the journal carries the generated entry; the postage log carries the meter readings and the per-code split; and the rollup carries the year-to-date figures. Every continuity, share, amount, entry, postage and rollup control resolves against these through the shared allocation kernel, so a finding cannot disagree with the data that produced it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per allocation file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/gaalloc_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "allocation files" },
+    { "from": "set-control", "to": "per-control", "label": "complete" },
+    { "from": "set-control", "to": "rcp-control", "label": "complete" },
+    { "from": "set-control", "to": "drv-control", "label": "complete" },
+    { "from": "set-control", "to": "pol-control", "label": "complete" },
+    { "from": "set-control", "to": "alc-control", "label": "complete" },
+    { "from": "set-control", "to": "je-control", "label": "complete" },
+    { "from": "set-control", "to": "pst-control", "label": "complete" },
+    { "from": "set-control", "to": "rpt-control", "label": "complete" },
+    { "from": "per-control", "to": "registers", "label": "resolves" },
+    { "from": "rcp-control", "to": "registers", "label": "resolves" },
+    { "from": "drv-control", "to": "registers", "label": "resolves" },
+    { "from": "pol-control", "to": "registers", "label": "resolves" },
+    { "from": "alc-control", "to": "registers", "label": "resolves" },
+    { "from": "je-control", "to": "registers", "label": "resolves" },
+    { "from": "pst-control", "to": "registers", "label": "resolves" },
+    { "from": "rpt-control", "to": "registers", "label": "resolves" },
+    { "from": "alc-control", "to": "je-control", "label": "allocated amounts" },
+    { "from": "pst-control", "to": "pol-control", "label": "meter delta" },
+    { "from": "rcp-control", "to": "report", "label": "findings" },
+    { "from": "alc-control", "to": "report", "label": "findings" },
+    { "from": "je-control", "to": "report", "label": "findings" },
+    { "from": "rpt-control", "to": "report", "label": "findings" },
+    { "from": "registers", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,404",
+      "source": "python -m pytest --collect-only -q -o addopts= (ga-allocation-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "22",
+      "source": "len(gaalloc_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every allocation file"
+    },
+    {
+      "label": "Families",
+      "value": "9",
+      "source": "distinct rule-id prefixes in gaalloc_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Allocation files",
+      "value": "24",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-three planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "8",
+      "source": "len(gaalloc_engine.model.DOC_TYPES)",
+      "plain": "period calendar, recipient lookup, driver tab, cost-pool ledger, allocation schedule, allocation journal, postage log, year-to-date rollup"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "gaalloc_engine/tests boundary tests on the cent and the basis point",
+      "plain": "an allocation a cent off the pool is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "A management or holding entity carries corporate G&A, shared overhead and the postage meter for a group of operating entities and projects, and none of that cost belongs to it. Every month a recurring workbook -- one tab per month, a driver tab and a lookup tab behind it, a stamped accounting date per period -- turns a column of driver counts into a column of percentages, multiplies them by the month's cost pool, and generates the allocation journal entry. The workbook is copied forward every month, which is precisely why it drifts. Four failures hide inside that, and none of them look wrong on the face of the tab. The share column sums to 99.97% and quietly leaves cost behind in the holding entity, or sums past 100.00% and over-relieves it, every month for the rest of the year. The allocated column was rounded recipient by recipient rather than by a largest-remainder split, or was left stale, and no longer ties the pool it divided -- or ties it exactly while two recipients' amounts sit transposed, so the cost landed on the wrong books. The generated entry balances and no longer matches the schedule it was posted from, because a debit was retyped and the credit was moved with it, or an entity was charged and relieved inside the same entry so both sides inflated and nothing actually moved. And a month was never rolled, or was rolled and stamped to the date of the month it was copied from, so a period is absent from the year or posts real cost into the wrong accounting period. None of these are judgment calls. They are equalities -- a share column against 10000 basis points, an allocated column against the pool, an amount against pool times share, a net debit against the re-derived allocation, a postage line against a physical meter reading, an accounting date against the last day of its own month -- which a deterministic control settles better than a spreadsheet inherited by whoever runs the close this year.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every allocation file",
+      "narrative": "The CLI generates twenty-four fictional allocation files -- one clean baseline and one carrying each of the twenty-three planted defects -- then runs all twenty-two controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (ga-allocation-automation/); gaalloc_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A share column that still sums to exactly 100.00%",
+      "narrative": "One defect file moves two shares in the opening month against each other by twenty-five basis points. The column still sums to 10000 bps, so the sum control holds and nothing on the tab looks wrong. alc_shares_rederive rebuilds both shares from the driver counts by largest remainder and fails them, proving the share column is a derivation the engine recomputes rather than a constant it reads back.",
+      "source": "gaalloc_engine/generate.py DEFECTS share_drift -> alc_shares_rederive"
+    },
+    {
+      "title": "An entry that balances and does not tie the schedule",
+      "narrative": "Another defect file reduces one recipient's debit and moves the holding entity's credit with it, so the March entry balances to the cent. je_balanced holds. je_ties_allocation rebuilds the allocation from the drivers and the pool, reads the entry net of any offsetting credit on the same recipient, and fails the line -- the schedule and the entry posted from it had parted company.",
+      "source": "gaalloc_engine/generate.py DEFECTS journal_off_schedule -> je_ties_allocation"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-two controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "gaalloc_report.json, gaalloc_report.md, samples/"
+    },
+    {
+      "cmd": "python -m gaalloc_engine samples",
+      "operation": "analyze an existing folder of allocation files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m gaalloc_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest gaalloc_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10404 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,404",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (ga-allocation-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "22",
+      "unit": "controls",
+      "source": "len(gaalloc_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "23",
+      "unit": "defect files",
+      "source": "len(gaalloc_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "gaalloc_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the workbook they were given: the year runs month by month with every tab stamped to its own month end, the lookup is sound and the holding entity is not allocating to itself, every recipient carries one whole driver count in every month, each pool adds to its components, every share sums to exactly 100.00% and re-derives from the drivers, every allocated amount ties the pool and re-derives as pool times share, the generated entry balances, ties that allocation and nets to zero across the group, the postage reconciles to the physical meter, and the year-to-date rollup recomputes from the tabs beneath it. It is not an opinion on whether the cost should have been incurred, whether the driver chosen is the right basis for the policy, whether the recipients are the right population, or whether the entry was actually posted.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean allocation into the documented close review and sign-off"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a cost pool that stepped month over month beyond the file's variance band lands here, and a person says whether the group's cost base changed or a component was typed into the wrong month"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the month is not carried into the close until the failing control is cleared -- a missing or misstamped tab, a share column off 100.00%, an amount that does not re-derive, an entry that does not balance or does not tie the schedule, or a postage line the meter does not support"
+      }
+    ],
+    "guarantees": [
+      "Read-only: allocation files are parsed and never written back, and nothing is posted, filed or paid, so the engine cannot introduce the break it reports.",
+      "Integer cents and whole basis points throughout, compared with exact ==; there is no tolerance band on an allocation, and a cent off the pool is reported as a break.",
+      "An amount that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one row it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "One allocation kernel: the controls and the generator share gaalloc_engine.allocation, so a finding cannot disagree with the data that produced it.",
+      "Largest remainder everywhere it matters: driver shares sum to exactly 10000 basis points and allocated amounts sum to exactly the pool, so the residual cent lands in exactly one deterministic place rather than being rounded away recipient by recipient.",
+      "Every accounting-date test is made against the period stamped in the file, never the system clock, so the same file returns the same findings in any month it is run.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread, and each family's precondition owns its own gap so a lost row is named once rather than reported three times downstream."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It re-derives the allocation journal entry and compares it; it does not post it. A person decides whether a month is carried into the close and whether a pool step is a real change in the cost base."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never posts an entry, files a return, pays a supplier, or writes to a source artifact. It re-derives the allocation and compares it, then stops.",
+      "source": "ga-allocation-automation/README.md and gaalloc_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the eight artifacts the allocation workbook emits. It does not connect to a general ledger, an accounts-payable system, a payroll feed or the postage meter itself.",
+      "source": "gaalloc_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It is about where a shared cost lands, not whether it should have been incurred, and not whether the driver the policy names -- headcount-equivalents, units, doors -- is the right basis for the group. It checks that the basis was applied, not that it was chosen well.",
+      "source": "gaalloc_engine/engine.py module docstring and the drv_ family"
+    },
+    {
+      "statement": "The month-over-month variance band is a review signal read from the file itself, defaulting to 500 basis points; it is not a materiality judgment, and a pool step inside the band is not asserted to be correct.",
+      "source": "gaalloc_engine/model.py DEFAULT_VARIANCE_FLAG_BPS and engine.py pol_month_over_month_variance"
+    },
+    {
+      "statement": "It takes the driver counts and the meter readings at face value: it confirms the workbook derives from them and reconciles, not that the counts were captured correctly or the meter was read honestly. All shipped data is fictional and the fiscal year is set in a fictional future.",
+      "source": "gaalloc_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-gaalloc.svg",
+    "motion": "../assets/engine-gaalloc.svg",
+    "poster_alt": "G&A Expense Allocation diagram: on the left a dark card for the holding entity's monthly cost pool of $286,881.40, built from shared overhead, corporate G&A and metered postage; an arrow labelled split on drivers into a centre panel headed pool times driver share, listing the controls that held -- shares summing to exactly 10,000 basis points, every share re-derived from the driver counts, the allocated column tying the pool to the cent, the entry balancing and netting to zero at consolidation -- and beneath them one red line for two recipients' amounts transposed while the column still ties, and one amber line for a pool that stepped 13.94% against a 5.00% band; on the right a FAIL verdict panel; along the bottom the six fictional recipients with their April driver counts and re-derived shares, ENT-201 at 31.43% through PRJ-302 at 5.72%, summing to 100.00%; and a footer strip reading 22 controls, 9 families, 10,404 tests, read-only, SFS-E43-GAA.",
+    "caption": "The G&A Expense Allocation engine tile states the identity that has to hold every month: the driver counts set the shares, the shares and the pool set the amounts, the amounts set the entry, and every one of those figures is recomputed from the tab beneath it rather than read back.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest gaalloc_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/ga-allocation-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/ga-allocation-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "G&A Expense Allocation (SFS-E43-GAA) datasheet -- twenty-two deterministic, read-only controls over a holding entity's recurring monthly G&A allocation workbook: the month calendar and every tab stamped to its own month end, the recipient lookup with the holding entity excluded from its own allocation, whole driver counts covering every recipient-month, a cost pool that adds to its shared-overhead, corporate-G&A and metered-postage components, shares that sum to exactly 10,000 basis points and re-derive from the drivers by largest remainder, allocated amounts that tie the pool to the cent and re-derive as pool times share, a generated journal entry that balances, ties the re-derived allocation and nets to zero at consolidation, a postage split reconciled to the physical meter, and a year-to-date rollup recomputed from the tabs beneath it. 10,404 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}
