@@ -2883,11 +2883,20 @@
     return; // markup already holds final counter values
   }
 
+  // Reveal on entry, never on a fraction of the block's own height. A ratio
+  // threshold silently fails on any block taller than 1/ratio viewports, and
+  // the fleet grew into exactly that: as one .reveal element it is ~8,300px on
+  // a laptop and ~24,000px on a phone, so 12% of it is 1,000px / 2,900px of
+  // pixels that have to be on screen at once. Below a ~1,000px-tall window the
+  // ratio can never be met and the whole 47-engine portfolio stayed at
+  // opacity:0 — invisible on every phone and most desktops. threshold 0 fires
+  // the moment the block enters; the negative bottom inset keeps the old "wait
+  // until it is meaningfully on screen" feel and is height-independent.
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0, rootMargin: '0px 0px -12% 0px' });
   document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
 
   var hero = document.querySelector('.hero');
