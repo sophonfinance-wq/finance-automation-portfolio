@@ -31,6 +31,13 @@ def _collected_count(cwd: Path, *extra: str) -> int:
     proc = subprocess.run(
         [sys.executable, "-m", "pytest", "--collect-only", "-q", "-o", "addopts=", *extra],
         cwd=str(cwd), capture_output=True, text=True, timeout=180, env=env,
+        # The child needs a real stdin handle. Under pytest's default capture on
+        # Windows sys.stdin is a dummy whose handle cannot be duplicated, so the
+        # spawn dies with "OSError: [WinError 6] The handle is invalid" and the
+        # count gate appears to fail when nothing has drifted. Collection never
+        # reads stdin, so DEVNULL costs nothing and makes the suite runnable
+        # without having to remember `-s`.
+        stdin=subprocess.DEVNULL,
     )
     output = proc.stdout + "\n" + proc.stderr
     assert proc.returncode == 0, output[-4000:]

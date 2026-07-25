@@ -93,6 +93,12 @@ def test_cli_exits_cleanly(tmp_path):
         [sys.executable, "generate_datasheets.py",
          "--slug", "triangulate", "--out", str(target)],
         cwd=str(gen.ROOT), capture_output=True, text=True, timeout=120,
+        # The child needs a real stdin handle. Under pytest's default capture on
+        # Windows sys.stdin is a dummy whose handle cannot be duplicated, so the
+        # spawn dies with "OSError: [WinError 6] The handle is invalid" before the
+        # generator runs -- a failure that reads like a broken CLI but is only the
+        # harness. The generator never reads stdin, so DEVNULL costs nothing.
+        stdin=subprocess.DEVNULL,
     )
     assert proc.returncode == 0, proc.stderr
     assert target.is_file()
