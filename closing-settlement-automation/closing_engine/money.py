@@ -1,17 +1,17 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the home sale closing & settlement tie-out engine.
+=======================================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. A closing entry
+that tolerates a penny does not foot, and a settlement statement whose total
+tolerates a penny against the lines above it was keyed rather than summed.
+Escrow disburses to the cent: the seller's proceeds are whatever remains after
+every other line, so a penny absorbed anywhere lands there.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:

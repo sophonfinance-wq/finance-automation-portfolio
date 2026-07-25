@@ -1,17 +1,18 @@
 """
-Money primitives for the insurance cost allocation engine.
-==========================================================
+Money primitives for the depreciation & prepaid amortization engine.
+====================================================================
 
 Every monetary amount inside the engine is an **integer number of cents**, so
 arithmetic is exact and tie-outs are deterministic. Floating-point dollars are
 never used for accumulation or comparison; they appear only at the formatting
 edge. Dataclass fields and JSON keys carry a ``_cents`` suffix.
 
-Comparisons are exact ``==`` -- there is **no tolerance band**. An allocation
-that tolerates a penny against the premium it divides has not been allocated; it
-has been rounded until it looked allocated, which is the opposite thing. An
-allocation engine lives or dies on the residual cent: it belongs to exactly one
-project, and :func:`allocate_by_ratio` is how it gets there.
+Comparisons are exact ``==`` -- there is **no tolerance band**. A penny per
+period does not stay a penny: it accumulates, and an asset either fully
+depreciates over its life or it leaves a stub on the register forever. The
+subledger has to tie to its GL control account and to the recurring journal
+entry posted from it, and a roll-forward that closes to within a penny has
+stopped closing.
 
 This is the platform-standard money contract, shared in shape with every other
 engine. Two helpers cover the operations that can lose pennies:
