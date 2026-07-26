@@ -389,8 +389,8 @@
   .tile.hot a { font-size:14px; font-weight:500; color:var(--blue); text-decoration:none; margin-top:14px; display:inline-flex; align-items:center; gap:8px; }
   .tile.hot a:hover { text-decoration:underline; }
 
-  /* Both diagram hosts anchor the flow layer below. */
-  .tile-vis, .flag-vis { position:relative; }
+  /* Every diagram host anchors the flow layer below. */
+  .tile-vis, .flag-vis, .loop-hero { position:relative; }
 
   /* ============ DIAGRAM FLOW ============ */
   /* What the engine does, stated as motion on the diagram itself: a signal runs
@@ -3042,7 +3042,24 @@
       out: [[62, 35], [64, 55], [76, 66]], lamps: [[43, 47], [76, 66]], reject: [28, 55] },
     'engine-1065': { in: [[25, 25], [16, 48], [24, 68]], hub: [49, 45],
       out: [[72, 22], [74, 45], [70, 68], [90, 70]], lamps: [[49, 45], [64, 40]] },
-    'tile-surplus': { in: [[22, 35]], hub: [49, 47], out: [[75, 52]], lamps: [[49, 47], [64, 40], [78, 55]] }
+    'tile-surplus': { in: [[22, 35]], hub: [49, 47], out: [[75, 52]], lamps: [[49, 47], [64, 40], [78, 55]] },
+    // the workbook passes under the scanner and comes out unchanged; the verdict
+    // chip is the last thing to light
+    'tile-validation': { in: [[23, 34]], hub: [43, 43], out: [[62, 52], [79, 36]],
+      lamps: [[43, 43], [79, 36]] },
+    // four examiners beam in; the consensus disc only lights once all four have
+    // landed, and the work is signed off after it — no consensus, no sign-off
+    'tile-triangulate': { in: [[31, 25], [67, 23], [29, 62], [70, 62]], hub: [50, 37],
+      out: [[50, 49]], lamps: [[50, 37]] },
+    'tile-brain': { in: [[22, 30], [38, 62]], hub: [55, 52], out: [[75, 52], [76, 63]],
+      lamps: [[66, 51], [55, 50]] },
+    // the map resolves to one canonical source; the stale copy is what gets flagged
+    'tile-atlas': { in: [[27, 42], [50, 26], [72, 42]], hub: [50, 44], out: [[52, 63]],
+      lamps: [[52, 63]], reject: [63, 54] },
+    // bank and ledger meet at the tie-out, then the three cash controls run
+    'tile-cash': { in: [[18, 45], [78, 45]], hub: [50, 45], out: [[29, 79], [43, 79], [57, 79]],
+      lamps: [[50, 45]] },
+    'engine-loop': { in: [[14, 74]], hub: [50, 44], out: [[81, 27]], lamps: [[50, 44], [66, 61]] }
   };
   var SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -3095,6 +3112,20 @@
       wrap.appendChild(rej);
     }
     host.appendChild(wrap);
+    // Take the artwork's exact box rather than the host's. The host can be wider
+    // (the flag figure caps its art at --vis-max and centres it) and a film's
+    // aspect can differ from its own still by a few pixels — the loop diagram's
+    // video came out 8px taller than the webp — and either way the anchors would
+    // sit off the drawing. Measured, so it is right for whichever media is in.
+    function fit() {
+      var m = host.querySelector('img,video');
+      if (!m || !m.offsetWidth) return;
+      wrap.style.left = m.offsetLeft + 'px'; wrap.style.top = m.offsetTop + 'px';
+      wrap.style.width = m.offsetWidth + 'px'; wrap.style.height = m.offsetHeight + 'px';
+      wrap.style.right = 'auto'; wrap.style.bottom = 'auto'; wrap.style.maxWidth = 'none';
+    }
+    fit();
+    requestAnimationFrame(fit);
     return { wrap: wrap, segs: segs, lamps: lamps, rej: rej, nIn: nIn };
   }
 
@@ -3108,7 +3139,9 @@
       var inbound = i < o.nIn, idx = inbound ? i : i - o.nIn;
       var delay = inbound ? 90 * idx : 1080 + 130 * idx;
       var dur = inbound ? 900 : 980;
-      var L = 7, P = s.b.getTotalLength() || 60;
+      // a fixed bead swamps a short hop (triangulate's sign-off is 12 units long)
+      // and gets lost on a long one, so scale it to the path
+      var P = s.b.getTotalLength() || 60, L = Math.max(3.5, Math.min(9, P * 0.2));
       s.b.style.strokeDasharray = L + ' ' + P;
       s.g.animate([{ opacity: 0 }, { opacity: 1, offset: .16 }, { opacity: 1, offset: .74 }, { opacity: 0 }],
         { duration: dur + 820, delay: Math.max(0, delay - 120), fill: 'both' });
@@ -3152,7 +3185,7 @@
     }
   }
 
-  var dgmHosts = [].slice.call(document.querySelectorAll('#engines .tile-vis, .flag-vis'));
+  var dgmHosts = [].slice.call(document.querySelectorAll('#engines .tile-vis, .flag-vis, .loop-hero'));
   if (dgmHosts.length) {
     var dio = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
