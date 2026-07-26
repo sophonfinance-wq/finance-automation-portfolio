@@ -94,6 +94,39 @@ and python-decode + cv2-resize 5.99. (Expressing the blend as an ffmpeg `blend=`
 expression keeps everything in YUV and scores 3.69, but it evaluates per pixel
 per frame and is far too slow for a batch.)
 
+## The gate the numbers cannot replace
+
+**Every clip must be looked at.** The four measurements above check the camera, the
+burnt-in figures, the poster handoff and the loop. Not one of them looks at
+whether the machine stays a machine, and that is where this generator actually
+fails. Of 30 clips that passed all four numeric gates, visual review found real
+defects in 16: paper draping like wet cloth off the output tray, an input ream
+draining to bare metal and refilling, infeed paper turning into a steel plate, a
+coil spring melting, a stainless tray dissolving and re-forming, a drive belt
+coming apart into loose straps, a dial gauge fading in from nothing.
+
+Two clips (`spending`, `financing`) passed *every* number on their final take —
+rotation 0.08 and 0.09 degrees, text intact — and were still obviously wrong on
+sight, the report hanging off the tray like a curtain past the caption strip.
+Numbers alone would have shipped both.
+
+Build a contact sheet per clip (8 frames evenly sampled, 2 columns) and review
+them. `motion-work` in the working tree has the throwaway script for this. When a
+clip fails, run `unwire.py` — the default for a clip that cannot be made good is
+its static poster, never the best bad take.
+
+## Trim the tail
+
+The generator drifts further from its source frame the longer it runs: averaged
+over this batch, drift at 90% of duration was 1.5x the drift at 30%, and most of
+the artifacts above appear in the last third. `install_motion.py` therefore drops
+the final sixth (`TRIM_TAIL`). That alone rescued `inforeturn`, whose report
+drooped only after frame 103 and which is clean once trimmed.
+
+It is not a cure-all. `checkage`'s paper melt starts at frame 17, 14% in, and
+trimming cannot touch it. Trim removes late-onset defects; early ones need a
+re-roll, and some tiles never converge.
+
 ## Prompting
 
 Lead with the lock and name the rigid parts. The difference between attempt 1 and
