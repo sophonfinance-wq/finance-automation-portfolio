@@ -13,7 +13,9 @@
     "rotation_span_deg": "<=0.30 measured ON THE SOURCE RENDER at 1920x1080. The metric accumulates 120 consecutive-pair rigid fits and is resolution-dependent: the same clip reads 0.178deg at 1920x1080 and 1.771deg after a LOSSLESS downscale to 1280x720, while the shipped crf-30 file reads 1.478 -- lower than lossless, so it is tracking noise, not compression and not real motion. A pure resize cannot introduce rotation. Do not re-gate the shipped 720p file and conclude the batch regressed.",
     "handoff": "frame 0 vs poster <8.0/255 mean abs, so the <video> replacing the poster does not pop",
     "aspect": "clip aspect must equal poster aspect; these tiles are true 16:9 (1600x900), unlike the 1.791 tiles that needed refitting in 1af78d9",
-    "footer_text": "normalized cross-correlation of the burnt-in label ink, each frame against the clip OWN frame 0, >=0.90 on controls/tests/read-only. Absolute difference does not work: H.264 softening alone moves ink 15-20 levels, and a shadow crossing the strip reads as a redraw. part_no is advisory with a 0.55 floor because it sits at the longest lever arm from frame centre, so residual rotation displaces it most."
+    "footer_text": "normalized cross-correlation of the burnt-in label ink, each frame against the clip OWN frame 0, >=0.90 on controls/tests/read-only. Absolute difference does not work: H.264 softening alone moves ink 15-20 levels, and a shadow crossing the strip reads as a redraw. part_no is advisory with a 0.55 floor because it sits at the longest lever arm from frame centre, so residual rotation displaces it most.",
+    "loop_seam": "every tile plays with loop=true, so the wrap from last frame to first is on screen every few seconds. install_motion.py eases the tail back to frame 0 (BLEND_FRACTION of the clip) so the wrap is continuous. Judge it in ABSOLUTE mean-abs terms, not as a multiple of the median frame step -- a nearly-static clip has a tiny median step, so an acceptable seam reads as '6x' while being visually nothing. All clips here land <=2.41; intercompany, which already ships and reads as a clean loop, is 2.11; the previous batch's upgrade/warranty/draw are 7-12.",
+    "encode_order": "close the loop in the SAME pass as scale+encode. A second pass over the finished 720p file costs a generation of H.264 and moved the handoff 3.8 -> 6.2 for no visible gain. Blending needs pixel access so the decode is unavoidable, but let ffmpeg scale: measured ffmpeg-only 3.69, python-decode+ffmpeg-scale 4.91, python-decode+cv2-resize 5.99."
   },
   "clips": {
     "bond": {
@@ -25,8 +27,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.029,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.86,
-        "shipped_bytes": 149592
+        "shipped_handoff_mean_abs": 5.23,
+        "shipped_bytes": 152457
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the collateral return loop with a release gate works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -39,8 +41,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.29,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.28,
-        "shipped_bytes": 171235
+        "shipped_handoff_mean_abs": 5.57,
+        "shipped_bytes": 166404
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the proportioning splitter driven by a rate cam riding a rising staircase works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -55,8 +57,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.199,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.74,
-        "shipped_bytes": 196438
+        "shipped_handoff_mean_abs": 4.91,
+        "shipped_bytes": 199746
       }
     },
     "closing": {
@@ -68,8 +70,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.154,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.18,
-        "shipped_bytes": 173863
+        "shipped_handoff_mean_abs": 5.49,
+        "shipped_bytes": 163899
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the single-file verification line works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -82,8 +84,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.036,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.78,
-        "shipped_bytes": 115710
+        "shipped_handoff_mean_abs": 5.4,
+        "shipped_bytes": 123507
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the single left-to-right certificate transport with four gauging stations works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -96,8 +98,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.134,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.87,
-        "shipped_bytes": 205964
+        "shipped_handoff_mean_abs": 5.18,
+        "shipped_bytes": 200879
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the two tall brass metering columns works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -110,8 +112,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.041,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.23,
-        "shipped_bytes": 229511
+        "shipped_handoff_mean_abs": 5.56,
+        "shipped_bytes": 231075
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the three-lane comparator works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -124,8 +126,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.178,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.8,
-        "shipped_bytes": 173319
+        "shipped_handoff_mean_abs": 5.03,
+        "shipped_bytes": 179662
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the master camshaft drives a single escapement \u2014 an anchor pawl into a fine-toothed ratchet wheel \u2014 so the whole machine advances exactly one tooth per period works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -138,8 +140,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.19,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.93,
-        "shipped_bytes": 192137
+        "shipped_handoff_mean_abs": 5.04,
+        "shipped_bytes": 198891
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the per-dwelling sheet sorter feeding a fixed-ratio multiplier works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -152,8 +154,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.011,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.03,
-        "shipped_bytes": 174954
+        "shipped_handoff_mean_abs": 5.48,
+        "shipped_bytes": 178532
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the twin-transport reconciliation comparator works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -166,8 +168,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.069,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.9,
-        "shipped_bytes": 171720
+        "shipped_handoff_mean_abs": 5.06,
+        "shipped_bytes": 168158
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the deadline escapement works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -180,8 +182,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.156,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.31,
-        "shipped_bytes": 179381
+        "shipped_handoff_mean_abs": 5.66,
+        "shipped_bytes": 175751
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the horizontal schedule bed of parallel guide rails carrying brass milestone carriages works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -194,8 +196,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.05,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.1,
-        "shipped_bytes": 136909
+        "shipped_handoff_mean_abs": 5.35,
+        "shipped_bytes": 140467
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the one left-to-right transport with five legible stations works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -211,8 +213,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.038,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.11,
-        "shipped_bytes": 180437
+        "shipped_handoff_mean_abs": 5.47,
+        "shipped_bytes": 185027
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the single left-to-right train works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -225,8 +227,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.095,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.86,
-        "shipped_bytes": 149278
+        "shipped_handoff_mean_abs": 5.03,
+        "shipped_bytes": 148660
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the bank of six tall glass-fronted brass accumulator columns, each with a weighted piston that rises as that payee's payment sheets drop in \u2014 physically summing works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -242,8 +244,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.187,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.14,
-        "shipped_bytes": 325077
+        "shipped_handoff_mean_abs": 5.41,
+        "shipped_bytes": 326254
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the premium apportioning machine works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -258,8 +260,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.043,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.81,
-        "shipped_bytes": 173690
+        "shipped_handoff_mean_abs": 5.09,
+        "shipped_bytes": 176627
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the roll-forward carriage ladder works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -272,8 +274,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.066,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.13,
-        "shipped_bytes": 152397
+        "shipped_handoff_mean_abs": 5.41,
+        "shipped_bytes": 154911
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the single paper transport with four inline stations works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -286,8 +288,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.055,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.08,
-        "shipped_bytes": 287381
+        "shipped_handoff_mean_abs": 5.52,
+        "shipped_bytes": 276397
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the three stacked paper-transport decks, one per subcontractor tier, each shorter than the one above works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -302,8 +304,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.293,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.71,
-        "shipped_bytes": 138319
+        "shipped_handoff_mean_abs": 5.15,
+        "shipped_bytes": 135580
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the dividing manifold works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -318,8 +320,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.05,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.16,
-        "shipped_bytes": 278417
+        "shipped_handoff_mean_abs": 5.48,
+        "shipped_bytes": 287750
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the splitter roller divides each incoming workpaper onto two parallel transports works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -334,8 +336,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.05,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.44,
-        "shipped_bytes": 215968
+        "shipped_handoff_mean_abs": 5.91,
+        "shipped_bytes": 279431
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the four-stage paper transport works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -348,8 +350,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.115,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.52,
-        "shipped_bytes": 274441
+        "shipped_handoff_mean_abs": 5.78,
+        "shipped_bytes": 263757
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the six-station cutaway works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -362,8 +364,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.076,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.28,
-        "shipped_bytes": 158976
+        "shipped_handoff_mean_abs": 5.77,
+        "shipped_bytes": 150858
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the sequential gate interlock on a straight paper transport works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -376,8 +378,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.086,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.06,
-        "shipped_bytes": 256626
+        "shipped_handoff_mean_abs": 5.33,
+        "shipped_bytes": 265821
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the series-interlock gang works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -392,8 +394,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.204,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.95,
-        "shipped_bytes": 240189
+        "shipped_handoff_mean_abs": 5.09,
+        "shipped_bytes": 237737
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the precision brass balance beam on a knife-edge pivot is the hero works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -406,8 +408,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.214,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.25,
-        "shipped_bytes": 151596
+        "shipped_handoff_mean_abs": 5.56,
+        "shipped_bytes": 150890
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the three-column mechanical comparator works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -420,8 +422,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.056,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.79,
-        "shipped_bytes": 191097
+        "shipped_handoff_mean_abs": 5.39,
+        "shipped_bytes": 203594
       }
     },
     "wire": {
@@ -435,8 +437,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.158,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 3.72,
-        "shipped_bytes": 213566
+        "shipped_handoff_mean_abs": 4.92,
+        "shipped_bytes": 208296
       },
       "prompt": "ABSOLUTELY NO CAMERA MOVEMENT. This is a rigid still photograph and the camera is bolted down. Every edge of the frame, every corner of the machine and the whole bottom caption strip must stay in exactly the same place in every single frame -- not drifting, not rotating, not tipping, not sliding, not breathing, not one pixel. If nothing else moves, that is correct. Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the three-station release line works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     },
@@ -449,8 +451,8 @@
         "measured_on": "source render 1920x1080",
         "rotation_span_deg": 0.184,
         "footer_text_ok": true,
-        "shipped_handoff_mean_abs": 4.13,
-        "shipped_bytes": 332275
+        "shipped_handoff_mean_abs": 5.25,
+        "shipped_bytes": 320295
       },
       "prompt": "Treat the input as a locked-off studio photograph on a tripod. The camera is completely static: no orbit, no rotation, no pan, no tilt, no roll, no zoom, no push-in, no dolly, no parallax, no perspective change, no lens change. The machine body, the surface it rests on, the horizon line and the caption strip along the bottom edge are RIGID and must stay pixel-locked in exactly their original position, scale and angle for every frame. The bottom caption strip must remain perfectly horizontal and perfectly still; do not tilt, slide, skew, redraw or re-letter it. Animate ONLY small parts inside the open cutaway: the stack of pale workpapers at the left feeds forward one sheet at a time, inside the cutaway the rate-selecting precedence ladder works steadily through one slow cycle, and the bound report at the right slides gently outward onto its tray. The round gauge needle sweeps slightly. Everything else in the frame is frozen. Subtle, restrained, precise mechanical motion, evenly paced for a seamless loop. Lighting, colour, matte cream background and metal finish unchanged. No people, no hands, no new objects, no text changes."
     }
