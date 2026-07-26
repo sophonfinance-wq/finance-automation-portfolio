@@ -3126,14 +3126,30 @@
     }
     fit();
     requestAnimationFrame(fit);
+    // The box is not final when the layer is built. A film carries the still's
+    // width/height attributes until its own metadata arrives, and the two differ:
+    // the stills are 1280x714, the films 1280x720, so the media grows ~2px once
+    // it knows its real aspect. Follow it rather than measuring once.
+    if (window.ResizeObserver) {
+      var media = host.querySelector('img,video');
+      if (media) {
+        var ro = new ResizeObserver(fit);
+        ro.observe(media);
+        wrap.__ro = ro;
+      }
+    }
     return { wrap: wrap, segs: segs, lamps: lamps, rej: rej, nIn: nIn };
   }
 
   // Inputs travel in, the engine and its controls light, results leave, and
   // anything refused flashes last. Then the layer deletes itself, so what is
   // left is the still — nothing to repeat and nothing to re-run.
+  function dgmDrop(wrap) {
+    if (wrap.__ro) { wrap.__ro.disconnect(); wrap.__ro = null; }
+    if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+  }
   function dgmRun(o) {
-    if (!o.wrap.animate) { o.wrap.parentNode && o.wrap.parentNode.removeChild(o.wrap); return; }
+    if (!o.wrap.animate) { dgmDrop(o.wrap); return; }
     var EASE = 'cubic-bezier(.45,.05,.5,.95)', last = 0;
     o.segs.forEach(function (s, i) {
       var inbound = i < o.nIn, idx = inbound ? i : i - o.nIn;
@@ -3164,7 +3180,7 @@
         { opacity: 0, transform: 'scale(.9)' }], { duration: 700, delay: Math.max(0, last - 600), iterations: 2, fill: 'both' });
       last += 900;
     }
-    setTimeout(function () { if (o.wrap.parentNode) o.wrap.parentNode.removeChild(o.wrap); }, last + 450);
+    setTimeout(function () { dgmDrop(o.wrap); }, last + 450);
   }
 
   // Armed once per diagram, on first sight. A tile with a film waits for the film
