@@ -234,9 +234,6 @@
   .hero-ctas { display:flex; flex-wrap:wrap; gap:1px; }
   .hero-ctas .btn { min-width:230px; }
   .hero-ctas .cta-label-mobile { display:none; }
-  .hero-img { display:none; }
-  .hero-img img, .hero-img video { display:block; width:100%; height:auto; }
-  .hero-img figcaption { font-family:var(--mono); font-size:11px; color:var(--text-3); margin-top:10px; letter-spacing:.4px; }
 
   /* stats band */
   .stats { border-bottom:1px solid var(--border); background:var(--bg); }
@@ -640,7 +637,6 @@
   /* ============ RESPONSIVE ============ */
   @media (max-width:1020px) {
     .hero-grid { grid-template-columns:1fr; gap:36px; }
-    .hero-img { max-width:640px; }
     .flag-body { grid-template-columns:1fr; }
     .flag-col + .flag-col { border-left:none; border-top:1px solid var(--border); }
     .fleet { grid-template-columns:1fr 1fr; }
@@ -689,7 +685,26 @@
     .wrap { padding:0 18px; }
     section { padding:44px 0; }
     .lead { font-size:15.5px; }
-    .fleet { grid-template-columns:1fr; }
+    /* Forty-seven tiles in a single column made the portfolio ~24,000px tall on a
+       phone — around thirty screens between the heading and the next section,
+       which is why the bottom of it never got read. Two up, with the description
+       clamped: the engine's name and its diagram stay whole, and the full text is
+       on the datasheet the title already links to. */
+    .fleet { grid-template-columns:1fr 1fr; }
+    .tile { padding:14px 14px 13px; min-height:0; }
+    .tile-vis { margin:-14px -14px 11px; }
+    .tile .tnum { font-size:10.5px; }
+    .tile h3 { font-size:14px; margin:7px 0 5px; letter-spacing:-.15px; }
+    /* flex:1 from the base rule stretches this box, and a stretched height beats
+       -webkit-line-clamp: the ellipsis lands on line three and the rest of the
+       paragraph still renders under it, clipped mid-glyph. Let it size to its
+       lines instead. */
+    .tile p { font-size:12.5px; line-height:1.46; flex:0 1 auto;
+      display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+    /* the command is unreadable wrapped into a half-width column */
+    .tile .run { display:none; }
+    .tile.hot p { -webkit-line-clamp:5; }
+    .tile.hot a { font-size:13px; }
     .controls-grid { grid-template-columns:1fr; }
     .steps { grid-template-columns:1fr; }
     .stats-in { grid-template-columns:1fr 1fr; }
@@ -896,9 +911,6 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
       </div>
     </div>
-    <figure class="hero-img reveal" aria-hidden="false">
-      <img src="assets/hero.webp" data-video="assets/hero-motion.mp4" alt="Labeled pipeline: 1 your documents flow into 2 the finance engine, pass 3 an independent check, and land as 4 a verified stack that you approve" width="2048" height="1143" fetchpriority="high">
-    </figure>
   </div>
 </header>
 
@@ -3002,6 +3014,12 @@
         v.poster = img.currentSrc || img.src;
         v.src = img.getAttribute('data-video');
         v.width = img.width; v.height = img.height;
+        // The films are 1280x720 where their stills are 1280x714, so a swapped-in
+        // video grew its box by ~2px and nudged the page. Hold the still's ratio
+        // and let the film cover it: 0.4% of crop, no shift, and the flow layer
+        // gets a box that never changes under it.
+        var aw = img.getAttribute('width'), ah = img.getAttribute('height');
+        if (aw && ah) { v.style.aspectRatio = aw + ' / ' + ah; v.style.objectFit = 'cover'; }
         v.setAttribute('role', 'img');
         v.setAttribute('aria-label', img.alt);
         img.replaceWith(v);
