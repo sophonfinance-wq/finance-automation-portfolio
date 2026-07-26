@@ -11,7 +11,6 @@
   "status": "PRODUCTION",
   "marketing_thesis": "A knowledge system earns trust by carrying each quote back to its meeting, date, timestamp, and speaker — and by refusing to answer when no source clears the relevance floor.",
   "layers_intro": "The stack preserves chain of custody from the transcript of record through retrieval and the downstream handoff. Select a layer for its plain-terms and engineering detail.",
-
   "layers": [
     {
       "id": "handoff",
@@ -49,7 +48,6 @@
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/brain_engine/model.py"
     }
   ],
-
   "blocks": [
     {
       "id": "transcripts",
@@ -133,15 +131,42 @@
     }
   ],
   "edges": [
-    {"from": "transcripts", "to": "extract", "label": "utterances"},
-    {"from": "extract", "to": "corpus_index", "label": "cards + directives"},
-    {"from": "corpus_index", "to": "query", "label": "ranked corpus"},
-    {"from": "query", "to": "cited_output", "label": "hits or refusal"},
-    {"from": "corpus_index", "to": "review_directives", "label": "matched review"},
-    {"from": "review_directives", "to": "remediation_prompt", "label": "ordered citations"},
-    {"from": "remediation_prompt", "to": "downstream", "label": "prompt + PENDING log"}
+    {
+      "from": "transcripts",
+      "to": "extract",
+      "label": "utterances"
+    },
+    {
+      "from": "extract",
+      "to": "corpus_index",
+      "label": "cards + directives"
+    },
+    {
+      "from": "corpus_index",
+      "to": "query",
+      "label": "ranked corpus"
+    },
+    {
+      "from": "query",
+      "to": "cited_output",
+      "label": "hits or refusal"
+    },
+    {
+      "from": "corpus_index",
+      "to": "review_directives",
+      "label": "matched review"
+    },
+    {
+      "from": "review_directives",
+      "to": "remediation_prompt",
+      "label": "ordered citations"
+    },
+    {
+      "from": "remediation_prompt",
+      "to": "downstream",
+      "label": "prompt + PENDING log"
+    }
   ],
-
   "spec_strip": [
     {
       "label": "Tests",
@@ -180,7 +205,6 @@
       "plain": "a scriptable no-source result"
     }
   ],
-
   "problem_statement": "Finance and tax decisions often survive only as meeting memory or buried notes. When the same position is needed in a workpaper, disclosure, or review response, an uncited paraphrase is not enough: the user needs the recorded words, who said them, and when — or an explicit refusal when the source is absent.",
   "scenarios": [
     {
@@ -204,7 +228,6 @@
       "source": "python -m brain_engine.loop --demo (knowledge-brain-engine/); live demo output; brain_engine/loop.py"
     }
   ],
-
   "instruction_set": [
     {
       "cmd": "python -m brain_engine",
@@ -319,7 +342,6 @@
       "artifacts": "none"
     }
   ],
-
   "benchmarks": [
     {
       "label": "Engine tests",
@@ -347,7 +369,6 @@
       "source": "python -m brain_engine.loop --demo — live output reports 3 corrections, 2 turns, and 1 quarantined orphan"
     }
   ],
-
   "control_characteristics": {
     "plain": "Every returned answer is tied to a recorded source. The remediation boundary ends with the generated cited prompt and PENDING log; execution and confirmation belong to the downstream user or system.",
     "verdict_map": [
@@ -401,7 +422,6 @@
       }
     ]
   },
-
   "limits": [
     {
       "statement": "The public runnable corpus is hand-authored and fully fictional; it demonstrates the ingest-and-query stage but does not record or transcribe a live meeting.",
@@ -424,15 +444,13 @@
       "source": "brain_engine/loop.py — REMEDIABLE excludes ORPHANED; integrity_loop and verdict_exit_code"
     }
   ],
-
   "media": {
-    "poster": "../assets/tile-brain.webp",
-    "motion": "../assets/tile-brain-motion.mp4",
-    "poster_alt": "Knowledge Brain system illustration showing meeting and SOP documents entering a queryable knowledge store, with a cited verbatim timestamped answer and a no-source no-answer control",
+    "poster": "../assets/engine-brain.webp",
+    "motion": "../assets/engine-brain-motion.mp4",
+    "poster_alt": "Knowledge Brain engine tile: an isometric CAD drawing of a document-inspection machine in matte grey, read left to right — accounting workpapers feed from an intake tray at the left onto a cobalt guide line, pass a structural-precondition gate, run through a bank of inspection stations that each check one family of controls, and leave as a single bound report in the tray at the right, with exceptions dropping to a reject tray below. A footer strip reads 7,011 tests, read-only, SFS-E07-KBN.",
     "caption": "Repository system animation: meeting and SOP sources feed the Knowledge Brain; answers leave cited verbatim and timestamped, while an unsourced query returns no answer.",
     "crops": []
   },
-
   "quickstart": [
     {
       "label": "Clone and print the fictional brain index",
@@ -447,14 +465,12 @@
       "command": "python -m brain_engine remediate \"Surplus Workpaper Review — Reviewer Corrections\""
     }
   ],
-
   "links": {
     "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/knowledge-brain-engine/README.md",
     "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/knowledge-brain-engine",
     "tests": "/tests/",
     "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
   },
-
   "meta": {
     "description": "Knowledge Brain (SFS-E07-KBN) datasheet — deterministic, citation-governed retrieval over fictional meeting transcripts, with cited answers, paste-ready footnotes, meeting prep, explicit refusal, and a generated apply-ready remediation handoff whose execution and confirmation stay downstream."
   }

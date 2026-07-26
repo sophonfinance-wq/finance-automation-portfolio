@@ -11,7 +11,6 @@
   "status": "PRODUCTION",
   "marketing_thesis": "The map and renderer live in source. Every structural count on this page is recomputed by the Atlas CLI or its test suite.",
   "layers_intro": "The Atlas is a data-to-artifact pipeline. Select a layer to see what it contributes to the generated map.",
-
   "layers": [
     {
       "id": "artifact",
@@ -42,7 +41,6 @@
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/atlas_data.py"
     }
   ],
-
   "blocks": [
     {
       "id": "model",
@@ -96,12 +94,27 @@
     }
   ],
   "edges": [
-    {"from": "model", "to": "payload", "label": "typed rows"},
-    {"from": "payload", "to": "render", "label": "resolved payload"},
-    {"from": "render", "to": "artifact", "label": "UTF-8 output"},
-    {"from": "artifact", "to": "views", "label": "embedded UI"}
+    {
+      "from": "model",
+      "to": "payload",
+      "label": "typed rows"
+    },
+    {
+      "from": "payload",
+      "to": "render",
+      "label": "resolved payload"
+    },
+    {
+      "from": "render",
+      "to": "artifact",
+      "label": "UTF-8 output"
+    },
+    {
+      "from": "artifact",
+      "to": "views",
+      "label": "embedded UI"
+    }
   ],
-
   "spec_strip": [
     {
       "label": "Tests",
@@ -140,7 +153,6 @@
       "plain": "the recurring finance rhythm keyed to a December 31 year-end"
     }
   ],
-
   "problem_statement": "Finance teams depend on structural knowledge: where records live, how recurring processes run, what conventions mean, and when work happens. When that context is scattered across people's memories and disconnected documents, onboarding slows down and handoffs become fragile.",
   "scenarios": [
     {
@@ -159,7 +171,6 @@
       "source": "finance-atlas/README.md — The problem it solves and Regenerate it; finance-atlas/atlas_tests/test_generator.py"
     }
   ],
-
   "instruction_set": [
     {
       "cmd": "py generate.py",
@@ -197,7 +208,6 @@
       "artifacts": "none"
     }
   ],
-
   "benchmarks": [
     {
       "label": "Repeat-build stability",
@@ -237,7 +247,6 @@
       "source": "py -3 -m pytest --collect-only -q -o addopts= (finance-atlas/); verified 2026-07-20 and pinned in site-datasheets/counts.json"
     }
   ],
-
   "control_characteristics": {
     "plain": "The Atlas guarantees a reproducible offline document generated from declared source data; it is not a live control, verification, or approval system.",
     "guarantees": [
@@ -252,7 +261,6 @@
       "offline_default": true
     }
   },
-
   "limits": [
     {
       "statement": "This is a fictional demonstration artifact, not a published map of any real finance department, entity registry, drive, system, bank, or person.",
@@ -271,15 +279,13 @@
       "source": "finance-atlas/README.md — demonstration-artifact scope; finance-atlas/atlas_data.py module docstring"
     }
   ],
-
   "media": {
-    "poster": "../assets/tile-atlas.webp",
-    "motion": "../assets/tile-atlas-motion.mp4",
-    "poster_alt": "Isometric Finance Operations Atlas concept linking entities and bank accounts to systems and a canonical source, with a stale copy labelled as flagged",
+    "poster": "../assets/engine-atlas.webp",
+    "motion": "../assets/engine-atlas-motion.mp4",
+    "poster_alt": "Finance Operations Atlas engine tile: an isometric CAD drawing of a document-inspection machine in matte grey, read left to right — accounting workpapers feed from an intake tray at the left onto a cobalt guide line, pass a structural-precondition gate, run through a bank of inspection stations that each check one family of controls, and leave as a single bound report in the tray at the right, with exceptions dropping to a reject tray below. A footer strip reads 2,952 tests, read-only, SFS-E08-ATL.",
     "caption": "Concept visual from the repository's Atlas media. The generated Atlas is a fictional static-data demonstration, not a live system monitor.",
     "crops": []
   },
-
   "quickstart": [
     {
       "label": "Clone and generate the default artifact",
@@ -290,14 +296,12 @@
       "command": "py generate.py --out somewhere.html"
     }
   ],
-
   "links": {
     "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/finance-atlas/README.md",
     "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/finance-atlas",
     "tests": "/tests/",
     "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
   },
-
   "meta": {
     "description": "Finance Operations Atlas (SFS-E08-ATL) datasheet — a deterministic, standard-library generator that turns a typed fictional finance-operations model into one self-contained HTML map with five interactive views."
   }
