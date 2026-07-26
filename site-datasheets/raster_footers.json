@@ -1,374 +1,514 @@
 {
-  "_why": "These tiles bake their spec strip into pixels, so no test can read it. Each entry records the figures composited onto the artwork together with digests of the exact files they were composited into. If counts.json moves, the figure check fails and the tile must be re-rendered; if a file changes, its digest check fails until the strip is re-read and re-pinned. The four original tiles pin a motion file too, because their figure is burnt into the animation as well as the poster - correcting only the poster once left all four animations still wrong.",
+  "_why": "These tiles bake their spec strip into pixels, so no test can read it. Each entry records the figures composited onto the artwork together with digests of the exact files they were composited into. If counts.json moves, the figure check fails and the tile must be re-rendered; if either file changes, its digest check fails until the strip is re-read and re-pinned. All forty-seven tiles now pin a motion file as well as a poster: the poster is only frame zero, and correcting it alone once left four animations still rendering a figure ten thousand short. Eight engines carry no Controls figure in their spec_strip, so their strip omits that cell rather than inventing one, and their pin carries no controls key.",
   "tiles": {
-    "draw": {
-      "poster": "engine-draw.webp",
-      "motion": "engine-draw-motion.mp4",
-      "controls": 34,
-      "tests": 10392,
-      "part_no": "SFS-E11-DRW",
+    "ap": {
+      "poster": "engine-ap.webp",
+      "motion": "engine-ap-motion.mp4",
+      "tests": 12223,
+      "part_no": "SFS-E10-APX",
       "sha256": {
-        "poster": "c4c60f5412311bd69fb23eb12da17592e6e6df6c8684fc7b5e4a370915b3674a",
-        "motion": "6a48c0e99b2e27ede8ee5fe697d740f005b52eef5fc4664ebb3f456eb068c660"
-      }
+        "poster": "9c7a1d9f6a6b857caa32907d0a23a19ef480b8ce2b193f87da04e5fb0a39accd",
+        "motion": "8c1c0790844883ed8cd82b259816768457ebd518f01b123632b218d3ee186d7c"
+      },
+      "controls": 30
     },
-    "upgrade": {
-      "poster": "engine-upgrade.webp",
-      "motion": "engine-upgrade-motion.mp4",
-      "controls": 20,
-      "tests": 10279,
-      "part_no": "SFS-E12-BUP",
+    "atlas": {
+      "poster": "engine-atlas.webp",
+      "motion": "engine-atlas-motion.mp4",
+      "tests": 2952,
+      "part_no": "SFS-E08-ATL",
       "sha256": {
-        "poster": "03cbc5c814caf93c5ba7c03d1c91aada016f1f20f442ee2c68d34d1d0ea40c6a",
-        "motion": "d49ff2507bb9559fffa57d0ddbf0a433cd2a28635caa4f9aac6552d00409d993"
-      }
-    },
-    "warranty": {
-      "poster": "engine-warranty.webp",
-      "motion": "engine-warranty-motion.mp4",
-      "controls": 22,
-      "tests": 10299,
-      "part_no": "SFS-E13-WRC",
-      "sha256": {
-        "poster": "7bbb311fd184b5061a67e25d82e664802dbbaf589f2e0a2092ac7d5c071e544f",
-        "motion": "8113b2b55c20ec030063d51ac0aa29e1b9a9ff7c95d73c535970ea4467c9586b"
-      }
-    },
-    "intercompany": {
-      "poster": "engine-intercompany.webp",
-      "motion": "engine-intercompany-motion.mp4",
-      "controls": 23,
-      "tests": 10310,
-      "part_no": "SFS-E14-ICO",
-      "sha256": {
-        "poster": "9e8845fb1374c3f7dcbd890e8c897fc266cfc63dc54ccd1c54d0137a8863f2b7",
-        "motion": "0d2222d8a5a072aa92282f763758078c13523678ebfb9439a0d48021e15b506a"
+        "poster": "5205bd1f458ad1a355ea8c972c13c851ce780e5f2247d5ba8846414654aa903b",
+        "motion": "262f7b763553802456c3b589a0930f871f99bade18be614e9d749aa7032d1e51"
       }
     },
     "bond": {
       "poster": "engine-bond.webp",
       "motion": "engine-bond-motion.mp4",
-      "controls": 29,
       "tests": 10420,
       "part_no": "SFS-E16-BND",
       "sha256": {
-        "poster": "51572f163305d7ef9ba8d956e509d368853808eaa67a6233eb1cdf765b5666f5",
-        "motion": "bb0083767c6b4b0a323958c19adcae4fc42111939e8225e87cd666053289362f"
+        "poster": "751de16cd1dce71b8f2b1cbbcbc3ee6c32182704a7615dc1daf274ec35d2e7bf",
+        "motion": "0b6b2ff7c6b5167d42ff049694c837c4c47c30d58f5c96073d05cd60055b8d3c"
+      },
+      "controls": 29
+    },
+    "brain": {
+      "poster": "engine-brain.webp",
+      "motion": "engine-brain-motion.mp4",
+      "tests": 7011,
+      "part_no": "SFS-E07-KBN",
+      "sha256": {
+        "poster": "329abec4cbd9222a28add167b47682f117b31eb4a419c18864393529750f0df8",
+        "motion": "e11c1a947940f6b99e26e48f5414e16df9dfd502cf9d643157b4ac4badfd5bfd"
       }
     },
     "capitalize": {
       "poster": "engine-capitalize.webp",
-      "controls": 19,
+      "motion": "engine-capitalize-motion.mp4",
       "tests": 10323,
       "part_no": "SFS-E39-CAP",
       "sha256": {
-        "poster": "3ab6aecb8300b843dc242aaee07cc58a5f2e4b3e6fc58a61c6cc845593930ea2"
-      }
+        "poster": "25632614964ef5ac7782eb08904c25d77344233dc8fcf9135af999773fefa13f",
+        "motion": "b396fe4123bd41b911b72a4f516ee352a4b2c98c9be1ec11856ffc5a24812b13"
+      },
+      "controls": 19
+    },
+    "cash": {
+      "poster": "engine-cash.webp",
+      "motion": "engine-cash-motion.mp4",
+      "tests": 5290,
+      "part_no": "SFS-E09-CSH",
+      "sha256": {
+        "poster": "05a5639706872eb93fe62d91ec30188f29ab7d47752cdcd4091d09ee982151fd",
+        "motion": "f6e6feb73ce273adf27ef1c82667487a51989f46fe8ac8c0a9bb4a2bbe7d9e53"
+      },
+      "controls": 5
     },
     "checkage": {
       "poster": "engine-checkage.webp",
-      "controls": 20,
+      "motion": "engine-checkage-motion.mp4",
       "tests": 10361,
       "part_no": "SFS-E44-OCA",
       "sha256": {
-        "poster": "ab14277ea39967f9b7eda5e948ec9f8dfbb51fd4f60d66d936f8fb0855495ccc"
+        "poster": "c68433784b04e201d583e416b1330b2c905439929454a4bc74bab3ca2a27c23c",
+        "motion": "e3f0fa02a95cfa71d7b17d07a92f2f0b0974a168a567d660c12936f5c3596b2f"
+      },
+      "controls": 20
+    },
+    "close": {
+      "poster": "engine-close.webp",
+      "motion": "engine-close-motion.mp4",
+      "tests": 15687,
+      "part_no": "SFS-E01-CLS",
+      "sha256": {
+        "poster": "1e9164e15c53e677a5c9a4954347b5862e63405f379a954c13abc52ccf692de2",
+        "motion": "313762ac455d088d1756b4ac096f3ccfd2a9ce82be6a5979aef1ee549db1b46a"
       }
     },
     "closing": {
       "poster": "engine-closing.webp",
       "motion": "engine-closing-motion.mp4",
-      "controls": 25,
       "tests": 10379,
       "part_no": "SFS-E32-COE",
       "sha256": {
-        "poster": "67452928c37f545129bc64bdf65891ef3b5697f6be4508b5b525261175646e8d",
-        "motion": "b8394f1692d0d3b748d1126fc224d92a2768690af618bfd2397627a80499991a"
-      }
+        "poster": "1b260e7c137952cb1b3b07f31824506498b06a8b94d74e265479b9090f91fcdb",
+        "motion": "6538985a7f7003c66210711f22b77e9e83c89d12b93ca42f663494ca9622e99e"
+      },
+      "controls": 25
     },
     "coi": {
       "poster": "engine-coi.webp",
       "motion": "engine-coi-motion.mp4",
-      "controls": 22,
       "tests": 10340,
       "part_no": "SFS-E18-COI",
       "sha256": {
-        "poster": "8f0fbead5e1ee3aca8f1309c992aa0a285380dcaaf983093308c878a1fa47518",
-        "motion": "9d674e8055511cf2c268bd91390138c1305d9ff12374269ceae66e45a5d5c9bf"
-      }
+        "poster": "336810b8aa1d31c74c5bc60ae71ac510335c41afba13bc7cf99505b30b718718",
+        "motion": "0d6afd0e1a410e330ae43370003f79275ee6ed1eb4611505cba12cb5b58cf3b1"
+      },
+      "controls": 22
     },
     "contingency": {
       "poster": "engine-contingency.webp",
-      "controls": 22,
+      "motion": "engine-contingency-motion.mp4",
       "tests": 10368,
       "part_no": "SFS-E46-CTG",
       "sha256": {
-        "poster": "a1f1eedc96412e79acd265dcbbecf1d8febe78994218835b489f3bf359e52c59"
-      }
+        "poster": "cb4e1f8d51a4b9816f7c847828948364b568986326b61e0a0c6902324ca22aa3",
+        "motion": "2dc07880b3315bd2032737bb265fdd6e23af728dad688dcc1d98ebc9f7a6f0c2"
+      },
+      "controls": 22
     },
     "deposit": {
       "poster": "engine-deposit.webp",
-      "controls": 27,
+      "motion": "engine-deposit-motion.mp4",
       "tests": 10407,
       "part_no": "SFS-E37-EMD",
       "sha256": {
-        "poster": "34c06e95cb16b076d897e9264a7b0e2b84c77c3e873bc991588a319bd05beebd"
-      }
+        "poster": "7fb17cda28282ccfc1aff7d2ae452ed4e46b94a0825b559ed484512f30025d1d",
+        "motion": "bc48a6546d29a9f9d55f79d7e750187b38dc4eb26f2cc0335db47cec6c33defc"
+      },
+      "controls": 27
     },
     "depreciation": {
       "poster": "engine-depreciation.webp",
-      "controls": 30,
+      "motion": "engine-depreciation-motion.mp4",
       "tests": 10440,
       "part_no": "SFS-E36-DEP",
       "sha256": {
-        "poster": "0e79a873ba9a3737f521a0b85d5d5422d341f1add56d7b0a5d615d75ef6c6548"
-      }
+        "poster": "4b6585bc4604c7c2adc29482476b591d809cfbd622768ac0ba7ee0965f1f0e11",
+        "motion": "0a05546eab45b2162aabfdc6301ff5f621c4cb1e45880f1b8b1545ff7f19fe18"
+      },
+      "controls": 30
+    },
+    "draw": {
+      "poster": "engine-draw.webp",
+      "motion": "engine-draw-motion.mp4",
+      "tests": 10392,
+      "part_no": "SFS-E11-DRW",
+      "sha256": {
+        "poster": "256f65615a94a68ac36db1f5e63bd41bbf8c9911d455c9aae2550d96796aa0e6",
+        "motion": "410d262af771ecfd04a725488ac1f8e6763f7e6f5a830027a88987ebecb21653"
+      },
+      "controls": 34
     },
     "energy": {
       "poster": "engine-energy.webp",
-      "controls": 26,
+      "motion": "engine-energy-motion.mp4",
       "tests": 10390,
       "part_no": "SFS-E26-EEH",
       "sha256": {
-        "poster": "494cc9061ef1955fcc138569dd40973e4f9b4718f021104a23ad70d0efe53f2c"
-      }
+        "poster": "ec785edadb0da382f58a2dc1c140154c6db9311b859a672a6366662dc9794c7a",
+        "motion": "1e7faddc7f2a33cf3cacb765bbb6713a9441c62b0299b80e37b09d259bd62471"
+      },
+      "controls": 26
     },
     "expense": {
       "poster": "engine-expense.webp",
       "motion": "engine-expense-motion.mp4",
-      "controls": 23,
       "tests": 10346,
       "part_no": "SFS-E19-EXP",
       "sha256": {
-        "poster": "589d5dba1f14ac25d2f5c1c059e4d2e18eec379395aa15291bd6d0fc641d5e6e",
-        "motion": "fbe702a89caa7feca44f64ed18d46dd2bccd1f0dbdf075b5b940004165cd5af6"
-      }
+        "poster": "421bab3087ec74f35c64409e61e8861e2906f560ab663efeeb7de9d49ad06b76",
+        "motion": "013b5362dfa4066f97782271077fa28bcd0d436cbbffb54c8b7d1f42c1f055bd"
+      },
+      "controls": 23
     },
     "filing": {
       "poster": "engine-filing.webp",
-      "controls": 22,
+      "motion": "engine-filing-motion.mp4",
       "tests": 10369,
       "part_no": "SFS-E25-DUE",
       "sha256": {
-        "poster": "36646a3f61ce5aed909a11d2c1412a0016d772e2513d2d5d9bcd1ba998b13737"
-      }
+        "poster": "900452e0dd710970dadb53828566f9d65cb2b2e9e10a594c32ca5c0d468e1774",
+        "motion": "853296e32bd11af79b60daaf04a323335b9cea5946bb6c45d3d8eac1d3c53f2f"
+      },
+      "controls": 22
     },
     "financing": {
       "poster": "engine-financing.webp",
-      "controls": 21,
+      "motion": "engine-financing-motion.mp4",
       "tests": 10337,
       "part_no": "SFS-E28-FEX",
       "sha256": {
-        "poster": "111178270cf23bec6d9700095f8efd71b977f3d8155039b7f492375c67504de6"
-      }
+        "poster": "0d809724b2c25d5c080f3570c8e11ae61d2175fb7da0b824a17bd407d3a76947",
+        "motion": "c4283e196054169b283d4dd81e893fd93cf506a454c45a60f2f03729b70da1f0"
+      },
+      "controls": 21
     },
     "franchise": {
       "poster": "engine-franchise.webp",
-      "controls": 21,
+      "motion": "engine-franchise-motion.mp4",
       "tests": 10344,
       "part_no": "SFS-E40-TXF",
       "sha256": {
-        "poster": "558db28f8b8b52a1fd4fb7bd36968ce1343e69335630b0ae4b4d114c6376160f"
-      }
+        "poster": "a02dc934e65c29203cac4d610bd80b621c615b49abb23e05d7a979a544414425",
+        "motion": "4838b47dd5847c25f497f5418d686e333012b2c46f5a7e0c9db5dcb6bb86962a"
+      },
+      "controls": 21
     },
     "gaalloc": {
       "poster": "engine-gaalloc.webp",
-      "controls": 22,
+      "motion": "engine-gaalloc-motion.mp4",
       "tests": 10404,
       "part_no": "SFS-E43-GAA",
       "sha256": {
-        "poster": "374cbde75ac5a35d4c566b80c20d626d68510273fd46d23ea862dbd3fc0fa416"
-      }
+        "poster": "4e17eaf1657d2da5d6e86497bec299bbae3e102ec83a840ddf190e0620c83c39",
+        "motion": "bd83f2814009b260c62782ef0a421c7e1f4f2ade11fa5fe5ffff887b094eab03"
+      },
+      "controls": 22
     },
     "grt": {
       "poster": "engine-grt.webp",
       "motion": "engine-grt-motion.mp4",
-      "controls": 27,
       "tests": 10400,
       "part_no": "SFS-E24-GRT",
       "sha256": {
-        "poster": "ee1b79020f8206ec7ae66222d0f8476f6f687ecb9b5ba3fab9e3b2f204b658a6",
-        "motion": "b6aadb3430f01c4d209b2debeee8dde6f5fd34dcb5663bc7be2015597221bb5c"
-      }
+        "poster": "69a3addf9e6556490c48def6d5d31a5741e2a59e168c26c41696fe1f300f723a",
+        "motion": "9998011a09005528f8bd03781c88bd3fafb44f8db962cb7282a206564240e6e2"
+      },
+      "controls": 27
     },
     "inforeturn": {
       "poster": "engine-inforeturn.webp",
       "motion": "engine-inforeturn-motion.mp4",
-      "controls": 22,
       "tests": 10382,
       "part_no": "SFS-E47-IRN",
       "sha256": {
-        "poster": "f17261fd47f1069366c7c30f26512b8f4821a4e24d5fca6a9b1b96d094f22c94",
-        "motion": "8b238adbd873b6d4cbda8d80d316907fa05725c0137ee6feca1d64f11fa543df"
-      }
+        "poster": "af47320b94d16aaed3de4bc9a1ba5122959427883e9f107ad0bc543cedbd145f",
+        "motion": "93082aeb4aec0c08fa0e03a4fef15957780bb29d7b1331e6e01c51040d1b045d"
+      },
+      "controls": 22
     },
     "insurance": {
       "poster": "engine-insurance.webp",
-      "controls": 24,
+      "motion": "engine-insurance-motion.mp4",
       "tests": 10364,
       "part_no": "SFS-E17-INS",
       "sha256": {
-        "poster": "a49697ec809852e302df52da7338caedb5f3baf4d304545a7cd1449eb3b89509"
-      }
+        "poster": "bb56e10bc437f7f041ed357176bba4d4ed1e29744469f26a4820d250aeb8353c",
+        "motion": "0c27de7ee75a3ca417cb1fa3e363a4d85307d7d9a57ab893fb4109a1cbd33655"
+      },
+      "controls": 24
+    },
+    "intercompany": {
+      "poster": "engine-intercompany.webp",
+      "motion": "engine-intercompany-motion.mp4",
+      "tests": 10310,
+      "part_no": "SFS-E14-ICO",
+      "sha256": {
+        "poster": "d341e74e078eaa6a831618d1d8b5c1514575ef478b7063eda2c31c775487d2ab",
+        "motion": "a12af26a033a8934b0bff8134902f7eeb24640863116907d7074fe76d9be6a82"
+      },
+      "controls": 23
     },
     "interest": {
       "poster": "engine-interest.webp",
       "motion": "engine-interest-motion.mp4",
-      "controls": 28,
       "tests": 10402,
       "part_no": "SFS-E27-INT",
       "sha256": {
-        "poster": "96afdfb7a13fa12ed01d70cd8756ea4a8c05c077c3cc6431e06dc8709bde82ae",
-        "motion": "d49cafe2c71613b332a782eeda6252423e361124d588a234fa0d5c82f5a90cd6"
-      }
+        "poster": "26fea64ca58bc7730f5fa52540726ed29c251ef006999cd697fa171fd827a845",
+        "motion": "0bf50014539c8150e11924f86a23fc61fbfa10417eb636e1f1451e29a6612a93"
+      },
+      "controls": 28
     },
     "labor": {
       "poster": "engine-labor.webp",
       "motion": "engine-labor-motion.mp4",
-      "controls": 26,
       "tests": 10382,
       "part_no": "SFS-E20-LAB",
       "sha256": {
-        "poster": "d7cf3b855bb1229e09d563546953152b7bf7685adb8f62f595558c876bfe46c2",
-        "motion": "9d72106e53700b79b9c00115afc8368e9fcf168d1d31da37f0bacb4cf4e49ff7"
-      }
+        "poster": "deb3eff3ef82f865d146c91ed42f8ca7f114e6ed3681703180ccd227c4ff5399",
+        "motion": "f033646baf05afb85248f373966140eaa00ccabe58641c53a3f6c83b60881526"
+      },
+      "controls": 26
     },
     "lien": {
       "poster": "engine-lien.webp",
       "motion": "engine-lien-motion.mp4",
-      "controls": 25,
       "tests": 10373,
       "part_no": "SFS-E21-LWV",
       "sha256": {
-        "poster": "9288461f228fc279881d418cfe58875e862d058945d16a1b441bbf31d1eb1adc",
-        "motion": "9e2df0921feef4d4c5b903827eb479ed5d9943081aa67a7117f5e223c0de42d5"
-      }
+        "poster": "2124f5f20d7beed40fb838fb1e5349109cf57963e9fcaf6a669cf19907323d6e",
+        "motion": "19452ec921805fd0302adba73b44d2143c9c916aa957439d3dc38598528e58e3"
+      },
+      "controls": 25
     },
     "payroll": {
       "poster": "engine-payroll.webp",
-      "controls": 29,
+      "motion": "engine-payroll-motion.mp4",
       "tests": 10414,
       "part_no": "SFS-E30-PBR",
       "sha256": {
-        "poster": "2cac1c9616b9ff76c48e021f28f8f1bc7af57451dbb2bcc1d63e6542da3db487"
-      }
+        "poster": "25ab2e04effa5b0b899c8044fe748fd7de6be2524e10e7e60a6b558376a3e3fc",
+        "motion": "483c36cbd9f78c65e994e060ea3550b81b4a9f1e60c2751e3c2a9df7e19d1edb"
+      },
+      "controls": 29
     },
     "pickup": {
       "poster": "engine-pickup.webp",
-      "controls": 25,
+      "motion": "engine-pickup-motion.mp4",
       "tests": 10423,
       "part_no": "SFS-E35-EPU",
       "sha256": {
-        "poster": "7afdfd563e863ac5be62e15bff634b819392494838ef69426c37d3406c3e7ae4"
-      }
+        "poster": "c59f046fd2d807c58a432d6f8d4d997d68fba02357908d076221e367d60a4e8b",
+        "motion": "8988c69a18f2b18fcb325c198c1dae588f65025ca776a1526da92a663259d7ca"
+      },
+      "controls": 25
     },
     "proforma": {
       "poster": "engine-proforma.webp",
       "motion": "engine-proforma-motion.mp4",
-      "controls": 26,
       "tests": 10381,
       "part_no": "SFS-E23-QPR",
       "sha256": {
-        "poster": "fdf969a9be9434dfa120800933f2c7cd7263d6cf4d11450c8b0cb9fab1500307",
-        "motion": "647ceae0103fd332ab6f18349c8b8da102a79cf08336317b21d65e8fc37e6243"
-      }
+        "poster": "70478da59635d0a6f44258cb48dab38275ae7e2c62a52df0d63800a985fdbf09",
+        "motion": "f4345a8d111825038184e4d40a0f83a82ef8780eca06b0361ababb27c0b15b9b"
+      },
+      "controls": 26
     },
     "proptax": {
       "poster": "engine-proptax.webp",
       "motion": "engine-proptax-motion.mp4",
-      "controls": 26,
       "tests": 10389,
       "part_no": "SFS-E15-PPT",
       "sha256": {
-        "poster": "6c85360c5deb14faed782b835ef590f76c57cf1e0d81fbd318fd451296b40924",
-        "motion": "36d19c0dca0647773bff9d5b39243a1948c5e57df44ba1b3151ff41ecd912b06"
+        "poster": "65a7e55e61aaff3ebc0abd30460713b341aa2390d14e3378c6daf2f0abbc4ff6",
+        "motion": "a4246535ebebdcc76678c9429df90c1de2a85afb7e539a05894e91c20c03e41d"
+      },
+      "controls": 26
+    },
+    "recon": {
+      "poster": "engine-recon.webp",
+      "motion": "engine-recon-motion.mp4",
+      "tests": 7511,
+      "part_no": "SFS-E02-RCN",
+      "sha256": {
+        "poster": "a1472a4d2edcc4840d0d11dfa04f7475703c379c516e76de272041c0fe89fab8",
+        "motion": "9fcf5e0f5a609386472f3039297e40aed22392f24b3d4ec111964eefe713777c"
       }
     },
     "sizing": {
       "poster": "engine-sizing.webp",
-      "controls": 21,
+      "motion": "engine-sizing-motion.mp4",
       "tests": 10338,
       "part_no": "SFS-E41-DTS",
       "sha256": {
-        "poster": "2a3e594c3e5f72cd49fbb176c8024800000d2fd060346d28602d815fff8bb5c5"
-      }
+        "poster": "f4c3b3d4eaca3e25140be1ead94e6d61f4260ce2a91baec7fb9e9598ac3c180d",
+        "motion": "376a4366ede74c3effa8bc618b685bf9cd34798faf00e6dfc834b52e6fe0604e"
+      },
+      "controls": 21
     },
     "sov": {
       "poster": "engine-sov.webp",
       "motion": "engine-sov-motion.mp4",
-      "controls": 29,
       "tests": 10412,
       "part_no": "SFS-E34-SOV",
       "sha256": {
-        "poster": "97b3049f4b9c38bc7132cafc24c7d8e36b51cec8e862750410eaf5b9cdc4b5de",
-        "motion": "8e8fe2a2ea90cf0cf145bfb60caaa59476b0324a540bc19721a64ea5ea8223f4"
-      }
+        "poster": "2602000e6026ce7d846c62895a588e30211532aade8da4c4086f1e559b0e7490",
+        "motion": "2590abe2d4fa412aa6d0d80649f2f01a365f6234c932c55b6cfb5626485bbff7"
+      },
+      "controls": 29
     },
     "spending": {
       "poster": "engine-spending.webp",
-      "controls": 29,
+      "motion": "engine-spending-motion.mp4",
       "tests": 10424,
       "part_no": "SFS-E38-SRG",
       "sha256": {
-        "poster": "232041928d3730fea9456b50ccfe604dc77b2973d38109dd619bef4bb7047bb6"
-      }
+        "poster": "0d89bb95501e909af30523aea360bb65394cf3a5f9e2f1afed4f5d15f4b3a489",
+        "motion": "a2d4a5f0dd4ac087142e0802822c76e716826ac9d32e3b956c0884763654f537"
+      },
+      "controls": 29
     },
     "standing": {
       "poster": "engine-standing.webp",
-      "controls": 26,
+      "motion": "engine-standing-motion.mp4",
       "tests": 10385,
       "part_no": "SFS-E33-GDS",
       "sha256": {
-        "poster": "7bb876daf2756332905477c2edc4e4bcbb1de45af01990769cc8083ef062390e"
+        "poster": "e643a95a0aa1f64c7071df97b15e4a2f389eb28e47bb3fc3a0e69289ed28d4d3",
+        "motion": "b92507fc015e6bebbd0108c5a3dfc38abb450a7177c2885727e609d3e1fc6004"
+      },
+      "controls": 26
+    },
+    "surplus": {
+      "poster": "engine-surplus.webp",
+      "motion": "engine-surplus-motion.mp4",
+      "tests": 7498,
+      "part_no": "SFS-E05-SRP",
+      "sha256": {
+        "poster": "c8d1c9158a68b1355ddeb8c7c3d8b9e6bf9a36abb1369c9de950a2ac4f2c351e",
+        "motion": "43fb46346aeecd4c16de78d1a6cb92e10c3f288552d830d3a9c7b2ed27ce6bb4"
+      }
+    },
+    "tax": {
+      "poster": "engine-tax.webp",
+      "motion": "engine-tax-motion.mp4",
+      "tests": 8605,
+      "part_no": "SFS-E03-PTX",
+      "sha256": {
+        "poster": "6e29532b29e461ee5c529ea31f7bab3f2fd1e13c4b163f8501681db5f7c3682d",
+        "motion": "a85044de1037d56cb76a328339f27b5f8fef428f11712effb51358006fedbe41"
+      }
+    },
+    "triangulate": {
+      "poster": "engine-triangulate.webp",
+      "motion": "engine-triangulate-motion.mp4",
+      "tests": 8320,
+      "part_no": "SFS-E06-TRI",
+      "sha256": {
+        "poster": "4374929b55fe614bb5313c18978fb9c56dc2551b36baefe3c5d7e3ec6a5ee47b",
+        "motion": "d96553ae8cc4d741daf075290ad0b4ef42e9dab072bccf0fdfce64f86e49b4fd"
       }
     },
     "unitsales": {
       "poster": "engine-unitsales.webp",
       "motion": "engine-unitsales-motion.mp4",
-      "controls": 21,
       "tests": 10355,
       "part_no": "SFS-E42-USM",
       "sha256": {
-        "poster": "f5c21aec1a35ed82bc6065b83efd076feeccc37a9f54a58e737b0e02a92cb743",
-        "motion": "a06c38daa2f2724397f4aa87e021014864caaa3a9e6a00b313d8b15350976f31"
+        "poster": "665659265344d72fe78c74fb5dd6f659af4824b26d61038c29dd89e9978d5af8",
+        "motion": "9901e34df46f3d226c4865b5680d54840d2c2d5de359562ccd50229c91a63011"
+      },
+      "controls": 21
+    },
+    "upgrade": {
+      "poster": "engine-upgrade.webp",
+      "motion": "engine-upgrade-motion.mp4",
+      "tests": 10279,
+      "part_no": "SFS-E12-BUP",
+      "sha256": {
+        "poster": "944e2ea4b69fbabf08a6b0aead3283f5d686b0ef86f1b349995181c1cff5d053",
+        "motion": "908bde4ffaa90c51b886a3d498b5b24d4f96b0a380c0f87e880d2e7a25f8161b"
+      },
+      "controls": 20
+    },
+    "validation": {
+      "poster": "engine-validation.webp",
+      "motion": "engine-validation-motion.mp4",
+      "tests": 4814,
+      "part_no": "SFS-E04-VAL",
+      "sha256": {
+        "poster": "7f6fff38159f971ff4ab480177d4b18cb449ea5cf626f14ff519724f8f9a0104",
+        "motion": "07617455753c466c2f65752345439f4a14a4c9d56df84c040d4428879a2a9d6b"
       }
     },
     "variance": {
       "poster": "engine-variance.webp",
-      "controls": 22,
+      "motion": "engine-variance-motion.mp4",
       "tests": 10411,
       "part_no": "SFS-E45-PVR",
       "sha256": {
-        "poster": "3aefeb7eb372d876ad3aa1c1ea9b7932e1513ec8fcb5f7add2fe869299ead659"
-      }
+        "poster": "a331319e4f39245b60804c6e12c809dc10b60933f29529f6af3a90cc02fe2f4f",
+        "motion": "7b51fae9015996a70941a042ba4d9c96130deb05b2ab6a7e0cf017274b383f6f"
+      },
+      "controls": 22
+    },
+    "warranty": {
+      "poster": "engine-warranty.webp",
+      "motion": "engine-warranty-motion.mp4",
+      "tests": 10299,
+      "part_no": "SFS-E13-WRC",
+      "sha256": {
+        "poster": "42177412d7d586fd8bd17293a9a656e6d8aa3d288b8805959ebe14cec752d93d",
+        "motion": "47a5a29cb18dd0c931948ecff96e26a3ff17a06d3d52c1411dd5b91b12eba26c"
+      },
+      "controls": 22
     },
     "waterfall": {
       "poster": "engine-waterfall.webp",
-      "controls": 30,
+      "motion": "engine-waterfall-motion.mp4",
       "tests": 10449,
       "part_no": "SFS-E22-WFL",
       "sha256": {
-        "poster": "746d0bc6d5ad378f8cc696b1041faf461a4844b1b35f0a96ae7d78abb6a01cd4"
-      }
+        "poster": "b7cdd037768762a5a5fee66abbfbf2869358c72ed2809135c3a1101470ff89ab",
+        "motion": "4d01ec35145636e0dd6428184262ef44d17c7070695a3968601ce8825d61ff72"
+      },
+      "controls": 30
     },
     "wire": {
       "poster": "engine-wire.webp",
-      "controls": 23,
+      "motion": "engine-wire-motion.mp4",
       "tests": 10347,
       "part_no": "SFS-E29-WRL",
       "sha256": {
-        "poster": "36d3abb4be6662a654882bd2d24071c205c9911fc693c7eef082874eb1bdf4b2"
-      }
+        "poster": "eea6b649e298e9f4adff4adeb612d44f22b110cb5708a70007118afbe60ea6b6",
+        "motion": "a130b1101aba4cba0016918ee4cfcbfd4763a471d8eed702a0db9cf985d75238"
+      },
+      "controls": 23
     },
     "withholding": {
       "poster": "engine-withholding.webp",
       "motion": "engine-withholding-motion.mp4",
-      "controls": 28,
       "tests": 10410,
       "part_no": "SFS-E31-NRW",
       "sha256": {
-        "poster": "dcdc8f7999ac05227b7d1910cdefe31ead27ec48ecb9551b6b2507dc5bdabaf0",
-        "motion": "9865efe44a38280dc4add27f2fa3d116e86843e77e8ce8e25935567c71998d51"
-      }
+        "poster": "e01e91931200f6ca04a99da3e3d2fa62092a391d862852aa5ded1701e155069c",
+        "motion": "a0b54e52e20bc8fb32a742b8e1fa4ea4799d04cff80eb3e325d82884bee890a9"
+      },
+      "controls": 28
     }
   }
 }
