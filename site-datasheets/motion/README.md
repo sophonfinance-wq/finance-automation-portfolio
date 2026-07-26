@@ -67,6 +67,33 @@ place, so a mismatch shows up as a pop. All shipped clips land at 3.7-4.3.
 **Aspect** — the clip must match its poster's aspect. These tiles are true 16:9
 (1600x900); the older tiles at 1.791 needed refitting in `1af78d9`.
 
+**Loop seam** — every tile plays with `loop=true`, so the wrap from last frame
+back to first is on screen every few seconds. Measured across the whole site, 34
+of 37 clips jumped at that wrap; the previous batch's `upgrade`, `warranty` and
+`draw` are the worst on the site at 7–12 (absolute mean-abs, 0–255). `install_motion.py`
+now eases the tail back to frame 0 so the wrap is continuous, which brings every
+clip here to ≤2.4 — at or better than `intercompany` (2.11), which already ships
+and reads as a clean loop.
+
+Judge the seam in **absolute** terms, not as a multiple of the median frame step.
+A nearly-static clip has a tiny median step, so a perfectly acceptable seam can
+read as "6x" while being visually nothing.
+
+Two rejected alternatives, for the record. Cross-dissolving the tail onto the
+*head* makes frame 0 a blend of two moments, so it no longer matches the poster
+and the swap pops — trading a jump every loop for a pop on every load. Ping-pong
+is seamless by construction but runs the machine backwards, which is wrong for a
+mechanism meant to read as working.
+
+Do the loop close in the SAME pass as the scale and encode. Running it as a
+second pass over the finished 720p file costs a generation of H.264 and pushed
+the poster handoff from ~3.8 to ~6.2 with no visible benefit. Blending needs
+pixel access so the decode is unavoidable, but let ffmpeg do the scaling:
+measured on one clip, ffmpeg-only scored 3.69, python-decode + ffmpeg-scale 4.91,
+and python-decode + cv2-resize 5.99. (Expressing the blend as an ffmpeg `blend=`
+expression keeps everything in YUV and scores 3.69, but it evaluates per pixel
+per frame and is far too slow for a batch.)
+
 ## Prompting
 
 Lead with the lock and name the rigid parts. The difference between attempt 1 and
