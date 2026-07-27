@@ -27,7 +27,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import re
 
 import datasheet_spec as ds
 import generate_datasheets as gen
@@ -114,20 +113,9 @@ def test_alt_text_states_the_strip_the_tile_renders() -> None:
         alt = (ds.load_spec(slug).get("media") or {}).get("poster_alt") or ""
         if "footer" not in alt.lower():
             continue  # an alt that makes no strip claim cannot misstate it
-        # Eight engines carry no Controls figure in their spec_strip, so their strip
-        # renders three cells instead of four and their pin has no controls key. The
-        # cell that does not exist cannot be misstated; the rest still must not be.
-        cells = [f"{entry['tests']:,} tests", entry["part_no"]]
-        if "controls" in entry:
-            cells.insert(0, f"{entry['controls']} controls")
-        elif re.search(r"\d[\d,]*\s+controls\b", alt, re.I):
-            # The exemption must not become a way to dodge the assertion: a tile whose
-            # strip omits the figure may not have an alt that claims one anyway. Match a
-            # FIGURE rather than the bare word, because the alt legitimately describes
-            # "a bank of inspection stations that each check one family of controls".
-            problems.append(
-                f"{slug}: strip renders no controls figure, but its alt text claims one")
-        for cell in cells:
+        for cell in (f"{entry['controls']} controls",
+                     f"{entry['tests']:,} tests",
+                     entry["part_no"]):
             if cell.lower() not in alt.lower():
                 problems.append(f"{slug}: strip renders {cell!r}, alt does not say it")
     assert not problems, "alt text contradicts the artwork:\n  " + "\n  ".join(problems)
