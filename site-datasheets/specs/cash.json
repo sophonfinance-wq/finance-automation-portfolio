@@ -11,6 +11,7 @@
   "status": "PRODUCTION",
   "marketing_thesis": "Cash is trusted only after the bridge, register, approvals, and sweep arithmetic can be re-derived. The public engine exposes those controls as deterministic validators and pins the behavior with an end-to-end tamper grid.",
   "layers_intro": "Each layer is one implemented validation-only control. Select a layer for its business purpose and source-level behavior.",
+
   "layers": [
     {
       "id": "bank-rec",
@@ -48,6 +49,7 @@
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/cash_engine/cash_concentration.py"
     }
   ],
+
   "blocks": [
     {
       "id": "demo",
@@ -131,63 +133,19 @@
     }
   ],
   "edges": [
-    {
-      "from": "demo",
-      "to": "bank-rec-control",
-      "label": "reconciliations"
-    },
-    {
-      "from": "demo",
-      "to": "checks-control",
-      "label": "check register"
-    },
-    {
-      "from": "demo",
-      "to": "wire-control",
-      "label": "wire requests"
-    },
-    {
-      "from": "demo",
-      "to": "register-control",
-      "label": "bank register"
-    },
-    {
-      "from": "demo",
-      "to": "sweep-control",
-      "label": "sweep lines"
-    },
-    {
-      "from": "bank-rec-control",
-      "to": "aggregate",
-      "label": "findings + verdict"
-    },
-    {
-      "from": "checks-control",
-      "to": "aggregate",
-      "label": "findings + verdict"
-    },
-    {
-      "from": "wire-control",
-      "to": "aggregate",
-      "label": "findings + verdict"
-    },
-    {
-      "from": "register-control",
-      "to": "aggregate",
-      "label": "findings + verdict"
-    },
-    {
-      "from": "sweep-control",
-      "to": "aggregate",
-      "label": "findings + verdict"
-    },
-    {
-      "from": "aggregate",
-      "to": "human",
-      "label": "ready or needs review",
-      "gate": true
-    }
+    {"from": "demo", "to": "bank-rec-control", "label": "reconciliations"},
+    {"from": "demo", "to": "checks-control", "label": "check register"},
+    {"from": "demo", "to": "wire-control", "label": "wire requests"},
+    {"from": "demo", "to": "register-control", "label": "bank register"},
+    {"from": "demo", "to": "sweep-control", "label": "sweep lines"},
+    {"from": "bank-rec-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "checks-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "wire-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "register-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "sweep-control", "to": "aggregate", "label": "findings + verdict"},
+    {"from": "aggregate", "to": "human", "label": "ready or needs review", "gate": true}
   ],
+
   "spec_strip": [
     {
       "label": "Tests",
@@ -226,6 +184,7 @@
       "plain": "the engine validates but cannot post"
     }
   ],
+
   "problem_statement": "Cash can appear plausible while a bridge is out of tie, a stale check is unresolved, a wire lacks segregation of duties, a running balance has drifted, or sweep legs do not foot. A controller needs each control recomputed from structured inputs and every exception carried forward without turning mechanical cleanliness into approval.",
   "scenarios": [
     {
@@ -244,6 +203,7 @@
       "source": "cash-management/cash_engine/wire_approval.py — WireApprovalValidator and WireApprovalResult"
     }
   ],
+
   "instruction_set": [
     {
       "cmd": "python -m cash_engine --demo",
@@ -274,6 +234,7 @@
       "artifacts": "none"
     }
   ],
+
   "benchmarks": [
     {
       "label": "Engine tests",
@@ -304,6 +265,7 @@
       "plain": "the bundled fictional dataset exercises every control"
     }
   ],
+
   "control_characteristics": {
     "plain": "A mechanically clean result is only READY FOR HUMAN REVIEW. The source keeps approval, release, and posting outside the engine.",
     "verdict_map": [
@@ -335,6 +297,7 @@
       "note": "The engine determines mechanical readiness only. Every result carries manual gates, and posting_authorized remains False."
     }
   },
+
   "limits": [
     {
       "statement": "The engine never posts, drafts a journal entry, releases a wire, creates an import payload, or mutates a source system.",
@@ -353,13 +316,15 @@
       "source": "cash-management/cash_engine/bank_rec.py — BANK_ERROR_REVIEW_REQUIRED and BOOK_ERROR_REVIEW_REQUIRED"
     }
   ],
+
   "media": {
-    "poster": "../assets/engine-cash.webp",
-    "motion": "../assets/engine-cash-motion.mp4",
-    "poster_alt": "Cash Management engine tile: an isometric CAD drawing of a document-inspection machine in matte grey, read left to right — accounting workpapers feed from an intake tray at the left onto a cobalt guide line, pass a structural-precondition gate, run through a bank of inspection stations that each check one family of controls, and leave as a single bound report in the tray at the right, with exceptions dropping to a reject tray below. A footer strip reads 5 controls, 5,290 tests, read-only, SFS-E09-CSH.",
+    "poster": "../assets/tile-cash.webp",
+    "motion": "../assets/tile-cash-motion.mp4",
+    "poster_alt": "Cash Management diagram with a bank record tied to the general ledger above check aging, two wire approvals, and a concentration sweep",
     "caption": "The existing Cash Management engine tile depicts the bank-to-ledger tie-out together with check aging, dual wire approvals, and concentration sweep controls.",
     "crops": []
   },
+
   "quickstart": [
     {
       "label": "Clone and run the complete fictional demo",
@@ -370,12 +335,14 @@
       "command": "python -m pytest --collect-only -q -o addopts="
     }
   ],
+
   "links": {
     "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/cash-management/README.md",
     "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/cash-management/cash_engine",
     "tests": "/tests/",
     "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
   },
+
   "meta": {
     "description": "Cash Management (SFS-E09-CSH) datasheet — five deterministic, validation-only cash controls for bank-to-GL reconciliation, outstanding checks, wire segregation of duties, bank-register continuity, and concentration sweeps, all ending at an explicit human-review boundary."
   }

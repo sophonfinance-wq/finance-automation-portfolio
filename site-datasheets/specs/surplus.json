@@ -11,6 +11,7 @@
   "status": "PRODUCTION",
   "marketing_thesis": "The public package exposes its intermediates, its reconciliation identities, and the exact commands behind the page. Its control claims can be re-run from the repository instead of accepted on presentation alone.",
   "layers_intro": "Each layer has one duty: source facts feed the calculation, the harness challenges its exposed intermediates, and the bounded loop stops at a human-review boundary.",
+
   "layers": [
     {
       "id": "human-gate",
@@ -48,6 +49,7 @@
       "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/surplus_engine/generate.py"
     }
   ],
+
   "blocks": [
     {
       "id": "facts",
@@ -111,38 +113,14 @@
     }
   ],
   "edges": [
-    {
-      "from": "facts",
-      "to": "engine",
-      "label": "source facts"
-    },
-    {
-      "from": "engine",
-      "to": "reports",
-      "label": "published results"
-    },
-    {
-      "from": "engine",
-      "to": "reconcile",
-      "label": "exposed intermediates"
-    },
-    {
-      "from": "reconcile",
-      "to": "loop",
-      "label": "breaks"
-    },
-    {
-      "from": "loop",
-      "to": "engine",
-      "label": "re-derive earliest period"
-    },
-    {
-      "from": "loop",
-      "to": "human",
-      "label": "PASS / FLAG / FAIL",
-      "gate": true
-    }
+    {"from": "facts", "to": "engine", "label": "source facts"},
+    {"from": "engine", "to": "reports", "label": "published results"},
+    {"from": "engine", "to": "reconcile", "label": "exposed intermediates"},
+    {"from": "reconcile", "to": "loop", "label": "breaks"},
+    {"from": "loop", "to": "engine", "label": "re-derive earliest period"},
+    {"from": "loop", "to": "human", "label": "PASS / FLAG / FAIL", "gate": true}
   ],
+
   "spec_strip": [
     {
       "label": "Tests",
@@ -179,6 +157,7 @@
       "plain": "PASS and FLAG exit 0; FAIL exits 1"
     }
   ],
+
   "problem_statement": "Foreign-affiliate surplus and adjusted cost base are not one ending balance. They are connected roll-forwards across entities, years, ownership percentages, distributions, capital events, and exchange-rate layers. A spreadsheet can still look orderly while a stale opening, unsupported elevation, overdrawn pool, or mis-keyed ACB breaks the structure. This engine makes those mechanics explicit and gives a separate harness enough exposed detail to re-derive them.",
   "scenarios": [
     {
@@ -197,6 +176,7 @@
       "source": "py -3 -m surplus_engine.loop --demo (tax-surplus-engine/); reproduced 2026-07-20; surplus_engine/loop.py -- DEMO_FAULTS and DEFAULT_MATERIALITY_CAD"
     }
   ],
+
   "instruction_set": [
     {
       "cmd": "python -m surplus_engine --start 2021 --end 2024",
@@ -269,6 +249,7 @@
       "artifacts": "none"
     }
   ],
+
   "benchmarks": [
     {
       "label": "Engine tests",
@@ -295,6 +276,7 @@
       "source": "tax-surplus-engine/README.md -- seeded Cedar Mezz per-layer FX example; surplus_engine/fx.py"
     }
   ],
+
   "control_characteristics": {
     "verdict_map": [
       {
@@ -331,6 +313,7 @@
       "note": "The loop can restore structural consistency, but a FLAG requires a person to review material booked adjustments before sign-off, and a FAIL escalates without claiming convergence."
     }
   },
+
   "limits": [
     {
       "statement": "The repository package is a fictional reference implementation over generated entities, facts, and FX rates; it does not reproduce a client or employer methodology or dataset.",
@@ -349,13 +332,15 @@
       "source": "tax-surplus-engine/surplus_engine/loop.py -- _settle_year, assurance_loop, and _verdict"
     }
   ],
+
   "media": {
-    "poster": "../assets/engine-surplus.webp",
-    "motion": "../assets/engine-surplus-motion.mp4",
-    "poster_alt": "Tax Surplus / ACB engine tile: an isometric CAD drawing of a document-inspection machine in matte grey, read left to right — accounting workpapers feed from an intake tray at the left onto a cobalt guide line, pass a structural-precondition gate, run through a bank of inspection stations that each check one family of controls, and leave as a single bound report in the tray at the right, with exceptions dropping to a reject tray below. A footer strip reads 7,498 tests, read-only, SFS-E05-SRP.",
+    "poster": "../assets/tile-surplus.webp",
+    "motion": "../assets/tile-surplus-motion.mp4",
+    "poster_alt": "System illustration showing yearly filings flowing through the Surplus Engine into carried-forward tax pools with source tracing and per-layer FX",
     "caption": "Portfolio system animation: yearly filings pass through the Surplus Engine into carried-forward tax pools, with source traceability and per-layer FX called out.",
     "crops": []
   },
+
   "quickstart": [
     {
       "label": "Clone and run the structural gate",
@@ -366,12 +351,14 @@
       "command": "python -m surplus_engine.loop --demo --out out"
     }
   ],
+
   "links": {
     "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tax-surplus-engine/README.md",
     "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/tax-surplus-engine",
     "tests": "/tests/",
     "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
   },
+
   "meta": {
     "description": "Tax Surplus / ACB (SFS-E05-SRP) datasheet: a seeded foreign-affiliate surplus-pool and adjusted-cost-base engine with distribution waterfall, tier elevation, per-layer FX, independent reconciliation, and a bounded human-gated remediation loop."
   }
