@@ -1,0 +1,5011 @@
+{
+  "title": "Trial-balance roll-forward control report",
+  "overall_verdict": "FAIL",
+  "file_count": 27,
+  "rule_count": 24,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "reg_entities_valid",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "src_code_rows_only",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "src_books_self_balance",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "src_balance_basis",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "scope_final_year_removed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "scope_renamed_once",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "scope_first_year_registered",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "scope_register_matches_columns",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "map_forward_complete",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "map_reverse_traces",
+      "severity": "FAIL",
+      "exceptions": 12
+    },
+    {
+      "rule": "map_values_exact",
+      "severity": "FAIL",
+      "exceptions": 23
+    },
+    {
+      "rule": "map_dual_codes_sum",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "map_duplicate_row_zero",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "col_self_balance",
+      "severity": "FAIL",
+      "exceptions": 7
+    },
+    {
+      "rule": "elim_covers_all_columns",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "combined_foots",
+      "severity": "FAIL",
+      "exceptions": 8
+    },
+    {
+      "rule": "bak_backup_complete",
+      "severity": "FAIL",
+      "exceptions": 34
+    },
+    {
+      "rule": "bak_titles_from_title_column",
+      "severity": "FAIL",
+      "exceptions": 26
+    },
+    {
+      "rule": "lnk_links_resolve",
+      "severity": "FAIL",
+      "exceptions": 41
+    },
+    {
+      "rule": "twin_exports_match",
+      "severity": "FAIL",
+      "exceptions": 8
+    },
+    {
+      "rule": "fee_final_year_suppressed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "dormant_entity_review",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "reg_short_period_review",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "activity_column_used__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 24,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/column",
+          "message": "column 'E-PARENT' matches the book's monthly-activity column on every differing row (11 of them) -- it was populated from the activity column, not the balance column. Activity foots to zero too, so the column self-balances while carrying movement instead of balances"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 0 (0106)",
+          "message": "cell carries 2,100.00; the balance column derives 41,500.00 -- the difference of -39,400.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 1 (0126)",
+          "message": "cell carries 900.00; the balance column derives 18,250.00 -- the difference of -17,350.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 2 (1206)",
+          "message": "cell carries 15,000.00; the balance column derives 2,450,000.00 -- the difference of -2,435,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 3 (1222)",
+          "message": "cell carries -4,000.00; the balance column derives 610,000.00 -- the difference of -614,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 4 (2001/1601)",
+          "message": "cell carries -3,100.00; the balance column derives -96,750.00 -- the difference of 93,650.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 5 (2936)",
+          "message": "cell carries -23,600.00; the balance column derives -3,180,000.00 -- the difference of 3,156,400.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 6 (2973)",
+          "message": "cell carries 11,000.00; the balance column derives 240,000.00 -- the difference of -229,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 7 (3999)",
+          "message": "cell carries 0.00; the balance column derives -96,500.00 -- the difference of 96,500.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 8 (3300)",
+          "message": "cell carries -1,500.00; the balance column derives -18,000.00 -- the difference of 16,500.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 10 (7829)",
+          "message": "cell carries 2,400.00; the balance column derives 29,700.00 -- the difference of -27,300.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 11 (7901)",
+          "message": "cell carries 800.00; the balance column derives 1,800.00 -- the difference of -1,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 4 (2001/1601)",
+          "message": "dual-code row collects ['2001', '1601'] and is owed -96,750.00, but carries -3,100.00 -- part of the balance is stranded on a code the sum ignored"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 7 (3999)",
+          "message": "dual-code row collects ['3999', '2999'] and is owed -96,500.00, but carries 0.00 -- part of the balance is stranded on a code the sum ignored"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 0 (0106)",
+          "message": "cell carries 2,100.00 but its backup row 'BKP-0106' carries 41,500.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 1 (0126)",
+          "message": "cell carries 900.00 but its backup row 'BKP-0126' carries 18,250.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 2 (1206)",
+          "message": "cell carries 15,000.00 but its backup row 'BKP-1206' carries 2,450,000.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 3 (1222)",
+          "message": "cell carries -4,000.00 but its backup row 'BKP-1222' carries 610,000.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 4 (2001/1601)",
+          "message": "cell carries -3,100.00 but its backup row 'BKP-1601' carries -96,750.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 5 (2936)",
+          "message": "cell carries -23,600.00 but its backup row 'BKP-2936' carries -3,180,000.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 6 (2973)",
+          "message": "cell carries 11,000.00 but its backup row 'BKP-2973' carries 240,000.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 8 (3300)",
+          "message": "cell carries -1,500.00 but its backup row 'BKP-3300' carries -18,000.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 10 (7829)",
+          "message": "cell carries 2,400.00 but its backup row 'BKP-7829' carries 29,700.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 11 (7901)",
+          "message": "cell carries 800.00 but its backup row 'BKP-7901' carries 1,800.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "amount_not_integer__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 14,
+        "FAIL": 13,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 1 (0126)",
+          "message": "cell carries 0.00; the balance column derives 18,250.00 -- the difference of -18,250.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/column",
+          "message": "column sums to -18,250.00, not zero -- something is unmapped, dropped or half-posted in this column"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 1 (0126)]",
+          "message": "combined carries 18,250.00; the cells and eliminations foot to 0.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-PARENT/row 1 (0126)",
+          "message": "the twin carries 18,250.00 where the workpaper carries 0.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "FLAG",
+          "location": "amount:workpaper[E-PARENT/row 1]/value_cents",
+          "message": "AMOUNT_INVALID: workpaper[E-PARENT/row 1]/value_cents must be integer cents, got 1825000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "backup_row_missing__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-1206",
+          "message": "mapped account 'BK2-1206' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 2 (1206)",
+          "message": "link points at 'BK2-1206', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "backup_title_from_category__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 26,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-0106/title",
+          "message": "backup titles 'BK1-0106' as 'Cash'; the source's title column says 'Cash - operating' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-1206/title",
+          "message": "backup titles 'BK1-1206' as 'Investments'; the source's title column says 'Investment in project' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2001/title",
+          "message": "backup titles 'BK1-2001' as 'Payables'; the source's title column says 'Accounts payable' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2936/title",
+          "message": "backup titles 'BK1-2936' as 'Equity'; the source's title column says 'Equity - parent' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2999/title",
+          "message": "backup titles 'BK1-2999' as 'Equity'; the source's title column says 'Retained earnings - beginning' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-0106/title",
+          "message": "backup titles 'BK2-0106' as 'Cash'; the source's title column says 'Cash - operating' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-1206/title",
+          "message": "backup titles 'BK2-1206' as 'Investments'; the source's title column says 'Investment in project' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-2001/title",
+          "message": "backup titles 'BK2-2001' as 'Payables'; the source's title column says 'Accounts payable' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-2936/title",
+          "message": "backup titles 'BK2-2936' as 'Equity'; the source's title column says 'Equity - parent' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-2999/title",
+          "message": "backup titles 'BK2-2999' as 'Equity'; the source's title column says 'Retained earnings - beginning' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-0106/title",
+          "message": "backup titles 'BK3-0106' as 'Cash'; the source's title column says 'Cash - operating' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-1206/title",
+          "message": "backup titles 'BK3-1206' as 'Investments'; the source's title column says 'Investment in project' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-2001/title",
+          "message": "backup titles 'BK3-2001' as 'Payables'; the source's title column says 'Accounts payable' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-2936/title",
+          "message": "backup titles 'BK3-2936' as 'Equity'; the source's title column says 'Equity - parent' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-2999/title",
+          "message": "backup titles 'BK3-2999' as 'Equity'; the source's title column says 'Retained earnings - beginning' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-0106/title",
+          "message": "backup titles 'BKP-0106' as 'Cash'; the source's title column says 'Cash - operating' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-0126/title",
+          "message": "backup titles 'BKP-0126' as 'Cash'; the source's title column says 'Cash - reserve' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-1206/title",
+          "message": "backup titles 'BKP-1206' as 'Investments'; the source's title column says 'Investment in project' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-1222/title",
+          "message": "backup titles 'BKP-1222' as 'Investments'; the source's title column says 'Investment in joint venture' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-1601/title",
+          "message": "backup titles 'BKP-1601' as 'Payables'; the source's title column says 'Accounts payable' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-2936/title",
+          "message": "backup titles 'BKP-2936' as 'Equity'; the source's title column says 'Equity - parent' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-2973/title",
+          "message": "backup titles 'BKP-2973' as 'Equity'; the source's title column says 'Distributions - parent' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-2999/title",
+          "message": "backup titles 'BKP-2999' as 'Equity'; the source's title column says 'Retained earnings - beginning' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-3300/title",
+          "message": "backup titles 'BKP-3300' as 'Income'; the source's title column says 'Management fees' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-7829/title",
+          "message": "backup titles 'BKP-7829' as 'Expense'; the source's title column says 'Permits and fees' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-7901/title",
+          "message": "backup titles 'BKP-7901' as 'Expense'; the source's title column says 'Filing fee expense' -- this is the source's CATEGORY column, the text neighbour of the title column: the harvest read text by position, not by role"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "balance_lands_nowhere__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 12,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "FAIL",
+          "location": "source_extract:E-PARENT/2999",
+          "message": "book balance -96,500.00 on code '2999' is collected by no workpaper row -- the balance lands nowhere, and both sides still foot, which is why only enumeration catches it"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "FAIL",
+          "location": "source_extract:E-BRIGHTWATER/2999",
+          "message": "book balance -232,200.00 on code '2999' is collected by no workpaper row -- the balance lands nowhere, and both sides still foot, which is why only enumeration catches it"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "FAIL",
+          "location": "source_extract:E-COPPERFIELD/2999",
+          "message": "book balance -287,400.00 on code '2999' is collected by no workpaper row -- the balance lands nowhere, and both sides still foot, which is why only enumeration catches it"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "FAIL",
+          "location": "source_extract:E-ALDERPOINT/2999",
+          "message": "book balance -65,950.00 on code '2999' is collected by no workpaper row -- the balance lands nowhere, and both sides still foot, which is why only enumeration catches it"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 7 (3999)",
+          "message": "cell carries -65,950.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 7 (3999)",
+          "message": "cell carries -232,200.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 7 (3999)",
+          "message": "cell carries -287,400.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 7 (3999)",
+          "message": "cell carries -96,500.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 7 (3999)",
+          "message": "cell carries -65,950.00; the balance column derives 0.00 -- the difference of -65,950.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 7 (3999)",
+          "message": "cell carries -232,200.00; the balance column derives 0.00 -- the difference of -232,200.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 7 (3999)",
+          "message": "cell carries -287,400.00; the balance column derives 0.00 -- the difference of -287,400.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 7 (3999)",
+          "message": "cell carries -96,500.00; the balance column derives 0.00 -- the difference of -96,500.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "book_out_of_balance__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "FAIL",
+          "location": "source_extract:TB-2029-06-30/books[BK1]",
+          "message": "book 'BK1' sums to 500.00, not zero -- an unbalanced extract is incomplete or mid-posting, and nothing populated from it can be trusted"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 0 (0106)",
+          "message": "cell carries 96,400.00; the balance column derives 96,900.00 -- the difference of -500.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-0106",
+          "message": "backup carries 96,400.00 for 'BK1-0106'; the extract carries 96,900.00"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "cell_off_extract__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 5,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 0 (0106)",
+          "message": "cell carries 59,900.00; the balance column derives 58,900.00 -- the difference of 1,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/column",
+          "message": "column sums to 1,000.00, not zero -- something is unmapped, dropped or half-posted in this column"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 0 (0106)]",
+          "message": "combined carries 219,550.00; the cells and eliminations foot to 220,550.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 0 (0106)",
+          "message": "cell carries 59,900.00 but its backup row 'BK2-0106' carries 58,900.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-COPPERFIELD/row 0 (0106)",
+          "message": "the twin carries 58,900.00 where the workpaper carries 59,900.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "clean__Rivermont_Holdings",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "column_does_not_foot__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 2 (1206)",
+          "message": "cell carries 0.00; the balance column derives 940,000.00 -- the difference of -940,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/column",
+          "message": "column sums to -940,000.00, not zero -- something is unmapped, dropped or half-posted in this column"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 2 (1206)]",
+          "message": "combined carries 7,520,000.00; the cells and eliminations foot to 6,580,000.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-ALDERPOINT/row 2 (1206)",
+          "message": "the twin carries 940,000.00 where the workpaper carries 0.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "column_not_in_register__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/columns[E-THORNBURY]",
+          "message": "column 'E-THORNBURY' is not in the confirmed register -- an unconfirmed column is scope nobody signed off"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/eliminations[E-THORNBURY]",
+          "message": "column 'E-THORNBURY' sits outside the eliminations range -- a range that ends at last year's final column silently excludes every column added this year"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "combined_maintained_by_hand__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 0 (0106)]",
+          "message": "combined carries 219,800.00; the cells and eliminations foot to 219,550.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "dormant_column_present__Ashfield_Holdings",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "FLAG",
+          "location": "workpaper:E-DUNMORE/column",
+          "message": "column 'E-DUNMORE' is genuinely empty -- the book carries no balances at all. Confirm the entity is dormant rather than booked somewhere else"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "dual_code_half_dropped__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 5,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 4 (2001/1601)",
+          "message": "cell carries 0.00; the balance column derives -44,200.00 -- the difference of 44,200.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 4 (2001/1601)",
+          "message": "dual-code row collects ['2001', '1601'] and is owed -44,200.00, but carries 0.00 -- part of the balance is stranded on a code the sum ignored"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/column",
+          "message": "column sums to 44,200.00, not zero -- something is unmapped, dropped or half-posted in this column"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 4 (2001/1601)]",
+          "message": "combined carries -229,250.00; the cells and eliminations foot to -185,050.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-BRIGHTWATER/row 4 (2001/1601)",
+          "message": "the twin carries -44,200.00 where the workpaper carries 0.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_entity_id__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "FAIL",
+          "location": "entity_register:REG-2029/entities[E-BRIGHTWATER]",
+          "message": "entity id 'E-BRIGHTWATER' appears more than once -- the same entity cannot be rolled forward twice"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_row_populated__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 6,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 9 (3300)",
+          "message": "cell carries -18,000.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 9 (3300)",
+          "message": "cell carries -18,000.00; the balance column derives 0.00 -- the difference of -18,000.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 9 (3300)",
+          "message": "duplicated row code '3300' carries -18,000.00 on its later instance -- the first instance consumed the code, so this is the same balance twice"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/column",
+          "message": "column sums to -18,000.00, not zero -- something is unmapped, dropped or half-posted in this column"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 9 (3300)]",
+          "message": "combined carries 0.00; the cells and eliminations foot to -18,000.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-PARENT/row 9 (3300)",
+          "message": "the twin carries 0.00 where the workpaper carries -18,000.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "elimination_range_short__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/eliminations[E-ALDERPOINT]",
+          "message": "column 'E-ALDERPOINT' sits outside the eliminations range -- a range that ends at last year's final column silently excludes every column added this year"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "final_year_column_kept__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "FAIL",
+          "location": "entity_register:REG-2029/entities[E-LARKFIELD]",
+          "message": "final-year entity 'E-LARKFIELD' still has a workpaper column -- its last return was prepared off the prior year, and a live column here will be populated by habit"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/columns[E-LARKFIELD]",
+          "message": "column 'E-LARKFIELD' is not in the confirmed register -- an unconfirmed column is scope nobody signed off"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/eliminations[E-LARKFIELD]",
+          "message": "column 'E-LARKFIELD' sits outside the eliminations range -- a range that ends at last year's final column silently excludes every column added this year"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "final_year_fee_charged__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "FAIL",
+          "location": "entity_register:REG-2029/entities[E-LARKFIELD]/fee_due_cents",
+          "message": "final-year entity 'E-LARKFIELD' shows a fee of 800.00 -- the fixed fee attaches to the coming year, which this entity will not see"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "first_year_no_registration__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "FAIL",
+          "location": "entity_register:REG-2029/entities[E-ALDERPOINT]/registration_date",
+          "message": "first-year entity 'E-ALDERPOINT' carries no readable registration date -- its first-period start is the one fact the preparer cannot infer"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "link_dangles__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 0 (0106)",
+          "message": "link points at 'BKP-0000', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "memo_row_harvested__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "FAIL",
+          "location": "source_extract:TB-2029-06-30/memo[BKP-9100]",
+          "message": "memo-row account 'BKP-9100' was harvested into the backup tab -- memo rows are side-schedule annotations and populating one double counts what a schedule already explains"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-9100",
+          "message": "backup account 'BKP-9100' belongs to no mapped book"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 53,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-",
+          "message": "required artifact 'backup_tab' is missing -- the cycle cannot be audited from a partial record"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-0106",
+          "message": "mapped account 'BK1-0106' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-1206",
+          "message": "mapped account 'BK1-1206' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2001",
+          "message": "mapped account 'BK1-2001' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2936",
+          "message": "mapped account 'BK1-2936' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2999",
+          "message": "mapped account 'BK1-2999' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-0106",
+          "message": "mapped account 'BK2-0106' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-1206",
+          "message": "mapped account 'BK2-1206' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-2001",
+          "message": "mapped account 'BK2-2001' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-2936",
+          "message": "mapped account 'BK2-2936' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK2-2999",
+          "message": "mapped account 'BK2-2999' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-0106",
+          "message": "mapped account 'BK3-0106' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-1206",
+          "message": "mapped account 'BK3-1206' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-2001",
+          "message": "mapped account 'BK3-2001' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-2936",
+          "message": "mapped account 'BK3-2936' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK3-2999",
+          "message": "mapped account 'BK3-2999' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-0106",
+          "message": "mapped account 'BKP-0106' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-0126",
+          "message": "mapped account 'BKP-0126' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-1206",
+          "message": "mapped account 'BKP-1206' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-1222",
+          "message": "mapped account 'BKP-1222' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-1601",
+          "message": "mapped account 'BKP-1601' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-2936",
+          "message": "mapped account 'BKP-2936' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-2973",
+          "message": "mapped account 'BKP-2973' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-2999",
+          "message": "mapped account 'BKP-2999' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-3300",
+          "message": "mapped account 'BKP-3300' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-7829",
+          "message": "mapped account 'BKP-7829' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BKP-7901",
+          "message": "mapped account 'BKP-7901' is missing from the backup tab -- a figure with no backup row cannot be reviewed"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 0 (0106)",
+          "message": "link points at 'BK3-0106', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 0 (0106)",
+          "message": "link points at 'BK1-0106', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 0 (0106)",
+          "message": "link points at 'BK2-0106', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 0 (0106)",
+          "message": "link points at 'BKP-0106', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 1 (0126)",
+          "message": "link points at 'BKP-0126', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 2 (1206)",
+          "message": "link points at 'BK3-1206', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 2 (1206)",
+          "message": "link points at 'BK1-1206', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 2 (1206)",
+          "message": "link points at 'BK2-1206', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 2 (1206)",
+          "message": "link points at 'BKP-1206', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 3 (1222)",
+          "message": "link points at 'BKP-1222', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 4 (2001/1601)",
+          "message": "link points at 'BK3-2001', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 4 (2001/1601)",
+          "message": "link points at 'BK1-2001', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 4 (2001/1601)",
+          "message": "link points at 'BK2-2001', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 4 (2001/1601)",
+          "message": "link points at 'BKP-1601', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 5 (2936)",
+          "message": "link points at 'BK3-2936', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 5 (2936)",
+          "message": "link points at 'BK1-2936', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 5 (2936)",
+          "message": "link points at 'BK2-2936', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 5 (2936)",
+          "message": "link points at 'BKP-2936', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 6 (2973)",
+          "message": "link points at 'BKP-2973', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-ALDERPOINT/row 7 (3999)",
+          "message": "link points at 'BK3-2999', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 7 (3999)",
+          "message": "link points at 'BK1-2999', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-COPPERFIELD/row 7 (3999)",
+          "message": "link points at 'BK2-2999', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 7 (3999)",
+          "message": "link points at 'BKP-2999', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 8 (3300)",
+          "message": "link points at 'BKP-3300', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 10 (7829)",
+          "message": "link points at 'BKP-7829', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-PARENT/row 11 (7901)",
+          "message": "link points at 'BKP-7901', which the backup tab does not carry -- a dead link fails exactly when a reviewer follows it"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "phantom_cell__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 6,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 10 (7829)",
+          "message": "cell carries 3,400.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 10 (7829)",
+          "message": "cell carries 3,400.00; the balance column derives 0.00 -- the difference of 3,400.00 is a figure the extract does not support"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/column",
+          "message": "column sums to 3,400.00, not zero -- something is unmapped, dropped or half-posted in this column"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "FAIL",
+          "location": "workpaper:-/combined[row 10 (7829)]",
+          "message": "combined carries 29,700.00; the cells and eliminations foot to 33,100.00 -- a combined column maintained beside the grid rather than struck from it"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 10 (7829)",
+          "message": "cell carries 3,400.00 but its backup row 'BK1-0106' carries 96,400.00 -- a link that disagrees with its cell looks reviewed and is not"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-BRIGHTWATER/row 10 (7829)",
+          "message": "the twin carries 0.00 where the workpaper carries 3,400.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "rename_double_counted__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "FAIL",
+          "location": "prior_structure:PRIOR-2028/renames[E-HAWTHORNE->E-COPPERFIELD]",
+          "message": "renamed entity still carries a column under its old identity 'E-HAWTHORNE' beside 'E-COPPERFIELD' -- one entity, two columns, every balance at risk of being counted twice"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/columns[E-HAWTHORNE]",
+          "message": "column 'E-HAWTHORNE' is not in the confirmed register -- an unconfirmed column is scope nobody signed off"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/eliminations[E-HAWTHORNE]",
+          "message": "column 'E-HAWTHORNE' sits outside the eliminations range -- a range that ends at last year's final column silently excludes every column added this year"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "short_first_period__Rivermont_Holdings",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "FLAG",
+          "location": "entity_register:REG-2029/entities[E-ALDERPOINT]/registration_date",
+          "message": "first-year entity 'E-ALDERPOINT' registered 275 days into the fiscal year (band is 90) -- its first period starts 2029-04-02, not at the fiscal start, and the preparer needs that date"
+        }
+      ]
+    },
+    {
+      "document": "twin_drifts__Calderwood_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "the entity register is internally sound"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "columns and register agree one-to-one, both directions"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero cell traces to the extract"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "the backup tab is complete and ties exactly"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "FAIL",
+          "location": "twin_export:E-BRIGHTWATER/row 0 (0106)",
+          "message": "the twin carries 96,475.00 where the workpaper carries 96,400.00 -- two formats, two truths, and the reviewer always finds the stale one"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    },
+    {
+      "document": "unknown_entity_status__Westmere_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 12,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all artifacts present, period readable"
+        },
+        {
+          "rule": "reg_entities_valid",
+          "status": "FAIL",
+          "location": "entity_register:REG-2029/entities[E-BRIGHTWATER]",
+          "message": "status 'pending_review' is not one of ('continuing', 'first_year', 'final_year', 'excluded') -- an uncharacterised entity is one nobody decided the roll-forward treatment for"
+        },
+        {
+          "rule": "src_code_rows_only",
+          "status": "PASS",
+          "location": "-",
+          "message": "only code-position rows were harvested"
+        },
+        {
+          "rule": "src_books_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every book self-balances to zero"
+        },
+        {
+          "rule": "src_balance_basis",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column derives from its book's declared balance column"
+        },
+        {
+          "rule": "scope_final_year_removed",
+          "status": "PASS",
+          "location": "-",
+          "message": "every final-year entity was retired"
+        },
+        {
+          "rule": "scope_renamed_once",
+          "status": "PASS",
+          "location": "-",
+          "message": "every rename carried exactly one column over"
+        },
+        {
+          "rule": "scope_first_year_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "every first-year entity is registered inside the window"
+        },
+        {
+          "rule": "scope_register_matches_columns",
+          "status": "FAIL",
+          "location": "workpaper:-/columns[E-BRIGHTWATER]",
+          "message": "column 'E-BRIGHTWATER' is not in the confirmed register -- an unconfirmed column is scope nobody signed off"
+        },
+        {
+          "rule": "map_forward_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "every nonzero book balance is collected"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 0 (0106)",
+          "message": "cell carries 96,400.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 2 (1206)",
+          "message": "cell carries 1,820,000.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 4 (2001/1601)",
+          "message": "cell carries -44,200.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 5 (2936)",
+          "message": "cell carries -1,640,000.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_reverse_traces",
+          "status": "FAIL",
+          "location": "workpaper:E-BRIGHTWATER/row 7 (3999)",
+          "message": "cell carries -232,200.00 but the book supports no balance on that row -- a phantom value is a number somebody authored rather than harvested"
+        },
+        {
+          "rule": "map_values_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cell ties the extract to the penny"
+        },
+        {
+          "rule": "map_dual_codes_sum",
+          "status": "PASS",
+          "location": "-",
+          "message": "every dual-code row sums all its codes through the map"
+        },
+        {
+          "rule": "map_duplicate_row_zero",
+          "status": "PASS",
+          "location": "-",
+          "message": "every duplicated row code is zero later"
+        },
+        {
+          "rule": "col_self_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "every column sums to zero"
+        },
+        {
+          "rule": "elim_covers_all_columns",
+          "status": "PASS",
+          "location": "-",
+          "message": "the eliminations range covers every column"
+        },
+        {
+          "rule": "combined_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined column foots"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-0106",
+          "message": "backup account 'BK1-0106' belongs to no mapped book"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-1206",
+          "message": "backup account 'BK1-1206' belongs to no mapped book"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2001",
+          "message": "backup account 'BK1-2001' belongs to no mapped book"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2936",
+          "message": "backup account 'BK1-2936' belongs to no mapped book"
+        },
+        {
+          "rule": "bak_backup_complete",
+          "status": "FAIL",
+          "location": "backup_tab:-/BK1-2999",
+          "message": "backup account 'BK1-2999' belongs to no mapped book"
+        },
+        {
+          "rule": "bak_titles_from_title_column",
+          "status": "PASS",
+          "location": "-",
+          "message": "every backup title quotes the title column"
+        },
+        {
+          "rule": "lnk_links_resolve",
+          "status": "PASS",
+          "location": "-",
+          "message": "every link resolves and agrees"
+        },
+        {
+          "rule": "twin_exports_match",
+          "status": "PASS",
+          "location": "-",
+          "message": "both rendered twins agree"
+        },
+        {
+          "rule": "fee_final_year_suppressed",
+          "status": "PASS",
+          "location": "-",
+          "message": "fees follow status exactly"
+        },
+        {
+          "rule": "dormant_entity_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no dormant columns to confirm"
+        },
+        {
+          "rule": "reg_short_period_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no short first periods to note"
+        }
+      ]
+    }
+  ]
+}

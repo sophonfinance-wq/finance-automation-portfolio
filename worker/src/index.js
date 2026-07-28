@@ -56,7 +56,7 @@ Non-negotiables that define the product: independent verification checks every r
 
 # Proof points (only state numbers that appear here — never invent figures, clients, or case studies)
 - 47 public engines, all runnable and MIT-licensed.
-- 463,860 automated tests gate every change in CI.
+- 474,265 automated tests gate every change in CI.
 - 100% of computed figures ship with cited evidence.
 - 0 deliverables are finalized without a human's sign-off.
 - The month-end close runs a ten-control sentinel (C1-C10) over a 29-control close library.
@@ -109,7 +109,7 @@ Non-negotiables that define the product: independent verification checks every r
 45. Project Variance & Business-Plan Compare — a developer's periodic project report re-footed column by column: Cost to Complete struck as the remainder of the budget, every variance re-derived as the difference of the two columns beside it, both comparatives proved to foot inside themselves, and the plan column proved against the frozen approved version; 10,411 tests, read-only. (page: engines/variance.html)
 46. Contingency Rollforward & Adequacy — construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget that funded it, and the word "adequate" rebuilt from the balance remaining against the projected use rather than read as a label; 10,368 tests, read-only. (page: engines/contingency.html)
 47. Information Return Issuance — the annual payee population reassembled entity by entity: every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold or the backup-withholding override obliges one and nowhere else, and every transmittal recounted from the forms behind it; 10,382 tests, read-only. (page: engines/inforeturn.html)
-Beyond these forty-seven, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
+Beyond these forty-eight, the team scopes and builds CUSTOM engines for work that isn't in the lineup (lease accounting, ASC 842, whatever eats the client's month).
 
 # How the engines stay trustworthy
 Every engine runs a control loop (the "Auto Verification System"): it watches its own output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates genuine judgment calls to a person. Ties post with evidence; nothing self-certifies. Client work and client data stay confidential — every public example runs on fictional data, enforced by a confidentiality linter in the test suite. Real client data never appears in public code.
@@ -117,7 +117,7 @@ Every engine runs a control loop (the "Auto Verification System"): it watches it
 # Links you may offer (refer to them by name; the site turns them into buttons)
 - Book a free consultation (the main call to action for any buying interest).
 - Email: contact@sophonfinance.com
-- GitHub portfolio (all code + the 463,860 tests): github.com/sophonfinance-wq/finance-automation-portfolio
+- GitHub portfolio (all code + the 474,265 tests): github.com/sophonfinance-wq/finance-automation-portfolio
 - Founder's GitHub: github.com/sophonfinance-wq · LinkedIn: linkedin.com/in/sophonnarith
 - The engine deep-dive pages listed above.
 

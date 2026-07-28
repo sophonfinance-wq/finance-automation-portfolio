@@ -1,6 +1,6 @@
 # Platform Architecture
 
-This repository is a forty-seven-system, AI-driven Finance & Tax automation platform. The forty-seven
+This repository is a forty-eight-system, AI-driven Finance & Tax automation platform. The forty-eight
 decompose exactly as **5 + 39 + 1 + 1 + 1**:
 
 - **five deterministic calculation engines** — month-end close, cash & debt reconciliation, the
@@ -15,7 +15,7 @@ decompose exactly as **5 + 39 + 1 + 1 + 1**:
 - **the Triangulate AI control framework**.
 
 The canonical roster — number, part number, mnemonic, family, display name and engine directory for
-every one of the forty-seven — lives in `site-datasheets/datasheet_tests/conftest.py` and is
+every one of the forty-eight — lives in `site-datasheets/datasheet_tests/conftest.py` and is
 test-gated, so this prose is a summary of that authority rather than a second copy of it.
 
 Above all of it sits an optional orchestration layer:
