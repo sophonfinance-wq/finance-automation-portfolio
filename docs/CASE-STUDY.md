@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **forty-seven runnable systems, a
-463,860-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **forty-eight runnable systems, a
+474,265-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
 
 ---
 
@@ -135,7 +135,8 @@ Each is now encoded as a control in the portfolio:
 | Project variance and business-plan compare &mdash; Cost to Complete struck as the remainder of the budget, net revenue, profit and margin on cost re-derived from their own inputs, every variance column re-footed as the difference of the two columns beside it in cents and basis points alike, both comparative columns proved to foot inside themselves, the plan column proved against the frozen approved version, and each milestone variance re-derived under the plus-is-ahead convention | `project-variance-automation` | 10,411 |
 | Contingency rollforward and adequacy &mdash; construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use | `contingency-rollforward-automation` | 10,368 |
 | Information return issuance &mdash; the annual payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms | `info-return-automation` | 10,382 |
-| **Total** | **47 systems** | **463,860** |
+| Trial-balance roll-forward &mdash; last year's column structure carried forward, final-year entities retired and renames carried once, every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept both directions so a balance riding a dropped chart equivalence cannot vanish, each dual-chart row summed through the equivalence map, the eliminations range proved to reach this year's new columns, and every figure linked to a backup row that agrees with it | `tb-rollforward-automation` | 10,405 |
+| **Total** | **48 systems** | **474,265** |
 
 ---
 

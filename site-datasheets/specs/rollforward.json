@@ -1,0 +1,462 @@
+{
+  "num": 48,
+  "slug": "rollforward",
+  "part_no": "SFS-E48-TBR",
+  "mnemonic": "TBR",
+  "family": "Workpaper Rollforward",
+  "name": "Trial-Balance Roll-Forward",
+  "tagline": "Every column rebuilt from the extract's declared balance column, and every figure linked to its backup.",
+  "plain_summary": "Once a fiscal year the group rebuilds a workpaper it does not maintain in between: one column per entity, carried forward from last year's structure and repopulated from the year-end trial-balance extract. Entities dissolve and lose their columns, entities are renamed and must be carried exactly once, entities are formed and arrive with a registration date that starts their first period. This engine reads the seven artifacts that cycle emits -- the entity register, last year's structure, the year-end extract, the chart-equivalence map, the populated workpaper, the embedded backup tab and the second rendered format -- and runs twenty-four deterministic controls over them. Is the file complete and the fiscal window readable, are the entity ids unique and every column entity's book present, were only code-position rows harvested, does every book in the extract foot to zero, was any column populated from the monthly-activity column instead of the balance column, did final-year entities lose their columns, was each rename carried once, are first-year entities registered inside the window, does the column set equal the register both directions, does every nonzero book balance land in a row, does every nonzero cell trace back to the extract, does every cell equal its re-derivation to the penny, does each dual-chart row sum every code it collects through the equivalence map, is a duplicated row code zero on its later instance, does every column foot to zero, does the eliminations range cover every column, does the combined column foot, is the backup tab complete and titled from the source's title column, does every figure link to a backup row that agrees with it, do both rendered formats match, and does the fixed annual fee follow entity status. Every comparison is exact == in integer cents, every date is tested against the fiscal window the file carries rather than the system clock, and no source artifact is ever written.",
+  "rev": "2026-07-27",
+  "status": "PRODUCTION",
+  "marketing_thesis": "The failure modes of an annual roll-forward all share one property: the workpaper still balances. That is what makes them survive review. A column populated from the extract's monthly-activity column rather than its balance column foots to zero exactly the way a real column does, because activity nets to zero too -- so the footing check, the reviewer's whole defence, passes while the column carries movement instead of balances. A retained-earnings balance riding a legacy chart code disappears the moment the equivalence is dropped, and both sides still foot. An eliminations range written over last year's structure keeps evaluating happily after two columns are inserted beyond its end. A backup tab built from the source's category column instead of its title column reads plausibly forever -- Cash, Equity -- and reconciles to nothing anybody can look up. None of these announce themselves; all of them are found only by re-derivation. So the engine locates every column it reads by its declared role rather than its position, re-derives the whole grid from the extract through one kernel the generator also imports, sweeps completeness in both directions, and ships a planted-defect file for every registered control -- including one that proves the footing check genuinely cannot catch the activity-column substitution, because if it could, the control would be redundant.",
+  "layers_intro": "Twelve control families run in registry order over each workpaper file. The first proves the others had something to read and that the fiscal window is legible, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the workpaper file carries every artifact the controls below read, exactly once, and that the fiscal window is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the seven document types in model.DOC_TYPES -- entity register, prior structure, source extract, chart map, workpaper, backup tab, twin export -- and FAILs a file carrying more than one of any. It also FAILs an absent, unreadable or backwards fiscal window, since every registration date is placed against that stated window and never against the system clock. Every downstream rule reports nothing when the artifact it reads is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "reg",
+      "label": "Entity Register",
+      "plain": "Checks entity ids are unique, statuses are known, every column entity names a real book, and a late first-year registration is flagged.",
+      "engineering": "Two controls. reg_entities_valid FAILs a duplicated entity id -- the register is the one confirmed population everybody signed off, and a duplicate means two people can read it and roll forward two different workpapers. It FAILs a status outside continuing, first_year, final_year and excluded, because the status is what decides the roll-forward treatment and an uncharacterised entity is one nobody decided a treatment for. It also FAILs a column entity naming a book the extract does not carry: a column with no book cannot be populated, only invented. reg_short_period_review is a FLAG, not a failure: a first-year entity registered more than the file's own band into the fiscal year has a short first period, and the preparer needs the registration date rather than the fiscal start, or the first return quietly covers months the entity did not exist.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "src",
+      "label": "Source Extract",
+      "plain": "Checks only trial-balance rows were harvested, every book foots to zero, and no column was populated from the activity column.",
+      "engineering": "Three controls, and the third is the one this engine exists for. src_code_rows_only FAILs a memo-position account that reached the backup tab: memo rows are side-schedule annotations whose codes look like trial-balance rows, and harvesting one double counts what a schedule already explains. src_books_self_balance FAILs a book that does not net to zero, because an unbalanced extract was caught mid-posting or truncated in transit and nothing populated from it can be trusted. src_balance_basis catches the substitution that survives every other check: some books carry a monthly-activity column beside the balance column, and a harvest that reads by position takes movement instead of balances. Activity foots to zero exactly the way balances do, so the column self-balances and the footing control stays silent. The control re-derives what the column would carry if populated from activity and FAILs when every differing row matches it -- so the finding names the cause rather than reporting a hundred unrelated cell breaks.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "scope",
+      "label": "Roll-Forward Scope",
+      "plain": "Checks final-year entities lost their columns, renames were carried once, first-year entities are registered in the window, and the column set equals the register.",
+      "engineering": "Four controls. scope_final_year_removed FAILs a final-year entity that still has a column -- its last return was prepared off the prior year, and a live column here will be populated by habit and charged a fee the dissolution already ended. scope_renamed_once FAILs a renamed entity appearing under its old identity beside its new one, appearing twice under the new one, or vanishing entirely: the classic double count is one entity, two columns, every balance at risk of being counted twice, and the classic under-count is a rename that dropped the entity instead of carrying it. scope_first_year_registered FAILs a first-year entity with no readable registration date or one outside the fiscal window, inclusive of both endpoints -- either the status is wrong or the date is. scope_register_matches_columns asserts exact set equality in both directions, because a registered entity with no column is a filing that will quietly not happen and a column with no register row is scope nobody signed off.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "map",
+      "label": "Mapping and Re-derivation",
+      "plain": "Sweeps completeness in both directions, ties every cell to the penny, sums each dual-chart row through the equivalence map, and zeroes duplicated rows.",
+      "engineering": "Five controls, and they are the arithmetic core. map_forward_complete enumerates every nonzero balance of every mapped book and FAILs one that no workpaper row collects -- typically a balance riding a chart code the row list never carried, which vanishes while both sides still foot, so only enumeration finds it. map_reverse_traces is the complement: a nonzero cell the book does not support is a number somebody authored rather than harvested. map_values_exact compares every cell to its re-derivation with exact == in integer cents; there is no tolerance band, because a tolerated penny is a figure the ledger does not support and every schedule downstream inherits it. map_dual_codes_sum handles the rows two charts of accounts share -- the cell owed is the sum of the row's own codes plus their chart equivalents, and dropping either half strands a balance on a code the sheet displays but the sum ignored. It also FAILs an equivalence naming a row the workpaper does not carry, which maps a balance to nowhere. map_duplicate_row_zero FAILs a value on the later instance of a duplicated row code: the first instance consumed the code, so the second is the same balance twice.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "col",
+      "label": "Column Footing",
+      "plain": "Checks every entity column sums to zero.",
+      "engineering": "One control. col_self_balance FAILs a column that does not net to zero -- a trial-balance column is self-proving, and a column that does not foot has something unmapped, dropped or half-posted in it. It is deliberately necessary rather than sufficient: the whole design premise of this engine is that the most dangerous failures pass this check, which is why the basis and mapping controls sit beside it rather than behind it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "elim",
+      "label": "Eliminations Coverage",
+      "plain": "Checks the eliminations range covers every entity column.",
+      "engineering": "One control. elim_covers_all_columns FAILs a column sitting outside the declared eliminations coverage. A range written over last year's structure keeps evaluating without error after new columns are inserted beyond its end -- nothing breaks, the new columns simply are not eliminated, and the omission is invisible in a sheet whose totals all still foot. Coverage is declared in the artifact, so coverage is what gets checked.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "combined",
+      "label": "Combined Column",
+      "plain": "Checks the combined column equals the entity cells plus eliminations, row by row.",
+      "engineering": "One control. combined_foots re-strikes each row of the combined column from the cells and the eliminations beneath it and compares with exact ==. A combined column maintained beside the grid rather than struck from it drifts the first time a cell moves, and it is the column the reader trusts most because it is the one they read first.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "bak",
+      "label": "Backup Tab",
+      "plain": "Checks the backup tab carries every mapped account once at the extract's balance, titled from the source's title column.",
+      "engineering": "Two controls. bak_backup_complete asserts set equality between the backup rows and the mapped accounts in both directions, FAILs a duplicated account, and FAILs a backup balance that differs from the extract -- the backup is the reviewer's landing spot, and one that is missing accounts or quoting different balances sends every review down a hole. bak_titles_from_title_column is the text twin of the activity-column defect: the extract carries a category column beside the title column, and a backup titled from category reads plausibly -- Cash, Equity -- while reconciling to nothing a reviewer can look up. When the wrong title matches the source's category exactly, the finding says so, because reading text by position is the same error as reading a value by position and the reviewer should learn that rather than see a bare string mismatch.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "lnk",
+      "label": "Live Links",
+      "plain": "Checks every nonzero figure is linked, every link resolves, and every link agrees with its cell.",
+      "engineering": "One control. lnk_links_resolve enforces the live-link contract three ways: a nonzero cell with no link is a keyed number rather than a harvested one; a link naming an account the backup does not carry is a dead end that fails exactly when a reviewer follows it; and a link whose backup balance differs from the cell is worse than either, because it looks reviewed and is not. A zero cell needs no link -- nothing to support means nothing to link to.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "twin",
+      "label": "Rendered Twins",
+      "plain": "Checks both rendered formats of the workpaper carry identical values.",
+      "engineering": "One control. twin_exports_match compares the workpaper grid against the second rendered export cell by cell. The workpaper ships twice -- a legacy format for the reviewer's convention and a modern one for tooling -- and a repair applied to one and not the other leaves two truths in circulation. The reviewer always finds the stale one, because the stale one is the one that was not being watched.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "fee",
+      "label": "Fixed Annual Fee",
+      "plain": "Checks the fixed filing fee is owed by live entities and never by final-year or excluded ones.",
+      "engineering": "One control. fee_final_year_suppressed FAILs a final-year entity showing any fee -- the jurisdiction's fixed fee attaches to the coming year, which an entity in its final year will not see, so charging it there hands money to a fiscal year that does not exist for that entity. It FAILs an excluded entity showing a fee for the same reason, and FAILs a continuing or first-year entity whose fee is anything other than the fixed figure the file carries. The fee is a fixed statutory figure rather than a computed one, which is exactly why an error in it survives: there is nothing to recompute it against unless something does.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "dormant",
+      "label": "Dormant Column Review",
+      "plain": "Flags a column whose book is genuinely empty, for a human to confirm.",
+      "engineering": "One control, and it is a FLAG by design. dormant_entity_review fires when both the derivation and the workpaper agree the column is entirely zero. Consistency is not the question -- the zeros tie the extract exactly. The question is whether an empty book is right, because a dormant entity is sometimes an entity whose activity landed in somebody else's book. That is a judgement the engine cannot make and should not pretend to; it makes sure a person makes it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Workpaper Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional annual roll-forward files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-seven files in total. Only the entity register, the prior structure, the extract books and the chart map are stated; the whole populated grid, every link, the backup tab, the combined column and the twin export are re-derived through the same kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data. The corpus deliberately puts real rows on the edges that matter: the parent book carries a monthly-activity column whose figures also net to zero, one workpaper row is shared by two charts of accounts, one row code appears twice, and one book is entirely empty.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/generate.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "is the file complete and the fiscal window legible",
+      "engineering": "One control. FAILs a file missing any of the seven artifact types or carrying a duplicate of one, and FAILs an absent, unreadable or backwards fiscal window, so no downstream rule holds vacuously on absent evidence.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "reg-control",
+      "label": "Entity Register",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "is the confirmed population sound",
+      "engineering": "Two controls: entity ids are unique, statuses are known, every column entity names a book the extract carries, and a first-year entity registered late into the window is flagged so the preparer gets its real first-period start.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "src-control",
+      "label": "Source Extract",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "was the right column of the right rows harvested",
+      "engineering": "Three controls: only code-position rows reach the backup, every book foots to zero, and no column was populated from a book's monthly-activity column instead of its balance column -- the substitution that self-balances and therefore survives every footing check.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "scope-control",
+      "label": "Roll-Forward Scope",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does this year's column set match the confirmed population",
+      "engineering": "Four controls: final-year entities lost their columns, each rename is carried exactly once, first-year entities are registered inside the fiscal window, and the column set equals the register's column population as exact set equality in both directions.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "map-control",
+      "label": "Mapping and Re-derivation",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does every cell tie the extract, both directions",
+      "engineering": "Five controls: every nonzero book balance lands in a row, every nonzero cell traces back to a book, every cell equals its re-derivation to the penny, every dual-chart row sums all the codes it collects through the equivalence map, and a duplicated row code is zero on its later instance.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "col-control",
+      "label": "Column Footing",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does every column sum to zero",
+      "engineering": "One control, necessary but deliberately not sufficient: the failures this engine exists for all foot to zero, which is why the basis and mapping controls run beside it rather than behind it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "elim-control",
+      "label": "Eliminations and Combined",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is every column eliminated and does the total foot",
+      "engineering": "Two controls: the declared eliminations coverage includes every entity column -- a range that ends at last year's final column silently excludes this year's additions -- and the combined column is re-struck row by row from the cells and eliminations beneath it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "bak-control",
+      "label": "Backup and Links",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "can a reviewer land on the evidence for any figure",
+      "engineering": "Three controls: the backup tab carries every mapped account once at the extract's own balance, every title comes from the source's title column rather than its category column, and every nonzero figure links to a backup row that exists and agrees with it.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "twin-control",
+      "label": "Twins and Fees",
+      "kind": "control",
+      "col": 3,
+      "row": 0,
+      "plain": "do both rendered formats agree, and does the fee follow status",
+      "engineering": "Two controls: the two rendered exports of the workpaper carry identical values cell by cell, and the fixed annual fee is owed in full by continuing and first-year entities and is exactly zero for final-year and excluded ones.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/engine.py"
+    },
+    {
+      "id": "artifacts",
+      "label": "Registers, Extract & Map",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the artifacts and roles every rule resolves against",
+      "engineering": "The entity register carries each entity's id, name, status, book code, registration date where the entity is new and the fee it is shown as owing; the prior structure carries last year's column list and this year's renames; the source extract carries each book's declared column roles and its rows in code or memo position, each with an account, a title, a category and a balance -- and, for books that have one, a monthly-activity figure; the chart map carries the equivalences between the workpaper's canonical row codes and a book's own; the workpaper carries its columns, its rows, every cell with its link, the eliminations coverage and the combined column; the backup tab carries one flat row per mapped account; and the file itself carries the fiscal window, the fixed fee and the short-period review band. Every control resolves against these through the shared kernel in rollforward_engine.workpaper, which locates each column by its declared role rather than its position.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/workpaper.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per workpaper file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps or absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/rollforward_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "set-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "reg-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "src-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "scope-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "map-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "col-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "elim-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "bak-control", "label": "workpaper files" },
+    { "from": "corpus", "to": "twin-control", "label": "workpaper files" },
+    { "from": "set-control", "to": "artifacts", "label": "resolves" },
+    { "from": "reg-control", "to": "artifacts", "label": "resolves" },
+    { "from": "src-control", "to": "artifacts", "label": "resolves" },
+    { "from": "scope-control", "to": "artifacts", "label": "resolves" },
+    { "from": "map-control", "to": "artifacts", "label": "resolves" },
+    { "from": "src-control", "to": "map-control", "label": "balances" },
+    { "from": "reg-control", "to": "scope-control", "label": "statuses" },
+    { "from": "map-control", "to": "col-control", "label": "cells" },
+    { "from": "map-control", "to": "bak-control", "label": "accounts" },
+    { "from": "col-control", "to": "elim-control", "label": "columns" },
+    { "from": "elim-control", "to": "report", "label": "findings" },
+    { "from": "bak-control", "to": "report", "label": "findings" },
+    { "from": "twin-control", "to": "report", "label": "findings" },
+    { "from": "map-control", "to": "report", "label": "findings" },
+    { "from": "artifacts", "to": "report", "label": "findings" }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,405",
+      "source": "python -m pytest --collect-only -q -o addopts= (tb-rollforward-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "24",
+      "source": "len(rollforward_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every workpaper file"
+    },
+    {
+      "label": "Families",
+      "value": "12",
+      "source": "distinct rule-id prefixes in rollforward_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Workpaper files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-six planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "7",
+      "source": "len(rollforward_engine.model.DOC_TYPES)",
+      "plain": "entity register, prior structure, source extract, chart map, workpaper, backup tab, twin export"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "rollforward_engine/tests boundary tests on the cent and the day",
+      "plain": "a cell a penny off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "Once a fiscal year the group rebuilds a workpaper it does not maintain in between: one column per entity, carried forward from last year's structure and repopulated from the year-end trial-balance extract. Entities dissolve and lose their columns, entities are renamed and must be carried exactly once, entities are formed and arrive with a registration date that starts their first period. Five failures hide inside that, and they share the property that makes them dangerous: the workpaper still balances. First, a column is populated from the wrong source column -- some books carry a monthly-activity figure beside the balance, and a harvest that reads by position takes movement instead of balances; activity foots to zero exactly the way balances do, so the column self-balances and the reviewer's whole defence passes. Second, a balance rides an equivalent chart code and disappears: two charts share one workpaper row, and dropping the equivalence strands a retained-earnings balance on a code the sheet displays but the sum ignores, while every column still foots. Third, the eliminations range excludes this year's columns, because a range written over last year's structure keeps evaluating without error after columns are inserted beyond its end. Fourth, the backup tab quotes the source's category column instead of its title column, so the evidence a reviewer lands on reads plausibly and reconciles to nothing. Fifth, the two rendered formats drift, and a repair applied to one leaves the other in circulation. Which return each entity owes is a separate engine's question. This is the workpaper underneath that filing, and none of it is a judgment call: it is a column located by its declared role, a sum against its constituent codes, a set compared in both directions, a range against a column list, and a figure against the row it links to -- which a deterministic control settles better than a sheet rebuilt each July.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every workpaper file",
+      "narrative": "The CLI generates twenty-seven fictional workpaper files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-four controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (tb-rollforward-automation/); rollforward_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A column populated from the activity column still foots, and is caught anyway",
+      "narrative": "One planted defect repopulates the parent column from the book's monthly-activity column instead of its balance column, then rebuilds the combined column and the twin from those same wrong figures, exactly as a real workpaper would. The column still sums to zero, so the footing control stays silent -- a test asserts that silence, because if the footing check could catch this the basis control would be redundant. src_balance_basis catches it by re-deriving what the column would carry if populated from activity and finding that every differing row matches.",
+      "source": "rollforward_engine/tests test_activity_column_defect_still_self_balances and test_the_activity_column_also_foots_to_zero"
+    },
+    {
+      "title": "A dropped chart equivalence strands a balance while everything still balances",
+      "narrative": "The workpaper carries retained earnings on a legacy code that the chart map equates to the book's current code. One planted defect empties the equivalence list. The balance is then collected by no row at all -- and both the book and the column still foot, because the balance simply never arrives. Only the forward completeness sweep, which enumerates every nonzero book balance and asks which row collected it, reports the loss.",
+      "source": "rollforward_engine/tests test_a_balance_collected_by_no_row_is_reported"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-four controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "rollforward_report.json, rollforward_report.md, samples/"
+    },
+    {
+      "cmd": "python -m rollforward_engine samples",
+      "operation": "analyze an existing folder of workpaper files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m rollforward_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest rollforward_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10405 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,405",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (tb-rollforward-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "24",
+      "unit": "controls",
+      "source": "len(rollforward_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(rollforward_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "rollforward_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the workpaper file they were given: every entity is unique and characterised, every column entity names a real book, only trial-balance rows were harvested, every book foots, no column was populated from an activity column, final-year entities were retired and renames carried once, first-year entities are registered inside the window, the column set equals the confirmed register in both directions, every cell ties its re-derivation to the penny with nothing stranded and nothing invented, every column foots, the eliminations range covers every column, the combined column is struck from the grid, the backup tab is complete and titled from the source's title column, every figure links to a backup row that agrees with it, both rendered formats match, and the fixed fee follows status. It is not an opinion on whether an entity's status is correct in law, whether the extract itself is complete, whether the fixed fee is the figure the jurisdiction currently charges, or whether a dormant entity should be dormant.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean workpaper into the documented preparer review and sign-off before it is sent out"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; a genuinely empty column and a first-year entity whose registration implies a short first period both land here"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the workpaper does not go to the preparer until the failing control is cleared -- a column off its extract, a balance collected by no row, a column outside the eliminations range, a backup that does not tie, a dead or disagreeing link, or two rendered formats that differ"
+      }
+    ],
+    "guarantees": [
+      "Read-only: workpaper files are parsed and never written back, so the engine cannot introduce the break it reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a cell, and a penny off the re-derivation is reported as a break.",
+      "Every column is located by its declared role rather than its position -- the balance column by its role and the title column by its role -- because reading by position is the single error that produces all of the failures that still foot.",
+      "One derivation kernel: the controls and the generator share rollforward_engine.workpaper, so a populated cell cannot disagree with the logic that produced it, and forward and reverse completeness cannot disagree about the same balance.",
+      "A column populated from a monthly-activity column self-balances, and the suite asserts that the footing control stays silent on it -- so the basis control is proved to be doing work the footing check cannot.",
+      "Completeness is swept in both directions: every nonzero book balance must land in a row, and every nonzero cell must trace back to a book.",
+      "A dual-chart row carries the sum of every code it collects through the equivalence map, and each book code is consumed by exactly one row, so a balance can neither be stranded nor counted twice.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one cell it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Every registration date is tested against the fiscal window the file carries, never against the system clock, so a run in a later year returns the same findings.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a missing artifact fails completeness rather than letting the controls that read it pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether the workpaper goes to the preparer."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never populates a workpaper, files a return, pays a fee or writes to a source artifact. It reads the workpaper file and stops.",
+      "source": "tb-rollforward-automation/README.md and rollforward_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It reads the seven artifacts the annual roll-forward emits. It does not connect to a general ledger, a spreadsheet, an entity-management system or any tax authority's filing channel.",
+      "source": "rollforward_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It does not decide which return an entity owes or when it is due. That is a filing-calendar question and a separate engine's; this engine is the workpaper the filing is prepared from and nothing more.",
+      "source": "tb-rollforward-automation/README.md scope statement"
+    },
+    {
+      "statement": "It audits the extract it is given. If a book is missing from the extract entirely, the register control reports the column that names it, but the engine cannot know that a book which is present is complete -- only that it foots and that the workpaper ties to it.",
+      "source": "rollforward_engine/engine.py check_reg_entities_valid and check_src_books_self_balance"
+    },
+    {
+      "statement": "It applies the statuses, the fixed fee and the review band the file itself carries; it does not decide whether an entity's status is correct in law or whether the fee is the figure the jurisdiction currently charges. All shipped data is fictional -- the groups, entities, books, chart codes, balances and dates are invented, and the fiscal year is set in a fictional future.",
+      "source": "rollforward_engine/generate.py"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-rollforward.svg",
+    "motion": "../assets/engine-rollforward.svg",
+    "poster_alt": "Trial-Balance Roll-Forward engine tile: an isometric line drawing of a wide workpaper grid. Last year's column structure enters at the left; three station marks along the top edge show a column retired, a column renamed and a column added. Beneath the grid a flat backup tab runs its full width, with fine cobalt tie-lines rising from it to individual cells. Two source columns feed the grid from the right, one drawn solid and one drawn dashed and unused, and a single cobalt path traces the route a balance takes from the extract to its cell.",
+    "caption": "The Trial-Balance Roll-Forward tile states the question the annual rebuild turns on: which column the figures came from, whether every balance found a row, and whether the reviewer can land on the evidence for any cell.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest rollforward_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/tb-rollforward-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/tb-rollforward-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Trial-Balance Roll-Forward (SFS-E48-TBR) datasheet -- twenty-four deterministic, read-only controls over a group's annual workpaper rebuild: every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept in both directions, dual-chart rows summed through the equivalence map, the eliminations range proved to cover every column, the backup tab titled from the source's title column, and every figure linked to a backup row that agrees with it. 10,405 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}

@@ -84,6 +84,7 @@ ROSTER: dict[str, dict] = {
     "variance":      {"num": 45, "part_no": "SFS-E45-PVR", "mnemonic": "PVR", "family": "Project Reporting", "name": "Project Variance & Business-Plan Compare", "engine_dir": "project-variance-automation"},
     "contingency":   {"num": 46, "part_no": "SFS-E46-CTG", "mnemonic": "CTG", "family": "Contingency Controls", "name": "Contingency Rollforward & Adequacy", "engine_dir": "contingency-rollforward-automation"},
     "inforeturn":    {"num": 47, "part_no": "SFS-E47-IRN", "mnemonic": "IRN", "family": "Information Returns", "name": "Information Return Issuance", "engine_dir": "info-return-automation"},
+    "rollforward":   {"num": 48, "part_no": "SFS-E48-TBR", "mnemonic": "TBR", "family": "Workpaper Rollforward", "name": "Trial-Balance Roll-Forward", "engine_dir": "tb-rollforward-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"
