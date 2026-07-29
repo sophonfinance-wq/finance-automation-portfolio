@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JV Investor Reporting Package — Sophon Finance Systems</title>
+<meta name="description" content="JV Investor Reporting Package (SFS-E49-IRP) datasheet -- twenty-five deterministic, read-only controls over the monthly financial reporting package a developer issues to a joint-venture equity partner, re-derived from the five sources that produce it. Integer cents, exact equality, no materiality gate, fictional data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#ffffff;--bg-alt:#f4f4f4;--border:#e0e0e0;--border-strong:#c6c6c6;--text:#161616;--text-2:#525252;--text-3:#6f6f6f;--blue:#0f62fe;--blue-hover:#0043ce;--blue-tint:#edf5ff;--green:#198038;--amber:#8e6a00;--red:#da1e28;
+  --sans:'IBM Plex Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--mono:'IBM Plex Mono',ui-monospace,Consolas,Menlo,monospace;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{max-width:100%}
+body{font-family:var(--sans);color:var(--text);background:var(--bg);line-height:1.6}
+.wrap{width:100%;max-width:1040px;min-width:0;margin:0 auto;padding:0 22px}
+a{color:var(--blue)}
+:where(a,button,[tabindex]):focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+header.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 0}
+.nav-in{display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text)}
+.brand-mark{width:30px;height:30px;flex:none}
+.brand-word{font-weight:600;font-size:18px;letter-spacing:.2px;white-space:nowrap;line-height:1.15}
+.brand-word span{font-weight:300}
+.brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
+.brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;font-weight:500;letter-spacing:.9px;line-height:1;color:var(--blue,#0f62fe);white-space:nowrap}
+@media (max-width:400px){.brand-word{font-size:16px}.brand-tag{font-size:8.5px;letter-spacing:.8px}}
+.nav-in .backlink{margin-left:auto;color:var(--blue);text-decoration:none;font-size:14px}
+.btn{display:inline-flex;align-items:center;gap:10px;text-decoration:none;font-size:15px;padding:13px 18px;min-height:46px;border:1px solid transparent}
+.btn-p{background:var(--blue);color:#fff}.btn-p:hover{background:var(--blue-hover)}
+.btn-t{background:transparent;color:var(--blue);border-color:var(--blue)}.btn-t:hover{background:var(--blue);color:#fff}
+.kicker{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.6px;color:var(--blue)}
+.partline{font-family:var(--mono);font-size:12.5px;color:var(--text-2);letter-spacing:.3px;margin-top:4px}
+.legend{font-size:12px;color:var(--text-3);margin-top:6px}
+.thesis{border-left:3px solid var(--blue);background:var(--blue-tint);padding:12px 16px;margin:18px 0;font-size:14.5px;color:var(--text-2)}
+.masthead{padding:46px 0 8px}
+h1{font-size:clamp(30px,5vw,46px);font-weight:300;letter-spacing:-.3px;line-height:1.15;margin:8px 0 6px}
+h1 strong{font-weight:600}
+.tag{font-size:16px;color:var(--text-2);max-width:44em}
+.intro{font-size:16.5px;color:var(--text-2);max-width:48em;margin:16px 0 8px}
+section{padding:30px 0 6px;border-top:1px solid var(--border);margin-top:26px}
+section:first-of-type{border-top:0;margin-top:0}
+h2{font-size:clamp(20px,2.6vw,26px);font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.zone-k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);display:block;margin-bottom:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border)}
+.pair>div{padding:18px 20px}.pair>div+div{border-left:1px solid var(--border)}
+.pair :is(h3,h4){font-family:var(--mono);font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--text-3);margin-bottom:8px}
+.pair .plain :is(h3,h4){color:var(--blue)}
+.pair li{margin:6px 0 6px 18px}
+.strip{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--border)}
+.strip .cell{padding:16px 18px;border-top:1px solid var(--border);border-left:1px solid var(--border)}
+.strip .cell:nth-child(-n+3){border-top:0}
+.strip .cell:nth-child(3n+1){border-left:0}
+.strip .v{font-size:22px;font-weight:600;letter-spacing:-.3px}
+.strip .l{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);margin-top:4px}
+.strip .p{font-size:12.5px;color:var(--text-2);margin-top:6px}
+sup.fn{font-family:var(--mono);font-size:10px;color:var(--blue);margin-left:2px}
+table.ds{width:100%;max-width:100%;border-collapse:collapse;font-size:14px}
+table.ds th,table.ds td{text-align:left;padding:9px 12px;border:1px solid var(--border);vertical-align:top}
+table.ds th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text-3);background:var(--bg-alt);font-weight:500}
+table.ds td.mono,table.ds code{font-family:var(--mono);font-size:12.5px}
+.copyrow{display:flex;align-items:center;gap:8px}
+.copybtn{font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;padding:2px 8px;cursor:pointer;color:var(--text-2)}
+.copybtn:hover{border-color:var(--blue);color:var(--blue)}
+.limits li{list-style:none;border:1px solid var(--border);border-left:3px solid var(--amber);padding:12px 16px;margin:10px 0;font-size:14.5px;color:var(--text-2)}
+.figwrap{margin:22px 0 8px}.figwrap img,.figwrap video{display:block;width:100%;height:auto;border:1px solid var(--border)}
+figcaption{font-size:12.5px;color:var(--text-3);margin-top:7px}
+.media-crops{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.media-crops img{display:block;width:100%;height:auto;border:1px solid var(--border)}
+.motion-media{display:block}.motion-media>img{display:none!important}.motion-media>video{display:block}
+.schem-wrap{overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}
+.subst{font-size:12.5px;color:var(--text-3);margin-top:8px}
+.subst li{list-style:none;margin:5px 0;padding-left:20px;text-indent:-20px;overflow-wrap:anywhere}
+.subst .fnid{font-family:var(--mono);color:var(--blue);margin-right:6px}
+.verify{background:var(--bg-alt);border:1px solid var(--border);padding:24px;margin-top:8px}
+.verify .runline{font-family:var(--mono);font-size:13px;background:#161616;color:#9ef0a0;padding:12px 16px;margin:12px 0;overflow-x:auto;white-space:pre}
+.cta{margin:40px 0 56px;background:var(--blue);color:#fff;padding:32px 28px}
+.cta h2{color:#fff;border:0}.cta p{color:#d0e2ff;font-size:15px;max-width:44em;margin:6px 0 16px}
+.btn-w{background:#fff;color:var(--blue)}.btn-wo{background:transparent;color:#fff;border-color:#fff}
+footer{border-top:1px solid var(--border);padding:18px 0 26px;font-size:13px;color:var(--text-3)}
+footer a{color:var(--blue);text-decoration:none}
+/* die stack — isometric SVG hero (contained, layout-reserving) + interactive layer cards */
+.die{position:relative;margin:10px 0}
+.die-svg{width:100%;max-width:540px;height:auto;display:block;margin:0 auto}
+.die-3d{display:none}
+.js-die .die-3d{display:flex;flex-direction:column;gap:8px;margin-top:18px}
+.die-face{display:block;width:100%;text-align:left;padding:13px 16px;border:1px solid var(--blue);border-left:3px solid var(--blue);background:var(--blue-tint);font-family:var(--mono);font-size:13px;color:var(--text);cursor:pointer;box-shadow:0 2px 0 #cfe0ff;transition:background-color .15s ease,box-shadow .15s ease,transform .15s ease}
+.die-face:hover{transform:translateY(-1px);box-shadow:0 3px 0 #a6c8ff}
+.die-face:focus-visible{outline:4px solid #f1c21b;outline-offset:3px}
+.die-face[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue);box-shadow:0 3px 0 #002d9c}
+.die-panel{border:1px solid var(--border);border-left:3px solid var(--blue);padding:14px 18px;margin-top:12px;font-size:14px;color:var(--text-2);min-height:64px}
+.die-panel h3{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--blue);margin-bottom:6px}
+/* schematic */
+.schem{width:100%;height:auto;display:block;border:1px solid var(--border)}
+.schem-edge path{stroke-dasharray:6 6;animation:flow 1.6s linear infinite}
+.schem-edge.gate path{stroke-dasharray:none;stroke-width:2.2}
+@keyframes flow{to{stroke-dashoffset:-12}}
+@media (max-width:760px){.wrap{padding-inline:16px}.nav-in{flex-wrap:wrap;gap:8px 12px}.brand{min-width:0}.brand-word{white-space:normal}.nav-in .backlink{margin-left:auto;font-size:13px}.partline{overflow-wrap:anywhere}.pair{grid-template-columns:1fr}.pair>div+div{border-left:0;border-top:1px solid var(--border)}.strip{grid-template-columns:1fr}.strip .cell{border-left:0!important;border-top:1px solid var(--border)!important}.strip .cell:first-child{border-top:0!important}table.ds{display:block;width:100%;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;-webkit-overflow-scrolling:touch}.media-crops{grid-template-columns:1fr}.die-svg{max-width:100%}.schem-wrap svg.schem{width:auto;max-width:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.schem-edge path{animation:none;stroke-dasharray:none}}
+.schem-block rect{transition:fill .15s}
+.schem-block:hover rect{fill:var(--blue-tint)}
+@media print{header.nav,.cta,.masthead .btn,.copybtn{display:none}.motion-media>img{display:block!important}.motion-media>video{display:none!important}.die-3d{display:none!important}.die-svg{display:block!important}.pair,.strip{display:block}section{break-inside:avoid}.verify .runline{background:#fff!important;color:#000!important;border:1px solid #000;white-space:pre-wrap;overflow-wrap:anywhere;-webkit-print-color-adjust:economy;print-color-adjust:economy}}
+
+</style>
+</head>
+<body>
+<header class="nav"><div class="wrap nav-in">
+  <a class="brand" href="/" aria-label="Sophon Finance Systems — home">
+    <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 30 L19 21 L27 26 L38 14" fill="none" stroke="#0f62fe" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="14" r="3" fill="#0f62fe"/><rect x="10" y="35" width="28" height="3" fill="#161616"/></svg>
+    <span class="brand-text"><span class="brand-word">Sophon <span>Finance Systems</span></span><span class="brand-tag">FINANCE &amp; ACCOUNTING AUTOMATION</span></span>
+  </a>
+  <a class="backlink" href="/#engines">&larr; All engines</a>
+  <a class="btn btn-p" href="/#book" style="padding:10px 14px;min-height:40px;font-size:14px">Book a consultation</a>
+</div></header>
+<main class="wrap">
+<section class="masthead">
+  <p class="kicker">ENGINE 49</p>
+  <p class="partline">SFS-E49-IRP &middot; INVESTOR REPORTING &middot; REV 2026-07-29 &middot; PRODUCTION</p>
+  <p class="legend">PRODUCTION = runnable end-to-end, CI-backed, full test suite passing. All data fictional and seeded.</p>
+  <h1><strong>JV Investor Reporting Package</strong></h1>
+  <p class="tag">Every statement re-derived from the sources that were supposed to produce it, and nothing released over an open exception.</p>
+  <p class="intro">Every month a developer issues a financial reporting package to the joint-venture equity partner of a single project entity: a cover, a trial balance, a balance sheet, a statement of operations, a statement of members&#x27; capital, a development cost schedule, a job cost bridge, cash support, notes and a release record. It is assembled by hand, per project, per investor, and the failure mode is a wrong figure sent to an outside partner. This engine reads the five sources that package is built from -- the project entity&#x27;s general ledger extract, the job cost detail by division, the executed equity draw schedule, the parent entity&#x27;s ledger carrying the reciprocal investment account, and the package issued for the period before -- and runs twenty-five deterministic controls over the package that came out of them. Does the trial balance net to zero, does it cover every account with activity, and does each balance agree to its ledger account by account number rather than by row position; does the balance sheet balance and is a credit intercompany balance reclassified rather than netted against assets; does each member&#x27;s capital agree to the ledger, do the contributions foot, does the Total column cross-foot every row, does each member roll forward, and does the result agree to the statement of operations; does the development cost schedule tie to work in process, does the job cost bridge close with every difference itemized and disclosed, is every division covered; do contributions agree per member to the executed draw schedule and does the parent&#x27;s investment agree to the capital it represents; is a nil statement genuinely nil, is cash supported, does every quoted footnote figure match its cell, does every caption fit its schedule, does the cover agree with what the notes disclose; and are the tie-out rows and preparer artifacts out, does the package continue from last period, is it complete, and was it allowed to leave. It never mutates an input and never posts an entry.</p>
+  <p class="thesis">Five of these controls are not hypotheticals. They were written from five genuine defects found during a manual build of one such package -- errors that took three rounds of human review to surface, and none of which looked wrong on the page. A job cost difference absorbed into a rounding line instead of being itemized and disclosed, so the partner receives a figure nobody can rebuild. A contribution column typed from a funding notice rather than footed against the draw schedule the partner also holds, with the variance never quantified. A cost-to-date schedule still carrying a caption saying the cost arose in the period, so a reader adds a month of spend that was really every month since the ground broke -- every figure on the page correct. A cover asserting the package is free of exceptions while the notes disclose one, on the page most readers read closest. A reviewer&#x27;s own tie-out arithmetic left inside the print area and shipped to the investor as though it were a line of the statement. What these have in common is that the package still foots, still balances and still reads plausibly, so a review that reads the page cannot find them; only re-derivation from the sources can. So the engine joins the package to the ledger on the account number and only on the account number, requires a bridge to close exactly rather than nearly, sums the member columns across every row including the sharing-ratio row, reads either side of an account rather than its net, and holds the whole package on any one open exception -- with no materiality gate, because materiality is a judgement about a figure the partner has not seen yet.</p>
+  <p><a class="btn btn-p" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run it</a> <a class="btn btn-t" href="/#book">Book a consultation</a></p>
+</section>
+<section><h2>Architecture</h2><span class="zone-k die-instruction">functional block stack &middot; static overview</span>
+<div class="die">
+<svg class="die-svg" viewBox="0 0 410 520" role="img" aria-label="Exploded functional block stack: Trial Balance, Balance Sheet, Members&#x27; Capital, Development and Job Cost, External Agreement, Presentation, Release over seeded fictional data">
+  <g class="die-layer" data-layer="tb"><polygon points="80,20 400,20 360,42 40,42" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,42 360,42 360,88 40,88" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="69" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Trial Balance</text></g>
+  <g class="die-layer" data-layer="bs"><polygon points="80,80 400,80 360,102 40,102" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,102 360,102 360,148 40,148" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="129" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Balance Sheet</text></g>
+  <g class="die-layer" data-layer="cap"><polygon points="80,140 400,140 360,162 40,162" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,162 360,162 360,208 40,208" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="189" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Members&#x27; Capital</text></g>
+  <g class="die-layer" data-layer="cost"><polygon points="80,200 400,200 360,222 40,222" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,222 360,222 360,268 40,268" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="249" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Development and Job Cost</text></g>
+  <g class="die-layer" data-layer="ext"><polygon points="80,260 400,260 360,282 40,282" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,282 360,282 360,328 40,328" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="309" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">External Agreement</text></g>
+  <g class="die-layer" data-layer="pres"><polygon points="80,320 400,320 360,342 40,342" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,342 360,342 360,388 40,388" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="369" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Presentation</text></g>
+  <g class="die-layer" data-layer="rel"><polygon points="80,380 400,380 360,402 40,402" fill="#edf5ff" stroke="#0f62fe" stroke-width="1.4"/><polygon points="40,402 360,402 360,448 40,448" fill="#ffffff" stroke="#0f62fe" stroke-width="1.4"/><text x="60" y="429" font-family="IBM Plex Mono,monospace" font-size="13" fill="#161616">Release</text></g>
+  <text x="40" y="510" font-family="IBM Plex Mono,monospace" font-size="11" fill="#6f6f6f">substrate: seeded fictional data</text>
+</svg>
+  <div class="die-3d" aria-hidden="false">
+    <button class="die-face" data-layer="tb" data-plain="Checks the trial balance nets to zero, carries every ledger account with activity, and agrees to the ledger account by account number." data-eng="Three controls. tb_nets_zero FAILs a trial balance whose debits and credits do not net to zero in integer cents -- an unbalanced trial balance means the extract was caught mid-posting or a row was dropped in transit, and every statement struck from it inherits the break. tb_completeness enumerates the ledger and FAILs an account with activity on either side that the package trial balance does not carry; it reads either column and never the net, because a clearing account that took in an amount and released the same amount has a nil balance and is exactly the account a package drops -- and dropping it hides the whole of what it did. tb_agrees_ledger is the control this area exists for: it joins the package trial balance to the ledger on the account number and only on the account number. A trial balance exported in reading order set beside a ledger exported in account order agrees on the rows where the two orders happen to coincide and is wrong everywhere else, and it still foots, still nets and still balances. When a stated balance disagrees with its own account but does match the ledger account in the same row position, the finding says so -- that is the fingerprint of a positional paste, and naming it saves the hour it otherwise takes to work out why two unrelated figures are both wrong by the same pair of amounts." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="Trial Balance layer — open detail" aria-controls="die-panel" aria-expanded="false">Trial Balance</button>
+    <button class="die-face" data-layer="bs" data-plain="Checks total assets equals liabilities plus members&#x27; equity, and that a credit intercompany balance is reclassified rather than netted against assets." data-eng="Two controls. bs_balances re-foots each of the three sections from its own rows and FAILs a statement whose assets do not equal liabilities plus members&#x27; equity, so a transposition inside a section that leaves the grand total intact is still caught. interco_classified handles the presentation question a balance sheet gets wrong quietly: an intercompany account carried as an asset that has gone into a credit balance is a payable, and leaving it in assets nets a liability against an asset and understates both sides by the same amount. The statement continues to balance, which is precisely why nobody notices. The control reads the account&#x27;s role and its sign, and FAILs a credit-balance intercompany account presented inside assets." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="Balance Sheet layer — open detail" aria-controls="die-panel" aria-expanded="false">Balance Sheet</button>
+    <button class="die-face" data-layer="cap" data-plain="Checks each member&#x27;s ending balance against the ledger, foots the contributions, cross-foots the Total column on every row, rolls each member forward, and ties net income to the statement of operations." data-eng="Five controls, and this is where an investor package is read hardest, because the capital statement is the one page the partner checks against their own records. capital_agrees_ledger FAILs a member&#x27;s ending balance that does not equal its ledger capital account. contributions_foot FAILs a contribution total that does not equal the detail beneath it. total_cross_foots sums the member columns across every row of the statement, including the sharing-ratio row: the defect it exists for is a Total cell linked somewhere else instead of summing the row it sits on -- to the ledger, to a funding notice, to last period&#x27;s total -- and such a cell is right often enough to survive review and wrong exactly when a member column moves, which is the month it matters. capital_rollforward re-derives ending as beginning plus contributions plus net income less distributions, per member, so a distribution dropped from the rollforward cannot hide behind an ending balance that was typed rather than struck. net_income_agrees FAILs a capital statement whose net income is not the bottom line of the statement of operations sitting two pages earlier in the same package." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="Members&#x27; Capital layer — open detail" aria-controls="die-panel" aria-expanded="false">Members&#x27; Capital</button>
+    <button class="die-face" data-layer="cost" data-plain="Checks the development cost schedule against work in process, closes the job cost bridge with every difference itemized and disclosed, and covers every division." data-eng="Three controls, and the middle one is the first of the five defects this engine was written from. devcost_agrees_wip FAILs a development cost schedule whose total does not equal the ledger work-in-process account. jobcost_bridge does not require the job cost report and the ledger to agree -- they differ routinely and for good reasons, interest capitalised in one and not the other, an accrual posted after the cost cut-off. It requires the report plus everything itemized against it to reach the ledger exactly, with no closing tolerance, because a bridge that nearly closes has an unexplained figure in it; and it FAILs any reconciling item carried in the bridge without being disclosed, because the alternative is what actually happens -- the gap is absorbed into a rounding line and the partner is told a figure nobody can rebuild. division_coverage FAILs a division appearing in the job cost report that appears neither in the schedule nor in a disclosed reconciling item, so a renumbered division cannot quietly leave the package while the total still ties." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="Development and Job Cost layer — open detail" aria-controls="die-panel" aria-expanded="false">Development and Job Cost</button>
+    <button class="die-face" data-layer="ext" data-plain="Checks contributions per member against the executed equity draw schedule, and the parent&#x27;s investment account against the capital it represents." data-eng="Two controls, and both test the package against a document held outside it. draw_schedule_agrees is the second of the five: it foots the executed draws per member and FAILs a contribution figure that does not agree, quantifying the variance rather than reporting a bare mismatch. Only executed draws count -- a scheduled or cancelled draw is not a contribution, and treating a funding notice as one is the exact substitution the control exists to catch. It matters because the partner holds the same draw schedule, so a contribution that agrees to nothing is a figure the partner can disprove from their own file. reciprocal_investment FAILs a parent-entity investment account that does not equal the project entity&#x27;s capital account, which is the one relationship in the package that has to hold across two sets of books and is therefore the one nobody owns." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="External Agreement layer — open detail" aria-controls="die-panel" aria-expanded="false">External Agreement</button>
+    <button class="die-face" data-layer="pres" data-plain="Checks a nil statement is genuinely nil, cash is supported, footnote figures match their cells, captions fit their schedules, and the cover agrees with the notes." data-eng="Five controls, two of them from the original five defects. nil_is_genuine FAILs a statement of operations presented as nil when any revenue or expense account is not nil, because a nil presentation is a claim about the ledger and not a formatting choice. cash_supported is deliberately a FLAG rather than a failure: the engine can see the bank reconciliation is not attached or does not agree and it cannot manufacture one, so it reports the position and hands it over. footnote_figures re-reads every figure quoted inside a note against the cell it describes and FAILs a note quoting a stale number -- notes are edited last and carried forward first. caption_matches_type FAILs a cost-to-date schedule carrying a caption implying the cost arose in the period, and the converse; every figure on such a page is right, and a reader adds a month of spend that was really every month since the ground broke. cover_consistent FAILs a basis-of-presentation assertion that the package is free of exceptions while the notes disclose one, on the page most readers read closest." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="Presentation layer — open detail" aria-controls="die-panel" aria-expanded="false">Presentation</button>
+    <button class="die-face" data-layer="rel" data-plain="Checks the tie-out rows and preparer artifacts are out, the package continues from the prior one, every named statement exists, and nothing left over an open exception." data-eng="Five controls, the last of which is why the engine is worth running. checkrows_excluded is the fifth original defect: it FAILs an internal tie-out check row left inside the released print area, where the reviewer&#x27;s own arithmetic ships to the investor as though it were a line of the statement. no_preparer_artifacts FAILs any other preparer-only artifact in the released package. prior_period_continuity FAILs an opening balance that does not equal the prior package&#x27;s closing balance, so a restated prior close cannot enter this period silently. package_complete FAILs a statement named on the contents page that the package does not carry, or carries empty -- a contents page is a promise, and the controls that read a missing statement report nothing, so absence must fail here rather than read as twenty-four held controls. release_gate is the only control that reads the run&#x27;s own output: one open exception holds the package. There is no materiality gate, and there should not be, because materiality is a judgement about a figure the partner has not seen yet and the engine&#x27;s job is to make sure whoever makes that judgement is looking at the exception rather than at a package already in the partner&#x27;s inbox." data-src="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" aria-label="Release layer — open detail" aria-controls="die-panel" aria-expanded="false">Release</button>
+  </div>
+  <div class="die-panel" id="die-panel" role="region" aria-label="Architecture layer details" aria-live="polite"><h3>Select a layer</h3><p>Seven control areas run in registry order over each package file, twenty-five controls in all. They are ordered the way the package is assembled -- from the trial balance the statements are struck from, out to the release decision that lets it leave -- so a finding lands on the earliest artifact that can explain it.</p></div>
+</div></section>
+<section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
+<div class="strip">
+  <div class="cell"><div class="v">10,432<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">25<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Controls</div><div class="p">independent rules run over every package file</div></div>
+  <div class="cell"><div class="v">7<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Areas</div><div class="p">groups of controls, each answering one question about the package</div></div>
+  <div class="cell"><div class="v">27<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Package files</div><div class="p">one clean baseline plus twenty-six planted-defect files</div></div>
+  <div class="cell"><div class="v">15<sup class="fn"><a id="fnref-5" href="#fn-5" aria-label="See substantiation 5">5</a></sup></div><div class="l">Artifacts read</div><div class="p">five sources in, and the ten documents the package is made of</div></div>
+  <div class="cell"><div class="v">0<sup class="fn"><a id="fnref-6" href="#fn-6" aria-label="See substantiation 6">6</a></sup></div><div class="l">Tolerance</div><div class="p">a figure a penny off its re-derivation is a break, not a rounding band</div></div>
+</div></section>
+<section><h2>What it does for you</h2><span class="zone-k">plain terms</span>
+  <p class="intro">The monthly investor reporting package is assembled by hand, per project, per investor, from five sources that were never designed to agree with one another. It foots, it balances and it reads plausibly even when it is wrong, because the arithmetic that would expose the error is the arithmetic that produced the figure. Five failures found during a manual build of one such package took three rounds of human review to surface: a job cost difference absorbed into a rounding line rather than itemized and disclosed; a contribution column typed from a funding notice rather than footed against the draw schedule the partner also holds; a cost-to-date schedule carrying a caption saying the cost arose in the period; a cover asserting the package is free of exceptions while the notes disclose one; and a reviewer&#x27;s own tie-out check row left inside the released print area. None of them looked wrong on the page. All of them were addressed to somebody outside the company.</p>
+  <p style="margin:10px 0"><b>The seeded demo runs every control over every package file<sup class="fn"><a id="fnref-7" href="#fn-7" aria-label="See substantiation 7">7</a></sup>.</b> The CLI generates twenty-seven fictional package files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-five controls over every file and writes both reports. The clean baseline returns PASS on all twenty-five. Each defect file returns exactly the finding its control exists for, and the run as a whole returns FAIL, which is the engine working: a corpus with a planted defect for every control is supposed to fail. Every defect file is also marked held, because a package with a known exception is held -- a defect file left marked released would trip the release gate as well as its own control, and a corpus in which one break fires two controls cannot prove that either of them is independent. The release gate&#x27;s own file is the exception, because being released over an open exception is precisely what it is for.</p>
+  <p style="margin:10px 0"><b>A trial balance pasted beside the ledger instead of joined to it<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup>.</b> The package trial balance is exported in reading order and the ledger extract comes out in account order. Pasted one column beside the other, the package agrees on the rows where the two orders coincide and is wrong everywhere else -- and it foots, it nets, and the balance sheet struck from it balances. tb_agrees_ledger joins on the account number and only on the account number, so each mismatched row is reported against its own account; and where the stated balance does match the ledger account occupying the same row position, the finding says so. That is the fingerprint of a positional paste rather than a posting error, and naming it is the difference between an hour of investigation and a re-export.</p>
+  <p style="margin:10px 0"><b>A bridge that nearly closes, and a Total that does not sum its row<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup>.</b> jobcost_bridge does not require the job cost report and the ledger to agree; it requires the report plus everything itemized against it to reach the ledger exactly. There is no closing tolerance, because a bridge that nearly closes has an unexplained figure in it, and any reconciling item carried in the bridge without being disclosed fails on its own account. total_cross_foots sums the member columns across every row of the capital statement, including the sharing-ratio row: a Total cell linked to the ledger, to a funding notice or to last period&#x27;s total instead of summing the row it sits on is right often enough to survive review, and wrong exactly in the month a member column moves.</p>
+</section>
+<section><h2>Functional block diagram</h2><span class="zone-k">engineering &middot; each block links to its source</span>
+<div class="schem-wrap"><svg class="schem" width="950" height="530" viewBox="0 0 950 530" role="group" aria-labelledby="schem-title">
+  <title id="schem-title">Functional block diagram of the JV Investor Reporting Package engine</title>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f62fe"/></marker></defs>
+  <g class="schem-edge"><path d="M200,423 C235,423 235,81 270,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C235,423 235,195 270,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="150" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C235,423 235,309 270,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="264" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C235,423 235,423 270,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="235" y="378" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C355,423 355,81 510,81" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="36" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C355,423 355,195 510,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="150" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C355,423 355,309 510,309" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="355" y="264" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">package files</text></g>
+  <g class="schem-edge"><path d="M200,423 C475,423 475,195 750,195" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="475" y="150" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">sources and package</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L379,482 C355,482 355,482 355,118" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="475" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L379,482 C355,482 355,482 355,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="486" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L379,482 C355,482 355,482 355,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="497" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L379,482 C355,482 355,482 355,460" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="508" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L619,482 C595,482 595,482 595,118" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="475" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L619,482 C595,482 595,482 595,232" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="486" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M835,232 C835,482 835,482 811,482 L619,482 C595,482 595,482 595,346" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="497" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">roles</text></g>
+  <g class="schem-edge"><path d="M440,81 C595,81 595,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M440,195 C595,195 595,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M440,309 C595,309 595,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M440,423 C595,423 595,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="595" y="415" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,81 C715,81 715,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="244" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge"><path d="M680,195 C715,195 715,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="301" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-edge gate"><path d="M680,309 C715,309 715,423 750,423" fill="none" stroke="#0f62fe" stroke-width="1.6" marker-end="url(#arrow)"/><text x="715" y="358" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f" text-anchor="middle" paint-order="stroke" stroke="#ffffff" stroke-width="3">findings</text></g>
+  <g class="schem-block" data-block="corpus"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/generate.py" target="_blank" rel="noopener" aria-label="Open Seeded Package Files source on GitHub"><rect x="30" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="115" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Seeded Package Files</text></a></g>
+  <g class="schem-block" data-block="tb-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Trial Balance source on GitHub"><rect x="270" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="85" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Trial Balance</text></a></g>
+  <g class="schem-block" data-block="bs-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Balance Sheet source on GitHub"><rect x="270" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Balance Sheet</text></a></g>
+  <g class="schem-block" data-block="cap-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Members&#x27; Capital source on GitHub"><rect x="270" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Members&#x27; Capital</text></a></g>
+  <g class="schem-block" data-block="cost-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Development and Job Cost source on GitHub"><rect x="270" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="355" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle"><tspan x="355" y="419">Development</tspan><tspan x="355" y="435">and Job Cost</tspan></text></a></g>
+  <g class="schem-block" data-block="ext-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open External Agreement source on GitHub"><rect x="510" y="44" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="85" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">External Agreement</text></a></g>
+  <g class="schem-block" data-block="pres-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Presentation source on GitHub"><rect x="510" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Presentation</text></a></g>
+  <g class="schem-block" data-block="rel-control"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py" target="_blank" rel="noopener" aria-label="Open Release source on GitHub"><rect x="510" y="272" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="595" y="313" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Release</text></a></g>
+  <g class="schem-block" data-block="artifacts"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/model.py" target="_blank" rel="noopener" aria-label="Open Sources and Package source on GitHub"><rect x="750" y="158" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="199" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Sources and Package</text></a></g>
+  <g class="schem-block" data-block="report"><a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/report.py" target="_blank" rel="noopener" aria-label="Open Verdict and Findings source on GitHub"><rect x="750" y="386" width="170" height="74" rx="4" fill="#ffffff" stroke="#0f62fe" stroke-width="1.6"/><text x="835" y="427" font-family="IBM Plex Sans,sans-serif" font-size="13" font-weight="600" fill="#161616" text-anchor="middle">Verdict and Findings</text></a></g>
+  <g class="schem-title"><line x1="30" y1="504" x2="920" y2="504" stroke="#c6c6c6" stroke-width="1"/><text x="30" y="518" font-family="IBM Plex Mono,monospace" font-size="10" fill="#6f6f6f">SFS-E49-IRP &middot; FUNCTIONAL BLOCK DIAGRAM &middot; REV 2026-07-29</text></g>
+</svg></div><div class="pair schematic-pair"><div class="plain"><h3>Plain terms</h3><ul><li><b>Seeded Package Files.</b> fictional monthly reporting packages enter the control registry</li><li><b>Trial Balance.</b> does it net, does it cover the ledger, does it agree by account number</li><li><b>Balance Sheet.</b> does it balance, and is a credit intercompany balance a liability</li><li><b>Members&#x27; Capital.</b> does every member&#x27;s column tie, foot, cross-foot and roll forward</li><li><b>Development and Job Cost.</b> does the schedule tie work in process, and is every difference disclosed</li><li><b>External Agreement.</b> does the package agree with documents held outside it</li><li><b>Presentation.</b> does the page say what the figures underneath it say</li><li><b>Release.</b> is it clean enough to leave, and did it leave anyway</li><li><b>Sources and Package.</b> the fifteen artifacts and the roles every rule resolves against</li><li><b>Verdict and Findings.</b> every finding, with the reason it exists, ends at a person</li></ul></div><div class="engineering"><h3>Engineering</h3><ul><li><b>Seeded Package Files.</b> generate_corpus writes one clean baseline plus one planted-defect file for every registered control and one for the integer-cents guard, twenty-seven files in total. Only the base facts are stated: the non-capital ledger accounts, the job cost detail by division, the cost carried in the ledger and not in the cost report, the equity draw schedule, the prior package&#x27;s closing capital, each member&#x27;s distributions and sharing ratio, the presentation the statement of operations declares, the cover&#x27;s assertions, the notes&#x27; cell references, the tie-out rows and the artifact list. Everything the engine later checks is a derived figure -- the trial balance, the balance sheet and its section totals, every capital column and the Total across it, the contribution detail, the development cost total, the job cost report total, the bank reconciliation balances, the parent&#x27;s reciprocal investment and every figure quoted in a note -- computed through the same package kernel and the same recompute helpers the controls recompute with. So a defect that changes a base fact re-derives the package and keeps the break confined to one control.</li><li><b>Trial Balance.</b> Three controls: the trial balance nets to zero, every ledger account with activity on either side appears in it, and each balance agrees to its own ledger account matched by account number and never by row position -- with a positional paste named as such when the stated figure matches the account sitting in the same row.</li><li><b>Balance Sheet.</b> Two controls: each section is re-footed from its own rows and total assets must equal liabilities plus members&#x27; equity, and an intercompany account in a credit balance is reclassified to liabilities rather than netted against assets -- a netting that leaves the statement balancing and understates both sides by the same amount.</li><li><b>Members&#x27; Capital.</b> Five controls: each member&#x27;s ending balance agrees to its ledger capital account, contributions foot to their detail, the Total column sums the member columns on every row including the sharing-ratio row, ending is re-derived as beginning plus contributions plus net income less distributions, and net income equals the statement of operations bottom line.</li><li><b>Development and Job Cost.</b> Three controls: the development cost schedule total equals the ledger work-in-process account, the job cost bridge closes exactly with no tolerance and fails any reconciling item carried without being disclosed, and every division in the report appears in the schedule or in a disclosed reconciling item.</li><li><b>External Agreement.</b> Two controls: contributions agree per member to the executed equity draw schedule with any variance quantified and only executed draws counted, and the parent entity&#x27;s investment account equals the project entity&#x27;s capital account -- the one relationship that has to hold across two sets of books.</li><li><b>Presentation.</b> Five controls: a nil statement of operations is nil only if every revenue and expense account is nil, unsupported cash is flagged rather than failed because the engine cannot manufacture a bank statement, every figure quoted in a note equals the cell it describes, every schedule&#x27;s caption fits its type, and the cover&#x27;s basis-of-presentation assertions are consistent with every disclosed exception.</li><li><b>Release.</b> Five controls: internal tie-out check rows are excluded from the released print area, no preparer-only artifact ships, opening balances equal the prior package&#x27;s closing balances, every statement named in the contents exists and is non-empty, and the package is held unless every control above passes.</li><li><b>Sources and Package.</b> Five source documents go in -- the project entity&#x27;s general ledger extract, the job cost detail by division, the executed equity draw schedule, the parent entity&#x27;s ledger carrying the reciprocal investment account, and the package issued for the period before. Ten make up the package itself: the cover with its contents list and basis-of-presentation assertions, the trial balance, the balance sheet, the statement of operations, the statement of members&#x27; capital, the development cost schedule, the job cost report and its bridge, the cash support, the notes, and the release record. Ledger accounts carry a declared role -- cash, work in process, intercompany or capital -- so every control locates the accounts it needs by role rather than by name or position, and each schedule declares its type so a caption can be tested against what the schedule actually is.</li><li><b>Verdict and Findings.</b> Findings roll up per package file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps and no absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.</li></ul></div></div>
+</section>
+<section><h2>Instruction set</h2><span class="zone-k">every public command</span>
+<table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
+<tbody>
+  <tr><td class="mono"><div class="copyrow"><code>python run.py</code><button class="copybtn" data-copy="python run.py" aria-label="Copy command: python run.py">copy</button></div></td><td>regenerate the seeded fictional corpus, run all twenty-five controls, write both reports</td><td class="mono">per-file verdicts and every actionable finding, then the overall verdict</td><td class="mono">2 for the bundled corpus, which carries a planted defect for every control by design</td><td>investor_report.json, investor_report.md, samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m investor_engine samples</code><button class="copybtn" data-copy="python -m investor_engine samples" aria-label="Copy command: python -m investor_engine samples">copy</button></div></td><td>analyze an existing folder of package files without regenerating it</td><td class="mono">per-file verdicts and findings</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>none unless --json or --md is passed</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m investor_engine samples --generate --quiet</code><button class="copybtn" data-copy="python -m investor_engine samples --generate --quiet" aria-label="Copy command: python -m investor_engine samples --generate --quiet">copy</button></div></td><td>regenerate the corpus and print only the overall verdict</td><td class="mono">a single verdict line</td><td class="mono">0 PASS / 1 REVIEW / 2 FAIL / 3 usage</td><td>samples/</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest investor_engine/tests -q</code><button class="copybtn" data-copy="python -m pytest investor_engine/tests -q" aria-label="Copy command: python -m pytest investor_engine/tests -q">copy</button></div></td><td>run the full test suite for this engine</td><td class="mono">10432 passed</td><td class="mono">0 when every test passes</td><td>none</td></tr>
+</tbody></table></section>
+<section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
+<table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
+<tbody>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>10,432</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Registered controls<sup class="fn"><a id="fnref-11" href="#fn-11" aria-label="See substantiation 11">11</a></sup></td><td class="mono"><b>25</b> controls<br><span style="color:#6f6f6f;font-size:12.5px">counted from the registry, not from documentation</span></td></tr>
+  <tr><td>Planted defects<sup class="fn"><a id="fnref-12" href="#fn-12" aria-label="See substantiation 12">12</a></sup></td><td class="mono"><b>26</b> defect files<br><span style="color:#6f6f6f;font-size:12.5px">every registered control has at least one file that trips it, plus one for the integer-cents guard</span></td></tr>
+  <tr><td>Control coverage<sup class="fn"><a id="fnref-13" href="#fn-13" aria-label="See substantiation 13">13</a></sup></td><td class="mono"><b>100</b> percent of controls with a planted defect<br><span style="color:#6f6f6f;font-size:12.5px">no control ships without a file demonstrating it firing</span></td></tr>
+</tbody></table></section>
+<section><h2>Control characteristics</h2><span class="zone-k">engineering</span>
+<div class="pair control-pair"><div class="plain"><h3>Plain terms</h3><p>The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether the package goes to the partner. There is no materiality threshold, because materiality is a judgement about a figure the partner has not seen yet.</p></div><div class="engineering"><h3>Engineering</h3><p><b>Deterministic envelope.</b> seeded fictional inputs, read-only operation, offline default mode.</p><p><b>Demo gate.</b> FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control</p></div></div>
+<table class="ds" style="margin-top:14px"><thead><tr><th>Severity</th><th>Verdict</th><th>Action</th></tr></thead><tbody><tr><td>No findings above PASS</td><td class="mono"><b>PASS</b></td><td>carry the mechanically clean package into the documented preparer review and partner sign-off before it is issued</td></tr><tr><td>One or more FLAG, no FAIL</td><td class="mono"><b>REVIEW</b></td><td>a human resolves each flag; cash whose bank reconciliation has not arrived or does not agree lands here, because the engine can see the support is absent and cannot manufacture it</td></tr><tr><td>One or more FAIL</td><td class="mono"><b>FAIL</b></td><td>the package does not go to the partner until the failing control is cleared -- a balance off its ledger account, a bridge difference carried undisclosed, a contribution that does not agree to the executed draws, a Total that does not sum its row, a caption that misstates its schedule, a cover that contradicts the notes, or a check row inside the print area</td></tr></tbody></table>
+<ul style="margin-top:14px"><li style="list-style:disc;margin-left:18px">Read-only: package files are parsed and never written back, so the engine cannot introduce the break it reports, and it never posts an entry.</li><li style="list-style:disc;margin-left:18px">Integer cents throughout, compared with exact ==; there is no tolerance band on any figure, and a penny off the re-derivation is reported as a break.</li><li style="list-style:disc;margin-left:18px">Package balances are matched to the ledger by account number and never by row position, and a stated figure that matches the account in the same row position is named as a positional paste rather than reported as an unexplained difference.</li><li style="list-style:disc;margin-left:18px">Completeness reads either side of a ledger account and never its net, so a clearing account that took in an amount and released the same amount cannot be dropped behind a nil balance.</li><li style="list-style:disc;margin-left:18px">The job cost bridge must close exactly rather than within a tolerance, and a reconciling item carried in the bridge without being disclosed fails on its own account.</li><li style="list-style:disc;margin-left:18px">The Total column is summed across every row of the capital statement, including the sharing-ratio row, so a Total cell linked elsewhere instead of summing its row is caught in the month it first disagrees.</li><li style="list-style:disc;margin-left:18px">One derivation kernel: the controls and the generator share the same package module and the same recompute helpers, so a stated figure cannot disagree with the logic that produced it, and a planted defect keeps its break confined to one control.</li><li style="list-style:disc;margin-left:18px">Only executed equity draws are treated as contributions; a scheduled or cancelled draw is never counted, and any variance against the executed schedule is quantified rather than reported as a bare mismatch.</li><li style="list-style:disc;margin-left:18px">A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one field it was read on, rather than being coerced into the number the engine is meant to audit.</li><li style="list-style:disc;margin-left:18px">Every executed draw is tested against the reporting period the file carries, never against the system clock, so a run in a later month returns the same findings.</li><li style="list-style:disc;margin-left:18px">Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.</li><li style="list-style:disc;margin-left:18px">Absent evidence is never a passing control; a statement named on the contents page and missing from the package fails completeness rather than letting the controls that read it report nothing and pass unread.</li></ul>
+</section>
+<section><h2>Operating limits</h2><span class="zone-k">what it refuses to do</span>
+<ul class="limits"><li>The engine never assembles a package, issues a statement, posts an entry or writes to a source artifact. It reads the package file and stops.<sup class="fn"><a id="fnref-14" href="#fn-14" aria-label="See substantiation 14">14</a></sup></li><li>It does not resolve classification judgement. Where the ledger labels a cost one thing, the payment went somewhere else and the draw schedule calls it a third, the engine reports that two sources disagree and must not pick a winner.<sup class="fn"><a id="fnref-15" href="#fn-15" aria-label="See substantiation 15">15</a></sup></li><li>It cannot manufacture a document that does not exist yet. Cash whose bank reconciliation has not arrived is raised as a FLAG and left to a person; the engine reports the absence and never fills it.<sup class="fn"><a id="fnref-16" href="#fn-16" aria-label="See substantiation 16">16</a></sup></li><li>It writes no disclosure wording. Whether and how to tell the partner about an exception is a decision, not a computation; the engine insists the difference is quantified and disclosed, and writes none of the sentence.<sup class="fn"><a id="fnref-17" href="#fn-17" aria-label="See substantiation 17">17</a></sup></li><li>It audits the extract it is given. The ledger pull stays manual and automation begins downstream, so the engine can prove the package ties to the extract but not that the extract is itself complete. All shipped data is fictional -- the project entities, the members, the chart of accounts, the divisions of job cost, the equity draws, the notes and every balance and reporting date are invented, and the reporting period is set in a fictional future.<sup class="fn"><a id="fnref-18" href="#fn-18" aria-label="See substantiation 18">18</a></sup></li></ul></section>
+<section><h2>See it run</h2><span class="zone-k">brand animation</span>
+<figure class="figwrap"><img src="../assets/engine-investor.svg" alt="JV Investor Reporting Package engine tile: an isometric line drawing of a monthly reporting package drawn as three exploded statement sheets. Five source slabs at the left converge on a single node and feed the stack. On the top sheet a cobalt path runs across one row through the member columns into the Total column. Below the stack a dashed boundary marks the released print area, with a tie-out check row struck out beneath it. At the right a closed gate holds the package, and the partner&#x27;s copy waits beyond it drawn dashed and unissued." loading="lazy"><figcaption>The JV Investor Reporting Package tile states the three questions the monthly package turns on: whether the statements were re-derived from the five sources rather than assembled beside them, whether the Total column sums the row it sits on, and whether anything was allowed to leave with an exception still open.</figcaption></figure></section>
+<section><h2>Integration</h2><span class="zone-k">how to run it</span>
+<p class="intro">Distribution: public repository, MIT license.</p>
+<div class="verify">
+<div class="runline">python run.py</div><div class="runline">python -m pytest investor_engine/tests -q</div>  <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:12px">
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/investor-reporting-automation" target="_blank" rel="noopener">Source on GitHub</a>
+    <a class="btn btn-t" href="https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/README.md" target="_blank" rel="noopener">Engine README</a>
+    <a class="btn btn-t" href="/tests/">All tests, by engine</a>
+    <a class="btn btn-t" href="https://codespaces.new/sophonfinance-wq/finance-automation-portfolio" target="_blank" rel="noopener">Run in Codespaces</a>
+  </div>
+</div>
+<div class="subst"><span class="zone-k">Substantiation</span><ul>
+    <li id="fn-1"><a class="fnid" href="#fnref-1" aria-label="Back to reference 1">1</a>python -m pytest --collect-only -q -o addopts= (investor-reporting-automation/)</li>
+    <li id="fn-2"><a class="fnid" href="#fnref-2" aria-label="Back to reference 2">2</a>len(investor_engine.engine.REGISTRY)</li>
+    <li id="fn-3"><a class="fnid" href="#fnref-3" aria-label="Back to reference 3">3</a>investor-reporting-automation/README.md control table, summing to the registry</li>
+    <li id="fn-4"><a class="fnid" href="#fnref-4" aria-label="Back to reference 4">4</a>samples/*.json after python run.py</li>
+    <li id="fn-5"><a class="fnid" href="#fnref-5" aria-label="Back to reference 5">5</a>len(investor_engine.model.DOC_TYPES)</li>
+    <li id="fn-6"><a class="fnid" href="#fnref-6" aria-label="Back to reference 6">6</a>investor_engine/tests boundary tests on every cent</li>
+    <li id="fn-7"><a class="fnid" href="#fnref-7" aria-label="Back to reference 7">7</a>python run.py (investor-reporting-automation/); investor_engine/tests planted-defect suite</li>
+    <li id="fn-8"><a class="fnid" href="#fnref-8" aria-label="Back to reference 8">8</a>investor_engine/engine.py check_tb_agrees_ledger; samples/balance_taken_by_position__Alderpoint_Terraces.json</li>
+    <li id="fn-9"><a class="fnid" href="#fnref-9" aria-label="Back to reference 9">9</a>investor_engine/engine.py check_jobcost_bridge and check_total_cross_foots; samples/bridge_difference_undisclosed__Dunmore_Flats.json and samples/total_row_links_elsewhere__Alderpoint_Terraces.json</li>
+    <li id="fn-10"><a class="fnid" href="#fnref-10" aria-label="Back to reference 10">10</a>python -m pytest --collect-only -q -o addopts= (investor-reporting-automation/)</li>
+    <li id="fn-11"><a class="fnid" href="#fnref-11" aria-label="Back to reference 11">11</a>len(investor_engine.engine.REGISTRY)</li>
+    <li id="fn-12"><a class="fnid" href="#fnref-12" aria-label="Back to reference 12">12</a>len(investor_engine.generate.DEFECTS)</li>
+    <li id="fn-13"><a class="fnid" href="#fnref-13" aria-label="Back to reference 13">13</a>investor_engine/tests: every registered rule has a planted defect</li>
+    <li id="fn-14"><a class="fnid" href="#fnref-14" aria-label="Back to reference 14">14</a>investor-reporting-automation/README.md and investor_engine read-only / determinism tests</li>
+    <li id="fn-15"><a class="fnid" href="#fnref-15" aria-label="Back to reference 15">15</a>investor-reporting-automation/README.md out-of-scope statement</li>
+    <li id="fn-16"><a class="fnid" href="#fnref-16" aria-label="Back to reference 16">16</a>investor_engine/engine.py check_cash_supported</li>
+    <li id="fn-17"><a class="fnid" href="#fnref-17" aria-label="Back to reference 17">17</a>investor-reporting-automation/README.md out-of-scope statement</li>
+    <li id="fn-18"><a class="fnid" href="#fnref-18" aria-label="Back to reference 18">18</a>investor_engine/generate.py and investor-reporting-automation/README.md</li>
+</ul></div>
+<div class="cta"><h2>Show us where the hours go.</h2><p>One conversation: you describe the work that consumes your team's month; we tell you plainly what this engine can take over, what it can't, and what a scoped first phase would cost. Your people keep approval authority.</p><a class="btn btn-w" href="/#book">Book a free consultation</a></div>
+</section>
+</main>
+<footer><div class="wrap">&copy; 2026 Sophon Finance Systems &nbsp;&middot;&nbsp; <a href="/">sophonfinance.com</a> &nbsp;&middot;&nbsp; <a href="https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/investor-reporting-automation" target="_blank" rel="noopener">GitHub</a> &nbsp;&middot;&nbsp; All public examples use fictional, seeded data.</div></footer>
+<script>
+// Motion upgrade: swap a poster for silent video only when motion is welcome.
+(function(){
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(motionQuery&&motionQuery.matches)return;
+  if(!('IntersectionObserver' in window))return;
+  document.querySelectorAll('img[data-video]').forEach(function(img){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;
+      // The preference can change after the observer was registered.
+      if(motionQuery&&motionQuery.matches){io.unobserve(img);return;}
+      io.unobserve(img);
+      // Only upgrade to <video> when data-video is genuinely a video. A spec whose
+      // media.motion falls back to its poster would otherwise give a <video> with an
+      // SVG src that no browser can decode -- and .motion-media>img{display:none}
+      // hides the working image, leaving a control bar over a diagram that can never
+      // play. Belt and braces: the generator also stops emitting the attribute.
+      var msrc=img.getAttribute('data-video')||'';
+      if(!/\.(mp4|webm|ogv)$/i.test(msrc))return;
+      var v=document.createElement('video');
+      var media=document.createElement('span');
+      media.className='motion-media';
+      v.muted=true;v.defaultMuted=true;v.loop=true;v.autoplay=true;v.playsInline=true;v.controls=true;
+      v.setAttribute('muted','');v.setAttribute('playsinline','');v.setAttribute('autoplay','');v.setAttribute('loop','');v.setAttribute('controls','');v.setAttribute('preload','auto');
+      v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
+      v.setAttribute('aria-label',img.alt);
+      v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
+      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      if(motionQuery){
+        if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
+        else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
+      }
+      playVideo();
+    });},{rootMargin:'120px'});
+    io.observe(img);
+  });
+})();
+// copy-to-clipboard for instruction rows
+document.querySelectorAll('.copybtn').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=b.getAttribute('data-copy')||'';
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){
+      var old=b.textContent;b.textContent='copied';setTimeout(function(){b.textContent=old;},1200);
+    }).catch(function(){});}
+  });
+});
+// Die stack: the isometric SVG is the visual; each layer is a focusable card that opens its detail.
+(function(){
+  var die=document.querySelector('.die');
+  if(!die)return;
+  var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
+  var printQuery=window.matchMedia&&window.matchMedia('print');
+  var stack=die.querySelector('.die-3d');
+  var panel=document.getElementById('die-panel');
+  var instruction=die.parentElement&&die.parentElement.querySelector('.die-instruction');
+  var faces=Array.prototype.slice.call(die.querySelectorAll('.die-face'));
+  if(!stack||!panel||!faces.length)return;
+
+  document.documentElement.classList.add('js-die');
+  var promptMarkup=panel.innerHTML;
+  var selectedFace=null;
+
+  function syncInstruction(){
+    if(!instruction)return;
+    instruction.textContent='functional block stack · select a layer for detail';
+  }
+  [motionQuery,printQuery].forEach(function(query){
+    if(!query)return;
+    if(query.addEventListener)query.addEventListener('change',syncInstruction);
+    else if(query.addListener)query.addListener(syncInstruction);
+  });
+  syncInstruction();
+
+  function setUnpressed(){
+    faces.forEach(function(face){
+      face.setAttribute('aria-pressed','false');
+      face.setAttribute('aria-expanded','false');
+    });
+  }
+  function addDetail(label,value){
+    var p=document.createElement('p');
+    var strong=document.createElement('strong');
+    strong.textContent=label+' ';
+    p.appendChild(strong);
+    p.appendChild(document.createTextNode(value||''));
+    panel.appendChild(p);
+  }
+  function githubSource(raw){
+    try{
+      var url=new URL(raw,window.location.href);
+      if(url.protocol==='https:'&&url.hostname==='github.com')return url.href;
+    }catch(error){}
+    return '';
+  }
+  function open(btn){
+    setUnpressed();
+    btn.setAttribute('aria-pressed','true');
+    btn.setAttribute('aria-expanded','true');
+    selectedFace=btn;
+    while(panel.firstChild)panel.removeChild(panel.firstChild);
+    var heading=document.createElement('h3');
+    heading.textContent=btn.textContent;
+    panel.appendChild(heading);
+    addDetail('Plain terms.',btn.getAttribute('data-plain'));
+    addDetail('Engineering.',btn.getAttribute('data-eng'));
+    var src=githubSource(btn.getAttribute('data-src'));
+    if(src){
+      var sourceLine=document.createElement('p');
+      var sourceLink=document.createElement('a');
+      sourceLink.href=src;
+      sourceLink.target='_blank';
+      sourceLink.rel='noopener';
+      sourceLink.textContent='Source on GitHub';
+      sourceLine.appendChild(sourceLink);
+      panel.appendChild(sourceLine);
+    }
+  }
+  function clearSelection(){
+    var returnFocus=selectedFace;
+    var focusWasInPanel=panel.contains(document.activeElement);
+    setUnpressed();
+    selectedFace=null;
+    panel.innerHTML=promptMarkup;
+    if(focusWasInPanel&&returnFocus)returnFocus.focus();
+  }
+
+  faces.forEach(function(btn){
+    btn.setAttribute('aria-pressed','false');
+    btn.addEventListener('click',function(){open(btn);});
+  });
+
+  die.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){
+      e.preventDefault();
+      clearSelection();
+      return;
+    }
+    var btn=e.target.closest&&e.target.closest('.die-face');
+    if(!btn||!die.contains(btn))return;
+    if(e.key==='Enter'||e.key===' '){
+      e.preventDefault();
+      open(btn);
+    }
+  });
+})();
+
+</script>
+</body>
+</html>

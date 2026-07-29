@@ -6,8 +6,8 @@ prompt below into Codex (or any independent reviewer) to run an adversarial audi
 in this repo.
 
 > Before sending: update the HEAD and expected test count. Current at last edit:
-> **`pytest -m "not site_tooling"` → 474,265 collected (curated suite) · `pytest -m site_tooling` → 54 collected (separate public-datasheet guards) · `SWEEP=1 pytest -m "not site_tooling"` → 1,648,990 (property sweep) · 47 systems** (verified 2026-07-24)
-> curated per system: (close 15,687 / partnership 8,605 / triangulate 8,320 / recon 7,511 / surplus 7,498 / knowledge-brain 7,011 / cash-management 5,290 / audit 4,814 / finance-atlas 2,952 / accounts-payable 12,223 / project-draw 10,392 / buyer-upgrades 10,279 / warranty 10,299 / intercompany 10,310 / property-tax 10,389 / surety-bond 10,420 / insurance-allocation 10,364 / coi 10,340 / expense 10,346 / labor 10,382 / lien 10,373 / waterfall 10,449 / proforma 10,381 / grt 10,400 / filing 10,369 / energy 10,390 / interest 10,402 / financing 10,337 / wire 10,347 / payroll 10,414 / withholding 10,410 / closing 10,379 / standing 10,385 / sov 10,412 / pickup 10,423 / depreciation 10,440 / deposit 10,407 / spending 10,424 / capitalize 10,323 / franchise 10,344 / sizing 10,338 / unitsales 10,355 / gaalloc 10,404 / checkage 10,361 / variance 10,411 / contingency 10,368 / inforeturn 10,382). Each engine added in the last build cycle carries a 10,000-case bounded invariant grid over its money kernel on top of its behavior tests.
+> **`pytest -m "not site_tooling"` → 484,697 collected (curated suite) · `pytest -m site_tooling` → 57 collected (separate public-datasheet guards) · `SWEEP=1 pytest -m "not site_tooling"` → 1,648,990 (property sweep) · 49 systems** (verified 2026-07-29)
+> curated per system: (close 15,687 / partnership 8,605 / triangulate 8,320 / recon 7,511 / surplus 7,498 / knowledge-brain 7,011 / cash-management 5,290 / audit 4,814 / finance-atlas 2,952 / accounts-payable 12,223 / project-draw 10,392 / buyer-upgrades 10,279 / warranty 10,299 / intercompany 10,310 / property-tax 10,389 / surety-bond 10,420 / insurance-allocation 10,364 / coi 10,340 / expense 10,346 / labor 10,382 / lien 10,373 / waterfall 10,449 / proforma 10,381 / grt 10,400 / filing 10,369 / energy 10,390 / interest 10,402 / financing 10,337 / wire 10,347 / payroll 10,414 / withholding 10,410 / closing 10,379 / standing 10,385 / sov 10,412 / pickup 10,423 / depreciation 10,440 / deposit 10,407 / spending 10,424 / capitalize 10,323 / franchise 10,344 / sizing 10,338 / unitsales 10,355 / gaalloc 10,404 / checkage 10,361 / variance 10,411 / contingency 10,368 / inforeturn 10,382 / rollforward 10,405 / investor 10,432). Each engine added in the last build cycle carries a 10,000-case bounded invariant grid over its money kernel on top of its behavior tests.
 
 ---
 
@@ -21,10 +21,10 @@ Assume the author may have made mistakes or oversold things — find them.
 REPO: https://github.com/sophonfinance-wq/finance-automation-portfolio
 Setup: Python 3.12+, `pip install -r requirements.txt`, then
 `python -m pytest -q -m "not site_tooling"` from the repo root. Separately run
-`python -m pytest -q -m site_tooling` and confirm its 54-test guard suite. Confirm the reported
+`python -m pytest -q -m site_tooling` and confirm its 57-test guard suite. Confirm the reported
 totals (and each engine's sub-count) are correct; if any count is wrong, that's a finding. The
-framing is forty-eight runnable systems, with public site-tooling guards reported separately from the
-474,265-test curated engine suite.
+framing is forty-nine runnable systems, with public site-tooling guards reported separately from the
+484,697-test curated engine suite.
 
 VERIFY EACH AREA INDEPENDENTLY:
 

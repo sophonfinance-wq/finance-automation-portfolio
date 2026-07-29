@@ -1,6 +1,6 @@
 # Sophon Finance Systems — portfolio repo
 
-Forty-eight deterministic finance/tax engines + a self-healing loop layer, all on fictional data
+Forty-nine deterministic finance/tax engines + a self-healing loop layer, all on fictional data
 (seeded where the engine declares it). One rule everywhere: **no material output rests on a single model's word.**
 
 ## Orient in 30 seconds

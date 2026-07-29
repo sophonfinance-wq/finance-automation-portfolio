@@ -30,7 +30,7 @@ product.
 
 ## Accuracy and confidentiality (non-negotiable)
 
-- Every claim is true and demonstrable. Current facts: **forty-eight runnable systems, a 474,265-test curated suite (plus an opt-in ~1.65M-case property/invariant sweep), fully
+- Every claim is true and demonstrable. Current facts: **forty-nine runnable systems, a 484,697-test curated suite (plus an opt-in ~1.65M-case property/invariant sweep), fully
   fictional data (seeded where the engine declares it), MIT-licensed, CI-backed.** (Verified via `pytest --collect-only -m "not site_tooling"` 2026-07-24.) A separate **54-test `site_tooling` suite** validates the generated public datasheets and is excluded from the curated engine total. Keep numbers current with the repository.
 - The Knowledge Brain **generates** an apply-ready, cited remediation prompt and a change-log; a
   downstream AI or operator applies the changes. Never state or imply that the engine itself applies
@@ -57,7 +57,8 @@ product.
   Debt Term-Sheet Sizing & Loan Terms, Unit Sales & Commission Tie-Out,
   G&A Expense Allocation, Outstanding Check Aging & Escheatment,
   Project Variance & Business-Plan Compare, Contingency Rollforward & Adequacy,
-  Information Return Issuance, Trial-Balance Roll-Forward.
+  Information Return Issuance, Trial-Balance Roll-Forward,
+  JV Investor Reporting Package.
 - Write provider names plainly: "Anthropic Claude," and "ChatGPT" without a version number.
 
 ## Design
