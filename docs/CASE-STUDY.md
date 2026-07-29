@@ -18,8 +18,8 @@ built an internal **knowledge brain**: I recorded every engagement meeting, tran
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
-without becoming the weakest link. This portfolio is that proof: **forty-eight runnable systems, a
-474,265-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
+without becoming the weakest link. This portfolio is that proof: **forty-nine runnable systems, a
+484,697-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
 
 ---
 
@@ -136,7 +136,8 @@ Each is now encoded as a control in the portfolio:
 | Contingency rollforward and adequacy &mdash; construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use | `contingency-rollforward-automation` | 10,368 |
 | Information return issuance &mdash; the annual payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms | `info-return-automation` | 10,382 |
 | Trial-balance roll-forward &mdash; last year's column structure carried forward, final-year entities retired and renames carried once, every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept both directions so a balance riding a dropped chart equivalence cannot vanish, each dual-chart row summed through the equivalence map, the eliminations range proved to reach this year's new columns, and every figure linked to a backup row that agrees with it | `tb-rollforward-automation` | 10,405 |
-| **Total** | **48 systems** | **474,265** |
+| JV investor reporting package &mdash; the monthly package issued to a joint-venture equity partner, re-derived from the five sources that produce it: the trial balance agreed to the ledger by account number rather than row position, a credit intercompany balance reclassified rather than netted against assets, every member's capital footed, cross-footed and rolled forward with the Total column summing the row it sits on, the job cost bridge closed exactly with every difference itemized and disclosed, contributions agreed per member to the executed equity draw schedule, each caption tested against its schedule's type, the cover held consistent with the notes, the reviewer's tie-out rows kept out of the print area, and nothing released over an open exception | `investor-reporting-automation` | 10,432 |
+| **Total** | **49 systems** | **484,697** |
 
 ---
 

@@ -5,15 +5,15 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-463%2C860%20curated%20%2B%20invariant%20grids-2ea44f)](#testing)
-[![Systems](https://img.shields.io/badge/systems-48%20runnable-6f42c1)](#the-forty-eight-systems)
+[![Tests](https://img.shields.io/badge/tests-484%2C697%20curated%20%2B%20invariant%20grids-2ea44f)](#testing)
+[![Systems](https://img.shields.io/badge/systems-49%20runnable-6f42c1)](#the-forty-nine-systems)
 [![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
-Forty-eight self-contained Python systems for finance and tax work — month-end close, cash/debt
+Forty-nine self-contained Python systems for finance and tax work — month-end close, cash/debt
 reconciliation, a cash-manager control suite, cross-border surplus & ACB, partnership 1065 /
 §704(c), read-only workbook validation, a NotebookLM-style knowledge brain, and an interactive
 finance operations atlas. One of them, **Triangulate**, is a multi-agent LLM review framework with a
@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (31,883 tests plus bounded invariant grids = 474,265 cases; runs in minutes)
+# run the curated engine suite (31,883 tests plus bounded invariant grids = 484,697 cases; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -62,7 +62,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
-**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (474,265 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.65M generated cases). A separate 57-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
+**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (484,697 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.65M generated cases). A separate 57-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
 
 **4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
 ```bash
@@ -105,7 +105,7 @@ Full flow in **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
 ---
 
-## The forty-eight systems
+## The forty-nine systems
 
 Every system is self-contained, deterministic, and ships with a seeded fictional-data generator.
 
@@ -143,7 +143,8 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Project Variance & Business-Plan Compare](./project-variance-automation/) | `variance_engine` | `python run.py` | the periodic project report: Cost to Complete struck as Total Budget less Cost to Date, net revenue, profit and margin on cost re-derived from their own inputs, every variance column re-footed as the difference of the two columns beside it in cents and basis points alike, both comparative columns proved to foot inside themselves, the plan column proved against the frozen approved version, and every milestone variance re-derived under the plus-is-ahead convention |
 | [Contingency Rollforward & Adequacy](./contingency-rollforward-automation/) | `contingency_engine` | `python run.py` | the contingency status block: construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use |
 | [Information Return Issuance](./info-return-automation/) | `inforeturn_engine` | `python run.py` | the annual information-return run: the payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the box threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms |
-| [Trial-Balance Roll-Forward](./tb-rollforward-automation/) | `rollforward_engine` | `python run.py` | the annual workpaper rebuild: last year's column structure carried forward, final-year entities retired and renames carried once, every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept in both directions, dual-chart rows summed through the equivalence map, the eliminations range proved to reach this year's new columns, and every figure linked to a backup row that agrees with it | 10,405 |
+| [Trial-Balance Roll-Forward](./tb-rollforward-automation/) | `rollforward_engine` | `python run.py` | the annual workpaper rebuild: last year's column structure carried forward, final-year entities retired and renames carried once, every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept in both directions, dual-chart rows summed through the equivalence map, the eliminations range proved to reach this year's new columns, and every figure linked to a backup row that agrees with it |
+| [JV Investor Reporting Package](./investor-reporting-automation/) | `investor_engine` | `python run.py` | the monthly package issued to a joint-venture equity partner: the trial balance agreed to the ledger by account number rather than row position, a credit intercompany balance reclassified rather than netted against assets, every member's capital footed, cross-footed and rolled forward with the Total column summing the row it sits on, the job cost bridge closed exactly with every difference itemized and disclosed, contributions agreed to the executed equity draw schedule, each caption tested against its schedule's type, and nothing released over an open exception |
 | [Debt Term-Sheet Sizing & Loan Terms](./debt-sizing-automation/) | `sizing_engine` | `python run.py` | the loan term sheet before close: the maximum loan held to advance rate times cost basis, the all-in rate re-derived as the greater of index plus spread or the floor, every fee checked against its correct base, maturity proved as base term plus exercised extensions, and the portfolio rollup footed |
 | [Franchise Tax Combined Apportionment](./franchise-tax-automation/) | `franchise_engine` | `python run.py` | the combined-group franchise return: the affiliate roster reconciled to the prior year plus additions less removals, group revenue tied to the consolidated tax trial balance, the single receipts-factor apportionment recomputed and bounded, and the tax re-derived as taxable margin times apportionment times rate |
 | [Section 263A Interest Capitalization](./interest-capitalization-automation/) | `capitalize_engine` | `python run.py` | the IRC §263A(f) avoided-cost calculation: each project's capitalized interest re-derived from accumulated production expenditures times the period rate quarter by quarter, every row footed across the grid, interest proved to equal capitalized plus deducted, and the prior-year comparison tied rather than typed |
@@ -174,9 +175,9 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **31,883** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 47 systems. This is the curated total less the bounded invariant grids below (`5,812` distinct test functions before parametrization). Runs in minutes. |
-| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **474,265** | Adds `431,977` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
-| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 474,265 curated engine total. |
+| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **31,883** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 49 systems. This is the curated total less the bounded invariant grids below (`5,812` distinct test functions before parametrization). Runs in minutes. |
+| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **484,697** | Adds `431,977` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 484,697 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.65M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
