@@ -268,6 +268,18 @@ footer a{color:var(--blue);text-decoration:none}
   var motionQuery=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)');
   if(motionQuery&&motionQuery.matches)return;
   if(!('IntersectionObserver' in window))return;
+  function playFilm(v){var p=v.play();if(p&&p.catch)p.catch(function(){});}
+  // Films prepared off-document, still waiting to prove a frame (see placeFilm).
+  // Some phones (iOS Low Power Mode, data saver) gate the first muted autoplay
+  // until any interaction, so retry on early gestures and when the tab comes back.
+  // Only pending films are retried: a film already on the page carries a control
+  // bar, and replaying it would overrule a visitor who pressed pause.
+  var pending=[];
+  function retryPending(){pending.slice().forEach(playFilm);}
+  ['touchstart','pointerdown','click','keydown'].forEach(function(evt){
+    window.addEventListener(evt,retryPending,{passive:true});
+  });
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)retryPending();});
   document.querySelectorAll('img[data-video]').forEach(function(img){
     var io=new IntersectionObserver(function(es){es.forEach(function(e){
       if(!e.isIntersecting)return;
@@ -289,14 +301,43 @@ footer a{color:var(--blue);text-decoration:none}
       v.poster=img.currentSrc||img.src;v.src=img.getAttribute('data-video');
       v.setAttribute('aria-label',img.alt);
       v.style.width='100%';v.style.height='auto';v.style.display='block';v.style.border='1px solid #e0e0e0';
-      img.replaceWith(media);media.appendChild(img);media.appendChild(v);
-      function playVideo(){var p=v.play();if(p&&p.catch)p.catch(function(){});}
-      function syncMotion(e){if(e.matches){v.pause();}else{playVideo();}}
+      // The film does not take the still's place until it proves it can render.
+      // Media-gating in-app webviews (Facebook's iOS browser among them) admit
+      // play() but hold back the data or the decode, and .motion-media>img hides
+      // the still the instant the wrapper goes in -- so a film swapped in on faith
+      // painted nothing and the figure went blank where a good still used to be.
+      // The still therefore holds its ground while the film is prepared
+      // off-document, and only its first 'playing' frame -- actual pixels flowing
+      // -- earns the wrapper. A film that errors, or never clears the gate, never
+      // swaps in at all, and the reader keeps the diagram either way.
+      pending.push(v);
+      function drop(){var i=pending.indexOf(v);if(i>-1)pending.splice(i,1);}
+      var placed=false;
+      function placeFilm(){
+        if(placed)return;
+        // A preference for less motion can arrive while the film is still pending;
+        // leave it off-document and let the still stand.
+        if(motionQuery&&motionQuery.matches)return;
+        placed=true;drop();
+        img.replaceWith(media);media.appendChild(img);media.appendChild(v);
+        // Now that the film is in the page, ask it to run there: a film held
+        // off-document gets no autoplay of its own and the browser may suspend
+        // it once it has proven its frame, so the visible element starts here.
+        playFilm(v);
+      }
+      v.addEventListener('playing',placeFilm);
+      v.addEventListener('error',drop);
+      // A play() issued while the resource is still loading is aborted by that
+      // same load, and an off-document film has no autoplay to fall back on --
+      // so ask again the moment there is actually data to play.
+      v.addEventListener('loadeddata',function(){playFilm(v);});
+      v.addEventListener('canplay',function(){playFilm(v);});
+      function syncMotion(e){if(e.matches){v.pause();}else{playFilm(v);}}
       if(motionQuery){
         if(motionQuery.addEventListener)motionQuery.addEventListener('change',syncMotion);
         else if(motionQuery.addListener)motionQuery.addListener(syncMotion);
       }
-      playVideo();
+      playFilm(v);
     });},{rootMargin:'120px'});
     io.observe(img);
   });
