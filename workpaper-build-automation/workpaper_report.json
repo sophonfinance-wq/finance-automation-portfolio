@@ -1,0 +1,4333 @@
+{
+  "title": "Tax workpaper build & carry-down control report",
+  "overall_verdict": "FAIL",
+  "file_count": 27,
+  "rule_count": 24,
+  "rules": [
+    {
+      "rule": "frozen_layers_byte_equal",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "captions_advance_one_year",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "capital_flow_equals_delta",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "split_pairs_sum_to_one",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "income_split_rows_exact",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "equity_total_rolls",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "equity_ties_balance_sheet",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "member_capital_chain",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "member_closing_ties_equity",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tax_basis_is_capital_plus_liability",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ep_chain_rolls",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "retained_earnings_beginning_rolls",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "row_form_classified_from_balances",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "evidence_ties_locked_source",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "evidence_subtotal_foots",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "citation_block_correct",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "locked_source_digest_matches",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prebuild_image_digest_matches",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "edit_scope_matches_register",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cross_schedule_reciprocity",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "source_completeness",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "exception_register_honored",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "render_hygiene",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "history_labels_survive",
+      "severity": "FAIL",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "FAIL",
+          "location": "amount:equity[EQ-2029-3010]/amount_cents",
+          "message": "AMOUNT_INVALID: equity[EQ-2029-3010]/amount_cents must be integer cents, got 60000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "cell_edited_outside_register__Copperfield_Yards_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/notes/N-02/text",
+          "message": "cell 'notes/N-02/text' changed from 'The note payable to a member is unsecured and bears interest at a fixed annual rate.' to 'The note payable to a member is unsecured and bears interest at a fixed annual rate, payable at maturity.' and the build register does not name it -- an edit nobody declared is an edit nobody reviewed"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "citation_names_wrong_tab__Alderpoint_Terraces_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/evidence/citation/tab",
+          "message": "the citation names tab as 'Monthly activity'; the locked source declares 'TB by entity block' -- a citation a reviewer cannot follow back is not evidence"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "clean__Rivermont_Holdings",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "ep_accumulated_typed_over__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/earnings_and_profits/blocks[EP-2029]",
+          "message": "block 'EP-2029' ends at 1,093,888.89; 610,000.00 accumulated plus 482,888.89 taxable is 1,092,888.89"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "equity_total_typed_over__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/equity/total_cents",
+          "message": "the equity schedule closes at 6,453,388.89; the prior-year total of 4,935,000.00 plus the current-year flows and the result derives 6,452,888.89, a difference of 500.00"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "equity_vs_bs_disclosed__Copperfield_Yards_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "FLAG",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/balance_sheet/rows[equity]",
+          "message": "the balance sheet presents equity of 6,452,388.89 against a derived 6,452,888.89; the difference of 500.00 is disclosed in the exception register ('Contribution received after the extract was locked; presented on the balance sheet and carried to the equity schedule next year.') -- confirm the disclosure still describes this year before the package is issued"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "equity_vs_bs_undisclosed__Alderpoint_Terraces_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/balance_sheet/rows[equity]",
+          "message": "the balance sheet presents equity of 6,452,388.89 against a derived 6,452,888.89, a difference of 500.00 that no entry in the disclosed-exception register accounts for"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "evidence_subtotal_typed_over__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/evidence/subtotal_cents",
+          "message": "the evidence subtotal reads 120.00 against 0.00 footed from its own 23 rows -- a subtotal that is not the sum of the rows above it has been typed over"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/evidence/subtotal_cents",
+          "message": "the evidence subtotal is 120.00; a harvested ledger foots to zero, and a non-zero support tab means an account was left behind or counted twice"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "evidence_title_off_source__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/evidence/rows[1010]",
+          "message": "evidence row '1010' is titled 'Cash - reserve account'; the locked source titles it 'Cash - reserve'"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "flow_off_source_delta__Copperfield_Yards_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/equity/rows[EQ-2029-3000]/amount_cents",
+          "message": "account 3000 carries 400,250.00 on the current-year row; the source balance less the prior-year balance is 400,000.00 (source -2,150,000.00, prior -1,750,000.00) -- a flow row is a movement, never a balance"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "formula_error_rendered__Alderpoint_Terraces_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/trial_balance/rows[4]/display",
+          "message": "the package renders '#REF!' at trial_balance/rows[4]/display -- an error marker where a figure belongs is a cell that never computed, delivered as if it had"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "frozen_layer_reordered__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/equity/rows[1]",
+          "message": "frozen layer at position 1 is not the prior-year row: the package carries 'EQ-2028-3010' (800,000.00) where the prior package has 'EQ-2028-3000' (450,000.00) -- a prior layer that moves is a signed figure being restated a year later"
+        },
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/equity/rows[2]",
+          "message": "frozen layer at position 2 is not the prior-year row: the package carries 'EQ-2028-3000' (450,000.00) where the prior package has 'EQ-2028-3010' (800,000.00) -- a prior layer that moves is a signed figure being restated a year later"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "funded_account_left_off__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "224 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/trial_balance/rows",
+          "message": "account '1010' ('Cash - reserve') carries 140,000.00 in the locked source and appears nowhere on the built trial balance"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "history_label_dropped__Copperfield_Yards_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/captions",
+          "message": "the prior package labelled a row 'Calderwood Group - Fiscal year ended June 30, 2028' and the built package carries no such label; the figure survived the roll and the thing that said what it was did not"
+        }
+      ]
+    },
+    {
+      "document": "income_split_off_ratio__Alderpoint_Terraces_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/equity/rows[income/M-CALDERWOOD]/amount_cents",
+          "message": "member 'M-CALDERWOOD' is allocated 262,444.44; 524,888.89 at 3500 basis points is 183,711.11 -- the income rows have to sum back to the statement of operations to the cent"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "investment_stub_drifts__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/trial_balance/rows[1300]/balance_cents",
+          "message": "the investment in Brightwater Commons JV is carried at 465,000.00 and the counterpart stub reports 463,500.00, a difference of 1,500.00"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "liability_split_does_not_sum__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "FAIL",
+          "location": "allocation_register:AR-RIVERMONT-01-FY2029/splits/liability_share",
+          "message": "the 'liability_share' split sums to 10100 basis points, not 10000; a pair that is not exactly one allocates a whole the entity never had"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "member_closing_off_equity__Copperfield_Yards_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/member_capital/blocks",
+          "message": "the members' closing book capital sums to 6,453,488.89 against an equity schedule of 6,452,888.89, a difference of 600.00 across 2 members"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "member_contribution_column_typed__Alderpoint_Terraces_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/member_capital/blocks[MC-2029-M-CALDERWOOD]",
+          "message": "book column of block 'MC-2029-M-CALDERWOOD' closes at 2,225,961.11; 1,732,250.00 opening plus 400,400.00 contributions plus 183,711.11 allocated result less 90,000.00 distributions is 2,226,361.11"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "placeholder_deregistered__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/trial_balance/rows[9990]",
+          "message": "account '9990' is a suspense-range or unmapped placeholder and carries no registered exception; a placeholder nobody accepted has been built into the package"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "prebuild_image_retaken__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "FAIL",
+          "location": "manifest:MF-RIVERMONT-01-FY2029/prebuild_image_digest",
+          "message": "the pre-build image hashes to 236a534a4524e9e9... and the manifest records c620a705ad966309... -- the custody backup on file is not the one the build took, so the edit-scope diff proves nothing"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "retained_earnings_not_rolled__Copperfield_Yards_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/trial_balance/rows[3900]/balance_cents",
+          "message": "account 3900 opens the year at 300,000.00; last year's opening of 300,000.00 plus last year's result of 235,000.00 is 535,000.00, a difference of -235,000.00"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "225 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "row_form_read_from_formula__Alderpoint_Terraces_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/equity/rows[EQ-2029-3020]/row_form",
+          "message": "account 3020 is classified 'year_delta'; its balances (0.00 at the prior year-end, -250,000.00 at this one) make it 'cumulative_residual' -- the row carries a live formula, which is what the form appears to have been read from"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "source_moved_after_build__Rivermont_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "FAIL",
+          "location": "manifest:MF-RIVERMONT-01-FY2029/locked_source_digest",
+          "message": "the locked source hashes to 75c096050fb0a110... and the manifest records 8f109c3f757f64f3... -- the extract the package cites is not the extract it was built from, so every harvested figure is unproved"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "stale_prior_year_caption__Ashfield_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/captions/equity_title",
+          "message": "caption 'equity_title' reads \"Statement of members' equity - fiscal year ended June 30, 2028\"; rolling the prior-year caption forward 1 year(s) gives \"Statement of members' equity - fiscal year ended June 30, 2029\" -- the label has to move with the figures underneath it"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/captions/equity_title",
+          "message": "caption 'equity_title' still names 2028 after the roll; a stale year on a rolled row sends the reader to the wrong column of the wrong package"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "tax basis equals capital plus liability share in all 4 blocks"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "225 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    },
+    {
+      "document": "tax_basis_omits_liability__Copperfield_Yards_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "frozen_layers_byte_equal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 prior-year layers carried byte-equal and in order"
+        },
+        {
+          "rule": "captions_advance_one_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 rolling captions advanced 1 year(s), none still naming 2028"
+        },
+        {
+          "rule": "capital_flow_equals_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year capital flows equal the source-less-prior delta for their account"
+        },
+        {
+          "rule": "split_pairs_sum_to_one",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 carried split pairs sum to exactly 10000 basis points across every member"
+        },
+        {
+          "rule": "income_split_rows_exact",
+          "status": "PASS",
+          "location": "-",
+          "message": "the result of 524,888.89 is allocated exactly across 2 members on the carried split"
+        },
+        {
+          "rule": "equity_total_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "closing equity of 6,452,888.89 equals the prior total plus flows plus the result"
+        },
+        {
+          "rule": "equity_ties_balance_sheet",
+          "status": "PASS",
+          "location": "-",
+          "message": "balance-sheet equity of 6,452,888.89 ties the equity schedule exactly"
+        },
+        {
+          "rule": "member_capital_chain",
+          "status": "PASS",
+          "location": "-",
+          "message": "8 member year-block columns chain and link across 4 blocks"
+        },
+        {
+          "rule": "member_closing_ties_equity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 members' closing book capital sums to 6,452,888.89 and ties the equity schedule"
+        },
+        {
+          "rule": "tax_basis_is_capital_plus_liability",
+          "status": "FAIL",
+          "location": "built_package:WP-RIVERMONT-01-FY2029/member_capital/blocks[MC-2029-M-CALDERWOOD]/tax_basis_cents",
+          "message": "block 'MC-2029-M-CALDERWOOD' reports basis of 2,119,011.11; 2,119,011.11 tax capital plus 917,700.00 liability share is 3,036,711.11, a difference of -917,700.00"
+        },
+        {
+          "rule": "ep_chain_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "the earnings-and-profits chain holds across 3 year blocks"
+        },
+        {
+          "rule": "retained_earnings_beginning_rolls",
+          "status": "PASS",
+          "location": "-",
+          "message": "beginning retained earnings equals the prior opening plus the prior year's result"
+        },
+        {
+          "rule": "row_form_classified_from_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 current-year rows are classified from the balances at both year-ends"
+        },
+        {
+          "rule": "evidence_ties_locked_source",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 23 evidence rows tie the locked source by exact account number"
+        },
+        {
+          "rule": "evidence_subtotal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the evidence subtotal foots to zero across 23 harvested rows"
+        },
+        {
+          "rule": "citation_block_correct",
+          "status": "PASS",
+          "location": "-",
+          "message": "the citation names the source file, tab, balance column and harvest date the build actually read"
+        },
+        {
+          "rule": "locked_source_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the locked source hashes to the manifest digest (8f109c3f757f64f3...)"
+        },
+        {
+          "rule": "prebuild_image_digest_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "the pre-build image hashes to the manifest digest (c620a705ad966309...)"
+        },
+        {
+          "rule": "edit_scope_matches_register",
+          "status": "PASS",
+          "location": "-",
+          "message": "226 cells differ from the pre-build image and the register declares all of them (246 entries)"
+        },
+        {
+          "rule": "cross_schedule_reciprocity",
+          "status": "PASS",
+          "location": "-",
+          "message": "2 intercompany rows and 1 investment rows agree with their counterparts"
+        },
+        {
+          "rule": "source_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "every one of the 23 source accounts is either on the trial balance or flat in the source"
+        },
+        {
+          "rule": "exception_register_honored",
+          "status": "PASS",
+          "location": "-",
+          "message": "every placeholder and mislabeled account is registered (2 accounts on the register)"
+        },
+        {
+          "rule": "render_hygiene",
+          "status": "PASS",
+          "location": "-",
+          "message": "no formula-error marker, external link or local path in the rendered package"
+        },
+        {
+          "rule": "history_labels_survive",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-year history labels survive the roll"
+        }
+      ]
+    }
+  ]
+}
