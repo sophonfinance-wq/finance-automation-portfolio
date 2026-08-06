@@ -1,7 +1,7 @@
 # Platform Architecture
 
-This repository is a forty-nine-system, AI-driven Finance & Tax automation platform. The forty-nine
-decompose exactly as **5 + 41 + 1 + 1 + 1**:
+This repository is a fifty-system, AI-driven Finance & Tax automation platform. The fifty
+decompose exactly as **5 + 41 + 1 + 1 + 1 + 1**:
 
 - **five deterministic calculation engines** — month-end close, cash & debt reconciliation, the
   cash-management suite, partnership 1065 / §704(c), and cross-border surplus & ACB;
@@ -11,12 +11,18 @@ decompose exactly as **5 + 41 + 1 + 1 + 1**:
   project reporting (the workbook validation engine and the accounts-payable control engine are the
   originals; the newest are contingency rollforward, information-return issuance, trial-balance
   roll-forward and the JV investor reporting package);
+- **one workpaper construction engine** — it *builds* a new fiscal year's tax workpaper package from
+  a locked ledger source and the prior year's signed package: it freezes every prior-year layer,
+  advances the year captions by exactly one year, computes the current-year capital flows as source
+  less prior, carries down the member allocation splits, appends the new member-capital and E&P year
+  blocks, and constructs the evidence tab with its citation block and zero-footing subtotal.
+  Twenty-four controls then prove what it built;
 - **the Knowledge Brain** retrieval engine;
 - **an interactive finance operations atlas**;
 - **the Triangulate AI control framework**.
 
 The canonical roster — number, part number, mnemonic, family, display name and engine directory for
-every one of the forty-nine — lives in `site-datasheets/datasheet_tests/conftest.py` and is
+every one of the fifty — lives in `site-datasheets/datasheet_tests/conftest.py` and is
 test-gated, so this prose is a summary of that authority rather than a second copy of it.
 
 Above all of it sits an optional orchestration layer:

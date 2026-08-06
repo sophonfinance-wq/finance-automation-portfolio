@@ -1,0 +1,404 @@
+{
+  "num": 50,
+  "slug": "workpaper",
+  "part_no": "SFS-E50-WPB",
+  "mnemonic": "WPB",
+  "family": "Workpaper Construction",
+  "name": "Tax Workpaper Build & Carry-Down",
+  "tagline": "It builds the new year's workpaper package from the locked ledger and the signed prior year, then proves every cell it constructed against the inputs it came from.",
+  "plain_summary": "Once a year the annual tax workpaper package has to become next year's package. In practice somebody opens last year's file, saves it under a new name, and edits it -- and every failure mode that follows shares one property: the package still foots. This engine builds the new package instead of editing the old one. It reads a locked general-ledger extract scoped to one entity block, the prior year's signed package, a member allocation register carrying the split pairs in integer basis points, a register of exceptions a reviewer has already accepted, the counterpart entity's copy of the investment held in the block, and an image of the working file captured immediately before the build ran. From those it constructs a current-year trial balance harvested by exact account number; a balance sheet and statement of operations classified from the prior-year map and footing to zero; a members' equity schedule in which every prior-year layer is carried byte-equal, every rolling caption is advanced by exactly one year, each current-year contribution and distribution is computed as the movement in its own account rather than typed, and the result is allocated on the carried split; a new year block per member in the capital accounts, book and tax, with liability share and outside basis; an earnings-and-profits roll-forward; an evidence tab with its citation block and a subtotal that has to foot to zero; and a build register naming every constructed cell beside the derivation that produced it. Twenty-four controls then prove what it built. The build is a pure function of its inputs, takes no clock reading, and never writes to the extract, the prior package or the registers.",
+  "rev": "2026-08-05",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Rolling a workpaper is not copying one. A copied file inherits last year's captions, last year's frozen history and last year's formulas, and the person doing the roll is asked to notice which of those should have changed -- in a file that adds up either way. Every defect this engine is built against survives review for the same reason: the schedule still foots. A prior-year layer moves because a sort was applied or a formula was left live in a frozen row, and history, which is supposed to be a constant, quietly gets a new value. A caption keeps last year's date, so a reviewer reconciles a current-year column against a prior-year heading and has no reason to suspect the heading. A contributions account holding every contribution since the entity was formed is dropped onto a current-year row, restating the whole history as this year's activity -- and the closing total was footed from that same row, so it agrees. A row's form is read off a formula rather than off the balances at both year-ends, which gets it wrong every time a formula was filled down. The rebuild touches a cell nobody declared, and the only way to know is to hold the pre-build image and diff against it. Because the engine builds rather than edits, each of those becomes a derivation with a name: the frozen layers are carried byte-equal and compared byte-equal, the captions are advanced arithmetically and checked arithmetically, the flows are computed as source-less-prior movements, the row form is decided from balances at both year-ends, and the edit scope is the build register or it is a finding. And because a workpaper package is the opening position of every year after it, a penny tolerated here is not a rounding difference -- it is frozen into every future year's history.",
+  "layers_intro": "Seven stages run in build order over each file, and the controls that prove each stage sit with the stage that produced it -- twenty-four controls in all. The order is the order the package is constructed, from the ledger the year is harvested out of to the register that says what the build was allowed to touch, so a finding lands on the earliest derivation that can explain it.",
+  "layers": [
+    {
+      "id": "harvest",
+      "label": "Harvest",
+      "plain": "Pulls the current year's balances out of the locked ledger extract by exact account number, scoped to one entity block, and proves the accounts left off the workpaper are flat in the source.",
+      "engineering": "Two controls sit here. source_completeness is the reason harvesting by account number is not merely tidy: an account that carries no balance carries no figure onto the workpaper and stays on the evidence tab, so the claim the package makes is not that every account was copied but that every account left off was flat -- and that is a claim which can be proved rather than assumed. The control enumerates the locked source and FAILs an omitted account that is funded, naming it. evidence_ties_locked_source closes the same loop from the other side: every row on the evidence tab must tie the source by exact account number, never by row position. An extract exported in reading order set beside a workpaper built in account order agrees on the rows where the two orders coincide and is wrong everywhere else, and the trial balance struck from it still nets. Harvesting is also where the entity-block scope is applied, because a group extract carries blocks the package is not about, and a balance harvested from the wrong block is a figure with no defect in it at all -- it is simply somebody else's.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "classify",
+      "label": "Classification",
+      "plain": "Classifies the harvested balances into a balance sheet and a statement of operations from the prior year's map, and decides each row's form from the balances at both year-ends rather than from a formula.",
+      "engineering": "Two controls, and the second is the one that pays for itself. row_form_classified_from_balances exists because some rows on an equity schedule carry a cumulative residual and some carry a year delta, and which one a row is depends on that account's balances at both year-ends -- not on the formula sitting in the cell. A formula survives a copy and a balance does not, so a row form read off the formula is wrong every time a formula was filled down the column, and it is wrong in the direction that looks right: the cell computes, the column foots, and the figure is a year of activity presented as a life-to-date total or the reverse. The control re-derives the form from the two balances and FAILs a row whose form disagrees. retained_earnings_beginning_rolls is the classification equivalent of a continuity check: beginning retained earnings must equal the prior year's opening plus the prior year's result, so a restated prior close cannot enter the new year silently through the one line nobody re-derives.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "freeze",
+      "label": "Freeze and Advance",
+      "plain": "Carries every prior-year layer through byte-equal and in order, advances every rolling caption by exactly one year, and keeps every history label the prior package carried.",
+      "engineering": "Three controls, and they are the ones a copied file cannot satisfy. frozen_layers_byte_equal compares each prior-year layer against the layer the signed package carried, byte for byte and in order. History is supposed to be a constant, and the three ways it stops being one -- a sort applied to the schedule, a formula left live in a frozen row, a re-derivation that reaches back a year -- all leave a schedule that still adds up, which is why the comparison has to be against the prior package rather than against arithmetic. Order is part of the comparison because a re-sorted schedule holds exactly the same cells; the thing a sort actually breaks is the sequence of a frozen history, so that is what is asserted. captions_advance_one_year advances every rolling caption arithmetically and FAILs any rolled row still wearing last year's label -- the cheapest defect in the whole roll to create and one of the most expensive to find, because a reviewer reconciling a current-year column against a prior-year heading cannot make it agree and has no reason to suspect the heading. history_labels_survive FAILs a prior-year history label the roll dropped, so a year cannot vanish from the schedule while the total still ties.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "flows",
+      "label": "Current-Year Flows",
+      "plain": "Computes each current-year contribution and distribution as the movement in its own account, allocates the result on the carried split, and rolls the equity total.",
+      "engineering": "Four controls. capital_flow_equals_delta is the derivation the whole engine is built around: a current-year flow is the current source balance less the prior-year balance for that account, and nothing else. A contributions account holds every contribution since the entity was formed, so dropping that balance onto a current-year row restates the entire history as this year's activity -- and because the closing total was footed from the same row, the schedule agrees with itself and the defect is invisible on the page. split_pairs_sum_to_one requires every carried split pair to sum to exactly one hundred per cent, held in integer basis points so a split can be exact rather than nearly exact. income_split_rows_exact re-derives each income row as the result times that member's split and FAILs a row off its ratio, which is what catches a split typed from a side letter instead of carried from the register. equity_total_rolls closes the schedule: prior total plus flows plus result, re-derived, so a total that was typed rather than struck cannot survive.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "blocks",
+      "label": "Member and E&P Blocks",
+      "plain": "Appends a new year block per member -- opening, contributions, income, distributions, closing, book and tax, with liability share and basis -- and a new earnings-and-profits year, then ties them back to the equity schedule.",
+      "engineering": "Five controls, and this is where the package is read hardest, because a member capital account is the one schedule a partner checks against their own file. member_capital_chain re-derives opening plus contributions plus income less distributions as closing, per member, in both the book and the tax column and in every block, so a distribution dropped from the chain cannot hide behind a closing balance that was typed. member_closing_ties_equity sums the members' closing book capital and FAILs a sum that does not reach the equity schedule -- the arithmetic that has to hold between two schedules that are usually maintained by different hands. tax_basis_is_capital_plus_liability re-derives outside basis as tax capital plus liability share, the one line most often carried forward rather than recomputed. ep_chain_rolls appends the earnings-and-profits year as prior accumulated plus current taxable and FAILs an accumulated figure typed over the roll. equity_ties_balance_sheet requires the equity schedule to agree with balance-sheet equity, and it is the one control that can downgrade: where the package itself discloses the difference, the finding is a FLAG rather than a FAIL, because the engine can confirm a disclosure exists and quantify the exact difference but cannot judge whether it is right, and that judgement belongs to a person.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "evidence",
+      "label": "Evidence and Custody",
+      "plain": "Builds the evidence tab with its citation block and a subtotal that foots to zero, and holds the digests that say the source and the pre-build image are still the ones the build ran against.",
+      "engineering": "Five controls. evidence_subtotal_foots requires the subtotal to be the sum of its rows and that sum to be zero, so an evidence tab cannot be made to agree by typing over the line that proves it. citation_block_correct FAILs a citation naming the wrong file, tab, balance column or harvest date -- a support tab whose citation points somewhere a reviewer cannot open is not evidence, it is decoration, and the defect is created by carrying last year's citation forward with this year's rows. locked_source_digest_matches and prebuild_image_digest_matches are the chain of custody: a source that moved after the build invalidates the build, and a custody backup that was retaken is no longer the thing the edit scope was measured against. edit_scope_matches_register is what those two digests exist to make meaningful -- it diffs the built package against the pre-build image and FAILs any cell that differs and that the build register does not name, because an edit nobody declared is an edit nobody reviewed. render_hygiene FAILs a formula-error marker, an external link or a local filesystem path left in the rendered package.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/engine.py"
+    },
+    {
+      "id": "proof",
+      "label": "Proof and Handover",
+      "plain": "Checks the package against the documents held outside it, honours only the exceptions a reviewer registered, and hands every finding to a person with the derivation that produced the cell.",
+      "engineering": "Three controls, plus the report the run ends in. cross_schedule_reciprocity tests the built package against something outside it: the intercompany rows must agree with the balance sheet, and the investment held in this block must agree with the counterpart entity's stub -- the one relationship that has to hold across two sets of books and is therefore the one nobody owns. exception_register_honored tolerates a placeholder or a mislabel only where a reviewer registered it, so an accepted exception is a decision with a record rather than a habit; deregistering one turns the tolerance straight back into a finding. Findings roll up per build file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS, and the CLI exit code is the verdict so a pipeline can gate on it. Every finding cites the cell and the derivation that produced it, and reports carry no timestamps and no absolute paths -- which is what makes the committed report diffable, because a change in the diff is a change in the build or the controls, not a change in when the run happened.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/report.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "artifacts",
+      "label": "Inputs and Artifacts",
+      "kind": "source",
+      "col": 0,
+      "row": 1,
+      "plain": "the six documents the build is a function of, and the three it emits",
+      "engineering": "Six artifacts go in: the locked general-ledger extract with its citation fields and book-to-tax adjustment, scoped to one entity block; the prior year's signed package carrying frozen history, the classification map, last year's equity total, member closings, accumulated earnings and profits and every rolling caption; the allocation register holding the member split pairs in integer basis points by purpose; the exception register naming the account numbers and tie-out differences a reviewer has already accepted; the counterpart stub holding the other side of the investment carried in this block; and the pre-build image, the working file captured immediately before the build ran. Three come out: the built package, the build register naming every constructed cell beside its derivation, and the manifest carrying the locked-source, pre-build and built-package digests.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/model.py"
+    },
+    {
+      "id": "corpus",
+      "label": "Seeded Build Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional build files enter the builder and then the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control and one for the integer-cents guard, twenty-seven files in all. Only base facts are stated: the locked source accounts, titles and balances, the prior year's frozen layers and captions, the split pairs, the registered exceptions, the counterpart stub and the pre-build image. Everything the controls later read is a constructed figure -- the trial balance, the classified statements, every equity row and its total, each member block book and tax, the earnings-and-profits year, the evidence rows and subtotal and every digest -- produced through the same build kernel the builder and the controls both import. So a defect that changes a base fact rebuilds the package around it and keeps the break confined to one control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/generate.py"
+    },
+    {
+      "id": "harvest",
+      "label": "Harvest and Classify",
+      "kind": "build",
+      "col": 1,
+      "row": 0,
+      "plain": "the year is pulled by account number and given its statement shape",
+      "engineering": "Current-year balances are harvested from the locked source by exact account number and scoped to one entity block, then classified into a balance sheet and a statement of operations from the prior-year map, footing to zero. An account with no balance carries no figure onto the workpaper and stays on the evidence tab, so completeness is provable rather than assumed, and each row's form -- cumulative residual or year delta -- is decided from the account's balances at both year-ends, never from the formula in the cell.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "freeze",
+      "label": "Freeze and Advance",
+      "kind": "build",
+      "col": 1,
+      "row": 1,
+      "plain": "history is carried byte-equal and every rolling caption moves one year",
+      "engineering": "Every prior-year layer is carried through byte-equal and in order, and every rolling caption is advanced arithmetically by exactly one year. Order is part of what is carried, because a re-sorted schedule holds the same cells and what a sort actually breaks is the sequence of a frozen history. No history label the prior package carried is allowed to disappear in the roll.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "flows",
+      "label": "Flows and Splits",
+      "kind": "build",
+      "col": 1,
+      "row": 2,
+      "plain": "each current-year flow is a movement, and the split is carried down",
+      "engineering": "Each current-year contribution and distribution is computed as the current source balance less the prior-year balance for that account, so a life-to-date balance can never be presented as a year of activity. Income rows are allocated on the split carried from the allocation register in integer basis points, each pair summing to exactly one hundred per cent, and the equity total is re-derived as prior total plus flows plus result.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "append",
+      "label": "Member and E&P Blocks",
+      "kind": "build",
+      "col": 1,
+      "row": 3,
+      "plain": "a new year block per member, book and tax, and a new E and P year",
+      "engineering": "A year block is appended per member -- opening from last year's closing, contributions, ordinary income on the carried split, distributions and closing, in both the book and the tax column -- together with the liability share and outside basis derived as tax capital plus that share. The earnings-and-profits roll-forward gains a dated year: prior accumulated plus current taxable.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "evidence",
+      "label": "Evidence and Citation",
+      "kind": "build",
+      "col": 2,
+      "row": 0,
+      "plain": "the harvested rows, the citation that opens them, and a subtotal that foots to zero",
+      "engineering": "The evidence tab carries the harvested rows with a citation block naming the source file, the tab, the balance column and the harvest date, and a subtotal that is the sum of its rows and has to be zero. Every row ties the locked source by exact account number, so the tab is something a reviewer can open and re-derive rather than a page that merely accompanies the package.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "register",
+      "label": "Register and Manifest",
+      "kind": "build",
+      "col": 2,
+      "row": 1,
+      "plain": "every constructed cell beside the derivation that produced it, and three digests",
+      "engineering": "The build register names every cell the build constructed and the derivation that produced it, which is what turns the package from a file into something reviewable cell by cell. The manifest carries three content digests -- the locked source, the pre-build image and the built package -- so a source that moved after the build, or a custody backup that was retaken, invalidates the build rather than quietly passing.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/build.py"
+    },
+    {
+      "id": "custody",
+      "label": "Custody and Edit Scope",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "only the cells the register declared are allowed to differ",
+      "engineering": "The built package is diffed against the pre-build image and any cell that differs without the build register naming it is a finding, because an edit nobody declared is an edit nobody reviewed. The diff is only meaningful while the image is still the one that was taken, which is why the image digest is a control of its own rather than a note in the manifest.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/engine.py"
+    },
+    {
+      "id": "controls",
+      "label": "Twenty-Four Controls",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "the registry that proves what the builder built",
+      "engineering": "Twenty-four controls run over every build file: frozen layers byte-equal and in order, captions advanced one year, flows equal to their source-less-prior delta, split pairs summing to one, income rows exact on the split, the equity total rolled and tied to the balance sheet, the member chain closed book and tax and tied to equity, basis as capital plus liability share, the earnings-and-profits chain rolled, beginning retained earnings continuous, row form read from balances, evidence tied to the source and footing to zero, the citation correct, three digests matched, the edit scope inside the register, cross-schedule reciprocity, source completeness, registered exceptions honoured, render hygiene, and history labels intact.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/engine.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 2,
+      "plain": "every finding, with the derivation behind the cell, ends at a person",
+      "engineering": "Findings roll up per build file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Each finding cites the cell and the derivation that produced it, and reports carry no timestamps and no absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the build or the controls, not a change in when the run happened.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/workpaper_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "harvest", "label": "build files" },
+    { "from": "corpus", "to": "freeze", "label": "build files" },
+    { "from": "corpus", "to": "flows", "label": "build files" },
+    { "from": "corpus", "to": "append", "label": "build files" },
+    { "from": "artifacts", "to": "harvest", "label": "locked source" },
+    { "from": "artifacts", "to": "freeze", "label": "prior package" },
+    { "from": "artifacts", "to": "flows", "label": "allocation" },
+    { "from": "artifacts", "to": "append", "label": "counterpart" },
+    { "from": "harvest", "to": "evidence", "label": "harvested rows" },
+    { "from": "freeze", "to": "register", "label": "frozen layers" },
+    { "from": "flows", "to": "register", "label": "constructed cells" },
+    { "from": "append", "to": "custody", "label": "built package" },
+    { "from": "harvest", "to": "controls", "label": "built package" },
+    { "from": "evidence", "to": "controls", "label": "evidence tab" },
+    { "from": "register", "to": "controls", "label": "derivations" },
+    { "from": "custody", "to": "controls", "label": "edit scope" },
+    { "from": "controls", "to": "report", "label": "findings", "gate": true }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,367",
+      "source": "python -m pytest --collect-only -q -o addopts= (workpaper-build-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "24",
+      "source": "len(workpaper_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every built package"
+    },
+    {
+      "label": "Schedules built",
+      "value": "7",
+      "source": "workpaper-build-automation/README.md, the schedule-by-schedule build list",
+      "plain": "what the builder constructs, from trial balance to build register"
+    },
+    {
+      "label": "Build files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-six planted-defect files"
+    },
+    {
+      "label": "Artifacts",
+      "value": "9",
+      "source": "len(workpaper_engine.model.DOC_TYPES)",
+      "plain": "six documents in, and the three the build emits"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "workpaper_engine/tests boundary tests on every cent",
+      "plain": "a constructed cell a penny off its derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "The annual tax workpaper package has to become next year's package, and the way that is done is by opening last year's file, saving it under a new name and editing it. Everything that goes wrong from there shares one property: the package still foots. A prior-year layer moves, because a sort was applied or a formula was left live in a frozen row, and a figure that was signed off quietly acquires a new value. A caption keeps last year's date, so a reviewer reconciles a current-year column against a prior-year heading and cannot make it agree. A contributions account holding every contribution since the entity was formed is dropped onto a current-year row, restating the whole history as this year's activity -- and the closing total was footed from the same row, so the schedule agrees with itself. A row's form is read off a formula that was filled down rather than off the balances at both year-ends. A rebuild touches a cell nobody declared, and without a pre-build image there is nothing to diff against. And because the package is the opening position of every year after it, none of these is a one-year error.",
+  "scenarios": [
+    {
+      "title": "The seeded demo builds every package, then proves what it built",
+      "narrative": "The CLI generates twenty-seven fictional build files -- one clean baseline and one carrying each of the twenty-six planted defects -- builds a package and a build register for each into a generated output folder, then runs all twenty-four controls over the built artifacts and writes both reports. The clean baseline returns PASS on all twenty-four. Each defect file returns exactly the finding its control exists for and nothing else, which is what proves the controls are independent rather than merely present. The run as a whole returns FAIL, and that is the engine working: a corpus carrying a planted defect for every registered control is supposed to fail.",
+      "source": "python run.py (workpaper-build-automation/); workpaper_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A life-to-date balance presented as a year of activity",
+      "narrative": "A member contribution column is typed from the equity account balance rather than derived. That account holds every contribution since the entity was formed, so the current-year row now states the whole history, and because the closing total was footed from the same row the schedule agrees with itself, cross-foots, and rolls. Nothing on the page is inconsistent. capital_flow_equals_delta re-derives the row as the current source balance less the prior-year balance for that account and reports the difference against the account it belongs to, and member_capital_chain re-derives the closing from the corrected components -- so the defect is found in the derivation rather than in the arithmetic, which is the only place it exists.",
+      "source": "workpaper_engine/engine.py check_capital_flow_equals_delta; samples/member_contribution_column_typed__Alderpoint_Terraces_Partners.json"
+    },
+    {
+      "title": "A frozen layer that moved, and a cell nobody declared",
+      "narrative": "A sort applied to the equity schedule leaves every cell present and the total unchanged, but the frozen history is now in a different order -- and history is supposed to be a constant. frozen_layers_byte_equal compares each prior-year layer against the layer the signed package carried, byte for byte and in order, so the sort is reported rather than absorbed. Separately, a rebuild edits a note the build register does not name. edit_scope_matches_register diffs the built package against the pre-build image and fails the undeclared cell, quoting what it was and what it became; prebuild_image_digest_matches makes that diff meaningful by failing a custody backup that is no longer the one that was taken.",
+      "source": "workpaper_engine/engine.py check_frozen_layers_byte_equal and check_edit_scope_matches_register; samples/frozen_layer_reordered__Rivermont_Holdings.json and samples/cell_edited_outside_register__Copperfield_Yards_Group.json"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, build every package and register, run all twenty-four controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "workpaper_report.json, workpaper_report.md, samples/, out/"
+    },
+    {
+      "cmd": "python -m workpaper_engine samples --build out",
+      "operation": "rebuild each package from its inputs and write it, with its build register, into a folder",
+      "output": "per-file verdicts and findings over what was built",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "out/"
+    },
+    {
+      "cmd": "python -m workpaper_engine samples --quiet",
+      "operation": "run the controls over an existing folder of build files and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "python -m pytest workpaper_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10367 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,367",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (workpaper-build-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "24",
+      "unit": "controls",
+      "source": "len(workpaper_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(workpaper_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it, plus one for the integer-cents guard"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "workpaper_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the package the engine built agrees with the inputs it was built from: every prior-year layer carried byte-equal and in order, every rolling caption advanced by exactly one year, every current-year flow equal to the movement in its own account, every split pair summing to one hundred per cent and every income row exact on it, the equity total rolled and tied to the balance sheet, each member block closed book and tax and summing back to equity, basis equal to tax capital plus liability share, the earnings-and-profits chain rolled, beginning retained earnings continuous with the prior close, every row's form decided from balances at both year-ends, the evidence tab tied to the source by account number with a subtotal footing to zero and a citation naming the right file, tab, column and date, the source and the pre-build image still hashing to the manifest, no cell edited outside the build register, the intercompany rows and the investment agreeing with the balance sheet and the counterpart stub, every omitted source account flat, every tolerated placeholder registered, no formula-error marker or local path rendered, and no history label dropped. It is not an opinion on whether an account is classified correctly, whether the extract itself is complete, whether an exception should have been accepted, or whether a disclosed difference is right.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the built package into the documented preparer review and the signature that closes the year"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; an equity-to-balance-sheet difference the package itself discloses lands here, quantified to the cent, because the engine can confirm the disclosure exists and cannot judge whether it is right"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the package is not signed until the failing control is cleared -- a frozen layer that moved, a caption still at last year's date, a flow that is not its account's movement, a member chain that does not close, an evidence subtotal that does not foot, a digest that no longer matches, or a cell edited outside the build register"
+      }
+    ],
+    "guarantees": [
+      "The build is a pure function of its inputs: it never writes to the locked extract, the prior package or the registers, and the controls never write at all, so neither can introduce the break the other reports.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on any figure, and because this engine builds the workpaper, a tolerated penny would be frozen into every future year's history.",
+      "Every prior-year layer is carried byte-equal and in order, and compared against the layer the signed prior package carried rather than against arithmetic, because a re-sorted or re-derived history still adds up.",
+      "Every current-year flow is derived as the current source balance less the prior-year balance for that account, never read from a balance, so a life-to-date total can never be presented as a year of activity.",
+      "Each row's form -- cumulative residual or year delta -- is decided from the account's balances at both year-ends and never from the formula in the cell, because a formula survives a copy and a balance does not.",
+      "Member split pairs are carried in integer basis points and every pair must sum to exactly one hundred per cent, so an allocation is exact rather than nearly exact.",
+      "Cells are keyed by row identity and never by position, so a re-sorted schedule holds exactly the same cells and the thing a sort actually breaks -- the order of a frozen history -- has a control of its own.",
+      "The built package is diffed against a pre-build image and any cell that differs without the build register naming it is a finding; the image and the locked source are digest-pinned, so a retaken backup or a moved source invalidates the build rather than passing quietly.",
+      "One derivation kernel: the builder, the generator and the controls all import the same build module, so a control cannot quietly disagree with the pipeline about how a cell was derived, and a planted defect keeps its break confined to one control.",
+      "Every fiscal year and every date is read from the file and never from the system clock, so a run in a later year returns the same package bytes and the same findings.",
+      "Deterministic and byte-stable: the same inputs produce the same built package, the same build register and the same findings in the same order, with no timestamps and no absolute paths in any output.",
+      "An account left off the workpaper must be flat in the locked source, so completeness is proved from the source rather than assumed from the package."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": false,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine builds a package and proves it; it never signs one. It writes only the artifacts it declares -- the built package, the build register and the manifest -- and never to an input. A person reads the findings and decides whether the year closes on this package, and a disclosed difference is flagged for that person rather than resolved, because whether a disclosure is right is a judgement and not a computation."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine builds a package and proves it against its inputs. It never signs a workpaper, files a return, posts an entry or writes to the locked extract, the prior package or any register.",
+      "source": "workpaper-build-automation/README.md and workpaper_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It does not resolve classification judgement. Where an account's placement is arguable, the engine reproduces the prior year's map and reports what it built; deciding the map is a person's work.",
+      "source": "workpaper-build-automation/README.md out-of-scope statement"
+    },
+    {
+      "statement": "It cannot judge a disclosed difference. Where the equity schedule and the balance sheet disagree and the package discloses it, the finding is flagged and quantified to the cent, and the question of whether the difference is right is left open.",
+      "source": "workpaper_engine/engine.py check_equity_ties_balance_sheet"
+    },
+    {
+      "statement": "It builds from the extract it is given. The ledger pull stays manual and automation begins downstream, so the engine can prove the package ties the locked extract and its own pre-build image but not that the extract is itself complete.",
+      "source": "workpaper_engine/build.py and workpaper-build-automation/README.md"
+    },
+    {
+      "statement": "All shipped data is fictional. The groups, entity blocks, members, account numbers, titles, balances, splits, citations and fiscal years are invented, and the fiscal years are set in a fictional future.",
+      "source": "workpaper_engine/generate.py and workpaper-build-automation/README.md"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-workpaper.svg",
+    "motion": "../assets/engine-workpaper.svg",
+    "poster_alt": "Tax Workpaper Build & Carry-Down engine tile: an isometric line drawing of a workpaper package under construction. Six source slabs at the left converge on a single node and feed the build. Three prior-year sheets sit frozen inside a bracket, and a newly constructed sheet is lifted clear above them, its year caption drawn in cobalt and cobalt carry-down arrows rising from the frozen layers into it. On the new sheet a cobalt path runs across one row through the member columns. At the right an evidence tab carries its citation lines and a subtotal rule closing on a cobalt zero, and beneath it a build register grid names one constructed cell. A dashed line runs from the pre-build image at the left along the base of the drawing to that register.",
+    "caption": "The Tax Workpaper Build & Carry-Down tile states what a roll-forward actually is: history carried up into the new year untouched, one caption advanced, the year's flows derived rather than typed, and a register that says exactly which cells the build was allowed to construct.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Build the seeded packages and prove them",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run this engine's tests",
+      "command": "python -m pytest workpaper_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/workpaper-build-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/workpaper-build-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Tax Workpaper Build & Carry-Down (SFS-E50-WPB) datasheet -- a deterministic builder that constructs a new fiscal year's tax workpaper package from a locked ledger extract and the prior year's signed package, freezing every prior-year layer, advancing every caption, deriving each current-year flow as a movement and carrying down the member splits, then proving what it built with twenty-four controls. Integer cents, exact equality, fictional data."
+  }
+}
