@@ -19,7 +19,7 @@ loaded it into a queryable knowledge base so prior decisions could be cited word
 workpapers. Then I re-engineered each *class* of that work into tested, deterministic, audit-ready
 Python systems on **fully synthetic data**, and built a control framework so AI can accelerate it
 without becoming the weakest link. This portfolio is that proof: **fifty runnable systems, a
-495,064-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
+504,712-test curated suite (plus an opt-in ~1.65M-case property sweep), CI.**
 
 ---
 
@@ -138,7 +138,7 @@ Each is now encoded as a control in the portfolio:
 | Trial-balance roll-forward &mdash; last year's column structure carried forward, final-year entities retired and renames carried once, every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept both directions so a balance riding a dropped chart equivalence cannot vanish, each dual-chart row summed through the equivalence map, the eliminations range proved to reach this year's new columns, and every figure linked to a backup row that agrees with it | `tb-rollforward-automation` | 10,405 |
 | JV investor reporting package &mdash; the monthly package issued to a joint-venture equity partner, re-derived from the five sources that produce it: the trial balance agreed to the ledger by account number rather than row position, a credit intercompany balance reclassified rather than netted against assets, every member's capital footed, cross-footed and rolled forward with the Total column summing the row it sits on, the job cost bridge closed exactly with every difference itemized and disclosed, contributions agreed per member to the executed equity draw schedule, each caption tested against its schedule's type, the cover held consistent with the notes, the reviewer's tie-out rows kept out of the print area, and nothing released over an open exception | `investor-reporting-automation` | 10,432 |
 | Tax workpaper build &amp; carry-down &mdash; the new fiscal year's tax workpaper package **built** from a locked ledger extract and the signed prior year rather than edited out of last year's file: the trial balance harvested by exact account number and scoped to one entity block, the balance sheet and statement of operations classified from the prior-year map and footing to zero, every prior-year layer frozen byte-equal, every rolling caption advanced by exactly one year, each current-year contribution and distribution computed as source less prior rather than typed, the member allocation splits carried down in integer basis points, new member-capital and E&amp;P year blocks appended, the evidence tab constructed with its citation block and a zero-footing subtotal, and every constructed cell named in a build register that bounds what the build was allowed to touch | `workpaper-build-automation` | 10,367 |
-| **Total** | **50 systems** | **495,064** |
+| **Total** | **50 systems** | **504,712** |
 
 ---
 
