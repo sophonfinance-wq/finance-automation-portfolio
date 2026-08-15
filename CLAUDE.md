@@ -1,6 +1,6 @@
 # Sophon Finance Systems — portfolio repo
 
-Fifty deterministic finance/tax engines + a self-healing loop layer, all on fictional data
+Fifty-one deterministic finance/tax engines + a self-healing loop layer, all on fictional data
 (seeded where the engine declares it). One rule everywhere: **no material output rests on a single model's word.**
 
 ## Orient in 30 seconds
@@ -19,7 +19,7 @@ Fifty deterministic finance/tax engines + a self-healing loop layer, all on fict
 - Five engines carry a `loop.py` (observe → detect → remediate → re-verify → gate); each has
   its own gate policy and its verdict doubles as the exit code.
 - Tests run **per package** (like CI): `cd <package-dir> && python -m pytest -q`.
-  `SWEEP=1` unlocks the ~1.65M-case grids. Deps: `pip install -r requirements.txt` once.
+  `SWEEP=1` unlocks the ~1.67M-case grids. Deps: `pip install -r requirements.txt` once.
 - The marketing site is `docs/index.html` (GitHub Pages from `main` — merges go live).
 
 ## Use the skills — don't re-derive

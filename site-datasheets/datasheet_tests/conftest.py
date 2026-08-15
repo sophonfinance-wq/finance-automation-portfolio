@@ -87,6 +87,7 @@ ROSTER: dict[str, dict] = {
     "rollforward":   {"num": 48, "part_no": "SFS-E48-TBR", "mnemonic": "TBR", "family": "Workpaper Rollforward", "name": "Trial-Balance Roll-Forward", "engine_dir": "tb-rollforward-automation"},
     "investor":      {"num": 49, "part_no": "SFS-E49-IRP", "mnemonic": "IRP", "family": "Investor Reporting", "name": "JV Investor Reporting Package", "engine_dir": "investor-reporting-automation"},
     "workpaper":     {"num": 50, "part_no": "SFS-E50-WPB", "mnemonic": "WPB", "family": "Workpaper Construction", "name": "Tax Workpaper Build & Carry-Down", "engine_dir": "workpaper-build-automation"},
+    "premaudit":     {"num": 51, "part_no": "SFS-E51-PRA", "mnemonic": "PRA", "family": "Insurance & Compliance", "name": "Premium Audit Response", "engine_dir": "premium-audit-automation"},
 }
 
 SPECS_DIR = ROOT / "specs"
