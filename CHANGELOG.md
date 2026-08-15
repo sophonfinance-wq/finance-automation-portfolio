@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-08-14
+
+- Added Premium Audit Response (SFS-E51-PRA, `premium-audit-automation/premaudit_engine`):
+  a self-verifying parser for fixed-width job-cost print reports that ties every job to the
+  report's own printed totals to the cent — over the union of parsed and printed jobs — or
+  refuses with the failing jobs named; inclusive policy-window cut retaining both period
+  bases; certificate-of-insurance cross-reference; fixed-precedence certificate triage that
+  partitions every cost line into exactly one bucket; byte-stable JSON/Markdown package
+  emitters. 9,648 tests on seeded fictional data, including three planted defect classes
+  that must refuse. Portfolio: 51 engines, 504,712 curated tests.
+
 ## 2026-07-17
 
 - Added a fictional, validation-only construction budget-variance preflight with
