@@ -3,14 +3,15 @@
 Produces the text a construction ERP would print for "job cost detail by
 transaction type by vendor", including the report's own per-job totals — which
 the parser later uses to verify itself. Also produces a matching coverage
-listing. Deterministic for a given seed; all names are fictional.
+listing and a parallel ledger export that carries transaction dates the print
+is blind to. Deterministic for a given seed; all names are fictional.
 """
 from __future__ import annotations
 
 import datetime as dt
 import random
 
-from .model import CoverageRecord, TranType
+from .model import CoverageRecord, LedgerRow, TranType
 from .money import format_cents
 
 COMPANIES = ("Alderpoint Builders LLC", "Rivermont Homes Group", "Copperfield Yards LP")
@@ -34,6 +35,7 @@ CC_POOL = (
     ("99-204", "Warranty - Entity Costs"),
 )
 PAGE_LINES = 46
+_TXN_OFFSETS = (0, 1, 2, 5, 9, 14, 21, 31, -3)
 
 
 def _date_between(rng: random.Random, lo: dt.date, hi: dt.date) -> dt.date:
@@ -47,12 +49,14 @@ def _fmt(d: dt.date) -> str:
 
 class GeneratedReport:
     def __init__(self, company: str, text: str, expected_job_totals: dict[str, int],
-                 coverage: list[CoverageRecord], line_count: int):
+                 coverage: list[CoverageRecord], line_count: int,
+                 ledger: list[LedgerRow] | None = None):
         self.company = company
         self.text = text
         self.expected_job_totals = expected_job_totals
         self.coverage = coverage
         self.line_count = line_count
+        self.ledger = ledger if ledger is not None else []
 
 
 def generate_report(seed: int, *, jobs: int = 4, defect: str | None = None) -> GeneratedReport:
@@ -69,8 +73,12 @@ def generate_report(seed: int, *, jobs: int = 4, defect: str | None = None) -> G
     out: list[str] = []
     expected: dict[str, int] = {}
     coverage: list[CoverageRecord] = []
+    ledger: list[LedgerRow] = []
     page = 1
     line_count = 0
+
+    def txn_for(acctg: dt.date) -> dt.date:
+        return acctg - dt.timedelta(days=rng.choice(_TXN_OFFSETS))
 
     def header() -> None:
         out.extend([
@@ -109,11 +117,17 @@ def generate_report(seed: int, *, jobs: int = 4, defect: str | None = None) -> G
                                 f"FICTIONAL WORK ORDER {rng.randint(10, 99)}", amt_txt])
                     job_total += amount
                     line_count += 1
+                    ledger.append(LedgerRow(
+                        job=job, cost_code=cc, tran_type=TranType.AP,
+                        txn_date=txn_for(d), acctg_date=d, amount_cents=amount))
                     if rng.random() < 0.15:  # reversal pair, vendor repeated
                         out.extend([vid, vname, _fmt(d), f"INV{rng.randint(1000, 99999)}",
                                     "(Rev) FICTIONAL REVERSAL", format_cents(-amount)])
                         job_total += -amount
                         line_count += 1
+                        ledger.append(LedgerRow(
+                            job=job, cost_code=cc, tran_type=TranType.AP,
+                            txn_date=txn_for(d), acctg_date=d, amount_cents=-amount))
                 if vname != CLEARING[1] and rng.random() < 0.9:
                     exp = _date_between(rng, dt.date(2025, 6, 1), dt.date(2027, 6, 1))
                     coverage.append(CoverageRecord(
@@ -131,6 +145,9 @@ def generate_report(seed: int, *, jobs: int = 4, defect: str | None = None) -> G
                     out.extend([_fmt(d), *refs, format_cents(amount)])
                     job_total += amount
                     line_count += 1
+                    ledger.append(LedgerRow(
+                        job=job, cost_code=cc, tran_type=TranType.JC,
+                        txn_date=txn_for(d), acctg_date=d, amount_cents=amount))
         expected[job] = job_total
         printed = job_total
         if defect_armed == "printed_total_off":
@@ -149,4 +166,4 @@ def generate_report(seed: int, *, jobs: int = 4, defect: str | None = None) -> G
             header()
     out.extend(["AP Cost = Invoices Only, JC Cost = Journal Entries",
                 "Category", "1-Labor, 2-Material, 3-Equipment, 4-Subcontractor, 5-Overhead, 6-Other"])
-    return GeneratedReport(company, "\n".join(out), expected, coverage, line_count)
+    return GeneratedReport(company, "\n".join(out), expected, coverage, line_count, ledger)
