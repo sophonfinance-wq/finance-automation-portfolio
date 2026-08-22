@@ -176,7 +176,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,237** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 50 systems. This is the curated total less the bounded invariant grids below (`6,304` distinct test functions before parametrization). Runs in minutes. |
+| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,285** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 51 systems. This is the curated total less the bounded invariant grids below (`6,304` distinct test functions before parametrization). Runs in minutes. |
 | ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **504,712** | Adds `461,827` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
 | **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 504,712 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.65M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
