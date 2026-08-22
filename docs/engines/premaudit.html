@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Premium Audit Response — Sophon Finance Systems</title>
-<meta name="description" content="Premium Audit Response (SFS-E51-PRA) datasheet - a self-verifying parser for fixed-width job-cost print reports that ties every job to the report&#x27;s own printed totals to the cent or refuses, cuts the policy audit window inclusively, cross-references certificate coverage, and triages every cost line into exactly one certificate bucket under a fixed-precedence policy. 9,648 tests, seeded fictional data, three planted defect classes that must refuse.">
+<meta name="description" content="Premium Audit Response (SFS-E51-PRA) datasheet - a self-verifying parser for fixed-width job-cost print reports that ties every job to the report&#x27;s own printed totals to the cent or refuses, cuts the policy audit window inclusively, cross-references certificate coverage, and triages every cost line into exactly one certificate bucket under a fixed-precedence policy. 9,655 tests, seeded fictional data, three planted defect classes that must refuse.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -145,7 +145,7 @@ footer a{color:var(--blue);text-decoration:none}
 </div></section>
 <section><h2>Key specifications</h2><span class="zone-k">at a glance</span>
 <div class="strip">
-  <div class="cell"><div class="v">9,648<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
+  <div class="cell"><div class="v">9,655<sup class="fn"><a id="fnref-1" href="#fn-1" aria-label="See substantiation 1">1</a></sup></div><div class="l">Tests</div><div class="p">the collected checks that pin this engine&#x27;s behavior</div></div>
   <div class="cell"><div class="v">7<sup class="fn"><a id="fnref-2" href="#fn-2" aria-label="See substantiation 2">2</a></sup></div><div class="l">Triage buckets</div><div class="p">every line lands in exactly one</div></div>
   <div class="cell"><div class="v">3<sup class="fn"><a id="fnref-3" href="#fn-3" aria-label="See substantiation 3">3</a></sup></div><div class="l">Planted defects</div><div class="p">each one must produce a refusal, not a workpaper</div></div>
   <div class="cell"><div class="v">0 cents<sup class="fn"><a id="fnref-4" href="#fn-4" aria-label="See substantiation 4">4</a></sup></div><div class="l">Tolerance</div><div class="p">an untied job is a refusal, not a rounding note</div></div>
@@ -177,13 +177,13 @@ footer a{color:var(--blue);text-decoration:none}
 <table class="ds"><thead><tr><th>Command</th><th>Operation</th><th>Output</th><th>Exit</th><th>Artifacts</th></tr></thead>
 <tbody>
   <tr><td class="mono"><div class="copyrow"><code>python -m premaudit_engine --seed 7</code><button class="copybtn" data-copy="python -m premaudit_engine --seed 7" aria-label="Copy command: python -m premaudit_engine --seed 7">copy</button></div></td><td>generate a fictional print report, parse and verify it, build the triaged package</td><td class="mono">line count and window total in cents; package files under out/</td><td class="mono">0 built / 2 refused (reconciliation failure)</td><td>out/package_seed7.json, out/package_seed7.md</td></tr>
-  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the engine suite: curated cases plus the pipeline, money and window grids</td><td class="mono">9,648 tests</td><td class="mono">0 green</td><td>none</td></tr>
+  <tr><td class="mono"><div class="copyrow"><code>python -m pytest -q</code><button class="copybtn" data-copy="python -m pytest -q" aria-label="Copy command: python -m pytest -q">copy</button></div></td><td>run the engine suite: curated cases plus the pipeline, money and window grids</td><td class="mono">9,655 tests</td><td class="mono">0 green</td><td>none</td></tr>
   <tr><td class="mono"><div class="copyrow"><code>SWEEP=1 python -m pytest -q</code><button class="copybtn" data-copy="SWEEP=1 python -m pytest -q" aria-label="Copy command: SWEEP=1 python -m pytest -q">copy</button></div></td><td>widen the pipeline grid tenfold for the exhaustive sweep</td><td class="mono">the same invariants over 24,000 seeds</td><td class="mono">0 green</td><td>none</td></tr>
 </tbody></table></section>
 <section><h2>Benchmarks</h2><span class="zone-k">measured demo results</span>
 <table class="ds"><thead><tr><th>Measure</th><th>Result</th></tr></thead>
 <tbody>
-  <tr><td>Engine tests<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup></td><td class="mono"><b>9,648</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
+  <tr><td>Engine tests<sup class="fn"><a id="fnref-8" href="#fn-8" aria-label="See substantiation 8">8</a></sup></td><td class="mono"><b>9,655</b> tests collected<br><span style="color:#6f6f6f;font-size:12.5px">live collection from the engine directory</span></td></tr>
   <tr><td>Pipeline grid<sup class="fn"><a id="fnref-9" href="#fn-9" aria-label="See substantiation 9">9</a></sup></td><td class="mono"><b>2,400</b> seeded end-to-end cases<br><span style="color:#6f6f6f;font-size:12.5px">generate -&gt; parse -&gt; tie -&gt; cut -&gt; triage, every seed</span></td></tr>
   <tr><td>Suite runtime<sup class="fn"><a id="fnref-10" href="#fn-10" aria-label="See substantiation 10">10</a></sup></td><td class="mono"><b>~7</b> seconds<br><span style="color:#6f6f6f;font-size:12.5px">the whole suite, grids included</span></td></tr>
 </tbody></table></section>
