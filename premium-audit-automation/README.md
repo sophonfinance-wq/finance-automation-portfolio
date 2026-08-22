@@ -10,18 +10,23 @@ own printed per-job totals**. Every parsed job must tie its printed total **to t
 union of jobs parsed and jobs printed**, or the engine refuses to produce a workpaper at all — the
 refusal names each failing job and its cent delta. What survives is cut to the policy audit window
 (inclusive on both boundary dates), cross-referenced against a certificate-of-insurance coverage
-listing, and triaged line by line under a fixed precedence: journal entries that never had a
-vendor, clearing accounts (numeric id or the ERP's literal "summary vendor" name), wrap-enrolled
-vendors, materials-only and professional exemptions, vendors whose required coverage is current at
-the window end, and the remainder marked for certificate chase. The output is a byte-stable
-audit-response package — sorted-key JSON plus a Markdown summary, integer cents throughout, every
-line in exactly one bucket.
+listing, and triaged line by line under a fixed precedence: professional cost-code words first,
+then journal entries that never had a vendor, clearing accounts (numeric id or the ERP's literal
+"summary vendor" name), wrap-enrolled vendors, materials-only and professional vendor exemptions,
+vendors whose required coverage is current at the window end, and the remainder marked for
+certificate chase.
+
+When a ledger export is available, `reconcile` attaches true transaction dates to print lines by
+exact line-key match (duplicates stay positionally separate — never merged). `divergence` then
+measures how far the accounting-basis window total sits from the transaction-basis cut. The
+working package (full internal workpaper) and the carrier-facing deliverable are separate
+emitters; `deliverable_leaks` fails closed if an internal field escapes the allow-list.
 
 ## Run it
 
 ```bash
 python -m premaudit_engine --seed 7        # generate a fictional print, parse, verify, package
-python -m pytest -q                        # 9,648 tests
+python -m pytest -q                        # 9,655 tests
 SWEEP=1 python -m pytest -q                # widen the pipeline grid tenfold
 ```
 
@@ -37,8 +42,11 @@ Exit codes: `0` package built · `2` refused (printed-total reconciliation faile
   lowercase names, jobs that print a total but carry zero lines, page-break boilerplate mid-job.
 - **Window semantics** — inclusive on both ends, asserted against raw date arithmetic across a
   400-day sweep.
+- **Dual-basis reconcile** — duplicate line keys match positionally; movers classify as moved-in /
+  moved-out; generated ledger covers every print line; deliverable stays on the allow-list.
 - **Triage as a partition** — fixed precedence in code; every line lands in exactly one bucket;
-  an unreceived certificate never counts as coverage.
+  an unreceived certificate never counts as coverage; Legal cost codes triage as professional
+  before the journal-entry branch.
 - **Determinism** — same seed, same bytes: the print text, the package JSON, the Markdown.
 
 All data is fictional and seeded. The engine never contacts a carrier, never decides the period
