@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Baseline and Version Drift engine tile">
+  <defs>
+    <style>
+      .ln { fill: none; stroke: #1a232e; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+      .thin { fill: none; stroke: #1a232e; stroke-width: 2; }
+      .cb { fill: none; stroke: #2953ff; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+      .cbthin { fill: none; stroke: #2953ff; stroke-width: 2.5; }
+      .dash { fill: none; stroke: #5a6675; stroke-width: 2; stroke-dasharray: 8 7; }
+      .lab { font: 600 26px 'Segoe UI', Arial, sans-serif; fill: #1a232e; }
+      .small { font: 500 20px 'Segoe UI', Arial, sans-serif; fill: #5a6675; }
+      .cbt { font: 700 26px 'Segoe UI', Arial, sans-serif; fill: #2953ff; }
+      .bg { fill: #f7f8fa; }
+    </style>
+  </defs>
+  <rect class="bg" x="0" y="0" width="1600" height="900"/>
+
+  <!-- four copies of one budget, drawn as parallel sheets -->
+  <g transform="translate(80,110)">
+
+    <!-- copy 1: the contractual exhibit -->
+    <g transform="translate(0,0)">
+      <rect class="ln" x="0" y="0" width="300" height="520" rx="8"/>
+      <text class="lab" x="18" y="-18">exhibit</text>
+      <line class="thin" x1="24" y1="60"  x2="276" y2="60"/>
+      <line class="thin" x1="24" y1="112" x2="250" y2="112"/>
+      <line class="thin" x1="24" y1="164" x2="268" y2="164"/>
+      <line class="thin" x1="24" y1="216" x2="238" y2="216"/>
+      <line class="thin" x1="24" y1="268" x2="262" y2="268"/>
+      <line class="thin" x1="24" y1="320" x2="244" y2="320"/>
+      <rect class="ln" x="24" y="424" width="252" height="56"/>
+      <text class="lab" x="38" y="461">36,830,743</text>
+    </g>
+
+    <!-- copy 2: the working model -->
+    <g transform="translate(360,0)">
+      <rect class="ln" x="0" y="0" width="300" height="520" rx="8"/>
+      <text class="lab" x="18" y="-18">working</text>
+      <line class="thin" x1="24" y1="60"  x2="276" y2="60"/>
+      <line class="thin" x1="24" y1="112" x2="250" y2="112"/>
+      <!-- the line that disagrees -->
+      <line class="cbthin" x1="24" y1="164" x2="268" y2="164"/>
+      <line class="thin" x1="24" y1="216" x2="238" y2="216"/>
+      <line class="thin" x1="24" y1="268" x2="262" y2="268"/>
+      <line class="thin" x1="24" y1="320" x2="244" y2="320"/>
+      <rect class="cb" x="24" y="424" width="252" height="56"/>
+      <text class="cbt" x="38" y="461">36,824,062</text>
+    </g>
+
+    <!-- copy 3: the billing instrument, carrying change columns -->
+    <g transform="translate(720,0)">
+      <rect class="ln" x="0" y="0" width="300" height="520" rx="8"/>
+      <text class="lab" x="18" y="-18">billing</text>
+      <line class="thin" x1="24" y1="60"  x2="276" y2="60"/>
+      <line class="thin" x1="24" y1="112" x2="250" y2="112"/>
+      <line class="thin" x1="24" y1="164" x2="268" y2="164"/>
+      <line class="thin" x1="24" y1="216" x2="238" y2="216"/>
+      <line class="thin" x1="24" y1="268" x2="262" y2="268"/>
+      <line class="thin" x1="24" y1="320" x2="244" y2="320"/>
+      <!-- approved + previous + current = revised -->
+      <line class="thin" x1="180" y1="30" x2="180" y2="380"/>
+      <line class="thin" x1="228" y1="30" x2="228" y2="380"/>
+      <text class="small" x="188" y="410">chg</text>
+      <rect class="ln" x="24" y="424" width="252" height="56"/>
+      <text class="lab" x="38" y="461">37,365,619</text>
+    </g>
+
+    <!-- copy 4: the summary memo, a category short -->
+    <g transform="translate(1080,0)">
+      <rect class="ln" x="0" y="0" width="300" height="520" rx="8"/>
+      <text class="lab" x="18" y="-18">memo</text>
+      <line class="thin" x1="24" y1="60"  x2="276" y2="60"/>
+      <line class="thin" x1="24" y1="112" x2="250" y2="112"/>
+      <line class="thin" x1="24" y1="164" x2="268" y2="164"/>
+      <!-- the category that exists in the other copies and not this one -->
+      <line class="dash" x1="24" y1="216" x2="238" y2="216"/>
+      <line class="thin" x1="24" y1="268" x2="262" y2="268"/>
+      <line class="thin" x1="24" y1="320" x2="244" y2="320"/>
+      <rect class="ln" x="24" y="424" width="252" height="56"/>
+      <text class="lab" x="38" y="461">36,824,062</text>
+    </g>
+
+    <!-- the pairing rail: category sets reconciled before any value is compared -->
+    <line class="cb" x1="24" y1="164" x2="1356" y2="164"/>
+    <circle cx="24"   cy="164" r="7" fill="#2953ff"/>
+    <circle cx="384"  cy="164" r="7" fill="#2953ff"/>
+    <circle cx="744"  cy="164" r="7" fill="#2953ff"/>
+    <circle cx="1104" cy="164" r="7" fill="#2953ff"/>
+
+    <!-- the unpaired category, marked where it should have been -->
+    <line class="cbthin" x1="1104" y1="216" x2="1140" y2="216"/>
+    <text class="cbt" x="1150" y="224">?</text>
+
+    <text class="small" x="24" y="576">one budget, four copies in circulation</text>
+    <text class="cbt"   x="24" y="616">category sets paired first, then values, then totals</text>
+  </g>
+
+  <text class="small" x="80" y="810">a difference below materiality is still a difference &#8212; it is graded, never suppressed</text>
+</svg>

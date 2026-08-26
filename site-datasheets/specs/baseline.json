@@ -1,0 +1,447 @@
+{
+  "num": 52,
+  "slug": "baseline",
+  "part_no": "SFS-E52-BDR",
+  "mnemonic": "BDR",
+  "family": "Budget Integrity",
+  "name": "Baseline & Version Drift",
+  "tagline": "Four copies of one budget, each internally perfect, reconciled against one another.",
+  "plain_summary": "A joint venture is signed against a contractual exhibit. The sponsor maintains a working model. Draws are billed on an instrument carrying approved-plus-changes columns. A summary memo goes to a lender. Four copies of one budget -- and each can foot perfectly, re-derive its own margin, balance sources against uses, and still disagree with the other three. This engine reads the six artifacts a reporting cycle emits -- the governing agreement, every budget version in circulation, the amendment log, the milestone set, the derived schedules and the funding register -- and runs twenty-five deterministic controls across them. Is every artifact present and the period legible, does every version declare an id and a role and a prepared date, is there exactly one contractual baseline and does the agreement name it, was that baseline prepared on or after the agreement it is an exhibit to, was any version prepared after the period it reports on, do the category sets reconcile in both directions, does every paired line agree with the baseline, is a sub-threshold difference still surfaced, does every version's derived total equal the baseline's and its own stated figure, do the phase totals foot with no unphased line, are offsetting movements graded as re-carves rather than changes, is each reporting copy current to within the file's staleness band, does a summary predate the working model it restates, does every billing line re-derive from approved plus previous plus current, does every current change trace to an approved amendment for its exact amount, has a pending amendment been billed as though approved, has a locked line moved in any copy, does every schedule input exist and carry a date, do the instalments conserve the base over the declared periods, is the base net of advances taken, are advances inside the cap, do member commitments agree across copies, does the funding split match the agreement's ratio for the declared phase, and is every member inside commitment and cap. Every comparison is exact == in integer cents, and every date is tested against the reporting period the file carries rather than the system clock.",
+  "rev": "2026-08-26",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Every within-document control in a finance stack asks the same question: does this workbook foot? Four copies of one budget can each answer yes and still disagree by half a million. That is not a hypothetical failure mode; it is the ordinary condition of a project that has been running long enough to have a contractual exhibit, a working model that has moved since, a billing form carrying its own change columns, and a memo somebody circulated last quarter. Each artifact is maintained by a different person for a different purpose, each is internally consistent, and nothing in the stack compares them. The failures that follow are quiet by construction. A reclassification -- two lines moving by equal and opposite amounts -- reads as a change and buries the genuine ones. A line renamed in one copy has no counterpart in another, so a comparison that pairs on names walks straight past the line that moved. A copy goes stale rather than wrong: it was right when it was prepared, its cost-through date is months behind, and every figure read off it since has been quoted with confidence. A derived schedule loses a milestone and does not error -- it silently keeps its last amortisation. This engine is the reconciliation nobody performs: category sets paired before values, totals summed from lines rather than read from a stated figure, offsetting movements graded separately from changes, every movement traced to an approved amendment, and a materiality threshold used only to grade a difference that has already been found -- never to decide whether one exists.",
+  "layers_intro": "Seven control families run in registry order over each cycle file. The first proves the others had something to read, because a control that passes on absent evidence reports assurance it never performed.",
+  "layers": [
+    {
+      "id": "set",
+      "label": "Structural Precondition",
+      "plain": "Checks the cycle file carries every artifact the controls below read, and that the reporting period is legible.",
+      "engineering": "One control. set_complete runs first and deliberately owns the missing-artifact finding. It FAILs a file missing any of the six document types in model.DOC_TYPES -- governing agreement, budget version, amendment log, milestone set, derived schedule, funding register -- and FAILs an absent, unreadable or backwards reporting period, since every date control places its dates against that stated period and never against the system clock. Every downstream rule reports nothing when the artifact it reads is absent, so this precondition is what stops absence reading as a held control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "ver",
+      "label": "Version Inventory",
+      "plain": "Establishes which copy governs, and whether each copy is plausibly dated.",
+      "engineering": "Four controls. ver_versions_declared requires every version to carry a unique id, a role drawn from model.VERSION_ROLES and a readable prepared date, because a copy with no provenance cannot be ranked against the copies it disagrees with. ver_single_baseline requires exactly one version to carry the contractual_baseline role and requires the agreement's baseline_document_id to name it -- two baselines make two different variances both defensible, and none means the variance every report quotes was measured against whichever copy the preparer had open. ver_baseline_postdates_agreement FAILs a baseline prepared before the agreement it is an exhibit to. ver_prepared_within_period FAILs a version prepared after the period it reports on.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "lin",
+      "label": "Agreement Between Copies",
+      "plain": "Reconciles the category sets, then the paired values, then the totals.",
+      "engineering": "Six controls, and the ordering inside them is the load-bearing part. lin_categories_reconcile pairs the category sets in both directions first, and reports a category present in one copy and absent from another as a finding in its own right -- pairing on names alone would silently skip whatever was renamed, split or merged, which is precisely the line that moved. lin_values_agree then compares every paired line to the baseline with exact ==, excluding categories already explained as reclassification. lin_immaterial_drift_review carries the sub-threshold differences as FLAGs so they are reconciled before they grow. lin_totals_agree sums each version from its lines rather than reading a stated total, compares that derived figure to the stated one, and then to the baseline. lin_phase_totals_tie proves the phase split foots with no unphased line hiding in the grand total. lin_reclass_review grades offsetting movements with an unchanged total as re-carves rather than changes.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "stl",
+      "label": "Currency of Each Copy",
+      "plain": "Asks whether each copy is still speaking about the period being reported.",
+      "engineering": "Two controls. stl_cost_through_current FAILs a version whose cost-through date is beyond the period end, and FAILs one that is further behind the period end than the file's stale_days band -- a copy that was right when it was prepared is the hardest kind of wrong to notice. stl_summary_not_superseded FLAGs a summary restatement prepared before the working model it restates, which is the mechanism by which a stale figure escapes the building.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "amd",
+      "label": "Amendment Traceability",
+      "plain": "Re-derives every movement and traces it to an approved amendment.",
+      "engineering": "Four controls. amd_change_columns_foot re-derives each billing line as approved plus previous changes plus current changes and compares it to the revised figure, because a revised column that was typed rather than computed is invisible otherwise. amd_changes_trace_to_log requires every non-zero current change to be backed by approved amendments summing to exactly that amount -- paperwork that exists but is for a different figure is the harder case, because it reads clean. amd_pending_not_billed FAILs a category whose amendment is still pending but which carries a non-zero current change, and FAILs an amendment state outside model.CHANGE_STATES. amd_locked_lines_unchanged FAILs any copy that moves a line the baseline marked locked.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "drv",
+      "label": "Derived Schedules",
+      "plain": "Proves a schedule's inputs are present before its output is trusted.",
+      "engineering": "Five controls. drv_inputs_declared FAILs a schedule naming a milestone that does not exist. drv_milestones_populated FAILs a schedule whose declared input milestone exists but carries no date -- the quiet one, because blanking a milestone does not error, it silently leaves the schedule on its last amortisation. drv_instalments_conserve proves the instalment stream sums to the base over the declared number of periods. drv_base_net_of_advances proves the base equals total less advances, since amortising the gross figure after advances have been drawn pays the advanced portion twice. drv_cap_not_exceeded proves advances stay inside the declared cap.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "eqt",
+      "label": "Funding Consistency",
+      "plain": "Checks commitments agree across copies and the split matches the phase in force.",
+      "engineering": "Three controls. eqt_commitments_agree FAILs a member committed for different amounts in different copies, because the remaining-commitment figure on a funding request is derived from it. eqt_split_matches_phase compares each member's split in the funding register to the agreement's ratio for the phase the agreement declares, and proves the phase's weights sum to 10000 basis points -- a split compared without its phase is compared against the wrong ratio half the time. eqt_contributed_within_commitment proves contributed does not exceed commitment and commitment does not exceed cap.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Cycle Files",
+      "kind": "source",
+      "col": 0,
+      "row": 2,
+      "plain": "fictional reporting-cycle files enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control, twenty-seven files in total. Only the line set, the agreement and the amendment log are stated; every version's stated total, the billing instrument's change columns and the derived schedule's instalment stream are re-derived through the same kernel the engine later recomputes with, so the relationships the engine tests are the relationships that produced the data. The corpus deliberately carries an approved amendment and a pending one in the clean file, so the traceability controls are exercised by a passing file rather than only by their defects.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/generate.py"
+    },
+    {
+      "id": "kernel",
+      "label": "Derivation Kernel",
+      "kind": "process",
+      "col": 1,
+      "row": 2,
+      "plain": "one implementation of pairing, reclassification and amortisation",
+      "engineering": "budget.py is the single place that knows how a version is read, how two versions are paired and how a schedule is amortised. Both the generator and the controls import it, so a control and the corpus it audits cannot quietly disagree about what agreement means. pair_lines returns three disjoint groups rather than a lookup, detect_reclassifications returns offsetting pairs only when the total is unchanged, and amortisation_schedule delegates to the shared money kernel so an instalment stream is derived the same way it was built.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/budget.py"
+    },
+    {
+      "id": "set-control",
+      "label": "Structural Precondition",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "every artifact present, period legible",
+      "engineering": "set_complete owns absence so no downstream rule reports it a second time.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "ver-control",
+      "label": "Version Inventory",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "one governing copy, plausibly dated",
+      "engineering": "Four controls establishing which copy variance is measured against.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "lin-control",
+      "label": "Agreement Between Copies",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "category sets, then values, then totals",
+      "engineering": "Six controls, ordered so the set reconciliation precedes any value comparison.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "stl-control",
+      "label": "Currency",
+      "kind": "control",
+      "col": 2,
+      "row": 3,
+      "plain": "is each copy still about this period",
+      "engineering": "Two controls covering staleness and superseded restatements.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "amd-control",
+      "label": "Amendment Traceability",
+      "kind": "control",
+      "col": 2,
+      "row": 4,
+      "plain": "every movement re-derived and traced",
+      "engineering": "Four controls over the billing instrument's change columns and the approval register.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "drv-control",
+      "label": "Derived Schedules",
+      "kind": "control",
+      "col": 2,
+      "row": 5,
+      "plain": "inputs present, base conserved",
+      "engineering": "Five controls proving a schedule's inputs exist and carry dates before its output is trusted.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "eqt-control",
+      "label": "Funding Consistency",
+      "kind": "control",
+      "col": 2,
+      "row": 6,
+      "plain": "commitments agree, split matches phase",
+      "engineering": "Three controls over the funding register and the agreement's phase ratios.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/engine.py"
+    },
+    {
+      "id": "findings",
+      "label": "Findings",
+      "kind": "output",
+      "col": 3,
+      "row": 3,
+      "plain": "PASS, FLAG or FAIL with a location and a reason",
+      "engineering": "Every finding carries the rule that produced it, a location of the form doc_type:document_id/field, and a message that states the rationale rather than only the verdict. A file with any FAIL rolls up to FAIL; FLAGs without FAILs roll up to REVIEW.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/model.py"
+    },
+    {
+      "id": "reports",
+      "label": "Reports",
+      "kind": "output",
+      "col": 4,
+      "row": 3,
+      "plain": "byte-stable JSON and markdown",
+      "engineering": "Two renderings of the same findings, with no timestamps, absolute paths or hash-ordered iteration anywhere in the output, so a change in the committed diff means a change in the controls rather than a change in when the report ran.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/baseline_engine/report.py"
+    }
+  ],
+  "edges": [
+    {
+      "from": "corpus",
+      "to": "kernel",
+      "label": "cycle files"
+    },
+    {
+      "from": "kernel",
+      "to": "set-control",
+      "label": "derivations"
+    },
+    {
+      "from": "kernel",
+      "to": "ver-control",
+      "label": "derivations"
+    },
+    {
+      "from": "kernel",
+      "to": "lin-control",
+      "label": "derivations"
+    },
+    {
+      "from": "kernel",
+      "to": "stl-control",
+      "label": "derivations"
+    },
+    {
+      "from": "kernel",
+      "to": "amd-control",
+      "label": "derivations"
+    },
+    {
+      "from": "kernel",
+      "to": "drv-control",
+      "label": "derivations"
+    },
+    {
+      "from": "kernel",
+      "to": "eqt-control",
+      "label": "derivations"
+    },
+    {
+      "from": "set-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "ver-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "lin-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "stl-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "amd-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "drv-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "eqt-control",
+      "to": "findings",
+      "label": "resolves"
+    },
+    {
+      "from": "findings",
+      "to": "reports",
+      "label": "rendered"
+    }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,224",
+      "source": "python -m pytest --collect-only -q -o addopts= (baseline-drift-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "25",
+      "source": "len(baseline_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every cycle file"
+    },
+    {
+      "label": "Families",
+      "value": "7",
+      "source": "distinct rule-id prefixes in baseline_engine.engine.REGISTRY",
+      "plain": "groups of controls, each answering one question"
+    },
+    {
+      "label": "Cycle files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-six planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "6",
+      "source": "len(baseline_engine.model.DOC_TYPES)",
+      "plain": "agreement, versions, amendments, milestones, schedules, funding"
+    }
+  ],
+  "problem_statement": "A project budget does not exist once. It exists as a contractual exhibit the venture was signed against, a working model the sponsor maintains, a billing instrument draws are requested on, and a summary memo circulated to a lender -- four copies, four owners, four purposes. Each is internally consistent. Sources equal uses in all of them, each re-derives its own margin, each foots. Nothing in an ordinary finance stack compares them to one another, and five failures live in that gap. First, a copy is materially wrong while being internally perfect: the totals simply differ, and no within-document control can see it. Second, a reclassification reads as a change -- two lines move by equal and opposite amounts, the total never budges, and grading that as a budget revision buries the genuine revisions among the noise. Third, a category exists in one copy and not another, because a line was renamed or split; a comparison that walks one version's lines and looks each up in the other returns clean on everything it can pair and skips the one that moved. Fourth, a copy is stale rather than wrong: it was right when it was prepared, its cost-through date is months behind the period being reported, or its prepared date falls before the agreement it purports to be an exhibit to, and every figure read off it since has been quoted with confidence. Fifth, a derived schedule loses its inputs -- a fee amortised across a construction period depends on milestone dates, and blanking a milestone does not raise an error, it silently leaves the schedule on its last amortisation while the instalment it drives stops matching the term it spans. None of these announce themselves. Each survives every check that looks inside a single document, which is why the reconciliation between documents has to be a control of its own.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every cycle file",
+      "narrative": "The CLI generates twenty-seven fictional cycle files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-five controls over each. The clean file returns PASS with no flags; every defect file returns REVIEW or FAIL and names the control it tripped along with the reason that control exists.",
+      "source": "python run.py (baseline-drift-automation/); baseline_engine/tests planted-defect suite"
+    },
+    {
+      "title": "Two lines move in opposite directions and the total holds",
+      "narrative": "One planted defect moves an amount out of one category and into another in the working model, leaving the grand total untouched. The engine grades it as a reclassification rather than a change, so it surfaces for review as a re-carve that still needs an approval behind it, instead of appearing in the same list as the genuine budget movements.",
+      "source": "baseline_engine/generate.py _offsetting_reclass; budget.detect_reclassifications"
+    },
+    {
+      "title": "A category is renamed in one copy and the comparison does not skip it",
+      "narrative": "One planted defect renames a category in the working model. Because the category sets are reconciled in both directions before any value is compared, the engine reports the line as present in the baseline and absent from the copy -- rather than pairing on names, finding no match, and silently comparing everything else.",
+      "source": "baseline_engine/generate.py _category_renamed_in_copy; budget.pair_lines"
+    },
+    {
+      "title": "A milestone is blanked and the schedule keeps paying",
+      "narrative": "One planted defect removes the date from a milestone a fee amortisation declares as an input. The schedule does not error and its instalments still sum to its base, so every arithmetic control on it holds. The engine fails it anyway, because the term the amortisation spans is no longer defined.",
+      "source": "baseline_engine/generate.py _milestone_blanked; engine.check_drv_milestones_populated"
+    },
+    {
+      "title": "A difference below materiality is reported rather than suppressed",
+      "narrative": "A sub-threshold line difference is carried as a review flag, not dropped. The materiality threshold grades a difference the engine has already found with exact ==; it never decides whether a difference exists, because a line nobody reconciles is how a small difference becomes a large one.",
+      "source": "baseline_engine/tests/test_control_semantics.py threshold boundary tests"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-five controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "baseline_report.json, baseline_report.md, samples/"
+    },
+    {
+      "cmd": "python -m baseline_engine samples",
+      "operation": "analyze an existing folder of cycle files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m baseline_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest baseline_engine/tests -q",
+      "operation": "run the engine's own test suite",
+      "output": "pytest summary",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,224",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (baseline-drift-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "25",
+      "unit": "controls",
+      "source": "len(baseline_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(baseline_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "baseline_engine/tests/test_planted_defects.py test_every_control_has_a_planted_defect",
+      "plain": "no control ships without a corpus file proving it fires"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the set of budget copies they were given: every artifact is present and the period legible, exactly one copy governs and the agreement names it, no copy is dated before the agreement or after the period, the category sets reconcile in both directions, every paired line and every derived total agrees with the baseline, the phase split foots with no unphased line, every reporting copy is current to within the file's staleness band, every billing line re-derives from its own change columns and traces to an approved amendment for its exact amount, no pending amendment has been billed, no locked line has moved, every derived schedule's inputs exist and carry dates and its instalments conserve a base net of advances inside its cap, and every member's commitment agrees across copies and matches the phase ratio. It is not an opinion that the budget is correct, complete or approved.",
+    "guarantees": [
+      "Read-only: no control writes to a source artifact, and the read-only suite proves the corpus is byte-identical after a full registry run.",
+      "Deterministic: the generator takes no seed and the reports carry no timestamps, absolute paths or hash-ordered iteration, so the same corpus produces the same bytes.",
+      "Exact: every monetary comparison is integer cents with ==, and there is no tolerance band anywhere in the engine.",
+      "Clock-free: every date is measured against the reporting period carried in the file, never the system clock, so a passing corpus cannot start failing because CI ran on a different day.",
+      "Detection precedes grading: the materiality threshold grades a difference already found with ==; it never decides whether a difference exists.",
+      "Amounts are integer cents end to end; floating point appears only at the formatting edge.",
+      "A value that must be integer cents and is not raises AMOUNT_INVALID and is reported rather than coerced, so the engine never becomes the author of a figure it is auditing.",
+      "Category sets are reconciled before values, so a comparison cannot silently skip a renamed or split line.",
+      "Totals are summed from the lines rather than read from a stated figure, then compared to the stated figure.",
+      "Instalment streams are derived through the same shared money kernel that built them, so a schedule is re-derived the way it was constructed."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never prepares a budget, approves an amendment, issues a draw, or writes to a source artifact. It reads the cycle file and stops.",
+      "source": "baseline-drift-automation/README.md and baseline_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It does not check whether a single budget foots internally. Sources against uses, margin re-derivation and interest-reserve adequacy are a within-document question and SFS-E23-QPR owns it; this engine is the reconciliation between copies and nothing more.",
+      "source": "baseline-drift-automation/README.md scope statement"
+    },
+    {
+      "statement": "It reads the six artifacts a reporting cycle emits. It does not connect to a general ledger, a spreadsheet, a document-management system or a counterparty's portal.",
+      "source": "baseline_engine/model.py DOC_TYPES"
+    },
+    {
+      "statement": "It audits the copies it is given. A copy that was never circulated to it cannot be reconciled, and the engine reports the set it can see rather than asserting that set is complete.",
+      "source": "baseline_engine/engine.py check_set_complete"
+    },
+    {
+      "statement": "Which copy governs is read from the executed agreement's baseline_document_id. The engine verifies the declaration is internally consistent; it does not interpret the agreement.",
+      "source": "baseline_engine/engine.py check_ver_single_baseline"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-baseline.svg",
+    "motion": "../assets/engine-baseline.svg",
+    "poster_alt": "Baseline and Version Drift engine tile: a line drawing of four budget sheets standing side by side, labelled exhibit, working, billing and memo. A cobalt rail runs horizontally through the same row on all four sheets, pinned with a dot at each, showing the category sets being paired before any value is read. One sheet's row and its total box are drawn in cobalt where they diverge from the others; the fourth sheet shows that row dashed and unmatched, marked with a query. Each sheet carries its own total in a box at its foot, and the three totals differ.",
+    "caption": "The Baseline and Version Drift tile states the question four copies of one budget turn on: not whether any copy foots, but whether the copies agree with each other -- and which one governs when they do not.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run the tests",
+      "command": "python -m pytest baseline_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/baseline-drift-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/baseline-drift-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Baseline & Version Drift (SFS-E52-BDR) datasheet -- twenty-five deterministic, read-only controls across every copy of one project budget in circulation: category sets reconciled in both directions before any value is compared, totals summed from the lines rather than read from a stated figure, offsetting movements graded as reclassification rather than change, every movement traced to an approved amendment for its exact amount, derived-schedule inputs proved present before the output is trusted, and materiality used only to grade a difference already found. 10,224 tests, seeded fictional data, a planted-defect file for every control."
+  }
+}
