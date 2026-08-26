@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-08-26
+
+- Added Baseline & Version Drift (SFS-E52-BDR, `baseline-drift-automation/baseline_engine`):
+  a reconciliation engine for one project budget existing as four authoritative copies at
+  once — the contractual exhibit, the sponsor's working model, the billing instrument and a
+  summary memo — each of which can foot internally while disagreeing with the other three.
+  Category sets are paired in both directions before any value is compared, so a renamed or
+  split line cannot be silently skipped; totals are summed from the lines and then compared
+  to the stated figure; offsetting movements with an unchanged total are graded as
+  reclassification rather than change; every current change is re-derived from its own
+  approved-plus-changes columns and traced to an approved amendment for its exact amount;
+  derived-schedule inputs are proved present before the output is trusted. Materiality
+  grades a difference already found with exact ==; it never decides whether one exists.
+  25 controls, 10,224 tests on seeded fictional data, with a planted-defect file for every
+  control. Portfolio: 52 engines, 514,936 curated tests.
+
 ## 2026-08-14
 
 - Added Premium Audit Response (SFS-E51-PRA, `premium-audit-automation/premaudit_engine`):

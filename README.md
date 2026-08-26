@@ -6,14 +6,14 @@
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
 [![Tests](https://img.shields.io/badge/tests-504%2C712%20curated%20%2B%20invariant%20grids-2ea44f)](#testing)
-[![Systems](https://img.shields.io/badge/systems-51%20runnable-6f42c1)](#the-fifty-systems)
+[![Systems](https://img.shields.io/badge/systems-52%20runnable-6f42c1)](#the-fifty-systems)
 [![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
-Fifty-one self-contained Python systems for finance and tax work — month-end close, cash/debt
+Fifty-two self-contained Python systems for finance and tax work — month-end close, cash/debt
 reconciliation, a cash-manager control suite, cross-border surplus & ACB, partnership 1065 /
 §704(c), read-only workbook validation, a NotebookLM-style knowledge brain, and an interactive
 finance operations atlas. One of them, **Triangulate**, is a multi-agent LLM review framework with a
@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (33,285 tests plus bounded invariant grids = 504,712 cases; runs in minutes)
+# run the curated engine suite (33,285 tests plus bounded invariant grids = 514,936 cases; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -62,7 +62,7 @@ cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out 
 ```
 > An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
 
-**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (504,712 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.67M generated cases). A separate 57-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
+**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (514,936 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.67M generated cases). A separate 57-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
 
 **4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
 ```bash
@@ -161,6 +161,7 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Depreciation & Prepaid Amortization](./depreciation-register-automation/) | `depreciation_engine` | `python run.py` | every fixed-asset depreciation and prepaid amortization figure re-derived from cost, useful life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the posted recurring entry |
 | [Earnest-Money Deposit Trust](./deposit-trust-automation/) | `deposit_engine` | `python run.py` | each unit's pre-close earnest money tied three ways — the deposit ledger, the escrow agent's statement and the construction-loan paydowns — to zero variance, with cancellation splits and the reconciliation summary recomputed from the units beneath |
 | [Capital Spending Request Gate](./spending-gate-automation/) | `spending_engine` | `python run.py` | a developer's capital spending requests: dollar triggers fired only after approval, the five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied |
+| [Baseline & Version Drift](./baseline-drift-automation/) | `baseline_engine` | `python run.py` | four copies of one project budget reconciled against one another: category sets paired in both directions before any value is compared, totals summed from the lines rather than read from a stated figure, offsetting movements graded as reclassification rather than change, every movement traced to an approved amendment, and derived-schedule inputs proved present before the output is trusted | **10,224** |
 
 **Triangulate** is the centerpiece: a framework for putting AI into financial work without letting a
 single model validate its own output. Its reviewer is a live Anthropic Claude integration
@@ -177,8 +178,8 @@ demand:
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
 | **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,237** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 50 systems. This is the curated total less the bounded invariant grids below (`6,304` distinct test functions before parametrization). Runs in minutes. |
-| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **504,712** | Adds `461,827` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
-| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 504,712 curated engine total. |
+| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **514,936** | Adds `461,827` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 514,936 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.65M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
 
 Every test calls real engine code and asserts a true property. The sweep is excluded from the
