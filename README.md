@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (33,285 tests plus bounded invariant grids = 514,936 cases; runs in minutes)
+# run the curated engine suite (514,936 cases; gates CI; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
