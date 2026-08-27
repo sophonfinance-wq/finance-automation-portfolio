@@ -1,16 +1,16 @@
 # Platform Architecture
 
-This repository is a fifty-system, AI-driven Finance & Tax automation platform. The fifty
-decompose exactly as **5 + 41 + 1 + 1 + 1 + 1**:
+This repository is a fifty-two-system, AI-driven Finance & Tax automation platform. The fifty-two
+decompose exactly as **5 + 43 + 1 + 1 + 1 + 1**:
 
 - **five deterministic calculation engines** — month-end close, cash & debt reconciliation, the
   cash-management suite, partnership 1065 / §704(c), and cross-border surplus & ACB;
-- **forty-one read-only control engines** — each one reads a record a finance team already produces,
+- **forty-three read-only control engines** — each one reads a record a finance team already produces,
   re-derives every figure on it from the base facts, and reports exceptions without ever writing back.
-  They span payables, draws, insurance, tax compliance, debt, payroll, closings, asset registers and
-  project reporting (the workbook validation engine and the accounts-payable control engine are the
-  originals; the newest are contingency rollforward, information-return issuance, trial-balance
-  roll-forward and the JV investor reporting package);
+  They span payables, draws, insurance, tax compliance, debt, payroll, closings, asset registers,
+  project reporting, premium-audit response, and budget baseline / version drift (the workbook
+  validation engine and the accounts-payable control engine are the originals; the newest include
+  Premium Audit Response and Baseline & Version Drift);
 - **one workpaper construction engine** — it *builds* a new fiscal year's tax workpaper package from
   a locked ledger source and the prior year's signed package: it freezes every prior-year layer,
   advances the year captions by exactly one year, computes the current-year capital flows as source
@@ -22,7 +22,7 @@ decompose exactly as **5 + 41 + 1 + 1 + 1 + 1**:
 - **the Triangulate AI control framework**.
 
 The canonical roster — number, part number, mnemonic, family, display name and engine directory for
-every one of the fifty — lives in `site-datasheets/datasheet_tests/conftest.py` and is
+every one of the fifty-two — lives in `site-datasheets/datasheet_tests/conftest.py` and is
 test-gated, so this prose is a summary of that authority rather than a second copy of it.
 
 Above all of it sits an optional orchestration layer:

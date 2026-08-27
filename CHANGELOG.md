@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-08-27
+
+- Claim-surface alignment to the measured portfolio (52 engines / 514,936 curated tests):
+  README badges and system table (adds Premium Audit Response), ARCHITECTURE family math
+  (5 + 43 + 1 + 1 + 1 + 1), homepage tile order 51→52, consultation autoresponse, Sophie
+  copy, and docs/tests meta descriptions. Quiet typography and hover nits on the public site.
+
 ## 2026-08-26
 
 - Added Baseline & Version Drift (SFS-E52-BDR, `baseline-drift-automation/baseline_engine`):
