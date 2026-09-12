@@ -10,7 +10,7 @@ totals tie, the controls are zero, and the package is still not reviewable.
 |---|---|
 | Package | `workpaper_engine` |
 | Controls | 9 |
-| Tests | 76 |
+| Tests | 20,076 gated + a `SWEEP=1` wide pass |
 | Data | fictional, seeded (`SEED = 20260912`) |
 | Writes | never — the engine is read-only |
 
@@ -65,7 +65,8 @@ sweep reports success while the file still looks wrong.
 ```bash
 cd workpaper-review-automation
 python run.py                      # generate + analyze + write both reports
-python -m pytest -q                # 76 tests
+python -m pytest -q                # 20,076 tests
+SWEEP=1 python -m pytest -q        # + the wide band sweep
 python -m workpaper_engine samples # analyze an existing folder, read-only
 ```
 
@@ -80,5 +81,13 @@ rounding a source figure would make the engine the author of the number it is me
 
 The corpus ships one clean package plus one package per defect class, so every control has something
 to catch and the clean baseline proves no control fires on a sound package.
+
+Beyond the case tests, six curated invariant grids assert properties rather than examples: the money
+kernel conserves every cent across 10,000 points; `CITATION_MISMATCH` fires **iff** the quoted and
+resolved figures differ, swept across offsets that include exactly one cent; a value is a date
+candidate **iff** it is whole dollars inside the serial band, swept across both boundaries and across
+fractional cents; and a cell presented as a date while feeding a total fails at every point of the
+band, because no value can make a date an acceptable addend. `SWEEP=1` widens the same grids rather
+than adding different ones, so a sweep failure always reproduces at the gated size.
 
 All data is invented. No real entity, person, place, figure, document or path appears anywhere.
