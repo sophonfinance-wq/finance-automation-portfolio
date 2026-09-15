@@ -5,8 +5,8 @@
 # Sophon Finance Systems — AI-Driven Finance & Accounting Automation
 
 [![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
-[![Tests](https://img.shields.io/badge/tests-504%2C712%20curated%20%2B%20invariant%20grids-2ea44f)](#testing)
-[![Systems](https://img.shields.io/badge/systems-52%20runnable-6f42c1)](#the-fifty-systems)
+[![Tests](https://img.shields.io/badge/tests-514%2C936%20curated%20%2B%20invariant%20grids-2ea44f)](#testing)
+[![Systems](https://img.shields.io/badge/systems-52%20runnable-6f42c1)](#the-fifty-two-systems)
 [![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
 [![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
 [![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
@@ -33,7 +33,7 @@ git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
 cd finance-automation-portfolio
 pip install -r requirements.txt
 
-# run the curated engine suite (33,285 tests plus bounded invariant grids = 514,936 cases; runs in minutes)
+# run the curated engine suite (514,936 cases; gates CI; runs in minutes)
 pytest -m "not site_tooling"
 
 # run a system
@@ -105,7 +105,7 @@ Full flow in **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
 
 ---
 
-## The fifty systems
+## The fifty-two systems
 
 Every system is self-contained, deterministic, and ships with a seeded fictional-data generator.
 
@@ -161,7 +161,8 @@ Every system is self-contained, deterministic, and ships with a seeded fictional
 | [Depreciation & Prepaid Amortization](./depreciation-register-automation/) | `depreciation_engine` | `python run.py` | every fixed-asset depreciation and prepaid amortization figure re-derived from cost, useful life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the posted recurring entry |
 | [Earnest-Money Deposit Trust](./deposit-trust-automation/) | `deposit_engine` | `python run.py` | each unit's pre-close earnest money tied three ways — the deposit ledger, the escrow agent's statement and the construction-loan paydowns — to zero variance, with cancellation splits and the reconciliation summary recomputed from the units beneath |
 | [Capital Spending Request Gate](./spending-gate-automation/) | `spending_engine` | `python run.py` | a developer's capital spending requests: dollar triggers fired only after approval, the five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied |
-| [Baseline & Version Drift](./baseline-drift-automation/) | `baseline_engine` | `python run.py` | four copies of one project budget reconciled against one another: category sets paired in both directions before any value is compared, totals summed from the lines rather than read from a stated figure, offsetting movements graded as reclassification rather than change, every movement traced to an approved amendment, and derived-schedule inputs proved present before the output is trusted | **10,224** |
+| [Premium Audit Response](./premium-audit-automation/) | `premaudit_engine` | `python -m premaudit_engine --seed 7` | fixed-width job-cost print reports parsed and tied to the report's own printed totals to the cent — refuse rather than emit a workpaper on any break; inclusive policy-window cut; certificate-of-insurance cross-reference; fixed-precedence triage that partitions every cost line into exactly one bucket — byte-stable JSON/Markdown, integer cents |
+| [Baseline & Version Drift](./baseline-drift-automation/) | `baseline_engine` | `python run.py` | four copies of one project budget reconciled against one another: category sets paired in both directions before any value is compared, totals summed from the lines rather than read from a stated figure, offsetting movements graded as reclassification rather than change, every movement traced to an approved amendment, and derived-schedule inputs proved present before the output is trusted |
 
 **Triangulate** is the centerpiece: a framework for putting AI into financial work without letting a
 single model validate its own output. Its reviewer is a live Anthropic Claude integration
@@ -177,7 +178,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,237** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 50 systems. This is the curated total less the bounded invariant grids below (`6,304` distinct test functions before parametrization). Runs in minutes. |
+| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,237** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 52 systems. This is the curated total less the bounded invariant grids below (`6,304` distinct test functions before parametrization). Runs in minutes. |
 | ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **514,936** | Adds `461,827` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel, plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
 | **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 514,936 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.65M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |

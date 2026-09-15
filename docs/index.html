@@ -9,10 +9,10 @@
 
 <!--
   ============================================================
-  SITE FACTS â€” single source of truth (verified 2026-08-05)
+  SITE FACTS â€” single source of truth (verified 2026-08-27)
   ============================================================
   ENGINES_PUBLIC   = 52       (system dirs in the canonical roster; README badge "systems: 52 runnable")
-  TESTS_CURATED    = 514,936   (pytest --collect-only -m "not site_tooling", 2026-08-05)
+  TESTS_CURATED    = 514,936   (pytest --collect-only -m "not site_tooling", 2026-08-27)
   TESTS_SITE_TOOLS = 57       (pytest --collect-only -m site_tooling; separate from curated total)
   TESTS_SWEEP      = ~1.65M   (opt-in property sweep, SWEEP=1 pytest -m "not site_tooling"; 1,648,990 on 2026-07-24)
   LOOP_ENGINES     = 5        (close, surplus, reconciliation, knowledge brain, Triangulate)
@@ -153,7 +153,7 @@
     .brand-mark .bm-line, .brand-mark .bm-dot { animation:none; }
     .brand-mark .bm-glint, .brand-mark .bm-ping { animation:none; opacity:0; }
   }
-  .brand-word { font-weight:600; font-size:18px; letter-spacing:.2px; white-space:nowrap; line-height:1.15; }
+  .brand-word { font-weight:600; font-size:18px; letter-spacing:.45px; white-space:nowrap; line-height:1.15; color:#000; }
   .brand-word span { font-weight:300; }
 .brand-text{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0}
 .brand-tag{font-family:var(--mono,'IBM Plex Mono',ui-monospace,monospace);font-size:9.5px;
@@ -187,7 +187,7 @@
   /* ============ SECTION PRIMITIVES ============ */
   section { padding:72px 0; }
   section.alt { background:var(--bg-alt); }
-  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.6px; color:var(--blue); }
+  .kicker { font-family:var(--mono); font-size:12px; font-weight:500; letter-spacing:.45px; color:var(--blue); }
   h2 { font-size:clamp(28px, 3.4vw, 42px); font-weight:300; letter-spacing:-.2px; line-height:1.18; margin:10px 0 12px; color:var(--text); }
   h2 strong { font-weight:600; }
   .lead { font-size:16.5px; max-width:46em; color:var(--text-2); font-weight:400; }
@@ -240,7 +240,7 @@
   .stats-in { display:grid; grid-template-columns:repeat(4,1fr); }
   .stat { padding:28px 28px 26px; border-left:1px solid var(--border); }
   .stat:first-child { border-left:none; padding-left:0; }
-  .stat b { display:block; font-size:40px; font-weight:300; color:var(--text); line-height:1.05; font-variant-numeric:tabular-nums; }
+  .stat b { display:block; font-size:40px; font-weight:300; color:var(--text); line-height:1.05; font-variant-numeric:tabular-nums lining-nums; font-feature-settings:"tnum" 1, "lnum" 1; }
   .stat b .unit { font-size:24px; }
   .stat .cap { display:block; font-size:13px; color:var(--text-2); margin-top:8px; line-height:1.45; }
   .stat .src { display:block; font-family:var(--mono); font-size:10.5px; color:var(--text-3); margin-top:8px; letter-spacing:.3px; }
@@ -374,8 +374,8 @@
 
   /* ============ PORTFOLIO GRID ============ */
   .fleet { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border);
-    border:1px solid var(--border); margin-top:32px; }
-  .tile { background:#fff; padding:24px 24px 22px; display:flex; flex-direction:column; min-height:190px; }
+    border:1px solid var(--border); margin-top:40px; }
+  .tile { background:#fff; padding:26px 24px 24px; display:flex; flex-direction:column; min-height:190px; }
   .tile-vis { margin:-24px -24px 18px; }
   .tile-vis img, .tile-vis video { display:block; width:100%; height:auto; }
   .tile .tnum { font-family:var(--mono); font-size:11.5px; font-weight:500; color:var(--blue); letter-spacing:.5px; }
@@ -422,7 +422,7 @@
   .fnode { position:relative; z-index:1; background:#fff; border:1px solid var(--border); padding:14px 16px; transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
   .fnode i { font-style:normal; font-family:var(--mono); font-size:10px; letter-spacing:.8px; color:var(--text-3); display:block; margin-bottom:3px; }
   .fnode b { display:block; font-size:14px; font-weight:600; color:var(--text); line-height:1.25; }
-  .fnode:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(15,42,92,.08); }
+  .fnode:hover { box-shadow:0 4px 14px rgba(15,42,92,.06); border-color:var(--border-strong); }
   .fnode.hot { border-color:var(--blue); } .fnode.hot i { color:var(--blue); }
   .fnode.dec { border-color:var(--navy); box-shadow:inset 0 0 0 1px var(--navy); } .fnode.dec i { color:var(--navy); }
   .flow-branch { display:block; width:100%; height:54px; margin-top:-1px; overflow:visible; }
@@ -435,7 +435,7 @@
   .fout .fdot { position:absolute; top:-8px; left:50%; transform:translateX(-50%); width:12px; height:12px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px var(--border); }
   .fout b { display:block; font-size:14px; font-weight:600; margin:1px 0 5px; }
   .fout span { display:block; font-size:13px; color:var(--text-2); line-height:1.5; }
-  .fout:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(15,42,92,.09); }
+  .fout:hover { box-shadow:0 4px 16px rgba(15,42,92,.07); }
   .fout.ok { border-top-color:var(--green); } .fout.ok b { color:var(--green); } .fout.ok .fdot { background:var(--green); box-shadow:0 0 0 1px var(--green); }
   .fout.fix { border-top-color:var(--blue); } .fout.fix b { color:var(--blue); } .fout.fix .fdot { background:var(--blue); box-shadow:0 0 0 1px var(--blue); }
   .fout.esc { border-top-color:#b0850f; } .fout.esc b { color:#8a6a00; } .fout.esc .fdot { background:#b0850f; box-shadow:0 0 0 1px #b0850f; }
@@ -449,7 +449,7 @@
   .loop-steps li small { display:block; font-size:12.5px; color:var(--text-2); margin-top:5px; line-height:1.35; }
   .loop-outs { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
   .lout { background:#fff; border:1px solid var(--border); border-top-width:3px; padding:0 0 20px; transition:transform .18s ease, box-shadow .18s ease; }
-  .lout:hover { transform:translateY(-3px); box-shadow:0 10px 28px rgba(15,42,92,.09); }
+  .lout:hover { box-shadow:0 4px 16px rgba(15,42,92,.07); }
   .lout figure { margin:0; background:var(--bg-alt); border-bottom:1px solid var(--border); height:clamp(130px,16vw,190px); overflow:hidden; }
   .lout figure img, .lout figure video { display:block; width:100%; height:100%; object-fit:cover; }
   /* outcome mini-diagrams: hand-typeset inline SVG, natural height â€” never crops */
@@ -564,7 +564,7 @@
   .bookp h3 { font-size:clamp(22px,2.6vw,28px); font-weight:300; letter-spacing:-.2px; line-height:1.2; margin:0 0 8px; }
   .bookp h3 strong { font-weight:600; }
   .bookp .bk-sub { font-size:14px; color:var(--text-2); line-height:1.55; margin:0 0 22px; }
-  .bookp label { display:block; font-family:var(--mono); font-size:11px; letter-spacing:.6px; text-transform:uppercase; color:var(--text-3); margin:14px 0 6px; }
+  .bookp label { display:block; font-family:var(--mono); font-size:11px; font-weight:500; letter-spacing:.75px; text-transform:uppercase; color:var(--text-2); margin:16px 0 7px; }
   .bookp input, .bookp textarea { width:100%; font-family:var(--sans); font-size:15px; color:var(--text); background:var(--bg-alt); border:none; border-bottom:1px solid var(--border-strong); padding:12px 14px; outline:none; transition:border-color .15s, box-shadow .15s; border-radius:0; -webkit-appearance:none; }
   .bookp input:focus, .bookp textarea:focus { border-bottom-color:var(--blue); box-shadow:inset 0 -1px 0 var(--blue); }
   .bookp textarea { min-height:96px; resize:vertical; }
@@ -918,7 +918,7 @@
 <section id="story">
   <div class="wrap">
     <div class="sec-head reveal">
-      <p class="kicker">Watch this first</p>
+      <p class="kicker">Why we build</p>
       <h2>It&rsquo;s the work, <strong>not the people.</strong></h2>
       <p class="lead">Just over a minute on why we build finance engines &mdash; and what stays human.</p>
     </div>
@@ -1446,18 +1446,18 @@
         <span class="run">python -m workpaper_engine samples --build out</span>
       </div>
       <div class="tile">
-        <div class="tile-vis"><img src="assets/engine-baseline.svg" alt="Baseline and Version Drift engine tile: a line drawing of four budget sheets standing side by side, labelled exhibit, working, billing and memo. A cobalt rail runs horizontally through the same row on all four sheets, pinned with a dot at each, showing the category sets being paired before any value is read. One sheet's row and its total box are drawn in cobalt where they diverge from the others; the fourth sheet shows that row dashed and unmatched, marked with a query. Each sheet carries its own total in a box at its foot, and the three totals differ." width="1600" height="900" loading="lazy"></div>
-        <span class="tnum">52</span>
-        <h3><a href="engines/baseline.html">Baseline &amp; Version Drift</a></h3>
-        <p>One project budget exists as four copies at once &mdash; the contractual exhibit, the sponsor&rsquo;s working model, the billing instrument and a summary memo &mdash; and each can foot perfectly while disagreeing with the other three. Category sets are reconciled in both directions before any value is compared, totals are summed from the lines rather than read from a stated figure, offsetting movements are graded as reclassification rather than change, and every movement is traced to an approved amendment. Twenty-five controls. Materiality grades a difference already found; it never decides whether one exists.</p>
-        <span class="run">python -m baseline_engine samples</span>
-      </div>
-      <div class="tile">
         <div class="tile-vis"><img src="assets/engine-premaudit.svg" alt="Premium Audit Response engine tile: an isometric line drawing of a fixed-width job-cost print report feeding a reconciliation gate. On the left sheet, cost lines run beneath a job heading and a printed total sits boxed at the foot of the column. A cobalt path carries the parsed lines into a gate drawn as a narrow arch; beneath the arch an equals sign ties the parsed sum to the printed total. Beyond the gate the lines fan into seven labeled triage bins, one row highlighted in cobalt where a certificate expiration reaches the audit window's end. At the right a bound package carries a JSON brace and a window bracket marked inclusive on both ends." width="1600" height="900" loading="lazy"></div>
         <span class="tnum">51</span>
         <h3><a href="engines/premaudit.html">Premium Audit Response</a></h3>
         <p>Once a year the general-liability carrier audits the policy: what did the covered work actually cost? The honest answer lives in fixed-width job-cost prints, and the traditional workpaper is somebody re-keying them &mdash; checked by the person who typed it, against the file they typed. This engine reads the print instead and keeps the one safeguard a re-key destroys: the report&rsquo;s own printed totals. Every parsed job must tie its printed total to the cent, over the union of jobs parsed and jobs printed, or the engine refuses to produce a workpaper at all &mdash; the refusal names each failing job and its cent delta. What survives is cut to the policy window, inclusive on both boundary dates, cross-referenced against the certificate-of-insurance listing, and triaged line by line under a fixed precedence &mdash; journal entries that never had a vendor, clearing accounts in both their costumes, wrap-enrolled vendors, materials-only and professional exemptions, coverage current at the window end, and the remainder marked for chase. Byte-stable JSON and Markdown out; integer cents throughout; no tolerance parameter to widen.</p>
         <span class="run">python -m premaudit_engine --seed 7</span>
+      </div>
+      <div class="tile">
+        <div class="tile-vis"><img src="assets/engine-baseline.svg" alt="Baseline and Version Drift engine tile: a line drawing of four budget sheets standing side by side, labelled exhibit, working, billing and memo. A cobalt rail runs horizontally through the same row on all four sheets, pinned with a dot at each, showing the category sets being paired before any value is read. One sheet's row and its total box are drawn in cobalt where they diverge from the others; the fourth sheet shows that row dashed and unmatched, marked with a query. Each sheet carries its own total in a box at its foot, and the three totals differ." width="1600" height="900" loading="lazy"></div>
+        <span class="tnum">52</span>
+        <h3><a href="engines/baseline.html">Baseline &amp; Version Drift</a></h3>
+        <p>One project budget exists as four copies at once &mdash; the contractual exhibit, the sponsor&rsquo;s working model, the billing instrument and a summary memo &mdash; and each can foot perfectly while disagreeing with the other three. Category sets are reconciled in both directions before any value is compared, totals are summed from the lines rather than read from a stated figure, offsetting movements are graded as reclassification rather than change, and every movement is traced to an approved amendment. Twenty-five controls. Materiality grades a difference already found; it never decides whether one exists.</p>
+        <span class="run">python -m baseline_engine samples</span>
       </div>
       <div class="tile hot">
         <div class="filmbg" aria-hidden="true"><video muted loop playsinline preload="none" data-cardfilm="assets/backdrop-c.mp4"></video></div>
@@ -1920,7 +1920,7 @@
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_next" value="https://sophonfinance.com/thanks.html">
       <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-      <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Sophon Finance Systems â€” your consultation request has been received.&#10;&#10;What happens next: we review the work you described and reply personally within one business day with a plain answer â€” what an engine can take over, what it can't, and what a scoped first phase would cost. No software purchase, fixed-scope pricing after observation, and your people keep approval authority at every step.&#10;&#10;Why finance teams work with us:&#10;- 50 public finance engines â€” month-end close, cash and debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable and more â€” runnable and MIT-licensed on GitHub&#10;- 490,000+ automated tests gate every change, and every computed figure ships with cited evidence&#10;- Human-gated by design: nothing files or posts itself â€” your team approves every output&#10;- Built by a KPMG-trained, ex-Big Four accountant with Fortune 100 and 500 experience&#10;&#10;See the engineering yourself:&#10;GitHub: https://github.com/sophonfinance-wq/finance-automation-portfolio&#10;Website: https://sophonfinance.com&#10;LinkedIn: https://www.linkedin.com/in/sophonnarith/&#10;Email: contact@sophonfinance.com&#10;&#10;We'll be in touch shortly.&#10;&#10;Sophonnarith Hang&#10;Founder, Sophon Finance Systems&#10;Automate the work. Keep the judgment.">
+      <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Sophon Finance Systems â€” your consultation request has been received.&#10;&#10;What happens next: we review the work you described and reply personally within one business day with a plain answer â€” what an engine can take over, what it can't, and what a scoped first phase would cost. No software purchase, fixed-scope pricing after observation, and your people keep approval authority at every step.&#10;&#10;Why finance teams work with us:&#10;- 52 public finance engines â€” month-end close, cash and debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable and more â€” runnable and MIT-licensed on GitHub&#10;- 514,936 automated tests gate every change, and every computed figure ships with cited evidence&#10;- Human-gated by design: nothing files or posts itself â€” your team approves every output&#10;- Built by a KPMG-trained, ex-Big Four accountant with Fortune 100 and 500 experience&#10;&#10;See the engineering yourself:&#10;GitHub: https://github.com/sophonfinance-wq/finance-automation-portfolio&#10;Website: https://sophonfinance.com&#10;LinkedIn: https://www.linkedin.com/in/sophonnarith/&#10;Email: contact@sophonfinance.com&#10;&#10;We'll be in touch shortly.&#10;&#10;Sophonnarith Hang&#10;Founder, Sophon Finance Systems&#10;Automate the work. Keep the judgment.">
       <label for="bkName">Your name</label>
       <input id="bkName" type="text" name="name" required autocomplete="name" placeholder="Jane Rivera">
       <label for="bkEmail">Work email</label>
@@ -2723,7 +2723,7 @@
    {kw:["engines","what engines","portfolio","all engines","other engines","full portfolio","list of","capabilities","how many engines","eleven engines","ten engines","nine engines","validation","surplus","acb","triangulate","knowledge brain","atlas","accounts payable","payables","ap"],
     a:"Fifty-two public engines today: month-end close, cash & debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable, project draw, buyer upgrades, warranty reimbursement, intercompany reciprocity, validation, tax surplus/ACB, triangulate, knowledge brain, the finance operations atlas, property tax, surety bond & collateral, insurance cost allocation, insurance compliance, expense & p-card, project labor charge, lien waiver tracking, equity waterfall & JV promote, project proforma integrity, gross-receipts & excise tax, filing obligation calendar, energy-efficient home credit, and tax workpaper build & carry-down â€” all runnable and MIT-licensed. If your bottleneck isn't listed, we scope and build it.", l:[["See the full portfolio","#engines"],["Inspect the code","gh"]], book:true, t:2},
    {kw:["custom","custom build","custom engine","bespoke","can you build","could you build","do you build","do you make","build something","build an engine","build us","build me","not listed","isn't listed","lease accounting","asc 842"],
-    a:"Beyond the fifty public engines, we scope and build custom ones for the work that isn't in the lineup. Tell us the process that's eating your team's month and we'll say plainly what an engine can take over.", l:[["See the engines","#engines"]], book:true, t:2},
+    a:"Beyond the fifty-two public engines, we scope and build custom ones for the work that isn't in the lineup. Tell us the process that's eating your team's month and we'll say plainly what an engine can take over.", l:[["See the engines","#engines"]], book:true, t:2},
    {kw:["self healing","self-healing","auto verification","auto-verification","control loop","independent recompute","how do you check","how do you verify","re-verify","reverify","recompute"],
     a:"Every engine runs its own control loop: it watches its output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates the judgment calls to a person. Ties post with evidence; nothing self-certifies.", l:[["Auto Verification System","#loops"]]},
    {kw:["human","oversight","control over","approve","approval","sign off","sign-off","rubber stamp","replace my team","replace staff","lose my job","take my job","jobs","controller","who owns","own the output","reject","redo","rework","send back","in the loop"],
