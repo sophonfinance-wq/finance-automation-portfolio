@@ -86,6 +86,24 @@ Even in agent-enabled mode:
 The orchestration layer can speed up execution, but the control layer is what makes the work
 defensible.
 
+### Operational hardening layer
+
+For file-based finance workflows, the deployment pattern stays deliberately conservative:
+
+- dry-run first
+- copy-only when changes are approved
+- no overwrites or deletes
+- local output folders for drafts and logs
+- explicit action logs
+- fictional fixtures for public tests
+- human approval before anything is filed or sent
+
+Recent private build work stress-tested three operational patterns behind this portfolio:
+advisory reconciliation prechecks, annual schedule rollforward planning, and review-package
+assembly. Each private tool suite cleared 1,100 repeated local fixture-test loops after build-out.
+The implementations stay private; the public repository documents the control pattern and ships
+fictional systems that demonstrate the same engineering discipline.
+
 ### Executive package layer
 
 After the engines run, the system can produce a management-ready package:
