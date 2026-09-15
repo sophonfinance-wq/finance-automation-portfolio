@@ -1,0 +1,181 @@
+{
+  "engine": "cash-completeness-engine",
+  "as_of": "2026-06-30",
+  "population": {
+    "register_accounts": 10,
+    "entities": [
+      "Bluffside 9 Townhomes LLC",
+      "Demo Holdings LLC",
+      "Harbor 17 Investor LLC",
+      "Juniper 42 Development LLC",
+      "Kestrel Capital Partners LLC",
+      "Saltgrass 6 Services LLC",
+      "Wrenfield 28 Development LLC"
+    ],
+    "register_total": 594629.81,
+    "register_gl_norms": [
+      "001-001-1015",
+      "309-001-1010",
+      "309-002-1015",
+      "417-001-1010",
+      "424-002-1020",
+      "501-001-1010",
+      "615-001-1010",
+      "628-001-1010",
+      "628-002-1015",
+      "706-001-1010"
+    ],
+    "tb_rows": 8,
+    "tb_cash_total": 634985.34
+  },
+  "scope_reconciliation": {
+    "buckets": {
+      "tb_matched_ties": [
+        "001-001-1015",
+        "309-001-1010",
+        "615-001-1010",
+        "706-001-1010"
+      ],
+      "exceptions_A": [
+        "417-001-1010",
+        "424-002-1020",
+        "628-001-1010"
+      ],
+      "exceptions_B": [
+        "309-002-1015",
+        "628-002-1015"
+      ],
+      "exceptions_C": [
+        "501-001-1010"
+      ],
+      "exceptions_D": []
+    },
+    "totals": {
+      "tb_matched_ties": 252400.66,
+      "exceptions_A": 246073.4,
+      "exceptions_B": 0.0,
+      "exceptions_C": 96155.75,
+      "exceptions_D": 0.0
+    },
+    "problems": []
+  },
+  "exceptions": [
+    {
+      "kind": "A_UNMAPPED_SUCCESSOR",
+      "gl_norm": "417-001-1010",
+      "entity": "Harbor 17 Investor LLC",
+      "register_balance": 28090.12,
+      "tb_balance": null,
+      "difference": 28090.12,
+      "destinations": [],
+      "note": "live Union National Bank account with no trial-balance row; map it into the GL. A TB-first reconciliation would never see this account."
+    },
+    {
+      "kind": "A_UNMAPPED_SUCCESSOR",
+      "gl_norm": "424-002-1020",
+      "entity": "Juniper 42 Development LLC",
+      "register_balance": 63205.88,
+      "tb_balance": null,
+      "difference": 63205.88,
+      "destinations": [],
+      "note": "live Union National Bank account with no trial-balance row; map it into the GL. A TB-first reconciliation would never see this account."
+    },
+    {
+      "kind": "A_UNMAPPED_SUCCESSOR",
+      "gl_norm": "628-001-1010",
+      "entity": "Wrenfield 28 Development LLC",
+      "register_balance": 154777.4,
+      "tb_balance": null,
+      "difference": 154777.4,
+      "destinations": [],
+      "note": "live Union National Bank account with no trial-balance row; map it into the GL. A TB-first reconciliation would never see this account."
+    },
+    {
+      "kind": "B_STALE_CLOSEOUT",
+      "gl_norm": "309-002-1015",
+      "entity": "Bluffside 9 Townhomes LLC",
+      "register_balance": 0.0,
+      "tb_balance": 75310.66,
+      "difference": -75310.66,
+      "destinations": [
+        {
+          "date": "2026-05-28",
+          "counterparty": "Kestrel Capital Partners LLC",
+          "amount": 75310.66
+        }
+      ],
+      "note": "TB still carries the traced pre-sweep balance 75,310.66; account closed and swept to 1 named destination(s) totalling 75,310.66. Book the close-out entry."
+    },
+    {
+      "kind": "B_STALE_CLOSEOUT",
+      "gl_norm": "628-002-1015",
+      "entity": "Wrenfield 28 Development LLC",
+      "register_balance": 0.0,
+      "tb_balance": 231000.0,
+      "difference": -231000.0,
+      "destinations": [
+        {
+          "date": "2026-06-05",
+          "counterparty": "Harbor 17 Investor LLC",
+          "amount": 138600.0
+        },
+        {
+          "date": "2026-06-05",
+          "counterparty": "Demo Holdings LLC",
+          "amount": 92400.0
+        }
+      ],
+      "note": "TB still carries the traced pre-sweep balance 231,000.00; account closed and swept to 2 named destination(s) totalling 231,000.00. Book the close-out entry."
+    },
+    {
+      "kind": "C_TIMING",
+      "gl_norm": "501-001-1010",
+      "entity": "Kestrel Capital Partners LLC",
+      "register_balance": 96155.75,
+      "tb_balance": 71155.75,
+      "difference": 25000.0,
+      "destinations": [],
+      "note": "1 trailing in-transit transaction(s) (no cutoff configured; isolated from the register's running balances) (2026-07-01 to 2026-07-01) totalling 25,000.00 fully explain the difference; no entry, clears next period."
+    }
+  ],
+  "phantom_or_no_register": [
+    {
+      "source_file": "trial_balance.csv",
+      "sheet": "Saltgrass 6 Services",
+      "gl_raw": "760-001-1010",
+      "gl_norm": "760-001-1010",
+      "title": "Cash - Union National Bank - Operating",
+      "balance": 5118.27
+    }
+  ],
+  "placeholder_gls": [
+    {
+      "entity": "Demo Holdings LLC",
+      "bank": "Coastal Mutual",
+      "gl_raw": "001-001-00-1015",
+      "gl_norm": "001-001-1015",
+      "balance": 12406.9,
+      "source_file": "demoholdings_coastal_mutual_moneymarket.csv"
+    }
+  ],
+  "exception_summary": {
+    "A_UNMAPPED_SUCCESSOR": {
+      "count": 3,
+      "register_total": 246073.4,
+      "tb_total": 0.0,
+      "destinations_total": 0
+    },
+    "B_STALE_CLOSEOUT": {
+      "count": 2,
+      "register_total": 0.0,
+      "tb_total": 306310.66,
+      "destinations_total": 306310.66
+    },
+    "C_TIMING": {
+      "count": 1,
+      "register_total": 96155.75,
+      "tb_total": 71155.75,
+      "destinations_total": 0
+    }
+  }
+}
