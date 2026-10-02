@@ -13,7 +13,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 
-Fifty-two self-contained Python systems for finance and tax work — month-end close, cash/debt
+Fifty-three self-contained Python systems for finance and tax work — month-end close, cash/debt
 reconciliation, a cash-manager control suite, cross-border surplus & ACB, partnership 1065 /
 §704(c), read-only workbook validation, a NotebookLM-style knowledge brain, and an interactive
 finance operations atlas. One of them, **Triangulate**, is a multi-agent LLM review framework with a
