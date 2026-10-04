@@ -10,7 +10,7 @@ Package `ap_engine` in `accounts-payable-automation/`.
 ```bash
 python run.py                 # generate the fictional corpus, run all 30 controls, write both artifacts
 python -m ap_engine ./samples # analyze an existing folder read-only
-python -m pytest -q           # 2,223 tests incl. the planted-defect suite
+python -m pytest -q           # 12,223 tests incl. the planted-defect suite
 ```
 
 Exit codes: `0` PASS · `1` REVIEW · `2` FAIL · `3` usage/IO. The bundled corpus carries one planted defect per control, so it exits `2` by design.

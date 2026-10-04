@@ -87,9 +87,11 @@ The same control pattern runs through every system:
 
 And since v1.2 the pattern *closes into a loop*: **observe → detect → remediate → re-verify →
 gate → repeat.** Engines detect their own drift, re-derive it from the seeded source of record,
-and re-verify — escalating only what they cannot certify. Two gate policies ship today:
-human-gated on the tax-surplus engine (`python -m surplus_engine.loop --demo`) and autonomous
-with quarantine on the close engine (`python -m close_engine.loop --demo`).
+and re-verify — escalating only what they cannot certify. Five engines run the loop today,
+each with its own gate: human-gated on the tax-surplus engine (`python -m surplus_engine.loop --demo`),
+autonomous with quarantine on the close engine (`python -m close_engine.loop --demo`),
+materiality-gated on reconciliation, verbatim-or-refuse on the knowledge brain, and on Triangulate
+arithmetic self-heals while judgment escalates.
 
 - **Deterministic core.** Integer-cent arithmetic, seeded generators, byte-stable outputs — the
   numbers don't move between runs, so every figure is re-derivable and diffable.
@@ -178,7 +180,7 @@ demand:
 
 | Tier | Command | Tests | What it is |
 |---|---|---:|---|
-| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,509** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 52 systems. This is the curated total less the bounded invariant grids below (`6,405` distinct test functions before parametrization). Runs in minutes. |
+| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,509** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 52 systems. This is the curated total less the bounded invariant grids below (`6,405` distinct test functions across the whole curated suite, before parametrization). Runs in minutes. |
 | ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **514,936** | Adds `481,427` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel (premium audit's is `test_invariant_grid.py`), plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
 | **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 514,936 curated engine total. |
 | **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.72M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
@@ -188,8 +190,8 @@ default run (and CI) for speed and generated at import — the files stay small.
 exhaustive verification when you want it; turn it on with `SWEEP=1`.
 
 Test cases by system (hand-written + grid expansion): month-end close leads at **15,687**, and every
-engine added in the latest build cycle now carries a **10,000-case** bounded invariant grid over its
-money kernel on top of its behavior tests — e.g. equity waterfall **10,449** · depreciation **10,440** ·
+engine added in the latest build cycle now carries a bounded invariant grid over its
+money kernel (**10,000** cases; premium audit's has **9,600**) on top of its behavior tests — e.g. equity waterfall **10,449** · depreciation **10,440** ·
 capital spending **10,424** · equity-method pickup **10,423** · accounts payable **12,223**. The earlier
 flagships remain partnership **8,605** · triangulate **8,320** · recon **7,511** · tax-surplus **7,498** ·
 knowledge-brain **7,011** · cash-management **5,290** · validation **4,814** · atlas **2,952** (including a
@@ -275,7 +277,7 @@ No agent or orchestration dependency is required to run the demos or validate th
 
 ## Author
 
-**Sophonnarith Hang** — AI Finance Engineer · Founder, Sophon Finance Systems · 18+ yrs senior
+**Sophonnarith Hang** — AI Finance Engineer · Founder, Sophon Finance Systems · 10+ yrs senior
 accounting & tax (Fortune 100 & 500; GAAP / FAR / CAS).
 [linkedin.com/in/sophonnarith](https://www.linkedin.com/in/sophonnarith) · [sophonfinance.com](https://sophonfinance.com) · contact@sophonfinance.com
 

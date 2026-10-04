@@ -9,7 +9,7 @@ invented for demonstration.
 ## Reporting a concern
 
 If you find a security issue — for example a dependency advisory or an unintended data exposure —
-please report it privately by email to **sophonfinance@gmail.com** rather than opening a public
+please report it privately by email to **contact@sophonfinance.com** rather than opening a public
 issue. You can expect an acknowledgement within a few business days.
 
 ## Supported version

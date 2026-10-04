@@ -136,7 +136,7 @@ We built an engine that re-derives all of it. 19 controls. It rebuilds every qua
 It's read-only. It never posts anything. It hands your preparer a list of exceptions and the reason each control exists.
 
 All fictional data, MIT licensed. Run it yourself: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your 263A workpaper hasn't been re-derived since the year it was built, message me. I'll show you what I'd check first, free.
 
@@ -165,7 +165,7 @@ The affiliate roster drifts. Last year's members plus additions less removals sh
 Whether your combined group is drawn correctly is a judgment call. I'm not automating that. What the engine does is prove the return foots to the workpapers it came from, which is the part that shouldn't require judgment and usually gets it anyway.
 
 Fictional data throughout, MIT licensed: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your combined return is assembled by hand every year, message me. Happy to show you where these break.
 
@@ -194,7 +194,7 @@ The maximum loan drifts past the advance rate. Not by much, and the cap is a mul
 It reads the term sheet and stops. It doesn't approve anything, and it has no opinion on whether the deal is a good deal.
 
 Fictional data, MIT licensed, runnable: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your term sheets get checked by hand before close, message me. I'll show you what I'd automate first, free.
 
@@ -229,7 +229,7 @@ And the tabs stop reconciling. A unit marked sold that never reaches the Sold/Cl
 Read-only. It never releases a commission payment. It tells your sales administrator which row to look at and why.
 
 Fictional data, MIT licensed: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your sales matrix gets re-added by hand every week, message me. I'll show you what I'd check first, free.
 
@@ -258,7 +258,7 @@ Driver shares that total 99.97% or 100.02%, because somebody rounded percentages
 The engine flags exceptions. It doesn't post the entry. Your controller still approves it, just with the arithmetic already settled.
 
 Fictional data, MIT licensed, run it yourself: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your monthly allocation is a spreadsheet with a plug in it, message me. Free, and I'll be specific.
 
@@ -287,7 +287,7 @@ So the population is wrong. A check that partially cleared still shows outstandi
 It never voids or reissues anything. It produces a list and the reason each item is on it.
 
 Fictional data, MIT licensed: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If nobody owns your unclaimed property filing, message me. That's usually the answer, and it's usually expensive.
 
@@ -320,7 +320,7 @@ The fourth one nobody checks at all: a comparative column that doesn't foot insi
 It reads the report and stops. It never re-forecasts anything.
 
 Fictional data, MIT licensed, run it yourself: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your project reports get re-added by hand every period, message me. I'll show you what I'd check first, free.
 
@@ -353,7 +353,7 @@ And the allocated total stops matching the draws. It's maintained beside the dra
 I'm not forecasting anything. Whether the projected use is a sound estimate is a judgment no engine makes. This is the narrower question, and it's the one that's pure arithmetic.
 
 Fictional data, MIT licensed: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If your contingency block is restated by hand every period, message me. Free, and I'll be specific.
 
@@ -386,7 +386,7 @@ Between them sits a rule that catches people out. Where a box attracts backup wi
 It never issues a form or files a transmittal. It produces the exceptions before the forms go out.
 
 Fictional data, MIT licensed: sophonfinance.com
-sophonfinance@gmail.com
+contact@sophonfinance.com
 
 If nobody re-runs your 1099 population before it goes out, message me. That's usually the answer.
 

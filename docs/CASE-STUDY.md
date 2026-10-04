@@ -11,8 +11,8 @@
 
 ## The short version
 
-For years I did genuinely hard finance and tax work by hand under partner review — Canadian
-cross-border foreign-affiliate tax, US partnership tax, multi-entity month-end close, and
+Since January 2026 I have done genuinely hard finance and tax work by hand under Controller and
+CFO review — Canadian cross-border foreign-affiliate tax, US partnership tax, multi-entity month-end close, and
 construction/JV audit support — inside a privately held real-estate group. I also
 built an internal **knowledge brain**: I recorded every engagement meeting, transcribed it, and
 loaded it into a queryable knowledge base so prior decisions could be cited word-for-word in
@@ -154,4 +154,4 @@ citation-governed knowledge base. This portfolio is the evidence that I do all t
 regulated finance function needs it done: **deterministic, evidence-backed, human-gated, and discreet
 with the source data.**
 
-— **Sophonnarith Hang** · [github.com/sophonfinance-wq](https://github.com/sophonfinance-wq) · sophonfinance@gmail.com
+— **Sophonnarith Hang** · [github.com/sophonfinance-wq](https://github.com/sophonfinance-wq) · contact@sophonfinance.com
