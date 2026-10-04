@@ -13,7 +13,7 @@ description: "Ship changes in this repo: branch, test like CI, commit, push, dra
      (cd "$d" && python -m pytest -q) || echo "FAILED: $d"
    done
    ```
-   `SWEEP=1` enables the ~1.65M-case grids (skip for normal ships). Install deps once: `pip install -r requirements.txt`.
+   `SWEEP=1` enables the ~1.72M-case grids (skip for normal ships). Install deps once: `pip install -r requirements.txt`.
    Also confirm the count gate before pushing — CI's `test-count.yml` hard-asserts it and only runs on
    `main`, so a drift here fails *after* merge:
    ```bash

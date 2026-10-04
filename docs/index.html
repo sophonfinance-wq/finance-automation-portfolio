@@ -9,12 +9,12 @@
 
 <!--
   ============================================================
-  SITE FACTS — single source of truth (verified 2026-08-05)
+  SITE FACTS — single source of truth (verified 2026-10-04)
   ============================================================
   ENGINES_PUBLIC   = 52       (system dirs in the canonical roster; README badge "systems: 52 runnable")
-  TESTS_CURATED    = 514,936   (pytest --collect-only -m "not site_tooling", 2026-08-05)
+  TESTS_CURATED    = 514,936   (pytest --collect-only -m "not site_tooling", 2026-08-26)
   TESTS_SITE_TOOLS = 57       (pytest --collect-only -m site_tooling; separate from curated total)
-  TESTS_SWEEP      = ~1.65M   (opt-in property sweep, SWEEP=1 pytest -m "not site_tooling"; 1,648,990 on 2026-07-24)
+  TESTS_SWEEP      = ~1.72M   (opt-in property sweep, SWEEP=1 pytest -m "not site_tooling"; 1,721,666 on 2026-10-04)
   LOOP_ENGINES     = 5        (close, surplus, reconciliation, knowledge brain, Triangulate)
   GITHUB           = https://github.com/sophonfinance-wq/finance-automation-portfolio
   LINKEDIN         = https://www.linkedin.com/in/sophonnarith/
@@ -685,7 +685,7 @@
     .wrap { padding:0 18px; }
     section { padding:44px 0; }
     .lead { font-size:15.5px; }
-    /* Fifty tiles in a single column made the portfolio ~24,000px tall on a
+    /* Fifty-plus tiles in a single column made the portfolio ~24,000px tall on a
        phone — around thirty screens between the heading and the next section,
        which is why the bottom of it never got read. Two up, with the description
        clamped: the engine's name and its diagram stay whole, and the full text is
@@ -1446,18 +1446,18 @@
         <span class="run">python -m workpaper_engine samples --build out</span>
       </div>
       <div class="tile">
-        <div class="tile-vis"><img src="assets/engine-baseline.svg" alt="Baseline and Version Drift engine tile: a line drawing of four budget sheets standing side by side, labelled exhibit, working, billing and memo. A cobalt rail runs horizontally through the same row on all four sheets, pinned with a dot at each, showing the category sets being paired before any value is read. One sheet's row and its total box are drawn in cobalt where they diverge from the others; the fourth sheet shows that row dashed and unmatched, marked with a query. Each sheet carries its own total in a box at its foot, and the three totals differ." width="1600" height="900" loading="lazy"></div>
-        <span class="tnum">52</span>
-        <h3><a href="engines/baseline.html">Baseline &amp; Version Drift</a></h3>
-        <p>One project budget exists as four copies at once &mdash; the contractual exhibit, the sponsor&rsquo;s working model, the billing instrument and a summary memo &mdash; and each can foot perfectly while disagreeing with the other three. Category sets are reconciled in both directions before any value is compared, totals are summed from the lines rather than read from a stated figure, offsetting movements are graded as reclassification rather than change, and every movement is traced to an approved amendment. Twenty-five controls. Materiality grades a difference already found; it never decides whether one exists.</p>
-        <span class="run">python -m baseline_engine samples</span>
-      </div>
-      <div class="tile">
         <div class="tile-vis"><img src="assets/engine-premaudit.svg" alt="Premium Audit Response engine tile: an isometric line drawing of a fixed-width job-cost print report feeding a reconciliation gate. On the left sheet, cost lines run beneath a job heading and a printed total sits boxed at the foot of the column. A cobalt path carries the parsed lines into a gate drawn as a narrow arch; beneath the arch an equals sign ties the parsed sum to the printed total. Beyond the gate the lines fan into seven labeled triage bins, one row highlighted in cobalt where a certificate expiration reaches the audit window's end. At the right a bound package carries a JSON brace and a window bracket marked inclusive on both ends." width="1600" height="900" loading="lazy"></div>
         <span class="tnum">51</span>
         <h3><a href="engines/premaudit.html">Premium Audit Response</a></h3>
         <p>Once a year the general-liability carrier audits the policy: what did the covered work actually cost? The honest answer lives in fixed-width job-cost prints, and the traditional workpaper is somebody re-keying them &mdash; checked by the person who typed it, against the file they typed. This engine reads the print instead and keeps the one safeguard a re-key destroys: the report&rsquo;s own printed totals. Every parsed job must tie its printed total to the cent, over the union of jobs parsed and jobs printed, or the engine refuses to produce a workpaper at all &mdash; the refusal names each failing job and its cent delta. What survives is cut to the policy window, inclusive on both boundary dates, cross-referenced against the certificate-of-insurance listing, and triaged line by line under a fixed precedence &mdash; journal entries that never had a vendor, clearing accounts in both their costumes, wrap-enrolled vendors, materials-only and professional exemptions, coverage current at the window end, and the remainder marked for chase. Byte-stable JSON and Markdown out; integer cents throughout; no tolerance parameter to widen.</p>
         <span class="run">python -m premaudit_engine --seed 7</span>
+      </div>
+      <div class="tile">
+        <div class="tile-vis"><img src="assets/engine-baseline.svg" alt="Baseline and Version Drift engine tile: a line drawing of four budget sheets standing side by side, labelled exhibit, working, billing and memo. A cobalt rail runs horizontally through the same row on all four sheets, pinned with a dot at each, showing the category sets being paired before any value is read. One sheet's row and its total box are drawn in cobalt where they diverge from the others; the fourth sheet shows that row dashed and unmatched, marked with a query. Each sheet carries its own total in a box at its foot, and the three totals differ." width="1600" height="900" loading="lazy"></div>
+        <span class="tnum">52</span>
+        <h3><a href="engines/baseline.html">Baseline &amp; Version Drift</a></h3>
+        <p>One project budget exists as four copies at once &mdash; the contractual exhibit, the sponsor&rsquo;s working model, the billing instrument and a summary memo &mdash; and each can foot perfectly while disagreeing with the other three. Category sets are reconciled in both directions before any value is compared, totals are summed from the lines rather than read from a stated figure, offsetting movements are graded as reclassification rather than change, and every movement is traced to an approved amendment. Twenty-five controls. Materiality grades a difference already found; it never decides whether one exists.</p>
+        <span class="run">python -m baseline_engine samples</span>
       </div>
       <div class="tile hot">
         <div class="filmbg" aria-hidden="true"><video muted loop playsinline preload="none" data-cardfilm="assets/backdrop-c.mp4"></video></div>
@@ -1477,10 +1477,10 @@
   <div class="wrap">
     <div class="sec-head reveal">
       <p class="kicker">Inside the close engine</p>
-      <h2>One engine. <strong>29 deterministic controls.</strong></h2>
-      <p class="lead">The month-end close isn't a single script &mdash; it's a library of recurring workpapers, each with its own arithmetic. The close engine drafts or validates every one under the same rule: recompute it independently, tie it to the ledger, and refuse to post anything a person hasn't approved.</p>
+      <h2>One engine. <strong>29 workpaper controls.</strong></h2>
+      <p class="lead">The month-end close isn't a single script &mdash; it's a library of recurring workpapers, each with its own arithmetic. The close engine drafts or validates every one under the same rule: recompute it independently, tie it to the ledger, and refuse to post anything a person hasn't approved. Separately, the ten Close Sentinel controls (C1&ndash;C10) re-check every finished close. 22 of the 29 run in the public repo; 7 are engagement deployments of the same pattern.</p>
     </div>
-    <figure class="cov-map reveal" role="img" aria-label="Control-flow schematic: source data — general ledger, bank, schedules — feeds 29 deterministic controls in the close engine. 8 are draft-capable: entries drafted and held for approval. 21 are validation-only: recomputed and flagged, never posting. Every path crosses the human gate — zero post without a human. Every control recomputes independently, ties to the ledger, and fails closed.">
+    <figure class="cov-map reveal" role="img" aria-label="Control-flow schematic: source data — general ledger, bank, schedules — feeds 29 workpaper controls in the close engine. 8 are draft-capable: entries drafted and held for approval. 21 are validation-only: recomputed and flagged, never posting. Every path crosses the human gate — zero post without a human. Every control recomputes independently, ties to the ledger, and fails closed.">
       <svg class="map-d" viewBox="0 0 960 208" aria-hidden="true" font-family="IBM Plex Sans, -apple-system, Arial, sans-serif">
         <defs>
           <marker id="cmN" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5 0 10Z" fill="#8d8d8d"/></marker>
@@ -1495,7 +1495,7 @@
         <rect class="cm-bar" x="153" y="45" width="238" height="4" fill="#0f62fe"/>
         <text x="272" y="70" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="10" fill="#0f62fe" text-anchor="middle" letter-spacing="2">CLOSE ENGINE</text></g><rect class="cm-ring cm-t3r" x="149" y="41" width="246" height="106" fill="none" stroke="#0f62fe" stroke-width="1.5" opacity="0"/>
         <text class="cm-fade cm-n29 cm-t4" x="212" y="122" font-size="46" font-weight="600" fill="#161616" text-anchor="middle" letter-spacing="-1">29</text>
-        <g class="cm-fade cm-t5"><text x="316" y="102" font-size="13.5" fill="#525252" text-anchor="middle">deterministic</text>
+        <g class="cm-fade cm-t5"><text x="316" y="102" font-size="13.5" fill="#525252" text-anchor="middle">workpaper</text>
         <text x="316" y="120" font-size="13.5" fill="#525252" text-anchor="middle">controls</text></g>
         <path class="cm-line cm-mk-b cm-t6b" pathLength="100" d="M392 94H412V54H442" fill="none" stroke="#0f62fe" stroke-width="1.8" marker-end="url(#cmB)"/><path class="cm-pulse cm-p1b" d="M392 94H412V54H442" pathLength="100" fill="none" stroke="#0f62fe" stroke-width="3" stroke-linecap="round" opacity="0"/>
         <path class="cm-line cm-mk-n cm-t6n" pathLength="100" d="M392 94H412V134H442" fill="none" stroke="#8d8d8d" stroke-width="1.8" marker-end="url(#cmN)"/><path class="cm-pulse cm-p1n" d="M392 94H412V134H442" pathLength="100" fill="none" stroke="#8d8d8d" stroke-width="3" stroke-linecap="round" opacity="0"/>
@@ -1539,7 +1539,7 @@
         <rect class="cm-bar" x="41" y="85" width="278" height="4" fill="#0f62fe"/>
         <text x="180" y="110" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="10" fill="#0f62fe" text-anchor="middle" letter-spacing="2">CLOSE ENGINE</text></g><rect class="cm-ring cm-t3r" x="37" y="81" width="286" height="104" fill="none" stroke="#0f62fe" stroke-width="1.5" opacity="0"/>
         <text class="cm-fade cm-n29 cm-t4" x="120" y="164" font-size="44" font-weight="600" fill="#161616" text-anchor="middle" letter-spacing="-1">29</text>
-        <g class="cm-fade cm-t5"><text x="232" y="142" font-size="14" fill="#525252" text-anchor="middle">deterministic</text>
+        <g class="cm-fade cm-t5"><text x="232" y="142" font-size="14" fill="#525252" text-anchor="middle">workpaper</text>
         <text x="232" y="162" font-size="14" fill="#525252" text-anchor="middle">controls</text></g>
         <path class="cm-line cm-t5t" pathLength="100" d="M180 182V196" fill="none" stroke="#8d8d8d" stroke-width="1.8"/>
         <path class="cm-line cm-mk-bm cm-t6b" pathLength="100" d="M180 196H96V218" fill="none" stroke="#0f62fe" stroke-width="1.8" marker-end="url(#cmBm)"/><path class="cm-pulse cm-p1b" d="M180 196H96V218" pathLength="100" fill="none" stroke="#0f62fe" stroke-width="3" stroke-linecap="round" opacity="0"/>
@@ -1753,7 +1753,7 @@
     <div class="eng-grid">
       <div class="terminal reveal">
         <div class="term-bar"><i aria-hidden="true"></i><i aria-hidden="true"></i><i aria-hidden="true"></i><span>verify-it-yourself — bash</span><span class="term-ci">&#9679; suite passing</span><button class="term-copy" type="button" id="termCopy" aria-label="Copy the verification commands">copy</button></div>
-        <div class="term-body" role="img" aria-label="Terminal transcript: clone and enter the public repository; pytest collects 514,936 curated engine tests while excluding site tooling; the curated suite passes; an opt-in sweep holds about 1.65 million generated invariants. Verified on fictional data, MIT license.">
+        <div class="term-body" role="img" aria-label="Terminal transcript: clone and enter the public repository; pytest collects 514,936 curated engine tests while excluding site tooling; the curated suite passes; an opt-in sweep holds about 1.72 million generated invariants. Verified on fictional data, MIT license.">
           <div class="cmd">git clone https://github.com/sophonfinance-wq/finance-automation-portfolio</div>
           <div class="dim">Cloning into 'finance-automation-portfolio'... done.</div>
           <div class="cmd">cd finance-automation-portfolio</div>
@@ -1761,14 +1761,14 @@
           <div class="ok-line">514936 tests collected</div>
           <div class="cmd">pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># curated suite — gates CI, runs in minutes</span></div>
           <div class="ok-line">passed ✓</div>
-          <div class="cmd">SWEEP=1 pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.65M generated cases</span></div>
+          <div class="cmd">SWEEP=1 pytest -m "not site_tooling"&nbsp;&nbsp;<span class="dim"># opt-in sweep — ~1.72M generated cases</span></div>
           <div class="ok-line">invariants held ✓</div>
-          <div class="dim">verified 2026-07-20 · fictional data · MIT license</div>
+          <div class="dim">verified 2026-08-26 · fictional data · MIT license</div>
         </div>
       </div>
       <div class="eng-points reveal d1">
         <div class="pt"><h3>514,936 tests, honestly tiered</h3>
-          <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.65M generated cases. A separate 57-test site-tooling suite guards the public datasheets and is excluded from the 514,936 engine total. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
+          <p>A curated suite gates CI; an opt-in sweep asserts arithmetic invariants across ~1.72M generated cases. A separate 57-test site-tooling suite guards the public datasheets and is excluded from the 514,936 engine total. The tiers are documented, not blended into one inflated number. <a href="tests/">See the per-engine breakdown &rarr;</a></p></div>
         <div class="pt"><h3>Fictional data, by rule</h3>
           <p>Every public example runs on invented data. Client information never appears in public code &mdash; backed by a deny-list confidentiality linter in the test suite.</p></div>
         <div class="pt"><h3>Read it, run it, or both</h3>
@@ -1920,7 +1920,7 @@
       <input type="hidden" name="_captcha" value="false">
       <input type="hidden" name="_next" value="https://sophonfinance.com/thanks.html">
       <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
-      <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Sophon Finance Systems — your consultation request has been received.&#10;&#10;What happens next: we review the work you described and reply personally within one business day with a plain answer — what an engine can take over, what it can't, and what a scoped first phase would cost. No software purchase, fixed-scope pricing after observation, and your people keep approval authority at every step.&#10;&#10;Why finance teams work with us:&#10;- 50 public finance engines — month-end close, cash and debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable and more — runnable and MIT-licensed on GitHub&#10;- 490,000+ automated tests gate every change, and every computed figure ships with cited evidence&#10;- Human-gated by design: nothing files or posts itself — your team approves every output&#10;- Built by a KPMG-trained, ex-Big Four accountant with Fortune 100 and 500 experience&#10;&#10;See the engineering yourself:&#10;GitHub: https://github.com/sophonfinance-wq/finance-automation-portfolio&#10;Website: https://sophonfinance.com&#10;LinkedIn: https://www.linkedin.com/in/sophonnarith/&#10;Email: contact@sophonfinance.com&#10;&#10;We'll be in touch shortly.&#10;&#10;Sophonnarith Hang&#10;Founder, Sophon Finance Systems&#10;Automate the work. Keep the judgment.">
+      <input type="hidden" name="_autoresponse" value="Thank you for reaching out to Sophon Finance Systems — your consultation request has been received.&#10;&#10;What happens next: we review the work you described and reply personally within one business day with a plain answer — what an engine can take over, what it can't, and what a scoped first phase would cost. No software purchase, fixed-scope pricing after observation, and your people keep approval authority at every step.&#10;&#10;Why finance teams work with us:&#10;- 52 public finance engines — month-end close, cash and debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable and more — runnable and MIT-licensed on GitHub&#10;- 510,000+ automated tests gate every change, and every computed figure ships with cited evidence&#10;- Human-gated by design: nothing files or posts itself — your team approves every output&#10;- Built by a KPMG-trained, ex-Big Four accountant with Fortune 100 and 500 experience&#10;&#10;See the engineering yourself:&#10;GitHub: https://github.com/sophonfinance-wq/finance-automation-portfolio&#10;Website: https://sophonfinance.com&#10;LinkedIn: https://www.linkedin.com/in/sophonnarith/&#10;Email: contact@sophonfinance.com&#10;&#10;We'll be in touch shortly.&#10;&#10;Sophonnarith Hang&#10;Founder, Sophon Finance Systems&#10;Automate the work. Keep the judgment.">
       <label for="bkName">Your name</label>
       <input id="bkName" type="text" name="name" required autocomplete="name" placeholder="Jane Rivera">
       <label for="bkEmail">Work email</label>
@@ -2721,9 +2721,9 @@
    {kw:["project draw","draw","draws","loan draw","construction loan","draw request","draw package","requisition","g702","g703","lender","lender draw","contingency","retention","retainage","percent complete","funding","capital call","jc to draw","cost to complete"],
     a:"Project Draw is our eleventh system — the construction loan draw proved before it reaches the lender. Thirty-four read-only controls across eight families: the reconciliation identity (draws to date less costs to date net of retention must be exactly zero, with no tolerance band), the lender's form tied to its own working papers and the trial balance, contingency held to the percent complete of its own cost class, cutoff on the costs being billed, accrual policy, supporting documentation, and funding follow-up. It flags exceptions and never bills or funds.", l:[["Project Draw details","engines/draw.html"],["The full portfolio","#engines"]], book:true},
    {kw:["engines","what engines","portfolio","all engines","other engines","full portfolio","list of","capabilities","how many engines","eleven engines","ten engines","nine engines","validation","surplus","acb","triangulate","knowledge brain","atlas","accounts payable","payables","ap"],
-    a:"Fifty-two public engines today: month-end close, cash & debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable, project draw, buyer upgrades, warranty reimbursement, intercompany reciprocity, validation, tax surplus/ACB, triangulate, knowledge brain, the finance operations atlas, property tax, surety bond & collateral, insurance cost allocation, insurance compliance, expense & p-card, project labor charge, lien waiver tracking, equity waterfall & JV promote, project proforma integrity, gross-receipts & excise tax, filing obligation calendar, energy-efficient home credit, and tax workpaper build & carry-down — all runnable and MIT-licensed. If your bottleneck isn't listed, we scope and build it.", l:[["See the full portfolio","#engines"],["Inspect the code","gh"]], book:true, t:2},
+    a:"Fifty-two public engines today: month-end close, cash & debt reconciliation, partnership tax (1065/K-1s), cash management, accounts payable, project draw, buyer upgrades, warranty reimbursement, intercompany reciprocity, validation, tax surplus/ACB, triangulate, knowledge brain, the finance operations atlas, property tax, surety bond & collateral, insurance cost allocation, insurance compliance, expense & p-card, project labor charge, lien waiver tracking, equity waterfall & JV promote, project proforma integrity, gross-receipts & excise tax, filing obligation calendar, energy-efficient home credit, interest accrual & loan amortization, financing execution & schedule variance, wire & transfer release control, payroll & benefit reconciliation, non-resident withholding & 1042-S, home sale closing & settlement tie-out, entity good-standing, subcontract SOV & change orders, equity-method pickup & eliminations, depreciation & prepaid amortization, earnest-money deposit trust, capital spending request gate, Section 263A interest capitalization, franchise tax combined apportionment, debt term-sheet sizing & loan terms, unit sales & commission tie-out, G&A expense allocation, outstanding check aging & escheatment, project variance & business-plan compare, contingency rollforward & adequacy, information return issuance, trial-balance roll-forward, JV investor reporting package, tax workpaper build & carry-down, premium audit response, and baseline & version drift — all runnable and MIT-licensed. If your bottleneck isn't listed, we scope and build it.", l:[["See the full portfolio","#engines"],["Inspect the code","gh"]], book:true, t:2},
    {kw:["custom","custom build","custom engine","bespoke","can you build","could you build","do you build","do you make","build something","build an engine","build us","build me","not listed","isn't listed","lease accounting","asc 842"],
-    a:"Beyond the fifty public engines, we scope and build custom ones for the work that isn't in the lineup. Tell us the process that's eating your team's month and we'll say plainly what an engine can take over.", l:[["See the engines","#engines"]], book:true, t:2},
+    a:"Beyond the fifty-two public engines, we scope and build custom ones for the work that isn't in the lineup. Tell us the process that's eating your team's month and we'll say plainly what an engine can take over.", l:[["See the engines","#engines"]], book:true, t:2},
    {kw:["self healing","self-healing","auto verification","auto-verification","control loop","independent recompute","how do you check","how do you verify","re-verify","reverify","recompute"],
     a:"Every engine runs its own control loop: it watches its output, fixes routine drift from source, re-verifies each correction against an independent recomputation, and escalates the judgment calls to a person. Ties post with evidence; nothing self-certifies.", l:[["Auto Verification System","#loops"]]},
    {kw:["human","oversight","control over","approve","approval","sign off","sign-off","rubber stamp","replace my team","replace staff","lose my job","take my job","jobs","controller","who owns","own the output","reject","redo","rework","send back","in the loop"],

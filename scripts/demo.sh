@@ -13,7 +13,7 @@ cd "$(dirname "$0")/.." || exit 1
 say() { printf "\n\033[1;36m== %s ==\033[0m\n" "$1"; }
 
 say "Test suite — 514,936 tests pin every engine's behavior"
-python -m pytest -q
+python -m pytest -q -m "not site_tooling"
 
 say "Month-End Close Engine — recurring JEs + schedule-to-GL tie-outs"
 ( cd monthly-close-automation && python run.py --period 2026-03 --out output )
