@@ -55,18 +55,18 @@ PROJECTS: tuple[str, ...] = (
 #: The budget line set every copy of a project's budget carries.
 #: ``(category, phase, amount_cents, locked)``
 LINES: tuple[tuple[str, str, int, bool], ...] = (
-    ("Land", PHASE_PRE, 650_000_000, True),
-    ("Consultants", PHASE_PRE, 160_000_000, False),
-    ("Permits", PHASE_PRE, 23_800_000, False),
-    ("Legal and Accounting", PHASE_PRE, 20_000_000, False),
-    ("Finance Costs", PHASE_PRE, 10_000_000, False),
-    ("Site Works", PHASE_POST, 792_086_000, False),
-    ("Vertical Construction", PHASE_POST, 984_603_900, False),
-    ("Contingency", PHASE_POST, 128_438_800, False),
-    ("Insurance", PHASE_POST, 57_800_000, False),
-    ("Marketing", PHASE_POST, 23_630_200, False),
-    ("Sponsor Fee", PHASE_POST, 141_781_300, False),
-    ("Loan Interest", PHASE_POST, 191_318_300, False),
+    ("Land", PHASE_PRE, 587_000_000, True),
+    ("Consultants", PHASE_PRE, 137_250_000, False),
+    ("Permits", PHASE_PRE, 21_465_000, False),
+    ("Legal and Accounting", PHASE_PRE, 18_640_000, False),
+    ("Finance Costs", PHASE_PRE, 9_275_000, False),
+    ("Site Works", PHASE_POST, 694_831_500, False),
+    ("Vertical Construction", PHASE_POST, 1_041_278_000, False),
+    ("Contingency", PHASE_POST, 110_692_500, False),
+    ("Insurance", PHASE_POST, 49_730_000, False),
+    ("Marketing", PHASE_POST, 26_814_000, False),
+    ("Sponsor Fee", PHASE_POST, 118_306_000, False),
+    ("Loan Interest", PHASE_POST, 174_451_000, False),
 )
 
 #: The single approved amendment the clean cycle carries, so the traceability
@@ -87,8 +87,8 @@ PERIOD_END = "2031-06-30"
 AS_OF = "2031-07-15"
 
 SCHEDULE_PERIODS = 22
-SCHEDULE_ADVANCES_CENTS = 38_000_000
-SCHEDULE_CAP_CENTS = 48_000_000
+SCHEDULE_ADVANCES_CENTS = 34_250_000
+SCHEDULE_CAP_CENTS = 41_750_000
 
 
 # --------------------------------------------------------------------------- #
@@ -203,14 +203,14 @@ def baseline(project: str) -> dict[str, Any]:
                 {
                     "member_id": "investor",
                     "commitment_cents": COMMITMENTS["investor"],
-                    "contributed_cents": 249_000_000,
+                    "contributed_cents": 231_500_000,
                     "cap_cents": 825_000_000,
                     "split_bps": 5000,
                 },
                 {
                     "member_id": "sponsor",
                     "commitment_cents": COMMITMENTS["sponsor"],
-                    "contributed_cents": 249_000_000,
+                    "contributed_cents": 231_500_000,
                     "cap_cents": 557_395_000,
                     "split_bps": 5000,
                 },
@@ -386,7 +386,7 @@ def _contributed_over_commitment(f: dict[str, Any]) -> None:
 
 
 def _amount_not_integer(f: dict[str, Any]) -> None:
-    _line(_ver(f, "BV-WORK"), "Marketing")["amount_cents"] = 23_630_200.5
+    _line(_ver(f, "BV-WORK"), "Marketing")["amount_cents"] = 26_814_000.5
 
 
 #: ``defect name -> (rule it demonstrates, mutator)``.

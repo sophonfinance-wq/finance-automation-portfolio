@@ -50,14 +50,14 @@ been found -- it never decides whether one exists.
 **Verdict:** FAIL (PASS 24, FLAG 0, FAIL 1)
 
 - **FAIL** `drv_cap_not_exceeded` @ `derived_schedule:DS-1/advances_cents`  
-  schedule sponsor_fee has advanced 540,000.00 against a cap of 480,000.00, 60,000.00 beyond it
+  schedule sponsor_fee has advanced 477,500.00 against a cap of 417,500.00, 60,000.00 beyond it
 
 ### amount_not_integer__Alderpoint_Terraces
 
 **Verdict:** FAIL (PASS 18, FLAG 2, FAIL 17)
 
 - **FAIL** `lin_categories_reconcile` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 - **FAIL** `lin_categories_reconcile` @ `budget_version:BV-WORK/lines/Consultants`  
   category 'Consultants' is in the baseline but absent from BV-WORK (working_model); a category present in one copy and not another is what a renamed or split line looks like, and pairing on names alone would skip it
 - **FAIL** `lin_categories_reconcile` @ `budget_version:BV-WORK/lines/Contingency`  
@@ -83,24 +83,24 @@ been found -- it never decides whether one exists.
 - **FAIL** `lin_categories_reconcile` @ `budget_version:BV-WORK/lines/Vertical Construction`  
   category 'Vertical Construction' is in the baseline but absent from BV-WORK (working_model); a category present in one copy and not another is what a renamed or split line looks like, and pairing on names alone would skip it
 - **FAIL** `lin_values_agree` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 - **FLAG** `lin_immaterial_drift_review` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 - **FAIL** `lin_totals_agree` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 - **FAIL** `lin_phase_totals_tie` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 - **FLAG** `lin_reclass_review` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 - **FAIL** `amd_locked_lines_unchanged` @ `amount:budget_version[BV-WORK]/lines[9]/amount_cents`  
-  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 23630200.5 -- amounts are integer cents and are never coerced
+  AMOUNT_INVALID: budget_version[BV-WORK]/lines[9]/amount_cents must be integer cents, got 26814000.5 -- amounts are integer cents and are never coerced
 
 ### base_ignores_advances__Dunmore_Flats
 
 **Verdict:** FAIL (PASS 24, FLAG 0, FAIL 1)
 
 - **FAIL** `drv_base_net_of_advances` @ `derived_schedule:DS-1/base_cents`  
-  schedule sponsor_fee amortises 1,417,813.00 where total less advances is 1,037,813.00; the advanced portion would be paid a second time across the instalments
+  schedule sponsor_fee amortises 1,183,060.00 where total less advances is 840,560.00; the advanced portion would be paid a second time across the instalments
 
 ### baseline_predates_agreement__Brightwater_Commons
 
@@ -150,7 +150,7 @@ All controls held.
 **Verdict:** FAIL (PASS 24, FLAG 0, FAIL 1)
 
 - **FAIL** `drv_instalments_conserve` @ `derived_schedule:DS-1/instalments_cents`  
-  schedule sponsor_fee instalments sum to 1,040,313.00 against a base of 1,037,813.00; an amortisation that does not conserve its base pays out a different figure than the one approved
+  schedule sponsor_fee instalments sum to 843,060.00 against a base of 840,560.00; an amortisation that does not conserve its base pays out a different figure than the one approved
 
 ### line_differs_immaterially__Alderpoint_Terraces
 
@@ -159,34 +159,34 @@ All controls held.
 - **FLAG** `lin_immaterial_drift_review` @ `budget_version:BV-SUMM/lines/Permits`  
   Permits: BV-SUMM differs from the baseline by 41.00, below the 1,000.00 threshold -- reported so it is reconciled now rather than after it has grown
 - **FLAG** `lin_totals_agree` @ `budget_version:BV-SUMM/lines`  
-  BV-SUMM (summary_memo) totals 31,834,626.00 against the baseline 31,834,585.00, a difference of 41.00, below the 1,000.00 threshold -- reported for review rather than as a failure, because the aggregate of a sub-threshold line difference is the same difference
+  BV-SUMM (summary_memo) totals 29,897,371.00 against the baseline 29,897,330.00, a difference of 41.00, below the 1,000.00 threshold -- reported for review rather than as a failure, because the aggregate of a sub-threshold line difference is the same difference
 
 ### line_differs_materially__Dunmore_Flats
 
 **Verdict:** FAIL (PASS 23, FLAG 0, FAIL 2)
 
 - **FAIL** `lin_values_agree` @ `budget_version:BV-WORK/lines/Consultants`  
-  Consultants: BV-WORK (working_model) carries 1,650,000.00 against the baseline 1,600,000.00, a difference of 50,000.00 at or above the 1,000.00 materiality threshold
+  Consultants: BV-WORK (working_model) carries 1,422,500.00 against the baseline 1,372,500.00, a difference of 50,000.00 at or above the 1,000.00 materiality threshold
 - **FAIL** `lin_totals_agree` @ `budget_version:BV-WORK/lines`  
-  BV-WORK (working_model) totals 31,884,585.00 against the baseline 31,834,585.00, a difference of 50,000.00; each copy can be internally perfect and still disagree
+  BV-WORK (working_model) totals 29,947,330.00 against the baseline 29,897,330.00, a difference of 50,000.00; each copy can be internally perfect and still disagree
 
 ### line_missing_phase__Brightwater_Commons
 
 **Verdict:** FAIL (PASS 24, FLAG 0, FAIL 1)
 
 - **FAIL** `lin_phase_totals_tie` @ `budget_version:BV-WORK/lines/phase`  
-  BV-WORK phase totals sum to 31,256,585.00 against a budget total of 31,834,585.00; a line with no phase sits in the total while belonging to neither side of the split
+  BV-WORK phase totals sum to 29,400,030.00 against a budget total of 29,897,330.00; a line with no phase sits in the total while belonging to neither side of the split
 
 ### locked_line_moved__Copperfield_Yards
 
 **Verdict:** FAIL (PASS 22, FLAG 0, FAIL 3)
 
 - **FAIL** `lin_values_agree` @ `budget_version:BV-WORK/lines/Land`  
-  Land: BV-WORK (working_model) carries 6,650,000.00 against the baseline 6,500,000.00, a difference of 150,000.00 at or above the 1,000.00 materiality threshold
+  Land: BV-WORK (working_model) carries 6,020,000.00 against the baseline 5,870,000.00, a difference of 150,000.00 at or above the 1,000.00 materiality threshold
 - **FAIL** `lin_totals_agree` @ `budget_version:BV-WORK/lines`  
-  BV-WORK (working_model) totals 31,984,585.00 against the baseline 31,834,585.00, a difference of 150,000.00; each copy can be internally perfect and still disagree
+  BV-WORK (working_model) totals 30,047,330.00 against the baseline 29,897,330.00, a difference of 150,000.00; each copy can be internally perfect and still disagree
 - **FAIL** `amd_locked_lines_unchanged` @ `budget_version:BV-WORK/lines/Land`  
-  Land is locked at 6,500,000.00 but BV-WORK carries 6,650,000.00; a locked line moving is a term being renegotiated, not a budget being revised
+  Land is locked at 5,870,000.00 but BV-WORK carries 6,020,000.00; a locked line moving is a term being renegotiated, not a budget being revised
 
 ### milestone_blanked__Alderpoint_Terraces
 
@@ -225,7 +225,7 @@ All controls held.
 **Verdict:** FAIL (PASS 24, FLAG 0, FAIL 1)
 
 - **FAIL** `amd_change_columns_foot` @ `budget_version:BV-BILL/lines/Insurance`  
-  Insurance: revised reads 578,000.00 but approved plus changes derives 565,500.00, a difference of 12,500.00; the revised column was typed rather than computed
+  Insurance: revised reads 497,300.00 but approved plus changes derives 484,800.00, a difference of 12,500.00; the revised column was typed rather than computed
 
 ### schedule_input_unknown__Dunmore_Flats
 
@@ -248,7 +248,7 @@ All controls held.
 **Verdict:** FAIL (PASS 24, FLAG 0, FAIL 1)
 
 - **FAIL** `lin_totals_agree` @ `budget_version:BV-SUMM/stated_total_cents`  
-  BV-SUMM states a total of 31,841,266.07 but its own lines sum to 31,834,585.00; the stated figure was typed, not computed
+  BV-SUMM states a total of 29,904,011.07 but its own lines sum to 29,897,330.00; the stated figure was typed, not computed
 
 ### summary_superseded__Alderpoint_Terraces
 
