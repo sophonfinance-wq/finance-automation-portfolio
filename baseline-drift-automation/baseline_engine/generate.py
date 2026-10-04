@@ -211,7 +211,7 @@ def baseline(project: str) -> dict[str, Any]:
                     "member_id": "sponsor",
                     "commitment_cents": COMMITMENTS["sponsor"],
                     "contributed_cents": 231_500_000,
-                    "cap_cents": 557_395_000,
+                    "cap_cents": 525_000_000,
                     "split_bps": 5000,
                 },
             ],

@@ -7,7 +7,7 @@ class MoneyError(ValueError):
 
 
 def parse_cents(text: str) -> int:
-    """Parse a printed amount like '1,324.20' or '-2,580.00' into integer cents.
+    """Parse a printed amount like '4,321.09' or '-1,111.11' into integer cents.
 
     The print format always carries exactly two decimals; anything else refuses.
     """

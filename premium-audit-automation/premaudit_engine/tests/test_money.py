@@ -4,11 +4,11 @@ from ..money import MoneyError, format_cents, parse_cents
 
 
 @pytest.mark.parametrize("text,cents", [
-    ("1,324.20", 132420),
-    ("-2,580.00", -258000),
+    ("4,321.09", 432109),
+    ("-1,111.11", -111111),
     (".00", 0),
     ("0.01", 1),
-    ("12,906.04", 1290604),
+    ("23,456.70", 2345670),
     ("123,456.78", 12345678),
 ])
 def test_parse_known_values(text, cents):
@@ -22,6 +22,6 @@ def test_parse_refuses_malformed(bad):
 
 
 def test_format_negative_and_grouping():
-    assert format_cents(-258000) == "-2,580.00"
+    assert format_cents(-111111) == "-1,111.11"
     assert format_cents(98765432) == "987,654.32"
     assert format_cents(0) == "0.00"
