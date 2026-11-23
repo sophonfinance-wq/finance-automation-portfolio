@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive system map of a fictional real-estate finance group: drives, workstreams, a find-it directory, and the recurring calendar.">
+<title>Finance Operations Atlas — Sophon Finance Systems (demonstration)</title>
+<style>
+  :root{
+    --ink:#152b40; --ink-deep:#0e1e2e; --ink-bright:#1f4a6b;
+    --steel:#2f6f92; --teal:#4aa8a0; --teal-ink:#256d66;
+    --amber:#c97b2d; --amber-ink:#8a4f14; --slate:#5c6b7a;
+    --paper:#f7f6f3; --card:#ffffff; --line:#e5e2dc; --silver:#d8d5cf;
+    --text:#2b3540; --muted:#68727b; --grey:#666f77; --pale:#cfe3ee;
+    --radius:10px;
+    --shadow:0 1px 3px rgba(21,43,64,.08),0 4px 14px rgba(21,43,64,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Arial,sans-serif;
+    background:var(--paper);color:var(--text);font-size:15px;line-height:1.55}
+  button{appearance:none;border:0;background:none;font:inherit;color:inherit;cursor:pointer}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--steel);outline-offset:2px}
+  .visually-hidden{position:absolute;width:1px;height:1px;margin:-1px;padding:0;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- header ---------- */
+  header{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;
+    box-shadow:0 2px 10px rgba(14,30,46,.35)}
+  .bar{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:24px;
+    padding:10px 24px;min-height:62px;flex-wrap:wrap}
+  .wordmark .wm-main{display:block;font-weight:700;font-size:17px;letter-spacing:.2em}
+  .wordmark .wm-sub{display:block;font-weight:400;font-size:10px;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--pale);margin-top:2px}
+  nav{display:flex;gap:4px;flex-wrap:wrap;margin-left:auto}
+  nav button{color:#c3d2dd;font-size:13.5px;padding:9px 14px;border-radius:7px;transition:.15s}
+  nav button:hover{background:rgba(255,255,255,.10);color:#fff}
+  nav button.active{background:var(--steel);color:#fff;font-weight:600}
+  nav button:focus-visible{outline:2px solid var(--pale);outline-offset:1px}
+  @media (max-width:760px){.bar{gap:10px;padding:10px 16px}nav{margin-left:0}}
+
+  main{max-width:1280px;margin:0 auto;padding:26px 24px 80px}
+  section.view{display:none}
+  section.view.active{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;border-radius:14px;overflow:hidden;color:#fff;
+    padding:44px 42px 40px;margin-bottom:26px;
+    background:linear-gradient(120deg,var(--ink-deep) 0%,var(--ink) 48%,var(--ink-bright) 100%)}
+  .hero::before{content:"";position:absolute;inset:0;opacity:.14;
+    background-image:linear-gradient(rgba(207,227,238,.55) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(207,227,238,.55) 1px,transparent 1px);
+    background-size:60px 60px}
+  .hero>*{position:relative}
+  .hero h2{font-size:29px;font-weight:600}
+  .hero p{margin-top:8px;max-width:760px;color:#d9e4ec;font-size:15.5px}
+  .chips{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}
+  .chip{border:1px solid rgba(255,255,255,.42);border-radius:999px;padding:7px 16px;
+    font-size:12px;letter-spacing:.12em;color:#e7f0f6}
+  .chip b{color:#fff;font-weight:600}
+
+  .hint{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin:2px 2px 18px}
+  .hint .dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex:none}
+
+  /* ---------- cards & grids ---------- */
+  .grid{display:grid;gap:16px}
+  .grid.cols4{grid-template-columns:repeat(4,1fr)}
+  .grid.cols3{grid-template-columns:repeat(3,1fr)}
+  @media (max-width:1000px){.grid.cols4,.grid.cols3{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:640px){.grid.cols4,.grid.cols3{grid-template-columns:1fr}}
+
+  .card{display:block;width:100%;text-align:left;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:18px 20px;transition:.16s;position:relative;color:var(--text)}
+  .card:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(21,43,64,.14);
+    border-color:var(--steel)}
+  .card .kicker{display:block;font-size:10.5px;letter-spacing:.18em;font-weight:700;
+    text-transform:uppercase;margin-bottom:6px}
+  .card .card-title{display:block;font-size:16.5px;color:var(--ink);font-weight:600;margin-bottom:6px}
+  .card .card-sub{display:block;font-size:13.5px;color:var(--muted)}
+  .card .cardrow{display:flex;gap:12px;align-items:center}
+  .card .cardrow .card-title,.card .cardrow .card-sub{margin:0}
+  .card .cardfoot{display:block;margin-top:10px;font-size:13.5px;color:var(--muted)}
+  .card .go{position:absolute;top:16px;right:16px;color:var(--steel);font-weight:700;
+    opacity:0;transition:.16s}
+  .card:hover .go{opacity:1}
+  @media (hover:none){.card .go{opacity:1}}
+
+  h2.sect{font-size:19px;color:var(--ink);margin:30px 0 14px;font-weight:600}
+  h2.sect span{color:var(--grey);font-weight:400;font-size:14px;margin-left:10px}
+
+  /* ---------- drive map ---------- */
+  .three-pane{display:grid;grid-template-columns:230px 330px 1fr;gap:16px;align-items:start}
+  @media (max-width:1000px){.three-pane{grid-template-columns:1fr}}
+  .rail{display:flex;flex-direction:column;gap:8px}
+  .drive-btn{display:flex;align-items:center;gap:12px;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);padding:13px 14px;
+    transition:.15s;text-align:left;width:100%}
+  .drive-btn:hover{border-color:var(--steel)}
+  .drive-btn.active{border-color:var(--ink);background:var(--ink);color:#fff}
+  .drive-letter{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;
+    justify-content:center;font-weight:800;font-size:15px;color:#fff;flex:none}
+  .drive-letter.sys{font-size:11px;letter-spacing:.04em}
+  .drive-text{min-width:0}
+  .drive-btn .dl{display:block;font-weight:600;color:var(--ink);font-size:14px}
+  .drive-btn .ds{display:block;font-size:11.5px;color:var(--muted)}
+  .drive-btn.active .dl{color:#fff}
+  .drive-btn.active .ds{color:var(--pale)}
+  .folder-list{display:flex;flex-direction:column;gap:6px;max-height:70vh;overflow:auto;padding-right:4px}
+  .folder{display:block;width:100%;text-align:left;background:var(--card);
+    border:1px solid var(--line);border-left:4px solid var(--silver);border-radius:8px;
+    padding:10px 13px;transition:.13s;font-size:13.5px}
+  .folder:hover{border-left-color:var(--teal)}
+  .folder.active{border-color:var(--steel);border-left-color:var(--steel);background:#eef4f8}
+  .folder .fname{display:block;font-weight:600;color:var(--ink)}
+  .folder .fdesc{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+  .ftag{float:right;font-size:10px;letter-spacing:.08em;padding:2px 8px;margin-left:8px;
+    border-radius:999px;font-weight:700;text-transform:uppercase}
+  .tag-live{background:#e2f1ef;color:var(--teal-ink)}
+  .tag-ref{background:#e8eff5;color:var(--steel)}
+  .tag-archive{background:#eeece8;color:#5c6470}
+  .tag-secure{background:#f7ead9;color:var(--amber-ink)}
+
+  .detail{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:24px 26px;min-height:340px}
+  .detail .crumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--steel);font-weight:700;margin-bottom:8px}
+  .detail h3{font-size:20px;color:var(--ink);margin-bottom:10px}
+  .detail p.purpose{color:var(--text);margin-bottom:16px}
+  .detail h4{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--grey);margin:16px 0 8px}
+  .kv{display:flex;flex-direction:column;gap:6px}
+  .kv .row{display:flex;gap:10px;font-size:13.5px}
+  .kv .k{flex:0 0 210px;font-weight:600;color:var(--steel)}
+  .kv .v{color:var(--text);min-width:0}
+  @media (max-width:640px){.kv .row{flex-direction:column;gap:2px}.kv .k{flex:none}}
+  .pathchip{display:inline-block;background:#efede9;border:1px solid var(--line);
+    border-radius:6px;font-family:Consolas,Menlo,monospace;font-size:12px;color:var(--ink);
+    padding:3px 8px;margin:2px 4px 2px 0;overflow-wrap:anywhere;word-break:break-word;max-width:100%}
+  ul.tips{margin:4px 0 0 18px}
+  ul.tips li{font-size:13.5px;color:var(--text);margin-bottom:5px}
+  .empty{color:var(--grey);display:flex;align-items:center;justify-content:center;
+    min-height:300px;font-size:14px}
+  .legend{display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-size:11.5px;
+    color:var(--muted);margin:6px 0 16px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;
+    vertical-align:-1px}
+
+  /* ---------- workstreams ---------- */
+  .ws-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .ws-tab{border:1px solid var(--line);background:var(--card);border-radius:999px;
+    padding:9px 18px;font-size:13.5px;font-weight:600;color:var(--steel);transition:.15s}
+  .ws-tab:hover{border-color:var(--steel)}
+  .ws-tab.active{background:var(--ink);border-color:var(--ink);color:#fff}
+  .ws-meta{display:flex;gap:22px;flex-wrap:wrap;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);padding:14px 20px;
+    margin-bottom:18px;font-size:13.5px}
+  .ws-meta .m b{display:block;color:var(--steel);font-weight:600;font-size:11px;
+    letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+  .pipeline{display:flex;align-items:stretch;overflow-x:auto;padding:6px 2px 14px}
+  .step{position:relative;flex:1;min-width:150px;background:var(--card);
+    border:1.5px solid var(--line);border-radius:10px;padding:14px 14px 12px;
+    transition:.15s;margin-right:26px;text-align:left}
+  .step:last-child{margin-right:0}
+  .step::after{content:"";position:absolute;top:50%;right:-21px;width:16px;height:2px;
+    background:var(--grey)}
+  .step:last-child::after{display:none}
+  .step .num{display:flex;width:24px;height:24px;border-radius:50%;background:var(--steel);
+    color:#fff;font-size:12px;font-weight:700;align-items:center;justify-content:center;
+    margin-bottom:8px}
+  .step:hover{border-color:var(--steel);transform:translateY(-2px)}
+  .step.active{border-color:var(--ink);background:#eef4f8}
+  .step.active .num{background:var(--ink)}
+  .step .sname{display:block;font-size:13px;font-weight:600;color:var(--ink);line-height:1.3}
+  .stepdetail{background:var(--card);border:1px solid var(--line);
+    border-left:5px solid var(--teal);border-radius:var(--radius);box-shadow:var(--shadow);
+    padding:22px 24px;margin-top:4px}
+  .stepdetail h3{color:var(--ink);font-size:17px;margin-bottom:8px}
+
+  /* ---------- find it ---------- */
+  .searchwrap{position:relative;margin-bottom:16px}
+  .searchwrap input{width:100%;font:inherit;font-size:15px;padding:13px 18px 13px 46px;
+    border:1.5px solid var(--line);border-radius:10px;background:var(--card);color:var(--text)}
+  .searchwrap input:focus{outline:none;border-color:var(--steel);
+    box-shadow:0 0 0 3px rgba(47,111,146,.18)}
+  .searchwrap .icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--grey)}
+  .findtable{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+  .findtable th{background:var(--ink);color:#fff;text-align:left;font-size:11.5px;
+    letter-spacing:.12em;text-transform:uppercase;padding:11px 16px;font-weight:600}
+  .findtable td{padding:11px 16px;border-top:1px solid var(--line);font-size:13.5px;vertical-align:top}
+  .findtable td:first-child{font-weight:600;color:var(--ink);width:26%}
+  .findtable td:nth-child(2){width:44%}
+  .findtable .cat{display:inline-block;font-size:10px;letter-spacing:.1em;
+    text-transform:uppercase;font-weight:700;padding:2px 8px;border-radius:999px;
+    background:#e8eff5;color:var(--steel)}
+  .nores{padding:26px;text-align:center;color:var(--grey)}
+
+  /* ---------- calendar ---------- */
+  .cal-col h3{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:#fff;
+    border-radius:8px 8px 0 0;padding:10px 16px;font-weight:700}
+  .cal-col:nth-child(1) h3{background:var(--teal-ink)}
+  .cal-col:nth-child(2) h3{background:var(--steel)}
+  .cal-col:nth-child(3) h3{background:var(--ink)}
+  .cal-body{background:var(--card);border:1px solid var(--line);border-top:0;
+    border-radius:0 0 var(--radius) var(--radius);padding:8px}
+  .event{border-left:4px solid var(--teal);background:#fbfaf8;border-radius:6px;
+    padding:10px 12px;margin:8px 6px}
+  .event .when{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+    font-weight:700;color:var(--steel)}
+  .event .what{font-size:13.5px;font-weight:600;color:var(--ink);margin:1px 0 2px}
+  .event .who{font-size:12px;color:var(--muted)}
+
+  footer{border-top:1px solid var(--line);margin-top:50px;padding:18px 24px;
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    max-width:1280px;margin-left:auto;margin-right:auto;color:var(--muted);font-size:12px}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="wordmark">
+      <span class="wm-main">SOPHON FINANCE SYSTEMS</span>
+      <span class="wm-sub">Finance Operations Atlas (demonstration)</span>
+    </div>
+    <h1 class="visually-hidden">SOPHON FINANCE SYSTEMS — Finance Operations Atlas (demonstration)</h1>
+    <nav id="nav" aria-label="Atlas views">
+      <button type="button" data-view="overview" class="active" aria-current="page">Overview</button>
+      <button type="button" data-view="drives">Drive Map</button>
+      <button type="button" data-view="workstreams">Workstreams</button>
+      <button type="button" data-view="find">Find It</button>
+      <button type="button" data-view="calendar">Calendar</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= OVERVIEW ================= -->
+<section class="view active" id="view-overview" aria-label="Overview">
+  <div class="hero">
+    <h2>A finance department, mapped on a single page.</h2>
+    <p>Where records live, how each recurring process runs, and when it happens — for the finance and accounting group of Demo Holdings Inc., a fictional real-estate investment company. Every card, drive, and process step opens a briefing.</p>
+    <div class="chips">
+      <span class="chip"><b>FYE</b> DEC 31</span>
+      <span class="chip"><b>3</b> REGIONS</span>
+      <span class="chip"><b>~120</b> LEGAL ENTITIES</span>
+      <span class="chip"><b>4</b> CORE WORKSTREAMS</span>
+      <span class="chip"><b>4</b> DRIVES + SYSTEMS</span>
+    </div>
+  </div>
+
+  <p class="hint"><span class="dot" aria-hidden="true"></span> Every card, drive, and process step opens a briefing — and when the only question is where something lives, Find It answers it fastest.</p>
+
+  <h2 class="sect">Core workstreams</h2>
+  <div class="grid cols4" id="ov-workstreams"></div>
+
+  <h2 class="sect">The drives <span>click to explore</span></h2>
+  <div class="grid cols4" id="ov-drives"></div>
+
+  <h2 class="sect">Good to know</h2>
+  <div class="grid cols3" id="ov-notes"></div>
+</section>
+
+<!-- ================= DRIVE MAP ================= -->
+<section class="view" id="view-drives" aria-label="Drive map">
+  <h2 class="sect" style="margin-top:4px">Drive Map <span>drive &#8594; folder &#8594; briefing</span></h2>
+  <div class="legend">
+    <span><i style="background:#4aa8a0"></i>Live / active</span>
+    <span><i style="background:#2f6f92"></i>Reference</span>
+    <span><i style="background:#c97b2d"></i>Controlled access</span>
+    <span><i style="background:#666f77"></i>Archive / legacy</span>
+  </div>
+  <div class="three-pane">
+    <div class="rail" id="drive-rail"></div>
+    <div class="folder-list" id="folder-list"></div>
+    <div class="detail" id="drive-detail"><div class="empty">Choose a folder to open its briefing.</div></div>
+  </div>
+</section>
+
+<!-- ================= WORKSTREAMS ================= -->
+<section class="view" id="view-workstreams" aria-label="Workstreams">
+  <h2 class="sect" style="margin-top:4px">Workstreams <span>open any step for its inputs, outputs and filing locations</span></h2>
+  <div class="ws-tabs" id="ws-tabs"></div>
+  <div class="ws-meta" id="ws-meta"></div>
+  <div class="pipeline" id="ws-pipeline"></div>
+  <div class="stepdetail" id="ws-stepdetail"></div>
+</section>
+
+<!-- ================= FIND IT ================= -->
+<section class="view" id="view-find" aria-label="Find it">
+  <h2 class="sect" style="margin-top:4px">Find It <span>search the location directory</span></h2>
+  <div class="searchwrap">
+    <span class="icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="display:block"><circle cx="11" cy="11" r="7"></circle><line x1="16.5" y1="16.5" x2="21" y2="21"></line></svg></span>
+    <label class="visually-hidden" for="findbox">Filter the location table</label>
+    <input id="findbox" type="text" placeholder="Try: bank statements, trial balance, procedures, draws, T1134, templates …" autocomplete="off">
+  </div>
+  <div id="findcount" class="visually-hidden" role="status"></div>
+  <div style="overflow-x:auto"><table class="findtable">
+    <thead><tr><th scope="col">Looking for&#8230;</th><th scope="col">Location</th><th scope="col">Notes</th></tr></thead>
+    <tbody id="findrows"></tbody>
+  </table></div>
+  <div class="nores" id="nores" style="display:none">No matches — a broader term (for example “bank”, “tax”, or “audit”) usually finds it.</div>
+</section>
+
+<!-- ================= CALENDAR ================= -->
+<section class="view" id="view-calendar" aria-label="Calendar">
+  <h2 class="sect" style="margin-top:4px">The Finance Calendar <span>the recurring rhythm at a glance</span></h2>
+  <div class="grid cols3">
+    <div class="cal-col"><h3>Monthly</h3><div class="cal-body" id="cal-monthly"></div></div>
+    <div class="cal-col"><h3>Quarterly</h3><div class="cal-body" id="cal-quarterly"></div></div>
+    <div class="cal-col"><h3>Annual</h3><div class="cal-body" id="cal-annual"></div></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <span>Demonstration artifact — all entities, people, paths and figures are fictional.</span>
+  <span>Sophon Finance Systems — generated from atlas_data.py</span>
+</footer>
+
+<script>
+window.ATLAS = {"tags":{"live":"Live","ref":"Reference","archive":"Archive","secure":"Controlled"},"notes":[{"kicker":"Convention","kicker_color":"#2f6f92","title":"File names carry meaning","text":"Entity, period, and bank are encoded in file names \u2014 for example \u201c<Entity> YYYY-MM <Bank>.pdf\u201d for statements and \u201cYYYY-MM <Entity> <description>.pdf\u201d for entry support. File new documents to the same pattern.","action":{"view":"find"}},{"kicker":"Registry","kicker_color":"#8a4f14","title":"One folder per legal entity","text":"The Entity Registry holds formation documents, agreements, and bank records for roughly 120 fictional entities \u2014 the map of the corporate structure.","action":{"view":"drives","drive":"G","folder":"Entity Registry"}},{"kicker":"Rhythm","kicker_color":"#256d66","title":"December 31 is year-end","text":"The fiscal year ends December 31 \u2014 the external review, tax filings, schedule rollforwards, and archive conventions all key off that date.","action":{"view":"calendar"}}],"drives":[{"key":"G","label":"Group Drive","sub":"Primary shared drive","color":"#152b40","folders":[{"name":"Treasury","tag":"live","desc":"Bank registers, cash JE support, payment queues","purpose":"Daily cash operations for the group: per-entity bank register extracts from the GL system, cash journal-entry support organized by region, the posting queue for platform-generated entries, and the two-stage wire approval workflow.","keys":["G:\\Finance\\Treasury\\Bank Registers","G:\\Finance\\Treasury\\Cash JE Support\\<Region>","G:\\Finance\\Treasury\\Entries to Post","G:\\Finance\\Treasury\\Wires - Released & Scheduled"],"rows":[["Bank registers","One register workbook per entity, refreshed from the GL system through the close window \u2014 the starting point for reconciliation."],["Cash JE support","Region \u2192 entity \u2192 year \u2192 month folders holding wire and transfer support."],["Payment queues","Batches from the AP payment platform and the construction-draw platform land in Entries to Post before they are recorded."],["Wire workflow","Every wire clears two approvals: Pending Release \u2192 Released & Scheduled."]],"tips":["Statement PDFs follow \u201c<Entity> YYYY-MM <Bank>.pdf\u201d \u2014 file new statements to the same pattern.","Month folders for the coming year are pre-created each December.","The authoritative statement archive is the Entity Registry; anything here is a working copy."]},{"name":"Accounting","tag":"live","desc":"Entity folders, schedules, procedures, audit support","purpose":"The accounting group's working area: one folder per legal entity or project (journal entries, draws, lender reporting) plus the functional libraries \u2014 written procedures, standing schedules, recurring-entry masters, and audit support.","keys":["G:\\Finance\\Accounting\\Procedures","G:\\Finance\\Accounting\\Schedules\\<Entity>","G:\\Finance\\Accounting\\Recurring Entries","G:\\Finance\\Accounting\\<Entity>\\JE Support"],"rows":[["Procedures","The written methodology library \u2014 AP, close, recurring entries, draws, and banking. Actively maintained; check revision dates."],["Schedules","Prepaids, fixed assets, and accruals \u2014 one workbook per entity, rolled forward each month."],["Entity folders","A standard shape per project: journal entries, draws, budget updates, and the project binder."],["Audit","External-review workpapers by fiscal year, split by reporting group."]],"tips":["Entry support PDFs follow \u201cYYYY-MM <Entity> <description>.pdf\u201d so completeness checks work.","Completed projects are archived under _Completed Projects \u2014 treat those as read-only."]},{"name":"Trial Balances","tag":"live","desc":"Regional TB workbooks + fiscal-year snapshots","purpose":"The regional trial-balance workbooks exported from the GL system. Three live files \u2014 Northwest, Southwest, and Central \u2014 sit at the root and are refreshed in place each close; month-end snapshots are archived by fiscal year beneath them.","keys":["G:\\Finance\\Trial Balances\\Northwest TB.xlsx","G:\\Finance\\Trial Balances\\Southwest TB.xlsx","G:\\Finance\\Trial Balances\\Central TB.xlsx","G:\\Finance\\Trial Balances\\Archive\\<FY>"],"rows":[["Live files","One workbook per region with one tab per entity; updated in place through each close."],["Archives","Dated month-end snapshots by fiscal year \u2014 the history once the live file has moved on."],["Used by","Cash reconciliation, close reporting, audit support, tax workpapers."]],"tips":["These are shared files \u2014 if one is locked, work in a local copy and post the result back; the G: version is canonical.","Balance columns are refreshable GL-system queries \u2014 open in a licensed session to update."]},{"name":"Tax","tag":"live","desc":"Compliance tracker, filings, cross-border workstream","purpose":"The tax filing system, organized by jurisdiction and entity family: the compliance tracker, state and local filings, information returns, and the cross-border workstream supporting the Canadian parent, Demo Holdings Inc.","keys":["G:\\Finance\\Tax\\Compliance Tracker","G:\\Finance\\Tax\\State & Local","G:\\Finance\\Tax\\T1134\\Surplus & ACB","G:\\Finance\\Tax\\Structure Charts"],"rows":[["Tracker","The department-wide filing calendar \u2014 one row per entity per filing, from extension to confirmation."],["Entity families","One folder per family \u2014 for example Maple Fund LP, Cedar Mezz Holdings LLC, and Harborview Partners LP \u2014 with project entities inside each."],["Cross-border","The T1134 folder holds the annual information-return packages; Surplus & ACB is the working area for the pool calculations."],["External preparers","Income tax returns are prepared externally under annual engagement letters."]],"tips":["Historical filings are foldered by fiscal year \u2014 the December 31 convention.","Structure-chart decks visualize the Entity Registry; the registry itself is authoritative."]},{"name":"Entity Registry","tag":"secure","desc":"Legal-entity records + secure bank archive","purpose":"The master legal-entity registry \u2014 one standardized folder per entity holding formation documents, agreements, consents, and licensing \u2014 plus the controlled-access bank-statement archive.","keys":["G:\\Finance\\Entity Registry\\Corporate Records","G:\\Finance\\Entity Registry\\Bank Records","G:\\Finance\\Entity Registry\\Corporate Records\\_New Entity"],"rows":[["Corporate records","Folder names encode jurisdiction and status (for example \u201c\u2014 DE\u201d or \u201cdissolved\u201d), so the list itself reads as a status report."],["Bank records","The authoritative per-entity statement archive, by fiscal year, plus cash procedure sets and reconciliation templates."],["New entities","An intake template standardizes new-entity setup \u2014 banking, GL codes, and registry folder in one pass."]],"tips":["Access is controlled \u2014 request it through the Controller's office if a folder will not open.","When the corporate structure is in question, this registry is the authoritative answer."]},{"name":"Reporting & Archive","tag":"ref","desc":"Quarterly reporting, project tracker, frozen history","purpose":"Group reporting and frozen history: the quarterly project-reporting packages, the master project tracker, monthly combined financials, and legacy areas kept read-only.","keys":["G:\\Finance\\Reporting\\Quarterly Reports\\<Year>","G:\\Finance\\Reporting\\Project Tracker","G:\\Finance\\Reporting\\Monthly Financials","G:\\Finance\\_Archive"],"rows":[["Quarterly cadence","Each region reports quarterly on a rotating schedule; meeting folders hold the per-project packages."],["Tracker","One clearly labeled live workbook; dated archive copies are point-in-time snapshots."],["Legacy areas","Read-only corporate history \u2014 nothing in _Archive is part of a live process."]],"tips":["When something looks stale, check _Archive before assuming it is lost."]}]},{"key":"W","label":"Workstation","sub":"Local working copies","color":"#2f6f92","folders":[{"name":"Desktop staging","tag":"live","desc":"Monthly staging & local working copies","purpose":"The local scratch area for the current cycle: monthly close support, local trial-balance copies for the moments the shared workbook is locked, and the workpaper batch in progress. The canonical version of anything here lives on G:.","keys":["W:\\Staging\\<current month>","W:\\Staging\\Trial Balance (local copies)"],"rows":[["Rule of thumb","Anything worth keeping is filed back to its G: home \u2014 treat local copies as scratch space, not records."]],"tips":["Local copies drift \u2014 verify dates against the G: master before reusing a prior month's file."]},{"name":"Engagement workspaces","tag":"live","desc":"Per-engagement builds & status handoffs","purpose":"One working folder per engagement \u2014 workbook builds and the monthly reconciliation cycle \u2014 each carrying its process notes and a status handoff for continuity between cycles.","keys":["W:\\Documents\\Engagements\\<engagement>"],"rows":[["Contents","Build folders per entity, review notes, and a status document that says exactly where the work stands."]],"tips":["Each cycle ends by refreshing the handoff notes \u2014 read them first when resuming the work."]}]},{"key":"L","label":"Learning Library","sub":"Training & methodology","color":"#256d66","folders":[{"name":"Training recordings","tag":"ref","desc":"Process walkthroughs on video","purpose":"The recorded training library \u2014 screen walkthroughs of GL-system navigation, month-end close, journal-entry schedules, and audit preparation, each with a transcript, indexed in one master workbook.","keys":["L:\\Training\\Recordings"],"rows":[["Coverage","GL detail pulls, closing training, schedule maintenance, audit preparation, and entity tax reviews."]],"tips":["The master index workbook lists sessions by topic \u2014 the fastest way to find the right recording.","New joiners: watch the closing series before your first month-end."]},{"name":"Methodology notes","tag":"ref","desc":"Written notes & structure diagrams","purpose":"Written methodology notes and corporate-structure diagrams that supplement the procedures library, maintained as processes evolve.","keys":["L:\\Training\\Methodology Notes"],"rows":[],"tips":["One notebook is the designated current copy; the others are dated snapshots."]}]},{"key":"R","label":"Regional Share","sub":"Alternate mount + templates","color":"#5c6b7a","folders":[{"name":"Groups (mirror of G:)","tag":"ref","desc":"Same content as G: via another path","purpose":"R: is a second mount of the storage behind G:, so the Treasury, Accounting, Tax, and Entity Registry trees are reachable under both letters. Older documents may link through either path; both resolve to the same folders.","keys":["R:\\Shared\\Groups\\..."],"rows":[["Why it matters","Count or sweep files under a single drive letter, or everything shows up twice."]],"tips":["If a legacy link fails on R:, try the same path on G: before escalating."]},{"name":"Templates & branding","tag":"ref","desc":"Letterhead, memo & report templates","purpose":"Corporate identity assets: letterhead, memo, agenda, and report-cover templates, plus the shared reporting templates used for outward-facing documents.","keys":["R:\\Shared\\Templates"],"rows":[],"tips":["Use these templates for anything leaving the department \u2014 they carry the current identity standards."]}]},{"key":"SYS","label":"Systems","sub":"GL \u00b7 payments \u00b7 portals","color":"#8a4f14","folders":[{"name":"The GL system","tag":"live","desc":"General ledger & job cost \u2014 system of record","purpose":"The system of record for the general ledger and job costing. Every trial balance, GL detail pull, and journal posting runs through it, and its spreadsheet extracts feed the workpapers on G:.","keys":["GL desktop client + refreshable spreadsheet queries"],"rows":[["Company codes","Each entity has a GL company code \u2014 folder names on G: often carry it in parentheses."],["Extracts","Trial-balance and capital-account workbooks use refreshable GL queries rather than pasted values."]],"tips":["Open query-backed workbooks in a licensed session so the figures refresh."]},{"name":"Payment & banking platforms","tag":"live","desc":"AP payments \u00b7 construction draws \u00b7 bank portals","purpose":"The transaction platforms that feed the drive: the AP payment platform, the construction-draw platform, and the bank portals (for example First Meridian Bank) whose statements land in the secure archive.","keys":["Platform batches land in G:\\Finance\\Treasury\\Entries to Post"],"rows":[["Flow","Platform batches queue for posting, the entries are recorded in the GL, and the support is filed under the entity and month."]],"tips":["Platform user guides live beside the procedures library in G:\\Finance\\Accounting\\Procedures."]}]}],"workstreams":[{"key":"recon","title":"Month-End Cash Reconciliation","kicker":"Monthly \u00b7 business days 1\u20134","kicker_color":"#2f6f92","blurb":"Bank registers \u2192 regional trial balances \u2192 tied-out balances \u2192 Controller package.","meta":[["Window","Business days 1\u20134"],["Owner","Senior Accountant"],["Reviewer","Controller"],["Regions","Northwest \u00b7 Southwest \u00b7 Central"]],"steps":[{"name":"Refresh bank registers","detail":"Per-entity register workbooks are extracted from the GL system into the Treasury area \u2014 the evidence base for the month's reconciliation.","io":[["Input","GL bank-register extracts, one per entity"],["Location","G:\\Finance\\Treasury\\Bank Registers"],["Watch for","Stale extracts \u2014 an extract is only usable once its file date covers the full month."]]},{"name":"Open regional trial balances","detail":"The three regional trial-balance workbooks \u2014 one tab per entity \u2014 are the canvas the reconciliation is performed on.","io":[["Input","Northwest / Southwest / Central TB workbooks"],["Location","G:\\Finance\\Trial Balances"],["Watch for","File locks \u2014 work in a local copy, then post the result back to the shared file."]]},{"name":"Tie each account to the bank","detail":"For every cash and loan account, the ledger balance is compared to the bank-confirmed balance. Dormant accounts are verified as having had no activity, and immaterial differences are documented with a comment on the account.","io":[["Method","Reconcile to the bank-confirmed balance, with the register providing the supporting detail."],["Rules","Zero-activity clearance for dormant accounts \u00b7 a documented materiality threshold \u00b7 every comment references its account."]]},{"name":"Flag & document exceptions","detail":"Material differences receive sequential exception identifiers and status color coding, and the explanation is documented beside each item for review.","io":[["Output","Exception list + status colors + comments"],["Convention","EX-<MM>-## exception identifiers"]]},{"name":"Package for the Controller","detail":"Each region closes with a summary memo and an evidence package. Workbooks are referenced by link to their G: location rather than attached.","io":[["Output","Three regional packages"],["Recipient","Controller"],["Timing","Complete by business day 4"]]},{"name":"Post & carry forward","detail":"Correcting entries are posted, balances are re-verified, and structural items carry to next month's checklist so nothing is rediscovered from scratch.","io":[["Then","Close reporting picks up from here."]]}]},{"key":"surplus","title":"Foreign-Affiliate Surplus & ACB (T1134)","kicker":"Annual \u00b7 public-law framework","kicker_color":"#8a4f14","blurb":"Per-entity workbooks that carry the surplus pools and adjusted cost base behind the T1134 information returns.","meta":[["Cycle","Annual, entity by entity"],["Preparer","Tax staff"],["Reviewer","Tax Reviewer"],["Feeds","T1134 information returns"]],"steps":[{"name":"Gather source data","detail":"US partnership returns per entity-year and GL capital-account extracts are assembled as the factual base, alongside a published FX-rate reference.","io":[["Inputs","Form 1065 returns \u00b7 capital-account extracts \u00b7 published central-bank FX rates"],["Location","G:\\Finance\\Tax\\T1134\\Surplus & ACB"]]},{"name":"Build the workbook","detail":"Each calculation follows the standard template \u2014 one workbook per entity-owner pairing, with evidence, calculation, and summary tabs so every figure traces to a source.","io":[["Template","...\\Surplus & ACB\\_Template"],["Convention","One workbook per entity-owner pairing; evidence \u2192 calculation \u2192 summary lineage."]]},{"name":"Apply the published rules","detail":"Surplus pools (exempt vs taxable), pre-acquisition capital, and ACB move under the public Reg. 5907 series and related ITA provisions: income adds to pools, distributions consume them in statutory order, and ACB moves only on capital events.","io":[["Reference","Public Canadian Income Tax Regulations (the Reg. 5907 series) \u2014 see this portfolio's tax-surplus-engine for a working model."],["Watch for","FX treatment on distributions \u2014 document the rate basis used and keep it consistent."]]},{"name":"Verify independently","detail":"Before review, a second independent pass re-derives every balance from the source data.","io":[["Output","Verification notes filed with the entity package"]]},{"name":"Reviewer sign-off","detail":"Workbooks go to the Tax Reviewer; approved versions are filed to the Approved subfolder with the sign-off kept alongside.","io":[["Rule","File the version the reviewer signs off on, and retain the full version history alongside it."],["Location","...\\Surplus & ACB\\Approved"]]},{"name":"Feed the filings","detail":"Approved surplus and ACB balances support the annual T1134 information-return packages for the Canadian parent.","io":[["Output","One package per foreign affiliate"],["Location","G:\\Finance\\Tax\\T1134"]]}]},{"key":"close","title":"Monthly Close & Recurring Entries","kicker":"Monthly close","kicker_color":"#256d66","blurb":"Standing schedules \u2192 recurring entries \u2192 GL posting \u2192 support packages by entity.","meta":[["Window","First week after month-end"],["Owner","Accounting staff"],["System","The GL system"],["Entities","Holding companies + active projects"]],"steps":[{"name":"Roll standing schedules","detail":"Per-entity schedule workbooks \u2014 prepaids, fixed assets, and accruals \u2014 are rolled forward for the month.","io":[["Location","G:\\Finance\\Accounting\\Schedules\\<Entity>"],["Convention","One workbook per entity per schedule type, one column per period."]]},{"name":"Prepare recurring entries","detail":"The annual recurring-entry master plus the allocation workbooks drive the month's standard entries.","io":[["Location","G:\\Finance\\Accounting\\Recurring Entries"],["Reference","The recurring-entries procedure in the methodology library \u2014 kept current."]]},{"name":"Post to the GL","detail":"Entries are posted to the general ledger, and each schedule is tied back to its trial-balance account.","io":[["Check","Schedule ending balance = trial-balance balance, account by account."]]},{"name":"File support packages","detail":"Each posted entry gets a support PDF named to the convention, assembled for the month and filed into the entity's JE Support folder.","io":[["Location","G:\\Finance\\Accounting\\<Entity>\\JE Support"],["Watch for","Inconsistent file names \u2014 the completeness checks only work when the convention is followed exactly."]]},{"name":"Assemble reporting","detail":"The month's combined financials are assembled once the schedules and trial balances tie out.","io":[["Location","G:\\Finance\\Reporting\\Monthly Financials"]]},{"name":"Year-end rollforward","detail":"At fiscal year-end, every schedule workbook is rolled into a new-year copy and the prior year is archived.","io":[["Timing","Each January (FYE December 31)"]]}]},{"key":"compliance","title":"Compliance & Audit Cycle","kicker":"Quarterly \u00b7 annual","kicker_color":"#2f6f92","blurb":"State and local filings, estimated payments, information returns, and the annual external review.","meta":[["Cadence","Quarterly + annual"],["External","Audit firm (review) \u00b7 tax preparers (returns)"],["Approval","Tax Reviewer signs off payments"],["Tracker","G:\\Finance\\Tax\\Compliance Tracker"]],"steps":[{"name":"Quarterly state & local filings","detail":"Revenue extracts feed the filing worksheets; returns are filed per entity and payment confirmations are filed with the approvals.","io":[["Location","G:\\Finance\\Tax\\State & Local"],["Volume","Dozens of entities per quarter"]]},{"name":"Estimated payments & extensions","detail":"Vouchers and extensions are prepared per entity per year, each paired with its acceptance confirmation.","io":[["Check","Every extension has an acceptance confirmation beside it."]]},{"name":"Annual external review","detail":"A fresh audit folder is set up each year: year-end trial balances and ledgers are exported entity by entity, and a request-list workbook is assembled for each reporting group.","io":[["Location","G:\\Finance\\Accounting\\Audit\\<FY>"],["Convention","\u201c<Entity> TB 1231YY\u201d + a YTD ledger per entity"]]},{"name":"Income tax returns","detail":"External preparers work under annual engagement letters, with the compliance tracker carrying each entity from extension through filed return.","io":[["Location","G:\\Finance\\Tax\\Compliance Tracker"]]},{"name":"January information returns","detail":"AP payment data is assembled per region, matched to payee tax forms, filed, and the confirmations are kept per entity.","io":[["Location","G:\\Finance\\Accounting\\AP\\Information Returns"],["Watch for","Missing payee forms \u2014 the usual bottleneck; chase them before year-end."]]},{"name":"Canadian information returns","detail":"The compliance year finishes with the Canadian parent's T1134 packages, which draw on the surplus & ACB workstream.","io":[["Location","G:\\Finance\\Tax\\T1134"]]}]}],"findit":[["Bank statements (archive)","G:\\Finance\\Entity Registry\\Bank Records\\<Entity>","Controlled access; by fiscal year; \u201c<Entity> YYYY-MM <Bank>.pdf\u201d","Treasury"],["Bank registers (live)","G:\\Finance\\Treasury\\Bank Registers","One workbook per entity; refreshed through the close window","Treasury"],["Trial balances \u2014 live","G:\\Finance\\Trial Balances","Northwest / Southwest / Central workbooks; updated in place","GL"],["Trial balances \u2014 history","G:\\Finance\\Trial Balances\\Archive\\<FY>","Dated month-end snapshots by fiscal year","GL"],["Cash JE support","G:\\Finance\\Treasury\\Cash JE Support\\<Region>","Entity \u2192 year \u2192 month folders holding wire/transfer support","Treasury"],["Wire approvals in progress","G:\\Finance\\Treasury\\Wires - Pending Release","Two-approval workflow; cleared items move to Released & Scheduled","Treasury"],["Posting queue","G:\\Finance\\Treasury\\Entries to Post","Batches from the AP payment and construction-draw platforms","Treasury"],["Written procedures","G:\\Finance\\Accounting\\Procedures","AP \u00b7 close \u00b7 recurring entries \u00b7 draws \u00b7 banking","Methodology"],["Recurring-entry master","G:\\Finance\\Accounting\\Recurring Entries","One workbook per year; allocation workbooks sit beside it","GL"],["Standing schedules","G:\\Finance\\Accounting\\Schedules\\<Entity>","Prepaids, fixed assets, accruals; rolled forward monthly","GL"],["JE support PDFs","G:\\Finance\\Accounting\\<Entity>\\JE Support","\u201cYYYY-MM <Entity> <description>.pdf\u201d; FY archive subfolders","GL"],["Audit workpapers","G:\\Finance\\Accounting\\Audit\\<FY>","Year-end TBs and ledgers per entity, split by reporting group","Audit"],["Request-list workbooks","G:\\Finance\\Accounting\\Audit\\<FY>\\<Group>","Rolled forward each year for the external review","Audit"],["Structure charts (entity map)","G:\\Finance\\Tax\\Structure Charts","Annual entity-structure decks; the registry is authoritative","Structure"],["Legal-entity records","G:\\Finance\\Entity Registry\\Corporate Records","One folder per entity: formation, agreements, consents, licensing","Structure"],["New-entity intake form","G:\\Finance\\Entity Registry\\Corporate Records\\_New Entity","Intake template standardizing new-entity setup","Structure"],["Reconciliation templates & cash SOPs","G:\\Finance\\Entity Registry\\Bank Records\\_Recon Library","Cash procedure set + regional reconciliation templates","Methodology"],["Compliance tracker","G:\\Finance\\Tax\\Compliance Tracker","The live filing calendar \u2014 one row per entity per filing","Tax"],["State & local filings","G:\\Finance\\Tax\\State & Local","Quarterly; per-entity returns + payment confirmations","Tax"],["Surplus & ACB workbooks","G:\\Finance\\Tax\\T1134\\Surplus & ACB","One workbook per entity-owner pairing; Approved subfolder","Tax"],["Surplus workbook template","G:\\Finance\\Tax\\T1134\\Surplus & ACB\\_Template","Evidence \u2192 calculation \u2192 summary tab lineage","Tax"],["Capital-account extracts","G:\\Finance\\Tax\\T1134\\Surplus & ACB\\Capital Extracts","Per-entity GL capital detail, refreshable queries","Tax"],["Historical FX rates","G:\\Finance\\Tax\\T1134\\Surplus & ACB","Published central-bank reference rates, kept with the working area","Tax"],["T1134 packages","G:\\Finance\\Tax\\T1134","By year; one package per foreign affiliate + proof of delivery","Tax"],["Information-return season files","G:\\Finance\\Accounting\\AP\\Information Returns","By year; AP payment data matched to payee tax forms","AP"],["Payee tax forms","G:\\Finance\\Accounting\\AP\\Payee Forms","Match payees before the January filings","AP"],["Card-program logs","G:\\Finance\\Accounting\\Card Programs","Per program: statements \u00b7 coding log \u00b7 entries \u00b7 posted packets","AP"],["Project draw packages","G:\\Finance\\Accounting\\<Project>\\Draws","One folder per draw with pay applications + reconciliation","Projects"],["Quarterly report packages","G:\\Finance\\Reporting\\Quarterly Reports\\<Year>","Meeting folders rotating by region each quarter","Reporting"],["Master project tracker","G:\\Finance\\Reporting\\Project Tracker","One clearly labeled live workbook; dated copies are snapshots","Reporting"],["Report & letterhead templates","R:\\Shared\\Templates","Identity standards for outward-facing documents","Templates"],["Training recordings","L:\\Training\\Recordings","Master index workbook lists sessions by topic","Learning"],["Methodology notes","L:\\Training\\Methodology Notes","One designated current notebook; the rest are dated snapshots","Learning"]],"calendar":{"monthly":[["Business days 1\u20134","Cash reconciliation","Three regions \u2192 Controller package"],["First week","Recurring entries & standing schedules","Post to the GL; tie schedules to the trial balance"],["First week","JE support packages","Support PDFs filed per entity to the naming convention"],["Mid-month","Card-program cycle","Statement \u2192 coding log \u2192 entry \u2192 posted packet"],["Monthly","Project draws","Lender and equity draws per active project"],["Monthly","Bank statements filed","To the controlled per-entity archive"]],"quarterly":[["Quarter + 30 days","State & local filings","Per-entity returns; confirmations filed with approvals"],["Per filing schedule","Estimated payments","Vouchers per entity, paired with confirmations"],["Rotating","Quarterly project reporting","Region rotation; packages to G:\\Finance\\Reporting"],["Quarterly","Compliance tracker review","Status pass with the Tax Reviewer"]],"annual":[["December 31","Fiscal year-end","Schedules, audit, and filings key off this date"],["January","Schedule rollforward","Clone standing schedules to the new year; archive priors"],["January","Information-return season","AP data \u2192 payee-form match \u2192 file \u2192 confirmations"],["Q1\u2013Q2","External review","Year-end TBs, request lists, representation letters"],["Per filing schedule","Income tax returns","External preparers; tracked entity by entity"],["Per CRA schedule","T1134 information returns","Supported by the surplus & ACB workstream"]]},"nores":"No matches \u2014 a broader term (for example \u201cbank\u201d, \u201ctax\u201d, or \u201caudit\u201d) usually finds it."};
+</script>
+<script>
+"use strict";
+var ATLAS = window.ATLAS;
+
+function esc(s){
+  return String(s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function narrow(){ return window.matchMedia("(max-width: 1000px)").matches; }
+
+/* ---------------- view switching ---------------- */
+var VIEW_KEYS = ["overview","drives","workstreams","find","calendar"];
+function showView(key){
+  VIEW_KEYS.forEach(function(k){
+    document.getElementById("view-"+k).classList.toggle("active", k===key);
+  });
+  document.querySelectorAll("#nav button").forEach(function(btn){
+    var on = btn.dataset.view === key;
+    btn.classList.toggle("active", on);
+    if(on){ btn.setAttribute("aria-current","page"); }
+    else { btn.removeAttribute("aria-current"); }
+  });
+  window.scrollTo({top:0});
+}
+document.querySelectorAll("#nav button").forEach(function(btn){
+  btn.addEventListener("click", function(){ showView(btn.dataset.view); });
+});
+
+/* ---------------- shared fragments ---------------- */
+function tagChip(tag, inline){
+  var style = inline ? ' style="float:none"' : "";
+  return '<span class="ftag tag-'+esc(tag)+'"'+style+'>'+esc(ATLAS.tags[tag]||tag)+'</span>';
+}
+function driveChip(d){
+  var label = d.key==="SYS" ? "SYS" : d.key+":";
+  var cls = d.key==="SYS" ? "drive-letter sys" : "drive-letter";
+  return '<span class="'+cls+'" style="background:'+esc(d.color)+'" aria-hidden="true">'+esc(label)+'</span>';
+}
+function driveByKey(key){
+  return ATLAS.drives.filter(function(d){ return d.key===key; })[0] || null;
+}
+function runAction(action){
+  if(action.view==="drives" && action.drive){
+    showView("drives");
+    selectDrive(action.drive);
+    if(action.folder){ selectFolder(action.drive, action.folder); }
+  } else {
+    showView(action.view);
+  }
+}
+
+/* ---------------- overview ---------------- */
+var ovWs = document.getElementById("ov-workstreams");
+ATLAS.workstreams.forEach(function(w){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "card";
+  b.innerHTML =
+    '<span class="kicker" style="color:'+esc(w.kicker_color)+'">'+esc(w.kicker)+'</span>'+
+    '<span class="card-title">'+esc(w.title)+'</span>'+
+    '<span class="card-sub">'+esc(w.blurb)+'</span>'+
+    '<span class="go" aria-hidden="true">&#8594;</span>';
+  b.addEventListener("click", function(){ openWorkstream(w.key); });
+  ovWs.appendChild(b);
+});
+
+var ovDrives = document.getElementById("ov-drives");
+ATLAS.drives.forEach(function(d){
+  var names = d.folders.slice(0,3).map(function(f){ return f.name; }).join(" \u00b7 ");
+  var more = d.folders.length>3 ? " \u2026" : "";
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "card";
+  b.innerHTML =
+    '<span class="cardrow">'+driveChip(d)+
+      '<span><span class="card-title">'+esc(d.label)+'</span>'+
+      '<span class="card-sub">'+esc(d.sub)+'</span></span></span>'+
+    '<span class="cardfoot">'+d.folders.length+' mapped areas \u2014 '+esc(names)+more+'</span>'+
+    '<span class="go" aria-hidden="true">&#8594;</span>';
+  b.addEventListener("click", function(){ showView("drives"); selectDrive(d.key); });
+  ovDrives.appendChild(b);
+});
+
+var ovNotes = document.getElementById("ov-notes");
+ATLAS.notes.forEach(function(n){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "card";
+  b.innerHTML =
+    '<span class="kicker" style="color:'+esc(n.kicker_color)+'">'+esc(n.kicker)+'</span>'+
+    '<span class="card-title">'+esc(n.title)+'</span>'+
+    '<span class="card-sub">'+esc(n.text)+'</span>';
+  b.addEventListener("click", function(){ runAction(n.action); });
+  ovNotes.appendChild(b);
+});
+
+/* ---------------- drive map ---------------- */
+var rail = document.getElementById("drive-rail");
+var flist = document.getElementById("folder-list");
+var det = document.getElementById("drive-detail");
+ATLAS.drives.forEach(function(d){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "drive-btn"; b.dataset.drive = d.key;
+  b.innerHTML = driveChip(d)+
+    '<span class="drive-text"><span class="dl">'+esc(d.label)+'</span>'+
+    '<span class="ds">'+esc(d.sub)+'</span></span>';
+  b.addEventListener("click", function(){ selectDrive(d.key); });
+  rail.appendChild(b);
+});
+function selectDrive(key){
+  var d = driveByKey(key); if(!d){ return; }
+  document.querySelectorAll(".drive-btn").forEach(function(b){
+    b.classList.toggle("active", b.dataset.drive===key);
+  });
+  flist.innerHTML = "";
+  d.folders.forEach(function(f){
+    var el = document.createElement("button");
+    el.type = "button"; el.className = "folder"; el.dataset.folder = f.name;
+    el.innerHTML = tagChip(f.tag,false)+
+      '<span class="fname">'+esc(f.name)+'</span>'+
+      '<span class="fdesc">'+esc(f.desc)+'</span>';
+    el.addEventListener("click", function(){ selectFolder(key, f.name); });
+    flist.appendChild(el);
+  });
+  selectFolder(key, d.folders[0].name);
+}
+function selectFolder(key, name){
+  var d = driveByKey(key); if(!d){ return; }
+  var f = d.folders.filter(function(x){ return x.name===name; })[0];
+  if(!f){ return; }
+  document.querySelectorAll(".folder").forEach(function(el){
+    el.classList.toggle("active", el.dataset.folder===name);
+  });
+  var out =
+    '<p class="crumb">'+esc(d.label)+' \u00b7 '+tagChip(f.tag,true)+'</p>'+
+    '<h3>'+esc(f.name)+'</h3>'+
+    '<p class="purpose">'+esc(f.purpose)+'</p>';
+  if(f.keys.length){
+    out += '<h4>Key locations</h4><div>'+
+      f.keys.map(function(k){ return '<span class="pathchip">'+esc(k)+'</span>'; }).join("")+
+      '</div>';
+  }
+  if(f.rows.length){
+    out += '<h4>What to know</h4><div class="kv">'+
+      f.rows.map(function(r){
+        return '<div class="row"><span class="k">'+esc(r[0])+'</span>'+
+          '<span class="v">'+esc(r[1])+'</span></div>';
+      }).join("")+'</div>';
+  }
+  if(f.tips.length){
+    out += '<h4>Working notes</h4><ul class="tips">'+
+      f.tips.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join("")+'</ul>';
+  }
+  det.innerHTML = out;
+  if(narrow()){ det.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+}
+
+/* ---------------- workstreams ---------------- */
+var curWs = null;
+var wsTabs = document.getElementById("ws-tabs");
+var wsMeta = document.getElementById("ws-meta");
+var wsPipe = document.getElementById("ws-pipeline");
+var wsDet = document.getElementById("ws-stepdetail");
+ATLAS.workstreams.forEach(function(w){
+  var b = document.createElement("button");
+  b.type = "button"; b.className = "ws-tab"; b.dataset.ws = w.key;
+  b.textContent = w.title;
+  b.addEventListener("click", function(){ selectWs(w.key); });
+  wsTabs.appendChild(b);
+});
+function wsByKey(key){
+  return ATLAS.workstreams.filter(function(w){ return w.key===key; })[0] || null;
+}
+function selectWs(key){
+  var w = wsByKey(key); if(!w){ return; }
+  curWs = key;
+  document.querySelectorAll(".ws-tab").forEach(function(b){
+    b.classList.toggle("active", b.dataset.ws===key);
+  });
+  wsMeta.innerHTML = w.meta.map(function(m){
+    return '<div class="m"><b>'+esc(m[0])+'</b>'+esc(m[1])+'</div>';
+  }).join("");
+  wsPipe.innerHTML = "";
+  w.steps.forEach(function(s, i){
+    var el = document.createElement("button");
+    el.type = "button"; el.className = "step"; el.dataset.step = String(i);
+    el.innerHTML = '<span class="num" aria-hidden="true">'+(i+1)+'</span>'+
+      '<span class="sname">'+esc(s.name)+'</span>';
+    el.addEventListener("click", function(){ selectStep(i); });
+    wsPipe.appendChild(el);
+  });
+  selectStep(0);
+}
+function selectStep(i){
+  var w = wsByKey(curWs); if(!w){ return; }
+  var s = w.steps[i]; if(!s){ return; }
+  document.querySelectorAll(".step").forEach(function(el){
+    el.classList.toggle("active", el.dataset.step===String(i));
+  });
+  wsDet.innerHTML =
+    '<h3>Step '+(i+1)+' \u2014 '+esc(s.name)+'</h3>'+
+    '<p style="margin-bottom:14px">'+esc(s.detail)+'</p>'+
+    '<div class="kv">'+s.io.map(function(r){
+      return '<div class="row"><span class="k">'+esc(r[0])+'</span>'+
+        '<span class="v">'+esc(r[1])+'</span></div>';
+    }).join("")+'</div>';
+  if(narrow()){ wsDet.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+}
+function openWorkstream(key){ showView("workstreams"); selectWs(key); }
+
+/* ---------------- find it ---------------- */
+var tbody = document.getElementById("findrows");
+var nores = document.getElementById("nores");
+var findcount = document.getElementById("findcount");
+function renderFind(query){
+  tbody.innerHTML = "";
+  var q = (query||"").toLowerCase().trim();
+  var shown = 0;
+  ATLAS.findit.forEach(function(r){
+    var hay = (r[0]+" "+r[1]+" "+r[2]+" "+r[3]).toLowerCase();
+    if(q && hay.indexOf(q)===-1){ return; }
+    shown++;
+    var tr = document.createElement("tr");
+    tr.innerHTML = '<td>'+esc(r[0])+'</td>'+
+      '<td><span class="pathchip">'+esc(r[1])+'</span></td>'+
+      '<td><span class="cat">'+esc(r[3])+'</span><br>'+esc(r[2])+'</td>';
+    tbody.appendChild(tr);
+  });
+  nores.style.display = shown ? "none" : "block";
+  findcount.textContent = shown+" of "+ATLAS.findit.length+" locations shown.";
+}
+document.getElementById("findbox").addEventListener("input", function(e){
+  renderFind(e.target.value);
+});
+
+/* ---------------- calendar ---------------- */
+[["cal-monthly","monthly"],["cal-quarterly","quarterly"],["cal-annual","annual"]]
+  .forEach(function(pair){
+    var el = document.getElementById(pair[0]);
+    ATLAS.calendar[pair[1]].forEach(function(ev){
+      var d = document.createElement("div");
+      d.className = "event";
+      d.innerHTML = '<div class="when">'+esc(ev[0])+'</div>'+
+        '<div class="what">'+esc(ev[1])+'</div>'+
+        '<div class="who">'+esc(ev[2])+'</div>';
+      el.appendChild(d);
+    });
+  });
+
+/* ---------------- init ---------------- */
+selectDrive(ATLAS.drives[0].key);
+selectWs(ATLAS.workstreams[0].key);
+renderFind("");
+
+</script>
+</body>
+</html>

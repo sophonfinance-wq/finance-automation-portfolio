@@ -1,0 +1,207 @@
+{
+  "num": 51,
+  "slug": "premaudit",
+  "part_no": "SFS-E51-PRA",
+  "mnemonic": "PRA",
+  "family": "Insurance & Compliance",
+  "name": "Premium Audit Response",
+  "tagline": "The carrier's auditor asks what the warranty work actually cost. This engine answers from the ledger's own printed totals - or refuses.",
+  "plain_summary": "Once a year a general-liability carrier audits the policy: did the insured incur the cost the premium was underwritten on? The raw material is unglamorous - fixed-width job-cost print reports out of a construction ERP, a certificate-of-insurance coverage listing, and a policy period that never lines up with a fiscal year. In practice somebody re-keys the prints into a spreadsheet, and the workpaper's credibility rests on nobody having dropped a line. This engine reads the print instead, and it exploits the one thing a print report carries that a re-key loses: the report's own per-job totals. Every parsed job must tie its printed total to the cent, over the union of jobs parsed and jobs printed, or the engine refuses to produce a workpaper at all. What survives is cut to the audit window (inclusive on both ends), cross-referenced against the coverage listing, and triaged line by line under a fixed-precedence policy - journal entries that never had a vendor, clearing accounts, wrap-enrolled vendors, materials-only and professional exemptions, vendors whose required coverage is current at the window end, and the remainder marked for certificate chase. The output is a byte-stable audit-response package: JSON and Markdown, integer cents throughout, every line in exactly one bucket.",
+  "rev": "2026-08-14",
+  "status": "PRODUCTION",
+  "marketing_thesis": "A premium-audit workpaper fails quietly. The re-keyed spreadsheet still foots - it just foots to the wrong number, because a page break swallowed a line, a reversal row lost its vendor, or a clearing account was chased for a certificate it can never have. The defect classes this engine is built against are exactly the ones a tired preparer produces at a print boundary: the vendor that continues onto a reversal line without being restated, the journal-entry line with a single reference token instead of two, the numeric clearing account whose name is lowercase in a report where every vendor is uppercase, the job whose printed total simply is not there. Each one is either parsed correctly by construction or converted into a refusal that names the job and the cent delta. The engine's stance is the portfolio's stance: an untied workpaper is not a draft, it is a defect - and no material output rests on a single pass's word, because the print report itself is the second opinion.",
+  "layers_intro": "Five stages run in build order. The parser and its reconciliation gate come first because nothing downstream is allowed to exist if the parse does not tie; the window cut, coverage cross-reference and triage are pure functions over what survived; the emitters are byte-stable so a re-run is a diff, not a judgment call.",
+  "layers": [
+    {
+      "id": "parse",
+      "label": "Print Parser",
+      "plain": "Tokenizes the fixed-width print report - job headers, cost-code sections, AP blocks with vendor continuation, journal blocks with one or two reference tokens - into typed cost lines.",
+      "engineering": "A single-pass state machine over the print's token stream. AP blocks carry the vendor once and continue it across subsequent lines including (Rev) reversal rows, so the parser threads vendor identity through the block rather than requiring it per line. Journal-entry blocks have no vendor by definition; a one-token remainder is a description, not a reference pair. Amounts only terminate records - a cost-code line that could lex as an amount cannot, because the amount pattern requires exactly two decimals.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/parse.py"
+    },
+    {
+      "id": "tie",
+      "label": "Printed-Total Reconciliation",
+      "plain": "Sums every parsed job and ties it to the total the report itself printed for that job - over the union of both sets, to the cent, or the engine refuses.",
+      "engineering": "The union matters: a printed total with no parsed lines is a parse failure someone would otherwise never see, and a parsed job with no printed total is a truncated report. Refusal raises ParseRefusal carrying (job, parsed_cents, printed_cents|MISSING) for every failure - the error is the finding. There is no tolerance parameter to widen; an off-by-one-cent plant in the test corpus must be caught as exactly one cent.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/parse.py"
+    },
+    {
+      "id": "window",
+      "label": "Audit Window Cut",
+      "plain": "Marks every line in or out of the policy audit period - inclusive on both boundary dates, because policy periods are written that way.",
+      "engineering": "AuditWindow.contains is the single containment predicate; the grid asserts it against raw date arithmetic across a 400-day sweep so an off-by-one at either boundary cannot survive. Both cuts are retained in the package - the window subtotal and the full pull - so a period ruling later is a re-read, not a re-parse.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/model.py"
+    },
+    {
+      "id": "triage",
+      "label": "Certificate Triage",
+      "plain": "Classifies every line into exactly one certificate bucket under a fixed precedence: journal entry, clearing account, wrap-enrolled, materials-only, professional, coverage current, chase.",
+      "engineering": "Precedence is code, not documentation: a wrap-enrolled vendor with live coverage is wrap-enrolled, because the wrap answers the auditor's question before the certificate does. Coverage is current only if a received certificate's required-coverage expiration reaches the window end - an unreceived certificate row is polite fiction and classifies as chase. The clearing-account rule catches both the numeric vendor id and the ERP's literal 'summary vendor' name, the two costumes the same non-vendor wears.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/triage.py"
+    },
+    {
+      "id": "emit",
+      "label": "Package Emitters",
+      "plain": "Writes the audit-response package as sorted-key JSON and a Markdown summary - the same input bytes produce the same output bytes, every run.",
+      "engineering": "json.dumps with sort_keys over a payload of primitives; dates as ISO strings; money only as integer cents. The Markdown carries the two totals and the triage census. Byte-stability is asserted by rendering twice and comparing equality, not by trusting the serializer's reputation.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/report.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Print Reports",
+      "kind": "source",
+      "col": 0,
+      "row": 1,
+      "plain": "fictional fixed-width job-cost prints, with their own printed totals and planted defects",
+      "engineering": "generate_report(seed) emits the print text, the expected per-job totals, a matching coverage listing, and on request one of three planted defects: a printed total off by one cent, a missing total line, a malformed amount.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/generate.py"
+    },
+    {
+      "id": "parser",
+      "label": "Print Parser",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "token state machine over the print",
+      "engineering": "Vendor continuation, reversal rows, one-or-two-reference journal lines, page-break boilerplate.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/parse.py"
+    },
+    {
+      "id": "gate",
+      "label": "Reconciliation Gate",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "ties every job to its printed total or refuses",
+      "engineering": "Union of parsed and printed jobs, exact ==, ParseRefusal carries every failing job and delta.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/parse.py"
+    },
+    {
+      "id": "cut",
+      "label": "Window + Coverage",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "inclusive window cut; coverage currency at window end",
+      "engineering": "Pure predicates over the surviving lines; both period cuts retained.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/triage.py"
+    },
+    {
+      "id": "package",
+      "label": "Audit Package",
+      "kind": "output",
+      "col": 3,
+      "row": 1,
+      "plain": "byte-stable JSON + Markdown, every line in exactly one triage bucket",
+      "engineering": "Sorted-key JSON, integer cents, triage census; rendered twice and compared for equality in the suite.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/premaudit_engine/report.py"
+    }
+  ],
+  "edges": [
+    {"from": "corpus", "to": "parser", "label": "print text"},
+    {"from": "parser", "to": "gate", "label": "typed lines"},
+    {"from": "gate", "to": "cut", "label": "tied lines only"},
+    {"from": "corpus", "to": "cut", "label": "coverage listing"},
+    {"from": "cut", "to": "package", "label": "triaged lines"}
+  ],
+  "spec_strip": [
+    {"label": "Tests", "value": "9,648", "source": "python -m pytest --collect-only -q (premium-audit-automation/)", "plain": "the collected checks that pin this engine's behavior"},
+    {"label": "Triage buckets", "value": "7", "source": "len(premaudit_engine.model.Triage)", "plain": "every line lands in exactly one"},
+    {"label": "Planted defects", "value": "3", "source": "premaudit_engine/generate.py defect parameter", "plain": "each one must produce a refusal, not a workpaper"},
+    {"label": "Tolerance", "value": "0 cents", "source": "premaudit_engine/parse.py exact == reconciliation", "plain": "an untied job is a refusal, not a rounding note"}
+  ],
+  "problem_statement": "A premium audit asks a simple question - what did the covered work actually cost during the policy period - and the honest answer lives in a print format designed for paper. Re-keying it into a spreadsheet destroys the one safeguard the print carries: its own totals. The workpaper that results is checked by the person who typed it, against the file they typed. This engine keeps the print's self-description as the verification anchor and makes the parse prove itself against it, job by job, to the cent, before any triage or period cut is allowed to exist.",
+  "scenarios": [
+    {
+      "title": "A clean print parses, ties, and packages end to end",
+      "narrative": "The CLI generates a fictional print report, parses it, ties every job to the report's own printed totals, cuts the audit window, triages every line, and writes the JSON and Markdown package. The demo's numbers are fictional; the discipline is not.",
+      "source": "python -m premaudit_engine --seed 7 (premium-audit-automation/); tests/test_clean_baseline.py"
+    },
+    {
+      "title": "A printed total off by one cent is a refusal, not a variance",
+      "narrative": "One planted defect nudges a single job's printed total by one cent. The parse completes, the reconciliation gate fails exactly that job with a delta of exactly one cent, and no package is produced. The failing job is named in the refusal.",
+      "source": "premaudit_engine/generate.py defect=printed_total_off -> tests/test_planted_defects.py"
+    },
+    {
+      "title": "A job that prints a total but parses no lines cannot slip through",
+      "narrative": "Reconciliation runs over the union of parsed jobs and printed-total jobs. A truncated parse that silently dropped an entire job fails against the printed side of the union - the case a sums-only check would wave through.",
+      "source": "premaudit_engine/parse.py union reconciliation; tests/test_clean_baseline.py zero-line jobs"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python -m premaudit_engine --seed 7",
+      "operation": "generate a fictional print report, parse and verify it, build the triaged package",
+      "output": "line count and window total in cents; package files under out/",
+      "exit_code": "0 built / 2 refused (reconciliation failure)",
+      "artifacts": "out/package_seed7.json, out/package_seed7.md"
+    },
+    {
+      "cmd": "python -m pytest -q",
+      "operation": "run the engine suite: curated cases plus the pipeline, money and window grids",
+      "output": "9,648 tests",
+      "exit_code": "0 green",
+      "artifacts": "none"
+    },
+    {
+      "cmd": "SWEEP=1 python -m pytest -q",
+      "operation": "widen the pipeline grid tenfold for the exhaustive sweep",
+      "output": "the same invariants over 24,000 seeds",
+      "exit_code": "0 green",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {"label": "Engine tests", "value": "9,648", "unit": "tests collected", "source": "python -m pytest --collect-only -q (premium-audit-automation/)", "plain": "live collection from the engine directory"},
+    {"label": "Pipeline grid", "value": "2,400", "unit": "seeded end-to-end cases", "source": "tests/test_invariant_grid.py PIPELINE_SEEDS", "plain": "generate -> parse -> tie -> cut -> triage, every seed"},
+    {"label": "Suite runtime", "value": "~7", "unit": "seconds", "source": "python -m pytest -q (premium-audit-automation/), local run 2026-08-14", "plain": "the whole suite, grids included"}
+  ],
+  "control_characteristics": {
+    "plain": "A produced package means every job tied its printed total exactly, every line carries a window verdict and exactly one triage bucket, and the emitters rendered byte-stably. A refusal means the parse and the print disagreed - and the refusal names every disagreeing job and its cent delta.",
+    "verdict_map": [
+      {"severity": "All jobs tie printed totals", "verdict": "PACKAGE", "action": "carry the package into the audit response; the period ruling can be made later from the retained dual cut"},
+      {"severity": "Any job fails reconciliation", "verdict": "REFUSAL", "action": "fix the source print or the parse - the refusal lists each failing job with parsed vs printed cents"}
+    ],
+    "guarantees": [
+      "Read-only: the print text and coverage listing are never written back; the engine emits new artifacts only.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on a job total.",
+      "Every line is in exactly one triage bucket; precedence is fixed in code and tested as a partition.",
+      "Byte-stable emitters: identical inputs produce identical JSON and Markdown bytes."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "0 on the bundled demo seed - the clean corpus ties; defect seeds exit 2 by design",
+      "note": "The reconciliation gate is unconditional: no package exists unless every job ties. Human judgment enters after the engine - on the period basis and on chasing the certificates the triage marked - never inside the tie."
+    }
+  },
+  "limits": [
+    {"statement": "The engine parses one print dialect - the fixed-width job-cost detail layout its generator emits. A different ERP's print needs a new tokenizer, not new invariants.", "source": "premium-audit-automation/premaudit_engine/parse.py"},
+    {"statement": "Coverage triage answers certificate currency at the window end for one required coverage type; it does not evaluate limits adequacy, additional-insured wording, or endorsement scope.", "source": "premium-audit-automation/premaudit_engine/triage.py"},
+    {"statement": "The engine never contacts a carrier, files a response, or decides the period basis; it retains both cuts so a human can rule.", "source": "premium-audit-automation/premaudit_engine/engine.py"}
+  ],
+  "media": {
+    "poster": "../assets/system-rollforward-timeline.png",
+    "motion": "../assets/system-rollforward-timeline.png",
+    "poster_alt": "Premium Audit Response architecture: seeded fixed-width prints pass through a self-verifying parser and an exact-cents reconciliation gate into the window cut, coverage cross-reference and certificate triage, ending in a byte-stable audit package.",
+    "caption": "The Premium Audit Response engine tile states the gate that everything else hangs from: every job the print report totals must be re-derived to the cent from the lines above it - and a workpaper that cannot make that tie is refused, with the failing jobs named.",
+    "crops": [],
+    "run_label": "control architecture"
+  },
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/premium-audit-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/premium-audit-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "Premium Audit Response (SFS-E51-PRA) datasheet - a self-verifying parser for fixed-width job-cost print reports that ties every job to the report's own printed totals to the cent or refuses, cuts the policy audit window inclusively, cross-references certificate coverage, and triages every cost line into exactly one certificate bucket under a fixed-precedence policy. 9,648 tests, seeded fictional data, three planted defect classes that must refuse."
+  }
+}

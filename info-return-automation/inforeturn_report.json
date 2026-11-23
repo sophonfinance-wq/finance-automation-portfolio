@@ -1,0 +1,3546 @@
+{
+  "title": "Information-return issuance control report",
+  "overall_verdict": "FAIL",
+  "file_count": 24,
+  "rule_count": 22,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ent_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ent_payer_identity",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pye_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pye_type_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pye_tin_wellformed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "box_catalog_defined",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "box_catalog_unique",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "led_rows_attributable",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "led_amounts_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "led_payment_in_year",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "frm_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "frm_payer_identity",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "frm_no_duplicates",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "frm_box_ties_ledger",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "thr_required_form_issued",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "thr_no_unrequired_form",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "thr_near_threshold_review",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "bwh_rate_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_transmittal_foots",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_annual_rollup_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_watchlist_ties",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "FAIL",
+          "location": "amount:form[FRM-401-02].box_amount_cents",
+          "message": "AMOUNT_INVALID: form[FRM-401-02].box_amount_cents must be integer cents, got 7500000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "FAIL",
+          "location": "amount:form[FRM-401-02].box_amount_cents",
+          "message": "AMOUNT_INVALID: form[FRM-401-02].box_amount_cents must be integer cents, got 7500000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "FAIL",
+          "location": "amount:form[FRM-401-02].box_amount_cents",
+          "message": "AMOUNT_INVALID: form[FRM-401-02].box_amount_cents must be integer cents, got 7500000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "bad_payee_type__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PYE-506/payee_type",
+          "message": "payee PYE-506 is classed 'contractor', which is not one of ('lender', 'affiliate', 'vendor', 'settlement_entity'); its reporting treatment was never decided"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_box_row__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "FAIL",
+          "location": "box_catalog:BOXES-2029/boxes/interest_return/IB-1",
+          "message": "box interest_return/IB-1 is catalogued 2 times; the threshold applied to the population is whichever row is read first"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_entity_id__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "FAIL",
+          "location": "entity_register:ENTITIES-2029/entities/ENT-402",
+          "message": "entity id ENT-402 appears 2 times; a form that names it cannot be attributed to one payer"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_form__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/ENT-401/PYE-501/interest_return/IB-1",
+          "message": "forms FRM-401-01, FRM-401-04 all report entity ENT-401 payee PYE-501 box interest_return/IB-1; the same year total would be reported 2 times"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 11 form(s) and 1,721,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_payee_id__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PYE-506",
+          "message": "payee id PYE-506 appears 2 times; the year total for that payee can be split across the duplicates and understate every box"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "entity_tin_malformed__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "FAIL",
+          "location": "entity_register:ENTITIES-2029/entities/ENT-403/payer_tin",
+          "message": "payer entity ENT-403 carries taxpayer number 'FTN-77', which is not a well-formed identifier; the returns it issues cannot be associated with a filer"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "form_below_threshold__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/FRM-401-04",
+          "message": "form FRM-401-04 reports payee PYE-506 for box nonemployee_compensation_return/NB-1, where entity ENT-401 paid 500.00 against a threshold of 750.00 and no backup withholding attaches; the payee was not reportable"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 11 form(s) and 1,361,650.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "form_box_off_ledger__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/FRM-401-02/box_amount_cents",
+          "message": "form FRM-401-02 reports 75,100.00 in box nonemployee_compensation_return/NB-1 for payee PYE-503; entity ENT-401 ledger lines for that box total 75,000.00 (difference 100.00)"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,250.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "form_missing_field__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/FRM-401-02",
+          "message": "form FRM-401-02 is missing issue_date"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "ledger_orphan_payee__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "FAIL",
+          "location": "ledger_extract:LEDGER-2029/payments/PAY-9001/payee_id",
+          "message": "payment PAY-9001 is booked to payee 'PYE-999', which is not in the payee register; the amount joins no year total and the payee is under-reported by it"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "issuance_report:-",
+          "message": "issuance_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "missing_required_form__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/ENT-402/PYE-503/nonemployee_compensation_return/NB-2",
+          "message": "entity ENT-402 paid payee PYE-503 60,000.00 in box nonemployee_compensation_return/NB-2, which obliges a return, and no form is on the register"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 9 form(s) and 1,301,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "near_threshold_payee__Westmere",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "FLAG",
+          "location": "ledger_extract:LEDGER-2029/payments/ENT-401/PYE-506/NB-1",
+          "message": "entity ENT-401 paid payee PYE-506 720.00 in box nonemployee_compensation_return/NB-1, 30.00 under the threshold and inside the 50.00 review band; a late invoice posting to the year makes it reportable"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "negative_payment__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "FAIL",
+          "location": "ledger_extract:LEDGER-2029/payments/PAY-9002/amount_cents",
+          "message": "payment PAY-9002 carries -500.00; a reversal has to be netted against the payment it reverses before the population is assembled, not reported as a negative box"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,360,650.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "payee_tin_malformed__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "FAIL",
+          "location": "payee_register:PAYEES-2029/payees/PYE-506/payee_tin",
+          "message": "payee PYE-506 carries taxpayer number 'FTN-77', which is not a well-formed identifier; it counts as on file, suppresses backup withholding, and prints on the form unusable"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "payer_tin_mismatch__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/FRM-403-01/payer_tin",
+          "message": "form FRM-403-01 prints payer taxpayer number 'FTN-400100011'; entity ENT-403 is registered as 'FTN-400100033', so the return would be filed under the wrong payer"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "payment_outside_year__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "FAIL",
+          "location": "ledger_extract:LEDGER-2029/payments/PAY-4103/paid_date",
+          "message": "payment PAY-4103 is dated 2030-01-05, outside the reporting year 2029-01-01 to 2029-12-31; it belongs to another year's population"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "rollup_count_wrong__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "FAIL",
+          "location": "issuance_report:ISSUANCE-2029/form_count",
+          "message": "the annual rollup states 11 form(s) reporting 1,361,150.00 with 15,100.00 withheld; the transmittals sum to 10 form(s) reporting 1,361,150.00 with 15,100.00 withheld"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "transmittal_total_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "FAIL",
+          "location": "transmittal_register:TRANSMITTALS-2029/transmittals/ENT-402",
+          "message": "entity ENT-402 transmits 4 form(s) reporting 790,401.00 with 100.00 withheld; the forms on the register foot to 4 form(s) reporting 790,400.00 with 100.00 withheld"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,151.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "unknown_form_type__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "FAIL",
+          "location": "box_catalog:BOXES-2029/boxes/royalty_return/RB-1/form_type",
+          "message": "box RB-1 is catalogued under return series 'royalty_return', which is not one of ('interest_return', 'nonemployee_compensation_return', 'card_settlement_return'); no form of that series can be issued"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    },
+    {
+      "document": "watchlist_overstated__Stonecrest_Communities",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms carry backup withholding that recomputes at 25.00%"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "FLAG",
+          "location": "threshold_watchlist:WATCHLIST-2029/entries/ENT-401/PYE-506",
+          "message": "the watchlist holds entity ENT-401 payee PYE-506 box nonemployee_compensation_return/NB-1 as near its threshold, and the ledger totals do not put it inside the review band"
+        }
+      ]
+    },
+    {
+      "document": "withholding_wrong__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 issuance artifacts are present"
+        },
+        {
+          "rule": "ent_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entity ids are unique"
+        },
+        {
+          "rule": "ent_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 payer entities are named and identified"
+        },
+        {
+          "rule": "pye_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payee ids are unique"
+        },
+        {
+          "rule": "pye_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 payees carry a known class"
+        },
+        {
+          "rule": "pye_tin_wellformed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 taxpayer numbers on file are well-formed"
+        },
+        {
+          "rule": "box_catalog_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes carry a known series and a usable threshold"
+        },
+        {
+          "rule": "box_catalog_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 catalogued boxes are defined once"
+        },
+        {
+          "rule": "led_rows_attributable",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment lines are attributable to an entity, a payee and a catalogued box"
+        },
+        {
+          "rule": "led_amounts_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment amounts are non-negative cents"
+        },
+        {
+          "rule": "led_payment_in_year",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 payment dates fall inside the reporting year"
+        },
+        {
+          "rule": "frm_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms are complete and attributable"
+        },
+        {
+          "rule": "frm_payer_identity",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 forms print the payer identity their entity is registered under"
+        },
+        {
+          "rule": "frm_no_duplicates",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 entity/payee/box combinations carry exactly one form"
+        },
+        {
+          "rule": "frm_box_ties_ledger",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 form boxes tie the entity ledger total"
+        },
+        {
+          "rule": "thr_required_form_issued",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 payee/box totals that oblige a return have one"
+        },
+        {
+          "rule": "thr_no_unrequired_form",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 issued forms are owed under the catalog"
+        },
+        {
+          "rule": "thr_near_threshold_review",
+          "status": "PASS",
+          "location": "-",
+          "message": "no payee/box total sits inside the 50.00 review band below its threshold"
+        },
+        {
+          "rule": "bwh_rate_recomputes",
+          "status": "FAIL",
+          "location": "form_register:FORMS-2029/forms/FRM-401-03/backup_withholding_cents",
+          "message": "form FRM-401-03 carries 4,000.00 of backup withholding on 20,000.00 reported; no taxpayer number is on file for the payee, so the statutory 25.00% rate recomputes 5,000.00"
+        },
+        {
+          "rule": "rpt_transmittal_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 transmittals foot the forms they accompany"
+        },
+        {
+          "rule": "rpt_annual_rollup_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the annual rollup of 10 form(s) and 1,361,150.00 ties the transmittals"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the near-threshold watchlist ties the ledger"
+        }
+      ]
+    }
+  ]
+}

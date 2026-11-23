@@ -1,0 +1,287 @@
+<p align="center">
+  <img src="./assets/banner.svg" alt="Sophon Finance Systems — AI-Driven Finance & Accounting Automation" width="100%">
+</p>
+
+# Sophon Finance Systems — AI-Driven Finance & Accounting Automation
+
+[![CI](https://img.shields.io/github/actions/workflow/status/sophonfinance-wq/finance-automation-portfolio/ci.yml?branch=main&label=CI)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/badge/tests-514%2C936%20curated%20%2B%20invariant%20grids-2ea44f)](#testing)
+[![Systems](https://img.shields.io/badge/systems-52%20runnable-6f42c1)](#the-fifty-two-systems)
+[![Website](https://img.shields.io/badge/sophonfinance.com-live-0f62fe)](https://sophonfinance.com)
+[![Open in Codespaces](https://img.shields.io/badge/Codespaces-Open%20%26%20Run-181717?logo=github&logoColor=white)](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
+[![Run the demo](https://img.shields.io/badge/Actions-Run%20Finance%20Engine%20Demo-2088FF?logo=githubactions&logoColor=white)](https://github.com/sophonfinance-wq/finance-automation-portfolio/actions/workflows/run-finance-engine.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/Python-3.12%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+
+Fifty-two self-contained Python systems for finance and tax work — month-end close, cash/debt
+reconciliation, a cash-manager control suite, cross-border surplus & ACB, partnership 1065 /
+§704(c), read-only workbook validation, a NotebookLM-style knowledge brain, and an interactive
+finance operations atlas. One of them, **Triangulate**, is a multi-agent LLM review framework with a
+deterministic core and a human sign-off gate. Everything runs on seeded
+fictional data, is covered by CI, and is built on one rule: **no material output rests on a single
+model's word.**
+
+> 🔒 Fully fictional data. No employer or client workpaper, entity, methodology, path, or
+> figure is reproduced.
+
+---
+
+## Quickstart
+
+```bash
+git clone https://github.com/sophonfinance-wq/finance-automation-portfolio
+cd finance-automation-portfolio
+pip install -r requirements.txt
+
+# run the curated engine suite (33,509 tests plus bounded invariant grids = 514,936 cases; runs in minutes)
+pytest -m "not site_tooling"
+
+# run a system
+cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024
+```
+
+No install? [Open it in a GitHub Codespace](https://codespaces.new/sophonfinance-wq/finance-automation-portfolio)
+and run `bash scripts/demo.sh` for the full tour.
+
+---
+
+## For reviewers — a 60-second tour
+
+Five commands that show the load-bearing ideas, all on fictional data:
+
+**1. The AI control catches a hallucination.** Inject one made-up figure into a clean workpaper and watch two independent roles catch it and block sign-off:
+```bash
+cd ai-validation-framework && python -m triangulate --demo-adversarial
+```
+> An AI asserts a Total Revenue that's $49k over what the streams sum to; it cascades into the tax and net cells. The LLM-style **Reviewer** *and* an independent deterministic **Auditor** each re-derive every formula, raise **6 CRITICAL tie-out breaks**, and the human gate returns **FAIL** (exit 1). No model is asked "does this look right?" — the arithmetic decides.
+
+**2. Real cross-border tax depth.** Per-layer FX translation surfaces a sign-flip a blended rate hides:
+```bash
+cd tax-surplus-engine && python -m surplus_engine --start 2021 --end 2024 --out out
+# then open out/fx_layer_analysis.md  →  find the ⚑
+```
+> An entity contributes capital in 2023 and returns it in 2024. USD ACB nets to **$0**, and a single blended rate says CAD ACB is **$0** too — but translating each layer at its own year's rate gives **CAD $(660.35)**. The sign flips (ITA 261 / Reg. 5907). The harness checks **15 named reconciliation identities**; `--check` exits non-zero on any break.
+
+**3. Honest, tiered tests.** `pytest -m "not site_tooling"` runs the curated suite (514,936 cases, gates CI); `SWEEP=1 pytest -m "not site_tooling"` runs an exhaustive property sweep (~1.72M generated cases). A separate 57-test site-tooling suite validates the generated public datasheets. See [Testing](#testing).
+
+**4. Ten close controls, each proven against its own failure mode.** Inject twelve classic month-end errors — each mapped to the control that must catch it — and watch the sentinel catch every one:
+```bash
+cd monthly-close-automation && python -m close_engine --demo-guardrails
+```
+
+**5. The loop closes itself.** Contaminate a posted close with drift (a dropped intercompany leg, a missing accrual, a one-cent tamper) *plus* a tampered locked prior period, and watch the autonomous loop resync each category from source, re-verify, auto-post — and quarantine the locked-period tamper rather than overwrite it:
+```bash
+cd monthly-close-automation && python -m close_engine.loop --demo
+```
+> A trial balance loads with a one-sided line; a fully depreciated asset keeps depreciating; an intercompany entry loses its far leg; a clearing leg books `round(total)` instead of the sum of rounded lines; a closed period is quietly edited. The demo runs a clean baseline first (**zero findings**), then injects each fault and asserts the expected control (**C1–C10**) fires — a shadow recomputation independently re-derives every posted amount, and the run exits non-zero unless all twelve faults are caught.
+
+---
+
+## Architecture
+
+<p align="center"><img src="./assets/architecture.svg" alt="Five-stage control pipeline: seeded data, calculation engine, cited evidence, read-only validation, human verdict — with separation of duties across preparer, reviewer, specialist, deterministic auditor, and human gate" width="100%"></p>
+
+The same control pattern runs through every system:
+
+**seeded data → calculation engine → cited evidence → read-only validation → human verdict**
+
+And since v1.2 the pattern *closes into a loop*: **observe → detect → remediate → re-verify →
+gate → repeat.** Engines detect their own drift, re-derive it from the seeded source of record,
+and re-verify — escalating only what they cannot certify. Five engines run the loop today,
+each with its own gate: human-gated on the tax-surplus engine (`python -m surplus_engine.loop --demo`),
+autonomous with quarantine on the close engine (`python -m close_engine.loop --demo`),
+materiality-gated on reconciliation, verbatim-or-refuse on the knowledge brain, and on Triangulate
+arithmetic self-heals while judgment escalates.
+
+- **Deterministic core.** Integer-cent arithmetic, seeded generators, byte-stable outputs — the
+  numbers don't move between runs, so every figure is re-derivable and diffable.
+- **Separation of duties (Triangulate).** A preparer builds, a reviewer challenges, a specialist
+  supports, a deterministic audit re-derives, and a human signs off. Read-only review is
+  hash-enforced (any change to a workpaper raises); AI assumptions rank below source data and
+  signed work; a severity→verdict gate (PASS / FLAG / FAIL) doubles as a CI exit code.
+- **Human-gated.** Every AI-assisted deliverable ends at a person. An optional orchestration layer
+  can coordinate longer-running work in approved, agent-enabled environments — it only adds
+  throughput; the controls are what make the output defensible. The platform runs fully without it.
+
+Full flow in **[ARCHITECTURE.md](./ARCHITECTURE.md)**.
+
+---
+
+## The fifty-two systems
+
+Every system is self-contained, deterministic, and ships with a seeded fictional-data generator.
+
+| System | Package | Run | What it demonstrates |
+|---|---|---|---|
+| [Month-End Close](./monthly-close-automation/) | `close_engine` | `python -m close_engine --period 2026-03` | recurring JEs, schedule-to-GL tie-outs, debit/credit controls, a ten-control sentinel layer (completeness calendar, interco mirroring, shadow recompute, period lock — fault-injection proven via `--demo-guardrails`), refusal to post out-of-tie entries |
+| [Cash & Debt Reconciliation](./cash-reconciliation/) | `recon_engine` | `python -m recon_engine` | GL-to-bank/lender matching, materiality classification, evidence log generation |
+| [Cash Management](./cash-management/) | `cash_engine` | `python -m cash_engine --demo` | five cash-manager controls — bank-rec bridge (bank ± DIT/outstanding = GL), outstanding/void/stale checks, wire dual-approval (segregation of duties), register running-balance continuity, concentration sweep tie-out — all read-only, human-gated |
+| [Accounts Payable](./accounts-payable-automation/) | `ap_engine` | `python run.py` | posting integrity, payment release gates, duty segregation, information reporting — 30 read-only controls |
+| [Warranty Reimbursement](./warranty-reimbursement-automation/) | `warranty_engine` | `python run.py` | the warranty claim programme: a coverage limit re-derived from construction cost, cumulative claims held inside a finite pool, and every claim tested against its quarter, the policy period and close of escrow — 22 read-only controls |
+| [Buyer Upgrades](./buyer-upgrade-automation/) | `upgrade_engine` | `python run.py` | the upgrade programme: deferred revenue released only on close of escrow, the closing entry balanced, sales tax held as a liability, and four schedules tied to one number — 20 read-only controls |
+| [Project Draw](./project-draw-automation/) | `draw_engine` | `python run.py` | the construction loan draw: the reconciliation identity at zero tolerance, the lender's form tied to its working papers and the trial balance, contingency held to the percent complete of its own cost class, cutoff, supporting documentation — 34 read-only controls |
+| [Intercompany Reciprocity](./intercompany-automation/) | `intercompany_engine` | `python run.py` | the intercompany balances of a development group: every due-from reconciled to the due-to that faces it, each closing rolled forward from the ledger, funding traced to the protocol-correct entity and down the ownership chain, the guarantor's liquidity covenant held — 23 read-only controls |
+| [Partnership 1065](./partnership-1065-automation/) | `partnership_tax` | `python -m partnership_tax` | book-to-tax bridge, 1065 / Sch. K / L / M-1 / M-2 / K-1 mapping, review checks, IRC §704(c) built-in gain (`--section704c`) |
+| [Validation Engine](./audit-automation/) | `validation_engine` | `python run.py` | read-only workbook checks, formula integrity, lineage, PASS / REVIEW / FAIL verdicts, byte-identical no-write guarantee |
+| [Tax Surplus / ACB](./tax-surplus-engine/) | `surplus_engine` | `python -m surplus_engine --start 2021 --end 2024` | Canadian foreign-affiliate surplus pools, distribution waterfall, per-layer FX, ITA 40(3)-style deemed gain on negative ACB |
+| [Triangulate](./ai-validation-framework/) | `triangulate` | `python -m triangulate` | AI separation of duties: preparer, reviewer, specialist, deterministic audit, human gate |
+| [Knowledge Brain](./knowledge-brain-engine/) | `brain_engine` | `python -m brain_engine ask "..."` | meeting transcripts → citation-governed knowledge base; verbatim, timestamped citations; review → remediation (cited change-directives + an apply-ready remediation prompt); refuses with no source |
+| [Finance Operations Atlas](./finance-atlas/) | `atlas_data` + `generate` | `python generate.py` | documentation-as-artifact: a data model that renders an interactive, single-file HTML map of a finance department (drives, workstreams, directory, calendar) — deterministic output, deny-list confidentiality linting in the test suite |
+| [Property Tax](./property-tax-automation/) | `proptax_engine` | `python run.py` | a residential developer's property tax cycle: parcel completeness through platting and split, each jurisdiction's own statutory calendar and instalment arithmetic, ownership traced through closing so the roll bills the right owner, and the accrual behind it — 26 read-only controls |
+| [Surety Bond & Collateral](./surety-bond-automation/) | `bond_engine` | `python run.py` | the surety bond programme: each bond's lifecycle from posting to release, cash collateral returned when the obligation ends, premium stopped on released bonds, and aggregate penal sum held to the indemnity limit — 29 read-only controls |
+| [Insurance Cost Allocation](./insurance-allocation-automation/) | `insurance_engine` | `python run.py` | the insurance programme: one master premium apportioned across every project's job cost to the residual cent, builder's risk written over what is under construction, allocation basis tied to the data, and the carrier audit true-up posted to the year that bore the deposit — 24 read-only controls |
+| [Insurance Compliance](./coi-compliance-automation/) | `coi_engine` | `python run.py` | the certificate-of-insurance programme: every subcontractor's coverage verified against its contract requirements, expirations and gaps flagged before work proceeds, additional-insured and waiver-of-subrogation endorsements confirmed, and limits held to the job's exposure — 22 read-only controls |
+| [Expense & P-Card](./expense-report-automation/) | `expense_engine` | `python run.py` | the expense-report and purchasing-card programme: receipts matched to policy limits, duplicate and split-transaction detection, approval thresholds and segregation of duties enforced, and personal/non-reimbursable charges caught before posting — 23 read-only controls |
+| [Project Labor Charge](./labor-charge-automation/) | `labor_engine` | `python run.py` | the project labor-charging programme: hours tied to authorized cost codes, rate integrity, allocation across projects reconciled to the total, and overtime/premium and cutoff controls held to the pay period — 26 read-only controls |
+| [Lien Waiver Tracking](./lien-waiver-automation/) | `lien_engine` | `python run.py` | the lien-waiver programme: conditional and unconditional waivers matched to each payment, through-date coverage verified against the draw, release status tied to funds disbursed, and missing or stale waivers flagged before the next draw — 25 read-only controls |
+| [Equity Waterfall & JV Promote](./equity-waterfall-automation/) | `waterfall_engine` | `python run.py` | the JV distribution waterfall: preferred-return accrual, capital-account roll-forward, tier sequencing and pari-passu splits, hurdle-IRR re-solution, promote/carry split and capital-call dilution — every distributed dollar re-derived from the executed operating agreement at integer-cent equality |
+| [Project Proforma Integrity](./proforma-integrity-automation/) | `proforma_engine` | `python run.py` | the quarterly project proforma: source-and-use balance, cost/budget equalities, interest-reserve adequacy, the profit→waterfall→distribution tie-out chain, margin and return re-derivation, and reporting-calendar completeness — each figure rebuilt from the base ledger |
+| [Gross-Receipts & Excise Tax](./gross-receipts-tax-automation/) | `grt_engine` | `python run.py` | multi-jurisdiction gross-receipts / excise tax: each worksheet's tax re-derived from the GL revenue pull times the in-force classification rate, tied to the filed number, with deductions, thresholds, rate-effective dates and a complete, timely, approved filing calendar |
+| [Filing Obligation Calendar](./filing-calendar-automation/) | `filing_engine` | `python run.py` | the fiscal-year filing calendar: every entity × jurisdiction obligation proved filed or validly extended before its statutory due date, fixed-amount vouchers re-derived, and the status register tied to filed evidence with nothing missing or orphaned |
+| [Energy-Efficient Home Credit](./energy-credit-automation/) | `energy_engine` | `python run.py` | the IRC §45L credit: every claimed dwelling unit gated on its close-of-escrow date and RESNET/HERS certification, multiplied by the dated statutory per-unit amount, rolled up per project / region / fiscal year with net-benefit, partner allocation and a full cross-artifact tie-out |
+| [Outstanding Check Aging & Escheatment](./check-aging-automation/) | `checkage_engine` | `python run.py` | the disbursement register: the outstanding-check population re-derived from cleared amounts and cleared dates, every item aged to the as-of date, the total tied to the bank reconciliation's outstanding-checks line, voids and stop-payments proved excluded, and stale-dating separated from the dormancy period that drives escheatment |
+| [G&A Expense Allocation](./ga-allocation-automation/) | `gaalloc_engine` | `python run.py` | the monthly G&A allocation: driver shares footed to exactly 100%, allocated dollars footed to exactly the cost pool with the residual cent placed deterministically by largest remainder, the allocation journal entry balanced and netting to zero at consolidation, and the postage allocation reconciled to the meter-reading delta |
+| [Unit Sales & Commission Tie-Out](./unit-sales-automation/) | `sales_engine` | `python run.py` | the weekly sales matrix for a for-sale housing project: revenue per square foot and net proceeds re-derived from the prices, total commission struck on the actual sales price with every agent split summing back to it, sold units reconciled one-for-one to the closings tab, and the date sequence held in order |
+| [Project Variance & Business-Plan Compare](./project-variance-automation/) | `variance_engine` | `python run.py` | the periodic project report: Cost to Complete struck as Total Budget less Cost to Date, net revenue, profit and margin on cost re-derived from their own inputs, every variance column re-footed as the difference of the two columns beside it in cents and basis points alike, both comparative columns proved to foot inside themselves, the plan column proved against the frozen approved version, and every milestone variance re-derived under the plus-is-ahead convention |
+| [Contingency Rollforward & Adequacy](./contingency-rollforward-automation/) | `contingency_engine` | `python run.py` | the contingency status block: construction and project contingency rolled forward from the prior balance through the draws allocated against them, the period total footed to the draw detail, each bucket reconciled to the budget line that funded it, every draw walked against the balance earlier draws left, and the word "adequate" rebuilt from the balance remaining against the projected potential use |
+| [Information Return Issuance](./info-return-automation/) | `inforeturn_engine` | `python run.py` | the annual information-return run: the payee population reassembled entity by entity, every box amount footed back to the payment lines it came from, a form proved to exist exactly where the box threshold met at the cent or the backup-withholding override obliges one and nowhere else, withholding recomputed at the statutory rate in both directions, and every transmittal and the annual rollup recounted from the forms |
+| [Trial-Balance Roll-Forward](./tb-rollforward-automation/) | `rollforward_engine` | `python run.py` | the annual workpaper rebuild: last year's column structure carried forward, final-year entities retired and renames carried once, every column re-derived from the year-end extract's declared balance column rather than its position, completeness swept in both directions, dual-chart rows summed through the equivalence map, the eliminations range proved to reach this year's new columns, and every figure linked to a backup row that agrees with it |
+| [JV Investor Reporting Package](./investor-reporting-automation/) | `investor_engine` | `python run.py` | the monthly package issued to a joint-venture equity partner: the trial balance agreed to the ledger by account number rather than row position, a credit intercompany balance reclassified rather than netted against assets, every member's capital footed, cross-footed and rolled forward with the Total column summing the row it sits on, the job cost bridge closed exactly with every difference itemized and disclosed, contributions agreed to the executed equity draw schedule, each caption tested against its schedule's type, and nothing released over an open exception |
+| [Tax Workpaper Build & Carry-Down](./workpaper-build-automation/) | `workpaper_engine` | `python run.py` | the new fiscal year's tax workpaper package **built** from a locked ledger extract and the signed prior year rather than edited out of last year's file: the trial balance harvested by exact account number and scoped to one entity block, the statements classified from the prior-year map, every prior-year layer frozen byte-equal, every rolling caption advanced by exactly one year, each current-year contribution and distribution computed as source less prior rather than typed, the member allocation splits carried down in integer basis points, new member-capital and E&P year blocks appended, and the evidence tab constructed with its citation block and a zero-footing subtotal — then 24 controls prove what it built |
+| [Debt Term-Sheet Sizing & Loan Terms](./debt-sizing-automation/) | `sizing_engine` | `python run.py` | the loan term sheet before close: the maximum loan held to advance rate times cost basis, the all-in rate re-derived as the greater of index plus spread or the floor, every fee checked against its correct base, maturity proved as base term plus exercised extensions, and the portfolio rollup footed |
+| [Franchise Tax Combined Apportionment](./franchise-tax-automation/) | `franchise_engine` | `python run.py` | the combined-group franchise return: the affiliate roster reconciled to the prior year plus additions less removals, group revenue tied to the consolidated tax trial balance, the single receipts-factor apportionment recomputed and bounded, and the tax re-derived as taxable margin times apportionment times rate |
+| [Section 263A Interest Capitalization](./interest-capitalization-automation/) | `capitalize_engine` | `python run.py` | the IRC §263A(f) avoided-cost calculation: each project's capitalized interest re-derived from accumulated production expenditures times the period rate quarter by quarter, every row footed across the grid, interest proved to equal capitalized plus deducted, and the prior-year comparison tied rather than typed |
+| [Interest Accrual & Loan Amortization](./interest-accrual-automation/) | `interest_engine` | `python run.py` | each note's accrued interest re-derived from balance, rate and day-count, the amortization rolled forward, maturity, rate-step, prepayment and subordination gates enforced, and the reciprocal GL and interest journal tied back to the schedule |
+| [Financing Execution & Schedule Variance](./financing-execution-automation/) | `financing_engine` | `python run.py` | a developer's monthly upcoming-financings report: each milestone variance re-derived as Current − Prior, every Prior tied to last month's Current, the original baseline frozen, the playbook complete and each Gantt bar seated in its closing month |
+| [Wire & Transfer Release Control](./wire-release-automation/) | `wire_engine` | `python run.py` | every outbound wire, ACH and book transfer gated on two distinct authorized signers within their limits, an approved or callback-cleared beneficiary, a resolved routing number and a funded source account — before release |
+| [Payroll & Benefit Reconciliation](./payroll-benefit-automation/) | `benefit_engine` | `python run.py` | one pay period's benefit money: every 401(k), HSA and FSA deduction proved to reach the provider, the ledger and cash intact, the employer match and 402(g)/statutory limits recomputed, and each deposit checked against its DOL deadline |
+| [Non-Resident Withholding & 1042-S](./withholding-automation/) | `withholding_engine` | `python run.py` | every cross-border FDAP withholding rate recomputed from the payee's status, each treaty reduction gated on a valid W-8, and the tax withheld, the deposits and Form 1042 tied back to the 1042-S slips |
+| [Home Sale Closing & Settlement Tie-Out](./closing-settlement-automation/) | `closing_engine` | `python run.py` | each closed home's settlement, closing entry, revenue, loan release and cost-of-sale relief recomputed from base facts and proforma rates, the closing entry proved to balance, and the rollup tied to the units beneath |
+| [Entity Good-Standing](./good-standing-automation/) | `standing_engine` | `python run.py` | each entity proved in good standing in every state it's registered in — annual report on time, flat franchise tax paid, Secretary-of-State ACTIVE, registered agent and license current — with the rollup recomputed from the state records |
+| [Subcontract SOV & Change Orders](./sov-commitment-automation/) | `sov_engine` | `python run.py` | a subcontract commitment's schedule of values footed, only approved change orders moving the revised contract, every pay-application column re-derived with retention and tax, and the conditional lien release tied to the certified payment due |
+| [Equity-Method Pickup & Eliminations](./equity-pickup-automation/) | `pickup_engine` | `python run.py` | every equity-method pickup re-derived from ownership and investee result, the investment roll-forward and preferred-return accrual recomputed, each elimination paired to extinguish carrying value to zero, and the whole tied to the trial balance |
+| [Depreciation & Prepaid Amortization](./depreciation-register-automation/) | `depreciation_engine` | `python run.py` | every fixed-asset depreciation and prepaid amortization figure re-derived from cost, useful life and in-service window, both roll-forwards rebuilt, and the register totals tied to the GL control accounts and the posted recurring entry |
+| [Earnest-Money Deposit Trust](./deposit-trust-automation/) | `deposit_engine` | `python run.py` | each unit's pre-close earnest money tied three ways — the deposit ledger, the escrow agent's statement and the construction-loan paydowns — to zero variance, with cancellation splits and the reconciliation summary recomputed from the units beneath |
+| [Capital Spending Request Gate](./spending-gate-automation/) | `spending_engine` | `python run.py` | a developer's capital spending requests: dollar triggers fired only after approval, the five phase gates cleared in sequence, and every contingency floor, fee, total and gate summary re-derived and tied |
+| [Premium Audit Response](./premium-audit-automation/) | `premaudit_engine` | `python -m premaudit_engine --seed 7` | the annual general-liability premium audit answered from the fixed-width job-cost print itself: every parsed job tied to the report's own printed total to the cent over the union of jobs parsed and jobs printed (or the engine refuses, naming each failing job and its cent delta), cost cut to the inclusive policy audit window, vendors cross-referenced to the certificate-of-insurance listing, and every line triaged into exactly one bucket under a fixed precedence |
+| [Baseline & Version Drift](./baseline-drift-automation/) | `baseline_engine` | `python run.py` | four copies of one project budget reconciled against one another: category sets paired in both directions before any value is compared, totals summed from the lines rather than read from a stated figure, offsetting movements graded as reclassification rather than change, every movement traced to an approved amendment, and derived-schedule inputs proved present before the output is trusted |
+
+**Triangulate** is the centerpiece: a framework for putting AI into financial work without letting a
+single model validate its own output. Its reviewer is a live Anthropic Claude integration
+(standard-library `urllib`, `claude-opus-4-8`, JSON-schema output) that swaps cleanly with a
+deterministic offline mock — so the same pipeline runs air-gapped or against an approved model.
+
+---
+
+## Testing
+
+The suite is **tiered** — a fast curated suite gates CI, and an exhaustive property sweep runs on
+demand:
+
+| Tier | Command | Tests | What it is |
+|---|---|---:|---|
+| **Behaviour tests** (gates CI) | `pytest -m "not site_tooling"` | **33,509** | Unit + behavior tests, each asserting a real domain property — waterfall sum-preservation, tie-out recompute from first principles — across all 52 systems. This is the curated total less the bounded invariant grids below (`6,405` distinct test functions across the whole curated suite, before parametrization). Runs in minutes. |
+| ↳ plus the bounded invariant grids | *(same scoped `pytest` run)* | **514,936** | Adds `481,427` grid cases — every recent engine ships a `test_invariant_grid_10k.py` over its money kernel (premium audit's is `test_invariant_grid.py`), plus per-engine `test_curated_invariant_grid.py` — so each property is checked across a bounded integer domain (`itertools.product`). |
+| **Site tooling** (separate guard suite) | `pytest -m site_tooling` | **57** | Generator, schema, freshness, accessibility, page-budget, and tile-footer guards. Excluded from the 514,936 curated engine total. |
+| **Property sweep** (opt-in) | `SWEEP=1 pytest -m "not site_tooling"` | **~1.72M** | Exhaustive `itertools.product` grids asserting sum-preservation, exact integer round-trips, arithmetic identities, frozen-dataclass round-trips, and determinism across the full integer input domain. |
+
+Every test calls real engine code and asserts a true property. The sweep is excluded from the
+default run (and CI) for speed and generated at import — the files stay small. It's there for
+exhaustive verification when you want it; turn it on with `SWEEP=1`.
+
+Test cases by system (hand-written + grid expansion): month-end close leads at **15,687**, and every
+engine added in the latest build cycle now carries a bounded invariant grid over its
+money kernel (**10,000** cases; premium audit's has **9,600**) on top of its behavior tests — e.g. equity waterfall **10,449** · depreciation **10,440** ·
+capital spending **10,424** · equity-method pickup **10,423** · accounts payable **12,223**. The earlier
+flagships remain partnership **8,605** · triangulate **8,320** · recon **7,511** · tax-surplus **7,498** ·
+knowledge-brain **7,011** · cash-management **5,290** · validation **4,814** · atlas **2,952** (including a
+parametrized deny-list confidentiality linter across every shipped file).
+
+---
+
+## Repository layout
+
+```text
+finance-automation-portfolio/
+├── monthly-close-automation/     close_engine      — JEs, tie-outs, out-of-tie refusal
+├── cash-reconciliation/          recon_engine      — GL ↔ bank/lender matching
+├── cash-management/              cash_engine       — five cash-manager controls, read-only
+├── tax-surplus-engine/           surplus_engine    — FA surplus pools, ACB, per-layer FX
+├── partnership-1065-automation/  partnership_tax   — 1065 / K-1, §704(c) built-in gain
+├── audit-automation/             validation_engine — read-only workbook checks
+├── accounts-payable-automation/  ap_engine         — read-only payables controls
+├── ai-validation-framework/      triangulate       — multi-agent LLM review + guardrails
+├── knowledge-brain-engine/       brain_engine      — cited retrieval, review → remediation
+├── finance-atlas/                atlas_data        — one-page department atlas (drives, workstreams)
+├── docs/                         case study · walkthrough · agent operations · deployment tracks
+├── assets/                       diagrams + demo GIFs
+├── scripts/                      demo.sh
+└── .github/workflows/            CI + runnable demo
+```
+
+Each system has its own README with the regime it models, the run commands, and sample output.
+
+---
+
+## See it run
+
+<details>
+<summary><b>Watch each engine run (animated demos, all on fictional data)</b></summary>
+
+<br>
+
+**Month-End Close Engine**
+<p><img src="./assets/systems/close.gif" alt="Month-End Close Engine live demo" width="100%"></p>
+
+**Autonomous Close Loop** *(new)*
+<p><img src="./assets/systems/close-loop.gif" alt="Autonomous Close Loop live demo" width="100%"></p>
+
+**Cash & Debt Reconciliation**
+<p><img src="./assets/systems/recon.gif" alt="Cash and Debt Reconciliation live demo" width="100%"></p>
+
+**Tax Surplus / ACB Model**
+<p><img src="./assets/systems/surplus.gif" alt="Tax Surplus and ACB Model live demo" width="100%"></p>
+
+**Surplus Assurance Loop** *(new)*
+<p><img src="./assets/systems/surplus-loop.gif" alt="Surplus Assurance Loop live demo" width="100%"></p>
+
+**Partnership Tax · Form 1065**
+<p><img src="./assets/systems/partnership-tax.gif" alt="Partnership Tax Form 1065 live demo" width="100%"></p>
+
+**Validation Engine**
+<p><img src="./assets/systems/validation.gif" alt="Validation Engine live demo" width="100%"></p>
+
+**Triangulate**
+<p><img src="./assets/systems/triangulate.gif" alt="Triangulate AI validation live demo" width="100%"></p>
+
+**Knowledge Brain Engine**
+<p><img src="./assets/systems/brain.gif" alt="Knowledge Brain Engine live demo" width="100%"></p>
+
+</details>
+
+The **[Guided Demo & Walkthrough](./docs/DEMO-WALKTHROUGH.md)** shows the command to run for each
+system, what to inspect, and what it proves. For how these map to specific finance, tax, and
+engineering competencies, see the **[Case Study](./docs/CASE-STUDY.md)**.
+
+---
+
+## Stack
+
+`Python 3.12+` · `openpyxl` · `pytest` · `Anthropic Claude API` (stdlib `urllib`, no SDK) ·
+`GitHub Actions CI` · `LibreOffice headless` (Excel recalculation) · Excel-compatible workbooks ·
+Markdown / JSON evidence.
+
+No agent or orchestration dependency is required to run the demos or validate the control logic.
+
+---
+
+## Author
+
+**Sophonnarith Hang** — AI Finance Engineer · Founder, Sophon Finance Systems · 10+ yrs senior
+accounting & tax (Fortune 100 & 500; GAAP / FAR / CAS).
+[linkedin.com/in/sophonnarith](https://www.linkedin.com/in/sophonnarith) · [sophonfinance.com](https://sophonfinance.com) · contact@sophonfinance.com
+
+## License
+
+[MIT](./LICENSE). A public portfolio of original systems and methodology, demonstrated on fully
+fictional data with all confidential engagement detail withheld.

@@ -1,0 +1,204 @@
+{
+  "num": 3,
+  "slug": "tax",
+  "part_no": "SFS-E03-PTX",
+  "mnemonic": "PTX",
+  "family": "Partnership Tax",
+  "name": "Partnership Tax · Form 1065",
+  "tagline": "Deterministic Form 1065 support builder with penny-exact K-1s and seven tie-out checks",
+  "plain_summary": "From a seeded, fully fictional source bundle it builds the partnership's book-to-tax bridge, maps every figure onto Form 1065 and Schedule K, L, M-1, M-2 plus a K-1 preview, and allocates ordinary income so the partner K-1s sum to the exact penny. It runs seven deterministic tie-out checks and marks the package READY only when all pass, otherwise exit code 2. A separate mode tracks IRC §704(c) built-in gain under the traditional method, carrying two parallel capital accounts and flagging the ceiling rule rather than silently curing it.",
+  "rev": "2026-07-20",
+  "status": "PRODUCTION",
+
+  "marketing_thesis": "Every figure on this page re-derives from the public repository: the 653,550.00 ordinary income, the seven tie-out checks, the 15 sourced return lines, and the §704(c) roll-forward are printed by commands you can run, not asserted.",
+  "layers_intro": "Each layer is one stage of the pipeline, top of stack to substrate. Select a layer for its plain-terms and engineering detail.",
+
+  "layers": [
+    {"id": "gate", "label": "Review & tie-out gate",
+     "plain": "Seven checks decide whether the package is ready; if any fails, it reads REVIEW instead of READY.",
+     "engineering": "_review_checks builds seven ReviewCheck rows (CHK-001..CHK-007); a row is OK when |actual - expected| <= tolerance (tolerance 0), else FAIL. TaxPackage.ready = all checks OK; cli.main() returns exit 0 if ready else 2.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/engine.py"},
+    {"id": "report", "label": "Reporting & artifacts",
+     "plain": "Turns the computed package into the review-ready Markdown, JSON, and optional Excel files.",
+     "engineering": "write_outputs renders tax_workpapers.md, review_checks.md, form_1065_preview.json, and (unless --no-xlsx) an openpyxl 1065_supporting_package.xlsx with per-sheet number formats and OK/FAIL fills.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/report.py"},
+    {"id": "map", "label": "1065 mapping & K-1 allocation",
+     "plain": "Maps the workpaper numbers onto real return lines and splits ordinary income across the partners.",
+     "engineering": "_form_lines emits 15 FormLine rows across Form 1065 and Schedule K/L/M-1/M-2, each carrying source_ids; _partner_allocations uses allocate_by_bps for penny-exact K-1 ordinary income plus a capital roll-forward.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/engine.py"},
+    {"id": "core", "label": "Book-to-tax compute & integer-cent money core",
+     "plain": "Computes book income, the M-1 adjustments, and taxable ordinary income using whole-cent math.",
+     "engineering": "build_tax_package derives book_income, adjustment_total, ordinary_income, tax depreciation (from the M1-TDEP adjustment), and total deductions; money.py supplies to_cents, fmt, and the largest-remainder allocate_by_bps.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/money.py"},
+    {"id": "intake", "label": "Seeded synthetic source intake",
+     "plain": "Generates the fictional trial balance, balance sheet, capital accounts, and line-map targets the rest of the pipeline reads.",
+     "engineering": "generate_source_package(year, seed) with random.Random(seed) builds partners, income and deduction items, book-tax adjustments, the balance sheet, capital activity, and a SourceRecord index; typed dataclasses live in model.py.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/generate.py"}
+  ],
+
+  "blocks": [
+    {"id": "cli", "label": "CLI dispatch", "kind": "control", "col": 1, "row": 2,
+     "plain": "Reads the flags and picks either the standard 1065 build or the §704(c) demo.",
+     "engineering": "argparse parser with --year (2025), --seed (1065), --out, --no-xlsx, --section704c; routes to _run_section704c or the standard build.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/cli.py"},
+    {"id": "gen", "label": "Source intake", "kind": "source", "col": 2, "row": 1,
+     "plain": "Produces the fictional trial balance, balance sheet, capital, and line-map targets.",
+     "engineering": "generate_source_package(year, seed) -> TaxSourcePackage, seeded by random.Random(seed).",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/generate.py"},
+    {"id": "bridge", "label": "Book-to-tax bridge", "kind": "compute", "col": 3, "row": 1,
+     "plain": "Builds book income and the M-1 adjustments to reach taxable ordinary income.",
+     "engineering": "build_tax_package computes book_income, adjustment_total, ordinary_income, tax_depreciation, and total_deductions in integer cents.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/engine.py"},
+    {"id": "map", "label": "1065 / K / L / M-1 / M-2 line map", "kind": "compute", "col": 4, "row": 1,
+     "plain": "Maps each computed number onto its return line, with source IDs.",
+     "engineering": "_form_lines emits 15 FormLine rows across Form 1065 and Schedules K/L/M-1/M-2.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/engine.py"},
+    {"id": "alloc", "label": "K-1 partner allocation", "kind": "compute", "col": 4, "row": 2,
+     "plain": "Splits ordinary income and capital activity across partners to the penny.",
+     "engineering": "_partner_allocations with money.allocate_by_bps (largest remainder) so K-1 amounts sum exactly to Schedule K.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/engine.py"},
+    {"id": "checks", "label": "Review checks gate", "kind": "gate", "col": 5, "row": 1,
+     "plain": "Runs seven tie-out checks; only marks READY when all pass.",
+     "engineering": "_review_checks -> seven ReviewCheck rows; TaxPackage.ready = all OK; exit 0 / 2.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/engine.py"},
+    {"id": "report", "label": "Report writers", "kind": "output", "col": 6, "row": 1,
+     "plain": "Renders the Markdown, JSON, and optional Excel outputs.",
+     "engineering": "write_outputs -> tax_workpapers.md, review_checks.md, form_1065_preview.json, optional xlsx.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/report.py"},
+    {"id": "artifacts", "label": "Artifacts", "kind": "artifact", "col": 7, "row": 1,
+     "plain": "The review-ready files land in the output directory.",
+     "engineering": "output/tax_workpapers.md, review_checks.md, form_1065_preview.json, 1065_supporting_package.xlsx.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/report.py"},
+    {"id": "s704c", "label": "§704(c) built-in-gain engine", "kind": "compute", "col": 3, "row": 3,
+     "plain": "Alternate mode: tracks book vs tax capital and applies the traditional method with the ceiling rule.",
+     "engineering": "section704c.py tracks parallel §704(b) book and tax capital, allocates tax items under the traditional method, and flags ceiling_binding with the shortfall.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/section704c.py"},
+    {"id": "s704c_report", "label": "§704(c) reports", "kind": "output", "col": 6, "row": 3,
+     "plain": "Writes the built-in-gain summary and a per-partner K-1 capital analysis.",
+     "engineering": "run_demo writes section704c_summary.md and section704c_k1_<PARTNER>.md.",
+     "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/partnership_tax/section704c.py"}
+  ],
+
+  "edges": [
+    {"from": "cli", "to": "gen", "label": "default mode"},
+    {"from": "cli", "to": "s704c", "label": "--section704c"},
+    {"from": "gen", "to": "bridge", "label": "TaxSourcePackage"},
+    {"from": "bridge", "to": "map", "label": "ordinary income"},
+    {"from": "bridge", "to": "alloc", "label": "ordinary income"},
+    {"from": "map", "to": "checks", "label": "form lines"},
+    {"from": "alloc", "to": "checks", "label": "K-1 rows"},
+    {"from": "checks", "to": "report", "label": "READY / REVIEW", "gate": true},
+    {"from": "report", "to": "artifacts", "label": "md / json / xlsx"},
+    {"from": "s704c", "to": "s704c_report", "label": "results"},
+    {"from": "s704c_report", "to": "artifacts", "label": "section704c_*.md"}
+  ],
+
+  "spec_strip": [
+    {"label": "Tests", "value": "8,605",
+     "source": "python -m pytest --collect-only -q (partnership-1065-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json",
+     "plain": "the checks that pin this engine's behavior"},
+    {"label": "Tie-out checks", "value": "7",
+     "source": "partnership_tax/engine.py _review_checks (CHK-001..CHK-007); output/review_checks.md",
+     "plain": "deterministic reviewer checks that gate READY"},
+    {"label": "Mapped return lines", "value": "15",
+     "source": "partnership_tax/engine.py _form_lines; CHK-007 counts 15/15 with source refs",
+     "plain": "Form 1065 + Schedule K/L/M-1/M-2 lines, all sourced"},
+    {"label": "Money precision", "value": "integer cents",
+     "source": "partnership_tax/money.py to_cents / fmt / allocate_by_bps",
+     "plain": "largest-remainder allocation, K-1s sum exactly"},
+    {"label": "Default seed", "value": "1065",
+     "source": "partnership_tax/generate.py DEFAULT_SEED = 1065",
+     "plain": "deterministic synthetic source bundle"},
+    {"label": "Gate exit codes", "value": "0 = READY · 2 = REVIEW",
+     "source": "partnership_tax/cli.py main() (return 0 if package.ready else 2)",
+     "plain": "so it can act as a CI gate"}
+  ],
+
+  "problem_statement": "Preparing Form 1065 partnership-tax support is manual and error-prone: the book-to-tax bridge, the K-1 allocations that must sum to the penny, the Schedule L / M-1 / M-2 tie-outs, and multi-year IRC §704(c) built-in-gain tracking all have to reconcile before anything is filed. Typical failures are off-by-a-penny K-1 allocations, an unbalanced Schedule L, unsupported return lines, and §704(c) ceiling-rule distortions that get quietly smoothed over. This engine builds the whole package deterministically on fictional seeded data, sources every mapped line, and refuses to mark the package ready until all tie-out checks pass.",
+
+  "scenarios": [
+    {"title": "A standard 1065 support package that ties out",
+     "narrative": "The default run builds the fictional Demo 721 Development LP return: ordinary business income of 653,550.00, a 15-line Form 1065 / Schedule K/L/M-1/M-2 map, a three-partner K-1 preview, and 7/7 checks OK, so the package is marked READY and the process exits 0.",
+     "source": "README Run It (python -m partnership_tax); output/review_checks.md CHK-001..CHK-007; partnership_tax/cli.py main()"},
+    {"title": "Skip the optional Excel workbook",
+     "narrative": "Passing --no-xlsx builds the identical package but omits the openpyxl support workbook, emitting only the Markdown and JSON artifacts — useful in CI or where Excel is not wanted.",
+     "source": "README Run It (python run.py --no-xlsx); partnership_tax/cli.py --no-xlsx flag; partnership_tax/report.py write_outputs"},
+    {"title": "An IRC §704(c) built-in gain with a binding ceiling",
+     "narrative": "The §704(c) mode models Harborview Partners LP: Atlas contributes property (FMV 1,200,000 / tax basis 300,000 = 900,000 built-in gain) and Beacon contributes 1,200,000 cash. Book depreciation (200,000/yr) exceeds tax depreciation (50,000/yr), so the ceiling rule binds in FY1-5 (flagged BINDING short 50,000 each year); the residual 150,000 layer is caught up to Atlas on the FY6 sale and the tax-basis balance sheet ties at 2,260,000.",
+     "source": "README §704(c) section (python -m partnership_tax --section704c); output/section704c_summary.md"}
+  ],
+
+  "instruction_set": [
+    {"cmd": "python -m partnership_tax", "operation": "Build the standard fictional Form 1065 support package", "output": "Console summary (year, partnership, ordinary income, checks OK, READY/REVIEW) + written files", "exit_code": "0 if READY, 2 if REVIEW", "artifacts": "output/tax_workpapers.md, review_checks.md, form_1065_preview.json, 1065_supporting_package.xlsx"},
+    {"cmd": "python run.py --no-xlsx", "operation": "Same build via the convenience entrypoint, skipping the Excel workbook", "output": "Console summary + written files (no xlsx)", "exit_code": "0 if READY, 2 if REVIEW", "artifacts": "output/tax_workpapers.md, review_checks.md, form_1065_preview.json"},
+    {"cmd": "python -m partnership_tax --section704c", "operation": "Run the IRC §704(c) built-in-gain demo (traditional method + ceiling rule)", "output": "Console summary (partnership, partners, contributed props, built-in gain) + written files", "exit_code": "0", "artifacts": "output/section704c_summary.md, section704c_k1_ATLAS.md, section704c_k1_BEACON.md"},
+    {"cmd": "python -m pytest -q", "operation": "Run the engine's test suite", "output": "pytest pass/fail summary", "exit_code": "0 if all pass", "artifacts": "none (test run)"}
+  ],
+
+  "benchmarks": [
+    {"label": "Tests collected", "value": "8,605", "unit": "tests", "source": "python -m pytest --collect-only -q (partnership-1065-automation/); verified 2026-07-20 and pinned in site-datasheets/counts.json", "plain": "the checks that pin this engine's behavior"},
+    {"label": "Ordinary business income (seed 1065)", "value": "653,550.00", "unit": "USD (fictional)", "source": "output/review_checks.md CHK-001; output/form_1065_preview.json", "plain": "Demo 721 Development LP taxable ordinary income"},
+    {"label": "Tie-out checks passing", "value": "7/7", "unit": "checks OK", "source": "output/review_checks.md (Overall status: READY)", "plain": "all reviewer checks pass, package READY"},
+    {"label": "§704(c) built-in gain (Harborview demo)", "value": "900,000.00", "unit": "USD (fictional)", "source": "output/section704c_summary.md; README §704(c) section", "plain": "FMV 1,200,000 minus tax basis 300,000 at formation"},
+    {"label": "§704(c) tax-basis balance sheet", "value": "2,260,000.00", "unit": "USD (fictional), ties", "source": "output/section704c_summary.md", "plain": "assets = liabilities 0 + tax capital 2,260,000; book and tax capital totals also tie"}
+  ],
+
+  "control_characteristics": {
+    "verdict_map": [
+      {"severity": "All seven tie-out checks within tolerance (0)", "verdict": "READY", "action": "TaxPackage.ready = True; status READY in the reports; main() exits 0"},
+      {"severity": "Any tie-out check outside tolerance", "verdict": "REVIEW", "action": "TaxPackage.ready = False; that check reads FAIL; main() exits 2"},
+      {"severity": "§704(c): actual tax depreciation below the non-contributor's book-depreciation share", "verdict": "BINDING", "action": "non-contributor capped at the available tax item, contributor gets none, year flagged BINDING with the uncured shortfall"},
+      {"severity": "§704(c): tax item meets or exceeds the book share", "verdict": "not binding (—)", "action": "the book-tax disparity is cured normally; no shortfall flag"}
+    ],
+    "guarantees": [
+      "Integer-cent arithmetic end to end: money.py provides to_cents, fmt, and the largest-remainder allocate_by_bps, and the §704(c) module reuses the same helpers.",
+      "Largest-remainder allocation guarantees the partner K-1 ordinary-income amounts sum exactly to the Schedule K total even when the percentages create pennies.",
+      "Deterministic and seeded (DEFAULT_SEED = 1065): identical inputs produce byte-stable outputs.",
+      "Read-only on inputs: all source data is generated in process on fictional seeded data, and the only writes are to the output/ artifacts directory.",
+      "Every mapped return line carries source IDs; CHK-007 fails if any of the 15 lines is unsourced.",
+      "The package is marked READY only when all seven tie-out checks pass; otherwise the status is REVIEW and the process exits with code 2.",
+      "The §704(c) ceiling-rule distortion is surfaced — flagged BINDING with the uncured shortfall — not silently cured; only the traditional method is implemented."
+    ],
+    "determinism": {"seeded": true, "read_only": true, "offline_default": true},
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "machine gate: READY only when all seven tie-out checks pass, otherwise REVIEW and exit code 2",
+      "note": "The code enforces the READY/REVIEW machine gate and exit code; per the README Controls, human review remains the final sign-off."
+    },
+    "modes": [
+      {"name": "Standard 1065 package (default)", "detail": "python -m partnership_tax builds the book-to-tax bridge, the 15-line Form 1065 / Schedule K/L/M-1/M-2 map, the K-1 preview, and the seven tie-out checks; exit 0 READY / 2 REVIEW. --no-xlsx skips the optional Excel workbook."},
+      {"name": "§704(c) built-in-gain demo (--section704c)", "detail": "python -m partnership_tax --section704c runs the traditional method plus the ceiling rule over multiple years, tracking parallel §704(b) book and tax capital, and writes section704c_summary.md and a per-partner K-1; exit 0."}
+    ]
+  },
+
+  "limits": [
+    {"statement": "Only the IRC §704(c) traditional method is modelled; the remedial and curative methods of Reg. §1.704-3 are explicitly not implemented.", "source": "partnership_tax/section704c.py module docstring ('LIMITATION (documented on purpose)'); output/section704c_summary.md method-limitation note"},
+    {"statement": "It will not silently cure a ceiling-rule distortion: when tax depreciation is short, it caps the non-contributor, gives the contributor none, and flags the year BINDING with the uncured shortfall.", "source": "partnership_tax/section704c.py (ceiling_binding / ceiling_shortfall); README §704(c) section"},
+    {"statement": "It will not mark a package READY unless all seven tie-out checks pass; a failing check forces status REVIEW and exit code 2. It operates only on fictional seeded data — no real taxpayer, partner, EIN, or client figure.", "source": "partnership_tax/cli.py main() (return 0 if package.ready else 2); README Controls; partnership_tax/generate.py (ein='00-0000000', synthetic names)"}
+  ],
+
+  "media": {
+    "poster": "../assets/engine-1065.webp",
+    "motion": "../assets/engine-1065-motion.mp4",
+    "poster_alt": "Animated brand overview of the Partnership Tax · Form 1065 engine — the pipeline from seeded source intake through the book-to-tax bridge and 1065 / K-1 mapping to the tie-out gate, on fictional seeded data.",
+    "caption": "Animated overview of the tax run on fictional seeded data; run the commands above to reproduce.",
+    "run_label": "animated overview",
+    "crops": []
+  },
+
+  "quickstart": [
+    {"label": "Clone + build the standard package", "command": "git clone https://github.com/sophonfinance-wq/finance-automation-portfolio.git && cd finance-automation-portfolio/partnership-1065-automation && python -m partnership_tax"},
+    {"label": "Run the §704(c) built-in-gain demo", "command": "python -m partnership_tax --section704c"}
+  ],
+
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/partnership-1065-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/partnership-1065-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+
+  "meta": {
+    "description": "Partnership Tax · Form 1065 (SFS-E03-PTX) builds a deterministic Form 1065 support package on fictional seeded data — penny-exact K-1 allocations, 15 sourced return lines, seven tie-out checks that gate READY, and an IRC §704(c) built-in-gain module; every figure re-derives from the public repository."
+  }
+}

@@ -1,0 +1,3707 @@
+{
+  "title": "Expense & P-Card control report",
+  "overall_verdict": "FAIL",
+  "file_count": 24,
+  "rule_count": 23,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "card_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "card_id_unique",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "card_last4_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "card_home_entity_known",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "stmt_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "stmt_line_unique",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "stmt_amounts_integer",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "stmt_last4_matches_card",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "rpt_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_receipt_on_file",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_purpose_present",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rec_every_charge_reported",
+      "severity": "FAIL",
+      "exceptions": 5
+    },
+    {
+      "rule": "rec_no_orphan_report_line",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "rec_report_total_ties",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "rec_gl_ties_reports",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "cod_gl_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cod_project_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cod_disallowed_category",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_submitted_within_window",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "pol_per_charge_limit",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "pol_approver_distinct",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "dup_no_duplicate_charge",
+      "severity": "FAIL",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "FAIL",
+          "location": "amount:statement[STMT-2909-01/L-0101].amount_cents",
+          "message": "AMOUNT_INVALID: statement[STMT-2909-01/L-0101].amount_cents must be integer cents, got 84250.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "FAIL",
+          "location": "amount:statement[L-0101].amount_cents",
+          "message": "AMOUNT_INVALID: statement[L-0101].amount_cents must be integer cents, got 84250.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "FAIL",
+          "location": "amount:statement[CH-01].amount_cents",
+          "message": "AMOUNT_INVALID: statement[CH-01].amount_cents must be integer cents, got 84250.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "FAIL",
+          "location": "amount:statement[L-0101].amount_cents",
+          "message": "AMOUNT_INVALID: statement[L-0101].amount_cents must be integer cents, got 84250.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "card_bad_last4__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 4,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "FAIL",
+          "location": "cardholder_register:CARD-2909/cardholders/CH-03/card_last4",
+          "message": "cardholder CH-03 has card last four '619', which is not four digits"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-03/L-0301/last4",
+          "message": "charge L-0301 carries last four '6190'; cardholder CH-03's card ends '619'"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-03/L-0302/last4",
+          "message": "charge L-0302 carries last four '6190'; cardholder CH-03's card ends '619'"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-03/L-0303/last4",
+          "message": "charge L-0303 carries last four '6190'; cardholder CH-03's card ends '619'"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "card_duplicate_id__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "FAIL",
+          "location": "cardholder_register:CARD-2909/cardholders/CH-01",
+          "message": "cardholder CH-01 appears 2 times; a charge's ownership is ambiguous"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "card_missing_field__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "FAIL",
+          "location": "cardholder_register:CARD-2909/cardholders/CH-02",
+          "message": "cardholder CH-02 is missing home_entity"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "card_unknown_entity__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "FAIL",
+          "location": "cardholder_register:CARD-2909/cardholders/CH-01/home_entity",
+          "message": "cardholder CH-01 has home entity 'Westmere Group', which is not one of ('Northmoor Construction LLC', 'Halbrook Builders', 'Stonecrest Holdings', 'Ardenne Field Partners')"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 23,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "cod_bad_gl__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-01/R-L-0101/gl_code",
+          "message": "report EXP-2909-01 line R-L-0101 is coded to GL '9999', which is not in the policy's valid set"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "cod_bad_project__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-02/R-L-0201/project_code",
+          "message": "report EXP-2909-02 line R-L-0201 is coded to project 'PRJ-999', which is not in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "cod_disallowed__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "FLAG",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-03/L-0303/category",
+          "message": "charge L-0303 at Harbor Fuel Stop is category 'gambling', which the policy disallows; a reviewer must clear it by hand"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "dup_charge__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 8,276.44 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 11 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/*/L-0101",
+          "message": "charges L-0101, L-0105 are duplicates: Cascadia Air Charter on 2029-09-03 for 842.50 on card ending 4417; one should be disputed or removed"
+        }
+      ]
+    },
+    {
+      "document": "gl_total_untied__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2909/total_pcard_expense_cents",
+          "message": "the ledger carries 7,533.94 of P-Card expense; the report lines sum to 7,433.94 (difference 100.00)"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "gl_positions:-",
+          "message": "gl_positions is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "pol_late_submission__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "FLAG",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-02/submitted_date",
+          "message": "report EXP-2909-02 was filed 46 days after the statement dated 2029-09-30; the window is 14 days"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "pol_over_limit__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 10,935.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-02/L-0203/amount_cents",
+          "message": "charge L-0203 at Pinehill Software is 5,001.00, over the per-charge limit of 5,000.00"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "pol_self_approved__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-03/approver",
+          "message": "report EXP-2909-03 was approved by 'Rupert Vance', the cardholder themself; approval requires a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "rec_orphan_report_line__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-02/L-0203/-",
+          "message": "charge L-0203 on statement STMT-2909-02 has no report line; it is an uncoded, unreceipted company expense"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-02/R-L-0203/statement_line_id",
+          "message": "report EXP-2909-02 line R-L-0203 claims charge 'L-9999', which is on no statement in the cycle"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "rec_total_untied__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-03/R-L-0302/amount_cents",
+          "message": "charge L-0302 is 742.88 on the statement but 743.88 on the report (difference 1.00); it does not reconcile to the cent"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/CH-03",
+          "message": "cardholder CH-03 reports 2,174.13 against a statement of 2,173.13 (difference 1.00)"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2909/total_pcard_expense_cents",
+          "message": "the ledger carries 7,433.94 of P-Card expense; the report lines sum to 7,434.94 (difference -1.00)"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "rec_unreported_charge__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-01/L-0104/-",
+          "message": "charge L-0104 on statement STMT-2909-01 has no report line; it is an uncoded, unreceipted company expense"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/CH-01",
+          "message": "cardholder CH-01 reports 2,376.26 against a statement of 2,472.66 (difference -96.40)"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "FAIL",
+          "location": "gl_positions:GL-2909/total_pcard_expense_cents",
+          "message": "the ledger carries 7,433.94 of P-Card expense; the report lines sum to 7,337.54 (difference 96.40)"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "rpt_blank_purpose__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-03/R-L-0301/purpose",
+          "message": "report EXP-2909-03 line R-L-0301 states no business purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "rpt_missing_field__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-02/R-L-0202/-",
+          "message": "report EXP-2909-02 line R-L-0202 is missing gl_code"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "rpt_no_receipt__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-01/R-L-0103/receipt_on_file",
+          "message": "report EXP-2909-01 line R-L-0103 has no receipt on file; the charge is unsupported"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "stmt_duplicate_line_id__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/*/L-0201",
+          "message": "statement line id L-0201 appears 2 times; a report line cannot reconcile against it unambiguously"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-02/R-L-0201/amount_cents",
+          "message": "charge L-0201 is 1,499.00 on the statement but 1,005.00 on the report (difference -494.00); it does not reconcile to the cent"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "FAIL",
+          "location": "expense_report_register:EXP-2909/reports/EXP-2909-02/R-L-0203/statement_line_id",
+          "message": "report EXP-2909-02 line R-L-0203 claims charge 'L-0203', which is on no statement in the cycle"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "stmt_missing_field__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-02/L-0202/-",
+          "message": "statement STMT-2909-02 line L-0202 is missing merchant"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges match their cardholder's card"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 9 distinct charges"
+        }
+      ]
+    },
+    {
+      "document": "stmt_wrong_last4__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 artifacts present"
+        },
+        {
+          "rule": "card_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholders are fully described"
+        },
+        {
+          "rule": "card_id_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder ids are unique"
+        },
+        {
+          "rule": "card_last4_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 card last-fours are valid"
+        },
+        {
+          "rule": "card_home_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 home entities are recognised"
+        },
+        {
+          "rule": "stmt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement lines are complete"
+        },
+        {
+          "rule": "stmt_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement line ids are unique"
+        },
+        {
+          "rule": "stmt_amounts_integer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 statement amounts are integer cents"
+        },
+        {
+          "rule": "stmt_last4_matches_card",
+          "status": "FAIL",
+          "location": "statement_register:STMT-2909/statements/STMT-2909-01/L-0102/last4",
+          "message": "charge L-0102 carries last four '0000'; cardholder CH-01's card ends '4417'"
+        },
+        {
+          "rule": "rpt_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines are complete"
+        },
+        {
+          "rule": "rpt_receipt_on_file",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines have a receipt on file"
+        },
+        {
+          "rule": "rpt_purpose_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines state a purpose"
+        },
+        {
+          "rule": "rec_every_charge_reported",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges reconcile to one report line"
+        },
+        {
+          "rule": "rec_no_orphan_report_line",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 report lines claim a real charge"
+        },
+        {
+          "rule": "rec_report_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 cardholder reports tie their statement"
+        },
+        {
+          "rule": "rec_gl_ties_reports",
+          "status": "PASS",
+          "location": "-",
+          "message": "P-Card expense of 7,433.94 ties the ledger"
+        },
+        {
+          "rule": "cod_gl_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines carry a valid GL code"
+        },
+        {
+          "rule": "cod_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 lines name a project in the register"
+        },
+        {
+          "rule": "cod_disallowed_category",
+          "status": "PASS",
+          "location": "-",
+          "message": "none of 10 charges are in a disallowed category"
+        },
+        {
+          "rule": "pol_submitted_within_window",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were filed within the window"
+        },
+        {
+          "rule": "pol_per_charge_limit",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 charges are within the per-charge limit"
+        },
+        {
+          "rule": "pol_approver_distinct",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 reports were approved by a second person"
+        },
+        {
+          "rule": "dup_no_duplicate_charge",
+          "status": "PASS",
+          "location": "-",
+          "message": "no duplicate charges across 10 distinct charges"
+        }
+      ]
+    }
+  ]
+}

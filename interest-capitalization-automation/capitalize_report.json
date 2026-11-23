@@ -1,0 +1,2712 @@
+{
+  "title": "Section 263A interest-capitalization control report",
+  "overall_verdict": "FAIL",
+  "file_count": 21,
+  "rule_count": 19,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_unique_keys",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_name_present",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_status_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_tb_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "data_project_coverage",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "data_ape_nonneg",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "data_ape_nondecreasing",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "data_rate_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cap_rate_consistent",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cap_rederives",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "cap_no_leakage",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cap_within_interest",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cap_annual_total_foots",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cap_ceased_on_completion",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "cmp_current_ties_schedule",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cmp_prior_year_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_total_capitalized_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_project_count_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 16,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "FAIL",
+          "location": "amount:project_data[100/J-4101].accumulated_production_expenditures_cents",
+          "message": "AMOUNT_INVALID: project_data[100/J-4101].accumulated_production_expenditures_cents must be integer cents, got 4000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "FAIL",
+          "location": "amount:project_data[100/J-4101].accumulated_production_expenditures_cents",
+          "message": "AMOUNT_INVALID: project_data[100/J-4101].accumulated_production_expenditures_cents must be integer cents, got 4000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "FAIL",
+          "location": "amount:project_data[100/J-4101].accumulated_production_expenditures_cents",
+          "message": "AMOUNT_INVALID: project_data[100/J-4101].accumulated_production_expenditures_cents must be integer cents, got 4000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "annual_total_miscast__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "FAIL",
+          "location": "interest_by_year:INTEREST-2029/projects/100/J-4101/annual_interest_cents",
+          "message": "project 100/J-4101 states annual interest of 4,100,000.00, but its quarters foot to 4,000,000.00 (off 100,000.00)"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "ape_decreases__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "FAIL",
+          "location": "project_data:DATA-2029/projects/100/J-4101/2029-09-30/accumulated_production_expenditures_cents",
+          "message": "project 100/J-4101 accumulated expenditures fall from 55,000,000.00 at 2029-06-30 to 40,000,000.00 at 2029-09-30; the accumulation cannot decrease"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 6,630,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "bad_project_status__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "FAIL",
+          "location": "project_status:STATUS-2029/projects/100/J-4101/status",
+          "message": "project 100/J-4101 is in status 'suspended', which is not one of ('active', 'complete', 'on_hold')"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "blank_project_name__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "FAIL",
+          "location": "project_status:STATUS-2029/projects/100/J-4101/project_name",
+          "message": "project 100/J-4101 carries no project name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "capitalized_exceeds_interest__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "FAIL",
+          "location": "interest_by_year:INTEREST-2029/projects/100/J-4101/2029-03-31/capitalized_cents",
+          "message": "project 100/J-4101 at 2029-03-31 capitalizes 600,000.00 against 500,000.00 of interest incurred (excess 100,000.00)"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "capitalized_misderived__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "FAIL",
+          "location": "interest_by_year:INTEREST-2029/projects/100/J-4101/2029-12-31/capitalized_cents",
+          "message": "project 100/J-4101 capitalizes 1,200,000.00 at 2029-12-31; 90,000,000.00 of expenditures at 1.50% re-derives 1,350,000.00"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "capitalizing_after_completion__Ardenne_Field_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "FLAG",
+          "location": "interest_by_year:INTEREST-2029/projects/100/J-4101/annual_capitalized_cents",
+          "message": "project 100/J-4101 is placed in service but still capitalizes 3,645,000.00 this year; capitalization should cease at the in-service date"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "comparison_current_off__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "FAIL",
+          "location": "comparison:COMPARISON-2029/projects/100/J-4101/current_year_capitalized_cents",
+          "message": "project 100/J-4101 shows 3,655,000.00 current-year capitalized on the comparison; the schedule foots 3,645,000.00"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "data_quarter_missing__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "FAIL",
+          "location": "project_data:DATA-2029/projects/100/J-4101/quarters",
+          "message": "project 100/J-4101 Project Data is missing quarter(s) ['2029-09-30']; its capitalized interest cannot be re-derived"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_project_key__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "FAIL",
+          "location": "project_status:STATUS-2029/projects/100/J-4101",
+          "message": "project 100/J-4101 appears 2 times; a quarter of interest that names it cannot be attributed to one project"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "interest_leaks__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "FAIL",
+          "location": "interest_by_year:INTEREST-2029/projects/100/J-4101/2029-06-30",
+          "message": "project 100/J-4101 at 2029-06-30 incurs 950,000.00 interest but capitalizes 825,000.00 and deducts 75,000.00 (50,000.00 leaked)"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "invalid_rate__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "FAIL",
+          "location": "project_data:DATA-2029/projects/100/J-4101/capitalization_rate_bps",
+          "message": "project 100/J-4101 carries capitalization rate 15000, which is not a basis-point rate in 0..10000"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 15,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "comparison:-",
+          "message": "comparison is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "negative_ape__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "FAIL",
+          "location": "project_data:DATA-2029/projects/100/J-4101/2029-03-31/accumulated_production_expenditures_cents",
+          "message": "project 100/J-4101 shows -5,000,000.00 accumulated production expenditures at 2029-03-31; the balance cannot be negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 6,375,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "prior_year_untied__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "FAIL",
+          "location": "comparison:COMPARISON-2029/projects/100/J-4101/ending_capitalized_cents",
+          "message": "project 100/J-4101 ends at 6,145,000.01 capitalized; 2,500,000.00 prior plus 3,645,000.00 current rolls forward to 6,145,000.00"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "project_count_off__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "FAIL",
+          "location": "interest_by_year:INTEREST-2029/project_count",
+          "message": "the schedule states 5 project(s); the roster carries 4"
+        }
+      ]
+    },
+    {
+      "document": "rate_inconsistent__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "FAIL",
+          "location": "project_data:DATA-2029/projects/100/J-4101/capitalization_rate_bps",
+          "message": "project 100/J-4101 is rolled at 1.20%, but the period rate elsewhere on the schedule is 1.50%; the rate must be applied consistently"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 6,321,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "tb_project_missing__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "FAIL",
+          "location": "project_status:STATUS-2029/projects/300/J-9001",
+          "message": "project 300/J-9001 carries an interest balance on the trial balance but is absent from the schedule; its interest would be deducted in full with none capitalized"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the total capitalized of 7,050,000.00 ties the project annuals"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    },
+    {
+      "document": "total_capitalized_off__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 capitalization tabs are present over a 4-quarter grid"
+        },
+        {
+          "rule": "prj_unique_keys",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project keys are unique"
+        },
+        {
+          "rule": "prj_name_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a name"
+        },
+        {
+          "rule": "prj_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects carry a known status"
+        },
+        {
+          "rule": "prj_tb_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 trial-balance projects appear on the schedule"
+        },
+        {
+          "rule": "data_project_coverage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 roster projects are covered across every tab and quarter"
+        },
+        {
+          "rule": "data_ape_nonneg",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 accumulated-expenditure balances are non-negative"
+        },
+        {
+          "rule": "data_ape_nondecreasing",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 quarter-over-quarter expenditure steps are non-decreasing"
+        },
+        {
+          "rule": "data_rate_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a valid capitalization rate"
+        },
+        {
+          "rule": "cap_rate_consistent",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects are rolled at the same capitalization rate"
+        },
+        {
+          "rule": "cap_rederives",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly capitalized figures re-derive from expenditures and rate"
+        },
+        {
+          "rule": "cap_no_leakage",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarterly splits close to the interest incurred"
+        },
+        {
+          "rule": "cap_within_interest",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 quarters capitalize no more than the interest incurred"
+        },
+        {
+          "rule": "cap_annual_total_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 annual columns foot to their quarters"
+        },
+        {
+          "rule": "cap_ceased_on_completion",
+          "status": "PASS",
+          "location": "-",
+          "message": "no placed-in-service project is still capitalizing (checked 0)"
+        },
+        {
+          "rule": "cmp_current_ties_schedule",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison current-year figures tie the schedule"
+        },
+        {
+          "rule": "cmp_prior_year_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 comparison rows roll the prior year forward"
+        },
+        {
+          "rule": "rpt_total_capitalized_ties",
+          "status": "FAIL",
+          "location": "interest_by_year:INTEREST-2029/total_capitalized_cents",
+          "message": "the schedule states 7,050,000.01 total capitalized; the project annuals sum to 7,050,000.00 (off 0.01)"
+        },
+        {
+          "rule": "rpt_project_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the stated project count of 4 ties the roster"
+        }
+      ]
+    }
+  ]
+}

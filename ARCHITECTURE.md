@@ -1,0 +1,185 @@
+# Platform Architecture
+
+This repository is a fifty-two-system, AI-driven Finance & Tax automation platform. The fifty-two
+decompose exactly as **5 + 43 + 1 + 1 + 1 + 1**:
+
+- **five deterministic calculation engines** — month-end close, cash & debt reconciliation, the
+  cash-management suite, partnership 1065 / §704(c), and cross-border surplus & ACB;
+- **forty-three read-only control engines** — each one reads a record a finance team already produces,
+  re-derives every figure on it from the base facts, and reports exceptions without ever writing back.
+  They span payables, draws, insurance, tax compliance, debt, payroll, closings, asset registers and
+  project reporting (the workbook validation engine and the accounts-payable control engine are the
+  originals; the newest are trial-balance roll-forward, the JV investor reporting package, premium
+  audit response and baseline & version drift);
+- **one workpaper construction engine** — it *builds* a new fiscal year's tax workpaper package from
+  a locked ledger source and the prior year's signed package: it freezes every prior-year layer,
+  advances the year captions by exactly one year, computes the current-year capital flows as source
+  less prior, carries down the member allocation splits, appends the new member-capital and E&P year
+  blocks, and constructs the evidence tab with its citation block and zero-footing subtotal.
+  Twenty-four controls then prove what it built;
+- **the Knowledge Brain** retrieval engine;
+- **an interactive finance operations atlas**;
+- **the Triangulate AI control framework**.
+
+The canonical roster — number, part number, mnemonic, family, display name and engine directory for
+every one of the fifty-two — lives in `site-datasheets/datasheet_tests/conftest.py` and is
+test-gated, so this prose is a summary of that authority rather than a second copy of it.
+
+Above all of it sits an optional orchestration layer:
+
+1. seeded fictional data generators
+2. calculation engines
+3. evidence artifacts
+4. independent validation
+5. self-healing loops — engines detect drift, re-derive it from source, and re-verify, escalating
+   only what they cannot certify
+6. executive-ready reporting and gated verdicts
+7. an optional orchestration layer that coordinates longer-running work through the same controls
+
+The design principle is straightforward: the system that produces a number should not be the only
+system permitted to approve that number.
+
+---
+
+## Big picture: core finance platform
+
+<p align="center"><img src="./assets/architecture.svg" alt="Core finance platform architecture" width="100%"></p>
+
+---
+
+## Stage by stage
+
+### 1. Command entry
+
+The same workflow can start from a Python command, continuous integration, or — in approved,
+agent-enabled environments — the optional orchestration layer. The entry point is flexible; the
+control trail stays the same.
+
+### 2. Seeded fictional data
+
+Each engine ships with a generator that creates fake but realistic finance data. Fixed seeds make
+the output reproducible.
+
+### 3. Calculation engines
+
+| Engine | Folder | What it computes |
+|---|---|---|
+| Close Engine | `monthly-close-automation` | recurring journal entries, intercompany balancing, close evidence |
+| Reconciliation Engine | `cash-reconciliation` | GL-to-bank/lender matching with materiality classification |
+| Surplus / ACB Model | `tax-surplus-engine` | foreign-affiliate surplus pools, distribution waterfall, ACB ledger |
+| Partnership Tax · Form 1065 | `partnership-1065-automation` | source intake, book-to-tax bridge, 1065 line mapping, K-1 preview, IRC §704(c) built-in gain |
+
+### 3a. Knowledge / retrieval engine
+
+Not every engine computes a number. The Knowledge Brain is a retrieval engine: it ingests
+timestamped meeting transcripts into a citation-governed knowledge base and serves them back as
+verbatim, sourced citations.
+
+| Engine | Folder | What it serves |
+|---|---|---|
+| Knowledge Brain | `knowledge-brain-engine` | meeting transcripts -> a citation-governed knowledge base: verbatim, timestamped citations for workpapers and meeting prep; a review -> remediation mode that turns a reviewer's recorded corrections into cited directives plus an apply-ready remediation prompt (applied downstream by an AI or operator, not the engine); refuses when no source clears its relevance floor |
+
+### 4. Evidence artifacts
+
+The engines emit Markdown, JSON, and optional `.xlsx` workbooks. These artifacts are the handoff
+between "producer" systems and "checker" systems.
+
+### 5. Independent validation
+
+The validation layer does not trust the output just because the output exists.
+
+- **Validation Engine:** read-only rules over workbook and JSON artifacts.
+- **Accounts Payable Engine:** read-only payables controls — posting integrity, payment release gates, duty segregation, information reporting.
+- **Triangulate Orchestrator:** AI separation of duties (preparer / reviewer / specialist) plus a deterministic audit gate and human sign-off.
+
+### 5a. Self-healing loops
+
+Detection alone still leaves a person working the exception list. The loop layer closes that gap:
+
+**observe → detect → remediate → re-verify → gate → repeat**
+
+Each loop treats the engine's own control harness as its *sensor* and a deterministic
+re-derivation from the seeded source of record as its *authority*. It finds the earliest scope
+that fails a check, resyncs it to source (booking every change as an adjustment), and re-verifies —
+until everything ties or a turn budget is exhausted. It never invents a number: the settled state
+is byte-identical to a clean engine run.
+
+| Loop | Package | Gate policy |
+|---|---|---|
+| Assurance Loop | `surplus_engine.loop` | human-gated: `PASS` / `FLAG` / `FAIL` — material adjustments stop for a person |
+| Autonomous Close Loop | `close_engine.loop` | policy-gated: `AUTO-POSTED` / `PARTIAL` / `HALTED` — posts on its own authority, quarantines a tampered locked period, refuses a broken opening |
+
+The two policies bracket the spectrum: the same loop architecture runs human-gated where sign-off
+is required and autonomously where policy allows — the controls and the audit trail are identical.
+
+### 6. Verdicts
+
+The platform produces review-ready artifacts:
+
+- PASS / REVIEW / FAIL verdicts
+- fix packets
+- QA summaries
+- change logs
+- machine-readable JSON
+
+The human reviewer remains the final authority wherever the gate policy requires one — and every
+autonomous action still traces to a deterministic control.
+
+---
+
+## Deployment architecture
+
+The platform has two deployment tracks.
+
+### Enterprise-safe track
+
+This is the public demo mode.
+
+<p align="center"><img src="./assets/flows/enterprise-safe-flow.svg" alt="Enterprise-safe deployment flow" width="100%"></p>
+
+It uses Python, Excel-compatible files, `openpyxl`, `pytest`, Markdown, JSON, and CI. It requires no
+agent or orchestration dependency.
+
+### Agent-enabled track
+
+This is the advanced workflow for environments that permit AI orchestration.
+
+An optional orchestration layer can coordinate longer-running work, handoffs, and background review
+passes: dispatch a job, track status, receive exceptions, and approve the final communication, all
+through the same controls. The final output is a report package plus an executive-ready email draft.
+The orchestration layer does not replace deterministic validation or human sign-off.
+
+## Executive package
+
+<p align="center"><img src="./assets/executive-package.svg" alt="Finance automation outputs to CEO-ready email package" width="100%"></p>
+
+After validation, the system can produce:
+
+- executive summary
+- findings and exceptions
+- validation status
+- files generated
+- recommended next action
+- CEO/CFO-ready email draft
+
+Sending can be gated by human approval or by a client-approved routing policy.
+
+---
+
+## Design principles
+
+- **Determinism first.** Seeded generators and exact arithmetic make reruns reproducible.
+- **Separation of duties.** Builders do not get to bless their own work.
+- **Read-only validation.** Checkers should not mutate the files they inspect.
+- **Refuse, do not fudge.** Engines reject out-of-tie entries rather than plugging them — and the
+  Knowledge Brain refuses to answer when no source clears its relevance floor.
+- **Evidence by default.** Every run leaves a reviewable trail, and prior decisions stay citable:
+  the Knowledge Brain turns meeting transcripts into verbatim, timestamped citations for workpapers.
+- **Client-aware deployment.** The same control pattern runs with or without the optional
+  orchestration layer, depending on the client's IT rules.
+- **Executive-ready communication.** The output is not just technical artifacts; it is packaged so
+  leadership can understand what happened and what needs a decision.
+
+---
+
+*Capability-level architecture demonstrated on fictional data, with confidential engagement detail withheld.*

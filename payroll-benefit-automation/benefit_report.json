@@ -1,0 +1,5920 @@
+{
+  "title": "Payroll & benefit reconciliation control report",
+  "overall_verdict": "FAIL",
+  "file_count": 31,
+  "rule_count": 29,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "emp_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "emp_entity_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "emp_fields_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pln_unique_codes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "pln_type_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ded_refs_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ded_unique_pairs",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ded_matches_provider",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "tie_provider_total",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "tie_je_liability",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "tie_cash_transfer",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "ent_subtotal_recomputes",
+      "severity": "FAIL",
+      "exceptions": 9
+    },
+    {
+      "rule": "ent_consolidated_ties",
+      "severity": "FAIL",
+      "exceptions": 4
+    },
+    {
+      "rule": "mat_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "mat_comp_cap",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "lim_402g_deferral",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "lim_hsa_tier",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "lim_fsa_cap",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "lim_415c_additions",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "lim_deferral_watch",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "whh_per_period_recomputes",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "whh_not_over_max",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "dol_safe_harbor",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "dol_remit_after_pay",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "je_balances",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "je_clearing_zeroes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_tie_status_recomputes",
+      "severity": "FAIL",
+      "exceptions": 6
+    },
+    {
+      "rule": "rpt_exception_watchlist_ties",
+      "severity": "FLAG",
+      "exceptions": 2
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 18,
+        "FAIL": 9,
+        "FLAG": 2
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "FLAG",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "FAIL",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "FLAG",
+          "location": "amount:deduction[EMP-01/P-401K].amount_cents",
+          "message": "AMOUNT_INVALID: deduction[EMP-01/P-401K].amount_cents must be integer cents, got 90000.5 -- amounts are integer cents and are never coerced"
+        }
+      ]
+    },
+    {
+      "document": "bad_employee_field__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-04/dob",
+          "message": "employee EMP-04 has DOB 'not-a-date', which is not a readable date; the age-50/55 catch-up gate cannot be measured"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "bad_entity__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 6,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-03/entity",
+          "message": "employee EMP-03 is assigned entity 'ENT-ZZ', not one of ('ENT-NW', 'ENT-SW', 'ENT-TX'); its deductions cannot be partitioned"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-SW/P-401K/subtotal_cents",
+          "message": "entity ENT-SW plan P-401K: subtotal 1,800.00 does not recompute to the register sum 1,200.00"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-SW/P-MATCH/subtotal_cents",
+          "message": "entity ENT-SW plan P-MATCH: subtotal 9,730.75 does not recompute to the register sum 6,730.75"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-ZZ/P-401K",
+          "message": "entity ENT-ZZ plan P-401K: register sums to 600.00 but the entity summary carries no subtotal for it"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-ZZ/P-FSA-MED",
+          "message": "entity ENT-ZZ plan P-FSA-MED: register sums to 100.00 but the entity summary carries no subtotal for it"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-ZZ/P-MATCH",
+          "message": "entity ENT-ZZ plan P-MATCH: register sums to 3,000.00 but the entity summary carries no subtotal for it"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "bad_plan_type__Westmere_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "FAIL",
+          "location": "plan_catalog:PLANS-2031/plans/P-FSA-DEP/plan_type",
+          "message": "plan P-FSA-DEP is typed 'cafeteria', which is not one of ('deferral_pretax', 'employer_match', 'hsa', 'fsa_medical', 'fsa_dependent_care'); no control applies to it"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "cash_transfer_off__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "FAIL",
+          "location": "remittance_schedule:REMIT-2031/remittances/P-FSA-DEP/cash_transfer_cents",
+          "message": "plan P-FSA-DEP: register total 300.00 but cash transfer 290.00 (off -10.00)"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "FAIL",
+          "location": "reconciliation_report:RECON-2031/plans/P-FSA-DEP/tied",
+          "message": "plan P-FSA-DEP is reported tied=True; recomputing from its register, provider, ledger and cash legs gives tied=False"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 29,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "clearing_not_zero__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,905.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "FAIL",
+          "location": "journal_entry:JE-2031/lines/2130-HSA",
+          "message": "clearing account 2130-HSA nets to -1.00 after remittance; the benefit payable did not zero out"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "consolidated_off__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/consolidated/P-FSA-MED/total_cents",
+          "message": "plan P-FSA-MED: consolidated total 225.00 does not tie the register total 220.00"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/consolidated/P-FSA-MED/total_cents",
+          "message": "plan P-FSA-MED: entity subtotals sum to 220.00 but the consolidated total is 225.00"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "deferral_watch__Ardenne_Field_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "FLAG",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-04/prior_ytd/P-401K",
+          "message": "employee EMP-04 P-401K: year-to-date deferral 29,400.00 is within 1,600.00 of the 402(g) limit 31,000.00; trim before it breaches"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_deduction_pair__Westmere_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 7,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-03/P-FSA-MED",
+          "message": "employee EMP-03 has 2 deduction rows for plan P-FSA-MED; the pair must be a single figure"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 22 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "FAIL",
+          "location": "provider_file:UPLOADS-2031/uploads/Marran Flex Administrators/P-FSA-MED",
+          "message": "plan P-FSA-MED: register total 320.00 but Marran Flex Administrators upload total 220.00 (off -100.00)"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "FAIL",
+          "location": "journal_entry:JE-2031/lines/P-FSA-MED/credit_cents",
+          "message": "plan P-FSA-MED: register total 320.00 but journal-entry liability credit 220.00 (off -100.00)"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "FAIL",
+          "location": "remittance_schedule:REMIT-2031/remittances/P-FSA-MED/cash_transfer_cents",
+          "message": "plan P-FSA-MED: register total 320.00 but cash transfer 220.00 (off -100.00)"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-SW/P-FSA-MED/subtotal_cents",
+          "message": "entity ENT-SW plan P-FSA-MED: subtotal 100.00 does not recompute to the register sum 200.00"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/consolidated/P-FSA-MED/total_cents",
+          "message": "plan P-FSA-MED: consolidated total 220.00 does not tie the register total 320.00"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "FAIL",
+          "location": "reconciliation_report:RECON-2031/plans/P-FSA-MED/tied",
+          "message": "plan P-FSA-MED is reported tied=True; recomputing from its register, provider, ledger and cash legs gives tied=False"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_employee_id__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-01",
+          "message": "employee id EMP-01 appears 2 times; a deduction that names it cannot be attributed to one employee"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_plan_code__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "FAIL",
+          "location": "plan_catalog:PLANS-2031/plans/P-HSA",
+          "message": "plan code P-HSA appears 2 times; a deduction that names it cannot be attributed to one plan"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "entity_subtotal_off__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-NW/P-HSA/subtotal_cents",
+          "message": "entity ENT-NW plan P-HSA: subtotal 1,229.99 does not recompute to the register sum 1,228.57"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "FAIL",
+          "location": "entity_summary:ENTITY-2031/subtotals/ENT-SW/P-HSA/subtotal_cents",
+          "message": "entity ENT-SW plan P-HSA: subtotal 570.00 does not recompute to the register sum 571.42"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "hsa_over_max__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-01/P-HSA/amount_cents",
+          "message": "employee EMP-01 P-HSA: per-period HSA 500.00 does not recompute to 400.00 = room 2,800.00 over 7 periods"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-01/P-HSA/amount_cents",
+          "message": "employee EMP-01 P-HSA: per-period HSA 500.00 exceeds the pro-rated ceiling 400.00 (over 100.00)"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 55,104.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "hsa_per_period_off__Westmere_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-05/P-HSA/amount_cents",
+          "message": "employee EMP-05 P-HSA: per-period HSA 1,001.43 does not recompute to 1,001.42 = room 7,010.00 over 7 periods"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.34"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "je_liability_off__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "FAIL",
+          "location": "journal_entry:JE-2031/lines/P-HSA/credit_cents",
+          "message": "plan P-HSA: register total 2,801.41 but journal-entry liability credit 0.00 (off -2,801.41)"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "FAIL",
+          "location": "reconciliation_report:RECON-2031/plans/P-HSA/tied",
+          "message": "plan P-HSA is reported tied=True; recomputing from its register, provider, ledger and cash legs gives tied=False"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "je_unbalanced__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "FAIL",
+          "location": "journal_entry:JE-2031/lines",
+          "message": "journal entry does not balance: debits 54,905.32 vs credits 54,904.32 (off 1.00)"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "late_deposit__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "FAIL",
+          "location": "remittance_schedule:REMIT-2031/remittances/P-401K/remit_date",
+          "message": "plan P-401K: participant money paid 2031-08-29 was not deposited until 2031-09-15, 11 business days out, past the 7-day safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "match_miscomputed__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-01/P-MATCH/amount_cents",
+          "message": "employee EMP-01: booked match 3,900.00 but the formula on 8,000.00 eligible comp recomputes 4,000.00 (off -100.00)"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,704.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "match_over_cap__Westmere_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-04/P-MATCH/amount_cents",
+          "message": "employee EMP-04: booked match 7,500.00 but the formula on 15,000.00 eligible comp recomputes 6,730.75 (off 769.25)"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-04/P-MATCH/amount_cents",
+          "message": "employee EMP-04 earns 15,000.00, above the 13,461.50 comp cap; the booked match 7,500.00 exceeds the capped ceiling 6,730.75"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 56,442.82"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "reconciliation_report:-",
+          "message": "reconciliation_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        }
+      ]
+    },
+    {
+      "document": "over_402g__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-03/prior_ytd/P-401K",
+          "message": "employee EMP-03 P-401K: year-to-date deferral 24,600.00 exceeds the 402(g) limit 23,500.00 (over 1,100.00)"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "over_415c__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-02/prior_ytd/P-401K",
+          "message": "employee EMP-02 P-401K: year-to-date deferral 66,000.00 exceeds the 402(g) limit 31,000.00 (over 35,000.00)"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-02/annual_additions",
+          "message": "employee EMP-02: annual additions 72,000.00 exceed the 415(c) limit 70,000.00 (over 2,000.00)"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "over_fsa__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-01/prior_ytd/P-FSA-MED",
+          "message": "employee EMP-01 P-FSA-MED: year-to-date FSA 3,370.00 exceeds the cap 3,300.00 (over 70.00)"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "over_hsa__Westmere_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 3,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "FAIL",
+          "location": "employee_register:EMPLOYEES-2031/employees/EMP-05/prior_ytd/P-HSA",
+          "message": "employee EMP-05 (family): year-to-date HSA 9,001.42 exceeds the tier limit 8,550.00 (over 451.42)"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-05/P-HSA/amount_cents",
+          "message": "employee EMP-05 P-HSA: per-period HSA 1,001.42 does not recompute to 44.28 = room 310.00 over 7 periods"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-05/P-HSA/amount_cents",
+          "message": "employee EMP-05 P-HSA: per-period HSA 1,001.42 exceeds the pro-rated ceiling 44.32 (over 957.10)"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "provider_per_employee_mismatch__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "FAIL",
+          "location": "provider_file:UPLOADS-2031/uploads/Kelder Health Savings/P-HSA/EMP-01/amount_cents",
+          "message": "employee EMP-01 P-HSA: register deducted 400.00 but Kelder Health Savings received 1,001.42 (off 601.42)"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "FAIL",
+          "location": "provider_file:UPLOADS-2031/uploads/Kelder Health Savings/P-HSA/EMP-05/amount_cents",
+          "message": "employee EMP-05 P-HSA: register deducted 1,001.42 but Kelder Health Savings received 400.00 (off -601.42)"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "provider_total_off__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 27,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "FAIL",
+          "location": "provider_file:UPLOADS-2031/uploads/Harborline Trust/P-401K",
+          "message": "plan P-401K: register total 4,400.00 but Harborline Trust upload total 4,410.00 (off 10.00)"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "FAIL",
+          "location": "reconciliation_report:RECON-2031/plans/P-401K/tied",
+          "message": "plan P-401K is reported tied=True; recomputing from its register, provider, ledger and cash legs gives tied=False"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "remit_before_pay__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "FAIL",
+          "location": "remittance_schedule:REMIT-2031/remittances/P-HSA/remit_date",
+          "message": "plan P-HSA: remit date 2031-08-25 precedes the pay date 2031-08-29; the deposit cannot have settled before the payroll"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "tie_flag_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "FAIL",
+          "location": "reconciliation_report:RECON-2031/plans/P-HSA/tied",
+          "message": "plan P-HSA is reported tied=False; recomputing from its register, provider, ledger and cash legs gives tied=True"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "unknown_reference__Westmere_Holdings",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "FAIL",
+          "location": "deduction_register:DEDUCTIONS-2031/deductions/EMP-01/P-UNKNOWN/plan_code",
+          "message": "deduction names plan 'P-UNKNOWN', which is not in the plan catalog"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 17 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the exception watchlist ties the re-derived exceptions"
+        }
+      ]
+    },
+    {
+      "document": "watchlist_overstated__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 28,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 reconciliation artifacts are present"
+        },
+        {
+          "rule": "emp_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employee ids are unique"
+        },
+        {
+          "rule": "emp_entity_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry a known entity"
+        },
+        {
+          "rule": "emp_fields_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 employees carry valid fields"
+        },
+        {
+          "rule": "pln_unique_codes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plan codes are unique"
+        },
+        {
+          "rule": "pln_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 plans carry a known type"
+        },
+        {
+          "rule": "ded_refs_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 deductions reference known rows"
+        },
+        {
+          "rule": "ded_unique_pairs",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 employee/plan deduction pairs are unique"
+        },
+        {
+          "rule": "ded_matches_provider",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 21 per-employee provider hand-offs tie"
+        },
+        {
+          "rule": "tie_provider_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 plan/provider upload totals tie the register"
+        },
+        {
+          "rule": "tie_je_liability",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 liability credits tie the register"
+        },
+        {
+          "rule": "tie_cash_transfer",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 cash transfers tie the register"
+        },
+        {
+          "rule": "ent_subtotal_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 entity subtotals recompute from the register"
+        },
+        {
+          "rule": "ent_consolidated_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 consolidated totals tie the subtotals and register"
+        },
+        {
+          "rule": "mat_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employer matches recompute from the formula"
+        },
+        {
+          "rule": "mat_comp_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 above-cap matches are limited to the cap"
+        },
+        {
+          "rule": "lim_402g_deferral",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are within the 402(g) limit"
+        },
+        {
+          "rule": "lim_hsa_tier",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA contributions are within the tier limit"
+        },
+        {
+          "rule": "lim_fsa_cap",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 FSA elections are within the cap"
+        },
+        {
+          "rule": "lim_415c_additions",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 employees are within the 415(c) limit"
+        },
+        {
+          "rule": "lim_deferral_watch",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 deferrals are clear of the watch band"
+        },
+        {
+          "rule": "whh_per_period_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions recompute"
+        },
+        {
+          "rule": "whh_not_over_max",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 HSA per-period deductions are within the ceiling"
+        },
+        {
+          "rule": "dol_safe_harbor",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 participant deposits are inside the safe harbor"
+        },
+        {
+          "rule": "dol_remit_after_pay",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 remit dates fall on or after their pay date"
+        },
+        {
+          "rule": "je_balances",
+          "status": "PASS",
+          "location": "-",
+          "message": "the journal entry balances at 54,904.32"
+        },
+        {
+          "rule": "je_clearing_zeroes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 clearing accounts net to zero"
+        },
+        {
+          "rule": "rpt_tie_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every plan tie flag recomputes from its evidence"
+        },
+        {
+          "rule": "rpt_exception_watchlist_ties",
+          "status": "FLAG",
+          "location": "reconciliation_report:RECON-2031/exceptions/EMP-01/P-401K",
+          "message": "the watchlist lists deferral_over for employee EMP-01 plan P-401K, but the contributions do not support it"
+        }
+      ]
+    }
+  ]
+}

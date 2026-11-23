@@ -1,0 +1,3260 @@
+{
+  "title": "Combined-group franchise-tax control report",
+  "overall_verdict": "FAIL",
+  "file_count": 23,
+  "rule_count": 21,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aff_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aff_address_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aff_status_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "aff_registration_renewal",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "grp_roster_continuity",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "grp_members_registered",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "grp_excluded_reconciled",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tb_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tb_line_unique",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "tb_member_known",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "apt_receipts_sound",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "apt_totals_tie_receipts",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "apt_factor_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "apt_worksheet_factor_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "mgn_revenue_ties_tb",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "mgn_margin_recomputes",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "mgn_apportioned_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "mgn_tax_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_summary_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_report_totals_tie",
+      "severity": "FAIL",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "FAIL",
+          "location": "amount:margin_worksheet.group_revenue_cents",
+          "message": "AMOUNT_INVALID: margin_worksheet.group_revenue_cents must be integer cents, got 20000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "FAIL",
+          "location": "amount:margin_worksheet.group_revenue_cents",
+          "message": "AMOUNT_INVALID: margin_worksheet.group_revenue_cents must be integer cents, got 20000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "apportioned_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "FAIL",
+          "location": "margin_worksheet:MARGIN-2029/apportioned_margin_cents",
+          "message": "the margin worksheet states apportioned margin 48,750,000.01; 130,000,000.00 at 37.50% re-derives 48,750,000.00"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "bad_address__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "FAIL",
+          "location": "affiliate_register:AFFILIATES-2029/affiliates/AFF-02",
+          "message": "affiliate AFF-02 is missing postal_code on the address tab; it cannot be placed or registered"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "bad_affiliate_status__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "FAIL",
+          "location": "affiliate_register:AFFILIATES-2029/affiliates/AFF-03/status",
+          "message": "affiliate AFF-03 carries status 'pending', which is not one of ('active', 'inactive')"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_affiliate_id__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "FAIL",
+          "location": "affiliate_register:AFFILIATES-2029/affiliates/AFF-01",
+          "message": "affiliate id AFF-01 appears 2 times; a revenue line that names it cannot be attributed to one affiliate"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "excluded_unreconciled__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "FAIL",
+          "location": "combined_group:GROUP-2029/excluded/AFF-04",
+          "message": "affiliate AFF-04 was removed from the combined group but is not enumerated on the excluded list; the exclusion is unreconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "factor_wrong__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "FAIL",
+          "location": "receipts_factor:RECEIPTS-2029/factor_bps",
+          "message": "the receipts workpaper states an apportionment factor of 38.00%; in-state over everywhere recomputes 37.50%"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "margin_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "FAIL",
+          "location": "margin_worksheet:MARGIN-2029/taxable_margin_cents",
+          "message": "the margin worksheet states taxable margin 130,000,000.01; revenue 200,000,000.00 less elected deduction 70,000,000.00 re-derives 130,000,000.00"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "member_unregistered__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "FAIL",
+          "location": "affiliate_register:AFFILIATES-2029/affiliates/AFF-02",
+          "message": "combined member AFF-02 is not on the affiliate register; it has no address or registration to be admitted on"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "franchise_report:-",
+          "message": "franchise_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        }
+      ]
+    },
+    {
+      "document": "receipts_unsound__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "FAIL",
+          "location": "receipts_factor:RECEIPTS-2029/receipts/AFF-02/in_state_receipts_cents",
+          "message": "affiliate AFF-02 reports in-state receipts 60,000,000.00 above its everywhere receipts 50,000,000.00; in-state is a subset of everywhere"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 115,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 57.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 57.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 74,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 560,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 560,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 560,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "registration_renewal_due__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "FLAG",
+          "location": "affiliate_register:AFFILIATES-2029/affiliates/AFF-01/registration_renewal_date",
+          "message": "affiliate AFF-01 registration renews 2030-05-21, in 20 day(s); inside the 60-day window and due to be renewed"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "report_total_break__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "FAIL",
+          "location": "franchise_report:REPORT-2029/total_tax_due_cents",
+          "message": "the report states total 365,625.01 over 4 combined member(s); the summary and roster give 365,625.00 over 4"
+        }
+      ]
+    },
+    {
+      "document": "revenue_tie_break__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "FAIL",
+          "location": "margin_worksheet:MARGIN-2029/group_revenue_cents",
+          "message": "the margin worksheet states group revenue 200,000,000.01; the consolidated trial-balance lines sum to 200,000,000.00 (off by 0.01)"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.01 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "roster_discontinuity__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "FAIL",
+          "location": "combined_group:GROUP-2029/members",
+          "message": "the combined roster states members ['AFF-01', 'AFF-02', 'AFF-03', 'AFF-05']; rebuilding from prior ['AFF-01', 'AFF-02', 'AFF-03', 'AFF-04', 'AFF-06'] plus additions ['AFF-05'] less removals ['AFF-04'] gives ['AFF-01', 'AFF-02', 'AFF-03', 'AFF-05', 'AFF-06']"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "summary_recompute_break__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "FAIL",
+          "location": "tax_summary:SUMMARY-2029/tax_cents",
+          "message": "the tax summary states franchise tax 365,625.01; recomputing from the workpapers gives 365,625.00"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.01 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "tax_wrong__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "FAIL",
+          "location": "margin_worksheet:MARGIN-2029/tax_cents",
+          "message": "the margin worksheet states tax 365,625.01; 48,750,000.00 at 0.75% re-derives 365,625.00"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "tb_duplicate_line__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/lines/TB-01",
+          "message": "trial-balance line id TB-01 appears 2 times; the same revenue cannot be counted twice into the consolidated base"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "tb_missing_field__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/lines/TB-03",
+          "message": "trial-balance line TB-03 is missing account"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "tb_unknown_member__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "FAIL",
+          "location": "trial_balance:TB-2029/lines/TB-05/affiliate_id",
+          "message": "trial-balance line TB-05 is attributed to 'AFF-77', which is not a current combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "totals_tie_break__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "FAIL",
+          "location": "receipts_factor:RECEIPTS-2029/in_state_total_cents",
+          "message": "the receipts workpaper states totals in-state 75,000,001.00 / everywhere 200,000,000.00; the rows sum to 75,000,000.00 / 200,000,000.00"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the worksheet apportionment factor 37.50% ties the receipts"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    },
+    {
+      "document": "worksheet_factor_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 artifacts are present"
+        },
+        {
+          "rule": "aff_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate ids are unique"
+        },
+        {
+          "rule": "aff_address_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a complete address and registration"
+        },
+        {
+          "rule": "aff_status_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliates carry a known status"
+        },
+        {
+          "rule": "aff_registration_renewal",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 affiliate registrations are outside the renewal window"
+        },
+        {
+          "rule": "grp_roster_continuity",
+          "status": "PASS",
+          "location": "-",
+          "message": "the combined roster of 4 member(s) rebuilds from the prior year"
+        },
+        {
+          "rule": "grp_members_registered",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 combined members are registered affiliates"
+        },
+        {
+          "rule": "grp_excluded_reconciled",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 1 removed affiliate(s) are enumerated and reconciled"
+        },
+        {
+          "rule": "tb_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance lines carry their fields"
+        },
+        {
+          "rule": "tb_line_unique",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 trial-balance line ids are unique"
+        },
+        {
+          "rule": "tb_member_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every trial-balance line belongs to a combined member"
+        },
+        {
+          "rule": "apt_receipts_sound",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 receipts rows are sound"
+        },
+        {
+          "rule": "apt_totals_tie_receipts",
+          "status": "PASS",
+          "location": "-",
+          "message": "the receipts totals of 75,000,000.00 / 200,000,000.00 tie the rows"
+        },
+        {
+          "rule": "apt_factor_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportionment factor 37.50% recomputes"
+        },
+        {
+          "rule": "apt_worksheet_factor_recomputes",
+          "status": "FAIL",
+          "location": "margin_worksheet:MARGIN-2029/apportionment_factor_bps",
+          "message": "the margin worksheet applied an apportionment factor of 38.00%; the receipts workpaper recomputes 37.50%"
+        },
+        {
+          "rule": "mgn_revenue_ties_tb",
+          "status": "PASS",
+          "location": "-",
+          "message": "group revenue 200,000,000.00 ties the consolidated trial balance"
+        },
+        {
+          "rule": "mgn_margin_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the taxable margin 130,000,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_apportioned_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the apportioned margin 48,750,000.00 re-derives"
+        },
+        {
+          "rule": "mgn_tax_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the franchise tax 365,625.00 re-derives"
+        },
+        {
+          "rule": "rpt_summary_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summarised franchise tax 365,625.00 recomputes from the workpapers"
+        },
+        {
+          "rule": "rpt_report_totals_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report total 365,625.00 over 4 member(s) ties the summary and roster"
+        }
+      ]
+    }
+  ]
+}

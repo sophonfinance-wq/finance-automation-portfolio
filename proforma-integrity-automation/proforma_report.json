@@ -1,0 +1,4816 @@
+{
+  "title": "Project-proforma integrity control report",
+  "overall_verdict": "FAIL",
+  "file_count": 28,
+  "rule_count": 26,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "src_sources_total_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "src_uses_total_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "src_source_use_balance",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "cost_hard_soft_total",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "cost_unlevered_ties_devbudget",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "cost_contingency_rollup",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "int_reserve_adequate",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "int_equity_funded_before_construction",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prof_net_profit_derivation",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "prof_unlevered_profit_derivation",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "wfl_waterfall_ties_net",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "wfl_budgeted_ties_net",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "wfl_distributed_ties_net",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "wfl_sponsor_share_derivation",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "wfl_split_completeness",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "mgn_margin_on_cost",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "mgn_margin_on_revenue",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "mgn_cost_per_nsf",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "var_metric_delta",
+      "severity": "FAIL",
+      "exceptions": 3
+    },
+    {
+      "rule": "var_schedule_days",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "var_materiality_flag",
+      "severity": "FLAG",
+      "exceptions": 2
+    },
+    {
+      "rule": "rpt_project_qpr_filed",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_qpr_due_date_gate",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_regional_deliverables_present",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_cycle_count_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 12,
+        "FAIL": 14,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "FAIL",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "FLAG",
+          "location": "amount:ledger[PRJ-01].hard_cost_cents",
+          "message": "AMOUNT_INVALID: ledger[PRJ-01].hard_cost_cents must be integer cents, got 3000000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "budgeted_profit_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/budgeted_profit_cents",
+          "message": "project PRJ-01 states budgeted profit 10,000,000.01; net profit re-derives to 10,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 26,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "contingency_rollup_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "FAIL",
+          "location": "proforma_ledger:LEDGER-2031Q1/projects/PRJ-01/contingency_total_cents",
+          "message": "project PRJ-01 states a contingency total of 1,500,000.01; its lines sum to 1,500,000.00 (off 0.01)"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "cost_per_nsf_wrong__Westmere_Urban_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/cost_per_nsf_cents",
+          "message": "project PRJ-01 states 210.01 per NSF; cost over 200000 NSF re-derives to 210.00"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "cycle_count_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "FAIL",
+          "location": "cycle_report:CYCLE-2031Q1/filed_qpr_count",
+          "message": "the cycle report states 4 filed QPR(s); the filing register recomputes 3 for the active projects"
+        }
+      ]
+    },
+    {
+      "document": "devbudget_wrong__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "FAIL",
+          "location": "proforma_ledger:LEDGER-2031Q1/projects/PRJ-01/dev_cost_budget_cents",
+          "message": "project PRJ-01 carries a dev-cost budget of 40,000,000.01; the proforma's unlevered cost is 40,000,000.00 (unlevered-cost error 0.01)"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "distributed_profit_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/distributed_profit_cents",
+          "message": "project PRJ-01 states distributed profit 10,000,000.01; net profit re-derives to 10,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "equity_not_funded_first__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "FAIL",
+          "location": "proforma_ledger:LEDGER-2031Q1/projects/PRJ-01/equity_funded_before_construction",
+          "message": "project PRJ-01 does not fund its equity before construction; the loan was sized on the assumption that it does"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "hard_soft_total_wrong__Westmere_Urban_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/total_project_cost_cents",
+          "message": "project PRJ-01 states total project cost 42,000,000.01; hard 30,000,000.00 plus soft 12,000,000.00 is 42,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "interest_reserve_short__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "FAIL",
+          "location": "proforma_ledger:LEDGER-2031Q1/projects/PRJ-01/interest_reserve_cents",
+          "message": "project PRJ-01 budgets 2,000,000.00 of interest against a reserve of 1,999,999.99; the reserve is short 0.01"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "margin_on_cost_wrong__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/margin_on_cost_bps",
+          "message": "project PRJ-01 quotes a margin on cost of 23.81%; net profit over cost re-derives to 23.80%"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "margin_on_revenue_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/margin_on_revenue_bps",
+          "message": "project PRJ-01 quotes a margin on revenue of 19.24%; net profit over revenue re-derives to 19.23%"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "cycle_report:-",
+          "message": "cycle_report is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        }
+      ]
+    },
+    {
+      "document": "net_profit_wrong__Westmere_Urban_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/net_profit_cents",
+          "message": "project PRJ-01 states net profit 10,000,000.01; revenue 52,000,000.00 less cost is 10,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "profit_swing_material__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "FLAG",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/variance/net_profit_cents",
+          "message": "project PRJ-01 swings net profit 3,000,000.00 against prior, beyond the 1,000,000.00 materiality band; the move is real and wants a reviewer"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "qpr_late__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "FAIL",
+          "location": "filing_register:FILINGS-2031Q1/qpr_filings/PRJ-01/filed_date",
+          "message": "project PRJ-01 filed its QPR 2031-02-01, after the Marran due date 2031-01-22 (10 day(s) late)"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "qpr_missing__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "FAIL",
+          "location": "filing_register:FILINGS-2031Q1/qpr_filings/PRJ-02",
+          "message": "active project PRJ-02 has no QPR on file this cycle; the deck is incomplete without it"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 2 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 2 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "regional_deliverable_missing__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "FAIL",
+          "location": "filing_register:FILINGS-2031Q1/regional_filings/Marran/market_update",
+          "message": "region Marran did not file its market_update this cycle; the deck is incomplete without it"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "schedule_variance_wrong__Westmere_Urban_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/schedule_variance_days/construction_start",
+          "message": "project PRJ-01 milestone construction_start states a schedule variance of 15 day(s); current less baseline is 14 day(s)"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "source_use_imbalance__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "FAIL",
+          "location": "proforma_ledger:LEDGER-2031Q1/projects/PRJ-01/uses",
+          "message": "project PRJ-01 funds 42,000,000.00 of sources against 42,250,000.00 of uses; the source-and-use error is -250,000.00, not zero"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "sources_total_wrong__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/total_sources_cents",
+          "message": "project PRJ-01 states total sources 42,000,000.01; its source lines sum to 42,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "split_leaks__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/investor_profit_cents",
+          "message": "project PRJ-01 splits net profit into sponsor 3,000,000.00 plus investor 7,000,000.01 = 10,000,000.01; net profit is 10,000,000.00 (leakage 0.01)"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "sponsor_share_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/sponsor_profit_cents",
+          "message": "project PRJ-01 states a sponsor profit of 3,000,000.01; the equity split gives 3,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/investor_profit_cents",
+          "message": "project PRJ-01 splits net profit into sponsor 3,000,000.01 plus investor 7,000,000.00 = 10,000,000.01; net profit is 10,000,000.00 (leakage 0.01)"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "unlevered_profit_wrong__Westmere_Urban_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/unlevered_profit_cents",
+          "message": "project PRJ-01 states unlevered profit 12,000,000.01; revenue less unlevered cost is 12,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "uses_total_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/total_uses_cents",
+          "message": "project PRJ-01 states total uses 42,000,000.01; its use lines sum to 42,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "variance_typed__Halbrook_Residential",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 waterfall profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/variance/net_profit_cents",
+          "message": "project PRJ-01 states a net_profit_cents variance of 500,000.01; current less prior is 500,000.00 (off 0.01)"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    },
+    {
+      "document": "waterfall_profit_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 25,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 proforma artifacts are present"
+        },
+        {
+          "rule": "src_sources_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 source totals tie their lines"
+        },
+        {
+          "rule": "src_uses_total_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 use totals tie their lines"
+        },
+        {
+          "rule": "src_source_use_balance",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects balance sources to uses"
+        },
+        {
+          "rule": "cost_hard_soft_total",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 total project costs tie hard+soft"
+        },
+        {
+          "rule": "cost_unlevered_ties_devbudget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 dev-cost budgets tie the unlevered cost"
+        },
+        {
+          "rule": "cost_contingency_rollup",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 contingency totals tie their lines"
+        },
+        {
+          "rule": "int_reserve_adequate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 interest reserves cover the interest cost"
+        },
+        {
+          "rule": "int_equity_funded_before_construction",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 projects fund equity before construction"
+        },
+        {
+          "rule": "prof_net_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 net profits re-derive from revenue and cost"
+        },
+        {
+          "rule": "prof_unlevered_profit_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 unlevered profits re-derive"
+        },
+        {
+          "rule": "wfl_waterfall_ties_net",
+          "status": "FAIL",
+          "location": "tieout_summary:SUMMARY-2031Q1/projects/PRJ-01/waterfall_profit_cents",
+          "message": "project PRJ-01 states waterfall profit 10,000,000.01; net profit re-derives to 10,000,000.00 (off 0.01)"
+        },
+        {
+          "rule": "wfl_budgeted_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 budgeted profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_distributed_ties_net",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 distributed profit figures tie net profit"
+        },
+        {
+          "rule": "wfl_sponsor_share_derivation",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 sponsor profits re-derive from the split"
+        },
+        {
+          "rule": "wfl_split_completeness",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit splits sum to net profit"
+        },
+        {
+          "rule": "mgn_margin_on_cost",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on cost re-derive"
+        },
+        {
+          "rule": "mgn_margin_on_revenue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 margins on revenue re-derive"
+        },
+        {
+          "rule": "mgn_cost_per_nsf",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 per-NSF costs re-derive"
+        },
+        {
+          "rule": "var_metric_delta",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 variances are current minus prior"
+        },
+        {
+          "rule": "var_schedule_days",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 schedule variances re-derive"
+        },
+        {
+          "rule": "var_materiality_flag",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 profit swings are within the materiality band"
+        },
+        {
+          "rule": "rpt_project_qpr_filed",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 active projects filed a QPR"
+        },
+        {
+          "rule": "rpt_qpr_due_date_gate",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 QPRs filed on or before their due date"
+        },
+        {
+          "rule": "rpt_regional_deliverables_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 regional deliverables are on file"
+        },
+        {
+          "rule": "rpt_cycle_count_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the cycle report's 3 filed QPR(s) tie the filing register"
+        }
+      ]
+    }
+  ]
+}

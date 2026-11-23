@@ -1,0 +1,3552 @@
+{
+  "title": "Project variance and business-plan compare control report",
+  "overall_verdict": "FAIL",
+  "file_count": 24,
+  "rule_count": 22,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_unique_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_type_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "prj_comparatives_present",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "bud_line_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "bud_category_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "bud_project_exists",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "bud_cost_to_complete_foots",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "eco_net_revenue_foots",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "eco_expense_foots_budget",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "eco_profit_foots",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "eco_margin_on_cost_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "var_comparative_columns_foot",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "var_prior_column_ties",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "var_plan_column_ties",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "var_plan_version_frozen",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "mst_required_fields",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "mst_variance_sign_convention",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "mst_baseline_variance_foots",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "mst_slippage_lead_time",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_rollup_foots",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_slippage_watchlist_ties",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "FAIL",
+          "location": "amount:cost_line[CL-3012].total_budget_cents",
+          "message": "AMOUNT_INVALID: cost_line[CL-3012].total_budget_cents must be integer cents, got 6200000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "FAIL",
+          "location": "amount:cost_line[CL-3012].total_budget_cents",
+          "message": "AMOUNT_INVALID: cost_line[CL-3012].total_budget_cents must be integer cents, got 6200000000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "bad_cost_category__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "FAIL",
+          "location": "budget_variance:BUDGET-2029Q3/cost_lines/CL-3022/cost_category",
+          "message": "cost line CL-3022 sits in category 'marketing_reserve', which is not one of ('land', 'hard_cost', 'soft_cost', 'financing_cost', 'contingency')"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "bad_project_type__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "FAIL",
+          "location": "project_register:PROJECTS-2029Q3/projects/PRJ-303/project_type",
+          "message": "project PRJ-303 is typed 'industrial_flex', which is not one of ('for_sale_residential', 'rental_residential', 'mixed_use', 'land_development'); the reporting convention does not describe it"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "baseline_variance_wrong__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "FAIL",
+          "location": "milestone_schedule:SCHEDULE-2029Q3/milestones/MS-3033/variance_baseline_days",
+          "message": "milestone MS-3033 states a baseline variance of +15 day(s); baseline date less current date is +5 day(s)"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "cost_to_complete_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "FAIL",
+          "location": "budget_variance:BUDGET-2029Q3/cost_lines/CL-3032/cost_to_complete_cents",
+          "message": "cost line CL-3032 states cost to complete 22,250,000.00; total budget less cost to date is 22,000,000.00 (out by 250,000.00)"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_project_id__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "FAIL",
+          "location": "project_register:PROJECTS-2029Q3/projects/PRJ-301",
+          "message": "project id PRJ-301 appears 2 times in the register; a cost line or milestone that names it cannot be attributed to one project"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "expense_off_budget__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "FAIL",
+          "location": "current_period_economics:CURRENT-2029Q3/projects/PRJ-304/total_project_expense_cents",
+          "message": "project PRJ-304 states total project expense 32,000,000.00; its 3 budget lines total 32,500,000.00 (out by -500,000.00)"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "line_missing_field__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "FAIL",
+          "location": "budget_variance:BUDGET-2029Q3/cost_lines/CL-3013",
+          "message": "cost line CL-3013 is missing cost_category; the budget tab cannot place it on a project"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "margin_overstated__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "FAIL",
+          "location": "current_period_economics:CURRENT-2029Q3/projects/PRJ-301/margin_on_cost_bps",
+          "message": "project PRJ-301 states margin on cost 26.00%; profit over total project expense recomputes 25.00%"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "milestone_sign_flipped__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "FAIL",
+          "location": "milestone_schedule:SCHEDULE-2029Q3/milestones/MS-3012/variance_prior_days",
+          "message": "milestone MS-3012 states a prior variance of -3 day(s); prior date less current date is +3 day(s) under the convention that + is ahead"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "milestone_slipped__Halbrook_Residential_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "FLAG",
+          "location": "milestone_schedule:SCHEDULE-2029Q3/milestones/MS-3043/current_date",
+          "message": "milestone MS-3043 on project PRJ-304 now dates 2031-03-06 against a frozen baseline of 2031-02-28, 6 day(s) behind and past the 5-day tolerance"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "milestone_unnamed__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "FAIL",
+          "location": "milestone_schedule:SCHEDULE-2029Q3/milestones/MS-3022/milestone_name",
+          "message": "milestone MS-3022 is named 'site_mobilization', which the frozen baseline schedule does not define"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 20,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "report_rollup:-",
+          "message": "report_rollup is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "net_revenue_off__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "FAIL",
+          "location": "current_period_economics:CURRENT-2029Q3/projects/PRJ-302/net_project_revenue_cents",
+          "message": "project PRJ-302 states net project revenue 100,000,000.00; gross revenue less deductions is 99,750,000.00 (out by 250,000.00)"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "orphan_cost_line__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "FAIL",
+          "location": "budget_variance:BUDGET-2029Q3/cost_lines/CL-3099/project_id",
+          "message": "cost line CL-3099 names project 'PRJ-999', which is not in the project register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 16 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "plan_column_broken__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "FAIL",
+          "location": "business_plan_baseline:PLAN-2028R2/projects/PRJ-303/project_profit_cents",
+          "message": "the business plan column for project PRJ-303 states profit 13,900,000.00; its own net revenue less expense is 13,500,000.00"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "plan_variance_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 2,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "FAIL",
+          "location": "variance_summary:VARIANCE-2029Q3/rows/PRJ-302/net_project_revenue/plan_value",
+          "message": "project PRJ-302 net_project_revenue shows a business-plan figure of 95,900,000.00; the approved baseline carries 96,000,000.00"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "FAIL",
+          "location": "variance_summary:VARIANCE-2029Q3/rows/PRJ-302/net_project_revenue/variance_vs_plan",
+          "message": "project PRJ-302 net_project_revenue states a business-plan variance of 4,000,000.00; current less plan is 4,100,000.00"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "plan_version_rebased__Ardenne_Field_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "FAIL",
+          "location": "variance_summary:VARIANCE-2029Q3/basis_plan_version",
+          "message": "the variance tab is headed business plan BP-2029-R1 but the baseline document is version BP-2028-R2; the plan column is not the plan named"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "prior_column_missing__Westmere",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "FAIL",
+          "location": "project_register:PROJECTS-2029Q3/projects/PRJ-304",
+          "message": "project PRJ-304 has no prior period column; there is nothing for the variance tab to restate it against"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 18 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "prior_variance_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "FAIL",
+          "location": "variance_summary:VARIANCE-2029Q3/rows/PRJ-301/gross_revenue/variance_vs_prior",
+          "message": "project PRJ-301 gross_revenue states a prior-period variance of 2,100,000.00; current less prior is 2,000,000.00"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "profit_off__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "FAIL",
+          "location": "current_period_economics:CURRENT-2029Q3/projects/PRJ-302/project_profit_cents",
+          "message": "project PRJ-302 states profit 20,500,000.00; net project revenue less total project expense is 20,000,000.00 (out by 500,000.00)"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "rollup_total_wrong__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "FAIL",
+          "location": "report_rollup:ROLLUP-2029Q3/total_project_profit_cents",
+          "message": "the rollup states a total project profit of 68,000,000.00; footing the 4 current-period rows gives 67,000,000.00"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the slippage watchlist ties the milestone schedule exactly"
+        }
+      ]
+    },
+    {
+      "document": "watchlist_overstated__Ardenne_Field_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 9 project-report artifacts are present"
+        },
+        {
+          "rule": "prj_unique_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project ids in the register are unique"
+        },
+        {
+          "rule": "prj_type_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a known product type"
+        },
+        {
+          "rule": "prj_comparatives_present",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 projects carry a current, prior and business-plan column"
+        },
+        {
+          "rule": "bud_line_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines carry their required fields"
+        },
+        {
+          "rule": "bud_category_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines sit in a known budget category"
+        },
+        {
+          "rule": "bud_project_exists",
+          "status": "PASS",
+          "location": "-",
+          "message": "every cost line names a project in the register"
+        },
+        {
+          "rule": "bud_cost_to_complete_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 15 cost lines foot to total budget less cost to date"
+        },
+        {
+          "rule": "eco_net_revenue_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current net project revenues foot to gross less deductions"
+        },
+        {
+          "rule": "eco_expense_foots_budget",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 project expenses foot the total budget column"
+        },
+        {
+          "rule": "eco_profit_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 current project profits foot to net revenue less expense"
+        },
+        {
+          "rule": "eco_margin_on_cost_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 margins on cost recompute from profit and expense"
+        },
+        {
+          "rule": "var_comparative_columns_foot",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 8 comparative columns foot inside themselves"
+        },
+        {
+          "rule": "var_prior_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-prior variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_column_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 24 current-vs-plan variances re-foot from their own columns"
+        },
+        {
+          "rule": "var_plan_version_frozen",
+          "status": "PASS",
+          "location": "-",
+          "message": "the plan column, the tab header and every project agree on business plan BP-2028-R2"
+        },
+        {
+          "rule": "mst_required_fields",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 milestones are named, dated and attributable"
+        },
+        {
+          "rule": "mst_variance_sign_convention",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 prior-period milestone variances carry the + = ahead sign"
+        },
+        {
+          "rule": "mst_baseline_variance_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 baseline milestone variances re-foot to the frozen schedule"
+        },
+        {
+          "rule": "mst_slippage_lead_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "no forthcoming milestone is more than 5 day(s) behind the frozen baseline schedule"
+        },
+        {
+          "rule": "rpt_rollup_foots",
+          "status": "PASS",
+          "location": "-",
+          "message": "the report rollup count and all four totals foot across the projects"
+        },
+        {
+          "rule": "rpt_slippage_watchlist_ties",
+          "status": "FLAG",
+          "location": "slippage_watchlist:SLIPPAGE-2029Q3/entries/MS-3013",
+          "message": "the watchlist lists milestone MS-3013 as behind the frozen baseline, but the schedule does not put it past tolerance as of 2029-10-01"
+        }
+      ]
+    }
+  ]
+}

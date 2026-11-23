@@ -1,0 +1,399 @@
+{
+  "num": 49,
+  "slug": "investor",
+  "part_no": "SFS-E49-IRP",
+  "mnemonic": "IRP",
+  "family": "Investor Reporting",
+  "name": "JV Investor Reporting Package",
+  "tagline": "Every statement re-derived from the sources that were supposed to produce it, and nothing released over an open exception.",
+  "plain_summary": "Every month a developer issues a financial reporting package to the joint-venture equity partner of a single project entity: a cover, a trial balance, a balance sheet, a statement of operations, a statement of members' capital, a development cost schedule, a job cost bridge, cash support, notes and a release record. It is assembled by hand, per project, per investor, and the failure mode is a wrong figure sent to an outside partner. This engine reads the five sources that package is built from -- the project entity's general ledger extract, the job cost detail by division, the executed equity draw schedule, the parent entity's ledger carrying the reciprocal investment account, and the package issued for the period before -- and runs twenty-five deterministic controls over the package that came out of them. Does the trial balance net to zero, does it cover every account with activity, and does each balance agree to its ledger account by account number rather than by row position; does the balance sheet balance and is a credit intercompany balance reclassified rather than netted against assets; does each member's capital agree to the ledger, do the contributions foot, does the Total column cross-foot every row, does each member roll forward, and does the result agree to the statement of operations; does the development cost schedule tie to work in process, does the job cost bridge close with every difference itemized and disclosed, is every division covered; do contributions agree per member to the executed draw schedule and does the parent's investment agree to the capital it represents; is a nil statement genuinely nil, is cash supported, does every quoted footnote figure match its cell, does every caption fit its schedule, does the cover agree with what the notes disclose; and are the tie-out rows and preparer artifacts out, does the package continue from last period, is it complete, and was it allowed to leave. It never mutates an input and never posts an entry.",
+  "rev": "2026-07-29",
+  "status": "PRODUCTION",
+  "marketing_thesis": "Five of these controls are not hypotheticals. They were written from five genuine defects found during a manual build of one such package -- errors that took three rounds of human review to surface, and none of which looked wrong on the page. A job cost difference absorbed into a rounding line instead of being itemized and disclosed, so the partner receives a figure nobody can rebuild. A contribution column typed from a funding notice rather than footed against the draw schedule the partner also holds, with the variance never quantified. A cost-to-date schedule still carrying a caption saying the cost arose in the period, so a reader adds a month of spend that was really every month since the ground broke -- every figure on the page correct. A cover asserting the package is free of exceptions while the notes disclose one, on the page most readers read closest. A reviewer's own tie-out arithmetic left inside the print area and shipped to the investor as though it were a line of the statement. What these have in common is that the package still foots, still balances and still reads plausibly, so a review that reads the page cannot find them; only re-derivation from the sources can. So the engine joins the package to the ledger on the account number and only on the account number, requires a bridge to close exactly rather than nearly, sums the member columns across every row including the sharing-ratio row, reads either side of an account rather than its net, and holds the whole package on any one open exception -- with no materiality gate, because materiality is a judgement about a figure the partner has not seen yet.",
+  "layers_intro": "Seven control areas run in registry order over each package file, twenty-five controls in all. They are ordered the way the package is assembled -- from the trial balance the statements are struck from, out to the release decision that lets it leave -- so a finding lands on the earliest artifact that can explain it.",
+  "layers": [
+    {
+      "id": "tb",
+      "label": "Trial Balance",
+      "plain": "Checks the trial balance nets to zero, carries every ledger account with activity, and agrees to the ledger account by account number.",
+      "engineering": "Three controls. tb_nets_zero FAILs a trial balance whose debits and credits do not net to zero in integer cents -- an unbalanced trial balance means the extract was caught mid-posting or a row was dropped in transit, and every statement struck from it inherits the break. tb_completeness enumerates the ledger and FAILs an account with activity on either side that the package trial balance does not carry; it reads either column and never the net, because a clearing account that took in an amount and released the same amount has a nil balance and is exactly the account a package drops -- and dropping it hides the whole of what it did. tb_agrees_ledger is the control this area exists for: it joins the package trial balance to the ledger on the account number and only on the account number. A trial balance exported in reading order set beside a ledger exported in account order agrees on the rows where the two orders happen to coincide and is wrong everywhere else, and it still foots, still nets and still balances. When a stated balance disagrees with its own account but does match the ledger account in the same row position, the finding says so -- that is the fingerprint of a positional paste, and naming it saves the hour it otherwise takes to work out why two unrelated figures are both wrong by the same pair of amounts.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "bs",
+      "label": "Balance Sheet",
+      "plain": "Checks total assets equals liabilities plus members' equity, and that a credit intercompany balance is reclassified rather than netted against assets.",
+      "engineering": "Two controls. bs_balances re-foots each of the three sections from its own rows and FAILs a statement whose assets do not equal liabilities plus members' equity, so a transposition inside a section that leaves the grand total intact is still caught. interco_classified handles the presentation question a balance sheet gets wrong quietly: an intercompany account carried as an asset that has gone into a credit balance is a payable, and leaving it in assets nets a liability against an asset and understates both sides by the same amount. The statement continues to balance, which is precisely why nobody notices. The control reads the account's role and its sign, and FAILs a credit-balance intercompany account presented inside assets.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "cap",
+      "label": "Members' Capital",
+      "plain": "Checks each member's ending balance against the ledger, foots the contributions, cross-foots the Total column on every row, rolls each member forward, and ties net income to the statement of operations.",
+      "engineering": "Five controls, and this is where an investor package is read hardest, because the capital statement is the one page the partner checks against their own records. capital_agrees_ledger FAILs a member's ending balance that does not equal its ledger capital account. contributions_foot FAILs a contribution total that does not equal the detail beneath it. total_cross_foots sums the member columns across every row of the statement, including the sharing-ratio row: the defect it exists for is a Total cell linked somewhere else instead of summing the row it sits on -- to the ledger, to a funding notice, to last period's total -- and such a cell is right often enough to survive review and wrong exactly when a member column moves, which is the month it matters. capital_rollforward re-derives ending as beginning plus contributions plus net income less distributions, per member, so a distribution dropped from the rollforward cannot hide behind an ending balance that was typed rather than struck. net_income_agrees FAILs a capital statement whose net income is not the bottom line of the statement of operations sitting two pages earlier in the same package.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "cost",
+      "label": "Development and Job Cost",
+      "plain": "Checks the development cost schedule against work in process, closes the job cost bridge with every difference itemized and disclosed, and covers every division.",
+      "engineering": "Three controls, and the middle one is the first of the five defects this engine was written from. devcost_agrees_wip FAILs a development cost schedule whose total does not equal the ledger work-in-process account. jobcost_bridge does not require the job cost report and the ledger to agree -- they differ routinely and for good reasons, interest capitalised in one and not the other, an accrual posted after the cost cut-off. It requires the report plus everything itemized against it to reach the ledger exactly, with no closing tolerance, because a bridge that nearly closes has an unexplained figure in it; and it FAILs any reconciling item carried in the bridge without being disclosed, because the alternative is what actually happens -- the gap is absorbed into a rounding line and the partner is told a figure nobody can rebuild. division_coverage FAILs a division appearing in the job cost report that appears neither in the schedule nor in a disclosed reconciling item, so a renumbered division cannot quietly leave the package while the total still ties.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "ext",
+      "label": "External Agreement",
+      "plain": "Checks contributions per member against the executed equity draw schedule, and the parent's investment account against the capital it represents.",
+      "engineering": "Two controls, and both test the package against a document held outside it. draw_schedule_agrees is the second of the five: it foots the executed draws per member and FAILs a contribution figure that does not agree, quantifying the variance rather than reporting a bare mismatch. Only executed draws count -- a scheduled or cancelled draw is not a contribution, and treating a funding notice as one is the exact substitution the control exists to catch. It matters because the partner holds the same draw schedule, so a contribution that agrees to nothing is a figure the partner can disprove from their own file. reciprocal_investment FAILs a parent-entity investment account that does not equal the project entity's capital account, which is the one relationship in the package that has to hold across two sets of books and is therefore the one nobody owns.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "pres",
+      "label": "Presentation",
+      "plain": "Checks a nil statement is genuinely nil, cash is supported, footnote figures match their cells, captions fit their schedules, and the cover agrees with the notes.",
+      "engineering": "Five controls, two of them from the original five defects. nil_is_genuine FAILs a statement of operations presented as nil when any revenue or expense account is not nil, because a nil presentation is a claim about the ledger and not a formatting choice. cash_supported is deliberately a FLAG rather than a failure: the engine can see the bank reconciliation is not attached or does not agree and it cannot manufacture one, so it reports the position and hands it over. footnote_figures re-reads every figure quoted inside a note against the cell it describes and FAILs a note quoting a stale number -- notes are edited last and carried forward first. caption_matches_type FAILs a cost-to-date schedule carrying a caption implying the cost arose in the period, and the converse; every figure on such a page is right, and a reader adds a month of spend that was really every month since the ground broke. cover_consistent FAILs a basis-of-presentation assertion that the package is free of exceptions while the notes disclose one, on the page most readers read closest.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "rel",
+      "label": "Release",
+      "plain": "Checks the tie-out rows and preparer artifacts are out, the package continues from the prior one, every named statement exists, and nothing left over an open exception.",
+      "engineering": "Five controls, the last of which is why the engine is worth running. checkrows_excluded is the fifth original defect: it FAILs an internal tie-out check row left inside the released print area, where the reviewer's own arithmetic ships to the investor as though it were a line of the statement. no_preparer_artifacts FAILs any other preparer-only artifact in the released package. prior_period_continuity FAILs an opening balance that does not equal the prior package's closing balance, so a restated prior close cannot enter this period silently. package_complete FAILs a statement named on the contents page that the package does not carry, or carries empty -- a contents page is a promise, and the controls that read a missing statement report nothing, so absence must fail here rather than read as twenty-four held controls. release_gate is the only control that reads the run's own output: one open exception holds the package. There is no materiality gate, and there should not be, because materiality is a judgement about a figure the partner has not seen yet and the engine's job is to make sure whoever makes that judgement is looking at the exception rather than at a package already in the partner's inbox.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    }
+  ],
+  "blocks": [
+    {
+      "id": "corpus",
+      "label": "Seeded Package Files",
+      "kind": "source",
+      "col": 0,
+      "row": 3,
+      "plain": "fictional monthly reporting packages enter the control registry",
+      "engineering": "generate_corpus writes one clean baseline plus one planted-defect file for every registered control and one for the integer-cents guard, twenty-seven files in total. Only the base facts are stated: the non-capital ledger accounts, the job cost detail by division, the cost carried in the ledger and not in the cost report, the equity draw schedule, the prior package's closing capital, each member's distributions and sharing ratio, the presentation the statement of operations declares, the cover's assertions, the notes' cell references, the tie-out rows and the artifact list. Everything the engine later checks is a derived figure -- the trial balance, the balance sheet and its section totals, every capital column and the Total across it, the contribution detail, the development cost total, the job cost report total, the bank reconciliation balances, the parent's reciprocal investment and every figure quoted in a note -- computed through the same package kernel and the same recompute helpers the controls recompute with. So a defect that changes a base fact re-derives the package and keeps the break confined to one control.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/generate.py"
+    },
+    {
+      "id": "tb-control",
+      "label": "Trial Balance",
+      "kind": "control",
+      "col": 1,
+      "row": 0,
+      "plain": "does it net, does it cover the ledger, does it agree by account number",
+      "engineering": "Three controls: the trial balance nets to zero, every ledger account with activity on either side appears in it, and each balance agrees to its own ledger account matched by account number and never by row position -- with a positional paste named as such when the stated figure matches the account sitting in the same row.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "bs-control",
+      "label": "Balance Sheet",
+      "kind": "control",
+      "col": 1,
+      "row": 1,
+      "plain": "does it balance, and is a credit intercompany balance a liability",
+      "engineering": "Two controls: each section is re-footed from its own rows and total assets must equal liabilities plus members' equity, and an intercompany account in a credit balance is reclassified to liabilities rather than netted against assets -- a netting that leaves the statement balancing and understates both sides by the same amount.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "cap-control",
+      "label": "Members' Capital",
+      "kind": "control",
+      "col": 1,
+      "row": 2,
+      "plain": "does every member's column tie, foot, cross-foot and roll forward",
+      "engineering": "Five controls: each member's ending balance agrees to its ledger capital account, contributions foot to their detail, the Total column sums the member columns on every row including the sharing-ratio row, ending is re-derived as beginning plus contributions plus net income less distributions, and net income equals the statement of operations bottom line.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "cost-control",
+      "label": "Development and Job Cost",
+      "kind": "control",
+      "col": 1,
+      "row": 3,
+      "plain": "does the schedule tie work in process, and is every difference disclosed",
+      "engineering": "Three controls: the development cost schedule total equals the ledger work-in-process account, the job cost bridge closes exactly with no tolerance and fails any reconciling item carried without being disclosed, and every division in the report appears in the schedule or in a disclosed reconciling item.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "ext-control",
+      "label": "External Agreement",
+      "kind": "control",
+      "col": 2,
+      "row": 0,
+      "plain": "does the package agree with documents held outside it",
+      "engineering": "Two controls: contributions agree per member to the executed equity draw schedule with any variance quantified and only executed draws counted, and the parent entity's investment account equals the project entity's capital account -- the one relationship that has to hold across two sets of books.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "pres-control",
+      "label": "Presentation",
+      "kind": "control",
+      "col": 2,
+      "row": 1,
+      "plain": "does the page say what the figures underneath it say",
+      "engineering": "Five controls: a nil statement of operations is nil only if every revenue and expense account is nil, unsupported cash is flagged rather than failed because the engine cannot manufacture a bank statement, every figure quoted in a note equals the cell it describes, every schedule's caption fits its type, and the cover's basis-of-presentation assertions are consistent with every disclosed exception.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "rel-control",
+      "label": "Release",
+      "kind": "control",
+      "col": 2,
+      "row": 2,
+      "plain": "is it clean enough to leave, and did it leave anyway",
+      "engineering": "Five controls: internal tie-out check rows are excluded from the released print area, no preparer-only artifact ships, opening balances equal the prior package's closing balances, every statement named in the contents exists and is non-empty, and the package is held unless every control above passes.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/engine.py"
+    },
+    {
+      "id": "artifacts",
+      "label": "Sources and Package",
+      "kind": "control",
+      "col": 3,
+      "row": 1,
+      "plain": "the fifteen artifacts and the roles every rule resolves against",
+      "engineering": "Five source documents go in -- the project entity's general ledger extract, the job cost detail by division, the executed equity draw schedule, the parent entity's ledger carrying the reciprocal investment account, and the package issued for the period before. Ten make up the package itself: the cover with its contents list and basis-of-presentation assertions, the trial balance, the balance sheet, the statement of operations, the statement of members' capital, the development cost schedule, the job cost report and its bridge, the cash support, the notes, and the release record. Ledger accounts carry a declared role -- cash, work in process, intercompany or capital -- so every control locates the accounts it needs by role rather than by name or position, and each schedule declares its type so a caption can be tested against what the schedule actually is.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/model.py"
+    },
+    {
+      "id": "report",
+      "label": "Verdict and Findings",
+      "kind": "sink",
+      "col": 3,
+      "row": 3,
+      "plain": "every finding, with the reason it exists, ends at a person",
+      "engineering": "Findings roll up per package file: any FAIL is FAIL, FLAGs without FAILs are REVIEW, clean is PASS. The CLI exit code is the verdict, so a pipeline can gate on it. Reports carry no timestamps and no absolute paths, which is what makes the committed report diffable -- a change in the diff is a change in the controls, not a change in when the report was run.",
+      "source_link": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/investor_engine/report.py"
+    }
+  ],
+  "edges": [
+    { "from": "corpus", "to": "tb-control", "label": "package files" },
+    { "from": "corpus", "to": "bs-control", "label": "package files" },
+    { "from": "corpus", "to": "cap-control", "label": "package files" },
+    { "from": "corpus", "to": "cost-control", "label": "package files" },
+    { "from": "corpus", "to": "ext-control", "label": "package files" },
+    { "from": "corpus", "to": "pres-control", "label": "package files" },
+    { "from": "corpus", "to": "rel-control", "label": "package files" },
+    { "from": "corpus", "to": "artifacts", "label": "sources and package" },
+    { "from": "artifacts", "to": "tb-control", "label": "roles" },
+    { "from": "artifacts", "to": "bs-control", "label": "roles" },
+    { "from": "artifacts", "to": "cap-control", "label": "roles" },
+    { "from": "artifacts", "to": "cost-control", "label": "roles" },
+    { "from": "artifacts", "to": "ext-control", "label": "roles" },
+    { "from": "artifacts", "to": "pres-control", "label": "roles" },
+    { "from": "artifacts", "to": "rel-control", "label": "roles" },
+    { "from": "tb-control", "to": "report", "label": "findings" },
+    { "from": "bs-control", "to": "report", "label": "findings" },
+    { "from": "cap-control", "to": "report", "label": "findings" },
+    { "from": "cost-control", "to": "report", "label": "findings" },
+    { "from": "ext-control", "to": "report", "label": "findings" },
+    { "from": "pres-control", "to": "report", "label": "findings" },
+    { "from": "rel-control", "to": "report", "label": "findings", "gate": true }
+  ],
+  "spec_strip": [
+    {
+      "label": "Tests",
+      "value": "10,432",
+      "source": "python -m pytest --collect-only -q -o addopts= (investor-reporting-automation/)",
+      "plain": "the collected checks that pin this engine's behavior"
+    },
+    {
+      "label": "Controls",
+      "value": "25",
+      "source": "len(investor_engine.engine.REGISTRY)",
+      "plain": "independent rules run over every package file"
+    },
+    {
+      "label": "Areas",
+      "value": "7",
+      "source": "investor-reporting-automation/README.md control table, summing to the registry",
+      "plain": "groups of controls, each answering one question about the package"
+    },
+    {
+      "label": "Package files",
+      "value": "27",
+      "source": "samples/*.json after python run.py",
+      "plain": "one clean baseline plus twenty-six planted-defect files"
+    },
+    {
+      "label": "Artifacts read",
+      "value": "15",
+      "source": "len(investor_engine.model.DOC_TYPES)",
+      "plain": "five sources in, and the ten documents the package is made of"
+    },
+    {
+      "label": "Tolerance",
+      "value": "0",
+      "source": "investor_engine/tests boundary tests on every cent",
+      "plain": "a figure a penny off its re-derivation is a break, not a rounding band"
+    }
+  ],
+  "problem_statement": "The monthly investor reporting package is assembled by hand, per project, per investor, from five sources that were never designed to agree with one another. It foots, it balances and it reads plausibly even when it is wrong, because the arithmetic that would expose the error is the arithmetic that produced the figure. Five failures found during a manual build of one such package took three rounds of human review to surface: a job cost difference absorbed into a rounding line rather than itemized and disclosed; a contribution column typed from a funding notice rather than footed against the draw schedule the partner also holds; a cost-to-date schedule carrying a caption saying the cost arose in the period; a cover asserting the package is free of exceptions while the notes disclose one; and a reviewer's own tie-out check row left inside the released print area. None of them looked wrong on the page. All of them were addressed to somebody outside the company.",
+  "scenarios": [
+    {
+      "title": "The seeded demo runs every control over every package file",
+      "narrative": "The CLI generates twenty-seven fictional package files -- one clean baseline and one carrying each of the twenty-six planted defects -- then runs all twenty-five controls over every file and writes both reports. The clean baseline returns PASS on all twenty-five. Each defect file returns exactly the finding its control exists for, and the run as a whole returns FAIL, which is the engine working: a corpus with a planted defect for every control is supposed to fail. Every defect file is also marked held, because a package with a known exception is held -- a defect file left marked released would trip the release gate as well as its own control, and a corpus in which one break fires two controls cannot prove that either of them is independent. The release gate's own file is the exception, because being released over an open exception is precisely what it is for.",
+      "source": "python run.py (investor-reporting-automation/); investor_engine/tests planted-defect suite"
+    },
+    {
+      "title": "A trial balance pasted beside the ledger instead of joined to it",
+      "narrative": "The package trial balance is exported in reading order and the ledger extract comes out in account order. Pasted one column beside the other, the package agrees on the rows where the two orders coincide and is wrong everywhere else -- and it foots, it nets, and the balance sheet struck from it balances. tb_agrees_ledger joins on the account number and only on the account number, so each mismatched row is reported against its own account; and where the stated balance does match the ledger account occupying the same row position, the finding says so. That is the fingerprint of a positional paste rather than a posting error, and naming it is the difference between an hour of investigation and a re-export.",
+      "source": "investor_engine/engine.py check_tb_agrees_ledger; samples/balance_taken_by_position__Alderpoint_Terraces.json"
+    },
+    {
+      "title": "A bridge that nearly closes, and a Total that does not sum its row",
+      "narrative": "jobcost_bridge does not require the job cost report and the ledger to agree; it requires the report plus everything itemized against it to reach the ledger exactly. There is no closing tolerance, because a bridge that nearly closes has an unexplained figure in it, and any reconciling item carried in the bridge without being disclosed fails on its own account. total_cross_foots sums the member columns across every row of the capital statement, including the sharing-ratio row: a Total cell linked to the ledger, to a funding notice or to last period's total instead of summing the row it sits on is right often enough to survive review, and wrong exactly in the month a member column moves.",
+      "source": "investor_engine/engine.py check_jobcost_bridge and check_total_cross_foots; samples/bridge_difference_undisclosed__Dunmore_Flats.json and samples/total_row_links_elsewhere__Alderpoint_Terraces.json"
+    }
+  ],
+  "instruction_set": [
+    {
+      "cmd": "python run.py",
+      "operation": "regenerate the seeded fictional corpus, run all twenty-five controls, write both reports",
+      "output": "per-file verdicts and every actionable finding, then the overall verdict",
+      "exit_code": "2 for the bundled corpus, which carries a planted defect for every control by design",
+      "artifacts": "investor_report.json, investor_report.md, samples/"
+    },
+    {
+      "cmd": "python -m investor_engine samples",
+      "operation": "analyze an existing folder of package files without regenerating it",
+      "output": "per-file verdicts and findings",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "none unless --json or --md is passed"
+    },
+    {
+      "cmd": "python -m investor_engine samples --generate --quiet",
+      "operation": "regenerate the corpus and print only the overall verdict",
+      "output": "a single verdict line",
+      "exit_code": "0 PASS / 1 REVIEW / 2 FAIL / 3 usage",
+      "artifacts": "samples/"
+    },
+    {
+      "cmd": "python -m pytest investor_engine/tests -q",
+      "operation": "run the full test suite for this engine",
+      "output": "10432 passed",
+      "exit_code": "0 when every test passes",
+      "artifacts": "none"
+    }
+  ],
+  "benchmarks": [
+    {
+      "label": "Engine tests",
+      "value": "10,432",
+      "unit": "tests collected",
+      "source": "python -m pytest --collect-only -q -o addopts= (investor-reporting-automation/)",
+      "plain": "live collection from the engine directory"
+    },
+    {
+      "label": "Registered controls",
+      "value": "25",
+      "unit": "controls",
+      "source": "len(investor_engine.engine.REGISTRY)",
+      "plain": "counted from the registry, not from documentation"
+    },
+    {
+      "label": "Planted defects",
+      "value": "26",
+      "unit": "defect files",
+      "source": "len(investor_engine.generate.DEFECTS)",
+      "plain": "every registered control has at least one file that trips it, plus one for the integer-cents guard"
+    },
+    {
+      "label": "Control coverage",
+      "value": "100",
+      "unit": "percent of controls with a planted defect",
+      "source": "investor_engine/tests: every registered rule has a planted defect",
+      "plain": "no control ships without a file demonstrating it firing"
+    }
+  ],
+  "control_characteristics": {
+    "plain": "A clean result means the implemented mechanical controls found nothing wrong in the package file they were given: the trial balance nets and covers the ledger and agrees to it by account number, the balance sheet balances and classifies a credit intercompany balance as a liability, every member's capital ties the ledger and foots and cross-foots and rolls forward and agrees to the statement of operations, the development cost schedule ties work in process, the job cost bridge closes exactly with every difference disclosed, every division is covered, contributions agree to the executed draw schedule and the parent's investment agrees to the capital it represents, a nil statement is genuinely nil, every footnote figure matches its cell, every caption fits its schedule, the cover agrees with the notes, the check rows and preparer artifacts are out, the opening balances continue the prior package, every named statement exists, and nothing was released over an open exception. It is not an opinion on whether a cost is classified correctly, whether the ledger extract itself is complete, whether an exception should be disclosed and in what words, or whether a figure is material to the partner.",
+    "verdict_map": [
+      {
+        "severity": "No findings above PASS",
+        "verdict": "PASS",
+        "action": "carry the mechanically clean package into the documented preparer review and partner sign-off before it is issued"
+      },
+      {
+        "severity": "One or more FLAG, no FAIL",
+        "verdict": "REVIEW",
+        "action": "a human resolves each flag; cash whose bank reconciliation has not arrived or does not agree lands here, because the engine can see the support is absent and cannot manufacture it"
+      },
+      {
+        "severity": "One or more FAIL",
+        "verdict": "FAIL",
+        "action": "the package does not go to the partner until the failing control is cleared -- a balance off its ledger account, a bridge difference carried undisclosed, a contribution that does not agree to the executed draws, a Total that does not sum its row, a caption that misstates its schedule, a cover that contradicts the notes, or a check row inside the print area"
+      }
+    ],
+    "guarantees": [
+      "Read-only: package files are parsed and never written back, so the engine cannot introduce the break it reports, and it never posts an entry.",
+      "Integer cents throughout, compared with exact ==; there is no tolerance band on any figure, and a penny off the re-derivation is reported as a break.",
+      "Package balances are matched to the ledger by account number and never by row position, and a stated figure that matches the account in the same row position is named as a positional paste rather than reported as an unexplained difference.",
+      "Completeness reads either side of a ledger account and never its net, so a clearing account that took in an amount and released the same amount cannot be dropped behind a nil balance.",
+      "The job cost bridge must close exactly rather than within a tolerance, and a reconciling item carried in the bridge without being disclosed fails on its own account.",
+      "The Total column is summed across every row of the capital statement, including the sharing-ratio row, so a Total cell linked elsewhere instead of summing its row is caught in the month it first disagrees.",
+      "One derivation kernel: the controls and the generator share the same package module and the same recompute helpers, so a stated figure cannot disagree with the logic that produced it, and a planted defect keeps its break confined to one control.",
+      "Only executed equity draws are treated as contributions; a scheduled or cancelled draw is never counted, and any variance against the executed schedule is quantified rather than reported as a bare mismatch.",
+      "A figure that should be integer cents but is not produces an AMOUNT_INVALID finding contained to the one field it was read on, rather than being coerced into the number the engine is meant to audit.",
+      "Every executed draw is tested against the reporting period the file carries, never against the system clock, so a run in a later month returns the same findings.",
+      "Deterministic and byte-stable: same inputs produce the same findings in the same order, with no timestamps or absolute paths in any output.",
+      "Absent evidence is never a passing control; a statement named on the contents page and missing from the package fails completeness rather than letting the controls that read it report nothing and pass unread."
+    ],
+    "determinism": {
+      "seeded": true,
+      "read_only": true,
+      "offline_default": true
+    },
+    "gate_policy": {
+      "human_approval_required": true,
+      "demo_gate": "FAIL on the bundled corpus, by design -- it carries a planted defect for every registered control",
+      "note": "The engine has no write path and therefore no autonomy to gate. It produces findings; a person decides whether the package goes to the partner. There is no materiality threshold, because materiality is a judgement about a figure the partner has not seen yet."
+    }
+  },
+  "limits": [
+    {
+      "statement": "The engine never assembles a package, issues a statement, posts an entry or writes to a source artifact. It reads the package file and stops.",
+      "source": "investor-reporting-automation/README.md and investor_engine read-only / determinism tests"
+    },
+    {
+      "statement": "It does not resolve classification judgement. Where the ledger labels a cost one thing, the payment went somewhere else and the draw schedule calls it a third, the engine reports that two sources disagree and must not pick a winner.",
+      "source": "investor-reporting-automation/README.md out-of-scope statement"
+    },
+    {
+      "statement": "It cannot manufacture a document that does not exist yet. Cash whose bank reconciliation has not arrived is raised as a FLAG and left to a person; the engine reports the absence and never fills it.",
+      "source": "investor_engine/engine.py check_cash_supported"
+    },
+    {
+      "statement": "It writes no disclosure wording. Whether and how to tell the partner about an exception is a decision, not a computation; the engine insists the difference is quantified and disclosed, and writes none of the sentence.",
+      "source": "investor-reporting-automation/README.md out-of-scope statement"
+    },
+    {
+      "statement": "It audits the extract it is given. The ledger pull stays manual and automation begins downstream, so the engine can prove the package ties to the extract but not that the extract is itself complete. All shipped data is fictional -- the project entities, the members, the chart of accounts, the divisions of job cost, the equity draws, the notes and every balance and reporting date are invented, and the reporting period is set in a fictional future.",
+      "source": "investor_engine/generate.py and investor-reporting-automation/README.md"
+    }
+  ],
+  "media": {
+    "poster": "../assets/engine-investor.svg",
+    "motion": "../assets/engine-investor.svg",
+    "poster_alt": "JV Investor Reporting Package engine tile: an isometric line drawing of a monthly reporting package drawn as three exploded statement sheets. Five source slabs at the left converge on a single node and feed the stack. On the top sheet a cobalt path runs across one row through the member columns into the Total column. Below the stack a dashed boundary marks the released print area, with a tie-out check row struck out beneath it. At the right a closed gate holds the package, and the partner's copy waits beyond it drawn dashed and unissued.",
+    "caption": "The JV Investor Reporting Package tile states the three questions the monthly package turns on: whether the statements were re-derived from the five sources rather than assembled beside them, whether the Total column sums the row it sits on, and whether anything was allowed to leave with an exception still open.",
+    "crops": []
+  },
+  "quickstart": [
+    {
+      "label": "Run the seeded demo",
+      "command": "python run.py"
+    },
+    {
+      "label": "Run this engine's tests",
+      "command": "python -m pytest investor_engine/tests -q"
+    }
+  ],
+  "links": {
+    "readme": "https://github.com/sophonfinance-wq/finance-automation-portfolio/blob/main/investor-reporting-automation/README.md",
+    "source": "https://github.com/sophonfinance-wq/finance-automation-portfolio/tree/main/investor-reporting-automation",
+    "tests": "/tests/",
+    "codespaces": "https://codespaces.new/sophonfinance-wq/finance-automation-portfolio"
+  },
+  "meta": {
+    "description": "JV Investor Reporting Package (SFS-E49-IRP) datasheet -- twenty-five deterministic, read-only controls over the monthly financial reporting package a developer issues to a joint-venture equity partner, re-derived from the five sources that produce it. Integer cents, exact equality, no materiality gate, fictional data."
+  }
+}

@@ -1,0 +1,3540 @@
+{
+  "title": "Filing-obligation calendar control report",
+  "overall_verdict": "FAIL",
+  "file_count": 24,
+  "rule_count": 22,
+  "rules": [
+    {
+      "rule": "set_complete",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "due_year_end_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "due_table_defined",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "due_original_matches",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "due_extended_matches",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ext_flag_valid",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ext_applicable_overdue",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ext_filed_on_time",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ext_due_soon",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "pay_fixed_amount",
+      "severity": "FAIL",
+      "exceptions": 2
+    },
+    {
+      "rule": "evd_filed_has_evidence",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "evd_extension_evidence",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "evd_no_orphan_evidence",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ros_entity_has_row",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ros_row_entity_known",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "ros_unique_obligation_ids",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wfl_goal_monotonic",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "wfl_actual_slippage",
+      "severity": "FLAG",
+      "exceptions": 1
+    },
+    {
+      "rule": "cnt_final_not_recurring",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_status_recomputes",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_counts_tie",
+      "severity": "FAIL",
+      "exceptions": 1
+    },
+    {
+      "rule": "rpt_watchlist_ties",
+      "severity": "FLAG",
+      "exceptions": 1
+    }
+  ],
+  "files": [
+    {
+      "document": "amount_not_integer__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "FAIL",
+          "location": "amount:obligation[OB-1003].amount_required_cents",
+          "message": "AMOUNT_INVALID: obligation[OB-1003].amount_required_cents must be integer cents, got 80000.5 -- amounts are integer cents and are never coerced"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "bad_year_end__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1004/year_end",
+          "message": "obligation OB-1004 carries year-end '2028-13-40', which is not a readable date; its statutory due dates cannot be looked up"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "clean__Northmoor_Development_Group",
+      "verdict": "PASS",
+      "counts": {
+        "PASS": 22,
+        "FAIL": 0,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "count_wrong__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "FAIL",
+          "location": "status_summary:SUMMARY-2028/overdue_count",
+          "message": "the summary states 1 overdue / 6 filed; the register recomputes 0 / 6"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "duplicate_obligation_id__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1009",
+          "message": "obligation id OB-1009 appears 2 times; a voucher or status that names it cannot be attributed to one obligation"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "entity_missing_obligation__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "FAIL",
+          "location": "entity_roster:ROSTER-2028/entities/ENT-106",
+          "message": "active entity ENT-106 carries no obligation row; its filings are untracked"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "extension_date_without_flag__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1004/extension_filed",
+          "message": "obligation OB-1004 carries an extended due date but is not marked extension-filed; the deferral has no basis"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "filed_after_due__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1004/return_filed",
+          "message": "obligation OB-1004 was filed '2028-10-01', after its applicable deadline 2028-09-15; the filing is late"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 5 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "final_entity_recurring__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/ENT-101",
+          "message": "entity ENT-101 was marked FINAL in the prior fiscal year but carries live obligations this year: OB-1001, OB-1002, OB-1003"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "form_not_in_table__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "FAIL",
+          "location": "due_dates_table:DUEDATES-2028/rules/ZZZ-999/06-30",
+          "message": "the due-dates table has no row for form 'ZZZ-999' at year-end 06-30, which obligation OB-1006 requires; its due date cannot be re-derived"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 4 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "goal_out_of_order__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1001/review_goal",
+          "message": "obligation OB-1001 workflow goals are out of order: prep 2028-08-20, review 2028-08-15, sent 2028-09-01, due 2029-03-15"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "missing_artifact__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 19,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "FAIL",
+          "location": "status_summary:-",
+          "message": "status_summary is missing; the controls that read it cannot run and must not be reported as having passed"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "missing_extension_evidence__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "FAIL",
+          "location": "evidence_index:EVIDENCE-2028/evidence/OB-1002",
+          "message": "obligation OB-1002 is marked extension-filed but no extension acceptance is on file for it"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "missing_filed_evidence__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "FAIL",
+          "location": "evidence_index:EVIDENCE-2028/evidence/OB-1003",
+          "message": "obligation OB-1003 is marked filed but no filed-return or payment voucher is on file for it"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 10 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "obligation_due_soon__Stonecrest_Communities",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "FLAG",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1012/original_due",
+          "message": "obligation OB-1012 falls due 2028-12-15, in 14 day(s); inside the 30-day window and due to be chased"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 5 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "orphan_evidence__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "FAIL",
+          "location": "evidence_index:EVIDENCE-2028/evidence/EV-99/obligation_id",
+          "message": "evidence EV-99 points at obligation 'OB-9999', which is not in the register; it is an orphan with no row to claim it"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "status_wrong__Northmoor_Development_Group",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "FAIL",
+          "location": "status_summary:SUMMARY-2028/obligations/OB-1001/status",
+          "message": "obligation OB-1001 is summarised status='filed'; recomputing from its register dates gives status='open'"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "unfiled_overdue__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1004/return_filed",
+          "message": "obligation OB-1004 is unfiled and its applicable deadline 2028-09-15 is on or before the review date 2028-12-01; the obligation is overdue"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 1 overdue / 5 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "unknown_entity__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-2001/entity_id",
+          "message": "obligation OB-2001 names entity 'ENT-777', which is not in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 13 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "watchlist_overstated__Ardenne_Field_Partners",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "FLAG",
+          "location": "due_watchlist:WATCHLIST-2028/entries/OB-1001",
+          "message": "the watchlist lists obligation OB-1001 as due soon, but it is not inside the lead-time window as of 2028-12-01"
+        }
+      ]
+    },
+    {
+      "document": "workflow_slippage__Northmoor_Development_Group",
+      "verdict": "REVIEW",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 0,
+        "FLAG": 1
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "FLAG",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1002/review_actual",
+          "message": "obligation OB-1002 review completed 2028-09-05, after its goal 2028-08-15; the schedule is slipping"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "wrong_extended_due__Halbrook_Residential_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1001/extended_due",
+          "message": "obligation OB-1001 stores extended due '2029-04-15'; re-deriving the original plus the statutory offset gives 2029-03-15"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "wrong_fixed_amount__Stonecrest_Communities",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 original due dates re-derive"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1003/amount_required_cents",
+          "message": "obligation OB-1003 states amount 799.00; the statutory fixed amount for form MAR-3522 is 800.00"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    },
+    {
+      "document": "wrong_original_due__Ardenne_Field_Partners",
+      "verdict": "FAIL",
+      "counts": {
+        "PASS": 21,
+        "FAIL": 1,
+        "FLAG": 0
+      },
+      "findings": [
+        {
+          "rule": "set_complete",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 7 calendar artifacts are present"
+        },
+        {
+          "rule": "due_year_end_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligations carry a readable year-end"
+        },
+        {
+          "rule": "due_table_defined",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations map to a due-dates row"
+        },
+        {
+          "rule": "due_original_matches",
+          "status": "FAIL",
+          "location": "obligation_register:REGISTER-2028/obligations/OB-1004/original_due",
+          "message": "obligation OB-1004 stores original due '2028-09-16'; re-deriving from the table gives 2028-09-15"
+        },
+        {
+          "rule": "due_extended_matches",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extended due dates re-derive"
+        },
+        {
+          "rule": "ext_flag_valid",
+          "status": "PASS",
+          "location": "-",
+          "message": "every extension flag agrees with its extended date"
+        },
+        {
+          "rule": "ext_applicable_overdue",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 obligations are filed, extended or still open"
+        },
+        {
+          "rule": "ext_filed_on_time",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed returns were filed on time"
+        },
+        {
+          "rule": "ext_due_soon",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 unfiled obligations are outside the window"
+        },
+        {
+          "rule": "pay_fixed_amount",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 3 fixed-amount payments are the statutory constant"
+        },
+        {
+          "rule": "evd_filed_has_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 6 filed obligations are backed by evidence"
+        },
+        {
+          "rule": "evd_extension_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 extensions are backed by an acceptance"
+        },
+        {
+          "rule": "evd_no_orphan_evidence",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 evidence rows tie to a register obligation"
+        },
+        {
+          "rule": "ros_entity_has_row",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 5 active entities carry at least one obligation"
+        },
+        {
+          "rule": "ros_row_entity_known",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation names an entity in the roster"
+        },
+        {
+          "rule": "ros_unique_obligation_ids",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 12 obligation ids are unique"
+        },
+        {
+          "rule": "wfl_goal_monotonic",
+          "status": "PASS",
+          "location": "-",
+          "message": "all 11 workflow schedules run in order"
+        },
+        {
+          "rule": "wfl_actual_slippage",
+          "status": "PASS",
+          "location": "-",
+          "message": "every workflow actual met its goal"
+        },
+        {
+          "rule": "cnt_final_not_recurring",
+          "status": "PASS",
+          "location": "-",
+          "message": "no prior-year final entity (1) recurs with a live obligation"
+        },
+        {
+          "rule": "rpt_status_recomputes",
+          "status": "PASS",
+          "location": "-",
+          "message": "every obligation status recomputes from the register"
+        },
+        {
+          "rule": "rpt_counts_tie",
+          "status": "PASS",
+          "location": "-",
+          "message": "the summary counts of 0 overdue / 6 filed tie the register"
+        },
+        {
+          "rule": "rpt_watchlist_ties",
+          "status": "PASS",
+          "location": "-",
+          "message": "the due-soon watchlist ties the register"
+        }
+      ]
+    }
+  ]
+}
